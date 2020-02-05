@@ -9,6 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
+  google_fonts: ^0.3.7
 
 dev_dependencies:
   flutter_test:

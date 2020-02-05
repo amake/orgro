@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(MyApp());
 
@@ -60,7 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: SingleChildScrollView(child: Text(_content)),
+        child: SingleChildScrollView(
+          child: Text(
+            _content,
+            style: GoogleFonts.firaMono(fontSize: 18),
+          ),
+        ),
       ),
     );
   }
