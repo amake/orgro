@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,8 +25,33 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+const platform = const MethodChannel('org.madlonkay.orgro/openFile');
 
+class _MyHomePageState extends State<MyHomePage> {
+  String _content = 'Nothing Loaded';
+
+  @override
+  void initState() {
+    super.initState();
+    platform.setMethodCallHandler(handler);
+  }
+
+  Future<dynamic> handler(MethodCall call) async {
+    switch (call.method) {
+      case 'loadString':
+        String content = call.arguments;
+        setState(() {
+          _content = content;
+        });
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    platform.setMethodCallHandler(null);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
+        child: SingleChildScrollView(child: Text(_content)),
       ),
     );
   }
