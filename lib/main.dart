@@ -8,25 +8,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Orgro',
+      theme: ThemeData.localize(ThemeData.light(), Typography.englishLike2018),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-const platform = const MethodChannel('org.madlonkay.orgro/openFile');
+const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
 class _MyHomePageState extends State<MyHomePage> {
   String _content = 'Nothing Loaded';
@@ -58,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Orgro'),
       ),
       body: Center(
         child: SingleChildScrollView(
