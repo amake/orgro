@@ -26,11 +26,13 @@ const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
 class _MyHomePageState extends State<MyHomePage> {
   String _content = 'Nothing Loaded';
+  ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
     platform.setMethodCallHandler(handler);
+    _controller = ScrollController();
   }
 
   Future<dynamic> handler(MethodCall call) async {
@@ -48,17 +50,32 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     platform.setMethodCallHandler(null);
+    _controller.dispose();
     super.dispose();
   }
+
+  void _scrollTo(double position) => _controller.animateTo(position,
+      duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Orgro'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.keyboard_arrow_up),
+            onPressed: () => _scrollTo(_controller.position.minScrollExtent),
+          ),
+          IconButton(
+            icon: const Icon(Icons.keyboard_arrow_down),
+            onPressed: () => _scrollTo(_controller.position.maxScrollExtent),
+          )
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
+          controller: _controller,
           child: Text(
             _content,
             style: GoogleFonts.firaMono(fontSize: 18),
