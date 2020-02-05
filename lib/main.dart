@@ -76,9 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: SingleChildScrollView(
           controller: _controller,
-          child: Text(
-            _content,
-            style: GoogleFonts.firaMono(fontSize: 18),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              _content,
+              style: GoogleFonts.firaMono(fontSize: 18),
+            ),
           ),
         ),
       ),
