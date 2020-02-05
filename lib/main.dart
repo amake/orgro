@@ -26,13 +26,11 @@ const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
 class _MyHomePageState extends State<MyHomePage> {
   String _content = 'Nothing Loaded';
-  ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
     platform.setMethodCallHandler(handler);
-    _controller = ScrollController();
   }
 
   Future<dynamic> handler(MethodCall call) async {
@@ -50,12 +48,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     platform.setMethodCallHandler(null);
-    _controller.dispose();
     super.dispose();
   }
 
-  void _scrollTo(double position) => _controller.animateTo(position,
-      duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  void _scrollToTop(BuildContext context) {
+    final controller = PrimaryScrollController.of(context);
+    _scrollTo(controller, controller.position.minScrollExtent);
+  }
+
+  void _scrollToBottom(BuildContext context) {
+    final controller = PrimaryScrollController.of(context);
+    _scrollTo(controller, controller.position.maxScrollExtent);
+  }
+
+  void _scrollTo(ScrollController controller, double position) =>
+      controller.animateTo(position,
+          duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
   @override
   Widget build(BuildContext context) {
@@ -63,26 +71,41 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Orgro'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.keyboard_arrow_up),
-            onPressed: () => _scrollTo(_controller.position.minScrollExtent),
+          // Builders required to get access to PrimaryScrollController
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.keyboard_arrow_up),
+              onPressed: () => _scrollToTop(context),
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.keyboard_arrow_down),
-            onPressed: () => _scrollTo(_controller.position.maxScrollExtent),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.keyboard_arrow_down),
+              onPressed: () => _scrollToBottom(context),
+            ),
           )
         ],
       ),
       body: Center(
-        child: SingleChildScrollView(
-          controller: _controller,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              _content,
-              style: GoogleFonts.firaMono(fontSize: 18),
-            ),
-          ),
+        child: MainTextView(_content),
+      ),
+    );
+  }
+}
+
+class MainTextView extends StatelessWidget {
+  const MainTextView(this.text, {Key key}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          text,
+          style: GoogleFonts.firaMono(fontSize: 18),
         ),
       ),
     );
