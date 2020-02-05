@@ -36,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<dynamic> handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        String content = call.arguments;
+        // ignore: avoid_as
+        final content = call.arguments as String;
         setState(() {
           _content = content;
         });
