@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:org_parser/org_parser.dart';
 
 void main() => runApp(MyApp());
 
@@ -87,27 +88,116 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child: MainTextView(_content),
+        child: Org(_content),
       ),
     );
   }
 }
 
-class MainTextView extends StatelessWidget {
-  const MainTextView(this.text, {Key key}) : super(key: key);
+class Org extends StatelessWidget {
+  const Org(this.text, {Key key}) : super(key: key);
 
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          text,
-          style: GoogleFonts.firaMono(fontSize: 18),
+    final parser = OrgParser();
+    final result = parser.parse(text);
+    final topContent = result.value[0] as String;
+    final sections = result.value[1] as List;
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: <Widget>[
+        if (topContent != null) Text(topContent, style: _orgStyle),
+        ...sections.map((section) => OrgSectionWidget(section as OrgSection)),
+      ],
+    );
+  }
+}
+
+class OrgSectionWidget extends StatefulWidget {
+  const OrgSectionWidget(this.section, {Key key}) : super(key: key);
+  final OrgSection section;
+
+  @override
+  _OrgSectionWidgetState createState() => _OrgSectionWidgetState();
+}
+
+class _OrgSectionWidgetState extends State<OrgSectionWidget> {
+  bool _open;
+
+  @override
+  void initState() {
+    super.initState();
+    _open = true;
+  }
+
+  void _toggle() => setState(() {
+        _open = !_open;
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        GestureDetector(
+          child: OrgHeadlineWidget(widget.section.headline),
+          onTap: _toggle,
         ),
+        if (_open) ...[
+          if (widget.section.content != null)
+            Text(widget.section.content, style: _orgStyle),
+          ...widget.section.children.map((child) => OrgSectionWidget(child)),
+        ]
+      ],
+    );
+  }
+}
+
+class OrgHeadlineWidget extends StatelessWidget {
+  const OrgHeadlineWidget(this.headline, {Key key}) : super(key: key);
+  final OrgHeadline headline;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _orgLevelColors[headline.level % _orgLevelColors.length];
+    final baseStyle = _orgStyle.copyWith(
+      color: color,
+      fontWeight: FontWeight.bold,
+    );
+    return RichText(
+      text: TextSpan(
+        text: '${headline.stars} ',
+        style: baseStyle,
+        children: [
+          if (headline.keyword != null)
+            TextSpan(
+                text: '${headline.keyword} ',
+                style: _orgStyle.copyWith(
+                    color: headline.keyword == 'DONE'
+                        ? _orgDoneColor
+                        : _orgTodoColor)),
+          if (headline.priority != null)
+            TextSpan(text: '${headline.priority} '),
+          if (headline.title != null) TextSpan(text: headline.title),
+          if (headline.tags.isNotEmpty)
+            TextSpan(text: ':${headline.tags.join(':')}:'),
+        ],
       ),
     );
   }
 }
+
+const _orgLevelColors = [
+  Color(0xff0000ff),
+  Color(0xffa0522d),
+  Color(0xffa020f0),
+  Color(0xffb22222),
+  Color(0xff228b22),
+  Color(0xff008b8b),
+  Color(0xff483d8b),
+  Color(0xff8b2252),
+];
+const _orgTodoColor = Color(0xffff0000);
+const _orgDoneColor = Color(0xff228b22);
+final _orgStyle = GoogleFonts.firaMono(fontSize: 18);
