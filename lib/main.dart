@@ -235,6 +235,7 @@ class OrgHeadlineWidget extends StatelessWidget {
       style: TextStyle(
         color: color,
         fontWeight: FontWeight.bold,
+        height: 1.8,
       ),
       child: Builder(
         // Builder here to make modified default text style accessible
