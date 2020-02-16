@@ -107,12 +107,15 @@ class Org extends StatelessWidget {
     final result = parser.parse(text);
     final topContent = result.value[0] as OrgContent;
     final sections = result.value[1] as List;
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: <Widget>[
-        if (topContent != null) OrgContentWidget(topContent),
-        ...sections.map((section) => OrgSectionWidget(section as OrgSection)),
-      ],
+    return DefaultTextStyle.merge(
+      style: _orgStyle,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: <Widget>[
+          if (topContent != null) OrgContentWidget(topContent),
+          ...sections.map((section) => OrgSectionWidget(section as OrgSection)),
+        ],
+      ),
     );
   }
 }
@@ -185,7 +188,7 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
     if (content is OrgPlainText) {
       return TextSpan(text: content.content);
     } else if (content is OrgMarkup) {
-      var style = _orgStyle;
+      var style = DefaultTextStyle.of(context).style;
       switch (content.style) {
         case OrgStyle.bold:
           style = style.copyWith(fontWeight: FontWeight.bold);
@@ -212,11 +215,11 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
       return TextSpan(
         recognizer: recognizer,
         text: content.description,
-        style: _orgStyle.copyWith(color: _orgLinkColor),
+        style:
+            DefaultTextStyle.of(context).style.copyWith(color: _orgLinkColor),
       );
     } else {
-      return TextSpan(
-          style: _orgStyle, children: content.children.map(_textTree).toList());
+      return TextSpan(children: content.children.map(_textTree).toList());
     }
   }
 }
@@ -228,28 +231,32 @@ class OrgHeadlineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = _orgLevelColors[headline.level % _orgLevelColors.length];
-    final baseStyle = _orgStyle.copyWith(
-      color: color,
-      fontWeight: FontWeight.bold,
-    );
-    return Text.rich(
-      TextSpan(
-        text: '${headline.stars} ',
-        style: baseStyle,
-        children: [
-          if (headline.keyword != null)
-            TextSpan(
-                text: '${headline.keyword} ',
-                style: _orgStyle.copyWith(
-                    color: headline.keyword == 'DONE'
-                        ? _orgDoneColor
-                        : _orgTodoColor)),
-          if (headline.priority != null)
-            TextSpan(text: '${headline.priority} '),
-          if (headline.title != null) TextSpan(text: headline.title),
-          if (headline.tags.isNotEmpty)
-            TextSpan(text: ':${headline.tags.join(':')}:'),
-        ],
+    return DefaultTextStyle.merge(
+      style: TextStyle(
+        color: color,
+        fontWeight: FontWeight.bold,
+      ),
+      child: Builder(
+        // Builder here to make modified default text style accessible
+        builder: (context) => Text.rich(
+          TextSpan(
+            text: '${headline.stars} ',
+            children: [
+              if (headline.keyword != null)
+                TextSpan(
+                    text: '${headline.keyword} ',
+                    style: DefaultTextStyle.of(context).style.copyWith(
+                        color: headline.keyword == 'DONE'
+                            ? _orgDoneColor
+                            : _orgTodoColor)),
+              if (headline.priority != null)
+                TextSpan(text: '${headline.priority} '),
+              if (headline.title != null) TextSpan(text: headline.title),
+              if (headline.tags.isNotEmpty)
+                TextSpan(text: ':${headline.tags.join(':')}:'),
+            ],
+          ),
+        ),
       ),
     );
   }
