@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -155,13 +157,28 @@ class _OrgSectionWidgetState extends State<OrgSectionWidget> {
   }
 }
 
-class OrgContentWidget extends StatelessWidget {
+class OrgContentWidget extends StatefulWidget {
   const OrgContentWidget(this.content, {Key key}) : super(key: key);
   final OrgContent content;
 
   @override
+  _OrgContentWidgetState createState() => _OrgContentWidgetState();
+}
+
+class _OrgContentWidgetState extends State<OrgContentWidget> {
+  List<GestureRecognizer> _recognizers = [];
+
+  @override
+  void dispose() {
+    for (final item in _recognizers) {
+      item.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Text.rich(_textTree(content));
+    return Text.rich(_textTree(widget.content));
   }
 
   InlineSpan _textTree(OrgContent content) {
@@ -189,9 +206,14 @@ class OrgContentWidget extends StatelessWidget {
       }
       return TextSpan(text: content.content, style: style);
     } else if (content is OrgLink) {
+      final recognizer = TapGestureRecognizer()
+        ..onTap = () => launch(content.location);
+      _recognizers.add(recognizer);
       return TextSpan(
-          text: content.description,
-          style: _orgStyle.copyWith(color: _orgLinkColor));
+        recognizer: recognizer,
+        text: content.description,
+        style: _orgStyle.copyWith(color: _orgLinkColor),
+      );
     } else {
       return TextSpan(
           style: _orgStyle, children: content.children.map(_textTree).toList());
