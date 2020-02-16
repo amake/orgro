@@ -165,8 +165,8 @@ class OrgHeadlineWidget extends StatelessWidget {
       color: color,
       fontWeight: FontWeight.bold,
     );
-    return RichText(
-      text: TextSpan(
+    return Text.rich(
+      TextSpan(
         text: '${headline.stars} ',
         style: baseStyle,
         children: [
