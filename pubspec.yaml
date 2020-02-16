@@ -9,8 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   org_parser:
-    git:
-      url: ../org_parser
+    path: ../org_parser
   cupertino_icons: ^0.1.2
   google_fonts: ^0.3.7
 
@@ -20,4 +19,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-

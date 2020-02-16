@@ -119,11 +119,9 @@ packages:
   org_parser:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "74a6fd69e7c6dc7ce28b487909a64d8089e007e4"
-      url: "../org_parser"
-    source: git
+      path: "../org_parser"
+      relative: true
+    source: path
     version: "0.0.1"
   path:
     dependency: transitive
