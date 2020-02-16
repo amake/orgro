@@ -129,7 +129,7 @@ class _OrgSectionWidgetState extends State<OrgSectionWidget> {
   @override
   void initState() {
     super.initState();
-    _open = true;
+    _open = widget.section.level == 1;
   }
 
   void _toggle() => setState(() {
