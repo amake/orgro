@@ -214,7 +214,7 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
       _recognizers.add(recognizer);
       return TextSpan(
         recognizer: recognizer,
-        text: content.description,
+        text: content.description ?? content.location,
         style:
             DefaultTextStyle.of(context).style.copyWith(color: _orgLinkColor),
       );
