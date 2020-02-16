@@ -139,6 +139,7 @@ class _OrgSectionWidgetState extends State<OrgSectionWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         GestureDetector(
           child: OrgHeadlineWidget(widget.section.headline),
