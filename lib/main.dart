@@ -103,12 +103,12 @@ class Org extends StatelessWidget {
   Widget build(BuildContext context) {
     final parser = OrgParser();
     final result = parser.parse(text);
-    final topContent = result.value[0] as String;
+    final topContent = result.value[0] as OrgContent;
     final sections = result.value[1] as List;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        if (topContent != null) Text(topContent, style: _orgStyle),
+        if (topContent != null) OrgContentWidget(topContent),
         ...sections.map((section) => OrgSectionWidget(section as OrgSection)),
       ],
     );
@@ -147,11 +147,55 @@ class _OrgSectionWidgetState extends State<OrgSectionWidget> {
         ),
         if (_open) ...[
           if (widget.section.content != null)
-            Text(widget.section.content, style: _orgStyle),
+            OrgContentWidget(widget.section.content),
           ...widget.section.children.map((child) => OrgSectionWidget(child)),
         ]
       ],
     );
+  }
+}
+
+class OrgContentWidget extends StatelessWidget {
+  const OrgContentWidget(this.content, {Key key}) : super(key: key);
+  final OrgContent content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(_textTree(content));
+  }
+
+  InlineSpan _textTree(OrgContent content) {
+    if (content is OrgPlainText) {
+      return TextSpan(text: content.content);
+    } else if (content is OrgMarkup) {
+      var style = _orgStyle;
+      switch (content.style) {
+        case OrgStyle.bold:
+          style = style.copyWith(fontWeight: FontWeight.bold);
+          break;
+        case OrgStyle.verbatim: // fallthrough
+        case OrgStyle.code:
+          style = style.copyWith(color: _orgCodeColor);
+          break;
+        case OrgStyle.italic:
+          style = style.copyWith(fontStyle: FontStyle.italic);
+          break;
+        case OrgStyle.strikeThrough:
+          style = style.copyWith(decoration: TextDecoration.lineThrough);
+          break;
+        case OrgStyle.underline:
+          style = style.copyWith(decoration: TextDecoration.underline);
+          break;
+      }
+      return TextSpan(text: content.content, style: style);
+    } else if (content is OrgLink) {
+      return TextSpan(
+          text: content.description,
+          style: _orgStyle.copyWith(color: _orgLinkColor));
+    } else {
+      return TextSpan(
+          style: _orgStyle, children: content.children.map(_textTree).toList());
+    }
   }
 }
 
@@ -201,4 +245,6 @@ const _orgLevelColors = [
 ];
 const _orgTodoColor = Color(0xffff0000);
 const _orgDoneColor = Color(0xff228b22);
+const _orgCodeColor = Color(0xff7f7f7f);
+const _orgLinkColor = Color(0xff3a5fcd);
 final _orgStyle = GoogleFonts.firaMono(fontSize: 18);
