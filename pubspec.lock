@@ -124,9 +124,11 @@ packages:
   org_parser:
     dependency: "direct main"
     description:
-      path: "../org_parser"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: ef5c4c796d6fd268369e641faf1023722506f802
+      url: "https://github.com/amake/org_parser.git"
+    source: git
     version: "0.0.1"
   path:
     dependency: transitive
