@@ -169,7 +169,7 @@ class OrgContentWidget extends StatefulWidget {
 }
 
 class _OrgContentWidgetState extends State<OrgContentWidget> {
-  List<GestureRecognizer> _recognizers = [];
+  final List<GestureRecognizer> _recognizers = [];
 
   @override
   void dispose() {
