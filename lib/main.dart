@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child: Org(_content),
+        child: OrgDocumentWidget(_content),
       ),
     );
   }

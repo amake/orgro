@@ -4,8 +4,8 @@ import 'package:org_parser/org_parser.dart';
 import 'package:orgro/src/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Org extends StatelessWidget {
-  const Org(this.text, {Key key}) : super(key: key);
+class OrgDocumentWidget extends StatelessWidget {
+  const OrgDocumentWidget(this.text, {Key key}) : super(key: key);
 
   final String text;
 
