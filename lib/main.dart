@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:orgro/src/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
@@ -108,7 +108,7 @@ class Org extends StatelessWidget {
     final topContent = result.value[0] as OrgContent;
     final sections = result.value[1] as List;
     return DefaultTextStyle.merge(
-      style: _orgStyle,
+      style: orgStyle,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
@@ -195,7 +195,7 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
           break;
         case OrgStyle.verbatim: // fallthrough
         case OrgStyle.code:
-          style = style.copyWith(color: _orgCodeColor);
+          style = style.copyWith(color: orgCodeColor);
           break;
         case OrgStyle.italic:
           style = style.copyWith(fontStyle: FontStyle.italic);
@@ -215,15 +215,13 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
       return TextSpan(
         recognizer: recognizer,
         text: content.description ?? content.location,
-        style:
-            DefaultTextStyle.of(context).style.copyWith(color: _orgLinkColor),
+        style: DefaultTextStyle.of(context).style.copyWith(color: orgLinkColor),
       );
     } else if (content is OrgMeta) {
       return TextSpan(
           text: content.content,
-          style: DefaultTextStyle.of(context)
-              .style
-              .copyWith(color: _orgMetaColor));
+          style:
+              DefaultTextStyle.of(context).style.copyWith(color: orgMetaColor));
     } else {
       return TextSpan(children: content.children.map(_textTree).toList());
     }
@@ -236,7 +234,7 @@ class OrgHeadlineWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _orgLevelColors[headline.level % _orgLevelColors.length];
+    final color = orgLevelColors[headline.level % orgLevelColors.length];
     return DefaultTextStyle.merge(
       style: TextStyle(
         color: color,
@@ -254,8 +252,8 @@ class OrgHeadlineWidget extends StatelessWidget {
                     text: '${headline.keyword} ',
                     style: DefaultTextStyle.of(context).style.copyWith(
                         color: headline.keyword == 'DONE'
-                            ? _orgDoneColor
-                            : _orgTodoColor)),
+                            ? orgDoneColor
+                            : orgTodoColor)),
               if (headline.priority != null)
                 TextSpan(text: '${headline.priority} '),
               if (headline.title != null) TextSpan(text: headline.title),
@@ -268,20 +266,3 @@ class OrgHeadlineWidget extends StatelessWidget {
     );
   }
 }
-
-const _orgLevelColors = [
-  Color(0xff0000ff),
-  Color(0xffa0522d),
-  Color(0xffa020f0),
-  Color(0xffb22222),
-  Color(0xff228b22),
-  Color(0xff008b8b),
-  Color(0xff483d8b),
-  Color(0xff8b2252),
-];
-const _orgTodoColor = Color(0xffff0000);
-const _orgDoneColor = Color(0xff228b22);
-const _orgCodeColor = Color(0xff7f7f7f);
-const _orgLinkColor = Color(0xff3a5fcd);
-const _orgMetaColor = Color(0xffb22222);
-final _orgStyle = GoogleFonts.firaMono(fontSize: 18);
