@@ -218,6 +218,12 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
         style:
             DefaultTextStyle.of(context).style.copyWith(color: _orgLinkColor),
       );
+    } else if (content is OrgMeta) {
+      return TextSpan(
+          text: content.content,
+          style: DefaultTextStyle.of(context)
+              .style
+              .copyWith(color: _orgMetaColor));
     } else {
       return TextSpan(children: content.children.map(_textTree).toList());
     }
@@ -277,4 +283,5 @@ const _orgTodoColor = Color(0xffff0000);
 const _orgDoneColor = Color(0xff228b22);
 const _orgCodeColor = Color(0xff7f7f7f);
 const _orgLinkColor = Color(0xff3a5fcd);
+const _orgMetaColor = Color(0xffb22222);
 final _orgStyle = GoogleFonts.firaMono(fontSize: 18);
