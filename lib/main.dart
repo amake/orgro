@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _content = 'Nothing Loaded';
+  String _content;
 
   @override
   void initState() {
@@ -86,7 +86,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Center(
-        child: OrgDocumentWidget(_content),
+        child: _content == null
+            ? const Text('Nothing Loaded')
+            : OrgDocumentWidget(_content),
       ),
     );
   }
