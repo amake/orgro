@@ -14,9 +14,19 @@ import Flutter
 
         if let viewController = window.rootViewController as? FlutterViewController {
             openFileChannel = FlutterMethodChannel(name: "org.madlonkay.orgro/openFile", binaryMessenger: viewController.binaryMessenger)
+            openFileChannel.setMethodCallHandler(handleMethod(call:result:))
         }
 
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+
+    func handleMethod(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch (call.method) {
+        case "ready":
+            result(true)
+        default:
+            result(FlutterMethodNotImplemented)
+        }
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
