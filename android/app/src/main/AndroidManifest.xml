@@ -40,7 +40,7 @@
 
                 <data android:scheme="file" />
                 <data android:scheme="content" />
-                <data android:mimeType="text/x-org" />
+                <data android:mimeType="*/*" />
             </intent-filter>
 
             <!--
