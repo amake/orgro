@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="orgro"
+        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -19,6 +19,98 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- See https://stackoverflow.com/a/31028507/448068 -->
+
+            <!--
+             Capture content by MIME type, which is how Gmail broadcasts
+             attachment open requests.  pathPattern and file extensions
+             are ignored, so the MIME type *MUST* be explicit, otherwise
+             we will match absolutely every file opened.
+            -->
+            <intent-filter
+                android:icon="@mipmap/ic_launcher"
+                android:label="@string/app_name"
+                android:priority="50" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/x-org" />
+            </intent-filter>
+
+            <!--
+                 Capture file open requests (pathPattern is honoured) where no
+                 MIME type is provided in the Intent.  An Intent with a null
+                 MIME type will never be matched by a filter with a set MIME
+                 type, so we need a second intent-filter if we wish to also
+                 match files with this extension and a non-null MIME type
+                 (even if it is non-null but zero length).
+            -->
+            <intent-filter
+                android:icon="@mipmap/ic_launcher"
+                android:label="@string/app_name"
+                android:priority="50" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+
+                <!--
+                     Work around Android's ugly primitive PatternMatcher
+                     implementation that can't cope with finding a . early in
+                     the path unless it's explicitly matched.
+                -->
+                <data android:pathPattern=".*\\.org" />
+                <data android:pathPattern=".*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.org" />
+            </intent-filter>
+
+            <!--
+                 Capture file open requests (pathPattern is honoured) where a
+                 (possibly blank) MIME type is provided in the Intent.  This
+                 filter may only be necessary for supporting ES File Explorer,
+                 which has the probably buggy behaviour of using an Intent
+                 with a MIME type that is set but zero-length.  It's
+                 impossible to match such a type except by using a global
+                 wildcard.
+            -->
+            <intent-filter
+                android:icon="@mipmap/ic_launcher"
+                android:label="@string/app_name"
+                android:priority="50" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+
+                <!--
+                     Work around Android's ugly primitive PatternMatcher
+                     implementation that can't cope with finding a . early in
+                     the path unless it's explicitly matched.
+                -->
+                <data android:pathPattern=".*\\.org" />
+                <data android:pathPattern=".*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.org" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.org" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
