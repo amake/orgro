@@ -96,26 +96,13 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
     if (content is OrgPlainText) {
       return TextSpan(text: content.content);
     } else if (content is OrgMarkup) {
-      var style = DefaultTextStyle.of(context).style;
-      switch (content.style) {
-        case OrgStyle.bold:
-          style = style.copyWith(fontWeight: FontWeight.bold);
-          break;
-        case OrgStyle.verbatim: // fallthrough
-        case OrgStyle.code:
-          style = style.copyWith(color: orgCodeColor);
-          break;
-        case OrgStyle.italic:
-          style = style.copyWith(fontStyle: FontStyle.italic);
-          break;
-        case OrgStyle.strikeThrough:
-          style = style.copyWith(decoration: TextDecoration.lineThrough);
-          break;
-        case OrgStyle.underline:
-          style = style.copyWith(decoration: TextDecoration.underline);
-          break;
-      }
-      return TextSpan(text: content.content, style: style);
+      return TextSpan(
+        text: content.content,
+        style: fontStyleForOrgStyle(
+          DefaultTextStyle.of(context).style,
+          content.style,
+        ),
+      );
     } else if (content is OrgLink) {
       final recognizer = TapGestureRecognizer()
         ..onTap = () => launch(content.location);

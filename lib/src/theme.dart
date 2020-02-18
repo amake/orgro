@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:org_parser/org_parser.dart';
 
 const orgLevelColors = [
   Color(0xff0000ff),
@@ -19,3 +20,20 @@ const orgCodeColor = Color(0xff7f7f7f);
 const orgLinkColor = Color(0xff3a5fcd);
 const orgMetaColor = Color(0xffb22222);
 final TextStyle orgStyle = GoogleFonts.firaMono(fontSize: 18);
+
+TextStyle fontStyleForOrgStyle(TextStyle base, OrgStyle style) {
+  switch (style) {
+    case OrgStyle.bold:
+      return base.copyWith(fontWeight: FontWeight.bold);
+    case OrgStyle.verbatim: // fallthrough
+    case OrgStyle.code:
+      return base.copyWith(color: orgCodeColor);
+    case OrgStyle.italic:
+      return base.copyWith(fontStyle: FontStyle.italic);
+    case OrgStyle.strikeThrough:
+      return base.copyWith(decoration: TextDecoration.lineThrough);
+    case OrgStyle.underline:
+      return base.copyWith(decoration: TextDecoration.underline);
+  }
+  throw Exception('Unknown style: $style');
+}
