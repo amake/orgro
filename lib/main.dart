@@ -30,7 +30,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    platform.setMethodCallHandler(handler);
+    platform
+      ..setMethodCallHandler(handler)
+      ..invokeMethod('ready');
   }
 
   Future<dynamic> handler(MethodCall call) async {
