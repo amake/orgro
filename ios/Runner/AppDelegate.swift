@@ -4,7 +4,7 @@ import Flutter
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
 
-    private var openFileChannel : FlutterMethodChannel?
+    private var openFileChannel : FlutterMethodChannel!
 
     override func application(
       _ application: UIApplication,
@@ -30,9 +30,6 @@ import Flutter
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        guard let openFileChannel = openFileChannel else {
-            return false
-        }
         if let content = try? String(contentsOf: url) {
             openFileChannel.invokeMethod("loadString", arguments: content)
             return true
