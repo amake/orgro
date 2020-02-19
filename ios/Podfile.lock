@@ -1,4 +1,6 @@
 PODS:
+  - file_picker (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - path_provider (0.0.1):
     - Flutter
@@ -10,6 +12,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -17,6 +20,8 @@ DEPENDENCIES:
   - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
 
 EXTERNAL SOURCES:
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
   path_provider:
@@ -29,6 +34,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
+  file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
