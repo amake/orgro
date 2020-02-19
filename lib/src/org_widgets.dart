@@ -29,42 +29,66 @@ class OrgDocumentWidget extends StatelessWidget {
   }
 }
 
-class OrgSectionWidget extends StatefulWidget {
+class OrgSectionWidget extends StatelessWidget {
   const OrgSectionWidget(this.section, {Key key}) : super(key: key);
   final OrgSection section;
 
   @override
-  _OrgSectionWidgetState createState() => _OrgSectionWidgetState();
-}
-
-class _OrgSectionWidgetState extends State<OrgSectionWidget> {
-  bool _open;
-
-  @override
-  void initState() {
-    super.initState();
-    _open = widget.section.level == 1;
-  }
-
-  void _toggle() => setState(() {
-        _open = !_open;
-      });
-
-  @override
   Widget build(BuildContext context) {
+    final open = ValueNotifier<bool>(section.level == 1);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         InkWell(
-          child: OrgHeadlineWidget(widget.section.headline),
-          onTap: _toggle,
+          child: OrgHeadlineWidget(section.headline),
+          onTap: () => open.value = !open.value,
         ),
-        if (_open) ...[
-          if (widget.section.content != null)
-            OrgContentWidget(widget.section.content),
-          ...widget.section.children.map((child) => OrgSectionWidget(child)),
-        ]
+        AnimatedShowHide(
+          open,
+          shownChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              if (section.content != null) OrgContentWidget(section.content),
+              ...section.children.map((child) => OrgSectionWidget(child)),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class AnimatedShowHide extends StatelessWidget {
+  const AnimatedShowHide(
+    this.visible, {
+    @required this.shownChild,
+    this.hiddenChild = const SizedBox.shrink(),
+    this.duration = const Duration(milliseconds: 100),
+    Key key,
+  })  : assert(visible != null),
+        assert(shownChild != null),
+        assert(hiddenChild != null),
+        assert(duration != null),
+        super(key: key);
+
+  final ValueNotifier<bool> visible;
+  final Widget shownChild;
+  final Widget hiddenChild;
+  final Duration duration;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: visible,
+      builder: (context, value, child) => AnimatedCrossFade(
+        alignment: Alignment.topLeft,
+        duration: duration,
+        firstChild: child,
+        secondChild: hiddenChild,
+        crossFadeState:
+            value ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      ),
+      child: shownChild,
     );
   }
 }
