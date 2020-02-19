@@ -176,13 +176,34 @@ class OrgHeadlineWidget extends StatelessWidget {
                             : orgTodoColor)),
               if (headline.priority != null)
                 TextSpan(text: '${headline.priority} '),
-              if (headline.title != null) TextSpan(text: headline.title),
+              if (headline.title != null)
+                WidgetSpan(
+                  child: IdentityTextScale(
+                    child: OrgContentWidget(headline.title),
+                  ),
+                ),
               if (headline.tags.isNotEmpty)
                 TextSpan(text: ':${headline.tags.join(':')}:'),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class IdentityTextScale extends StatelessWidget {
+  const IdentityTextScale({@required this.child, Key key})
+      : assert(child != null),
+        super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+      child: child,
     );
   }
 }
