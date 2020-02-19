@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:orgro/src/theme.dart';
@@ -54,7 +55,7 @@ class _OrgSectionWidgetState extends State<OrgSectionWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        GestureDetector(
+        InkWell(
           child: OrgHeadlineWidget(widget.section.headline),
           onTap: _toggle,
         ),
