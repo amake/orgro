@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/src/org_widgets.dart';
@@ -38,12 +41,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<dynamic> handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        final content = call.arguments as String;
-        setState(() {
-          _content = content;
-        });
+        _loadString(call.arguments as String);
         break;
     }
+  }
+
+  Future<void> _loadPath(String path) async {
+    final content = await File(path).readAsString();
+    _loadString(content);
+  }
+
+  void _loadString(String content) {
+    setState(() {
+      _content = content;
+    });
   }
 
   @override
@@ -89,9 +100,28 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: _content == null
-            ? const Text('Nothing Loaded')
+            ? PickFileButton(onSelected: _loadPath)
             : OrgDocumentWidget(_content),
       ),
+    );
+  }
+}
+
+class PickFileButton extends StatelessWidget {
+  const PickFileButton({@required this.onSelected, Key key})
+      : assert(onSelected != null),
+        super(key: key);
+
+  final Function(String) onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: const Text('Open File'),
+      onPressed: () async {
+        final path = await FilePicker.getFilePath(type: FileType.ANY);
+        onSelected(path);
+      },
     );
   }
 }
