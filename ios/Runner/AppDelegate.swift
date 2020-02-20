@@ -30,8 +30,31 @@ import Flutter
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        loadCopiedFile(url)
+        switch options[.openInPlace] as? Bool {
+        case .some(true):
+            loadInPlace(url)
+        default:
+            loadCopiedFile(url)
+        }
         return true
+    }
+
+    private func loadInPlace(_ url: URL) {
+        DispatchQueue.global().async {
+            // Adapted from https://github.com/palmin/open-in-place/blob/97d3e0cd9bb6f4e0a84e167b31d5dbf729c7aa8a/OpenInPlace/UrlCoordination.swift
+            let error: NSErrorPointer = nil
+            NSFileCoordinator(filePresenter: nil).coordinate(readingItemAt: url, options: [], error: error) { url in
+                if url.startAccessingSecurityScopedResource() {
+                    self.openFileChannel.invokeMethod("loadUrl", arguments: url.absoluteString) { result in
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
+            }
+            // TODO: Error handling
+            if let error = error?.pointee {
+                print(error)
+            }
+        }
     }
 
     private func loadCopiedFile(_ url: URL) {
