@@ -41,20 +41,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<dynamic> handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        _loadString(call.arguments as String);
-        break;
+        return _loadString(call.arguments as String);
+      case 'loadUrl':
+        return _loadUrl(call.arguments as String);
     }
   }
 
-  Future<void> _loadPath(String path) async {
-    final content = await File(path).readAsString();
-    _loadString(content);
+  Future<bool> _loadUrl(String url) async {
+    final uri = Uri.parse(url);
+    return _loadPath(uri.toFilePath());
   }
 
-  void _loadString(String content) {
+  Future<bool> _loadPath(String path) async {
+    final content = await File(path).readAsString();
+    return _loadString(content);
+  }
+
+  bool _loadString(String content) {
     setState(() {
       _content = content;
     });
+    return true;
   }
 
   @override
