@@ -120,7 +120,9 @@ class PickFileButton extends StatelessWidget {
       child: const Text('Open File'),
       onPressed: () async {
         final path = await FilePicker.getFilePath(type: FileType.ANY);
-        onSelected(path);
+        if (path != null) {
+          onSelected(path);
+        }
       },
     );
   }
