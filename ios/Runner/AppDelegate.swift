@@ -30,11 +30,18 @@ import Flutter
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        if let content = try? String(contentsOf: url) {
-            openFileChannel.invokeMethod("loadString", arguments: content)
-            return true
-        } else {
-            return false
+        loadCopiedFile(url)
+        return true
+    }
+
+    private func loadCopiedFile(_ url: URL) {
+        openFileChannel.invokeMethod("loadUrl", arguments: url.absoluteString) { result in
+            do {
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                // TODO: Error handling
+                print(error)
+            }
         }
     }
 }
