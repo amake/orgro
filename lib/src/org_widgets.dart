@@ -102,7 +102,7 @@ class OrgContentWidget extends StatefulWidget {
 }
 
 class _OrgContentWidgetState extends State<OrgContentWidget> {
-  final List<GestureRecognizer> _recognizers = [];
+  final _recognizers = <GestureRecognizer>[];
 
   @override
   void dispose() {
@@ -114,47 +114,71 @@ class _OrgContentWidgetState extends State<OrgContentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(_textTree(widget.content));
-  }
-
-  InlineSpan _textTree(OrgContent content) {
-    if (content is OrgPlainText) {
-      return TextSpan(text: content.content);
-    } else if (content is OrgMarkup) {
-      return TextSpan(
-        text: content.content,
-        style: fontStyleForOrgStyle(
-          DefaultTextStyle.of(context).style,
-          content.style,
-        ),
-      );
-    } else if (content is OrgLink) {
-      final recognizer = TapGestureRecognizer()
-        ..onTap = () => launch(content.location);
-      _recognizers.add(recognizer);
-      return TextSpan(
-        recognizer: recognizer,
-        text: content.description ?? content.location,
-        style: DefaultTextStyle.of(context).style.copyWith(color: orgLinkColor),
-      );
-    } else if (content is OrgMeta) {
-      return TextSpan(
-          text: content.content,
-          style:
-              DefaultTextStyle.of(context).style.copyWith(color: orgMetaColor));
-    } else {
-      return TextSpan(children: content.children.map(_textTree).toList());
-    }
+    return Text.rich(
+        _contentToSpanTree(context, widget.content, _recognizers.add));
   }
 }
 
-class OrgHeadlineWidget extends StatelessWidget {
+InlineSpan _contentToSpanTree(
+  BuildContext context,
+  OrgContent content,
+  Function(GestureRecognizer) registerRecognizer,
+) {
+  if (content is OrgPlainText) {
+    return TextSpan(text: content.content);
+  } else if (content is OrgMarkup) {
+    return TextSpan(
+      text: content.content,
+      style: fontStyleForOrgStyle(
+        DefaultTextStyle.of(context).style,
+        content.style,
+      ),
+    );
+  } else if (content is OrgLink) {
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => launch(content.location);
+    registerRecognizer(recognizer);
+    return TextSpan(
+      recognizer: recognizer,
+      text: content.description ?? content.location,
+      style: DefaultTextStyle.of(context).style.copyWith(color: orgLinkColor),
+    );
+  } else if (content is OrgMeta) {
+    return TextSpan(
+        text: content.content,
+        style:
+            DefaultTextStyle.of(context).style.copyWith(color: orgMetaColor));
+  } else {
+    return TextSpan(
+        children: content.children
+            .map((child) =>
+                _contentToSpanTree(context, child, registerRecognizer))
+            .toList());
+  }
+}
+
+class OrgHeadlineWidget extends StatefulWidget {
   const OrgHeadlineWidget(this.headline, {Key key}) : super(key: key);
   final OrgHeadline headline;
 
   @override
+  _OrgHeadlineWidgetState createState() => _OrgHeadlineWidgetState();
+}
+
+class _OrgHeadlineWidgetState extends State<OrgHeadlineWidget> {
+  final _recognizers = <GestureRecognizer>[];
+
+  @override
+  void dispose() {
+    for (final item in _recognizers) {
+      item.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final color = orgLevelColors[headline.level % orgLevelColors.length];
+    final color = orgLevelColors[widget.headline.level % orgLevelColors.length];
     return DefaultTextStyle.merge(
       style: TextStyle(
         color: color,
@@ -165,25 +189,22 @@ class OrgHeadlineWidget extends StatelessWidget {
         // Builder here to make modified default text style accessible
         builder: (context) => Text.rich(
           TextSpan(
-            text: '${headline.stars} ',
+            text: '${widget.headline.stars} ',
             children: [
-              if (headline.keyword != null)
+              if (widget.headline.keyword != null)
                 TextSpan(
-                    text: '${headline.keyword} ',
+                    text: '${widget.headline.keyword} ',
                     style: DefaultTextStyle.of(context).style.copyWith(
-                        color: headline.keyword == 'DONE'
+                        color: widget.headline.keyword == 'DONE'
                             ? orgDoneColor
                             : orgTodoColor)),
-              if (headline.priority != null)
-                TextSpan(text: '${headline.priority} '),
-              if (headline.title != null)
-                WidgetSpan(
-                  child: IdentityTextScale(
-                    child: OrgContentWidget(headline.title),
-                  ),
-                ),
-              if (headline.tags.isNotEmpty)
-                TextSpan(text: ':${headline.tags.join(':')}:'),
+              if (widget.headline.priority != null)
+                TextSpan(text: '${widget.headline.priority} '),
+              if (widget.headline.title != null)
+                _contentToSpanTree(
+                    context, widget.headline.title, _recognizers.add),
+              if (widget.headline.tags.isNotEmpty)
+                TextSpan(text: ':${widget.headline.tags.join(':')}:'),
             ],
           ),
         ),
