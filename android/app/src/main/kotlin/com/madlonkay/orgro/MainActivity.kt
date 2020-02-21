@@ -32,7 +32,7 @@ class MainActivity : FlutterActivity() {
 
         when (intent?.action) {
             Intent.ACTION_VIEW -> {
-                intent.data?.let { loadQueue.push(it) }
+                intent.data?.apply(loadQueue::push)
             }
         }
     }
