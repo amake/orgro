@@ -8,10 +8,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  org_parser:
-    # path: ../org_parser
-    git:
-      url: https://github.com/amake/org_parser.git
+  org_flutter:
+#    path: ../org_flutter
+     git:
+       url: https://github.com/amake/org_flutter.git
   cupertino_icons: ^0.1.2
   google_fonts: ^0.3.7
   url_launcher: ^5.4.1

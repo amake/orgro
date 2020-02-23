@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:orgro/src/org_widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:org_flutter/org_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -108,7 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: _content == null
             ? PickFileButton(onSelected: _loadPath)
-            : OrgDocumentWidget(_content),
+            : OrgDocumentWidget(
+                _content,
+                style: GoogleFonts.firaMono(fontSize: 18),
+                linkHandler: launch,
+              ),
       ),
     );
   }

@@ -128,12 +128,21 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
-  org_parser:
+  org_flutter:
     dependency: "direct main"
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ef5c4c796d6fd268369e641faf1023722506f802
+      resolved-ref: bba61bc75f28e93541938368fedf1b75dc2260dd
+      url: "https://github.com/amake/org_flutter.git"
+    source: git
+    version: "0.0.1"
+  org_parser:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: bc2a45f877ec3b546c2f8f0335de21dc701407a2
       url: "https://github.com/amake/org_parser.git"
     source: git
     version: "0.0.1"
