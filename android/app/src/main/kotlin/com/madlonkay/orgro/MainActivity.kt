@@ -10,15 +10,16 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
-import java.io.BufferedReader
 import java.io.InputStream
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MainActivity : FlutterActivity() {
 
     lateinit var channel: MethodChannel;
 
     private val loadQueue: Deque<Uri> = ArrayDeque()
+    private val ready = AtomicBoolean(false)
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine);
@@ -32,7 +33,7 @@ class MainActivity : FlutterActivity() {
 
         when (intent?.action) {
             Intent.ACTION_VIEW -> {
-                intent.data?.apply(loadQueue::push)
+                intent.data?.apply(if (ready.get()) this::loadUri else loadQueue::push)
             }
         }
     }
@@ -40,6 +41,7 @@ class MainActivity : FlutterActivity() {
     private fun handleMethod(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "ready" -> {
+                ready.set(true)
                 while (loadQueue.isNotEmpty()) {
                     loadUri(loadQueue.pop())
                 }
