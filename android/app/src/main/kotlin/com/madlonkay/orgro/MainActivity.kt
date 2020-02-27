@@ -53,8 +53,22 @@ class MainActivity : FlutterActivity() {
 
     private fun loadUri(uri: Uri) {
         contentResolver.openInputStream(uri)?.readText()?.let {
-            channel.invokeMethod("loadString", it)
+            channel.invokeMethod("loadString", it, InvocationLogger("loadString"))
         }
+    }
+}
+
+private class InvocationLogger(val method: String) : MethodChannel.Result {
+    override fun notImplemented() {
+        Log.e("Orgro", "$method not implemented")
+    }
+
+    override fun error(errorCode: String?, errorMessage: String?, errorDetails: Any?) {
+        Log.e("Orgro", "$method error; code=$errorCode, message=$errorMessage, details=$errorDetails")
+    }
+
+    override fun success(result: Any?) {
+        Log.d("Orgro", "$method success; result=$result")
     }
 }
 
