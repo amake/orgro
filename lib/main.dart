@@ -15,55 +15,77 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Orgro',
       theme: ThemeData.localize(ThemeData.light(), Typography.englishLike2018),
-      home: const MyHomePage(),
+      home: const Model(child: StartPage()),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key}) : super(key: key);
+class Model extends InheritedWidget {
+  const Model({@required Widget child})
+      : assert(child != null),
+        super(child: child);
+
+  static Model of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<Model>();
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  bool updateShouldNotify(Model oldWidget) => false;
+
+  Future<bool> loadUrl(BuildContext context, String url) async {
+    final uri = Uri.parse(url);
+    return loadPath(context, uri.toFilePath());
+  }
+
+  Future<bool> loadPath(BuildContext context, String path) async {
+    final file = File(path);
+    final content = await file.readAsString();
+    final title = file.uri.pathSegments.last;
+    return loadDocument(context, title, content);
+  }
+
+  bool loadDocument(BuildContext context, String title, String content) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DocumentPage(title: title, document: content),
+        fullscreenDialog: true,
+      ),
+    );
+    return true;
+  }
 }
 
 const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
-class _MyHomePageState extends State<MyHomePage> {
-  String _content;
+class PlatformOpenHandler extends StatefulWidget {
+  const PlatformOpenHandler({@required this.child, Key key})
+      : assert(child != null),
+        super(key: key);
+
+  final Widget child;
+
+  @override
+  _PlatformOpenHandlerState createState() => _PlatformOpenHandlerState();
+}
+
+class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
+  Model get _model => Model.of(context);
 
   @override
   void initState() {
     super.initState();
     platform
-      ..setMethodCallHandler(handler)
+      ..setMethodCallHandler(_handler)
       ..invokeMethod('ready');
   }
 
-  Future<dynamic> handler(MethodCall call) async {
+  Future<dynamic> _handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        return _loadString(call.arguments as String);
+        return _model.loadDocument(context, null, call.arguments as String);
       case 'loadUrl':
-        return _loadUrl(call.arguments as String);
+        return _model.loadUrl(context, call.arguments as String);
     }
-  }
-
-  Future<bool> _loadUrl(String url) async {
-    final uri = Uri.parse(url);
-    return _loadPath(uri.toFilePath());
-  }
-
-  Future<bool> _loadPath(String path) async {
-    final content = await File(path).readAsString();
-    return _loadString(content);
-  }
-
-  bool _loadString(String content) {
-    setState(() {
-      _content = content;
-    });
-    return true;
   }
 
   @override
@@ -72,49 +94,22 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _scrollToTop(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.minScrollExtent);
-  }
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
 
-  void _scrollToBottom(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.maxScrollExtent);
-  }
-
-  void _scrollTo(ScrollController controller, double position) =>
-      controller.animateTo(position,
-          duration: const Duration(milliseconds: 300), curve: Curves.ease);
+class StartPage extends StatelessWidget {
+  const StartPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Orgro'),
-        actions: <Widget>[
-          // Builders required to get access to PrimaryScrollController
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.keyboard_arrow_up),
-              onPressed: () => _scrollToTop(context),
-            ),
-          ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.keyboard_arrow_down),
-              onPressed: () => _scrollToBottom(context),
-            ),
-          )
-        ],
-      ),
-      body: Center(
-        child: _content == null
-            ? PickFileButton(onSelected: _loadPath)
-            : OrgDocumentWidget(
-                _content,
-                style: GoogleFonts.firaMono(fontSize: 18),
-                linkHandler: launch,
-              ),
+      appBar: AppBar(title: const Text('Orgro')),
+      body: PlatformOpenHandler(
+        child: Center(
+          child: PickFileButton(
+              onSelected: (path) => Model.of(context).loadPath(context, path)),
+        ),
       ),
     );
   }
@@ -137,6 +132,60 @@ class PickFileButton extends StatelessWidget {
           onSelected(path);
         }
       },
+    );
+  }
+}
+
+class DocumentPage extends StatelessWidget {
+  const DocumentPage({@required this.title, @required this.document, Key key})
+      : assert(document != null),
+        super(key: key);
+
+  final String title;
+  final String document;
+
+  void _scrollToTop(BuildContext context) {
+    final controller = PrimaryScrollController.of(context);
+    _scrollTo(controller, controller.position.minScrollExtent);
+  }
+
+  void _scrollToBottom(BuildContext context) {
+    final controller = PrimaryScrollController.of(context);
+    _scrollTo(controller, controller.position.maxScrollExtent);
+  }
+
+  void _scrollTo(ScrollController controller, double position) =>
+      controller.animateTo(position,
+          duration: const Duration(milliseconds: 300), curve: Curves.ease);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: title == null ? const Text('Orgro') : Text('Orgro: $title'),
+        actions: <Widget>[
+          // Builders required to get access to PrimaryScrollController
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.keyboard_arrow_up),
+              onPressed: () => _scrollToTop(context),
+            ),
+          ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.keyboard_arrow_down),
+              onPressed: () => _scrollToBottom(context),
+            ),
+          )
+        ],
+      ),
+      body: Center(
+        child: OrgDocumentWidget(
+          document,
+          style: GoogleFonts.firaMono(fontSize: 18),
+          linkHandler: launch,
+        ),
+      ),
     );
   }
 }
