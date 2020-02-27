@@ -10,11 +10,12 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
+import kotlinx.coroutines.*
 import java.io.InputStream
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
 
     lateinit var channel: MethodChannel;
 
@@ -33,7 +34,15 @@ class MainActivity : FlutterActivity() {
 
         when (intent?.action) {
             Intent.ACTION_VIEW -> {
-                intent.data?.apply(if (ready.get()) this::loadUri else loadQueue::push)
+                intent.data?.let { uri ->
+                    if (ready.get()) {
+                        launch { loadUri(uri) }
+                    } else {
+                        synchronized(loadQueue) {
+                            loadQueue.push(uri)
+                        }
+                    }
+                }
             }
         }
     }
@@ -42,8 +51,11 @@ class MainActivity : FlutterActivity() {
         when (call.method) {
             "ready" -> {
                 ready.set(true)
-                while (loadQueue.isNotEmpty()) {
-                    loadUri(loadQueue.pop())
+                synchronized(loadQueue) {
+                    while (loadQueue.isNotEmpty()) {
+                        val queued = loadQueue.pop()
+                        launch { loadUri(queued) }
+                    }
                 }
                 result.success(true)
             }
@@ -51,9 +63,11 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun loadUri(uri: Uri) {
+    private suspend fun loadUri(uri: Uri) = withContext(Dispatchers.IO) {
         contentResolver.openInputStream(uri)?.readText()?.let {
-            channel.invokeMethod("loadString", it, InvocationLogger("loadString"))
+            withContext(Dispatchers.Main) {
+                channel.invokeMethod("loadString", it, InvocationLogger("loadString"))
+            }
         }
     }
 }
