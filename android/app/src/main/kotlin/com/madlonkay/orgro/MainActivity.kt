@@ -29,18 +29,21 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
         channel.setMethodCallHandler(this::handleMethod)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
         when (intent?.action) {
             Intent.ACTION_VIEW -> {
-                intent.data?.let { uri ->
-                    if (ready.get()) {
-                        launch { loadUri(uri) }
-                    } else {
-                        synchronized(loadQueue) {
-                            loadQueue.push(uri)
+                if (!intent.consumed()) {
+                    intent.data?.let { uri ->
+                        if (ready.get()) {
+                            launch { loadUri(uri) }
+                        } else {
+                            synchronized(loadQueue) {
+                                loadQueue.push(uri)
+                            }
                         }
+                        intent.consume()
                     }
                 }
             }
@@ -90,3 +93,11 @@ private class InvocationLogger(val method: String) : MethodChannel.Result {
 }
 
 fun InputStream.readText(): String = bufferedReader().use { it.readText() }
+
+private const val consumedFlag = "orgro-consumed"
+
+fun Intent.consume() {
+    putExtra(consumedFlag, true)
+}
+
+fun Intent.consumed() : Boolean = hasExtra(consumedFlag)
