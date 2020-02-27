@@ -64,7 +64,10 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
     }
 
     private suspend fun loadUri(uri: Uri) = withContext(Dispatchers.IO) {
+        val start = System.currentTimeMillis()
         contentResolver.openInputStream(uri)?.readText()?.let {
+            val end = System.currentTimeMillis()
+            Log.d("Orgro", "loading URI complete (${end - start} ms)")
             withContext(Dispatchers.Main) {
                 channel.invokeMethod("loadString", it, InvocationLogger("loadString"))
             }
