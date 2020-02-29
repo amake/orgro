@@ -52,7 +52,7 @@ void narrow(BuildContext context, String title, OrgSection section) {
     context,
     MaterialPageRoute(
       builder: (context) => DocumentPage(
-        title: '$title (narrow)',
+        title: '$title › narrow',
         child: OrgSectionWidget(
           section,
           initiallyOpen: true,
