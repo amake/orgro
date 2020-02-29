@@ -47,6 +47,21 @@ bool loadDocument(BuildContext context, String title, String content) {
   return true;
 }
 
+void narrow(BuildContext context, String title, OrgSection section) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => DocumentPage(
+        title: '$title (narrow)',
+        child: OrgSectionWidget(
+          section,
+          initiallyOpen: true,
+        ),
+      ),
+    ),
+  );
+}
+
 const platform = MethodChannel('org.madlonkay.orgro/openFile');
 
 class PlatformOpenHandler extends StatefulWidget {
@@ -175,6 +190,7 @@ class DocumentPage extends StatelessWidget {
             child: child,
             style: GoogleFonts.firaMono(fontSize: 18),
             onLinkTap: launch,
+            onSectionLongPress: (section) => narrow(context, title, section),
           ),
         ],
       ),
