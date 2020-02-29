@@ -189,7 +189,7 @@ class DocumentPage extends StatelessWidget {
           OrgRootWidget(
             child: child,
             style: GoogleFonts.firaMono(fontSize: 18),
-            onLinkTap: launch,
+            onLinkTap: (url) => launch(url, forceSafariVC: false),
             onSectionLongPress: (section) => narrow(context, title, section),
           ),
         ],
