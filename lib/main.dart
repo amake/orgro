@@ -29,10 +29,11 @@ Future<bool> loadPath(BuildContext context, String path) async {
   final file = File(path);
   final content = await file.readAsString();
   final title = file.uri.pathSegments.last;
-  return loadDocument(context, title, content);
+  loadDocument(context, title, content);
+  return true;
 }
 
-bool loadDocument(BuildContext context, String title, String content) {
+void loadDocument(BuildContext context, String title, String content) {
   final document = OrgDocument(content);
   Navigator.push(
     context,
@@ -44,7 +45,6 @@ bool loadDocument(BuildContext context, String title, String content) {
       fullscreenDialog: true,
     ),
   );
-  return true;
 }
 
 void narrow(BuildContext context, String title, OrgSection section) {
