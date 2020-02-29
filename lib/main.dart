@@ -33,10 +33,14 @@ Future<bool> loadPath(BuildContext context, String path) async {
 }
 
 bool loadDocument(BuildContext context, String title, String content) {
+  final document = OrgDocument(content);
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => DocumentPage(title: title, document: content),
+      builder: (context) => DocumentPage(
+        title: title,
+        child: OrgDocumentWidget(document),
+      ),
       fullscreenDialog: true,
     ),
   );
@@ -122,12 +126,12 @@ class PickFileButton extends StatelessWidget {
 }
 
 class DocumentPage extends StatelessWidget {
-  const DocumentPage({@required this.title, @required this.document, Key key})
-      : assert(document != null),
+  const DocumentPage({@required this.title, @required this.child, Key key})
+      : assert(child != null),
         super(key: key);
 
   final String title;
-  final String document;
+  final Widget child;
 
   void _scrollToTop(BuildContext context) {
     final controller = PrimaryScrollController.of(context);
@@ -164,12 +168,15 @@ class DocumentPage extends StatelessWidget {
           )
         ],
       ),
-      body: Center(
-        child: OrgDocumentWidget(
-          document,
-          style: GoogleFonts.firaMono(fontSize: 18),
-          linkHandler: launch,
-        ),
+      body: ListView(
+        padding: const EdgeInsets.all(8),
+        children: <Widget>[
+          OrgRootWidget(
+            child: child,
+            style: GoogleFonts.firaMono(fontSize: 18),
+            onLinkTap: launch,
+          ),
+        ],
       ),
     );
   }
