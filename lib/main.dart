@@ -15,6 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Orgro',
       theme: ThemeData.localize(ThemeData.light(), Typography.englishLike2018),
+      darkTheme:
+          ThemeData.localize(ThemeData.dark(), Typography.englishLike2018),
       home: const StartPage(),
     );
   }
