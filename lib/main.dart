@@ -162,7 +162,7 @@ class DocumentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: title == null ? const Text('Orgro') : Text('Orgro: $title'),
+        title: title == null ? const Text('Orgro') : Text(title),
         actions: <Widget>[
           // Builders required to get access to PrimaryScrollController
           Builder(
