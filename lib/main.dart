@@ -15,44 +15,32 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Orgro',
       theme: ThemeData.localize(ThemeData.light(), Typography.englishLike2018),
-      home: const Model(child: StartPage()),
+      home: const StartPage(),
     );
   }
 }
 
-class Model extends InheritedWidget {
-  const Model({@required Widget child})
-      : assert(child != null),
-        super(child: child);
+Future<bool> loadUrl(BuildContext context, String url) async {
+  final uri = Uri.parse(url);
+  return loadPath(context, uri.toFilePath());
+}
 
-  static Model of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<Model>();
+Future<bool> loadPath(BuildContext context, String path) async {
+  final file = File(path);
+  final content = await file.readAsString();
+  final title = file.uri.pathSegments.last;
+  return loadDocument(context, title, content);
+}
 
-  @override
-  bool updateShouldNotify(Model oldWidget) => false;
-
-  Future<bool> loadUrl(BuildContext context, String url) async {
-    final uri = Uri.parse(url);
-    return loadPath(context, uri.toFilePath());
-  }
-
-  Future<bool> loadPath(BuildContext context, String path) async {
-    final file = File(path);
-    final content = await file.readAsString();
-    final title = file.uri.pathSegments.last;
-    return loadDocument(context, title, content);
-  }
-
-  bool loadDocument(BuildContext context, String title, String content) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DocumentPage(title: title, document: content),
-        fullscreenDialog: true,
-      ),
-    );
-    return true;
-  }
+bool loadDocument(BuildContext context, String title, String content) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => DocumentPage(title: title, document: content),
+      fullscreenDialog: true,
+    ),
+  );
+  return true;
 }
 
 const platform = MethodChannel('org.madlonkay.orgro/openFile');
@@ -69,8 +57,6 @@ class PlatformOpenHandler extends StatefulWidget {
 }
 
 class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
-  Model get _model => Model.of(context);
-
   @override
   void initState() {
     super.initState();
@@ -82,9 +68,9 @@ class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
   Future<dynamic> _handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        return _model.loadDocument(context, null, call.arguments as String);
+        return loadDocument(context, null, call.arguments as String);
       case 'loadUrl':
-        return _model.loadUrl(context, call.arguments as String);
+        return loadUrl(context, call.arguments as String);
     }
   }
 
@@ -107,8 +93,7 @@ class StartPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Orgro')),
       body: PlatformOpenHandler(
         child: Center(
-          child: PickFileButton(
-              onSelected: (path) => Model.of(context).loadPath(context, path)),
+          child: PickFileButton(onSelected: (path) => loadPath(context, path)),
         ),
       ),
     );
