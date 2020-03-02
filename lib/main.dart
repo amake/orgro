@@ -16,7 +16,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Orgro',
-      theme: ThemeData.localize(ThemeData.light(), Typography.englishLike2018),
+      theme: ThemeData.localize(
+          ThemeData(
+            primaryColor: Colors.teal,
+            accentColor: Colors.deepOrangeAccent,
+          ),
+          Typography.englishLike2018),
       darkTheme:
           ThemeData.localize(ThemeData.dark(), Typography.englishLike2018),
       home: const StartPage(),
