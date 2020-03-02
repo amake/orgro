@@ -74,7 +74,16 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
 Future<OrgDocument> parse(String content) async =>
     time('parse', () => compute(_parse, content));
 
-OrgDocument _parse(String text) => OrgDocument(text);
+OrgDocument _parse(String text) {
+  try {
+    return OrgDocument(text);
+    // ignore: avoid_catches_without_on_clauses
+  } catch (e, s) {
+    debugPrint(e.toString());
+    debugPrint(s.toString());
+    rethrow;
+  }
+}
 
 void narrow(BuildContext context, String title, OrgSection section) {
   Navigator.push(
