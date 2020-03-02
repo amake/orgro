@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +24,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+Future<T> time<T>(String tag, FutureOr<T> Function() func) async {
+  final start = DateTime.now();
+  final ret = await func();
+  final end = DateTime.now();
+  debugPrint('$tag: ${end.difference(start).inMilliseconds} ms');
+  return ret;
+}
+
 Future<bool> loadUrl(BuildContext context, String url) async {
   final uri = Uri.parse(url);
   return loadPath(context, uri.toFilePath());
@@ -29,25 +39,37 @@ Future<bool> loadUrl(BuildContext context, String url) async {
 
 Future<bool> loadPath(BuildContext context, String path) async {
   final file = File(path);
-  final content = await file.readAsString();
+  final content = time('read file', file.readAsString);
   final title = file.uri.pathSegments.last;
   loadDocument(context, title, content);
-  return true;
+  return content.then((_) => true);
 }
 
-void loadDocument(BuildContext context, String title, String content) {
-  final document = OrgDocument(content);
+void loadDocument(BuildContext context, String title, Future<String> content) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => DocumentPage(
-        title: title,
-        child: OrgDocumentWidget(document),
+      builder: (context) => FutureBuilder<OrgDocument>(
+        future: content.then(parse),
+        builder: (context, snapshot) {
+          final document = snapshot.data;
+          return document == null
+              ? const ProgressPage(title: 'Loading...')
+              : DocumentPage(
+                  title: title,
+                  child: OrgDocumentWidget(document),
+                );
+        },
       ),
       fullscreenDialog: true,
     ),
   );
 }
+
+Future<OrgDocument> parse(String content) async =>
+    time('parse', () => compute(_parse, content));
+
+OrgDocument _parse(String text) => OrgDocument(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   Navigator.push(
@@ -89,7 +111,11 @@ class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
   Future<dynamic> _handler(MethodCall call) async {
     switch (call.method) {
       case 'loadString':
-        return loadDocument(context, null, call.arguments as String);
+        return loadDocument(
+          context,
+          null,
+          Future.value(call.arguments as String),
+        );
       case 'loadUrl':
         return loadUrl(context, call.arguments as String);
     }
@@ -195,6 +221,24 @@ class DocumentPage extends StatelessWidget {
             onSectionLongPress: (section) => narrow(context, title, section),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProgressPage extends StatelessWidget {
+  const ProgressPage({this.title, Key key}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: title == null ? null : Text(title),
+      ),
+      body: const Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
