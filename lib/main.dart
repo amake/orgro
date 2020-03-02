@@ -57,13 +57,12 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
       builder: (context) => FutureBuilder<OrgDocument>(
         future: content.then(parse),
         builder: (context, snapshot) {
-          final document = snapshot.data;
-          return document == null
-              ? const ProgressPage(title: 'Loading...')
-              : DocumentPage(
+          return snapshot.hasData
+              ? DocumentPage(
                   title: title,
-                  child: OrgDocumentWidget(document),
-                );
+                  child: OrgDocumentWidget(snapshot.data),
+                )
+              : const ProgressPage(title: 'Loading...');
         },
       ),
       fullscreenDialog: true,
