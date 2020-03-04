@@ -57,12 +57,16 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
       builder: (context) => FutureBuilder<OrgDocument>(
         future: content.then(parse, onError: logError),
         builder: (context, snapshot) {
-          return snapshot.hasData
-              ? DocumentPage(
-                  title: title,
-                  child: OrgDocumentWidget(snapshot.data),
-                )
-              : const ProgressPage(title: 'Loading...');
+          if (snapshot.hasData) {
+            return DocumentPage(
+              title: title,
+              child: OrgDocumentWidget(snapshot.data),
+            );
+          } else if (snapshot.hasError) {
+            return ErrorPage(error: snapshot.error.toString());
+          } else {
+            return const ProgressPage();
+          }
         },
       ),
       fullscreenDialog: true,
@@ -237,18 +241,44 @@ class DocumentPage extends StatelessWidget {
 }
 
 class ProgressPage extends StatelessWidget {
-  const ProgressPage({this.title, Key key}) : super(key: key);
-
-  final String title;
+  const ProgressPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: title == null ? null : Text(title),
+        title: const Text('Loading...'),
       ),
       body: const Center(
         child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class ErrorPage extends StatelessWidget {
+  const ErrorPage({this.error, Key key}) : super(key: key);
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Error'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(Icons.error),
+              const SizedBox(height: 16),
+              Text(error, textAlign: TextAlign.center),
+            ],
+          ),
+        ),
       ),
     );
   }
