@@ -55,7 +55,7 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
     context,
     MaterialPageRoute(
       builder: (context) => FutureBuilder<OrgDocument>(
-        future: content.then(parse),
+        future: content.then(parse, onError: logError),
         builder: (context, snapshot) {
           return snapshot.hasData
               ? DocumentPage(
@@ -73,16 +73,13 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
 Future<OrgDocument> parse(String content) async =>
     time('parse', () => compute(_parse, content));
 
-OrgDocument _parse(String text) {
-  try {
-    return OrgDocument(text);
-    // ignore: avoid_catches_without_on_clauses
-  } catch (e, s) {
-    debugPrint(e.toString());
-    debugPrint(s.toString());
-    rethrow;
-  }
+Future logError(Object e, StackTrace s) async {
+  debugPrint(e.toString());
+  debugPrint(s.toString());
+  return e;
 }
+
+OrgDocument _parse(String text) => OrgDocument(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   Navigator.push(
