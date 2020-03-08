@@ -56,7 +56,7 @@ class _TextSizeButtonState extends State<TextSizeButton>
     OverlayEntry barrierOverlay;
     yield barrierOverlay = OverlayEntry(builder: (context) {
       return GestureDetector(
-        onTap: () async {
+        onTapDown: (_) async {
           await animationController.reverse();
           barrierOverlay.remove();
           buttonsOverlay.remove();
