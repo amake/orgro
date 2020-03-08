@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class TextSizeButton extends StatefulWidget {
-  const TextSizeButton({this.value, this.onChanged, Key key}) : super(key: key);
+  const TextSizeButton({
+    @required this.value,
+    @required this.onChanged,
+    Key key,
+  })  : assert(value != null),
+        assert(onChanged != null),
+        super(key: key);
 
   final double value;
   final Function(double) onChanged;
@@ -65,8 +71,13 @@ class _TextSizeButtonState extends State<TextSizeButton>
 }
 
 class TextSizePalette extends StatefulWidget {
-  const TextSizePalette({this.value, this.onChanged, Key key})
-      : super(key: key);
+  const TextSizePalette({
+    @required this.value,
+    @required this.onChanged,
+    Key key,
+  })  : assert(value != null),
+        assert(onChanged != null),
+        super(key: key);
 
   final double value;
   final Function(double) onChanged;
