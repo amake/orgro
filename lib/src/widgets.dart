@@ -62,7 +62,7 @@ class _TextSizeButtonState extends State<TextSizeButton>
           buttonsOverlay.remove();
           animationController.dispose();
         },
-        child: Container(color: Colors.transparent),
+        behavior: HitTestBehavior.opaque,
       );
     });
     yield buttonsOverlay;
