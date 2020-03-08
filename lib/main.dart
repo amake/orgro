@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
@@ -182,7 +183,7 @@ class PickFileButton extends StatelessWidget {
   }
 }
 
-class DocumentPage extends StatelessWidget {
+class DocumentPage extends StatefulWidget {
   const DocumentPage({@required this.title, @required this.child, Key key})
       : assert(child != null),
         super(key: key);
@@ -190,6 +191,11 @@ class DocumentPage extends StatelessWidget {
   final String title;
   final Widget child;
 
+  @override
+  _DocumentPageState createState() => _DocumentPageState();
+}
+
+class _DocumentPageState extends State<DocumentPage> {
   void _scrollToTop(BuildContext context) {
     final controller = PrimaryScrollController.of(context);
     _scrollTo(controller, controller.position.minScrollExtent);
@@ -204,12 +210,24 @@ class DocumentPage extends StatelessWidget {
       controller.animateTo(position,
           duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
+  double _textScale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _textScale ??= MediaQuery.textScaleFactorOf(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: title == null ? const Text('Orgro') : Text(title),
+        title: widget.title == null ? const Text('Orgro') : Text(widget.title),
         actions: <Widget>[
+          TextSizeButton(
+            value: _textScale,
+            onChanged: (value) => setState(() => _textScale = value),
+          ),
           // Builders required to get access to PrimaryScrollController
           Builder(
             builder: (context) => IconButton(
@@ -222,17 +240,21 @@ class DocumentPage extends StatelessWidget {
               icon: const Icon(Icons.keyboard_arrow_down),
               onPressed: () => _scrollToBottom(context),
             ),
-          )
+          ),
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: <Widget>[
-          OrgRootWidget(
-            child: child,
-            style: GoogleFonts.firaMono(fontSize: 18),
-            onLinkTap: (url) => launch(url, forceSafariVC: false),
-            onSectionLongPress: (section) => narrow(context, title, section),
+          MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: _textScale),
+            child: OrgRootWidget(
+              child: widget.child,
+              style: GoogleFonts.firaMono(fontSize: 18),
+              onLinkTap: (url) => launch(url, forceSafariVC: false),
+              onSectionLongPress: (section) =>
+                  narrow(context, widget.title, section),
+            ),
           ),
         ],
       ),
