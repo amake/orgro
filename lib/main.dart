@@ -248,13 +248,13 @@ class _DocumentPageState extends State<DocumentPage> {
           // Builders required to get access to PrimaryScrollController
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.keyboard_arrow_up),
+              icon: const Icon(Icons.vertical_align_top),
               onPressed: () => _scrollToTop(context),
             ),
           ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.keyboard_arrow_down),
+              icon: const Icon(Icons.vertical_align_bottom),
               onPressed: () => _scrollToBottom(context),
             ),
           ),
