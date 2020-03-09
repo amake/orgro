@@ -59,9 +59,12 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
         future: content.then(parse, onError: logError),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return DocumentPage(
-              title: title,
-              child: OrgDocumentWidget(snapshot.data),
+            return OrgController(
+              root: snapshot.data,
+              child: DocumentPage(
+                title: title,
+                child: OrgDocumentWidget(snapshot.data),
+              ),
             );
           } else if (snapshot.hasError) {
             return ErrorPage(error: snapshot.error.toString());
@@ -91,13 +94,16 @@ void narrow(BuildContext context, String title, OrgSection section) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => DocumentPage(
-        title: '$title › narrow',
-        child: OrgSectionWidget(
-          section,
-          initiallyOpen: true,
+      builder: (context) => OrgController(
+        root: section,
+        child: DocumentPage(
+          title: '$title › narrow',
+          child: OrgSectionWidget(
+            section,
+            initiallyOpen: true,
+          ),
+          textScale: textScale,
         ),
-        textScale: textScale,
       ),
     ),
   );
@@ -231,6 +237,10 @@ class _DocumentPageState extends State<DocumentPage> {
       appBar: AppBar(
         title: widget.title == null ? const Text('Orgro') : Text(widget.title),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.repeat),
+            onPressed: OrgController.of(context).cycleVisibility,
+          ),
           TextSizeButton(
             value: _textScale,
             onChanged: (value) => setState(() => _textScale = value),
