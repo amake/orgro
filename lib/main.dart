@@ -87,6 +87,7 @@ Future logError(Object e, StackTrace s) async {
 OrgDocument _parse(String text) => OrgDocument(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
+  final textScale = MediaQuery.textScaleFactorOf(context);
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -96,6 +97,7 @@ void narrow(BuildContext context, String title, OrgSection section) {
           section,
           initiallyOpen: true,
         ),
+        textScale: textScale,
       ),
     ),
   );
@@ -184,12 +186,17 @@ class PickFileButton extends StatelessWidget {
 }
 
 class DocumentPage extends StatefulWidget {
-  const DocumentPage({@required this.title, @required this.child, Key key})
-      : assert(child != null),
+  const DocumentPage({
+    @required this.title,
+    @required this.child,
+    this.textScale,
+    Key key,
+  })  : assert(child != null),
         super(key: key);
 
   final String title;
   final Widget child;
+  final double textScale;
 
   @override
   _DocumentPageState createState() => _DocumentPageState();
@@ -215,7 +222,7 @@ class _DocumentPageState extends State<DocumentPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _textScale ??= MediaQuery.textScaleFactorOf(context);
+    _textScale ??= widget.textScale ?? MediaQuery.textScaleFactorOf(context);
   }
 
   @override
@@ -248,12 +255,15 @@ class _DocumentPageState extends State<DocumentPage> {
         children: <Widget>[
           MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: _textScale),
-            child: OrgRootWidget(
-              child: widget.child,
-              style: GoogleFonts.firaMono(fontSize: 18),
-              onLinkTap: (url) => launch(url, forceSafariVC: false),
-              onSectionLongPress: (section) =>
-                  narrow(context, widget.title, section),
+            // Builder required to get modified textScaleFactor into the context
+            child: Builder(
+              builder: (context) => OrgRootWidget(
+                child: widget.child,
+                style: GoogleFonts.firaMono(fontSize: 18),
+                onLinkTap: (url) => launch(url, forceSafariVC: false),
+                onSectionLongPress: (section) =>
+                    narrow(context, widget.title, section),
+              ),
             ),
           ),
         ],
