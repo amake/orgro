@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
-import 'package:orgro/main.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/pages/pages.dart';
 
 Future<bool> loadUrl(BuildContext context, String url) async {
   final uri = Uri.parse(url);
