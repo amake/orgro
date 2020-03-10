@@ -209,20 +209,6 @@ class DocumentPage extends StatefulWidget {
 }
 
 class _DocumentPageState extends State<DocumentPage> {
-  void _scrollToTop(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.minScrollExtent);
-  }
-
-  void _scrollToBottom(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.maxScrollExtent);
-  }
-
-  void _scrollTo(ScrollController controller, double position) =>
-      controller.animateTo(position,
-          duration: const Duration(milliseconds: 300), curve: Curves.ease);
-
   double _textScale;
 
   @override
@@ -245,19 +231,8 @@ class _DocumentPageState extends State<DocumentPage> {
             value: _textScale,
             onChanged: (value) => setState(() => _textScale = value),
           ),
-          // Builders required to get access to PrimaryScrollController
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.vertical_align_top),
-              onPressed: () => _scrollToTop(context),
-            ),
-          ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.vertical_align_bottom),
-              onPressed: () => _scrollToBottom(context),
-            ),
-          ),
+          const ScrollTopButton(),
+          const ScrollBottomButton(),
         ],
       ),
       body: ListView(
