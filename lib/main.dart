@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:org_flutter/org_flutter.dart';
-import 'package:orgro/src/widgets.dart';
+import 'package:orgro/src/actions/actions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
