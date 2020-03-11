@@ -126,7 +126,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "27823e486c81b3a416e9f23b33c4540f8a6682fa"
+      resolved-ref: "663b20df17b615ab3615d0a8eeadbc2fdf64a216"
       url: "https://github.com/amake/org_flutter.git"
     source: git
     version: "0.0.1"
@@ -135,7 +135,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a3c590ca6fd5a7f7877465f790b50cd8c435e014
+      resolved-ref: "6a54ded91dce15bf7c1cd8de3066150db32d1d61"
       url: "https://github.com/amake/org_parser.git"
     source: git
     version: "0.0.1"
