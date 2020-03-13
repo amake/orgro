@@ -60,7 +60,10 @@ class _DocumentPageState extends State<DocumentPage> {
               OrgRootWidget(
                 child: widget.child,
                 style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
-                onLinkTap: (url) => launch(url, forceSafariVC: false),
+                onLinkTap: (url) {
+                  debugPrint('Launching URL: $url');
+                  return launch(url, forceSafariVC: false);
+                },
                 onSectionLongPress: (section) =>
                     narrow(context, widget.title, section),
               ),
