@@ -54,7 +54,7 @@ Future<OrgDocument> parse(String content) async =>
 OrgDocument _parse(String text) => OrgDocument(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
-  final textScale = MediaQuery.textScaleFactorOf(context);
+  final textScale = ViewSettings.of(context).textScale;
   Navigator.push(
     context,
     MaterialPageRoute(

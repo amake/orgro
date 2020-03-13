@@ -50,24 +50,41 @@ class _DocumentPageState extends State<DocumentPage> {
           const ScrollBottomButton(),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(8),
-        children: <Widget>[
-          MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: _textScale),
-            // Builder required to get modified textScaleFactor into the context
-            child: Builder(
-              builder: (context) => OrgRootWidget(
+      body: ViewSettings(
+        textScale: _textScale,
+        // Builder required to get ViewSettings into the context
+        child: Builder(
+          builder: (context) => ListView(
+            padding: const EdgeInsets.all(8),
+            children: <Widget>[
+              OrgRootWidget(
                 child: widget.child,
-                style: GoogleFonts.firaMono(fontSize: 18),
+                style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
                 onLinkTap: (url) => launch(url, forceSafariVC: false),
                 onSectionLongPress: (section) =>
                     narrow(context, widget.title, section),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class ViewSettings extends InheritedWidget {
+  const ViewSettings({
+    @required Widget child,
+    @required this.textScale,
+    Key key,
+  }) : super(child: child, key: key);
+
+  final double textScale;
+
+  @override
+  bool updateShouldNotify(ViewSettings oldWidget) =>
+      textScale != oldWidget.textScale;
+
+  static ViewSettings of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ViewSettings>();
 }
