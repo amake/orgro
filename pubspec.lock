@@ -126,7 +126,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "647dbac883c65a0d10e90baac3db765776c36f69"
+      resolved-ref: "50c72ca611acf00b85164ad3c03b5d66f934b4c0"
       url: "https://github.com/amake/org_flutter.git"
     source: git
     version: "0.0.1"
