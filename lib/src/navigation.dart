@@ -55,11 +55,14 @@ OrgDocument _parse(String text) => OrgDocument(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   final textScale = ViewSettings.of(context).textScale;
+  // Continue to use the true document root so that links to sections outside
+  // the narrowed section can be resolved
+  final parent = OrgController.of(context).root;
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => OrgController(
-        root: section,
+        root: parent,
         child: DocumentPage(
           title: '$title › narrow',
           child: OrgSectionWidget(

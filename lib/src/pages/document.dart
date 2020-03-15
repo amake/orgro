@@ -66,6 +66,8 @@ class _DocumentPageState extends State<DocumentPage> {
                 },
                 onSectionLongPress: (section) =>
                     narrow(context, widget.title, section),
+                onLocalSectionLinkTap: (section) =>
+                    narrow(context, widget.title, section),
               ),
             ],
           ),
