@@ -25,6 +25,14 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   double _textScale;
+  MySearchDelegate _searchDelegate;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchDelegate = MySearchDelegate(
+        onQueryChanged: (pattern) => OrgController.of(context).search(pattern));
+  }
 
   @override
   void didChangeDependencies() {
@@ -33,44 +41,73 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: widget.title == null ? const Text('Orgro') : Text(widget.title),
-        actions: <Widget>[
+  void dispose() {
+    _searchDelegate.dispose();
+    super.dispose();
+  }
+
+  Widget _title(bool searchMode) {
+    if (searchMode) {
+      return _searchDelegate.buildSearchField();
+    } else if (widget.title != null) {
+      return Text(widget.title);
+    } else {
+      return const Text('Orgro');
+    }
+  }
+
+  List<Widget> _actions(bool searchMode) => <Widget>[
+        if (!searchMode)
           IconButton(
-            icon: const Icon(Icons.repeat),
-            onPressed: OrgController.of(context).cycleVisibility,
+            icon: const Icon(Icons.search),
+            onPressed: () => _searchDelegate.start(context),
           ),
-          TextSizeButton(
-            value: _textScale,
-            onChanged: (value) => setState(() => _textScale = value),
-          ),
-          const ScrollTopButton(),
-          const ScrollBottomButton(),
-        ],
+        IconButton(
+          icon: const Icon(Icons.repeat),
+          onPressed: OrgController.of(context).cycleVisibility,
+        ),
+        TextSizeButton(
+          value: _textScale,
+          onChanged: (value) => setState(() => _textScale = value),
+        ),
+        const ScrollTopButton(),
+        const ScrollBottomButton(),
+      ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: _searchDelegate.searchMode,
+      builder: (context, searchMode, child) => Scaffold(
+        appBar: AppBar(
+          title: _title(searchMode),
+          actions: _actions(searchMode),
+        ),
+        body: child,
       ),
-      body: ViewSettings(
+      child: ViewSettings(
         textScale: _textScale,
         // Builder required to get ViewSettings into the context
         child: Builder(
-          builder: (context) => ListView(
-            padding: const EdgeInsets.all(8),
-            children: <Widget>[
-              OrgRootWidget(
-                child: widget.child,
-                style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
-                onLinkTap: (url) {
-                  debugPrint('Launching URL: $url');
-                  return launch(url, forceSafariVC: false);
-                },
-                onSectionLongPress: (section) =>
-                    narrow(context, widget.title, section),
-                onLocalSectionLinkTap: (section) =>
-                    narrow(context, widget.title, section),
-              ),
-            ],
-          ),
+          builder: (context) {
+            return ListView(
+              padding: const EdgeInsets.all(8),
+              children: <Widget>[
+                OrgRootWidget(
+                  child: widget.child,
+                  style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
+                  onLinkTap: (url) {
+                    debugPrint('Launching URL: $url');
+                    return launch(url, forceSafariVC: false);
+                  },
+                  onSectionLongPress: (section) =>
+                      narrow(context, widget.title, section),
+                  onLocalSectionLinkTap: (section) =>
+                      narrow(context, widget.title, section),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
