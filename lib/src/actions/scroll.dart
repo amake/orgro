@@ -5,6 +5,16 @@ void _scrollTo(ScrollController controller, double position) =>
     controller.animateTo(position,
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
+void _scrollToTop(BuildContext context) {
+  final controller = PrimaryScrollController.of(context);
+  _scrollTo(controller, controller.position.minScrollExtent);
+}
+
+void _scrollToBottom(BuildContext context) {
+  final controller = PrimaryScrollController.of(context);
+  _scrollTo(controller, controller.position.maxScrollExtent);
+}
+
 class ScrollTopButton extends StatelessWidget {
   const ScrollTopButton({Key key}) : super(key: key);
 
@@ -15,11 +25,13 @@ class ScrollTopButton extends StatelessWidget {
       onPressed: () => _scrollToTop(context),
     );
   }
+}
 
-  void _scrollToTop(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.minScrollExtent);
-  }
+PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
+  return PopupMenuItem<VoidCallback>(
+    child: const Text('Scroll to top'),
+    value: () => _scrollToTop(context),
+  );
 }
 
 class ScrollBottomButton extends StatelessWidget {
@@ -32,9 +44,11 @@ class ScrollBottomButton extends StatelessWidget {
       onPressed: () => _scrollToBottom(context),
     );
   }
+}
 
-  void _scrollToBottom(BuildContext context) {
-    final controller = PrimaryScrollController.of(context);
-    _scrollTo(controller, controller.position.maxScrollExtent);
-  }
+PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
+  return PopupMenuItem<VoidCallback>(
+    child: const Text('Scroll to bottom'),
+    value: () => _scrollToBottom(context),
+  );
 }

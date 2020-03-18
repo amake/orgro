@@ -64,16 +64,30 @@ class _DocumentPageState extends State<DocumentPage> {
       );
     }
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
-      yield IconButton(
-        icon: const Icon(Icons.repeat),
-        onPressed: OrgController.of(context).cycleVisibility,
-      );
       yield TextSizeButton(
         value: _textScale,
         onChanged: (value) => setState(() => _textScale = value),
       );
-      yield const ScrollTopButton();
-      yield const ScrollBottomButton();
+      if (MediaQuery.of(context).size.width > 600) {
+        yield IconButton(
+          icon: const Icon(Icons.repeat),
+          onPressed: OrgController.of(context).cycleVisibility,
+        );
+        yield const ScrollTopButton();
+        yield const ScrollBottomButton();
+      } else {
+        yield PopupMenuButton<VoidCallback>(
+          onSelected: (callback) => callback(),
+          itemBuilder: (context) => [
+            PopupMenuItem<VoidCallback>(
+              child: const Text('Cycle visibility'),
+              value: OrgController.of(context).cycleVisibility,
+            ),
+            scrollBottomMenuItem(context),
+            scrollTopMenuItem(context),
+          ],
+        );
+      }
     }
   }
 
