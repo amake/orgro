@@ -42,7 +42,7 @@ class _TextSizeButtonState extends State<TextSizeButton>
     final screen = MediaQuery.of(context).size;
     final buttonsOverlay = OverlayEntry(builder: (context) {
       return Positioned(
-        top: bounds.bottom - 8,
+        top: bounds.top,
         right: screen.width - bounds.right,
         child: FadeTransition(
           opacity: animationController,
