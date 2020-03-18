@@ -58,14 +58,16 @@ class SearchField extends StatelessWidget {
     // regular text in the AppBar
     final theme = Theme.of(context);
     final style = DefaultTextStyle.of(context).style;
-    final iconTheme = IconThemeData(color: style.color);
+    final color = style.color.withOpacity(0.7);
+    final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(
-        primaryColor: style.color,
-        accentColor: style.color,
-        hintColor: style.color.withOpacity(0.7),
-        disabledColor: style.color,
-        colorScheme: theme.colorScheme.copyWith(onSurface: style.color),
+        primaryColor: color,
+        accentColor: color,
+        hintColor: color,
+        disabledColor: color,
+        cursorColor: theme.accentColor,
+        colorScheme: theme.colorScheme.copyWith(onSurface: color),
       ),
       child: TextField(
         autofocus: true,
@@ -74,6 +76,7 @@ class SearchField extends StatelessWidget {
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           hintText: 'Search...',
+          border: InputBorder.none,
           prefixIcon: IconTheme.merge(
             data: iconTheme,
             child: const Icon(Icons.search),
