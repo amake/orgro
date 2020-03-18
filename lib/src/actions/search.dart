@@ -83,9 +83,14 @@ class SearchField extends StatelessWidget {
           ),
           suffixIcon: IconTheme.merge(
             data: iconTheme,
-            child: IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: onClear,
+            child: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _controller,
+              builder: (context, value, child) =>
+                  value.text.isNotEmpty ? child : const SizedBox.shrink(),
+              child: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: onClear,
+              ),
             ),
           ),
         ),
