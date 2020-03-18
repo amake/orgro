@@ -133,7 +133,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: c173a815a7fe19c544fda6e3d4882fe734ae2c17
+      resolved-ref: d7ac83f336d9b97ad625ad2fa05fedefdfcc04a5
       url: "https://github.com/amake/org_flutter.git"
     source: git
     version: "0.0.1"
@@ -180,7 +180,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0+1"
+    version: "1.9.0"
   petitparser:
     dependency: transitive
     description:
@@ -255,7 +255,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.11"
+    version: "0.2.15"
   typed_data:
     dependency: transitive
     description:
