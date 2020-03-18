@@ -56,23 +56,26 @@ class _DocumentPageState extends State<DocumentPage> {
     }
   }
 
-  List<Widget> _actions(bool searchMode) => <Widget>[
-        if (!searchMode)
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => _searchDelegate.start(context),
-          ),
-        IconButton(
-          icon: const Icon(Icons.repeat),
-          onPressed: OrgController.of(context).cycleVisibility,
-        ),
-        TextSizeButton(
-          value: _textScale,
-          onChanged: (value) => setState(() => _textScale = value),
-        ),
-        const ScrollTopButton(),
-        const ScrollBottomButton(),
-      ];
+  Iterable<Widget> _actions(bool searchMode) sync* {
+    if (!searchMode) {
+      yield IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () => _searchDelegate.start(context),
+      );
+    }
+    if (!searchMode || MediaQuery.of(context).size.width > 500) {
+      yield IconButton(
+        icon: const Icon(Icons.repeat),
+        onPressed: OrgController.of(context).cycleVisibility,
+      );
+      yield TextSizeButton(
+        value: _textScale,
+        onChanged: (value) => setState(() => _textScale = value),
+      );
+      yield const ScrollTopButton();
+      yield const ScrollBottomButton();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class _DocumentPageState extends State<DocumentPage> {
       builder: (context, searchMode, child) => Scaffold(
         appBar: AppBar(
           title: _title(searchMode),
-          actions: _actions(searchMode),
+          actions: _actions(searchMode).toList(growable: false),
         ),
         body: child,
       ),
