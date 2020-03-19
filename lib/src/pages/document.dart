@@ -58,8 +58,8 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Iterable<Widget> _actions(bool searchMode) sync* {
     if (!searchMode) {
-      yield IconButton(
-        icon: const Icon(Icons.search),
+      yield SearchButton(
+        hasQuery: _searchDelegate.hasQuery,
         onPressed: () => _searchDelegate.start(context),
       );
     }
