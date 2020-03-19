@@ -66,7 +66,6 @@ class SearchField extends StatelessWidget {
         accentColor: color,
         hintColor: color,
         disabledColor: color,
-        cursorColor: theme.accentColor,
         colorScheme: theme.colorScheme.copyWith(onSurface: color),
       ),
       child: TextField(
@@ -74,6 +73,7 @@ class SearchField extends StatelessWidget {
         style: style,
         controller: _controller,
         textInputAction: TextInputAction.search,
+        cursorColor: theme.accentColor,
         decoration: InputDecoration(
           hintText: 'Search...',
           border: InputBorder.none,
