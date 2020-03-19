@@ -52,7 +52,7 @@ class _DocumentPageState extends State<DocumentPage> {
     } else if (widget.title != null) {
       return Text(widget.title);
     } else {
-      return const Text('Orgro');
+      return const Text('orgro');
     }
   }
 

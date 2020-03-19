@@ -10,7 +10,7 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Orgro')),
+      appBar: AppBar(title: const Text('orgro')),
       body: PlatformOpenHandler(
         child: Center(
           child: PickFileButton(onSelected: (path) => loadPath(context, path)),

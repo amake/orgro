@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Orgro',
+      title: 'orgro',
       theme: ThemeData.localize(
           ThemeData(
             primaryColor: Colors.teal,
