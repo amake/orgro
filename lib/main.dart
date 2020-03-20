@@ -8,14 +8,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'orgro',
-      theme: ThemeData.localize(
-          ThemeData(
-            primaryColor: Colors.teal,
-            accentColor: Colors.deepOrangeAccent,
-          ),
-          Typography.englishLike2018),
-      darkTheme:
-          ThemeData.localize(ThemeData.dark(), Typography.englishLike2018),
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.light(
+          primary: Colors.teal,
+          primaryVariant: Colors.teal.shade700,
+          secondary: Colors.deepOrangeAccent,
+          secondaryVariant: Colors.deepOrangeAccent.shade700,
+        ),
+        textTheme: Typography.englishLike2018,
+      ),
+      darkTheme: ThemeData.from(
+        colorScheme: ColorScheme.dark(
+          primary: Colors.teal,
+          primaryVariant: Colors.teal.shade700,
+          secondary: Colors.deepOrangeAccent,
+          secondaryVariant: Colors.deepOrangeAccent.shade700,
+        ),
+        textTheme: Typography.englishLike2018,
+      ),
       home: const StartPage(),
     );
   }
