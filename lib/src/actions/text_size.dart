@@ -44,11 +44,16 @@ class _TextSizeButtonState extends State<TextSizeButton>
       return Positioned(
         top: bounds.top,
         right: screen.width - bounds.right,
-        child: FadeTransition(
-          opacity: animationController,
-          child: TextSizePalette(
-            value: widget.value,
-            onChanged: widget.onChanged,
+        child: SizeTransition(
+          sizeFactor: animationController,
+          axis: Axis.horizontal,
+          axisAlignment: 1,
+          child: FadeTransition(
+            opacity: animationController,
+            child: TextSizePalette(
+              value: widget.value,
+              onChanged: widget.onChanged,
+            ),
           ),
         ),
       );
@@ -108,6 +113,9 @@ class _TextSizePaletteState extends State<TextSizePalette> {
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.card,
+      // TODO(aaron): Figure out why this still doesn't produce an elevation
+      // shadow
+      elevation: PopupMenuTheme.of(context).elevation ?? 8,
       child: InkWell(
         child: Row(
           children: <Widget>[
