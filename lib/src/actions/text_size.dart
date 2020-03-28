@@ -35,15 +35,11 @@ class _TextSizeButtonState extends State<TextSizeButton>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    final renderObject = context.findRenderObject();
-    final translation = renderObject.getTransformTo(null).getTranslation();
-    final bounds =
-        renderObject.paintBounds.shift(Offset(translation.x, translation.y));
-    final screen = MediaQuery.of(context).size;
+    final position = _buttonPosition(context);
     final buttonsOverlay = OverlayEntry(builder: (context) {
       return Positioned(
-        top: bounds.top,
-        right: screen.width - bounds.right,
+        top: position.top,
+        right: position.right,
         child: PopupPalette(
           animation: animationController,
           child: TextSizeAdjuster(
@@ -67,6 +63,20 @@ class _TextSizeButtonState extends State<TextSizeButton>
     });
     yield buttonsOverlay;
     animationController.forward();
+  }
+
+  RelativeRect _buttonPosition(BuildContext context) {
+    // Copied from PopupMenuButtonState.showButtonMenu()
+    final button = context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    return RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(Offset.zero, ancestor: overlay),
+        button.localToGlobal(button.size.bottomRight(Offset.zero),
+            ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
   }
 }
 
