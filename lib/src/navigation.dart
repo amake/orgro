@@ -22,11 +22,14 @@ Future<bool> loadPath(BuildContext context, String path) async {
 }
 
 void loadDocument(BuildContext context, String title, Future<String> content) {
+  // Create the future here so that it is not recreated on every build; this way
+  // the result won't be recomputed e.g. on hot reload
+  final parsed = content.then(parse, onError: logError);
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => FutureBuilder<OrgDocument>(
-        future: content.then(parse, onError: logError),
+        future: parsed,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return OrgController(
