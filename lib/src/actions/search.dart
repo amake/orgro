@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class MySearchDelegate {
-  MySearchDelegate({@required this.onQueryChanged})
-      : assert(onQueryChanged != null) {
+  MySearchDelegate({
+    @required this.onQueryChanged,
+    @required this.onQuerySubmitted,
+  }) : assert(onQueryChanged != null) {
     _searchController.addListener(_searchQueryChanged);
   }
 
-  final Function(Pattern) onQueryChanged;
+  final Function(String) onQueryChanged;
+  final Function(String) onQuerySubmitted;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final _searchController = TextEditingController();
 
   Widget buildSearchField() => SearchField(
         _searchController,
         onClear: _clearSearchQuery,
+        onSubmitted: onQuerySubmitted,
       );
 
   void dispose() {
@@ -32,14 +36,7 @@ class MySearchDelegate {
 
   void _clearSearchQuery() => _searchController.clear();
 
-  void _searchQueryChanged() {
-    final pattern = RegExp(
-      RegExp.escape(_searchController.text),
-      unicode: true,
-      caseSensitive: false,
-    );
-    onQueryChanged(pattern);
-  }
+  void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
   bool get hasQuery => _searchController.value.text.isNotEmpty;
 }
@@ -91,10 +88,12 @@ class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
     this.onClear,
+    this.onSubmitted,
     Key key,
   }) : super(key: key);
   final TextEditingController _controller;
   final VoidCallback onClear;
+  final Function(String) onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +117,7 @@ class SearchField extends StatelessWidget {
         controller: _controller,
         textInputAction: TextInputAction.search,
         cursorColor: theme.accentColor,
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           hintText: 'Search...',
           border: InputBorder.none,
