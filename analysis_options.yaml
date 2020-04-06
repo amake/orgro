@@ -3,7 +3,7 @@ include: package:pedantic/analysis_options.yaml
 analyzer:
   strong-mode:
     implicit-casts: false
-    #implicit-dynamic: false
+    implicit-dynamic: false
 
 linter:
   rules:

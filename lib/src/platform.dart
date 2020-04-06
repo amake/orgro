@@ -21,7 +21,7 @@ class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
     super.initState();
     _channel
       ..setMethodCallHandler(_handler)
-      ..invokeMethod('ready');
+      ..invokeMethod<bool>('ready');
   }
 
   Future<dynamic> _handler(MethodCall call) async {

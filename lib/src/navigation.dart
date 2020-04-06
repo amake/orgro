@@ -25,7 +25,7 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
   final parsed = content.then(parse, onError: logError);
-  Navigator.push(
+  Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (context) => FutureBuilder<OrgDocument>(
@@ -61,7 +61,7 @@ void narrow(BuildContext context, String title, OrgSection section) {
   // Continue to use the true document root so that links to sections outside
   // the narrowed section can be resolved
   final parent = OrgController.of(context).root;
-  Navigator.push(
+  Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (context) => OrgController(
