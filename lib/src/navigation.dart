@@ -54,7 +54,7 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
 Future<OrgDocument> parse(String content) async =>
     time('parse', () => compute(_parse, content));
 
-OrgDocument _parse(String text) => OrgDocument(text);
+OrgDocument _parse(String text) => OrgDocument.parse(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   final textScale = ViewSettings.of(context).textScale;
