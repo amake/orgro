@@ -33,7 +33,7 @@ class _PlatformOpenHandlerState extends State<PlatformOpenHandler> {
           Future.value(call.arguments as String),
         );
       case 'loadUrl':
-        return loadUrl(context, call.arguments as String);
+        return loadFileUrl(context, call.arguments as String);
     }
   }
 

@@ -8,7 +8,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 
-Future<bool> loadUrl(BuildContext context, String url) async {
+Future<bool> loadFileUrl(BuildContext context, String url) async {
   final uri = Uri.parse(url);
   return loadPath(context, uri.toFilePath());
 }
