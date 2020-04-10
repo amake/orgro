@@ -4,9 +4,26 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
+
+Future<bool> loadHttpUrl(BuildContext context, String url) async {
+  final title = Uri.parse(url).pathSegments.last;
+  final content = time(
+    'load url',
+    () => http.get(url).then((response) {
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        throw Exception();
+      }
+    }),
+  );
+  loadDocument(context, title, content);
+  return content.then((_) => true, onError: () => false);
+}
 
 Future<bool> loadFileUrl(BuildContext context, String url) async {
   final uri = Uri.parse(url);

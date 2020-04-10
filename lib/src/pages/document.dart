@@ -122,24 +122,22 @@ class _DocumentPageState extends State<DocumentPage> {
         // Builder required to get ViewSettings into the context
         child: Builder(
           builder: (context) {
-            return ListView(
-              children: <Widget>[
-                SafeArea(
-                  minimum: const EdgeInsets.all(8),
-                  child: OrgRootWidget(
-                    child: widget.child,
-                    style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
-                    onLinkTap: (url) {
-                      debugPrint('Launching URL: $url');
-                      return launch(url, forceSafariVC: false);
-                    },
-                    onSectionLongPress: (section) =>
-                        narrow(context, widget.title, section),
-                    onLocalSectionLinkTap: (section) =>
-                        narrow(context, widget.title, section),
-                  ),
+            return SingleChildScrollView(
+              child: SafeArea(
+                minimum: const EdgeInsets.all(8),
+                child: OrgRootWidget(
+                  child: widget.child,
+                  style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
+                  onLinkTap: (url) {
+                    debugPrint('Launching URL: $url');
+                    return launch(url, forceSafariVC: false);
+                  },
+                  onSectionLongPress: (section) =>
+                      narrow(context, widget.title, section),
+                  onLocalSectionLinkTap: (section) =>
+                      narrow(context, widget.title, section),
                 ),
-              ],
+              ),
             );
           },
         ),
