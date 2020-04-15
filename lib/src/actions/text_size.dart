@@ -125,7 +125,8 @@ class TextSizeAdjuster extends StatefulWidget {
   _TextSizeAdjusterState createState() => _TextSizeAdjusterState();
 }
 
-const _kTextSizeAdjustmentIncrement = 0.12;
+const _kTextSizeAdjustmentIncrement = 10;
+const _kTextSizeAdjustmentFactor = 100;
 
 class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
   double _value;
@@ -133,14 +134,14 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
   @override
   void initState() {
     super.initState();
-    _value = widget.value;
+    _value = widget.value * _kTextSizeAdjustmentFactor;
   }
 
   void _setValue(double newValue) {
     setState(() {
       _value = newValue;
     });
-    widget.onChanged(newValue);
+    widget.onChanged(newValue / _kTextSizeAdjustmentFactor);
   }
 
   @override
@@ -153,7 +154,7 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
           onPressed: () => _setValue(_value - _kTextSizeAdjustmentIncrement),
         ),
         Text(
-          _value.toStringAsFixed(2),
+          (_value / _kTextSizeAdjustmentFactor).toStringAsFixed(2),
           style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
         ),
         IconButton(
