@@ -34,7 +34,10 @@ class MySearchDelegate {
     searchMode.value = false;
   }
 
-  void _clearSearchQuery() => _searchController.clear();
+  void _clearSearchQuery() {
+    _searchController.clear();
+    onQuerySubmitted(_searchController.text);
+  }
 
   void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
