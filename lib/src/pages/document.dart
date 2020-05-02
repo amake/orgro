@@ -88,12 +88,15 @@ class _DocumentPageState extends State<DocumentPage> {
           icon: const Icon(Icons.repeat),
           onPressed: OrgController.of(context).cycleVisibility,
         );
+        yield const ReaderModeButton();
         yield const ScrollTopButton();
         yield const ScrollBottomButton();
       } else {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
+            readerModeMenuItem(context),
+            const PopupMenuDivider(),
             PopupMenuItem<VoidCallback>(
               child: const Text('Cycle visibility'),
               value: OrgController.of(context).cycleVisibility,
