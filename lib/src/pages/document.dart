@@ -7,10 +7,26 @@ import 'package:orgro/src/navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
+  DocumentPage.defaults(
+    ViewSettings settings, {
+    @required String title,
+    @required Widget child,
+    Key key,
+  }) : this(
+          title: title,
+          child: child,
+          textScale: settings.textScale,
+          initialQuery: settings.queryString,
+          readerMode: settings.readerMode,
+          key: key,
+        );
+
   const DocumentPage({
     @required this.title,
     @required this.child,
     this.textScale,
+    this.initialQuery,
+    this.readerMode,
     Key key,
   })  : assert(child != null),
         super(key: key);
@@ -18,6 +34,8 @@ class DocumentPage extends StatefulWidget {
   final String title;
   final Widget child;
   final double textScale;
+  final String initialQuery;
+  final bool readerMode;
 
   @override
   _DocumentPageState createState() => _DocumentPageState();
@@ -26,6 +44,7 @@ class DocumentPage extends StatefulWidget {
 class _DocumentPageState extends State<DocumentPage> {
   double _textScale;
   MySearchDelegate _searchDelegate;
+  bool _readerMode;
 
   @override
   void initState() {
@@ -37,7 +56,9 @@ class _DocumentPageState extends State<DocumentPage> {
         }
       },
       onQuerySubmitted: _doQuery,
+      initialQuery: widget.initialQuery,
     );
+    _readerMode = widget.readerMode ?? false;
   }
 
   void _doQuery(String query) {
@@ -88,14 +109,17 @@ class _DocumentPageState extends State<DocumentPage> {
           icon: const Icon(Icons.repeat),
           onPressed: OrgController.of(context).cycleVisibility,
         );
-        yield const ReaderModeButton();
+        yield ReaderModeButton(
+          enabled: _readerMode,
+          onToggled: _toggleReaderMode,
+        );
         yield const ScrollTopButton();
         yield const ScrollBottomButton();
       } else {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
-            readerModeMenuItem(context),
+            readerModeMenuItem(context, _toggleReaderMode),
             const PopupMenuDivider(),
             PopupMenuItem<VoidCallback>(
               child: const Text('Cycle visibility'),
@@ -107,6 +131,13 @@ class _DocumentPageState extends State<DocumentPage> {
         );
       }
     }
+  }
+
+  void _toggleReaderMode() {
+    setState(() {
+      _readerMode = !_readerMode;
+      OrgController.of(context).hideMarkup.value = _readerMode;
+    });
   }
 
   @override
@@ -122,6 +153,8 @@ class _DocumentPageState extends State<DocumentPage> {
       ),
       child: ViewSettings(
         textScale: _textScale,
+        queryString: _searchDelegate.queryString,
+        readerMode: _readerMode,
         // Builder required to get ViewSettings into the context
         child: Builder(
           builder: (context) {
@@ -153,14 +186,24 @@ class ViewSettings extends InheritedWidget {
   const ViewSettings({
     @required Widget child,
     @required this.textScale,
+    @required this.queryString,
+    @required this.readerMode,
     Key key,
-  }) : super(child: child, key: key);
+  })  : assert(child != null),
+        assert(textScale != null),
+        assert(queryString != null),
+        assert(readerMode != null),
+        super(child: child, key: key);
 
   final double textScale;
+  final String queryString;
+  final bool readerMode;
 
   @override
   bool updateShouldNotify(ViewSettings oldWidget) =>
-      textScale != oldWidget.textScale;
+      textScale != oldWidget.textScale ||
+      queryString != oldWidget.queryString ||
+      readerMode != oldWidget.readerMode;
 
   static ViewSettings of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<ViewSettings>();

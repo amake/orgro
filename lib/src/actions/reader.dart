@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 
-PopupMenuItem<VoidCallback> readerModeMenuItem(BuildContext context) {
+PopupMenuItem<VoidCallback> readerModeMenuItem(
+    BuildContext context, VoidCallback onToggled) {
   return CheckedPopupMenuItem<VoidCallback>(
     checked: OrgController.of(context).hideMarkup.value,
-    value: () => _toggleHideMarkup(context),
+    value: onToggled,
     child: const Text('Reader mode'),
   );
 }
 
 class ReaderModeButton extends StatelessWidget {
-  const ReaderModeButton({Key key}) : super(key: key);
+  const ReaderModeButton({
+    @required this.enabled,
+    @required this.onToggled,
+    Key key,
+  })  : assert(enabled != null),
+        super(key: key);
+
+  final bool enabled;
+  final VoidCallback onToggled;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: OrgController.of(context).hideMarkup,
-      builder: (context, hideMarkup, child) {
-        return IconButton(
-          icon: const Icon(Icons.chrome_reader_mode),
-          color: hideMarkup ? Theme.of(context).accentColor : null,
-          onPressed: () => _toggleHideMarkup(context),
-        );
-      },
+    return IconButton(
+      icon: const Icon(Icons.chrome_reader_mode),
+      color: enabled ? Theme.of(context).accentColor : null,
+      onPressed: onToggled,
     );
   }
-}
-
-void _toggleHideMarkup(BuildContext context) {
-  final hideMarkup = OrgController.of(context).hideMarkup;
-  hideMarkup.value = !hideMarkup.value;
 }

@@ -5,14 +5,16 @@ class MySearchDelegate {
   MySearchDelegate({
     @required this.onQueryChanged,
     @required this.onQuerySubmitted,
-  }) : assert(onQueryChanged != null) {
+    String initialQuery,
+  })  : _searchController = TextEditingController(text: initialQuery),
+        assert(onQueryChanged != null) {
     _searchController.addListener(_searchQueryChanged);
   }
 
   final Function(String) onQueryChanged;
   final Function(String) onQuerySubmitted;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
-  final _searchController = TextEditingController();
+  final TextEditingController _searchController;
 
   Widget buildSearchField() => SearchField(
         _searchController,
@@ -42,6 +44,8 @@ class MySearchDelegate {
   void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
   bool get hasQuery => _searchController.value.text.isNotEmpty;
+
+  String get queryString => _searchController.value.text;
 }
 
 class SearchButton extends StatelessWidget {

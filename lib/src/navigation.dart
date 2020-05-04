@@ -74,22 +74,23 @@ Future<OrgDocument> parse(String content) async =>
 OrgDocument _parse(String text) => OrgDocument.parse(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
-  final textScale = ViewSettings.of(context).textScale;
-  // Continue to use the true document root so that links to sections outside
-  // the narrowed section can be resolved
-  final parent = OrgController.of(context).root;
+  final viewSettings = ViewSettings.of(context);
+  final orgController = OrgController.of(context);
   Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => OrgController(
-        root: parent,
-        child: DocumentPage(
+      builder: (context) => OrgController.defaults(
+        orgController,
+        // Continue to use the true document root so that links to sections
+        // outside the narrowed section can be resolved
+        root: orgController.root,
+        child: DocumentPage.defaults(
+          viewSettings,
           title: '$title › narrow',
           child: OrgSectionWidget(
             section,
             initiallyOpen: true,
           ),
-          textScale: textScale,
         ),
       ),
     ),
