@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/navigation.dart';
@@ -19,8 +20,10 @@ class StartPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 PickFileButton(onSelected: (path) => loadPath(context, path)),
-                const SizedBox(height: 16),
-                const OrgManualButton(),
+                if (!kReleaseMode) ...[
+                  const SizedBox(height: 16),
+                  const OrgManualButton(),
+                ]
               ],
             ),
           ),
