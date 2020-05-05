@@ -1,6 +1,7 @@
 name: orgro
 description: An Org file viewer
 version: 1.0.0+1
+homepage: https://github.com/amake/orgro
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
