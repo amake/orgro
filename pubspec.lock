@@ -63,7 +63,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0+2"
+    version: "1.9.0+1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -141,14 +141,14 @@ packages:
       name: org_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   path:
     dependency: transitive
     description:
@@ -169,7 +169,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+1"
+    version: "0.0.4+2"
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -293,7 +293,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1+2"
+    version: "0.1.1+4"
   vector_math:
     dependency: transitive
     description:
