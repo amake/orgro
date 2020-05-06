@@ -1,0 +1,43 @@
+Welcome to Orgro
+
+Orgro is an [[https://orgmode.org/][org-mode]] file viewer.
+
+Files open in "overview" visibility mode, with top sections folded.
+
+Tap a section header to expand it ↓
+
+* Supported features
+
+Orgro can understand the following org-mode features:
+
+** Sections
+
+Sections can be opened and closed by touching the section headline.
+
+TODO keywords, priority markers, and tags are highlighted and laid out nicely.
+
+** Blocks
+
+Blocks are laid out with horizontal scroll to keep code readable. They can also
+be opened and closed just like sections by touching the block header.
+
+   #+begin_src elisp
+     (+ 1 2)
+   #+end_src
+
+   #+RESULTS:
+   : 3
+
+The example above also illustrates affiliated keywords (the =#+RESULTS:= line)
+and fixed-width areas (the =: 3= line). Fixed width areas also have horizontal
+scroll to ensure proper display.
+
+** Tables
+
+Tables are rendered as GUI tables (rather than as raw text) to ensure proper
+spacing.
+
+| Foo         |    Bar | Baz |
+|-------------+--------+-----|
+| Lorem ipsum | 30.000 |   1 |
+| 123         |        |     |

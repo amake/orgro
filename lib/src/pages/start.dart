@@ -20,6 +20,8 @@ class StartPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const PickFileButton(),
+                const SizedBox(height: 16),
+                const OrgroManualButton(),
                 if (!kReleaseMode) ...[
                   const SizedBox(height: 16),
                   const OrgManualButton(),
@@ -40,6 +42,8 @@ class PickFileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RaisedButton(
       child: const Text('Open File'),
+      color: Theme.of(context).accentColor,
+      textColor: Theme.of(context).accentTextTheme.button.color,
       onPressed: () async {
         final path = await FilePicker.getFilePath(type: FileType.any);
         if (path != null) {
@@ -59,6 +63,18 @@ class OrgManualButton extends StatelessWidget {
       child: const Text('Open Org Manual'),
       onPressed: () => loadHttpUrl(context,
           'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org'),
+    );
+  }
+}
+
+class OrgroManualButton extends StatelessWidget {
+  const OrgroManualButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: const Text('Open Orgro Manual'),
+      onPressed: () => loadAsset(context, 'assets/orgro-manual.org'),
     );
   }
 }

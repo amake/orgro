@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
@@ -33,6 +34,14 @@ Future<bool> loadFileUrl(BuildContext context, String url) async {
 Future<bool> loadPath(BuildContext context, String path) async {
   final file = File(path);
   final content = time('read file', file.readAsString);
+  final title = file.uri.pathSegments.last;
+  loadDocument(context, title, content);
+  return content.then((_) => true);
+}
+
+Future<bool> loadAsset(BuildContext context, String key) async {
+  final content = rootBundle.loadString(key);
+  final file = File(key);
   final title = file.uri.pathSegments.last;
   loadDocument(context, title, content);
   return content.then((_) => true);
