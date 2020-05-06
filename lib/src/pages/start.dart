@@ -19,7 +19,7 @@ class StartPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                PickFileButton(onSelected: (path) => loadPath(context, path)),
+                const PickFileButton(),
                 if (!kReleaseMode) ...[
                   const SizedBox(height: 16),
                   const OrgManualButton(),
@@ -34,11 +34,7 @@ class StartPage extends StatelessWidget {
 }
 
 class PickFileButton extends StatelessWidget {
-  const PickFileButton({@required this.onSelected, Key key})
-      : assert(onSelected != null),
-        super(key: key);
-
-  final Function(String) onSelected;
+  const PickFileButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +43,7 @@ class PickFileButton extends StatelessWidget {
       onPressed: () async {
         final path = await FilePicker.getFilePath(type: FileType.any);
         if (path != null) {
-          onSelected(path);
+          await loadPath(context, path);
         }
       },
     );
