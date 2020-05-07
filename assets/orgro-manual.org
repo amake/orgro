@@ -32,12 +32,112 @@ The example above also illustrates affiliated keywords (the =#+RESULTS:= line)
 and fixed-width areas (the =: 3= line). Fixed width areas also have horizontal
 scroll to ensure proper display.
 
+Hide meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
+
 ** Tables
 
 Tables are rendered as GUI tables (rather than as raw text) to ensure proper
 spacing.
 
-| Foo         |    Bar | Baz |
-|-------------+--------+-----|
-| Lorem ipsum | 30.000 |   1 |
-| 123         |        |     |
+| Foo         |    Bar |  Baz |
+|-------------+--------+------|
+| Lorem ipsum | 30.000 |    1 |
+| 123         |        |      |
+| あいうえお  |  -1e24 | >3.5 |
+
+** Lists
+
+List content is shown with content reflowed for easy reading on narrow screens.
+
+- foo
+  - [X] bar
+  - [ ] baz
+    1. buzz
+    2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ipsum
+       sapien, molestie nec posuere at, porta sit amet neque. Duis vulputate
+       quis est et vestibulum. Quisque vehicula dolor vestibulum vestibulum
+       porta.
+  - bazinga
+    - thing :: this
+    - thang :: that
+
+** Drawers
+   :PROPERTIES:
+   :CUSTOM_ID: foobar
+   :END:
+
+Drawers are collapsed by default, but can be opened by touching the header.
+
+** Links
+
+External links open in your web browser:
+
+- Org-style bracketed links [[https://github.com/amake/sponsor][like this]]
+- Raw URLs like https://github.com/amake/sponsor
+
+Links to other sections in the same document open in a narrowed view. See [[*Narrowing][Narrowing]].
+
+** Emphasis
+
+The default emphasis markers are supported:
+
+- *bold*
+- /italic/
+- _underline_
+- +strikethrough+
+- ~code~
+- =verbatim=
+
+Hide the emphasis markers with [[*Reader Mode][Reader Mode]].
+
+** Other
+
+Other syntaxes that are highlighted but not (yet) interpreted in any special
+way:
+
+- Timestamps and ranges :: [2020-05-05 Tue]
+- Footnotes :: guess what[fn:: this is a footnote]
+- Macro references :: {{{date}}}
+
+* Narrowing
+
+Orgro can "narrow" the view to a specific section in two ways:
+
+- Open a section link
+- Long touch a section headline
+
+Close the narrowed view by touching the Back button in the top app bar.
+
+* Reader Mode
+
+Enable Reader Mode to hide emphasis markers and meta lines (lines starting with
+=#+=). The Reader Mode toggle can be found in one of two places:
+
+- Narrow screens (phones) :: =Reader mode= in the ⋮ action menu
+- Wide screens (tablets) :: icon button in the top app bar
+
+* Visibility Cycling
+
+Rotate sections between expanded and collapsed states just like org-mode in
+Emacs:
+
+1. Overview: Show only top-level headlines
+2. Contents: Show all headlines of all levels, but no body text
+3. Show all: Show everything
+
+- Narrow screens (phones) :: =Cycle visibility= in the ⋮ action menu
+- Wide screens (tablets) :: icon button in the top app bar
+
+* Search
+
+Touch the search button in the top app bar and enter a query. Relevant sections
+will be expanded, while sections without hits will be collapsed. Hits are
+highlighted.
+
+* Text Size
+
+Adjust the text size with the button in the top app bar.
+
+* Questions and Feedback
+
+Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
