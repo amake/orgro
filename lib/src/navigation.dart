@@ -98,7 +98,7 @@ void narrow(BuildContext context, String title, OrgSection section) {
           title: '$title › narrow',
           child: OrgSectionWidget(
             section,
-            initiallyOpen: true,
+            root: true,
           ),
         ),
       ),
