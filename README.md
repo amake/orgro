@@ -31,7 +31,7 @@ powers this application and is available as a separate library,
 - Narrowing
 - "Reader mode" where extraneous markup is hidden
 
-See the [manual](./assets/orgro-manual.org) for details
+See the [manual](./assets/orgro-manual.org) for details.
 
 # Limitations
 
@@ -39,3 +39,18 @@ Orgro is a viewer. It does not support editing at all.
 
 Many org-mode syntax structures are highlighted but not meaningfully
 interpreted.
+
+# Get it
+
+Right now the only way to get Orgro is to install it manually:
+
+1. Install [Flutter](https://flutter.dev/)
+2. Clone this repo
+3. Attach your device and do `flutter run` from the repo root
+
+It should be available in the Apple App Store and Google Play at some point.
+
+# Support Orgro
+
+If you like this app, please show your support by [sponsoring the
+author](https://github.com/sponsors/amake) ❤️
