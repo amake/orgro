@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +24,7 @@ class StartPage extends StatelessWidget {
                 const PickFileButton(),
                 const SizedBox(height: 16),
                 const OrgroManualButton(),
-                if (!kReleaseMode) ...[
+                if (!kReleaseMode && !kScreenshotMode) ...[
                   const SizedBox(height: 16),
                   const OrgManualButton(),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 
 void main() => runApp(MyApp());
@@ -7,6 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: !kScreenshotMode,
       title: 'orgro',
       theme: ThemeData.from(
         colorScheme: ColorScheme.light(
