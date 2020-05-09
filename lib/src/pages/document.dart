@@ -86,7 +86,10 @@ class _DocumentPageState extends State<DocumentPage> {
     if (searchMode) {
       return _searchDelegate.buildSearchField();
     } else if (widget.title != null) {
-      return Text(widget.title);
+      return Text(
+        widget.title,
+        overflow: TextOverflow.fade,
+      );
     } else {
       return const Text('orgro');
     }
