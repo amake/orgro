@@ -94,6 +94,7 @@ class SupportLink extends StatelessWidget {
         'https://github.com/amake/orgro/issues',
         forceSafariVC: false,
       ),
+      textColor: Theme.of(context).disabledColor,
     );
   }
 }
