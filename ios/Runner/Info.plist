@@ -55,6 +55,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app can open files stored on your device.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
