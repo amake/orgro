@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/platform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({Key key}) : super(key: key);
@@ -25,7 +26,9 @@ class StartPage extends StatelessWidget {
                 if (!kReleaseMode) ...[
                   const SizedBox(height: 16),
                   const OrgManualButton(),
-                ]
+                ],
+                const SizedBox(height: 64),
+                const SupportLink(),
               ],
             ),
           ),
@@ -75,6 +78,22 @@ class OrgroManualButton extends StatelessWidget {
     return RaisedButton(
       child: const Text('Open Orgro Manual'),
       onPressed: () => loadAsset(context, 'assets/orgro-manual.org'),
+    );
+  }
+}
+
+class SupportLink extends StatelessWidget {
+  const SupportLink({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton.icon(
+      icon: const Icon(Icons.help),
+      label: const Text('Support · Feedback'),
+      onPressed: () => launch(
+        'https://github.com/amake/orgro/issues',
+        forceSafariVC: false,
+      ),
     );
   }
 }
