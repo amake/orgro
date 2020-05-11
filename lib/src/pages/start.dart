@@ -21,16 +21,16 @@ class StartPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const PickFileButton(),
+                const _PickFileButton(),
                 const SizedBox(height: 16),
-                const OrgroManualButton(),
+                const _OrgroManualButton(),
                 if (!kReleaseMode && !kScreenshotMode) ...[
                   const SizedBox(height: 16),
-                  const OrgManualButton(),
+                  const _OrgManualButton(),
                 ],
-                const SizedBox(height: 64),
-                const SupportLink(),
-                const LicensesButton(),
+                const SizedBox(height: 80),
+                const _SupportLink(),
+                const _LicensesButton(),
               ],
             ),
           ),
@@ -40,8 +40,8 @@ class StartPage extends StatelessWidget {
   }
 }
 
-class PickFileButton extends StatelessWidget {
-  const PickFileButton({Key key}) : super(key: key);
+class _PickFileButton extends StatelessWidget {
+  const _PickFileButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +59,8 @@ class PickFileButton extends StatelessWidget {
   }
 }
 
-class OrgManualButton extends StatelessWidget {
-  const OrgManualButton({Key key}) : super(key: key);
+class _OrgManualButton extends StatelessWidget {
+  const _OrgManualButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +72,8 @@ class OrgManualButton extends StatelessWidget {
   }
 }
 
-class OrgroManualButton extends StatelessWidget {
-  const OrgroManualButton({Key key}) : super(key: key);
+class _OrgroManualButton extends StatelessWidget {
+  const _OrgroManualButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +84,8 @@ class OrgroManualButton extends StatelessWidget {
   }
 }
 
-class SupportLink extends StatelessWidget {
-  const SupportLink({Key key}) : super(key: key);
+class _SupportLink extends StatelessWidget {
+  const _SupportLink({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +101,8 @@ class SupportLink extends StatelessWidget {
   }
 }
 
-class LicensesButton extends StatelessWidget {
-  const LicensesButton({Key key}) : super(key: key);
+class _LicensesButton extends StatelessWidget {
+  const _LicensesButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
