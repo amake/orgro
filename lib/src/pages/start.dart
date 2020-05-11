@@ -30,6 +30,7 @@ class StartPage extends StatelessWidget {
                 ],
                 const SizedBox(height: 64),
                 const SupportLink(),
+                const LicensesButton(),
               ],
             ),
           ),
@@ -94,6 +95,24 @@ class SupportLink extends StatelessWidget {
       onPressed: () => launch(
         'https://github.com/amake/orgro/issues',
         forceSafariVC: false,
+      ),
+      textColor: Theme.of(context).disabledColor,
+    );
+  }
+}
+
+class LicensesButton extends StatelessWidget {
+  const LicensesButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: const Text('Licenses'),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => const LicensePage(),
+        ),
       ),
       textColor: Theme.of(context).disabledColor,
     );
