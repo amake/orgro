@@ -47,6 +47,17 @@ android {
         manifestPlaceholders = [displayName: '@string/app_name']
     }
 
+    signingConfigs {
+        release {
+            // Put keystore in /android; add 'keystore.password' to
+            // local.properties
+            storeFile file('../keystore.jks')
+            storePassword localProperties.getProperty('keystore.password')
+            keyAlias 'key0'
+            keyPassword localProperties.getProperty('keystore.password')
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
@@ -57,9 +68,7 @@ android {
             manifestPlaceholders = [displayName: '@string/app_name_profile']
         }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
