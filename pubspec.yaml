@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  org_flutter: ^0.2.0
+  org_flutter: ^0.3.0
   # org_flutter:
   #   path: ../org_flutter
   google_fonts: ^1.0.0
