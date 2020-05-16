@@ -154,7 +154,7 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
           onPressed: () => _setValue(_value - _kTextSizeAdjustmentIncrement),
         ),
         Text(
-          (_value / _kTextSizeAdjustmentFactor).toStringAsFixed(2),
+          '${(_value / _kTextSizeAdjustmentFactor * 100).toStringAsFixed(0)}%',
           style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
         ),
         IconButton(
