@@ -91,7 +91,7 @@ class _DocumentPageState extends State<DocumentPage> {
         overflow: TextOverflow.fade,
       );
     } else {
-      return const Text('orgro');
+      return const Text('Orgro');
     }
   }
 

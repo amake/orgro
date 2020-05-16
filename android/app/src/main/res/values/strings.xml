@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">orgro</string>
-    <string name="app_name_debug">orgro🐞</string>
-    <string name="app_name_profile">orgro🚀</string>
+    <string name="app_name">Orgro</string>
+    <string name="app_name_debug">Orgro🐞</string>
+    <string name="app_name_profile">Orgro🚀</string>
 </resources>

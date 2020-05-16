@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: !kScreenshotMode,
-      title: 'orgro',
+      title: 'Orgro',
       theme: ThemeData.from(
         colorScheme: ColorScheme.light(
           primary: _kPrimaryColor,
