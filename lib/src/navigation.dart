@@ -23,7 +23,13 @@ Future<bool> loadHttpUrl(BuildContext context, String url) async {
     }),
   );
   loadDocument(context, title, content);
-  return content.then((_) => true, onError: () => false);
+  return content.then((_) => true, onError: _httpError);
+}
+
+bool _httpError(Object e, StackTrace s) {
+  debugPrint(e.toString());
+  debugPrint(s.toString());
+  return false;
 }
 
 Future<bool> loadFileUrl(BuildContext context, String url) async {
