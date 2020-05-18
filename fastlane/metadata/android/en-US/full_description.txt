@@ -1,0 +1,15 @@
+Orgro is an org-mode file viewer with lots of features for comfortable reading on the go:
+
+- Reflowed text for easy viewing on mobile screens
+
+- Syntax highlighting that faithfully recreates the appearance in Emacs, in both light and dark modes
+
+- Reader mode for hiding extraneous markup and showing only what's important
+
+- Narrow your view to just a single section, just like in Emacs
+
+- Beautiful tables with guaranteed correct spacing, even with non-ASCII characters
+
+- Open external links in your web browser, and section links in narrowed views
+
+- Expand or collapse sections, blocks, and drawers just like in Emacs
