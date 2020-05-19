@@ -2,6 +2,10 @@
 
 An [org-mode](https://orgmode.org/) file viewer for iOS and Android
 
+<img width="300" src="https://orgro.org/assets/screenshot/flutter_02.png">
+
+_See https://orgro.org for a demo video_
+
 # What is org-mode?
 
 Imagine a plain-text markup language like Markdown, but married to an
