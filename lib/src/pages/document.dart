@@ -6,6 +6,8 @@ import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _kDefaultFontFamily = 'Fira Code';
+
 class DocumentPage extends StatefulWidget {
   DocumentPage.defaults(
     ViewSettings settings, {
@@ -16,6 +18,7 @@ class DocumentPage extends StatefulWidget {
           title: title,
           child: child,
           textScale: settings.textScale,
+          fontFamily: settings.fontFamily,
           initialQuery: settings.queryString,
           readerMode: settings.readerMode,
           key: key,
@@ -25,6 +28,7 @@ class DocumentPage extends StatefulWidget {
     @required this.title,
     @required this.child,
     this.textScale,
+    this.fontFamily,
     this.initialQuery,
     this.readerMode,
     Key key,
@@ -34,6 +38,7 @@ class DocumentPage extends StatefulWidget {
   final String title;
   final Widget child;
   final double textScale;
+  final String fontFamily;
   final String initialQuery;
   final bool readerMode;
 
@@ -43,12 +48,14 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   double _textScale;
+  String _fontFamily;
   MySearchDelegate _searchDelegate;
   bool _readerMode;
 
   @override
   void initState() {
     super.initState();
+    _fontFamily = widget.fontFamily ?? _kDefaultFontFamily;
     _searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
         if (query.length > 3) {
@@ -103,9 +110,11 @@ class _DocumentPageState extends State<DocumentPage> {
       );
     }
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
-      yield TextSizeButton(
-        value: _textScale,
-        onChanged: (value) => setState(() => _textScale = value),
+      yield TextStyleButton(
+        textScale: _textScale,
+        onTextScaleChanged: (value) => setState(() => _textScale = value),
+        fontFamily: _fontFamily,
+        onFontFamilyChanged: (value) => setState(() => _fontFamily = value),
       );
       if (MediaQuery.of(context).size.width > 600) {
         yield IconButton(
@@ -156,6 +165,7 @@ class _DocumentPageState extends State<DocumentPage> {
       ),
       child: ViewSettings(
         textScale: _textScale,
+        fontFamily: _fontFamily,
         queryString: _searchDelegate.queryString,
         readerMode: _readerMode,
         // Builder required to get ViewSettings into the context
@@ -163,7 +173,10 @@ class _DocumentPageState extends State<DocumentPage> {
           builder: (context) {
             return OrgRootWidget(
               child: widget.child,
-              style: GoogleFonts.firaMono(fontSize: 18 * _textScale),
+              style: GoogleFonts.getFont(
+                _fontFamily,
+                fontSize: 18 * _textScale,
+              ),
               onLinkTap: (url) {
                 debugPrint('Launching URL: $url');
                 return launch(url, forceSafariVC: false);
@@ -184,22 +197,26 @@ class ViewSettings extends InheritedWidget {
   const ViewSettings({
     @required Widget child,
     @required this.textScale,
+    @required this.fontFamily,
     @required this.queryString,
     @required this.readerMode,
     Key key,
   })  : assert(child != null),
         assert(textScale != null),
+        assert(fontFamily != null),
         assert(queryString != null),
         assert(readerMode != null),
         super(child: child, key: key);
 
   final double textScale;
+  final String fontFamily;
   final String queryString;
   final bool readerMode;
 
   @override
   bool updateShouldNotify(ViewSettings oldWidget) =>
       textScale != oldWidget.textScale ||
+      fontFamily != oldWidget.fontFamily ||
       queryString != oldWidget.queryString ||
       readerMode != oldWidget.readerMode;
 
