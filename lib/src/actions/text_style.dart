@@ -230,7 +230,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
       icon: const Icon(Icons.font_download),
       label: Text(_value),
       onPressed: () async {
-        widget.onOpen();
+        widget.onOpen?.call();
         final selection = await _choose(context);
         _setValue(selection);
       },
