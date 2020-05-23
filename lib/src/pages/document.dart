@@ -4,9 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const _kDefaultFontFamily = 'Fira Code';
 
 class DocumentPage extends StatefulWidget {
   DocumentPage.defaults(
@@ -55,7 +54,7 @@ class _DocumentPageState extends State<DocumentPage> {
   @override
   void initState() {
     super.initState();
-    _fontFamily = widget.fontFamily ?? _kDefaultFontFamily;
+    _fontFamily = widget.fontFamily ?? kDefaultFontFamily;
     _searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
         if (query.length > 3) {
@@ -65,7 +64,7 @@ class _DocumentPageState extends State<DocumentPage> {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
-    _readerMode = widget.readerMode ?? false;
+    _readerMode = widget.readerMode ?? kDefaultReaderMode;
   }
 
   void _doQuery(String query) {
@@ -112,9 +111,15 @@ class _DocumentPageState extends State<DocumentPage> {
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
       yield TextStyleButton(
         textScale: _textScale,
-        onTextScaleChanged: (value) => setState(() => _textScale = value),
+        onTextScaleChanged: (value) {
+          Preferences.getInstance().then((prefs) => prefs.textScale = value);
+          setState(() => _textScale = value);
+        },
         fontFamily: _fontFamily,
-        onFontFamilyChanged: (value) => setState(() => _fontFamily = value),
+        onFontFamilyChanged: (value) {
+          Preferences.getInstance().then((prefs) => prefs.fontFamily = value);
+          setState(() => _fontFamily = value);
+        },
       );
       if (MediaQuery.of(context).size.width > 600) {
         yield IconButton(
@@ -146,10 +151,10 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   void _toggleReaderMode() {
-    setState(() {
-      _readerMode = !_readerMode;
-      OrgController.of(context).hideMarkup.value = _readerMode;
-    });
+    final value = !_readerMode;
+    Preferences.getInstance().then((prefs) => prefs.readerMode = value);
+    OrgController.of(context).hideMarkup.value = value;
+    setState(() => _readerMode = value);
   }
 
   @override
@@ -173,10 +178,7 @@ class _DocumentPageState extends State<DocumentPage> {
           builder: (context) {
             return OrgRootWidget(
               child: widget.child,
-              style: GoogleFonts.getFont(
-                _fontFamily,
-                fontSize: 18 * _textScale,
-              ),
+              style: _textStyle,
               onLinkTap: (url) {
                 debugPrint('Launching URL: $url');
                 return launch(url, forceSafariVC: false);
@@ -190,6 +192,16 @@ class _DocumentPageState extends State<DocumentPage> {
         ),
       ),
     );
+  }
+
+  TextStyle get _textStyle {
+    final fontSize = 18 * _textScale;
+    try {
+      // Throws if font family not known
+      return GoogleFonts.getFont(_fontFamily, fontSize: fontSize);
+    } on Exception {
+      return GoogleFonts.getFont(kDefaultFontFamily, fontSize: fontSize);
+    }
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/preferences.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, String url) async {
   final title = Uri.parse(url).pathSegments.last;
@@ -64,13 +65,7 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
         future: parsed,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return OrgController(
-              root: snapshot.data,
-              child: DocumentPage(
-                title: title,
-                child: OrgDocumentWidget(snapshot.data),
-              ),
-            );
+            return _buildDocumentPage(context, snapshot.data, title);
           } else if (snapshot.hasError) {
             return ErrorPage(error: snapshot.error.toString());
           } else {
@@ -80,6 +75,32 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
       ),
       fullscreenDialog: true,
     ),
+  );
+}
+
+Widget _buildDocumentPage(BuildContext context, OrgDocument doc, String title) {
+  return FutureBuilder<Preferences>(
+    future: Preferences.getInstance(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        final prefs = snapshot.data;
+        return OrgController(
+          root: doc,
+          hideMarkup: prefs.readerMode,
+          child: DocumentPage(
+            title: title,
+            child: OrgDocumentWidget(doc),
+            textScale: prefs.textScale,
+            fontFamily: prefs.fontFamily,
+            readerMode: prefs.readerMode,
+          ),
+        );
+      } else if (snapshot.hasError) {
+        return ErrorPage(error: snapshot.error.toString());
+      } else {
+        return const ProgressPage();
+      }
+    },
   );
 }
 
