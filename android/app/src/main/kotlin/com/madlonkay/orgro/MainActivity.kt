@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.annotation.NonNull;
+import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -17,13 +17,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
 
-    lateinit var channel: MethodChannel;
+    lateinit var channel: MethodChannel
 
     private val loadQueue: Deque<Uri> = ArrayDeque()
     private val ready = AtomicBoolean(false)
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        GeneratedPluginRegistrant.registerWith(flutterEngine)
 
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "org.madlonkay.orgro/openFile")
         channel.setMethodCallHandler(this::handleMethod)
@@ -100,4 +100,4 @@ fun Intent.consume() {
     putExtra(consumedFlag, true)
 }
 
-fun Intent.consumed() : Boolean = hasExtra(consumedFlag)
+fun Intent.consumed(): Boolean = hasExtra(consumedFlag)
