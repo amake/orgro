@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -50,9 +50,9 @@ class _PickFileButton extends StatelessWidget {
       color: Theme.of(context).accentColor,
       textColor: Theme.of(context).accentTextTheme.button.color,
       onPressed: () async {
-        final path = await FilePicker.getFilePath(type: FileType.any);
-        if (path != null) {
-          await loadPath(context, path);
+        final fileInfo = await FilePickerWritable().openFilePicker();
+        if (fileInfo != null) {
+          await loadFile(context, fileInfo.file, fileInfo.fileName);
         }
       },
     );

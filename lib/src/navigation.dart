@@ -40,8 +40,12 @@ Future<bool> loadFileUrl(BuildContext context, String url) async {
 
 Future<bool> loadPath(BuildContext context, String path) async {
   final file = File(path);
-  final content = time('read file', file.readAsString);
   final title = file.uri.pathSegments.last;
+  return loadFile(context, file, title);
+}
+
+Future<bool> loadFile(BuildContext context, File file, String title) {
+  final content = time('read file', file.readAsString);
   loadDocument(context, title, content);
   return content.then((_) => true);
 }
