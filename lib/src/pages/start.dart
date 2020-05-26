@@ -5,10 +5,25 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/platform.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final recents = Preferences.of(context).recentFiles;
+    if (recents.isEmpty) {
+      return const _EmptyStartPage();
+    } else {
+      return const _RecentFilesStartPage();
+    }
+  }
+}
+
+class _EmptyStartPage extends StatelessWidget {
+  const _EmptyStartPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +55,49 @@ class StartPage extends StatelessWidget {
   }
 }
 
+class _RecentFilesStartPage extends StatelessWidget {
+  const _RecentFilesStartPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final recentFiles = Preferences.of(context).recentFiles;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Orgro')),
+      body: PlatformOpenHandler(
+        child: ListView.builder(
+          itemCount: recentFiles.length,
+          itemBuilder: (context, idx) {
+            final recentFile = recentFiles[idx];
+            return ListTile(
+              title: Text(recentFile.name),
+              onTap: () async {
+                final fileInfo = await FilePickerWritable()
+                    .readFileWithIdentifier(recentFile.identifier);
+                await loadFile(context, fileInfo.file, fileInfo.fileName);
+              },
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => _pickFile(context),
+      ),
+    );
+  }
+}
+
+Future<void> _pickFile(BuildContext context) async {
+  final fileInfo = await FilePickerWritable().openFilePicker();
+  if (fileInfo != null) {
+    final loaded = await loadFile(context, fileInfo.file, fileInfo.fileName);
+    if (loaded) {
+      final prefs = await Preferences.getInstance();
+      await prefs.addRecentFile(fileInfo.identifier, fileInfo.fileName);
+    }
+  }
+}
+
 class _PickFileButton extends StatelessWidget {
   const _PickFileButton({Key key}) : super(key: key);
 
@@ -49,12 +107,7 @@ class _PickFileButton extends StatelessWidget {
       child: const Text('Open File'),
       color: Theme.of(context).accentColor,
       textColor: Theme.of(context).accentTextTheme.button.color,
-      onPressed: () async {
-        final fileInfo = await FilePickerWritable().openFilePicker();
-        if (fileInfo != null) {
-          await loadFile(context, fileInfo.file, fileInfo.fileName);
-        }
-      },
+      onPressed: () => _pickFile(context),
     );
   }
 }

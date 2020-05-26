@@ -83,28 +83,17 @@ void loadDocument(BuildContext context, String title, Future<String> content) {
 }
 
 Widget _buildDocumentPage(BuildContext context, OrgDocument doc, String title) {
-  return FutureBuilder<Preferences>(
-    future: Preferences.getInstance(),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        final prefs = snapshot.data;
-        return OrgController(
-          root: doc,
-          hideMarkup: prefs.readerMode,
-          child: DocumentPage(
-            title: title,
-            child: OrgDocumentWidget(doc),
-            textScale: prefs.textScale,
-            fontFamily: prefs.fontFamily,
-            readerMode: prefs.readerMode,
-          ),
-        );
-      } else if (snapshot.hasError) {
-        return ErrorPage(error: snapshot.error.toString());
-      } else {
-        return const ProgressPage();
-      }
-    },
+  final prefs = Preferences.of(context);
+  return OrgController(
+    root: doc,
+    hideMarkup: prefs.readerMode,
+    child: DocumentPage(
+      title: title,
+      child: OrgDocumentWidget(doc),
+      textScale: prefs.textScale,
+      fontFamily: prefs.fontFamily,
+      readerMode: prefs.readerMode,
+    ),
   );
 }
 

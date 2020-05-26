@@ -112,12 +112,12 @@ class _DocumentPageState extends State<DocumentPage> {
       yield TextStyleButton(
         textScale: _textScale,
         onTextScaleChanged: (value) {
-          Preferences.getInstance().then((prefs) => prefs.textScale = value);
+          Preferences.of(context).textScale = value;
           setState(() => _textScale = value);
         },
         fontFamily: _fontFamily,
         onFontFamilyChanged: (value) {
-          Preferences.getInstance().then((prefs) => prefs.fontFamily = value);
+          Preferences.of(context).fontFamily = value;
           setState(() => _fontFamily = value);
         },
       );
@@ -152,7 +152,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   void _toggleReaderMode() {
     final value = !_readerMode;
-    Preferences.getInstance().then((prefs) => prefs.readerMode = value);
+    Preferences.of(context).readerMode = value;
     OrgController.of(context).hideMarkup.value = value;
     setState(() => _readerMode = value);
   }

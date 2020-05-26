@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/preferences.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const PreferencesProvider(child: MyApp()));
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=006058&secondary.color=ff6e40
 const _kPrimaryColor = Color(0xff006058);
@@ -11,6 +12,8 @@ const _kSecondaryColor = Colors.deepOrangeAccent;
 final _kSecondaryColorVariant = Colors.deepOrangeAccent.shade700;
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
