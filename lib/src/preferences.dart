@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +7,7 @@ const kDefaultFontFamily = 'Fira Code';
 // MediaQuery.textScaleFactorOf(context);
 const kDefaultReaderMode = false;
 
-const _kMaxRecentFiles = 10;
+const kMaxRecentFiles = 10;
 
 const _kFontFamilyKey = 'font_family';
 const _kTextScaleKey = 'text_scale';
@@ -37,41 +35,20 @@ class Preferences {
 
   set readerMode(bool value) => _prefs.setBool(_kReaderModeKey, value);
 
-  List<RecentFile> get recentFiles {
-    final ids = _prefs.getStringList(_kRecentFileIdsKey) ?? [];
-    final names = _prefs.getStringList(_kRecentFileNamesKey) ?? [];
-    if (ids.length != names.length) {
-      return const [];
-    }
-    final recents = <RecentFile>[];
-    for (var i = 0; i < ids.length; i++) {
-      recents.add(RecentFile(ids[i], names[i]));
-    }
-    return recents;
-  }
+  List<String> get recentFileIds =>
+      _prefs.getStringList(_kRecentFileIdsKey) ?? [];
 
-  Future<bool> addRecentFile(String identifier, String name) async {
-    final ids = (_prefs.getStringList(_kRecentFileIdsKey) ?? [])
-      ..insert(0, identifier);
-    final trimmedIds = ids.sublist(0, min(ids.length, _kMaxRecentFiles));
-    final names = (_prefs.getStringList(_kRecentFileNamesKey) ?? [])
-      ..insert(0, name);
-    final trimmedNames = names.sublist(0, min(names.length, _kMaxRecentFiles));
-    final setIds = _prefs.setStringList(_kRecentFileIdsKey, trimmedIds);
-    final setNames = _prefs.setStringList(_kRecentFileNamesKey, trimmedNames);
-    return await setIds && await setNames;
-  }
+  set recentFileIds(List<String> value) =>
+      _prefs.setStringList(_kRecentFileIdsKey, value);
+
+  List<String> get recentFileNames =>
+      _prefs.getStringList(_kRecentFileNamesKey) ?? [];
+
+  set recentFileNames(List<String> value) =>
+      _prefs.setStringList(_kRecentFileNamesKey, value);
 
   static Preferences of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<InheritedPreferences>().prefs;
-}
-
-class RecentFile {
-  RecentFile(this.identifier, this.name)
-      : assert(identifier != null),
-        assert(name != null);
-  final String identifier;
-  final String name;
 }
 
 class PreferencesProvider extends StatelessWidget {

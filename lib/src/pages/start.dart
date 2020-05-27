@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/recent_files.dart';
 import 'package:orgro/src/platform.dart';
-import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StartPage extends StatelessWidget {
+class StartPage extends StatefulWidget {
   const StartPage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final recents = Preferences.of(context).recentFiles;
-    if (recents.isEmpty) {
-      return const _EmptyStartPage();
-    } else {
-      return const _RecentFilesStartPage();
-    }
-  }
+  _StartPageState createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> with RecentFilesState {
+  @override
+  Widget build(BuildContext context) => buildWithRecentFiles(
+        whenEmpty: const _EmptyStartPage(),
+        whenNotEmpty: const _RecentFilesStartPage(),
+      );
 }
 
 class _EmptyStartPage extends StatelessWidget {
@@ -60,7 +61,7 @@ class _RecentFilesStartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recentFiles = Preferences.of(context).recentFiles;
+    final recentFiles = RecentFiles.of(context).list;
     return Scaffold(
       appBar: AppBar(title: const Text('Orgro')),
       body: PlatformOpenHandler(
@@ -70,11 +71,10 @@ class _RecentFilesStartPage extends StatelessWidget {
             final recentFile = recentFiles[idx];
             return ListTile(
               title: Text(recentFile.name),
-              onTap: () async {
-                final fileInfo = await FilePickerWritable()
-                    .readFileWithIdentifier(recentFile.identifier);
-                await loadFile(context, fileInfo.file, fileInfo.fileName);
-              },
+              onTap: () async => _load(
+                  context,
+                  FilePickerWritable()
+                      .readFileWithIdentifier(recentFile.identifier)),
             );
           },
         ),
@@ -87,14 +87,16 @@ class _RecentFilesStartPage extends StatelessWidget {
   }
 }
 
-Future<void> _pickFile(BuildContext context) async {
-  final fileInfo = await FilePickerWritable().openFilePicker();
-  if (fileInfo != null) {
-    final loaded = await loadFile(context, fileInfo.file, fileInfo.fileName);
-    if (loaded) {
-      final prefs = await Preferences.getInstance();
-      await prefs.addRecentFile(fileInfo.identifier, fileInfo.fileName);
-    }
+Future<void> _pickFile(BuildContext context) async =>
+    _load(context, FilePickerWritable().openFilePicker());
+
+Future<void> _load(
+    BuildContext context, Future<FileInfo> fileInfoFuture) async {
+  final loaded = await loadInPlaceFile(context, fileInfoFuture);
+  if (loaded) {
+    final fileInfo = await fileInfoFuture;
+    RecentFiles.of(context)
+        .add(RecentFile(fileInfo.identifier, fileInfo.fileName));
   }
 }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,14 @@ Future<bool> loadPath(BuildContext context, String path) async {
   return loadFile(context, file, title);
 }
 
+Future<bool> loadInPlaceFile(BuildContext context, Future<FileInfo> info) {
+  final resolved = time('resolve external file', () => info);
+  final title = resolved.then((info) => info.fileName);
+  final content = resolved.then((info) => info.file.readAsString());
+  loadDocument(context, title, content);
+  return content.then((_) => true);
+}
+
 Future<bool> loadFile(BuildContext context, File file, String title) {
   final content = time('read file', file.readAsString);
   loadDocument(context, title, content);
@@ -58,18 +67,22 @@ Future<bool> loadAsset(BuildContext context, String key) async {
   return content.then((_) => true);
 }
 
-void loadDocument(BuildContext context, String title, Future<String> content) {
+void loadDocument(
+    BuildContext context, FutureOr<String> title, Future<String> content) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
   final parsed = content.then(parse, onError: logError);
+  final all = Future.wait<Object>([Future.value(title), parsed]);
   Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => FutureBuilder<OrgDocument>(
-        future: parsed,
+      builder: (context) => FutureBuilder<List>(
+        future: all,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildDocumentPage(context, snapshot.data, title);
+            final title = snapshot.data[0] as String;
+            final doc = snapshot.data[1] as OrgDocument;
+            return _buildDocumentPage(context, doc, title);
           } else if (snapshot.hasError) {
             return ErrorPage(error: snapshot.error.toString());
           } else {
