@@ -82,6 +82,7 @@ class _RecentFilesStartPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _pickFile(context),
+        foregroundColor: Theme.of(context).accentTextTheme.button.color,
       ),
     );
   }
