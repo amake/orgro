@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
 
@@ -27,8 +27,7 @@ Future<bool> loadHttpUrl(BuildContext context, String url) async {
       onError: _httpError,
     ),
   );
-  loadDocument(context, title, content);
-  return content.then((_) => true);
+  return loadDocument(context, OpenFileInfo(null, title, () => content));
 }
 
 bool _httpError(Object e, StackTrace s) {
@@ -37,55 +36,40 @@ bool _httpError(Object e, StackTrace s) {
   return false;
 }
 
-Future<bool> loadFileUrl(BuildContext context, String url) async {
-  final uri = Uri.parse(url);
-  return loadPath(context, uri.toFilePath());
-}
-
-Future<bool> loadPath(BuildContext context, String path) async {
-  final file = File(path);
-  final title = file.uri.pathSegments.last;
-  return loadFile(context, file, title);
-}
-
-Future<bool> loadInPlaceFile(BuildContext context, Future<FileInfo> info) {
-  final resolved = time('resolve external file', () => info);
-  final title = resolved.then((info) => info.fileName);
-  final content = resolved.then((info) => info.file.readAsString());
-  loadDocument(context, title, content);
-  return content.then((_) => true);
-}
-
-Future<bool> loadFile(BuildContext context, File file, String title) {
-  final content = time('read file', file.readAsString);
-  loadDocument(context, title, content);
-  return content.then((_) => true);
-}
-
 Future<bool> loadAsset(BuildContext context, String key) async {
   final content = rootBundle.loadString(key);
   final file = File(key);
   final title = file.uri.pathSegments.last;
-  loadDocument(context, title, content);
-  return content.then((_) => true);
+  return loadDocument(context, OpenFileInfo(null, title, () => content));
 }
 
-void loadDocument(
-    BuildContext context, FutureOr<String> title, Future<String> content) {
+Future<bool> loadDocument(
+    BuildContext context, FutureOr<OpenFileInfo> fileInfo) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
-  final parsed = content.then(parse, onError: logError);
-  final all = Future.wait<Object>([Future.value(title), parsed]);
+  final parsed = Future.value(fileInfo).then((info) {
+    if (info != null) {
+      return info.toParsed();
+    } else {
+      // There was no fileーthe user canceled so close the route. We wait until
+      // here to know if the user canceled because when the user doesn't cancel
+      // it is expensive to resolve the opened file.
+      Navigator.pop(context);
+      return Future.value(null);
+    }
+  });
   Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => FutureBuilder<List>(
-        future: all,
+      builder: (context) => FutureBuilder<ParsedOrgFileInfo>(
+        future: parsed,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final title = snapshot.data[0] as String;
-            final doc = snapshot.data[1] as OrgDocument;
-            return _buildDocumentPage(context, doc, title);
+            return _buildDocumentPage(
+              context,
+              snapshot.data.doc,
+              snapshot.data.title,
+            );
           } else if (snapshot.hasError) {
             return ErrorPage(error: snapshot.error.toString());
           } else {
@@ -96,6 +80,7 @@ void loadDocument(
       fullscreenDialog: true,
     ),
   );
+  return parsed.then((value) => value != null);
 }
 
 Widget _buildDocumentPage(BuildContext context, OrgDocument doc, String title) {
@@ -112,11 +97,6 @@ Widget _buildDocumentPage(BuildContext context, OrgDocument doc, String title) {
     ),
   );
 }
-
-Future<OrgDocument> parse(String content) async =>
-    time('parse', () => compute(_parse, content));
-
-OrgDocument _parse(String text) => OrgDocument.parse(text);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   final viewSettings = ViewSettings.of(context);

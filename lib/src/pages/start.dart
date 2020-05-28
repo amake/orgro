@@ -1,11 +1,12 @@
-import 'package:file_picker_writable/file_picker_writable.dart';
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/recent_files.dart';
-import 'package:orgro/src/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StartPage extends StatefulWidget {
@@ -15,12 +16,17 @@ class StartPage extends StatefulWidget {
   _StartPageState createState() => _StartPageState();
 }
 
-class _StartPageState extends State<StartPage> with RecentFilesState {
+class _StartPageState extends State<StartPage>
+    with RecentFilesState, PlatformOpenHandler {
   @override
   Widget build(BuildContext context) => buildWithRecentFiles(
         whenEmpty: const _EmptyStartPage(),
         whenNotEmpty: const _RecentFilesStartPage(),
       );
+
+  @override
+  Future<bool> loadFileFromPlatform(OpenFileInfo info) =>
+      _loadFile(context, info);
 }
 
 class _EmptyStartPage extends StatelessWidget {
@@ -30,25 +36,23 @@ class _EmptyStartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Orgro')),
-      body: PlatformOpenHandler(
-        child: Center(
-          child: IntrinsicWidth(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const _PickFileButton(),
+      body: Center(
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const _PickFileButton(),
+              const SizedBox(height: 16),
+              const _OrgroManualButton(),
+              if (!kReleaseMode && !kScreenshotMode) ...[
                 const SizedBox(height: 16),
-                const _OrgroManualButton(),
-                if (!kReleaseMode && !kScreenshotMode) ...[
-                  const SizedBox(height: 16),
-                  const _OrgManualButton(),
-                ],
-                const SizedBox(height: 80),
-                const _SupportLink(),
-                const _LicensesButton(),
+                const _OrgManualButton(),
               ],
-            ),
+              const SizedBox(height: 80),
+              const _SupportLink(),
+              const _LicensesButton(),
+            ],
           ),
         ),
       ),
@@ -86,16 +90,14 @@ class _RecentFilesStartPage extends StatelessWidget {
           ),
         ],
       ),
-      body: PlatformOpenHandler(
-        child: ListView.separated(
-          itemCount: recentFiles.length,
-          itemBuilder: (context, idx) => _RecentFileListTile(recentFiles[idx]),
-          separatorBuilder: (context, idx) => const Divider(),
-        ),
+      body: ListView.separated(
+        itemCount: recentFiles.length,
+        itemBuilder: (context, idx) => _RecentFileListTile(recentFiles[idx]),
+        separatorBuilder: (context, idx) => const Divider(),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => _pickFile(context),
+        onPressed: () => _loadFile(context, pickFile()),
         foregroundColor: Theme.of(context).accentTextTheme.button.color,
       ),
     );
@@ -126,17 +128,17 @@ class _RecentFileListTile extends StatelessWidget {
   }
 }
 
-Future<void> _pickFile(BuildContext context) async =>
-    _load(context, FilePickerWritable().openFilePicker());
-
-Future<void> _load(
-    BuildContext context, Future<FileInfo> fileInfoFuture) async {
-  final loaded = await loadInPlaceFile(context, fileInfoFuture);
+Future<bool> _loadFile(
+  BuildContext context,
+  FutureOr<OpenFileInfo> fileInfoFuture,
+) async {
+  final loaded = await loadDocument(context, fileInfoFuture);
   if (loaded) {
     final fileInfo = await fileInfoFuture;
     RecentFiles.of(context)
-        .add(RecentFile(fileInfo.identifier, fileInfo.fileName));
+        .add(RecentFile(fileInfo.identifier, fileInfo.title));
   }
+  return loaded;
 }
 
 class _PickFileButton extends StatelessWidget {
@@ -148,7 +150,7 @@ class _PickFileButton extends StatelessWidget {
       child: const Text('Open File'),
       color: Theme.of(context).accentColor,
       textColor: Theme.of(context).accentTextTheme.button.color,
-      onPressed: () => _pickFile(context),
+      onPressed: () => _loadFile(context, pickFile()),
     );
   }
 }
