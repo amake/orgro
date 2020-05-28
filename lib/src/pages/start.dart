@@ -63,26 +63,64 @@ class _RecentFilesStartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final recentFiles = RecentFiles.of(context).list;
     return Scaffold(
-      appBar: AppBar(title: const Text('Orgro')),
+      appBar: AppBar(
+        title: const Text('Orgro · Recent files'),
+        actions: [
+          PopupMenuButton<VoidCallback>(
+            onSelected: (callback) => callback(),
+            itemBuilder: (context) => [
+              PopupMenuItem<VoidCallback>(
+                child: const Text('Orgro Manual'),
+                value: () => _openOrgroManual(context),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem<VoidCallback>(
+                child: Text('Support · Feedback'),
+                value: _visitSupportLink,
+              ),
+              PopupMenuItem<VoidCallback>(
+                child: const Text('Licenses'),
+                value: () => _openLicensePage(context),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: PlatformOpenHandler(
-        child: ListView.builder(
+        child: ListView.separated(
           itemCount: recentFiles.length,
-          itemBuilder: (context, idx) {
-            final recentFile = recentFiles[idx];
-            return ListTile(
-              title: Text(recentFile.name),
-              onTap: () async => _load(
-                  context,
-                  FilePickerWritable()
-                      .readFileWithIdentifier(recentFile.identifier)),
-            );
-          },
+          itemBuilder: (context, idx) => _RecentFileListTile(recentFiles[idx]),
+          separatorBuilder: (context, idx) => const Divider(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _pickFile(context),
         foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      ),
+    );
+  }
+}
+
+class _RecentFileListTile extends StatelessWidget {
+  const _RecentFileListTile(this.recentFile, {Key key})
+      : assert(recentFile != null),
+        super(key: key);
+
+  final RecentFile recentFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.insert_drive_file),
+      title: Text(recentFile.name),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () => RecentFiles.of(context).remove(recentFile),
+      ),
+      onTap: () async => _loadFile(
+        context,
+        readFileWithIdentifier(recentFile.identifier),
       ),
     );
   }
@@ -135,10 +173,13 @@ class _OrgroManualButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RaisedButton(
       child: const Text('Open Orgro Manual'),
-      onPressed: () => loadAsset(context, 'assets/orgro-manual.org'),
+      onPressed: () => _openOrgroManual(context),
     );
   }
 }
+
+void _openOrgroManual(BuildContext context) =>
+    loadAsset(context, 'assets/orgro-manual.org');
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink({Key key}) : super(key: key);
@@ -148,14 +189,16 @@ class _SupportLink extends StatelessWidget {
     return FlatButton.icon(
       icon: const Icon(Icons.help),
       label: const Text('Support · Feedback'),
-      onPressed: () => launch(
-        'https://github.com/amake/orgro/issues',
-        forceSafariVC: false,
-      ),
+      onPressed: _visitSupportLink,
       textColor: Theme.of(context).disabledColor,
     );
   }
 }
+
+void _visitSupportLink() => launch(
+      'https://github.com/amake/orgro/issues',
+      forceSafariVC: false,
+    );
 
 class _LicensesButton extends StatelessWidget {
   const _LicensesButton({Key key}) : super(key: key);
@@ -164,13 +207,15 @@ class _LicensesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       child: const Text('Licenses'),
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (context) => const LicensePage(),
-        ),
-      ),
+      onPressed: () => _openLicensePage(context),
       textColor: Theme.of(context).disabledColor,
     );
   }
 }
+
+void _openLicensePage(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const LicensePage(),
+      ),
+    );
