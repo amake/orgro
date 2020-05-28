@@ -16,16 +16,19 @@ Future<bool> loadHttpUrl(BuildContext context, String url) async {
   final title = Uri.parse(url).pathSegments.last;
   final content = time(
     'load url',
-    () => http.get(url).then((response) {
-      if (response.statusCode == 200) {
-        return response.body;
-      } else {
-        throw Exception();
-      }
-    }),
+    () => http.get(url).then(
+      (response) {
+        if (response.statusCode == 200) {
+          return response.body;
+        } else {
+          throw Exception();
+        }
+      },
+      onError: _httpError,
+    ),
   );
   loadDocument(context, title, content);
-  return content.then((_) => true, onError: _httpError);
+  return content.then((_) => true);
 }
 
 bool _httpError(Object e, StackTrace s) {
