@@ -11,8 +11,10 @@ class RecentFile {
   final String name;
 
   @override
-  bool operator ==(Object o) =>
-      o is RecentFile && identifier == o.identifier && name == o.name;
+  bool operator ==(Object other) =>
+      other is RecentFile &&
+      identifier == other.identifier &&
+      name == other.name;
 
   @override
   int get hashCode => hashValues(identifier, name);
