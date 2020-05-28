@@ -20,16 +20,19 @@ class RecentFile {
 
 class RecentFiles extends InheritedWidget {
   const RecentFiles(
-    this.list,
-    this.add, {
+    this.list, {
+    @required this.add,
+    @required this.remove,
     @required Widget child,
     Key key,
   })  : assert(list != null),
         assert(add != null),
+        assert(remove != null),
         super(child: child, key: key);
 
   final List<RecentFile> list;
   final ValueChanged<RecentFile> add;
+  final ValueChanged<RecentFile> remove;
 
   @override
   bool updateShouldNotify(RecentFiles oldWidget) =>
@@ -49,14 +52,23 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
         .take(kMaxRecentFiles)
         .unique()
         .toList(growable: false);
+    _save(newFiles);
+  }
+
+  void remove(RecentFile recentFile) {
+    final newFiles = List.of(_recentFiles)..remove(recentFile);
+    _save(newFiles);
+  }
+
+  void _save(List<RecentFile> files) {
     setState(() {
-      _recentFiles = newFiles;
+      _recentFiles = files;
     });
     _prefs
       ..recentFileIds =
-          newFiles.map((file) => file.identifier).toList(growable: false)
+          files.map((file) => file.identifier).toList(growable: false)
       ..recentFileNames =
-          newFiles.map((file) => file.name).toList(growable: false);
+          files.map((file) => file.name).toList(growable: false);
   }
 
   @override
@@ -78,7 +90,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   }) {
     return RecentFiles(
       _recentFiles,
-      add,
+      add: add,
+      remove: remove,
       child: _recentFiles.isEmpty ? whenEmpty : whenNotEmpty,
     );
   }
