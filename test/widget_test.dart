@@ -11,6 +11,6 @@ import 'package:orgro/main.dart';
 void main() {
   testWidgets('Instantiate app test', (tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(const MyApp());
   });
 }
