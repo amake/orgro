@@ -12,8 +12,7 @@ const kMaxRecentFiles = 10;
 const _kFontFamilyKey = 'font_family';
 const _kTextScaleKey = 'text_scale';
 const _kReaderModeKey = 'reader_mode';
-const _kRecentFileIdsKey = 'recent_file_ids';
-const _kRecentFileNamesKey = 'recent_file_names';
+const _kRecentFilesJsonKey = 'recent_files_json';
 
 class Preferences {
   static Future<Preferences> getInstance() async =>
@@ -35,17 +34,11 @@ class Preferences {
 
   set readerMode(bool value) => _prefs.setBool(_kReaderModeKey, value);
 
-  List<String> get recentFileIds =>
-      _prefs.getStringList(_kRecentFileIdsKey) ?? [];
+  List<String> get recentFilesJson =>
+      _prefs.getStringList(_kRecentFilesJsonKey) ?? [];
 
-  set recentFileIds(List<String> value) =>
-      _prefs.setStringList(_kRecentFileIdsKey, value);
-
-  List<String> get recentFileNames =>
-      _prefs.getStringList(_kRecentFileNamesKey) ?? [];
-
-  set recentFileNames(List<String> value) =>
-      _prefs.setStringList(_kRecentFileNamesKey, value);
+  set recentFilesJson(List<String> value) =>
+      _prefs.setStringList(_kRecentFilesJsonKey, value);
 
   static Preferences of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<InheritedPreferences>().prefs;

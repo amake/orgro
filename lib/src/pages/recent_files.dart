@@ -1,9 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
 class RecentFile {
+  RecentFile.fromJson(Map<String, Object> json)
+      : this(
+          json['identifier'] as String,
+          json['name'] as String,
+        );
+
   RecentFile(this.identifier, this.name)
       : assert(identifier != null),
         assert(name != null);
@@ -18,6 +26,11 @@ class RecentFile {
 
   @override
   int get hashCode => hashValues(identifier, name);
+
+  Map<String, Object> toJson() => {
+        'identifier': identifier,
+        'name': name,
+      };
 
   @override
   String toString() => 'RecentFile[$name:$_debugShortIdentifier]';
@@ -82,11 +95,10 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     setState(() {
       _recentFiles = files;
     });
-    _prefs
-      ..recentFileIds =
-          files.map((file) => file.identifier).toList(growable: false)
-      ..recentFileNames =
-          files.map((file) => file.name).toList(growable: false);
+    _prefs.recentFilesJson = files
+        .map((file) => file.toJson())
+        .map(json.encode)
+        .toList(growable: false);
   }
 
   @override
@@ -94,11 +106,10 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     super.didChangeDependencies();
     // Doing this here instead of [initState] because we need to pull in an
     // InheritedWidget
-    _recentFiles = _prefs.recentFileIds
-        .zipMap<RecentFile, String>(
-          _prefs.recentFileNames,
-          (id, name) => RecentFile(id, name),
-        )
+    _recentFiles = _prefs.recentFilesJson
+        .map<dynamic>(json.decode)
+        .cast<Map<String, Object>>()
+        .map((json) => RecentFile.fromJson(json))
         .toList(growable: false);
   }
 
