@@ -10,26 +10,33 @@ class RecentFile {
       : this(
           json['identifier'] as String,
           json['name'] as String,
+          DateTime.fromMillisecondsSinceEpoch(json['lastOpened'] as int),
         );
 
-  RecentFile(this.identifier, this.name)
+  RecentFile(this.identifier, this.name, this.lastOpened)
       : assert(identifier != null),
-        assert(name != null);
+        assert(name != null),
+        assert(lastOpened != null);
   final String identifier;
   final String name;
+  final DateTime lastOpened;
 
   @override
   bool operator ==(Object other) =>
+      // [lastOpened] purposefully not considered
       other is RecentFile &&
       identifier == other.identifier &&
       name == other.name;
 
   @override
-  int get hashCode => hashValues(identifier, name);
+  int get hashCode =>
+      // [lastOpened] purposefully not considered
+      hashValues(identifier, name);
 
   Map<String, Object> toJson() => {
         'identifier': identifier,
         'name': name,
+        'lastOpened': lastOpened.millisecondsSinceEpoch,
       };
 
   @override

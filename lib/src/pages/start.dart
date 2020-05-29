@@ -144,7 +144,7 @@ Future<RecentFile> _loadFile(
   if (loaded) {
     final fileInfo = await fileInfoFuture;
     if (fileInfo.identifier != null) {
-      result = RecentFile(fileInfo.identifier, fileInfo.title);
+      result = RecentFile(fileInfo.identifier, fileInfo.title, DateTime.now());
     } else {
       debugPrint("Couldn't obtain persistent access to ${fileInfo.title}");
     }
