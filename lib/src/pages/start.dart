@@ -100,7 +100,10 @@ class _RecentFilesStartPage extends StatelessWidget {
       ),
       body: ListView.separated(
         itemCount: recentFiles.length,
-        itemBuilder: (context, idx) => _RecentFileListTile(recentFiles[idx]),
+        itemBuilder: (context, idx) {
+          final recentFile = recentFiles[idx];
+          return _RecentFileListTile(recentFile, key: ValueKey(recentFile));
+        },
         separatorBuilder: (context, idx) => const Divider(),
       ),
       floatingActionButton: FloatingActionButton(
