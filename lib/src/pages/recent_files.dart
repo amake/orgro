@@ -18,6 +18,20 @@ class RecentFile {
 
   @override
   int get hashCode => hashValues(identifier, name);
+
+  @override
+  String toString() => 'RecentFile[$name:$_debugShortIdentifier]';
+
+  String get _debugShortIdentifier {
+    final length = identifier.length;
+    if (length > 20) {
+      final front = identifier.substring(0, 10);
+      final back = identifier.substring(length - 10);
+      return '$front...$back';
+    } else {
+      return identifier;
+    }
+  }
 }
 
 class RecentFiles extends InheritedWidget {
