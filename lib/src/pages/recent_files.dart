@@ -48,7 +48,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
   List<RecentFile> _recentFiles;
 
-  void add(RecentFile newFile) {
+  void addRecentFile(RecentFile newFile) {
+    debugPrint('Adding recent file: $newFile');
     final newFiles = [newFile]
         .followedBy(_recentFiles)
         .take(kMaxRecentFiles)
@@ -57,7 +58,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     _save(newFiles);
   }
 
-  void remove(RecentFile recentFile) {
+  void removeRecentFile(RecentFile recentFile) {
+    debugPrint('Removing recent file: $recentFile');
     final newFiles = List.of(_recentFiles)..remove(recentFile);
     _save(newFiles);
   }
@@ -92,8 +94,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   }) {
     return RecentFiles(
       _recentFiles,
-      add: add,
-      remove: remove,
+      add: addRecentFile,
+      remove: removeRecentFile,
       child: _recentFiles.isEmpty ? whenEmpty : whenNotEmpty,
     );
   }
