@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
@@ -111,6 +112,8 @@ class _RecentFilesStartPage extends StatelessWidget {
   }
 }
 
+final _kLastOpenedFormat = DateFormat.yMd().add_jm();
+
 class _RecentFileListTile extends StatelessWidget {
   const _RecentFileListTile(this.recentFile, {Key key})
       : assert(recentFile != null),
@@ -123,6 +126,7 @@ class _RecentFileListTile extends StatelessWidget {
     return ListTile(
       leading: const Icon(Icons.insert_drive_file),
       title: Text(recentFile.name),
+      subtitle: Text(_kLastOpenedFormat.format(recentFile.lastOpened)),
       trailing: IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () => RecentFiles.of(context).remove(recentFile),

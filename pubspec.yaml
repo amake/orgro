@@ -24,6 +24,7 @@ dependencies:
       ref: android-intent-fix
   http: ^0.12.0+4
   shared_preferences: '>=0.5.7+3 <2.0.0'
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
