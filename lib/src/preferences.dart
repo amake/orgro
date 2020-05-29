@@ -22,6 +22,8 @@ class Preferences {
 
   final SharedPreferences _prefs;
 
+  Future<void> reload() => _prefs.reload();
+
   String get fontFamily => _prefs.getString(_kFontFamilyKey);
 
   set fontFamily(String value) => _prefs.setString(_kFontFamilyKey, value);

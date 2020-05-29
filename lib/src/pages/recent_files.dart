@@ -81,6 +81,7 @@ class RecentFiles extends InheritedWidget {
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
   List<RecentFile> _recentFiles;
+  _LifecycleEventHandler _lifecycleEventHandler;
 
   void addRecentFile(RecentFile newFile) {
     debugPrint('Adding recent file: $newFile');
@@ -109,15 +110,36 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _reload);
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Doing this here instead of [initState] because we need to pull in an
     // InheritedWidget
-    _recentFiles = _prefs.recentFilesJson
-        .map<dynamic>(json.decode)
-        .cast<Map<String, Object>>()
-        .map((json) => RecentFile.fromJson(json))
-        .toList(growable: false);
+    _recentFiles = _load();
+  }
+
+  List<RecentFile> _load() => _prefs.recentFilesJson
+      .map<dynamic>(json.decode)
+      .cast<Map<String, Object>>()
+      .map((json) => RecentFile.fromJson(json))
+      .toList(growable: false);
+
+  Future<void> _reload() async {
+    debugPrint('Reloading recent files');
+    await _prefs.reload();
+    setState(() => _recentFiles = _load());
   }
 
   Widget buildWithRecentFiles({
@@ -130,5 +152,21 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
       remove: removeRecentFile,
       child: _recentFiles.isEmpty ? whenEmpty : whenNotEmpty,
     );
+  }
+}
+
+class _LifecycleEventHandler extends WidgetsBindingObserver {
+  _LifecycleEventHandler({this.onResume});
+  final VoidCallback onResume;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        debugPrint('App resumed');
+        onResume?.call();
+        break;
+      default:
+      // Nothing
+    }
   }
 }
