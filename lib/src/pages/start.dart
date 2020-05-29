@@ -25,8 +25,15 @@ class _StartPageState extends State<StartPage>
       );
 
   @override
-  Future<bool> loadFileFromPlatform(OpenFileInfo info) =>
-      _loadFile(context, info);
+  Future<bool> loadFileFromPlatform(OpenFileInfo info) async {
+    final recentFile = await _loadFile(context, info);
+    if (recentFile != null) {
+      addRecentFile(recentFile);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 class _EmptyStartPage extends StatelessWidget {
@@ -97,7 +104,7 @@ class _RecentFilesStartPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => _loadFile(context, pickFile()),
+        onPressed: () => _loadAndRememberFile(context, pickFile()),
         foregroundColor: Theme.of(context).accentTextTheme.button.color,
       ),
     );
@@ -120,7 +127,7 @@ class _RecentFileListTile extends StatelessWidget {
         icon: const Icon(Icons.delete),
         onPressed: () => RecentFiles.of(context).remove(recentFile),
       ),
-      onTap: () async => _loadFile(
+      onTap: () async => _loadAndRememberFile(
         context,
         readFileWithIdentifier(recentFile.identifier),
       ),
@@ -128,17 +135,29 @@ class _RecentFileListTile extends StatelessWidget {
   }
 }
 
-Future<bool> _loadFile(
+Future<RecentFile> _loadFile(
   BuildContext context,
   FutureOr<OpenFileInfo> fileInfoFuture,
 ) async {
   final loaded = await loadDocument(context, fileInfoFuture);
+  RecentFile result;
   if (loaded) {
     final fileInfo = await fileInfoFuture;
-    RecentFiles.of(context)
-        .add(RecentFile(fileInfo.identifier, fileInfo.title));
+    if (fileInfo.identifier != null) {
+      result = RecentFile(fileInfo.identifier, fileInfo.title);
+    } else {
+      debugPrint("Couldn't obtain persistent access to ${fileInfo.title}");
+    }
   }
-  return loaded;
+  return result;
+}
+
+Future<void> _loadAndRememberFile(
+  BuildContext context,
+  FutureOr<OpenFileInfo> fileInfoFuture,
+) async {
+  final recentFile = await _loadFile(context, fileInfoFuture);
+  RecentFiles.of(context).add(recentFile);
 }
 
 class _PickFileButton extends StatelessWidget {
@@ -150,7 +169,7 @@ class _PickFileButton extends StatelessWidget {
       child: const Text('Open File'),
       color: Theme.of(context).accentColor,
       textColor: Theme.of(context).accentTextTheme.button.color,
-      onPressed: () => _loadFile(context, pickFile()),
+      onPressed: () => _loadAndRememberFile(context, pickFile()),
     );
   }
 }
