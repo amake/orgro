@@ -24,7 +24,7 @@ typedef ContentProvider = Future<String> Function();
 class OpenFileInfo {
   OpenFileInfo.fromExternal(FileInfo externalFileInfo)
       : this(
-          externalFileInfo.identifier,
+          externalFileInfo.persistable ? externalFileInfo.identifier : null,
           externalFileInfo.fileName,
           externalFileInfo.file.readAsString,
         );
