@@ -20,10 +20,15 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage>
     with RecentFilesState, PlatformOpenHandler {
   @override
-  Widget build(BuildContext context) => buildWithRecentFiles(
-        whenEmpty: const _EmptyStartPage(),
-        whenNotEmpty: const _RecentFilesStartPage(),
-      );
+  Widget build(BuildContext context) =>
+      buildWithRecentFiles(builder: (hasRecentFiles) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: hasRecentFiles
+              ? const _RecentFilesStartPage()
+              : const _EmptyStartPage(),
+        );
+      });
 
   @override
   Future<bool> loadFileFromPlatform(OpenFileInfo info) async {
