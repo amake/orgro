@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -86,7 +87,12 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     final newFiles = [newFile]
         .followedBy(_recentFiles)
         .take(kMaxRecentFiles)
-        .unique()
+        .unique(
+          cache: LinkedHashSet(
+            equals: (a, b) => a.identifier == b.identifier,
+            hashCode: (o) => o.identifier.hashCode,
+          ),
+        )
         .toList(growable: false);
     _save(newFiles);
   }
