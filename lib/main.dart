@@ -11,8 +11,10 @@ void main() {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
-  runApp(const PreferencesProvider(child: MyApp()));
+  runApp(buildApp());
 }
+
+Widget buildApp() => const PreferencesProvider(child: MyApp());
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=006058&secondary.color=ff6e40
 const _kPrimaryColor = Color(0xff006058);
