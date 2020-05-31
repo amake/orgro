@@ -23,15 +23,13 @@ class RecentFile {
 
   @override
   bool operator ==(Object other) =>
-      // [lastOpened] purposefully not considered
       other is RecentFile &&
       identifier == other.identifier &&
-      name == other.name;
+      name == other.name &&
+      lastOpened == other.lastOpened;
 
   @override
-  int get hashCode =>
-      // [lastOpened] purposefully not considered
-      hashValues(identifier, name);
+  int get hashCode => hashValues(identifier, name, lastOpened);
 
   Map<String, Object> toJson() => {
         'identifier': identifier,
