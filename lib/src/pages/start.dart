@@ -102,7 +102,7 @@ class _RecentFilesStartPage extends StatelessWidget {
         itemCount: recentFiles.length,
         itemBuilder: (context, idx) {
           final recentFile = recentFiles[idx];
-          return _RecentFileListTile(recentFile, key: ValueKey(recentFile));
+          return _RecentFileListTile(recentFile);
         },
         separatorBuilder: (context, idx) => const Divider(),
       ),
@@ -126,17 +126,27 @@ class _RecentFileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.insert_drive_file),
-      title: Text(recentFile.name),
-      subtitle: Text(_kLastOpenedFormat.format(recentFile.lastOpened)),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () => RecentFiles.of(context).remove(recentFile),
+    return Dismissible(
+      key: ValueKey(recentFile),
+      onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.all(16),
+        color: Colors.red,
+        child: Icon(
+          Icons.delete,
+          color: Theme.of(context).accentTextTheme.button.color,
+        ),
       ),
-      onTap: () async => _loadAndRememberFile(
-        context,
-        readFileWithIdentifier(recentFile.identifier),
+      direction: DismissDirection.endToStart,
+      child: ListTile(
+        leading: const Icon(Icons.insert_drive_file),
+        title: Text(recentFile.name),
+        subtitle: Text(_kLastOpenedFormat.format(recentFile.lastOpened)),
+        onTap: () async => _loadAndRememberFile(
+          context,
+          readFileWithIdentifier(recentFile.identifier),
+        ),
       ),
     );
   }
