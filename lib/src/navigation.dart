@@ -44,7 +44,10 @@ Future<bool> loadAsset(BuildContext context, String key) async {
 }
 
 Future<bool> loadDocument(
-    BuildContext context, FutureOr<OpenFileInfo> fileInfo) {
+  BuildContext context,
+  FutureOr<OpenFileInfo> fileInfo, {
+  FutureOr<dynamic> Function() onClose,
+}) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
   final parsed = Future.value(fileInfo).then((info) {
@@ -58,7 +61,7 @@ Future<bool> loadDocument(
       return Future.value(null);
     }
   });
-  Navigator.push<void>(
+  final push = Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (context) => FutureBuilder<ParsedOrgFileInfo>(
@@ -80,6 +83,9 @@ Future<bool> loadDocument(
       fullscreenDialog: true,
     ),
   );
+  if (onClose != null) {
+    push.whenComplete(onClose);
+  }
   return parsed.then((value) => value != null);
 }
 

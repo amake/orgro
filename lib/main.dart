@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:native_state/native_state.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
@@ -14,8 +15,9 @@ void main() {
   runApp(buildApp());
 }
 
-Widget buildApp() =>
-    const PreferencesProvider(child: MyApp(), waiting: _Splash());
+Widget buildApp() => SavedState(
+      child: const PreferencesProvider(child: MyApp(), waiting: _Splash()),
+    );
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load

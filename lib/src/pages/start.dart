@@ -4,11 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:native_state/native_state.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/recent_files.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
 class StartPage extends StatefulWidget {
   const StartPage({Key key}) : super(key: key);
@@ -18,7 +21,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage>
-    with RecentFilesState, PlatformOpenHandler {
+    with RecentFilesState, PlatformOpenHandler, StateRestoration {
   @override
   Widget build(BuildContext context) =>
       buildWithRecentFiles(builder: (context, hasRecentFiles) {
@@ -36,11 +39,35 @@ class _StartPageState extends State<StartPage>
     // context
     final recentFile = await _loadFile(context, info);
     if (recentFile != null) {
-      addRecentFile(recentFile);
+      _rememberFile(recentFile);
       return true;
     } else {
       return false;
     }
+  }
+
+  @override
+  void restoreState(SavedStateData savedState) {
+    final restoreId = savedState.getString(_kRestoreOpenFileIdKey);
+    debugPrint('restoreState; restoreId=$restoreId');
+    if (restoreId != null) {
+      Future.delayed(const Duration(microseconds: 0), () async {
+        // We can't use _loadAndRememberFile because RecentFiles is not in this
+        // context
+        final recentFile = await _loadFile(
+          context,
+          readFileWithIdentifier(restoreId),
+        );
+        _rememberFile(recentFile);
+      });
+    }
+  }
+
+  void _rememberFile(RecentFile recentFile) {
+    addRecentFile(recentFile);
+    debugPrint('Saving file ID to state');
+    SavedState.of(context)
+        .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
   }
 }
 
@@ -163,7 +190,14 @@ Future<RecentFile> _loadFile(
   BuildContext context,
   FutureOr<OpenFileInfo> fileInfoFuture,
 ) async {
-  final loaded = await loadDocument(context, fileInfoFuture);
+  final loaded = await loadDocument(
+    context,
+    fileInfoFuture,
+    onClose: () {
+      debugPrint('Clearing saved state');
+      SavedState.of(context).remove(_kRestoreOpenFileIdKey);
+    },
+  );
   RecentFile result;
   if (loaded) {
     final fileInfo = await fileInfoFuture;
@@ -182,6 +216,9 @@ Future<void> _loadAndRememberFile(
 ) async {
   final recentFile = await _loadFile(context, fileInfoFuture);
   RecentFiles.of(context).add(recentFile);
+  debugPrint('Saving file ID to state');
+  await SavedState.of(context)
+      .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
 }
 
 class _PickFileButton extends StatelessWidget {
