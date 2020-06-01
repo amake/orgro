@@ -32,6 +32,8 @@ class _StartPageState extends State<StartPage>
 
   @override
   Future<bool> loadFileFromPlatform(OpenFileInfo info) async {
+    // We can't use _loadAndRememberFile because RecentFiles is not in this
+    // context
     final recentFile = await _loadFile(context, info);
     if (recentFile != null) {
       addRecentFile(recentFile);
