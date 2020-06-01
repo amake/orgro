@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/navigation.dart';
-import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/pages/view_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
@@ -45,16 +44,24 @@ class DocumentPage extends StatefulWidget {
   _DocumentPageState createState() => _DocumentPageState();
 }
 
-class _DocumentPageState extends State<DocumentPage> {
-  double _textScale;
-  String _fontFamily;
+class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   MySearchDelegate _searchDelegate;
-  bool _readerMode;
+
+  @override
+  String get initialFontFamily => widget.fontFamily;
+
+  @override
+  bool get initialReaderMode => widget.readerMode;
+
+  @override
+  double get initialTextScale => widget.textScale;
+
+  @override
+  String get queryString => _searchDelegate.queryString;
 
   @override
   void initState() {
     super.initState();
-    _fontFamily = widget.fontFamily ?? kDefaultFontFamily;
     _searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
         if (query.length > 3) {
@@ -64,7 +71,6 @@ class _DocumentPageState extends State<DocumentPage> {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
-    _readerMode = widget.readerMode ?? kDefaultReaderMode;
   }
 
   void _doQuery(String query) {
@@ -74,12 +80,6 @@ class _DocumentPageState extends State<DocumentPage> {
       caseSensitive: false,
     );
     OrgController.of(context).search(pattern);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _textScale ??= widget.textScale ?? MediaQuery.textScaleFactorOf(context);
   }
 
   @override
@@ -110,16 +110,10 @@ class _DocumentPageState extends State<DocumentPage> {
     }
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
       yield TextStyleButton(
-        textScale: _textScale,
-        onTextScaleChanged: (value) {
-          Preferences.of(context).textScale = value;
-          setState(() => _textScale = value);
-        },
-        fontFamily: _fontFamily,
-        onFontFamilyChanged: (value) {
-          Preferences.of(context).fontFamily = value;
-          setState(() => _fontFamily = value);
-        },
+        textScale: textScale,
+        onTextScaleChanged: (value) => textScale = value,
+        fontFamily: fontFamily,
+        onFontFamilyChanged: (value) => fontFamily = value,
       );
       if (MediaQuery.of(context).size.width > 600) {
         yield IconButton(
@@ -127,7 +121,7 @@ class _DocumentPageState extends State<DocumentPage> {
           onPressed: OrgController.of(context).cycleVisibility,
         );
         yield ReaderModeButton(
-          enabled: _readerMode,
+          enabled: readerMode,
           onToggled: _toggleReaderMode,
         );
         yield const ScrollTopButton();
@@ -151,10 +145,8 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   void _toggleReaderMode() {
-    final value = !_readerMode;
-    Preferences.of(context).readerMode = value;
-    OrgController.of(context).hideMarkup.value = value;
-    setState(() => _readerMode = value);
+    final value = !readerMode;
+    readerMode = OrgController.of(context).hideMarkup.value = value;
   }
 
   @override
@@ -168,70 +160,20 @@ class _DocumentPageState extends State<DocumentPage> {
         ),
         body: child,
       ),
-      child: ViewSettings(
-        textScale: _textScale,
-        fontFamily: _fontFamily,
-        queryString: _searchDelegate.queryString,
-        readerMode: _readerMode,
-        // Builder required to get ViewSettings into the context
-        child: Builder(
-          builder: (context) {
-            return OrgRootWidget(
-              child: widget.child,
-              style: _textStyle,
-              onLinkTap: (url) {
-                debugPrint('Launching URL: $url');
-                return launch(url, forceSafariVC: false);
-              },
-              onSectionLongPress: (section) =>
-                  narrow(context, widget.title, section),
-              onLocalSectionLinkTap: (section) =>
-                  narrow(context, widget.title, section),
-            );
+      child: buildWithViewSettings(
+        builder: (context) => OrgRootWidget(
+          child: widget.child,
+          style: textStyle,
+          onLinkTap: (url) {
+            debugPrint('Launching URL: $url');
+            return launch(url, forceSafariVC: false);
           },
+          onSectionLongPress: (section) =>
+              narrow(context, widget.title, section),
+          onLocalSectionLinkTap: (section) =>
+              narrow(context, widget.title, section),
         ),
       ),
     );
   }
-
-  TextStyle get _textStyle {
-    final fontSize = 18 * _textScale;
-    try {
-      // Throws if font family not known
-      return GoogleFonts.getFont(_fontFamily, fontSize: fontSize);
-    } on Exception {
-      return GoogleFonts.getFont(kDefaultFontFamily, fontSize: fontSize);
-    }
-  }
-}
-
-class ViewSettings extends InheritedWidget {
-  const ViewSettings({
-    @required Widget child,
-    @required this.textScale,
-    @required this.fontFamily,
-    @required this.queryString,
-    @required this.readerMode,
-    Key key,
-  })  : assert(child != null),
-        assert(textScale != null),
-        assert(fontFamily != null),
-        assert(queryString != null),
-        assert(readerMode != null),
-        super(child: child, key: key);
-
-  final double textScale;
-  final String fontFamily;
-  final String queryString;
-  final bool readerMode;
-
-  @override
-  bool updateShouldNotify(ViewSettings oldWidget) =>
-      textScale != oldWidget.textScale ||
-      fontFamily != oldWidget.fontFamily ||
-      queryString != oldWidget.queryString ||
-      readerMode != oldWidget.readerMode;
-
-  static ViewSettings of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ViewSettings>();
 }
