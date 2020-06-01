@@ -14,7 +14,22 @@ void main() {
   runApp(buildApp());
 }
 
-Widget buildApp() => const PreferencesProvider(child: MyApp());
+Widget buildApp() =>
+    const PreferencesProvider(child: MyApp(), waiting: _Splash());
+
+// Not the "real" splash screen; just something to cover the blank while waiting
+// for Preferences to load
+class _Splash extends StatelessWidget {
+  const _Splash({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: _kPrimaryColor,
+    );
+  }
+}
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=006058&secondary.color=ff6e40
 const _kPrimaryColor = Color(0xff006058);

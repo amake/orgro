@@ -47,10 +47,11 @@ class Preferences {
 }
 
 class PreferencesProvider extends StatelessWidget {
-  const PreferencesProvider({@required this.child, Key key})
+  const PreferencesProvider({@required this.child, this.waiting, Key key})
       : assert(child != null),
         super(key: key);
   final Widget child;
+  final Widget waiting;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Preferences>(
@@ -61,7 +62,7 @@ class PreferencesProvider extends StatelessWidget {
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
         } else {
-          return const SizedBox.shrink();
+          return waiting ?? const SizedBox.shrink();
         }
       },
     );
