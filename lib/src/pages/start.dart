@@ -21,7 +21,7 @@ class _StartPageState extends State<StartPage>
     with RecentFilesState, PlatformOpenHandler {
   @override
   Widget build(BuildContext context) =>
-      buildWithRecentFiles(builder: (hasRecentFiles) {
+      buildWithRecentFiles(builder: (context, hasRecentFiles) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: hasRecentFiles

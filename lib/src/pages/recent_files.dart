@@ -147,13 +147,17 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   }
 
   Widget buildWithRecentFiles({
-    @required Widget Function(bool hasRecentFiles) builder,
+    @required
+        Widget Function(BuildContext context, bool hasRecentFiles) builder,
   }) {
     return RecentFiles(
       _recentFiles,
       add: addRecentFile,
       remove: removeRecentFile,
-      child: builder(_recentFiles.isNotEmpty),
+      // Builder required to get RecentFiles into context
+      child: Builder(
+        builder: (context) => builder(context, _recentFiles.isNotEmpty),
+      ),
     );
   }
 }
