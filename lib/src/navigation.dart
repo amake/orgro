@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:native_state/native_state.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
+
+const _kRestoreOrgControllerStateKey = 'restore_org_controller_state';
 
 Future<bool> loadHttpUrl(BuildContext context, String url) async {
   final title = Uri.parse(url).pathSegments.last;
@@ -62,7 +66,8 @@ Future<bool> loadDocument(
     }
   });
   final push =
-      Navigator.push<void>(context, _buildDocumentRoute(context, parsed));
+      Navigator.push<void>(context, _buildDocumentRoute(context, parsed))
+        ..whenComplete(() => _clearOrgState(context));
   if (onClose != null) {
     push.whenComplete(onClose);
   }
@@ -110,6 +115,8 @@ class _DocumentPageWrapper extends StatelessWidget {
     final prefs = Preferences.of(context);
     return OrgController(
       root: doc,
+      initialState: _restoreOrgState(context),
+      stateListener: (state) => _saveOrgState(context, state),
       hideMarkup: prefs.readerMode,
       child: DocumentPage(
         title: title,
@@ -121,6 +128,24 @@ class _DocumentPageWrapper extends StatelessWidget {
     );
   }
 }
+
+Map<String, dynamic> _restoreOrgState(BuildContext context) {
+  final state =
+      SavedState.of(context).getString(_kRestoreOrgControllerStateKey);
+  if (state != null) {
+    return json.decode(state) as Map<String, dynamic>;
+  } else {
+    return null;
+  }
+}
+
+void _saveOrgState(BuildContext context, Map<String, dynamic> state) {
+  final string = json.encode(state);
+  SavedState.of(context).putString(_kRestoreOrgControllerStateKey, string);
+}
+
+void _clearOrgState(BuildContext context) =>
+    SavedState.of(context).remove(_kRestoreOrgControllerStateKey);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   final viewSettings = ViewSettings.of(context);
