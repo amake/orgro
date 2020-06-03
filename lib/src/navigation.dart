@@ -61,47 +61,65 @@ Future<bool> loadDocument(
       return Future.value(null);
     }
   });
-  final push = Navigator.push<void>(
-    context,
-    MaterialPageRoute(
-      builder: (context) => FutureBuilder<ParsedOrgFileInfo>(
-        future: parsed,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildDocumentPage(
-              context,
-              snapshot.data.doc,
-              snapshot.data.title,
-            );
-          } else if (snapshot.hasError) {
-            return ErrorPage(error: snapshot.error.toString());
-          } else {
-            return const ProgressPage();
-          }
-        },
-      ),
-      fullscreenDialog: true,
-    ),
-  );
+  final push =
+      Navigator.push<void>(context, _buildDocumentRoute(context, parsed));
   if (onClose != null) {
     push.whenComplete(onClose);
   }
   return parsed.then((value) => value != null);
 }
 
-Widget _buildDocumentPage(BuildContext context, OrgDocument doc, String title) {
-  final prefs = Preferences.of(context);
-  return OrgController(
-    root: doc,
-    hideMarkup: prefs.readerMode,
-    child: DocumentPage(
-      title: title,
-      child: OrgDocumentWidget(doc),
-      textScale: prefs.textScale,
-      fontFamily: prefs.fontFamily,
-      readerMode: prefs.readerMode,
+PageRoute _buildDocumentRoute(
+  BuildContext context,
+  Future<ParsedOrgFileInfo> parsed,
+) {
+  return MaterialPageRoute<void>(
+    builder: (context) => FutureBuilder<ParsedOrgFileInfo>(
+      future: parsed,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return _DocumentPageWrapper(
+            doc: snapshot.data.doc,
+            title: snapshot.data.title,
+          );
+        } else if (snapshot.hasError) {
+          return ErrorPage(error: snapshot.error.toString());
+        } else {
+          return const ProgressPage();
+        }
+      },
     ),
+    fullscreenDialog: true,
   );
+}
+
+class _DocumentPageWrapper extends StatelessWidget {
+  const _DocumentPageWrapper({
+    @required this.doc,
+    @required this.title,
+    Key key,
+  })  : assert(doc != null),
+        assert(title != null),
+        super(key: key);
+
+  final OrgDocument doc;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final prefs = Preferences.of(context);
+    return OrgController(
+      root: doc,
+      hideMarkup: prefs.readerMode,
+      child: DocumentPage(
+        title: title,
+        child: OrgDocumentWidget(doc),
+        textScale: prefs.textScale,
+        fontFamily: prefs.fontFamily,
+        readerMode: prefs.readerMode,
+      ),
+    );
+  }
 }
 
 void narrow(BuildContext context, String title, OrgSection section) {
