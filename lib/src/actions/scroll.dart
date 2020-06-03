@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:org_flutter/org_flutter.dart';
 
 void _scrollTo(ScrollController controller, double position) =>
     controller.animateTo(position,
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
 void _scrollToTop(BuildContext context) {
-  final controller = PrimaryScrollController.of(context);
+  final controller = OrgController.of(context).scrollController;
   _scrollTo(controller, controller.position.minScrollExtent);
 }
 
 void _scrollToBottom(BuildContext context) {
-  final controller = PrimaryScrollController.of(context);
+  final controller = OrgController.of(context).scrollController;
   _scrollTo(controller, controller.position.maxScrollExtent);
 }
 
