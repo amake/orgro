@@ -110,7 +110,7 @@ class _RecentFilesStartPage extends StatelessWidget {
     final recentFiles = RecentFiles.of(context).list;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orgro · Recent files'),
+        title: const Text('Orgro'),
         actions: [
           PopupMenuButton<VoidCallback>(
             onSelected: (callback) => callback(),
@@ -132,18 +132,49 @@ class _RecentFilesStartPage extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.separated(
-        itemCount: recentFiles.length,
-        itemBuilder: (context, idx) {
-          final recentFile = recentFiles[idx];
-          return _RecentFileListTile(recentFile);
-        },
-        separatorBuilder: (context, idx) => const Divider(),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: ListView.builder(
+            itemCount: recentFiles.length + 1,
+            itemBuilder: (context, idx) {
+              if (idx == 0) {
+                return const _ListHeader(child: Text('Recent files'));
+              } else {
+                final recentFile = recentFiles[idx - 1];
+                return _RecentFileListTile(recentFile);
+              }
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _loadAndRememberFile(context, pickFile()),
         foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      ),
+    );
+  }
+}
+
+class _ListHeader extends StatelessWidget {
+  const _ListHeader({@required this.child, Key key})
+      : assert(child != null),
+        super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: DefaultTextStyle.merge(
+        // Couldn't find actual specs for list subheader typography so this is
+        // my best guess
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).accentColor,
+        ),
+        child: child,
       ),
     );
   }
@@ -165,7 +196,7 @@ class _RecentFileListTile extends StatelessWidget {
       onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
       background: Container(
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         color: Colors.red,
         child: Icon(
           Icons.delete,
