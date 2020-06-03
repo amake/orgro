@@ -4,7 +4,7 @@ import 'package:org_flutter/org_flutter.dart';
 PopupMenuItem<VoidCallback> readerModeMenuItem(
     BuildContext context, VoidCallback onToggled) {
   return CheckedPopupMenuItem<VoidCallback>(
-    checked: OrgController.of(context).hideMarkup.value,
+    checked: OrgController.of(context).hideMarkup,
     value: onToggled,
     child: const Text('Reader mode'),
   );

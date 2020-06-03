@@ -146,7 +146,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   void _toggleReaderMode() {
     final value = !readerMode;
-    readerMode = OrgController.of(context).hideMarkup.value = value;
+    readerMode = OrgController.of(context).hideMarkup = value;
   }
 
   @override
