@@ -134,9 +134,9 @@ Touch the search button in the top app bar and enter a query. Relevant sections
 will be expanded, while sections without hits will be collapsed. Hits are
 highlighted.
 
-* Text Size
+* Text Style
 
-Adjust the text size with the button in the top app bar.
+Adjust the text size and font with the button in the top app bar.
 
 * Questions and Feedback
 
