@@ -9,6 +9,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/recent_files.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
@@ -132,7 +133,13 @@ class _EmptyBody extends StatelessWidget {
             ],
             const SizedBox(height: 80),
             const _SupportLink(),
-            const _LicensesButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const _LicensesButton(),
+                fontPreloader(context),
+              ],
+            ),
           ],
         ),
       ),
@@ -184,6 +191,7 @@ class _ListHeader extends StatelessWidget {
         ),
         child: title,
       ),
+      trailing: fontPreloader(context),
     );
   }
 }

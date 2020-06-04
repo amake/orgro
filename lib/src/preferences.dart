@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,6 +53,7 @@ class PreferencesProvider extends StatelessWidget {
         super(key: key);
   final Widget child;
   final Widget waiting;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Preferences>(
@@ -80,3 +82,12 @@ class InheritedPreferences extends InheritedWidget {
   bool updateShouldNotify(InheritedPreferences oldWidget) =>
       prefs != oldWidget.prefs;
 }
+
+// Hack: Load the preferred content font in a dummy widget before it's actually
+// needed. This helps prevent Flash of Unstyled Text, which in turn makes
+// restoring the scroll position more accurate.
+Widget fontPreloader(BuildContext context) => Text(
+      '',
+      style: GoogleFonts.getFont(
+          Preferences.of(context).fontFamily ?? kDefaultFontFamily),
+    );
