@@ -153,7 +153,7 @@ class _RecentFilesBody extends StatelessWidget {
           itemCount: recentFiles.length + 1,
           itemBuilder: (context, idx) {
             if (idx == 0) {
-              return const _ListHeader(child: Text('Recent files'));
+              return const _ListHeader(title: Text('Recent files'));
             } else {
               final recentFile = recentFiles[idx - 1];
               return _RecentFileListTile(recentFile);
@@ -166,11 +166,11 @@ class _RecentFilesBody extends StatelessWidget {
 }
 
 class _ListHeader extends StatelessWidget {
-  const _ListHeader({@required this.child, Key key})
-      : assert(child != null),
+  const _ListHeader({@required this.title, Key key})
+      : assert(title != null),
         super(key: key);
 
-  final Widget child;
+  final Widget title;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +182,7 @@ class _ListHeader extends StatelessWidget {
           fontWeight: FontWeight.w500,
           color: Theme.of(context).accentColor,
         ),
-        child: child,
+        child: title,
       ),
     );
   }
