@@ -202,16 +202,9 @@ class _RecentFileListTile extends StatelessWidget {
     return Dismissible(
       key: ValueKey(recentFile),
       onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.all(24),
-        color: Colors.red,
-        child: Icon(
-          Icons.delete,
-          color: Theme.of(context).accentTextTheme.button.color,
-        ),
-      ),
-      direction: DismissDirection.endToStart,
+      background: const _SwipeDeleteBackground(alignment: Alignment.centerLeft),
+      secondaryBackground:
+          const _SwipeDeleteBackground(alignment: Alignment.centerRight),
       child: ListTile(
         leading: const Icon(Icons.insert_drive_file),
         title: Text(recentFile.name),
@@ -220,6 +213,27 @@ class _RecentFileListTile extends StatelessWidget {
           context,
           readFileWithIdentifier(recentFile.identifier),
         ),
+      ),
+    );
+  }
+}
+
+class _SwipeDeleteBackground extends StatelessWidget {
+  const _SwipeDeleteBackground({@required this.alignment, Key key})
+      : assert(alignment != null),
+        super(key: key);
+
+  final AlignmentGeometry alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: alignment,
+      padding: const EdgeInsets.all(24),
+      color: Colors.red,
+      child: Icon(
+        Icons.delete,
+        color: Theme.of(context).accentTextTheme.button.color,
       ),
     );
   }
