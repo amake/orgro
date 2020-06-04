@@ -36,7 +36,7 @@ class _StartPageState extends State<StartPage>
             child:
                 hasRecentFiles ? const _RecentFilesBody() : const _EmptyBody(),
           ),
-          floatingActionButton: _buildFloatingActionButton(),
+          floatingActionButton: _buildFloatingActionButton(context),
         );
       });
 
@@ -64,7 +64,7 @@ class _StartPageState extends State<StartPage>
     );
   }
 
-  Widget _buildFloatingActionButton() {
+  Widget _buildFloatingActionButton(BuildContext context) {
     if (!hasRecentFiles) {
       return null;
     }
