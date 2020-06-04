@@ -24,14 +24,55 @@ class _StartPageState extends State<StartPage>
     with RecentFilesState, PlatformOpenHandler, StateRestoration {
   @override
   Widget build(BuildContext context) =>
-      buildWithRecentFiles(builder: (context, hasRecentFiles) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: hasRecentFiles
-              ? const _RecentFilesStartPage()
-              : const _EmptyStartPage(),
+      buildWithRecentFiles(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Orgro'),
+            actions: _buildActions().toList(growable: false),
+          ),
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child:
+                hasRecentFiles ? const _RecentFilesBody() : const _EmptyBody(),
+          ),
+          floatingActionButton: _buildFloatingActionButton(),
         );
       });
+
+  Iterable<Widget> _buildActions() sync* {
+    if (!hasRecentFiles) {
+      return;
+    }
+    yield PopupMenuButton<VoidCallback>(
+      onSelected: (callback) => callback(),
+      itemBuilder: (context) => [
+        PopupMenuItem<VoidCallback>(
+          child: const Text('Orgro Manual'),
+          value: () => _openOrgroManual(context),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem<VoidCallback>(
+          child: Text('Support · Feedback'),
+          value: _visitSupportLink,
+        ),
+        PopupMenuItem<VoidCallback>(
+          child: const Text('Licenses'),
+          value: () => _openLicensePage(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFloatingActionButton() {
+    if (!hasRecentFiles) {
+      return null;
+    }
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: () => _loadAndRememberFile(context, pickFile()),
+      foregroundColor: Theme.of(context).accentTextTheme.button.color,
+    );
+  }
 
   @override
   Future<bool> loadFileFromPlatform(OpenFileInfo info) async {
@@ -71,87 +112,54 @@ class _StartPageState extends State<StartPage>
   }
 }
 
-class _EmptyStartPage extends StatelessWidget {
-  const _EmptyStartPage({Key key}) : super(key: key);
+class _EmptyBody extends StatelessWidget {
+  const _EmptyBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Orgro')),
-      body: Center(
-        child: IntrinsicWidth(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const _PickFileButton(),
+    return Center(
+      child: IntrinsicWidth(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const _PickFileButton(),
+            const SizedBox(height: 16),
+            const _OrgroManualButton(),
+            if (!kReleaseMode && !kScreenshotMode) ...[
               const SizedBox(height: 16),
-              const _OrgroManualButton(),
-              if (!kReleaseMode && !kScreenshotMode) ...[
-                const SizedBox(height: 16),
-                const _OrgManualButton(),
-              ],
-              const SizedBox(height: 80),
-              const _SupportLink(),
-              const _LicensesButton(),
+              const _OrgManualButton(),
             ],
-          ),
+            const SizedBox(height: 80),
+            const _SupportLink(),
+            const _LicensesButton(),
+          ],
         ),
       ),
     );
   }
 }
 
-class _RecentFilesStartPage extends StatelessWidget {
-  const _RecentFilesStartPage({Key key}) : super(key: key);
+class _RecentFilesBody extends StatelessWidget {
+  const _RecentFilesBody({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final recentFiles = RecentFiles.of(context).list;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Orgro'),
-        actions: [
-          PopupMenuButton<VoidCallback>(
-            onSelected: (callback) => callback(),
-            itemBuilder: (context) => [
-              PopupMenuItem<VoidCallback>(
-                child: const Text('Orgro Manual'),
-                value: () => _openOrgroManual(context),
-              ),
-              const PopupMenuDivider(),
-              const PopupMenuItem<VoidCallback>(
-                child: Text('Support · Feedback'),
-                value: _visitSupportLink,
-              ),
-              PopupMenuItem<VoidCallback>(
-                child: const Text('Licenses'),
-                value: () => _openLicensePage(context),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: ListView.builder(
-            itemCount: recentFiles.length + 1,
-            itemBuilder: (context, idx) {
-              if (idx == 0) {
-                return const _ListHeader(child: Text('Recent files'));
-              } else {
-                final recentFile = recentFiles[idx - 1];
-                return _RecentFileListTile(recentFile);
-              }
-            },
-          ),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: ListView.builder(
+          itemCount: recentFiles.length + 1,
+          itemBuilder: (context, idx) {
+            if (idx == 0) {
+              return const _ListHeader(child: Text('Recent files'));
+            } else {
+              final recentFile = recentFiles[idx - 1];
+              return _RecentFileListTile(recentFile);
+            }
+          },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => _loadAndRememberFile(context, pickFile()),
-        foregroundColor: Theme.of(context).accentTextTheme.button.color,
       ),
     );
   }

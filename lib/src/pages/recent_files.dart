@@ -82,6 +82,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   List<RecentFile> _recentFiles;
   _LifecycleEventHandler _lifecycleEventHandler;
 
+  bool get hasRecentFiles => _recentFiles.isNotEmpty;
+
   void addRecentFile(RecentFile newFile) {
     debugPrint('Adding recent file: $newFile');
     final newFiles = [newFile]
@@ -146,25 +148,22 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     setState(() => _recentFiles = _load());
   }
 
-  Widget buildWithRecentFiles({
-    @required
-        Widget Function(BuildContext context, bool hasRecentFiles) builder,
-  }) {
+  Widget buildWithRecentFiles({@required WidgetBuilder builder}) {
     return RecentFiles(
       _recentFiles,
       add: addRecentFile,
       remove: removeRecentFile,
       // Builder required to get RecentFiles into context
-      child: Builder(
-        builder: (context) => builder(context, _recentFiles.isNotEmpty),
-      ),
+      child: Builder(builder: builder),
     );
   }
 }
 
 class _LifecycleEventHandler extends WidgetsBindingObserver {
   _LifecycleEventHandler({this.onResume});
+
   final VoidCallback onResume;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
