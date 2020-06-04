@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:org_flutter/org_flutter.dart';
 
 PopupMenuItem<VoidCallback> readerModeMenuItem(
-    BuildContext context, VoidCallback onToggled) {
+  BuildContext context, {
+  @required bool enabled,
+  @required Function(bool) onChanged,
+}) {
+  assert(enabled != null);
+  assert(onChanged != null);
   return CheckedPopupMenuItem<VoidCallback>(
-    checked: OrgController.of(context).hideMarkup,
-    value: onToggled,
+    checked: enabled,
+    value: () => onChanged(!enabled),
     child: const Text('Reader mode'),
   );
 }
@@ -13,20 +17,20 @@ PopupMenuItem<VoidCallback> readerModeMenuItem(
 class ReaderModeButton extends StatelessWidget {
   const ReaderModeButton({
     @required this.enabled,
-    @required this.onToggled,
+    @required this.onChanged,
     Key key,
   })  : assert(enabled != null),
         super(key: key);
 
   final bool enabled;
-  final VoidCallback onToggled;
+  final Function(bool) onChanged;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.chrome_reader_mode),
       color: enabled ? Theme.of(context).accentColor : null,
-      onPressed: onToggled,
+      onPressed: () => onChanged(!enabled),
     );
   }
 }

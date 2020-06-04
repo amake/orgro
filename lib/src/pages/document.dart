@@ -122,7 +122,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         );
         yield ReaderModeButton(
           enabled: readerMode,
-          onToggled: _toggleReaderMode,
+          onChanged: _setReaderMode,
         );
         yield const ScrollTopButton();
         yield const ScrollBottomButton();
@@ -130,7 +130,11 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
-            readerModeMenuItem(context, _toggleReaderMode),
+            readerModeMenuItem(
+              context,
+              enabled: readerMode,
+              onChanged: _setReaderMode,
+            ),
             const PopupMenuDivider(),
             PopupMenuItem<VoidCallback>(
               child: const Text('Cycle visibility'),
@@ -144,10 +148,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     }
   }
 
-  void _toggleReaderMode() {
-    final value = !readerMode;
-    readerMode = OrgController.of(context).hideMarkup = value;
-  }
+  void _setReaderMode(bool enabled) =>
+      readerMode = OrgController.of(context).hideMarkup = enabled;
 
   @override
   Widget build(BuildContext context) {
