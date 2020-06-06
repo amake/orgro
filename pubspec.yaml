@@ -14,12 +14,14 @@ dependencies:
   #   path: ../org_flutter
   google_fonts: ^1.0.0
   url_launcher: ^5.4.1
-  file_picker_writable: ^1.1.1+2
-  # file_picker_writable:
+  # file_picker_writable: ^1.1.1+2
+  # Using private fork pending resolution of
+  # https://github.com/hpoul/file_picker_writable/pull/3
+  file_picker_writable:
   #   path: ../file_picker_writable
-  #   git:
-  #     url: https://github.com/amake/file_picker_writable.git
-  #     ref: android-intent-fix
+    git:
+      url: https://github.com/amake/file_picker_writable.git
+      ref: ios-copy-to-fix
   http: ^0.12.0+4
   shared_preferences: '>=0.5.7+3 <2.0.0'
   intl: ^0.16.1
