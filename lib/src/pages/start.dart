@@ -276,10 +276,12 @@ Future<void> _loadAndRememberFile(
   FutureOr<OpenFileInfo> fileInfoFuture,
 ) async {
   final recentFile = await _loadFile(context, fileInfoFuture);
-  RecentFiles.of(context).add(recentFile);
-  debugPrint('Saving file ID to state');
-  await SavedState.of(context)
-      .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
+  if (recentFile != null) {
+    RecentFiles.of(context).add(recentFile);
+    debugPrint('Saving file ID to state');
+    await SavedState.of(context)
+        .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
+  }
 }
 
 class _PickFileButton extends StatelessWidget {
