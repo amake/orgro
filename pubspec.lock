@@ -69,7 +69,7 @@ packages:
     description:
       path: "."
       ref: android-file-not-found
-      resolved-ref: aa51193093efb95940d319f8b214f19b950f67b2
+      resolved-ref: "2f4297d539bde7038e2296aa0a46708ee55a8e54"
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "1.1.1+2"
