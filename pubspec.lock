@@ -68,8 +68,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: ios-copy-to-fix
-      resolved-ref: "4bc674d39ea05de89b0533b879a7169b9e27f2a5"
+      ref: android-file-not-found
+      resolved-ref: aa51193093efb95940d319f8b214f19b950f67b2
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "1.1.1+2"
