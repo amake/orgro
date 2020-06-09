@@ -67,12 +67,10 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: android-file-not-found
-      resolved-ref: "0580d2c6eadb74a5b92e63105e91b9ec94af27d7"
-      url: "https://github.com/amake/file_picker_writable.git"
-    source: git
-    version: "1.1.1+2"
+      name: file_picker_writable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1+4"
   flutter:
     dependency: "direct main"
     description: flutter
