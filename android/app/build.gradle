@@ -40,6 +40,9 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        // Workaround for spurious(?) error with Android Gradle Plugin 4.0, like
+        // https://github.com/flutter/flutter/issues/22397
+        checkReleaseBuilds false
     }
 
     defaultConfig {
