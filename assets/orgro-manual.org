@@ -21,16 +21,26 @@ TODO keywords, priority markers, and tags are highlighted and laid out nicely.
 Blocks are laid out with horizontal scroll to keep code readable. They can also
 be opened and closed just like sections by touching the block header.
 
-   #+begin_src elisp
-     (+ 1 2)
+Syntax highlighting is applied for [[https://github.com/git-touch/highlight/tree/master/highlight/lib/languages][many languages]] in =src= blocks.
+
+   #+begin_src bash
+     BAR='bar'
+
+     foo() {
+       echo "foo $BAR $@"
+     }
+
+     if true; then
+         foo 'baz'
+     fi
    #+end_src
 
    #+RESULTS:
-   : 3
+   : foo bar baz
 
 The example above also illustrates affiliated keywords (the =#+RESULTS:= line)
-and fixed-width areas (the =: 3= line). Fixed width areas also have horizontal
-scroll to ensure proper display.
+and fixed-width areas (the =: foo bar baz= line). Fixed width areas also have
+horizontal scroll to ensure proper display.
 
 Hide meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
 
