@@ -156,11 +156,21 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     return ValueListenableBuilder<bool>(
       valueListenable: _searchDelegate.searchMode,
       builder: (context, searchMode, child) => Scaffold(
-        appBar: AppBar(
-          title: _title(searchMode),
-          actions: _actions(searchMode).toList(growable: false),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: _title(searchMode),
+              actions: _actions(searchMode).toList(growable: false),
+              pinned: false,
+              floating: true,
+              forceElevated: true,
+              snap: true,
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([child]),
+            ),
+          ],
         ),
-        body: child,
       ),
       child: buildWithViewSettings(
         builder: (context) => OrgRootWidget(
