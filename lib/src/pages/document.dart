@@ -153,12 +153,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _searchDelegate.searchMode,
-      builder: (context, searchMode, child) => Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          ValueListenableBuilder<bool>(
+            valueListenable: _searchDelegate.searchMode,
+            builder: (context, searchMode, child) => SliverAppBar(
               title: _title(searchMode),
               actions: _actions(searchMode).toList(growable: false),
               pinned: false,
@@ -166,25 +166,26 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               forceElevated: true,
               snap: true,
             ),
-            SliverList(
-              delegate: SliverChildListDelegate([child]),
-            ),
-          ],
-        ),
-      ),
-      child: buildWithViewSettings(
-        builder: (context) => OrgRootWidget(
-          child: widget.child,
-          style: textStyle,
-          onLinkTap: (url) {
-            debugPrint('Launching URL: $url');
-            return launch(url, forceSafariVC: false);
-          },
-          onSectionLongPress: (section) =>
-              narrow(context, widget.title, section),
-          onLocalSectionLinkTap: (section) =>
-              narrow(context, widget.title, section),
-        ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              buildWithViewSettings(
+                builder: (context) => OrgRootWidget(
+                  child: widget.child,
+                  style: textStyle,
+                  onLinkTap: (url) {
+                    debugPrint('Launching URL: $url');
+                    return launch(url, forceSafariVC: false);
+                  },
+                  onSectionLongPress: (section) =>
+                      narrow(context, widget.title, section),
+                  onLocalSectionLinkTap: (section) =>
+                      narrow(context, widget.title, section),
+                ),
+              ),
+            ]),
+          ),
+        ],
       ),
     );
   }
