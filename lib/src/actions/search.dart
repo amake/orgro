@@ -91,7 +91,7 @@ class SearchButton extends StatelessWidget {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   const SearchField(
     this._controller, {
     this.onClear,
@@ -101,6 +101,25 @@ class SearchField extends StatelessWidget {
   final TextEditingController _controller;
   final VoidCallback onClear;
   final Function(String) onSubmitted;
+
+  @override
+  _SearchFieldState createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  _HackScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = _HackScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +140,11 @@ class SearchField extends StatelessWidget {
       child: TextField(
         autofocus: true,
         style: style,
-        controller: _controller,
+        controller: widget._controller,
+        scrollController: _scrollController,
         textInputAction: TextInputAction.search,
         cursorColor: theme.accentColor,
-        onSubmitted: onSubmitted,
+        onSubmitted: widget.onSubmitted,
         decoration: InputDecoration(
           hintText: 'Search...',
           border: InputBorder.none,
@@ -135,12 +155,12 @@ class SearchField extends StatelessWidget {
           suffixIcon: IconTheme.merge(
             data: iconTheme,
             child: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _controller,
+              valueListenable: widget._controller,
               builder: (context, value, child) =>
                   value.text.isNotEmpty ? child : const SizedBox.shrink(),
               child: IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: onClear,
+                onPressed: widget.onClear,
               ),
             ),
           ),
@@ -148,4 +168,9 @@ class SearchField extends StatelessWidget {
       ),
     );
   }
+}
+
+class _HackScrollController extends ScrollController {
+  @override
+  bool get hasClients => false;
 }
