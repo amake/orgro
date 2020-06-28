@@ -1,0 +1,1 @@
+- Hide app bar on scroll when viewing a document
