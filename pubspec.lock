@@ -63,7 +63,7 @@ packages:
       name: file
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.1"
   file_picker_writable:
     dependency: "direct main"
     description:
@@ -155,7 +155,7 @@ packages:
       name: native_state
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   org_flutter:
     dependency: "direct main"
     description:
