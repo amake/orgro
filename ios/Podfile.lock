@@ -2,6 +2,8 @@ PODS:
   - file_picker_writable (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_tex_js (0.0.1):
+    - Flutter
   - native_state (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -26,6 +28,7 @@ PODS:
 DEPENDENCIES:
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
+  - flutter_tex_js (from `.symlinks/plugins/flutter_tex_js/ios`)
   - native_state (from `.symlinks/plugins/native_state/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
@@ -42,6 +45,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
     :path: Flutter
+  flutter_tex_js:
+    :path: ".symlinks/plugins/flutter_tex_js/ios"
   native_state:
     :path: ".symlinks/plugins/native_state/ios"
   path_provider:
@@ -66,6 +71,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_tex_js: 010eab32e3bc329fe1b6d48efd8a3b0c0506bb50
   native_state: f9996d96d651408a9d9d5e0738aed4cbcdd5165c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4

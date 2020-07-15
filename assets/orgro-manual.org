@@ -106,6 +106,14 @@ spacing.
 | 123         |        |      |
 | あいうえお  |  -1e24 | >3.5 |
 
+** LaTeX fragments
+
+Math in LaTeX markup is supported as both inline ($$ a^2 + b^2 $$) and block:
+
+\begin{equation}
+\nabla \times \mathbf{B} = \frac{1}{c}\left( 4\pi\mathbf{J} + \frac{\partial \mathbf{E}}{\partial t}\right)
+\end{equation}
+
 ** Lists
 
 List content is shown with content reflowed for easy reading on narrow screens.
