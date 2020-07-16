@@ -94,7 +94,7 @@ packages:
       name: flutter_tex_js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -169,7 +169,7 @@ packages:
       name: org_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.1"
+    version: "0.6.2"
   org_parser:
     dependency: transitive
     description:
