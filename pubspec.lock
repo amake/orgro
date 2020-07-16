@@ -94,7 +94,7 @@ packages:
       name: flutter_tex_js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
