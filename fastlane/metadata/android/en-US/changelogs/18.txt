@@ -1,0 +1,2 @@
+- Render inline and block LaTeX (math) fragments
+- Org parser fixes
