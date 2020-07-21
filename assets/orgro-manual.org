@@ -114,6 +114,11 @@ Math in LaTeX markup is supported as both inline ($$ a^2 + b^2 $$) and block:
 \oint_{\partial \Sigma} \mathbf{B} \cdot \mathrm{d}\boldsymbol{l} = \mu_0 \left(\iint_{\Sigma} \mathbf{J} \cdot \mathrm{d}\mathbf{S} + \varepsilon_0 \frac{\mathrm{d}}{\mathrm{d}t} \iint_{\Sigma} \mathbf{E} \cdot \mathrm{d}\mathbf{S} \right)
 \end{align}
 
+** Prettified entities
+
+Special characters written with syntax like ~\﻿Omega~ or ~\﻿leftrightarrow~ are
+shown with their "pretty" replacement characters: \Omega \leftrightarrow
+
 ** Lists
 
 List content is shown with content reflowed for easy reading on narrow screens.

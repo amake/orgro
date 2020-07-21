@@ -169,14 +169,14 @@ packages:
       name: org_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2"
+    version: "0.7.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.2"
+    version: "0.4.0"
   path:
     dependency: transitive
     description:
