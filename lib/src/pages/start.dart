@@ -119,28 +119,30 @@ class _EmptyBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: IntrinsicWidth(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const _PickFileButton(),
-            const SizedBox(height: 16),
-            const _OrgroManualButton(),
-            if (!kReleaseMode && !kScreenshotMode) ...[
+      child: SingleChildScrollView(
+        child: IntrinsicWidth(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const _PickFileButton(),
               const SizedBox(height: 16),
-              const _OrgManualButton(),
-            ],
-            const SizedBox(height: 80),
-            const _SupportLink(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const _LicensesButton(),
-                fontPreloader(context),
+              const _OrgroManualButton(),
+              if (!kReleaseMode && !kScreenshotMode) ...[
+                const SizedBox(height: 16),
+                const _OrgManualButton(),
               ],
-            ),
-          ],
+              const SizedBox(height: 80),
+              const _SupportLink(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const _LicensesButton(),
+                  fontPreloader(context),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
