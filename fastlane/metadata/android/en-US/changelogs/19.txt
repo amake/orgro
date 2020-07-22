@@ -1,0 +1,2 @@
+- Prettify org entities (like \Omega → Ω)
+- Bug fixes
