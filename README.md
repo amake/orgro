@@ -46,13 +46,14 @@ interpreted.
 
 # Get it
 
-Right now the only way to get Orgro is to install it manually:
+Orgro is available on the [App
+Store](https://apps.apple.com/us/app/orgro/id1512580074?uo=4) and [Google
+Play](https://play.google.com/store/apps/details?id=com.madlonkay.orgro), or you
+can build and install from source:
 
 1. Install [Flutter](https://flutter.dev/)
 2. Clone this repo
 3. Attach your device and do `flutter run` from the repo root
-
-It should be available in the Apple App Store and Google Play at some point.
 
 # Support Orgro
 
