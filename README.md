@@ -18,6 +18,10 @@ I started taking notes in org-mode at work, then found myself wanting to view
 them on my tablet in meetings. By default on iOS you can't open an `.org` file
 at all, as the OS doesn't even know that it's plain text.
 
+Other mobile org-mode apps are focused on very different things like to-dos or
+task management; Orgro is instead first and foremost a *viewer*, letting you see
+and search the contents of your org files.
+
 I also wanted to try writing a parser with
 [PetitParser](https://github.com/petitparser/dart-petitparser); the result
 powers this application and is available as a separate library,
@@ -34,6 +38,7 @@ powers this application and is available as a separate library,
 - Search
 - Narrowing
 - "Reader mode" where extraneous markup is hidden
+- Inline and block LaTeX rendering
 
 See the [manual](./assets/orgro-manual.org) for details.
 
@@ -43,6 +48,10 @@ Orgro is a viewer. It does not support editing at all.
 
 Many org-mode syntax structures are highlighted but not meaningfully
 interpreted.
+
+# FAQ
+
+See [here](https://orgro.org/faq/)
 
 # Get it
 
