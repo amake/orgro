@@ -6,7 +6,7 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DocumentPage extends StatefulWidget {
+class DocumentPage extends StatelessWidget {
   DocumentPage.defaults(
     ViewSettings settings, {
     @required String title,
@@ -41,10 +41,47 @@ class DocumentPage extends StatefulWidget {
   final bool readerMode;
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // Body is split into separate widget to ensure that the primary scroll
+      // controller set by the Scaffold makes it into the body's context
+      body: _DocumentPageBody(
+        title: title,
+        child: child,
+        textScale: textScale,
+        fontFamily: fontFamily,
+        initialQuery: initialQuery,
+        readerMode: readerMode,
+      ),
+    );
+  }
+}
+
+class _DocumentPageBody extends StatefulWidget {
+  const _DocumentPageBody({
+    @required this.title,
+    @required this.child,
+    this.textScale,
+    this.fontFamily,
+    this.initialQuery,
+    this.readerMode,
+    Key key,
+  })  : assert(child != null),
+        super(key: key);
+
+  final String title;
+  final Widget child;
+  final double textScale;
+  final String fontFamily;
+  final String initialQuery;
+  final bool readerMode;
+
+  @override
   _DocumentPageState createState() => _DocumentPageState();
 }
 
-class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
+class _DocumentPageState extends State<_DocumentPageBody>
+    with ViewSettingsState {
   MySearchDelegate _searchDelegate;
 
   @override
@@ -153,12 +190,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          ValueListenableBuilder<bool>(
-            valueListenable: _searchDelegate.searchMode,
-            builder: (context, searchMode, child) => SliverAppBar(
+    return CustomScrollView(
+      slivers: [
+        ValueListenableBuilder<bool>(
+          valueListenable: _searchDelegate.searchMode,
+          builder: (context, searchMode, child) => PrimaryScrollController(
+            // Context here lacks access to the primary scroll controller, so we
+            // supply it explicitly from _DocumentPageBody's context
+            controller: PrimaryScrollController.of(this.context),
+            child: SliverAppBar(
               title: _title(searchMode),
               actions: _actions(searchMode).toList(growable: false),
               pinned: false,
@@ -167,26 +207,26 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               snap: true,
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              buildWithViewSettings(
-                builder: (context) => OrgRootWidget(
-                  child: widget.child,
-                  style: textStyle,
-                  onLinkTap: (url) {
-                    debugPrint('Launching URL: $url');
-                    return launch(url, forceSafariVC: false);
-                  },
-                  onSectionLongPress: (section) =>
-                      narrow(context, widget.title, section),
-                  onLocalSectionLinkTap: (section) =>
-                      narrow(context, widget.title, section),
-                ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            buildWithViewSettings(
+              builder: (context) => OrgRootWidget(
+                child: widget.child,
+                style: textStyle,
+                onLinkTap: (url) {
+                  debugPrint('Launching URL: $url');
+                  return launch(url, forceSafariVC: false);
+                },
+                onSectionLongPress: (section) =>
+                    narrow(context, widget.title, section),
+                onLocalSectionLinkTap: (section) =>
+                    narrow(context, widget.title, section),
               ),
-            ]),
-          ),
-        ],
-      ),
+            ),
+          ]),
+        ),
+      ],
     );
   }
 }
