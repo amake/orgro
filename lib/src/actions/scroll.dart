@@ -21,7 +21,7 @@ class ScrollTopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.vertical_align_top),
+      icon: const Icon(Icons.keyboard_arrow_up),
       onPressed: () => _scrollToTop(context),
     );
   }
@@ -40,7 +40,7 @@ class ScrollBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.vertical_align_bottom),
+      icon: const Icon(Icons.keyboard_arrow_down),
       onPressed: () => _scrollToBottom(context),
     );
   }
