@@ -55,10 +55,17 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     final fontSize = 18 * _textScale;
     try {
       // Throws if font family not known
-      return GoogleFonts.getFont(_fontFamily, fontSize: fontSize);
+      return _loadGoogleFont(_fontFamily, fontSize: fontSize);
     } on Exception {
-      return GoogleFonts.getFont(kDefaultFontFamily, fontSize: fontSize);
+      return _loadGoogleFont(kDefaultFontFamily, fontSize: fontSize);
     }
+  }
+
+  TextStyle _loadGoogleFont(String fontFamily, {double fontSize}) {
+    // Load actual bold and italic to avoid synthetics
+    GoogleFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
+    GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
+    return GoogleFonts.getFont(fontFamily, fontSize: fontSize);
   }
 
   Widget buildWithViewSettings({@required WidgetBuilder builder}) {
