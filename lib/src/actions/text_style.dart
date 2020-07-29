@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:orgro/src/fonts.dart';
 
 class TextStyleButton extends StatefulWidget {
   const TextStyleButton({
@@ -241,44 +241,14 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
         context: context,
         builder: (context) => SimpleDialog(
           children: [
-            for (final family in GoogleFonts.asMap().keys)
-              if (_kMonospaceFontFamilies.contains(family))
-                CheckboxListTile(
-                  value: _value == family,
-                  title: Text(family),
-                  onChanged: (_) => Navigator.pop(context, family),
-                ),
+            for (final family
+                in availableFontFamilies.toList(growable: false)..sort())
+              CheckboxListTile(
+                value: _value == family,
+                title: Text(family),
+                onChanged: (_) => Navigator.pop(context, family),
+              ),
           ],
         ),
       );
 }
-
-// There is currently no way to filter by category. This list manually compiled from
-// https://fonts.google.com/?category=Monospace
-//
-// TODO(aaron): Remove this pending solution to
-// https://github.com/material-foundation/google-fonts-flutter/issues/112
-const _kMonospaceFontFamilies = <String>{
-  'Roboto Mono',
-  'DM Mono',
-  'Inconsolata',
-  'Source Code Pro',
-  'PT Mono',
-  'Nanum Gothic Coding',
-  'Ubuntu Mono',
-  'IBM Plex Mono',
-  'Cousine',
-  'Share Tech Mono',
-  'Anonymous Pro',
-  'VT323',
-  'Fira Mono',
-  'Space Mono',
-  'Overpass Mono',
-  'Cutive Mono',
-  'Oxygen Mono',
-  'Courier Prime',
-  'B612 Mono',
-  'Nova Mono',
-  'Fira Code',
-  'Major Mono Display'
-};

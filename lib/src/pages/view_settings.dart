@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
 mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
@@ -51,22 +51,8 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _textScale ??= initialTextScale ?? MediaQuery.textScaleFactorOf(context);
   }
 
-  TextStyle get textStyle {
-    final fontSize = 18 * _textScale;
-    try {
-      // Throws if font family not known
-      return _loadGoogleFont(_fontFamily, fontSize: fontSize);
-    } on Exception {
-      return _loadGoogleFont(kDefaultFontFamily, fontSize: fontSize);
-    }
-  }
-
-  TextStyle _loadGoogleFont(String fontFamily, {double fontSize}) {
-    // Load actual bold and italic to avoid synthetics
-    GoogleFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
-    GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
-    return GoogleFonts.getFont(fontFamily, fontSize: fontSize);
-  }
+  TextStyle get textStyle =>
+      loadFontWithVariants(_fontFamily).copyWith(fontSize: 18 * _textScale);
 
   Widget buildWithViewSettings({@required WidgetBuilder builder}) {
     return ViewSettings(
