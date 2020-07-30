@@ -1,0 +1,4 @@
+- New font: FiraGO
+- Improved appearance of bold, italic text
+- Bug fixes
+- Internet permission required for loading fonts (was broken before!)
