@@ -12,6 +12,11 @@ void main() {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
+  if (kReleaseMode) {
+    // Disable debug printing for release builds
+    debugPrint = (_, {wrapWidth}) {};
+  }
+
   runApp(buildApp());
 }
 
