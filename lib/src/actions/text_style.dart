@@ -4,6 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 
+_PersistentPopupMenuItem textScaleMenuItem(
+  BuildContext context, {
+  @required double textScale,
+  @required Function(double) onChanged,
+}) {
+  assert(textScale != null);
+  assert(onChanged != null);
+  return _PersistentPopupMenuItem(
+    child: TextSizeAdjuster(
+      onChanged: onChanged,
+      value: textScale,
+    ),
+  );
+}
+
+_PersistentPopupMenuItem fontFamilyMenuItem(
+  BuildContext context, {
+  @required String fontFamily,
+  @required Function(String) onChanged,
+}) {
+  assert(fontFamily != null);
+  assert(onChanged != null);
+  return _PersistentPopupMenuItem(
+    child: FontFamilySelector(
+      onChanged: onChanged,
+      value: fontFamily,
+    ),
+  );
+}
+
 class TextStyleButton extends StatefulWidget {
   const TextStyleButton({
     @required this.textScale,
@@ -166,24 +196,28 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.remove),
-          onPressed: () => _setValue(_value - _kTextSizeAdjustmentIncrement),
-        ),
-        Text(
-          '${(_value / _kTextSizeAdjustmentFactor * 100).toStringAsFixed(0)}%',
-          style: DefaultTextStyle.of(context).style.copyWith(
-            fontFeatures: const [FontFeature.tabularFigures()],
+    return IconTheme.merge(
+      data: IconThemeData(color: DefaultTextStyle.of(context).style.color),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.remove),
+            onPressed: () => _setValue(_value - _kTextSizeAdjustmentIncrement),
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () => _setValue(_value + _kTextSizeAdjustmentIncrement),
-        )
-      ],
+          Text(
+            '${(_value / _kTextSizeAdjustmentFactor * 100).toStringAsFixed(0)}%',
+            style: DefaultTextStyle.of(context).style.copyWith(
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => _setValue(_value + _kTextSizeAdjustmentIncrement),
+          )
+        ],
+      ),
     );
   }
 }
@@ -252,3 +286,37 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
         ),
       );
 }
+
+/// A popup menu item that doesn't close when tapped and doesn't provide its own
+/// [InkWell], unlike [PopupMenuItem].
+// ignore: prefer_void_to_null
+class _PersistentPopupMenuItem extends PopupMenuEntry<Null> {
+  const _PersistentPopupMenuItem({@required this.child, Key key})
+      : super(key: key);
+
+  final Widget child;
+
+  @override
+  State<StatefulWidget> createState() => _PersistentPopupMenuItemState();
+
+  @override
+  double get height => kMinInteractiveDimension;
+
+  @override
+  bool represents(Object value) => false;
+}
+
+class _PersistentPopupMenuItemState extends State<_PersistentPopupMenuItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: AlignmentDirectional.centerStart,
+      constraints: BoxConstraints(minHeight: widget.height),
+      padding: const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+      child: widget.child,
+    );
+  }
+}
+
+// Keep in sync with same from popup_menu.dart
+const double _kMenuHorizontalPadding = 16;
