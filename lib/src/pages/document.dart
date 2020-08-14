@@ -6,7 +6,7 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DocumentPage extends StatelessWidget {
+class DocumentPage extends StatefulWidget {
   DocumentPage.defaults(
     ViewSettings settings, {
     @required String title,
@@ -41,47 +41,10 @@ class DocumentPage extends StatelessWidget {
   final bool readerMode;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // Body is split into separate widget to ensure that the primary scroll
-      // controller set by the Scaffold makes it into the body's context
-      body: _DocumentPageBody(
-        title: title,
-        child: child,
-        textScale: textScale,
-        fontFamily: fontFamily,
-        initialQuery: initialQuery,
-        readerMode: readerMode,
-      ),
-    );
-  }
-}
-
-class _DocumentPageBody extends StatefulWidget {
-  const _DocumentPageBody({
-    @required this.title,
-    @required this.child,
-    this.textScale,
-    this.fontFamily,
-    this.initialQuery,
-    this.readerMode,
-    Key key,
-  })  : assert(child != null),
-        super(key: key);
-
-  final String title;
-  final Widget child;
-  final double textScale;
-  final String fontFamily;
-  final String initialQuery;
-  final bool readerMode;
-
-  @override
   _DocumentPageState createState() => _DocumentPageState();
 }
 
-class _DocumentPageState extends State<_DocumentPageBody>
-    with ViewSettingsState {
+class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   MySearchDelegate _searchDelegate;
 
   @override
@@ -139,12 +102,13 @@ class _DocumentPageState extends State<_DocumentPageBody>
   }
 
   Iterable<Widget> _actions(bool searchMode) sync* {
-    if (!searchMode) {
-      yield SearchButton(
-        hasQuery: _searchDelegate.hasQuery,
-        onPressed: () => _searchDelegate.start(context),
-      );
-    }
+    // Disused in favor of Floating Action Button:
+    // if (!searchMode) {
+    //   yield SearchButton(
+    //     hasQuery: _searchDelegate.hasQuery,
+    //     onPressed: () => _searchDelegate.start(context),
+    //   );
+    // }
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
       yield IconButton(
         icon: const Icon(Icons.repeat),
@@ -201,41 +165,120 @@ class _DocumentPageState extends State<_DocumentPageBody>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        ValueListenableBuilder<bool>(
-          valueListenable: _searchDelegate.searchMode,
-          builder: (context, searchMode, child) => PrimaryScrollController(
-            // Context here lacks access to the primary scroll controller, so we
-            // supply it explicitly from _DocumentPageBody's context
-            controller: PrimaryScrollController.of(this.context),
-            child: SliverAppBar(
-              title: _title(searchMode),
-              actions: _actions(searchMode).toList(growable: false),
-              pinned: false,
-              floating: true,
-              forceElevated: true,
-              snap: true,
-            ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: _searchDelegate.searchMode,
+      builder: (context, searchMode, child) => Scaffold(
+        // Builder is here to ensure that the primary scroll controller set by the
+        // Scaffold makes it into the body's context
+        body: Builder(
+          builder: (context) => CustomScrollView(
+            slivers: [
+              _buildAppBar(context, searchMode: searchMode),
+              _buildDocument(context),
+            ],
           ),
         ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            buildWithViewSettings(
-              builder: (context) => OrgRootWidget(
-                child: widget.child,
-                style: textStyle,
-                onLinkTap: (url) {
-                  debugPrint('Launching URL: $url');
-                  return launch(url, forceSafariVC: false);
-                },
-                onSectionLongPress: (section) =>
-                    narrow(context, widget.title, section),
-                onLocalSectionLinkTap: (section) =>
-                    narrow(context, widget.title, section),
+        floatingActionButton: _buildFloatingActionButton(
+          context,
+          searchMode: searchMode,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar(
+    BuildContext context, {
+    @required bool searchMode,
+  }) {
+    return PrimaryScrollController(
+      // Context of app bar(?) lacks access to the primary scroll controller, so
+      // we supply it explicitly from parent context
+      controller: PrimaryScrollController.of(context),
+      child: SliverAppBar(
+        title: _title(searchMode),
+        actions: _actions(searchMode).toList(growable: false),
+        pinned: searchMode,
+        floating: true,
+        forceElevated: true,
+        snap: true,
+      ),
+    );
+  }
+
+  Widget _buildDocument(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate([
+        buildWithViewSettings(
+          builder: (context) => OrgRootWidget(
+            child: widget.child,
+            style: textStyle,
+            onLinkTap: (url) {
+              debugPrint('Launching URL: $url');
+              return launch(url, forceSafariVC: false);
+            },
+            onSectionLongPress: (section) =>
+                narrow(context, widget.title, section),
+            onLocalSectionLinkTap: (section) =>
+                narrow(context, widget.title, section),
+          ),
+        ),
+        // Bottom padding to compensate for Floating Action Button:
+        // FAB height (56px) + padding (16px) = 72px
+        const SizedBox(height: 72),
+      ]),
+    );
+  }
+
+  Widget _buildFloatingActionButton(
+    BuildContext context, {
+    @required bool searchMode,
+  }) {
+    if (searchMode) {
+      return null;
+    }
+    return FloatingActionButton(
+      child: _Badge(
+        child: const Icon(Icons.search),
+        visible: _searchDelegate.hasQuery,
+      ),
+      onPressed: () => _searchDelegate.start(context),
+      foregroundColor: Theme.of(context).accentTextTheme.button.color,
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({
+    @required this.child,
+    @required this.visible,
+    Key key,
+  }) : super(key: key);
+
+  final Widget child;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        child,
+        // Badge indicating an active query. The size and positioning is
+        // manually adjusted to match the icon it adorns.
+        Positioned(
+          top: 0,
+          right: 2,
+          child: Visibility(
+            visible: visible,
+            child: Container(
+              height: 8,
+              width: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red.shade800,
               ),
             ),
-          ]),
+          ),
         ),
       ],
     );
