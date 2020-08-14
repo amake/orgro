@@ -1,6 +1,6 @@
 name: orgro
 description: An Org file viewer
-version: 1.7.1+23
+version: 1.8.0+24
 homepage: https://github.com/amake/orgro
 
 environment:
