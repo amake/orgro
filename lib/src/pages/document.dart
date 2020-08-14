@@ -146,16 +146,16 @@ class _DocumentPageState extends State<_DocumentPageBody>
       );
     }
     if (!searchMode || MediaQuery.of(context).size.width > 500) {
-      yield TextStyleButton(
-        textScale: textScale,
-        onTextScaleChanged: (value) => textScale = value,
-        fontFamily: fontFamily,
-        onFontFamilyChanged: (value) => fontFamily = value,
+      yield IconButton(
+        icon: const Icon(Icons.repeat),
+        onPressed: OrgController.of(context).cycleVisibility,
       );
       if (MediaQuery.of(context).size.width > 600) {
-        yield IconButton(
-          icon: const Icon(Icons.repeat),
-          onPressed: OrgController.of(context).cycleVisibility,
+        yield TextStyleButton(
+          textScale: textScale,
+          onTextScaleChanged: (value) => textScale = value,
+          fontFamily: fontFamily,
+          onFontFamilyChanged: (value) => fontFamily = value,
         );
         yield ReaderModeButton(
           enabled: readerMode,
@@ -167,6 +167,17 @@ class _DocumentPageState extends State<_DocumentPageBody>
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
+            textScaleMenuItem(
+              context,
+              textScale: textScale,
+              onChanged: (value) => textScale = value,
+            ),
+            fontFamilyMenuItem(
+              context,
+              fontFamily: fontFamily,
+              onChanged: (value) => fontFamily = value,
+            ),
+            const PopupMenuDivider(),
             readerModeMenuItem(
               context,
               enabled: readerMode,
