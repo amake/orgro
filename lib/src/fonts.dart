@@ -86,9 +86,9 @@ const _kMonospaceGoogleFontFamilies = <String>{
 TextStyle loadFontWithVariants(String family) {
   try {
     return _loadDynamicFont(family);
-  } on Exception catch (e, s) {
+  } on Exception catch (e) {
     debugPrint(e.toString());
-    debugPrint(s.toString());
+    // debugPrint(s.toString());
   }
   try {
     return _loadGoogleFont(family);
