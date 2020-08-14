@@ -59,6 +59,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   @override
   String get queryString => _searchDelegate.queryString;
 
+  double get _screenWidth => MediaQuery.of(context).size.width;
+
+  // Not sure why this size
+  bool get _biggishScreen => _screenWidth > 500;
+
+  // E.g. iPad mini in portrait (768px), iPhone XS in landscape (812px), Pixel 2
+  // in landscape (731px)
+  bool get _bigScreen => _screenWidth > 600;
+
   @override
   void initState() {
     super.initState();
@@ -109,12 +118,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     //     onPressed: () => _searchDelegate.start(context),
     //   );
     // }
-    if (!searchMode || MediaQuery.of(context).size.width > 500) {
+    if (!searchMode || _biggishScreen) {
       yield IconButton(
         icon: const Icon(Icons.repeat),
         onPressed: OrgController.of(context).cycleVisibility,
       );
-      if (MediaQuery.of(context).size.width > 600) {
+      if (_bigScreen) {
         yield TextStyleButton(
           textScale: textScale,
           onTextScaleChanged: (value) => textScale = value,
@@ -206,7 +215,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   }
 
   Widget _buildDocument(BuildContext context) {
-    return SliverList(
+    final doc = SliverList(
       delegate: SliverChildListDelegate([
         buildWithViewSettings(
           builder: (context) => OrgRootWidget(
@@ -227,6 +236,13 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         const SizedBox(height: 72),
       ]),
     );
+
+    // Add some extra padding on big screens to make things not feel so
+    // tight. We can do this instead of adjusting the [OrgTheme.rootPadding]
+    // because we are shrinkwapping the document
+    return _bigScreen
+        ? SliverPadding(padding: const EdgeInsets.all(16), sliver: doc)
+        : doc;
   }
 
   Widget _buildFloatingActionButton(
