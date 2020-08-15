@@ -157,10 +157,11 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               onChanged: _setReaderMode,
             ),
             const PopupMenuDivider(),
-            PopupMenuItem<VoidCallback>(
-              child: const Text('Cycle visibility'),
-              value: OrgController.of(context).cycleVisibility,
-            ),
+            // Disused because icon button is always visible now
+            // PopupMenuItem<VoidCallback>(
+            //   child: const Text('Cycle visibility'),
+            //   value: OrgController.of(context).cycleVisibility,
+            // ),
             scrollBottomMenuItem(context),
             scrollTopMenuItem(context),
           ],
