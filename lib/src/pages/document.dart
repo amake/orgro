@@ -162,8 +162,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
             //   child: const Text('Cycle visibility'),
             //   value: OrgController.of(context).cycleVisibility,
             // ),
-            scrollBottomMenuItem(context),
             scrollTopMenuItem(context),
+            scrollBottomMenuItem(context),
           ],
         );
       }
