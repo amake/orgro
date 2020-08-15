@@ -199,18 +199,21 @@ Emacs:
 2. Contents: Show all headlines of all levels, but no body text
 3. Show all: Show everything
 
-- Narrow screens (phones) :: =Cycle visibility= in the action menu
-- Wide screens (tablets) :: icon button in the top app bar
+Activate with the button in the top app bar.
 
 * Search
 
-Touch the search button in the top app bar and enter a query. Relevant sections
+Touch the floating search button in the lower right of the screen. A search
+field will appear in the top app bar; enter your query here. Relevant sections
 will be expanded, while sections without hits will be collapsed. Hits are
 highlighted.
 
 * Text Style
 
-Adjust the text size and font with the button in the top app bar.
+Adjust the text size and font.
+
+- Narrow screens (phones) :: in the action menu
+- Wide screens (tablets) :: icon button in the top app bar
 
 * Questions and Feedback
 
