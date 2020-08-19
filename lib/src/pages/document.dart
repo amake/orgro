@@ -219,17 +219,22 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     final doc = SliverList(
       delegate: SliverChildListDelegate([
         buildWithViewSettings(
-          builder: (context) => OrgRootWidget(
-            child: widget.child,
-            style: textStyle,
-            onLinkTap: (url) {
-              debugPrint('Launching URL: $url');
-              return launch(url, forceSafariVC: false);
-            },
-            onSectionLongPress: (section) =>
-                narrow(context, widget.title, section),
-            onLocalSectionLinkTap: (section) =>
-                narrow(context, widget.title, section),
+          builder: (context) => Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: OrgRootWidget(
+                child: widget.child,
+                style: textStyle,
+                onLinkTap: (url) {
+                  debugPrint('Launching URL: $url');
+                  return launch(url, forceSafariVC: false);
+                },
+                onSectionLongPress: (section) =>
+                    narrow(context, widget.title, section),
+                onLocalSectionLinkTap: (section) =>
+                    narrow(context, widget.title, section),
+              ),
+            ),
           ),
         ),
         // Bottom padding to compensate for Floating Action Button:
