@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
 const _kCustomFontFiraGo = 'FiraGO';
-const _kCustomFonts = [_kCustomFontFiraGo];
+const _kCustomFontIosevka = 'Iosevka';
+const _kCustomFonts = [_kCustomFontFiraGo, _kCustomFontIosevka];
 
 void _initCustomFonts() {
   if (_kCustomFonts.every(DynamicFonts.asMap().containsKey)) {
@@ -44,6 +45,46 @@ void _initCustomFonts() {
         ),
         '51ad0da400568385e038ccb962a692f145dfbd9071d7fe5cb0903fd2a8912ccd',
         813028,
+      ),
+    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
+      {},
+      (acc, file) => acc..[file.variant] = file,
+    ),
+  );
+  DynamicFonts.register(
+    _kCustomFontIosevka,
+    [
+      _IosevkaFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        ),
+        '50b5fd5413460109465ec4d63a591675266bca989aad74d554b176a0b17abcf0',
+        1054620,
+      ),
+      _IosevkaFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+        ),
+        'cb3610c576d5bbe86fd140c300a2cfc9f2ecfcfdae2ab8ea7694c579976b53bb',
+        1064428,
+      ),
+      _IosevkaFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.italic,
+        ),
+        'a874a6da5142ff76ae488bee37b7582f4fc83bacf68beba968013b07b03bef6d',
+        1099620,
+      ),
+      _IosevkaFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        'd27f4434223097591758d1748c51302dbac7bb640c19cd26b78d0dabf7f6477c',
+        1108312,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -152,4 +193,31 @@ class _FiraGoFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://d35za8cqizqhg.cloudfront.net/assets/fonts/FiraGO_TTF_1001/$_dir/FiraGO-${variant.toApiFilenamePart()}.ttf';
+}
+
+class _IosevkaFile extends DynamicFontsFile {
+  _IosevkaFile(this.variant, String expectedFileHash, int expectedLength)
+      : super(expectedFileHash, expectedLength);
+
+  final DynamicFontsVariant variant;
+
+  bool get _italic => variant.fontStyle == FontStyle.italic;
+
+  bool get _bold => variant.fontWeight == FontWeight.bold;
+
+  String get _variantSlug {
+    if (_bold && _italic) {
+      return 'bolditalic';
+    } else if (_bold) {
+      return 'bold';
+    } else if (_italic) {
+      return 'italic';
+    } else {
+      return 'regular';
+    }
+  }
+
+  @override
+  String get url =>
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/ttf-iosevka-3.4.6/ttf/iosevka-$_variantSlug.ttf';
 }
