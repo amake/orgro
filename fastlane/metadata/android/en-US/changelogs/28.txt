@@ -1,0 +1,2 @@
+- New font: Iosevka
+- Use actual bold italic fonts when available
