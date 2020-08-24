@@ -37,6 +37,14 @@ void _initCustomFonts() {
         '36713ecac376845daa58738d2c2ba797cf6f6477b8c5bb4fa79721dc970e8081',
         813116,
       ),
+      _FiraGoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        '51ad0da400568385e038ccb962a692f145dfbd9071d7fe5cb0903fd2a8912ccd',
+        813028,
+      ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
       (acc, file) => acc..[file.variant] = file,
@@ -101,6 +109,8 @@ TextStyle _loadGoogleFont(String fontFamily) {
   // Load actual bold and italic to avoid synthetics
   GoogleFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
   GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
+  GoogleFonts.getFont(fontFamily,
+      fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
   return GoogleFonts.getFont(fontFamily);
 }
 
@@ -109,6 +119,8 @@ TextStyle _loadDynamicFont(String fontFamily) {
   // Load actual bold and italic to avoid synthetics
   DynamicFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
   DynamicFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
+  DynamicFonts.getFont(fontFamily,
+      fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
   return DynamicFonts.getFont(fontFamily);
 }
 
