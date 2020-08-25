@@ -40,6 +40,48 @@
      git pull
    #+end_src
 
+   Checksum
+
+   #+begin_src bash :dir ../../FiraGO/Fonts :results table drawer replace
+     for ttf in FiraGO_TTF_*/*/*.ttf; do
+         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS:
+   :results:
+   | FiraGO-BoldItalic.ttf       | 813028 | 51ad0da400568385e038ccb962a692f145dfbd9071d7fe5cb0903fd2a8912ccd |
+   | FiraGO-BookItalic.ttf       | 811792 | d1acf0bfba04de8a35888f402bbe029b3c412b2a52ea4da27bf498bc5973fc05 |
+   | FiraGO-EightItalic.ttf      | 768336 | ef2d9f3c9caf711d9aab4839abf63d50e658db802555364f8bbec0fd594fb41a |
+   | FiraGO-ExtraBoldItalic.ttf  | 812624 | fa332efd69db43a3dc3ea9cc9efbec938f5cb7d74331b653b5e5f5a0aab6f6cb |
+   | FiraGO-ExtraLightItalic.ttf | 813732 | 17b25b0acc856d25a84066acb84de10adc0adc0057cfde52b45e453daec25825 |
+   | FiraGO-FourItalic.ttf       | 765044 | e93d9f2e95f7ea40770583c41acaad4678ed90d5ef2cb0beeae073691805c8e4 |
+   | FiraGO-HairItalic.ttf       | 778444 | 719d4c484d24961a1d34df543654e9483a59be136f11efbb9a94522c5feb7cf7 |
+   | FiraGO-HeavyItalic.ttf      | 730912 | f7ee3438edc6d14046c0175eab3bc6edfccb72b7bda5f73e65509b5e1108573e |
+   | FiraGO-Italic.ttf           | 813116 | 36713ecac376845daa58738d2c2ba797cf6f6477b8c5bb4fa79721dc970e8081 |
+   | FiraGO-LightItalic.ttf      | 812940 | 0b686cb6edbb457ef3442f4c500a53bb964b96b939a7603949ee7ed812f5105d |
+   | FiraGO-MediumItalic.ttf     | 813936 | 949698ddae3a568f1ada6eed12d5226d448b0b4a6600a44f096cfd9a1aabb555 |
+   | FiraGO-SemiBoldItalic.ttf   | 813732 | 0dda9d907ec201586736814689a387a36fd05ebb87ac6faebdf4f8e4299d3020 |
+   | FiraGO-ThinItalic.ttf       | 802064 | c3bb05f7ec7715a9f2e733e11b23e2a564ad0fafbdb81e097f0f006d5288850f |
+   | FiraGO-TwoItalic.ttf        | 720640 | cebcd6f719b48196e0b23d70515ce9154f2c97edfaf954e2b6e97aa4b79420f1 |
+   | FiraGO-UltraLightItalic.ttf | 814244 | 71b11d76754a0d43c412a8af5ce6a69c0c32c4d2e6d8a23e0e747cf4dc62cd10 |
+   | FiraGO-Bold.ttf             | 807140 | ab720753c39073556260ebbaee7e7af89f9ca202a7c7abc257d935db590a1e35 |
+   | FiraGO-Book.ttf             | 805308 | 4c132d5290477709da7fee51f2494d9d13157024e5011d665ebe73489416f894 |
+   | FiraGO-Eight.ttf            | 757808 | ad5c1faab9d627aa69dcf3544530622d6c8281571e603d61879a5885b403b946 |
+   | FiraGO-ExtraBold.ttf        | 805876 | 4cc3a0294144d7194e1ab9be8603690d2059b2b66b9106896e1b1bf0ac542347 |
+   | FiraGO-ExtraLight.ttf       | 805744 | b1eca47daf25d0f975fedce2a7c18161d5b12f4ccef49bd15c9a55b6e65299d0 |
+   | FiraGO-Four.ttf             | 754716 | 57bd7bad431f02d578e2edd7f2e8864aae5420bbe309ee782bd0ab5fafb69aeb |
+   | FiraGO-Hair.ttf             | 768432 | 6516767cb6003138ab53f63c07f07d8c8236c3bb9214837dab056395d1e6349a |
+   | FiraGO-Heavy.ttf            | 719748 | ac93a492bd88d0bca88bcacb8c169101c013013b9d92bb06d757717e6a5af8a5 |
+   | FiraGO-Light.ttf            | 805292 | a8145c545e448cc3c51b1417422bc16ff84c5098907827dbfc13f8109ab3507b |
+   | FiraGO-Medium.ttf           | 806400 | 5f753a48c7dff5b7af294e76624febb28c41071a5a65c0fd8a024ea9d1491e8a |
+   | FiraGO-Regular.ttf          | 804888 | 495901c0c608ea265f4c31aa2a4c7a313e5cc2a3dd610da78a447fe8e07454a2 |
+   | FiraGO-SemiBold.ttf         | 806684 | b47f1eaf02deaf16051a897f84f275326476306eb198f1cbceb5b1f5882021b1 |
+   | FiraGO-Thin.ttf             | 793404 | a86be3f3ecf807e363347297bff4db79951394d7b024fe83b8ebb1cd2ddf1152 |
+   | FiraGO-Two.ttf              | 708572 | f5691843d026b52c1d40505ebf04fdea67b0eb50ca945642dfa033abf70d5c3c |
+   | FiraGO-UltraLight.ttf       | 804924 | a3f15783dc7b783e07518560992f038409eea500729cf2b2cfaef7cc17bd2cf7 |
+   :end:
+
    Deploy to S3
 
    #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
