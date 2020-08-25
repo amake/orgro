@@ -60,12 +60,13 @@
      port install npm6 ttfautohint otfcc
    #+end_src
 
+   Note: Upstream claims to require ~otf2otc~ from [[https://github.com/adobe-type-tools/afdko][afdko]], but this appears to
+   only be used for building TTCs, which we don't need.
+
    Additional preparation and updating
 
    #+begin_src bash :dir ../../Iosevka :async
      git pull
-     virtualenv .env
-     ./.env/bin/pip install -U afdko
      npm install
    #+end_src
 
@@ -189,9 +190,9 @@
 
    Build
 
-   #+begin_src bash :results output :async
+   #+begin_src bash :dir ../../Iosevka :async
      npm run clean
-     PATH=./node_modules/.bin:./.env/bin:$PATH npm run build -- ttf::iosevka-orgro
+     npm run build -- ttf::iosevka-orgro
    #+end_src
 
    Checksums
