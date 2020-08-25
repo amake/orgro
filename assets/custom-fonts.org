@@ -1,0 +1,215 @@
+* Custom fonts
+:PROPERTIES:
+:header-args: :results output silent
+:END:
+
+  Orgro offers the following fonts:
+
+  - [[https://github.com/tonsky/FiraCode][Fira Code]] (bundled with the app)
+  - All monospace fonts offered for dynamic download by the [[https://pub.dev/packages/google_fonts][google_fonts]] package
+  - Additional fonts manually made available for dynamic download via the
+    [[https://pub.dev/packages/dynamic_fonts][dynamic_fonts]] package
+    - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
+    - [[https://typeof.net/Iosevka/][Iosevka]]
+
+  This file documents how the last category is prepared in literate-programming
+  style.
+
+** Font variants
+
+   Org documents in general require four font variants:
+
+   - regular
+   - *bold*
+   - /italic/
+   - /bold italic/ :: You can't /*just*/ */combine/* ~*~ and ~/~, you have to
+     italicize something that is naturally bold for some other reason,
+     apparently
+
+** FiraGO
+
+   Download
+
+   #+begin_src bash :dir ../..
+     git clone --depth 1 https://github.com/bBoxType/FiraGO.git
+   #+end_src
+
+   Update
+
+   #+begin_src bash :dir ../../FiraGO
+     git pull
+   #+end_src
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
+     aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
+   #+end_src
+
+** Custom Iosevka
+
+   Download
+
+   #+begin_src bash :dir ../..
+     git clone --depth 1 https://github.com/be5invis/Iosevka.git
+   #+end_src
+
+   System prerequisites: Install with MacPorts
+
+   #+begin_src bash :dir /sudo::
+     port install npm6 ttfautohint otfcc
+   #+end_src
+
+   Additional preparation
+
+   #+begin_src bash :dir ../../Iosevka :async
+     virtualenv .env
+     ./.env/bin/pip install -U afdko
+     npm install
+   #+end_src
+
+   Configuration: Tangle the following
+
+   #+begin_src yaml :tangle ../../Iosevka/private-build-plans.toml
+     [buildPlans.iosevka-orgro]               # <iosevka-custom> is your plan name
+     family = "Iosevka Orgro"                 # Font menu family name
+     design = ["v-asterisk-low"]       # Customize styles
+     # upright = ["upright-styles"]            # Uncomment this line to set styles for upright only
+     # italic = ["italic-styles"]              # Uncomment this line to set styles for italic only
+     # oblique = ["oblique-styles"]            # Uncomment this line to set styles for oblique only
+     # hintParams = ["-a", "sss"]              # Optional custom parameters for ttfautohint
+
+     ###################################################################################################
+     # Override default building weights
+     # When buildPlans.<plan name>.weights is absent, all weights would built and mapped to
+     # default values.
+     # IMPORTANT : Currently "menu" and "css" property only support numbers between 0 and 1000.
+     #             and "shape" properly only supports number between 100 and 900 (inclusive).
+     #             If you decide to use custom weights you have to define all the weights you
+     #             plan to use otherwise they will not be built.
+     [buildPlans.iosevka-orgro.weights.regular]
+     shape = 400  # Weight for glyph shapes.
+     menu  = 400  # Weight for the font's names.
+     css   = 400  # Weight for webfont CSS.
+
+     # [buildPlans.iosevka-orgro.weights.book]
+     # shape = 450
+     # menu  = 450  # Use 450 here to name the font's weight "Book"
+     # css   = 450
+
+     [buildPlans.iosevka-orgro.weights.bold]
+     shape = 700
+     menu  = 700
+     css   = 700
+
+     # End weight section
+     ###################################################################################################
+
+     ###################################################################################################
+     # Override default building slope sets
+     # Format: <upright|italic|oblique> = <"normal"|"italic"|"oblique">
+     # When this section is absent, all slopes would be built.
+
+     [buildPlans.iosevka-orgro.slopes]
+     upright = "normal"
+     italic = "italic"
+     # oblique = "oblique"
+
+     # End slope section
+     ###################################################################################################
+
+     ###################################################################################################
+     # Override default building widths
+     # When buildPlans.<plan name>.widths is absent, all widths would built and mapped to
+     # default values.
+     # IMPORTANT : Currently "shape" property only supports numbers between 434 and 664 (inclusive),
+     #             while "menu" only supports integers between 1 and 9 (inclusive).
+     #             The "shape" parameter specifies the unit width, measured in 1/1000 em. The glyphs'
+     #             width are equal to, or a simple multiple of the unit width.
+     #             If you decide to use custom widths you have to define all the widths you plan to use,
+     #             otherwise they will not be built.
+
+     [buildPlans.iosevka-orgro.widths.normal]
+     shape = 500        # Unit Width, measured in 1/1000 em.
+     menu  = 5          # Width grade for the font's names.
+     css   = "normal"   # "font-stretch' property of webfont CSS.
+
+     # [buildPlans.iosevka-orgro.widths.extended]
+     # shape = 576
+     # menu  = 7
+     # css   = "expanded"
+
+     # End width section
+     ###################################################################################################
+
+     ###################################################################################################
+     # Character Exclusion
+     # Specify character ranges in the section below to exclude certain characters from the font being
+     # built. Remove this section when this feature is not needed.
+
+     # [buildPlans.iosevka-orgro.exclude-chars]
+     # ranges = [[10003, 10008]]
+
+     # End character exclusion
+     ###################################################################################################
+
+     ###################################################################################################
+     # Compatibility Ligatures
+     # Certain applications like Emacs does not support proper programming liagtures provided by
+     # OpenType, but can support ligatures provided by PUA codepoints. Therefore you can edit the
+     # following section to build PUA characters that are generated from the OpenType ligatures.
+     # Remove this section when compatibility ligatures are not needed.
+
+     # [[buildPlans.iosevka-orgro.compatibility-ligatures]]
+     # unicode = 57600 # 0xE100
+     # featureTag = 'calt'
+     # sequence = '<*>'
+
+     # End compatibility ligatures section
+     ###################################################################################################
+
+     ###################################################################################################
+     # Metric overrides
+     # Certain metrics like line height (leading) could be overridden in your build plan file.
+     # Edit the values to change the metrics. Remove this section when overriding is not needed.
+
+     # [buildPlans.iosevka-orgro.metric-override]
+     # leading = 1250
+     # winMetricAscenderPad = 0
+     # winMetricDescenderPad = 0
+     # powerlineScaleY = 1
+     # powerlineScaleX = 1
+     # powerlineShiftY = 0
+     # powerlineShiftX = 0
+
+     # End metric override section
+     ###################################################################################################
+   #+end_src
+
+   Build
+
+   #+begin_src bash :results output :async
+     npm run clean
+     PATH=./node_modules/.bin:./.env/bin:$PATH npm run build -- ttf::iosevka-orgro
+   #+end_src
+
+   Checksums
+
+   #+begin_src bash :dir ../../Iosevka/dist/iosevka-orgro/ttf :results table replace
+     for ttf in *.ttf; do
+         echo $ttf $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS:
+   | iosevka-orgro-bold.ttf       | 1083480 | 138c1ea84e48a0e1fd59645d89df78412041090735224e37719fdc1727a10c83 |
+   | iosevka-orgro-bolditalic.ttf | 1127532 | 60a1dc1adc934b34ae6cd06414e32f99f4b74d646b457c865ec8292780dead1f |
+   | iosevka-orgro-italic.ttf     | 1118840 | 254d281958d2bb52cc0d674c681d3e04da3437937bdc5746c4d66b63042040a9 |
+   | iosevka-orgro-regular.ttf    | 1073676 | c45274e0b276bbd3bd8435f9c2cf79e3eddf048f3d6b514d0bc81aa1b05d3eee |
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../../Iosevka :var dryrun="--dryrun"
+     ver=$(git describe --tags)
+     aws s3 $dryrun sync --exclude '*' --include 'ttf/*' --acl public-read dist/iosevka-orgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
+   #+end_src
