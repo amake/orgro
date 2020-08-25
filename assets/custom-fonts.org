@@ -60,9 +60,10 @@
      port install npm6 ttfautohint otfcc
    #+end_src
 
-   Additional preparation
+   Additional preparation and updating
 
    #+begin_src bash :dir ../../Iosevka :async
+     git pull
      virtualenv .env
      ./.env/bin/pip install -U afdko
      npm install
