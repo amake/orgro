@@ -184,8 +184,9 @@ Close the narrowed view by touching the Back button in the top app bar.
 
 * Reader Mode
 
-Enable Reader Mode to hide emphasis markers and meta lines (lines starting with
-=#+=). The Reader Mode toggle can be found in one of two places:
+Enable Reader Mode to hide emphasis markers and make meta lines (lines starting
+with =#+=) less prominent. The Reader Mode toggle can be found in one of two
+places:
 
 - Narrow screens (phones) :: =Reader mode= in the action menu
 - Wide screens (tablets) :: icon button in the top app bar
