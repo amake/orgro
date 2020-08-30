@@ -5,7 +5,12 @@ import 'package:orgro/src/preferences.dart';
 
 const _kCustomFontFiraGo = 'FiraGO';
 const _kCustomFontIosevka = 'Iosevka';
-const _kCustomFonts = [_kCustomFontFiraGo, _kCustomFontIosevka];
+const _kCustomFontJetBrainsMono = 'JetBrainsMono';
+const _kCustomFonts = [
+  _kCustomFontFiraGo,
+  _kCustomFontIosevka,
+  _kCustomFontJetBrainsMono,
+];
 
 void _initCustomFonts() {
   if (_kCustomFonts.every(DynamicFonts.asMap().containsKey)) {
@@ -85,6 +90,46 @@ void _initCustomFonts() {
         ),
         'bef68fdd0aea59689ee1ebac57914f118218d640efe07da23c5df03891b7b01d',
         1127532,
+      ),
+    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
+      {},
+      (acc, file) => acc..[file.variant] = file,
+    ),
+  );
+  DynamicFonts.register(
+    _kCustomFontJetBrainsMono,
+    [
+      _JetBrainsMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        ),
+        '203840f509ab86501a3fbec73262641b83f57c1a1bfdef6f2131f2718114f722',
+        140776,
+      ),
+      _JetBrainsMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+        ),
+        'bdd8007c72dda11978e0e131bdf6d33b2bfb77ba1c908a671052af25bde3ccad',
+        140752,
+      ),
+      _JetBrainsMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.italic,
+        ),
+        '075ddab98052c350788d78b6317de3ad5e9fda457b14eabc66618654c01a8f48',
+        147248,
+      ),
+      _JetBrainsMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        '3c6f1d6f2e7ff2837d59fa1f58d2b539ca644c8838f57a3153a40e9069b941af',
+        147796,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -220,4 +265,31 @@ class _IosevkaFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v3.4.6/ttf/iosevka-orgro-$_variantSlug.ttf';
+}
+
+class _JetBrainsMonoFile extends DynamicFontsFile {
+  _JetBrainsMonoFile(this.variant, String expectedFileHash, int expectedLength)
+      : super(expectedFileHash, expectedLength);
+
+  final DynamicFontsVariant variant;
+
+  bool get _italic => variant.fontStyle == FontStyle.italic;
+
+  bool get _bold => variant.fontWeight == FontWeight.bold;
+
+  String get _variantSlug {
+    if (_bold && _italic) {
+      return 'Bold-Italic';
+    } else if (_bold) {
+      return 'Bold';
+    } else if (_italic) {
+      return 'Italic';
+    } else {
+      return 'Regular';
+    }
+  }
+
+  @override
+  String get url =>
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.002/ttf/JetBrainsMono-$_variantSlug.ttf';
 }

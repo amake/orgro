@@ -88,6 +88,48 @@
      aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
    #+end_src
 
+** TODO JetBrains Mono
+
+   Download
+
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.002"
+     curl -LO https://github.com/JetBrains/JetBrainsMono/releases/download/v$version/JetBrainsMono-$version.zip
+     mkdir JetBrainsMono
+     unzip JetBrainsMono*.zip -d JetBrainsMono/$version
+   #+end_src
+
+   Checksum
+
+   #+begin_src bash :dir ../tmp/JetBrainsMono :results table drawer replace
+     for ttf in */ttf/*.ttf; do
+         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS:
+   :results:
+   | JetBrainsMono-Bold-Italic.ttf       | 147796 | 3c6f1d6f2e7ff2837d59fa1f58d2b539ca644c8838f57a3153a40e9069b941af |
+   | JetBrainsMono-Bold.ttf              | 140752 | bdd8007c72dda11978e0e131bdf6d33b2bfb77ba1c908a671052af25bde3ccad |
+   | JetBrainsMono-ExtraBold-Italic.ttf  | 150684 | e695524a12a4ce7c02c7357d5c07c19939f65a65579274ca7d16fa235656e77b |
+   | JetBrainsMono-ExtraBold.ttf         | 143284 | c131578ff522444657db22037e891914c6aeda50381295f00290ad8995a291f5 |
+   | JetBrainsMono-ExtraLight-Italic.ttf | 144544 | cd79175d7c9b85dd4e0050c92dd7f4ee41bc0f20a4012d4d34b6d98f33c4ab95 |
+   | JetBrainsMono-ExtraLight.ttf        | 137784 | ccfcacfd3736b90a7040fe6a0ea0515d13d6782ee72941b43ef3c6e17f2c72ab |
+   | JetBrainsMono-Italic.ttf            | 147248 | 075ddab98052c350788d78b6317de3ad5e9fda457b14eabc66618654c01a8f48 |
+   | JetBrainsMono-Light-Italic.ttf      | 146012 | e09cb7af4ed6008a651857014cab684d8312a370eab445c8b48377a750cc6970 |
+   | JetBrainsMono-Light.ttf             | 139600 | 6b7e7076247e963c3411aeaa7d0a98dd9c8e4aaf74c26a72a4f307ccc614ea67 |
+   | JetBrainsMono-Medium-Italic.ttf     | 148496 | 34230766c8c93cf25d675cc94e90957304e48c1f96cc481b0457dcc9a62c198d |
+   | JetBrainsMono-Medium.ttf            | 141276 | 5f26307eaaae1f77b697c8a735b00aac3ca8dc5543ae868f501a9279f190708b |
+   | JetBrainsMono-Regular.ttf           | 140776 | 203840f509ab86501a3fbec73262641b83f57c1a1bfdef6f2131f2718114f722 |
+   | JetBrainsMono-SemiLight-Italic.ttf  | 147056 | 2b4227fcbe2eec0709a2be24e849154d0796e67eb7b5a072f5a4a3676440614d |
+   | JetBrainsMono-SemiLight.ttf         | 141052 | 296f1635705d7c4cb253b5b287e7980faeab49ea8211168a6c2f6093b708a283 |
+   :end:
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
+     aws s3 $dryrun sync --exclude '*' --include 'JetBrainsMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
+   #+end_src
+
 ** Custom Iosevka
 
    Download
