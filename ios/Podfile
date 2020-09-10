@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
@@ -7,7 +9,7 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
-  'Release' => :release,
+  'Release' => :release
 }
 
 def flutter_root
@@ -31,7 +33,7 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  flutter_install_all_ios_pods __dir__
 end
 
 post_install do |installer|
