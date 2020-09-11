@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 
@@ -21,12 +23,23 @@ Future<OpenFileInfo> _resolve(FileInfoProvider provider) async {
 
 typedef ContentProvider = Future<String> Function();
 
+Future<String> _readFile(File file) async {
+  try {
+    return await file.readAsString();
+  } on Exception {
+    final bytes = await file.readAsBytes();
+    final decoded = await CharsetDetector.autoDecode(bytes);
+    debugPrint('Decoded file as ${decoded.charset}');
+    return decoded.string;
+  }
+}
+
 class OpenFileInfo {
   OpenFileInfo.fromExternal(FileInfo externalFileInfo)
       : this(
           externalFileInfo.persistable ? externalFileInfo.identifier : null,
           externalFileInfo.fileName,
-          externalFileInfo.file.readAsString,
+          () => _readFile(externalFileInfo.file),
         );
 
   OpenFileInfo(this.identifier, this.title, this.content);
