@@ -9,19 +9,11 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 
 Future<OpenFileInfo> pickFile() async =>
-    _resolve(FilePickerWritable().openFilePicker);
+    FilePickerWritable().openFile(OpenFileInfo._fromExternal);
 
 Future<OpenFileInfo> readFileWithIdentifier(String identifier) async =>
-    _resolve(() => FilePickerWritable().readFileWithIdentifier(identifier));
-
-typedef FileInfoProvider = FutureOr<FileInfo> Function();
-
-Future<OpenFileInfo> _resolve(FileInfoProvider provider) async {
-  final fileInfo = await time('resolve external file', provider);
-  return fileInfo == null ? null : OpenFileInfo.fromExternal(fileInfo);
-}
-
-typedef ContentProvider = Future<String> Function();
+    FilePickerWritable()
+        .readFile(identifier: identifier, reader: OpenFileInfo._fromExternal);
 
 Future<String> _readFile(File file) async {
   try {
@@ -35,23 +27,30 @@ Future<String> _readFile(File file) async {
 }
 
 class OpenFileInfo {
-  OpenFileInfo.fromExternal(FileInfo externalFileInfo)
-      : this(
-          externalFileInfo.persistable ? externalFileInfo.identifier : null,
-          externalFileInfo.fileName,
-          () => _readFile(externalFileInfo.file),
-        );
+  static Future<OpenFileInfo> _fromExternal(
+    FileInfo externalFileInfo,
+    File file,
+  ) async =>
+      OpenFileInfo(
+        externalFileInfo.persistable ? externalFileInfo.identifier : null,
+        externalFileInfo.fileName,
+        await _readFile(file),
+      );
 
   OpenFileInfo(this.identifier, this.title, this.content);
   final String identifier;
   final String title;
-  final ContentProvider content;
+  final FutureOr<String> content;
 
-  Future<ParsedOrgFileInfo> toParsed() async => ParsedOrgFileInfo(
-        identifier,
-        title,
-        await content().then(parse, onError: logError),
-      );
+  Future<ParsedOrgFileInfo> toParsed() async {
+    try {
+      final parsed = await parse(await content);
+      return ParsedOrgFileInfo(identifier, title, parsed);
+    } on Exception catch (e, s) {
+      await logError(e, s);
+      rethrow;
+    }
+  }
 }
 
 class ParsedOrgFileInfo {
@@ -73,17 +72,19 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     _filePickerState = FilePickerWritable().init()
-      ..registerFileInfoHandler(_loadFile);
+      ..registerFileOpenHandler(_loadFile);
   }
 
-  Future<bool> _loadFile(FileInfo fileInfo) =>
-      loadFileFromPlatform(OpenFileInfo.fromExternal(fileInfo));
+  Future<bool> _loadFile(FileInfo fileInfo, File file) async {
+    final openFileInfo = await OpenFileInfo._fromExternal(fileInfo, file);
+    return loadFileFromPlatform(openFileInfo);
+  }
 
   Future<bool> loadFileFromPlatform(OpenFileInfo info);
 
   @override
   void dispose() {
-    _filePickerState.removeFileInfoHandler(_loadFile);
+    _filePickerState.removeFileOpenHandler(_loadFile);
     super.dispose();
   }
 }

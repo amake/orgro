@@ -31,7 +31,7 @@ Future<bool> loadHttpUrl(BuildContext context, String url) async {
       onError: _httpError,
     ),
   );
-  return loadDocument(context, OpenFileInfo(null, title, () => content));
+  return loadDocument(context, OpenFileInfo(null, title, content));
 }
 
 bool _httpError(Object e, StackTrace s) {
@@ -44,7 +44,7 @@ Future<bool> loadAsset(BuildContext context, String key) async {
   final content = rootBundle.loadString(key);
   final file = File(key);
   final title = file.uri.pathSegments.last;
-  return loadDocument(context, OpenFileInfo(null, title, () => content));
+  return loadDocument(context, OpenFileInfo(null, title, content));
 }
 
 Future<bool> loadDocument(
