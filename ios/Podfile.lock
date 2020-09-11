@@ -2,6 +2,9 @@ PODS:
   - file_picker_writable (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_charset_detector (0.0.1):
+    - Flutter
+    - UniversalDetector
   - flutter_tex_js (0.0.1):
     - Flutter
   - native_state (0.0.1):
@@ -10,16 +13,19 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
+  - UniversalDetector (2.0.0)
   - url_launcher (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
+  - flutter_charset_detector (from `.symlinks/plugins/flutter_charset_detector/ios`)
   - flutter_tex_js (from `.symlinks/plugins/flutter_tex_js/ios`)
   - native_state (from `.symlinks/plugins/native_state/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - UniversalDetector (from `https://github.com/amake/UniversalDetector.git`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 EXTERNAL SOURCES:
@@ -27,6 +33,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
     :path: Flutter
+  flutter_charset_detector:
+    :path: ".symlinks/plugins/flutter_charset_detector/ios"
   flutter_tex_js:
     :path: ".symlinks/plugins/flutter_tex_js/ios"
   native_state:
@@ -35,18 +43,29 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  UniversalDetector:
+    :git: https://github.com/amake/UniversalDetector.git
+    :submodules: true
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+
+CHECKOUT OPTIONS:
+  UniversalDetector:
+    :commit: 789511e9f5019dc1db766e7c1de8784fafceefa8
+    :git: https://github.com/amake/UniversalDetector.git
+    :submodules: true
 
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_charset_detector: c407172f589bf26b4a78cfcc2b218a2d65163486
   flutter_tex_js: 010eab32e3bc329fe1b6d48efd8a3b0c0506bb50
   native_state: f9996d96d651408a9d9d5e0738aed4cbcdd5165c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  UniversalDetector: 575af6ea79fea1da3946b8fdc72a70427aeea305
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 970fb36801fc699a9421c7bffd1dbf83c8d55aeb
 
 COCOAPODS: 1.9.3
