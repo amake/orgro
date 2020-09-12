@@ -1,6 +1,6 @@
 * Custom fonts
 :PROPERTIES:
-:header-args: :results output silent
+:header-args: :results output
 :END:
 
   Orgro offers the following fonts:
@@ -88,7 +88,7 @@
      aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
    #+end_src
 
-** TODO JetBrains Mono
+** JetBrains Mono
 
    Download
 
@@ -150,7 +150,11 @@
    Additional preparation and updating
 
    #+begin_src bash :dir ../../Iosevka :async
-     git pull
+     # Check out newest tag; see
+     # https://stackoverflow.com/a/22857288/448068
+     git fetch --tags
+     tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+     git checkout $tag
      npm install
    #+end_src
 
