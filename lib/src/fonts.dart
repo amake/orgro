@@ -64,32 +64,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '9b47450d91a9efc28f8f7697e9d00644f2964310d970628eda17ac81c625e937',
-        1073676,
+        '3d9508aefff92c38f7ce9aa555bd0bd9ddc225addd74e02e1b80373ed4831e86',
+        1105184,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        'a96a46e8a5a2905d6a5097fc84b8a30efa4e276e8213022ce984b223d541d4b0',
-        1083480,
+        '105253113aed74f77f7499e6591cf9dea3c25cfde63ff631279ec87dd1542c5c',
+        1115148,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        'fe10da4f89154c1fc3a3a58d521515b725c323bf1db587ecc13b8ae6adec733e',
-        1118840,
+        '35e0dd96f86db215604d277c3140882d55f30cd11fd503b38b217e4ac1ebfbde',
+        1151820,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        'bef68fdd0aea59689ee1ebac57914f118218d640efe07da23c5df03891b7b01d',
-        1127532,
+        '8df3b9b762c47332bb9cbdc710e78b67bfe83063287b4b15a90086f0d2789ff4',
+        1160068,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -264,7 +264,7 @@ class _IosevkaFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v3.4.6/ttf/iosevka-orgro-$_variantSlug.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v3.5.0/ttf/iosevka-orgro-$_variantSlug.ttf';
 }
 
 class _JetBrainsMonoFile extends DynamicFontsFile {

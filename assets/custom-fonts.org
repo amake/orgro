@@ -292,10 +292,10 @@
    #+end_src
 
    #+RESULTS:
-   | iosevka-orgro-bold.ttf       | 1083480 | 138c1ea84e48a0e1fd59645d89df78412041090735224e37719fdc1727a10c83 |
-   | iosevka-orgro-bolditalic.ttf | 1127532 | 60a1dc1adc934b34ae6cd06414e32f99f4b74d646b457c865ec8292780dead1f |
-   | iosevka-orgro-italic.ttf     | 1118840 | 254d281958d2bb52cc0d674c681d3e04da3437937bdc5746c4d66b63042040a9 |
-   | iosevka-orgro-regular.ttf    | 1073676 | c45274e0b276bbd3bd8435f9c2cf79e3eddf048f3d6b514d0bc81aa1b05d3eee |
+   | iosevka-orgro-bold.ttf       | 1115148 | 105253113aed74f77f7499e6591cf9dea3c25cfde63ff631279ec87dd1542c5c |
+   | iosevka-orgro-bolditalic.ttf | 1160068 | 8df3b9b762c47332bb9cbdc710e78b67bfe83063287b4b15a90086f0d2789ff4 |
+   | iosevka-orgro-italic.ttf     | 1151820 | 35e0dd96f86db215604d277c3140882d55f30cd11fd503b38b217e4ac1ebfbde |
+   | iosevka-orgro-regular.ttf    | 1105184 | 3d9508aefff92c38f7ce9aa555bd0bd9ddc225addd74e02e1b80373ed4831e86 |
 
    Deploy to S3
 
