@@ -32,7 +32,7 @@ The example above also illustrates affiliated keywords (the =#+RESULTS:= line)
 and fixed-width areas (the =: 3= line). Fixed width areas also have horizontal
 scroll to ensure proper display.
 
-Hide meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
+Diminish meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
 
 ** Syntax highlighting
 
