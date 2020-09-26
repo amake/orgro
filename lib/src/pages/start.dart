@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:native_state/native_state.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
+import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/recent_files.dart';
-import 'package:orgro/src/fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
