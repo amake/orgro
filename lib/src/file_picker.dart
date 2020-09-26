@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:org_flutter/org_flutter.dart';
@@ -72,19 +73,42 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     _filePickerState = FilePickerWritable().init()
-      ..registerFileOpenHandler(_loadFile);
+      ..registerFileOpenHandler(_loadFile)
+      ..registerErrorEventHandler(_handleError);
   }
 
   Future<bool> _loadFile(FileInfo fileInfo, File file) async {
-    final openFileInfo = await OpenFileInfo._fromExternal(fileInfo, file);
+    OpenFileInfo openFileInfo;
+    try {
+      openFileInfo = await OpenFileInfo._fromExternal(fileInfo, file);
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      await _displayError(e.toString());
+      return false;
+    }
     return loadFileFromPlatform(openFileInfo);
   }
 
   Future<bool> loadFileFromPlatform(OpenFileInfo info);
 
+  Future<bool> _handleError(ErrorEvent event) async {
+    await _displayError(event.message);
+    return true;
+  }
+
+  Future<void> _displayError(String message) async => showDialog<void>(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: const Text('Error'),
+          children: [ListTile(title: Text(message))],
+        ),
+      );
+
   @override
   void dispose() {
-    _filePickerState.removeFileOpenHandler(_loadFile);
+    _filePickerState
+      ..removeFileOpenHandler(_loadFile)
+      ..removeErrorEventHandler(_handleError);
     super.dispose();
   }
 }
