@@ -260,7 +260,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       icon: const Icon(Icons.font_download),
       label: Text(_value),
       onPressed: () async {
@@ -268,6 +268,9 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
         final selection = await _choose(context);
         _setValue(selection);
       },
+      style: TextButton.styleFrom(
+        primary: DefaultTextStyle.of(context).style.color,
+      ),
     );
   }
 

@@ -291,10 +291,12 @@ class _PickFileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: const Text('Open File'),
-      color: Theme.of(context).accentColor,
-      textColor: Theme.of(context).accentTextTheme.button.color,
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).accentColor,
+        onPrimary: Theme.of(context).accentTextTheme.button.color,
+      ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
     );
   }
@@ -305,8 +307,12 @@ class _OrgManualButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: const Text('Open Org Manual'),
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).buttonColor,
+        onPrimary: DefaultTextStyle.of(context).style.color,
+      ),
       onPressed: () => loadHttpUrl(context,
           'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org'),
     );
@@ -318,8 +324,12 @@ class _OrgroManualButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return ElevatedButton(
       child: const Text('Open Orgro Manual'),
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).buttonColor,
+        onPrimary: DefaultTextStyle.of(context).style.color,
+      ),
       onPressed: () => _openOrgroManual(context),
     );
   }
@@ -333,11 +343,11 @@ class _SupportLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       icon: const Icon(Icons.help),
       label: const Text('Support · Feedback'),
       onPressed: _visitSupportLink,
-      textColor: Theme.of(context).disabledColor,
+      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
     );
   }
 }
@@ -352,10 +362,10 @@ class _LicensesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: const Text('Licenses'),
       onPressed: () => _openLicensePage(context),
-      textColor: Theme.of(context).disabledColor,
+      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
     );
   }
 }
