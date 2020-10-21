@@ -41,7 +41,3 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
-
-# Temporarily override with updated version pending update; see
-# https://github.com/siuying/UniversalDetector/pull/5
-pod 'UniversalDetector', git: 'https://github.com/amake/UniversalDetector.git', submodules: true
