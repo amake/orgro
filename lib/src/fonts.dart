@@ -104,32 +104,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '203840f509ab86501a3fbec73262641b83f57c1a1bfdef6f2131f2718114f722',
-        140776,
+        '2221c1e43699ef294f702f406964dc6a06907e80308e80e19a9027ba74570128',
+        158608,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        'bdd8007c72dda11978e0e131bdf6d33b2bfb77ba1c908a671052af25bde3ccad',
-        140752,
+        '85cc17ebec56464ef286841669b62ae1c2a3b17757ab6e320861543511bd70f4',
+        159796,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        '075ddab98052c350788d78b6317de3ad5e9fda457b14eabc66618654c01a8f48',
-        147248,
+        '817b3f304b26dc1d1219a7341e680c8c19f3c2fd94e7bb9b00de6aafdca1b121',
+        162016,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        '3c6f1d6f2e7ff2837d59fa1f58d2b539ca644c8838f57a3153a40e9069b941af',
-        147796,
+        'dc1ea64a3aa04e6781fb5b1eab214bb3876d1cb963ef80764be900e054177cf9',
+        162424,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -279,7 +279,7 @@ class _JetBrainsMonoFile extends DynamicFontsFile {
 
   String get _variantSlug {
     if (_bold && _italic) {
-      return 'Bold-Italic';
+      return 'BoldItalic';
     } else if (_bold) {
       return 'Bold';
     } else if (_italic) {
@@ -291,5 +291,5 @@ class _JetBrainsMonoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.002/ttf/JetBrainsMono-$_variantSlug.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.200/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
 }
