@@ -27,7 +27,7 @@ dependencies:
   dynamic_fonts: ^1.1.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
-  flutter_charset_detector: ^0.2.0
+  flutter_charset_detector: ^0.3.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
 
