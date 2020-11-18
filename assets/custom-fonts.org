@@ -1,7 +1,7 @@
 * Custom fonts
-:PROPERTIES:
-:header-args: :results output
-:END:
+  :PROPERTIES:
+  :header-args: :results output
+  :END:
 
   Orgro offers the following fonts:
 
@@ -92,7 +92,7 @@
 
    Download
 
-   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.200"
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.210"
      curl -LO https://github.com/JetBrains/JetBrainsMono/releases/download/v$version/JetBrainsMono-$version.zip
      rm -r JetBrainsMono
      mkdir JetBrainsMono
@@ -109,34 +109,34 @@
 
    #+RESULTS:
    :results:
-   | JetBrainsMono-Bold.ttf               | 159796 | 85cc17ebec56464ef286841669b62ae1c2a3b17757ab6e320861543511bd70f4 |
-   | JetBrainsMono-BoldItalic.ttf         | 162424 | dc1ea64a3aa04e6781fb5b1eab214bb3876d1cb963ef80764be900e054177cf9 |
-   | JetBrainsMono-ExtraBold.ttf          | 162040 | 1af65959687a9495a3f036067f9d7473265d4eeaa4484f06e3be8ba6f4fe6b76 |
-   | JetBrainsMono-ExtraBoldItalic.ttf    | 164532 | 9862368fbef1ec8c642b5160487cc369ed970ff01d3ecceeb8fa6b630074b621 |
-   | JetBrainsMono-ExtraLight.ttf         | 158468 | d509e6ee8e20f0e5fab720c685b0b89fa66d226e6142842175ac0bdd8e27679b |
-   | JetBrainsMono-ExtraLightItalic.ttf   | 160020 | 88facf05784172c960f64f9b216e20f0b49ef5a5bf94438255c91c21748b759c |
-   | JetBrainsMono-Italic.ttf             | 162016 | 817b3f304b26dc1d1219a7341e680c8c19f3c2fd94e7bb9b00de6aafdca1b121 |
-   | JetBrainsMono-Light.ttf              | 159612 | 86ed04f59f26026b92f03e375ef9192fa7e47ba0bea8acf4e110d19e953d5bbe |
-   | JetBrainsMono-LightItalic.ttf        | 161424 | d285af1048269da3e63221f92c81b2e971ca269ff6c659ef9029c47d670002a5 |
-   | JetBrainsMono-Medium.ttf             | 160120 | 2b8d80a79fc4ceacbbd7c6b8ada55546d044c75859ea5110a747e905cb55b374 |
-   | JetBrainsMono-MediumItalic.ttf       | 163464 | 2696cfd03ba77f8c42a83a6baea426cba10c3763a9387a933ca17e4dbd31a1ec |
-   | JetBrainsMono-Regular.ttf            | 158608 | 2221c1e43699ef294f702f406964dc6a06907e80308e80e19a9027ba74570128 |
-   | JetBrainsMono-Thin.ttf               | 156288 | 377d8c24ddf60a89b4712e7fc6c4681626067de609c052e3748365b9f756bff5 |
-   | JetBrainsMono-ThinItalic.ttf         | 159076 | 59011f69881f17216a278f152ec98147ee06bc41fafcfe56d9c57330a79a8005 |
-   | JetBrainsMonoNL-Bold.ttf             | 105372 | 0da734e2b9ae700a23c0ba3ff6ba564abd81099966c0d26e8eaee28272ef4511 |
-   | JetBrainsMonoNL-BoldItalic.ttf       | 108880 | ef808d38d40abda770d53aa248297762386a09cb5cace9a0057f6ff11d88e05d |
-   | JetBrainsMonoNL-ExtraBold.ttf        | 106632 | 17a4987b170a1a8b65a5056d0643dc26bffc14a7578d0063bad25c903f94d942 |
-   | JetBrainsMonoNL-ExtraBoldItalic.ttf  | 109136 | 31e7d276452628cd0da70cc095a744b814d2b4368926f12054ed2148a7934abc |
-   | JetBrainsMonoNL-ExtraLight.ttf       | 105020 | 63d484c8b567063fcbd400157a5d8832756b5c0136a21cae5f73bb17b9ef61de |
-   | JetBrainsMonoNL-ExtraLightItalic.ttf | 107188 | afb7369ea047f26073fb5267902b59f6b72df492bf1d897eef041ad5ea8ecb48 |
-   | JetBrainsMonoNL-Italic.ttf           | 107900 | fc9786b560b57487cc158c2513202c26aa1bb860df466f266c4c4e622e2fda6e |
-   | JetBrainsMonoNL-Light.ttf            | 104876 | 33bce66058aada6a89c075bed1459a6f17cf141eac13dcae7b3cd93763e0669f |
-   | JetBrainsMonoNL-LightItalic.ttf      | 107596 | 708f3d899cf8a94c35815fde33a10a7b1b75916552b0830a69c8ff00e2b7877a |
-   | JetBrainsMonoNL-Medium.ttf           | 104936 | 7de757d9eb560e2851e75224304e2c28b7b760530a648f23f8feb64d75eedd3f |
-   | JetBrainsMonoNL-MediumItalic.ttf     | 109068 | 87a4d35a459abb512f06647e193eebaf469addde624e4af7a368afb35221eba5 |
-   | JetBrainsMonoNL-Regular.ttf          | 104184 | b6b0a8efe70bf47d1ddf02268370190ef18c36dce80f7c65b2aba936972b27a3 |
-   | JetBrainsMonoNL-Thin.ttf             | 103668 | 9ac66b619d0d19fc2fd4dccee37ad2b70d78760cf269e20e9f5df3683b5c9206 |
-   | JetBrainsMonoNL-ThinItalic.ttf       | 106724 | 6c9474827043aacc6fa7beef6c80c9db54c230684c55f7f3f7e22bb734fa3d06 |
+   | JetBrainsMono-Bold.ttf               | 165408 | d02e658030761319ede19b3438e5c2bd2deadf7947847978aea1e17b1edc72bd |
+   | JetBrainsMono-BoldItalic.ttf         | 167680 | 55757a65cd7775b7f3b1efae754c9029058eb3b6590d6035411312ad815f8057 |
+   | JetBrainsMono-ExtraBold.ttf          | 167428 | 35cea0592472ee07f399d2e70c5e8e30a8eb8c06d6dcec0490d1edb63f082efd |
+   | JetBrainsMono-ExtraBoldItalic.ttf    | 169940 | 4dd11b6430c65d3d67ff260de7f95759a295d2dcadddfc606ec2e78098d309bf |
+   | JetBrainsMono-ExtraLight.ttf         | 163736 | 83717e6fdac3247227cf0001341383bfdfa1d907549fffd57abe8cd995252ad8 |
+   | JetBrainsMono-ExtraLightItalic.ttf   | 165408 | f30403706376d661e3304b1cf56a531fd51c797588efb3270373dc30e66362a6 |
+   | JetBrainsMono-Italic.ttf             | 167596 | 886d1932b40c46b651a7e5ee18bcdf5674e9cd66ef14e6534c780037dbd77d9d |
+   | JetBrainsMono-Light.ttf              | 164872 | 9b70edfa4fd95475a928688babc785318ef27bfe7301c4789c6fb1a9bb92e4fb |
+   | JetBrainsMono-LightItalic.ttf        | 166860 | 888646391d16f22350f87eba9980c4bd7751c41d94e79e9d13365870d42b538b |
+   | JetBrainsMono-Medium.ttf             | 165484 | 0c7eff03c604268e9cf889967c9a03d0a6021bb1b7d3be0c562831153be5a206 |
+   | JetBrainsMono-MediumItalic.ttf       | 168640 | 475eb1e63fc4f51cc5294194bade043bb67e7547ae3e5e728b93d987ba2799b7 |
+   | JetBrainsMono-Regular.ttf            | 163964 | 8c7f27df5824afe4d83ec4827646aef4b845e31a967bd1c2d635a7b324202054 |
+   | JetBrainsMono-Thin.ttf               | 161688 | 5ad35748d100f909a91839efc5b23b6e42d0b2284de7df18107f85464a815cca |
+   | JetBrainsMono-ThinItalic.ttf         | 164476 | 996c0c845c061f1ce8798da6a70cbd8a10432eb4de66daf23672e41b9fabf6dc |
+   | JetBrainsMonoNL-Bold.ttf             | 111008 | 477f50258c3a1ed745efa7b09146f95cc6ee5bc09328759b7e7cf7ab0f418012 |
+   | JetBrainsMonoNL-BoldItalic.ttf       | 114176 | 113a492d9c7a9b24bd95465269d18def16505ddef2193bd6a59ab2d828d98454 |
+   | JetBrainsMonoNL-ExtraBold.ttf        | 112040 | 2aecd052248318d8979990c7e8fcd8e66c83cfb05c9a36193ae51126942025eb |
+   | JetBrainsMonoNL-ExtraBoldItalic.ttf  | 114580 | 32a8c2816823e4048cbe8ab3236ba65264ad0e1b2002151cceae33683510452a |
+   | JetBrainsMonoNL-ExtraLight.ttf       | 110308 | d4bb3d2b38d1e6f4cecffe260b8520f64ff2c3bb3755cbca262e06c131fbacf5 |
+   | JetBrainsMonoNL-ExtraLightItalic.ttf | 112596 | 6f3e8036b0e48acb336550c8deaa81a2aea1d25f64d430dae62c67ced27c5d73 |
+   | JetBrainsMonoNL-Italic.ttf           | 113512 | 1d32ab286181a530832437d917330759652b5bd3f23410dc95191754ab621ab6 |
+   | JetBrainsMonoNL-Light.ttf            | 110144 | f7edaaef3786d1a6bcf097d32f7f2ecfed23752739896b8a58c29f92a5f8accb |
+   | JetBrainsMonoNL-LightItalic.ttf      | 113056 | c02b62d925ac53992428b3247165ce60e8f0033940740529ea432b810663c969 |
+   | JetBrainsMonoNL-Medium.ttf           | 110316 | 181878f3d00fbd5346fbd8ce37b6b6b49ac04f5c5d31430594052e6d99b49fef |
+   | JetBrainsMonoNL-MediumItalic.ttf     | 114272 | 4ae6019bca2cf9081402308defc7194efe90992681bb4ab519bb8041fc5ab702 |
+   | JetBrainsMonoNL-Regular.ttf          | 109564 | 9569c2a8620991b9ab444d4bd56e99ed1e60a7d9fe5402e30564b57ba267272a |
+   | JetBrainsMonoNL-Thin.ttf             | 109084 | a39c0cce73d516b7a0df520eb79408c1da904e0eb4c559426a98cce33e369c76 |
+   | JetBrainsMonoNL-ThinItalic.ttf       | 112148 | 482e348a06fe1c161907957e2d3414ed0e10f033caf7b717656e7dcf27cb4b99 |
    :end:
 
    Deploy to S3

@@ -104,32 +104,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '2221c1e43699ef294f702f406964dc6a06907e80308e80e19a9027ba74570128',
-        158608,
+        '8c7f27df5824afe4d83ec4827646aef4b845e31a967bd1c2d635a7b324202054',
+        163964,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        '85cc17ebec56464ef286841669b62ae1c2a3b17757ab6e320861543511bd70f4',
-        159796,
+        'd02e658030761319ede19b3438e5c2bd2deadf7947847978aea1e17b1edc72bd',
+        165408,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        '817b3f304b26dc1d1219a7341e680c8c19f3c2fd94e7bb9b00de6aafdca1b121',
-        162016,
+        '886d1932b40c46b651a7e5ee18bcdf5674e9cd66ef14e6534c780037dbd77d9d',
+        167596,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        'dc1ea64a3aa04e6781fb5b1eab214bb3876d1cb963ef80764be900e054177cf9',
-        162424,
+        '55757a65cd7775b7f3b1efae754c9029058eb3b6590d6035411312ad815f8057',
+        167680,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -291,5 +291,5 @@ class _JetBrainsMonoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.200/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.210/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
 }
