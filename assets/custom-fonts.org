@@ -10,6 +10,7 @@
   - Additional fonts manually made available for dynamic download via the
     [[https://pub.dev/packages/dynamic_fonts][dynamic_fonts]] package
     - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
+    - [[https://www.jetbrains.com/lp/mono/][JetBrains Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
 
   This file documents how the last category is prepared in literate-programming
