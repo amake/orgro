@@ -91,7 +91,7 @@ class SearchButton extends StatelessWidget {
   }
 }
 
-class SearchField extends StatefulWidget {
+class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
     this.onClear,
@@ -101,25 +101,6 @@ class SearchField extends StatefulWidget {
   final TextEditingController _controller;
   final VoidCallback onClear;
   final Function(String) onSubmitted;
-
-  @override
-  _SearchFieldState createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<SearchField> {
-  _HackScrollController _scrollController;
-
-  @override
-  void initState() {
-    _scrollController = _HackScrollController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,11 +121,10 @@ class _SearchFieldState extends State<SearchField> {
       child: TextField(
         autofocus: true,
         style: style,
-        controller: widget._controller,
-        scrollController: _scrollController,
+        controller: _controller,
         textInputAction: TextInputAction.search,
         cursorColor: theme.accentColor,
-        onSubmitted: widget.onSubmitted,
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           hintText: 'Search...',
           border: InputBorder.none,
@@ -155,12 +135,12 @@ class _SearchFieldState extends State<SearchField> {
           suffixIcon: IconTheme.merge(
             data: iconTheme,
             child: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: widget._controller,
+              valueListenable: _controller,
               builder: (context, value, child) =>
                   value.text.isNotEmpty ? child : const SizedBox.shrink(),
               child: IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: widget.onClear,
+                onPressed: onClear,
               ),
             ),
           ),
@@ -168,9 +148,4 @@ class _SearchFieldState extends State<SearchField> {
       ),
     );
   }
-}
-
-class _HackScrollController extends ScrollController {
-  @override
-  bool get hasClients => false;
 }
