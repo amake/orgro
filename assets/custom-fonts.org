@@ -174,13 +174,48 @@
    Configuration: Tangle the following
 
    #+begin_src yaml :tangle ../../Iosevka/private-build-plans.toml
-     [buildPlans.iosevka-orgro]               # <iosevka-custom> is your plan name
-     family = "Iosevka Orgro"                 # Font menu family name
-     design = ["v-asterisk-low"]       # Customize styles
-     # upright = ["upright-styles"]            # Uncomment this line to set styles for upright only
-     # italic = ["italic-styles"]              # Uncomment this line to set styles for italic only
-     # oblique = ["oblique-styles"]            # Uncomment this line to set styles for oblique only
-     # hintParams = ["-a", "sss"]              # Optional custom parameters for ttfautohint
+     [buildPlans.iosevka-orgro]       # <iosevka-custom> is your plan name
+     family = "Iosevka Orgro"        # Font menu family name
+     # spacing = "normal"               # Optional; Values: `normal`, `term`, `fontconfig-mono`, or `fixed`
+     # serifs = "sans"                  # Optional; Values: `sans` or `slab`
+
+     ###################################################################################################
+     # Configure variants
+
+     # Optional; Whether to inherit a `ss##` variant
+     # [buildPlans.iosevka-custom.variants]
+     # inherits = "ss01"
+
+     # Optional; Configure single character's variant
+     [buildPlans.iosevka-orgro.variants.design]
+     # g = 'singlestorey'
+     asterisk = 'low'
+
+     # Optional; Configure single character's variant for Upright and Oblique; Overrides [design]
+     # [buildPlans.iosevka-custom.variants.upright]
+     # i = 'zshaped'
+     # l = 'zshaped'
+
+     # Optional; Configure single character's variant for Italic only; Overrides [design]
+     # [buildPlans.iosevka-custom.variants.italic]
+     # i = 'italic'
+     # l = 'italic'
+
+
+     # End variant section
+     ###################################################################################################
+
+     ###################################################################################################
+     # Configure ligations
+
+     # [buildPlans.iosevka-custom.ligations]
+     # inherits = "default-calt"   # Optional; inherits an existing ligation set
+     # disables = []               # Optional; disable specific ligation groups, overrides inherited ligation set
+     # enables  = []               # Optional; enable specific ligation groups, overrides inherited ligation set
+
+     # End ligation section
+     ###################################################################################################
+
 
      ###################################################################################################
      # Override default building weights
@@ -195,7 +230,7 @@
      menu  = 400  # Weight for the font's names.
      css   = 400  # Weight for webfont CSS.
 
-     # [buildPlans.iosevka-orgro.weights.book]
+     # [buildPlans.iosevka-custom.weights.book]
      # shape = 450
      # menu  = 450  # Use 450 here to name the font's weight "Book"
      # css   = 450
@@ -237,7 +272,7 @@
      menu  = 5          # Width grade for the font's names.
      css   = "normal"   # "font-stretch' property of webfont CSS.
 
-     # [buildPlans.iosevka-orgro.widths.extended]
+     # [buildPlans.iosevka-custom.widths.extended]
      # shape = 576
      # menu  = 7
      # css   = "expanded"
@@ -250,7 +285,7 @@
      # Specify character ranges in the section below to exclude certain characters from the font being
      # built. Remove this section when this feature is not needed.
 
-     # [buildPlans.iosevka-orgro.exclude-chars]
+     # [buildPlans.iosevka-custom.exclude-chars]
      # ranges = [[10003, 10008]]
 
      # End character exclusion
@@ -263,7 +298,7 @@
      # following section to build PUA characters that are generated from the OpenType ligatures.
      # Remove this section when compatibility ligatures are not needed.
 
-     # [[buildPlans.iosevka-orgro.compatibility-ligatures]]
+     # [[buildPlans.iosevka-custom.compatibility-ligatures]]
      # unicode = 57600 # 0xE100
      # featureTag = 'calt'
      # sequence = '<*>'
@@ -276,7 +311,7 @@
      # Certain metrics like line height (leading) could be overridden in your build plan file.
      # Edit the values to change the metrics. Remove this section when overriding is not needed.
 
-     # [buildPlans.iosevka-orgro.metric-override]
+     # [buildPlans.iosevka-custom.metric-override]
      # leading = 1250
      # winMetricAscenderPad = 0
      # winMetricDescenderPad = 0
@@ -305,10 +340,10 @@
    #+end_src
 
    #+RESULTS:
-   | iosevka-orgro-bold.ttf       | 1195860 | dd6b67a9c9754041b6bb5778e5244d6d97247b6b4fca66f185a1e3efccf66d15 |
-   | iosevka-orgro-bolditalic.ttf | 1248904 | a47c69a751ffa09a0b9c6265395179e32b0246fd2000883463ae6438f26a9d4a |
-   | iosevka-orgro-italic.ttf     | 1245876 | e309b196859c101e3c613c66b5e68a6930cf0d3aa9ff5e482d1d7b27d0c75be9 |
-   | iosevka-orgro-regular.ttf    | 1189660 | b3bbff5649054006f76592480ba0995d87b943a7e38cf3392a1396bd779f56fa |
+   | iosevka-orgro-bold.ttf       | 1514504 | 882d392abcd01f5fd7621c2d01c99426e340f980e6c50331e2a0f65ca5ae07f2 |
+   | iosevka-orgro-bolditalic.ttf | 1572548 | 9abd41a5928c5100e42eaf911044bef4651e52d48cc94c84f0f3499b491a5228 |
+   | iosevka-orgro-italic.ttf     | 1559648 | 9514fc2730678d0bbf95e132e66a82fc3658e5faf78c13bcdd66dd3249956a8a |
+   | iosevka-orgro-regular.ttf    | 1502864 | 389f0c93a0c5fb1279ff85a7e900254cdcd55943d0efd8d669f928a06a6997f0 |
 
    Deploy to S3
 
