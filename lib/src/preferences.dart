@@ -14,11 +14,13 @@ const _kTextScaleKey = 'text_scale';
 const _kReaderModeKey = 'reader_mode';
 const _kRecentFilesJsonKey = 'recent_files_json';
 
-class Preferences {
-  static Future<Preferences> getInstance() async =>
-      Preferences._(await SharedPreferences.getInstance());
+class Preferences extends InheritedWidget {
+  static Preferences of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<Preferences>();
 
-  Preferences._(this._prefs);
+  const Preferences(this._prefs, {Widget child, Key key})
+      : assert(_prefs != null),
+        super(child: child, key: key);
 
   final SharedPreferences _prefs;
 
@@ -42,8 +44,8 @@ class Preferences {
   set recentFilesJson(List<String> value) =>
       _prefs.setStringList(_kRecentFilesJsonKey, value);
 
-  static Preferences of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<InheritedPreferences>().prefs;
+  @override
+  bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
 }
 
 class PreferencesProvider extends StatelessWidget {
@@ -55,11 +57,11 @@ class PreferencesProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Preferences>(
-      future: Preferences.getInstance(),
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return InheritedPreferences(snapshot.data, child: child);
+          return Preferences(snapshot.data, child: child);
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
         } else {
@@ -68,16 +70,4 @@ class PreferencesProvider extends StatelessWidget {
       },
     );
   }
-}
-
-class InheritedPreferences extends InheritedWidget {
-  const InheritedPreferences(this.prefs, {Widget child, Key key})
-      : assert(prefs != null),
-        super(child: child, key: key);
-
-  final Preferences prefs;
-
-  @override
-  bool updateShouldNotify(InheritedPreferences oldWidget) =>
-      prefs != oldWidget.prefs;
 }
