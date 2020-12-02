@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:native_state/native_state.dart';
+import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -41,25 +42,26 @@ class _StartPageState extends State<StartPage>
       });
 
   Iterable<Widget> _buildActions() sync* {
-    if (!hasRecentFiles) {
-      return;
-    }
     yield PopupMenuButton<VoidCallback>(
       onSelected: (callback) => callback(),
       itemBuilder: (context) => [
-        PopupMenuItem<VoidCallback>(
-          child: const Text('Orgro Manual'),
-          value: () => _openOrgroManual(context),
-        ),
-        const PopupMenuDivider(),
-        const PopupMenuItem<VoidCallback>(
-          child: Text('Support · Feedback'),
-          value: _visitSupportLink,
-        ),
-        PopupMenuItem<VoidCallback>(
-          child: const Text('Licenses'),
-          value: () => _openLicensePage(context),
-        ),
+        appearanceMenuItem(context),
+        if (hasRecentFiles) ...[
+          const PopupMenuDivider(),
+          PopupMenuItem<VoidCallback>(
+            child: const Text('Orgro Manual'),
+            value: () => _openOrgroManual(context),
+          ),
+          const PopupMenuDivider(),
+          const PopupMenuItem<VoidCallback>(
+            child: Text('Support · Feedback'),
+            value: _visitSupportLink,
+          ),
+          PopupMenuItem<VoidCallback>(
+            child: const Text('Licenses'),
+            value: () => _openLicensePage(context),
+          ),
+        ]
       ],
     );
   }
