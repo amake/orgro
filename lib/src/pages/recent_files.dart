@@ -135,19 +135,21 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     super.didChangeDependencies();
     // Doing this here instead of [initState] because we need to pull in an
     // InheritedWidget
-    _recentFiles = _load();
+    _load();
   }
 
-  List<RecentFile> _load() => _prefs.recentFilesJson
-      .map<dynamic>(json.decode)
-      .cast<Map<String, Object>>()
-      .map((json) => RecentFile.fromJson(json))
-      .toList(growable: false);
+  void _load() {
+    _recentFiles = _prefs.recentFilesJson
+        .map<dynamic>(json.decode)
+        .cast<Map<String, Object>>()
+        .map((json) => RecentFile.fromJson(json))
+        .toList(growable: false);
+  }
 
   Future<void> _reload() async {
     debugPrint('Reloading recent files');
     await _prefs.reload();
-    setState(() => _recentFiles = _load());
+    setState(_load);
   }
 
   Widget buildWithRecentFiles({@required WidgetBuilder builder}) {
