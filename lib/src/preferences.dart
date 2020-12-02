@@ -14,6 +14,8 @@ const _kTextScaleKey = 'text_scale';
 const _kReaderModeKey = 'reader_mode';
 const _kRecentFilesJsonKey = 'recent_files_json';
 
+const _kThemeModeKey = 'theme_mode';
+
 class Preferences extends InheritedWidget {
   static Preferences of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<Preferences>();
@@ -43,6 +45,10 @@ class Preferences extends InheritedWidget {
 
   set recentFilesJson(List<String> value) =>
       _prefs.setStringList(_kRecentFilesJsonKey, value);
+
+  String get themeMode => _prefs.getString(_kThemeModeKey);
+
+  set themeMode(String value) => _prefs.setString(_kThemeModeKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
