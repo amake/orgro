@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:native_state/native_state.dart';
+import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
@@ -44,33 +45,41 @@ const _kPrimaryColorVariant = Color(0xff00352f);
 const _kSecondaryColor = Colors.deepOrangeAccent;
 final _kSecondaryColorVariant = Colors.deepOrangeAccent.shade700;
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
 
   @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with AppearanceState {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: !kScreenshotMode,
-      title: 'Orgro',
-      theme: ThemeData.from(
-        colorScheme: ColorScheme.light(
-          primary: _kPrimaryColor,
-          primaryVariant: _kPrimaryColorVariant,
-          secondary: _kSecondaryColor,
-          secondaryVariant: _kSecondaryColorVariant,
+    return buildWithAppearance(builder: (context) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: !kScreenshotMode,
+        title: 'Orgro',
+        theme: ThemeData.from(
+          colorScheme: ColorScheme.light(
+            primary: _kPrimaryColor,
+            primaryVariant: _kPrimaryColorVariant,
+            secondary: _kSecondaryColor,
+            secondaryVariant: _kSecondaryColorVariant,
+          ),
+          textTheme: Typography.englishLike2018,
         ),
-        textTheme: Typography.englishLike2018,
-      ),
-      darkTheme: ThemeData.from(
-        colorScheme: ColorScheme.dark(
-          primary: _kPrimaryColor,
-          primaryVariant: _kPrimaryColorVariant,
-          secondary: _kSecondaryColor,
-          secondaryVariant: _kSecondaryColorVariant,
+        darkTheme: ThemeData.from(
+          colorScheme: ColorScheme.dark(
+            primary: _kPrimaryColor,
+            primaryVariant: _kPrimaryColorVariant,
+            secondary: _kSecondaryColor,
+            secondaryVariant: _kSecondaryColorVariant,
+          ),
+          textTheme: Typography.englishLike2018,
         ),
-        textTheme: Typography.englishLike2018,
-      ),
-      home: const StartPage(),
-    );
+        themeMode: Appearance.of(context).mode,
+        home: const StartPage(),
+      );
+    });
   }
 }
