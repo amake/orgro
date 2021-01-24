@@ -13,3 +13,5 @@ Orgro is an org-mode file viewer with lots of features for comfortable reading o
 - Open external links in your web browser, and section links in narrowed views
 
 - Expand or collapse sections, blocks, and drawers just like in Emacs
+
+Note: INTERNET permission is required for dynamically loading fonts from online sources (Google Fonts, AWS S3).
