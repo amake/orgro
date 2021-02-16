@@ -204,14 +204,14 @@ packages:
       name: org_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.1"
+    version: "0.9.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1"
+    version: "0.5.0"
   path:
     dependency: transitive
     description:
