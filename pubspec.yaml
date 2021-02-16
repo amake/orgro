@@ -23,7 +23,7 @@ dependencies:
   #   path: ../flutter_charset_detector
   google_fonts: ^1.0.0
   http: ^0.12.0+4
-  intl: ^0.16.1
+  intl: ^0.17.0
   native_state: ^1.1.0
   org_flutter: ^0.8.0
   # org_flutter:
