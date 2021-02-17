@@ -174,8 +174,11 @@
      git fetch --tags
      tag=$(git describe --tags $(git rev-list --tags --max-count=1))
      git checkout $tag
-     npm install
+     echo $tag
    #+end_src
+
+   #+RESULTS:
+   : v5.0.2
 
    Configuration: Tangle the following
 
@@ -333,11 +336,12 @@
    Build
 
    #+begin_src bash :dir ../../Iosevka :async
+     npm install
      npm run clean
      npm run build -- ttf::iosevka-orgro
    #+end_src
 
-   Checksums
+   Checksum
 
    #+name: iosevka-csums
    #+begin_src bash :dir ../../Iosevka/dist/iosevka-orgro/ttf :results table replace
@@ -347,10 +351,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 1514504 | 882d392abcd01f5fd7621c2d01c99426e340f980e6c50331e2a0f65ca5ae07f2 |
-   | iosevka-orgro-bolditalic.ttf | 1572548 | 9abd41a5928c5100e42eaf911044bef4651e52d48cc94c84f0f3499b491a5228 |
-   | iosevka-orgro-italic.ttf     | 1559648 | 9514fc2730678d0bbf95e132e66a82fc3658e5faf78c13bcdd66dd3249956a8a |
-   | iosevka-orgro-regular.ttf    | 1502864 | 389f0c93a0c5fb1279ff85a7e900254cdcd55943d0efd8d669f928a06a6997f0 |
+   | iosevka-orgro-bold.ttf       | 2750364 | f2d8442e6c7ce87807e19762f4283d5bc43aa4868e5f131d74da83e7a53c939e |
+   | iosevka-orgro-bolditalic.ttf | 2841708 | 21e843924aa85ea1d157f96230ef7c25c9666ba2a3b7732d99a5ff23662662a6 |
+   | iosevka-orgro-italic.ttf     | 2827964 | e4fd0d77d32fb4eb27d6d3e5206845afdef10ca48ba90db386eb7a8b5fc3caad |
+   | iosevka-orgro-regular.ttf    | 2732852 | 60416dcd5f9f771408ed5beaf8db5f9120466efaab7a55b646361fefb1e4a8cd |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
