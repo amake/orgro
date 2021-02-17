@@ -43,13 +43,14 @@
 
    Checksum
 
+   #+name: firago-csums
    #+begin_src bash :dir ../../FiraGO/Fonts :results table drawer replace
      for ttf in FiraGO_TTF_*/*/*.ttf; do
          echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
      done
    #+end_src
 
-   #+RESULTS:
+   #+RESULTS: firago-csums
    :results:
    | FiraGO-BoldItalic.ttf       | 813028 | 51ad0da400568385e038ccb962a692f145dfbd9071d7fe5cb0903fd2a8912ccd |
    | FiraGO-BookItalic.ttf       | 811792 | d1acf0bfba04de8a35888f402bbe029b3c412b2a52ea4da27bf498bc5973fc05 |
@@ -83,6 +84,8 @@
    | FiraGO-UltraLight.ttf       | 804924 | a3f15783dc7b783e07518560992f038409eea500729cf2b2cfaef7cc17bd2cf7 |
    :end:
 
+   #+call: update-checksums(replacements=firago-csums)
+
    Deploy to S3
 
    #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
@@ -102,13 +105,14 @@
 
    Checksum
 
+   #+name: jetbrainsmono-csums
    #+begin_src bash :dir ../tmp/JetBrainsMono :results table drawer replace
      for ttf in */fonts/ttf/*.ttf; do
          echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
      done
    #+end_src
 
-   #+RESULTS:
+   #+RESULTS: jetbrainsmono-csums
    :results:
    | JetBrainsMono-Bold.ttf               | 165408 | d02e658030761319ede19b3438e5c2bd2deadf7947847978aea1e17b1edc72bd |
    | JetBrainsMono-BoldItalic.ttf         | 167680 | 55757a65cd7775b7f3b1efae754c9029058eb3b6590d6035411312ad815f8057 |
@@ -139,6 +143,8 @@
    | JetBrainsMonoNL-Thin.ttf             | 109084 | a39c0cce73d516b7a0df520eb79408c1da904e0eb4c559426a98cce33e369c76 |
    | JetBrainsMonoNL-ThinItalic.ttf       | 112148 | 482e348a06fe1c161907957e2d3414ed0e10f033caf7b717656e7dcf27cb4b99 |
    :end:
+
+   #+call: update-checksums(replacements=jetbrainsmono-csums)
 
    Deploy to S3
 
@@ -333,21 +339,57 @@
 
    Checksums
 
+   #+name: iosevka-csums
    #+begin_src bash :dir ../../Iosevka/dist/iosevka-orgro/ttf :results table replace
      for ttf in *.ttf; do
          echo $ttf $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
      done
    #+end_src
 
-   #+RESULTS:
+   #+RESULTS: iosevka-csums
    | iosevka-orgro-bold.ttf       | 1514504 | 882d392abcd01f5fd7621c2d01c99426e340f980e6c50331e2a0f65ca5ae07f2 |
    | iosevka-orgro-bolditalic.ttf | 1572548 | 9abd41a5928c5100e42eaf911044bef4651e52d48cc94c84f0f3499b491a5228 |
    | iosevka-orgro-italic.ttf     | 1559648 | 9514fc2730678d0bbf95e132e66a82fc3658e5faf78c13bcdd66dd3249956a8a |
    | iosevka-orgro-regular.ttf    | 1502864 | 389f0c93a0c5fb1279ff85a7e900254cdcd55943d0efd8d669f928a06a6997f0 |
+
+   #+call: update-checksums(replacements=iosevka-csums)
 
    Deploy to S3
 
    #+begin_src bash :dir ../../Iosevka :var dryrun="--dryrun"
      ver=$(git describe --tags)
      aws s3 $dryrun sync --exclude '*' --include 'ttf/*' --acl public-read dist/iosevka-orgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
+   #+end_src
+
+** Updating sizes and checksums
+
+   #+name: old-csums
+   #+begin_src bash :results output table
+     git show HEAD:./custom-fonts.org | grep "^ *|.*|.*| *$" | tr -d '|'
+   #+end_src
+
+   #+name: update-checksums
+   #+header: :var target="../lib/src/fonts.dart" needles=old-csums
+   #+header: :var replacements=()
+   #+begin_src ruby :results output
+     File.open(target, 'r+') do |out|
+       text = out.read
+       replacements.each do |filename, size, csum|
+         _, old_size, old_csum = needles.assoc(filename)
+         next unless old_size && old_csum
+
+         unless size == old_size
+           puts "#{filename}: #{old_size} -> #{size}"
+           text.gsub!(old_size.to_s) { |_| size.to_s }
+         end
+         unless csum == old_csum
+           puts "#{filename}: #{old_csum} -> #{csum}"
+           text.gsub!(old_csum) { |_| csum } unless csum == old_csum
+         end
+       end
+
+       out.rewind
+       out.write(text)
+       out.truncate(out.pos)
+     end
    #+end_src
