@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
-const _kCustomFontFiraGo = 'FiraGO';
-const _kCustomFontIosevka = 'Iosevka';
-const _kCustomFontJetBrainsMono = 'JetBrainsMono';
 const _kCustomFonts = [
-  _kCustomFontFiraGo,
-  _kCustomFontIosevka,
-  _kCustomFontJetBrainsMono,
+  _FiraGoFile.name,
+  _IosevkaFile.name,
+  _JetBrainsMonoFile.name,
 ];
 
 void _initCustomFonts() {
@@ -17,7 +14,7 @@ void _initCustomFonts() {
     return;
   }
   DynamicFonts.register(
-    _kCustomFontFiraGo,
+    _FiraGoFile.name,
     [
       _FiraGoFile(
         const DynamicFontsVariant(
@@ -57,7 +54,7 @@ void _initCustomFonts() {
     ),
   );
   DynamicFonts.register(
-    _kCustomFontIosevka,
+    _IosevkaFile.name,
     [
       _IosevkaFile(
         const DynamicFontsVariant(
@@ -97,7 +94,7 @@ void _initCustomFonts() {
     ),
   );
   DynamicFonts.register(
-    _kCustomFontJetBrainsMono,
+    _JetBrainsMonoFile.name,
     [
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
@@ -223,6 +220,9 @@ class _FiraGoFile extends DynamicFontsFile {
   _FiraGoFile(this.variant, String expectedFileHash, int expectedLength)
       : super(expectedFileHash, expectedLength);
 
+  static const name = 'FiraGO';
+  static const version = '1001';
+
   final DynamicFontsVariant variant;
 
   String get _dir {
@@ -237,12 +237,15 @@ class _FiraGoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/FiraGO_TTF_1001/$_dir/FiraGO-${variant.toApiFilenamePart()}.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/FiraGO_TTF_$version/$_dir/FiraGO-${variant.toApiFilenamePart()}.ttf';
 }
 
 class _IosevkaFile extends DynamicFontsFile {
   _IosevkaFile(this.variant, String expectedFileHash, int expectedLength)
       : super(expectedFileHash, expectedLength);
+
+  static const name = 'Iosevka';
+  static const version = '4.0.0';
 
   final DynamicFontsVariant variant;
 
@@ -264,12 +267,15 @@ class _IosevkaFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v4.0.0/ttf/iosevka-orgro-$_variantSlug.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
 }
 
 class _JetBrainsMonoFile extends DynamicFontsFile {
   _JetBrainsMonoFile(this.variant, String expectedFileHash, int expectedLength)
       : super(expectedFileHash, expectedLength);
+
+  static const name = 'JetBrainsMono';
+  static const version = '2.210';
 
   final DynamicFontsVariant variant;
 
@@ -291,5 +297,5 @@ class _JetBrainsMonoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/2.210/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/$version/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
 }
