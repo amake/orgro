@@ -96,7 +96,7 @@
 
    Download
 
-   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.210"
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.225"
      curl -LO https://github.com/JetBrains/JetBrainsMono/releases/download/v$version/JetBrainsMono-$version.zip
      rm -r JetBrainsMono
      mkdir JetBrainsMono
@@ -114,34 +114,34 @@
 
    #+RESULTS: jetbrainsmono-csums
    :results:
-   | JetBrainsMono-Bold.ttf               | 165408 | d02e658030761319ede19b3438e5c2bd2deadf7947847978aea1e17b1edc72bd |
-   | JetBrainsMono-BoldItalic.ttf         | 167680 | 55757a65cd7775b7f3b1efae754c9029058eb3b6590d6035411312ad815f8057 |
-   | JetBrainsMono-ExtraBold.ttf          | 167428 | 35cea0592472ee07f399d2e70c5e8e30a8eb8c06d6dcec0490d1edb63f082efd |
-   | JetBrainsMono-ExtraBoldItalic.ttf    | 169940 | 4dd11b6430c65d3d67ff260de7f95759a295d2dcadddfc606ec2e78098d309bf |
-   | JetBrainsMono-ExtraLight.ttf         | 163736 | 83717e6fdac3247227cf0001341383bfdfa1d907549fffd57abe8cd995252ad8 |
-   | JetBrainsMono-ExtraLightItalic.ttf   | 165408 | f30403706376d661e3304b1cf56a531fd51c797588efb3270373dc30e66362a6 |
-   | JetBrainsMono-Italic.ttf             | 167596 | 886d1932b40c46b651a7e5ee18bcdf5674e9cd66ef14e6534c780037dbd77d9d |
-   | JetBrainsMono-Light.ttf              | 164872 | 9b70edfa4fd95475a928688babc785318ef27bfe7301c4789c6fb1a9bb92e4fb |
-   | JetBrainsMono-LightItalic.ttf        | 166860 | 888646391d16f22350f87eba9980c4bd7751c41d94e79e9d13365870d42b538b |
-   | JetBrainsMono-Medium.ttf             | 165484 | 0c7eff03c604268e9cf889967c9a03d0a6021bb1b7d3be0c562831153be5a206 |
-   | JetBrainsMono-MediumItalic.ttf       | 168640 | 475eb1e63fc4f51cc5294194bade043bb67e7547ae3e5e728b93d987ba2799b7 |
-   | JetBrainsMono-Regular.ttf            | 163964 | 8c7f27df5824afe4d83ec4827646aef4b845e31a967bd1c2d635a7b324202054 |
-   | JetBrainsMono-Thin.ttf               | 161688 | 5ad35748d100f909a91839efc5b23b6e42d0b2284de7df18107f85464a815cca |
-   | JetBrainsMono-ThinItalic.ttf         | 164476 | 996c0c845c061f1ce8798da6a70cbd8a10432eb4de66daf23672e41b9fabf6dc |
-   | JetBrainsMonoNL-Bold.ttf             | 111008 | 477f50258c3a1ed745efa7b09146f95cc6ee5bc09328759b7e7cf7ab0f418012 |
-   | JetBrainsMonoNL-BoldItalic.ttf       | 114176 | 113a492d9c7a9b24bd95465269d18def16505ddef2193bd6a59ab2d828d98454 |
-   | JetBrainsMonoNL-ExtraBold.ttf        | 112040 | 2aecd052248318d8979990c7e8fcd8e66c83cfb05c9a36193ae51126942025eb |
-   | JetBrainsMonoNL-ExtraBoldItalic.ttf  | 114580 | 32a8c2816823e4048cbe8ab3236ba65264ad0e1b2002151cceae33683510452a |
-   | JetBrainsMonoNL-ExtraLight.ttf       | 110308 | d4bb3d2b38d1e6f4cecffe260b8520f64ff2c3bb3755cbca262e06c131fbacf5 |
-   | JetBrainsMonoNL-ExtraLightItalic.ttf | 112596 | 6f3e8036b0e48acb336550c8deaa81a2aea1d25f64d430dae62c67ced27c5d73 |
-   | JetBrainsMonoNL-Italic.ttf           | 113512 | 1d32ab286181a530832437d917330759652b5bd3f23410dc95191754ab621ab6 |
-   | JetBrainsMonoNL-Light.ttf            | 110144 | f7edaaef3786d1a6bcf097d32f7f2ecfed23752739896b8a58c29f92a5f8accb |
-   | JetBrainsMonoNL-LightItalic.ttf      | 113056 | c02b62d925ac53992428b3247165ce60e8f0033940740529ea432b810663c969 |
-   | JetBrainsMonoNL-Medium.ttf           | 110316 | 181878f3d00fbd5346fbd8ce37b6b6b49ac04f5c5d31430594052e6d99b49fef |
-   | JetBrainsMonoNL-MediumItalic.ttf     | 114272 | 4ae6019bca2cf9081402308defc7194efe90992681bb4ab519bb8041fc5ab702 |
-   | JetBrainsMonoNL-Regular.ttf          | 109564 | 9569c2a8620991b9ab444d4bd56e99ed1e60a7d9fe5402e30564b57ba267272a |
-   | JetBrainsMonoNL-Thin.ttf             | 109084 | a39c0cce73d516b7a0df520eb79408c1da904e0eb4c559426a98cce33e369c76 |
-   | JetBrainsMonoNL-ThinItalic.ttf       | 112148 | 482e348a06fe1c161907957e2d3414ed0e10f033caf7b717656e7dcf27cb4b99 |
+   | JetBrainsMono-Bold.ttf               | 173264 | 4e350d30a649ebbaaa6dd2e38a1f38c4c5fa6692516af47be33dbeec42d58763 |
+   | JetBrainsMono-BoldItalic.ttf         | 175800 | e6cded7e6933741aad7fc09c6db0536bea14b83b8accd5288346bd7367112f30 |
+   | JetBrainsMono-ExtraBold.ttf          | 175812 | f796e8bb2ffcfd7e635155635a5eab86ce0190a3f710a945a92da29e631c5372 |
+   | JetBrainsMono-ExtraBoldItalic.ttf    | 178492 | 35176daf8a62befb3c2a854b07765a2fc186bbb4c8ba3b8f3124b5102f4121fd |
+   | JetBrainsMono-ExtraLight.ttf         | 171732 | f37e808b66d5350c935245e71071d95238d0d423fced5d1f011c7f603443213f |
+   | JetBrainsMono-ExtraLightItalic.ttf   | 173496 | acf566b08df2025d17aa93bce75311998576689ed21416d35b915cf8a9e66d6f |
+   | JetBrainsMono-Italic.ttf             | 175656 | d7972492ce345c58cf8984f65e30c3ccd190738582ded5852f5083e27f3ba068 |
+   | JetBrainsMono-Light.ttf              | 173244 | 87b45464e17c8555424f23f50e4ab3df73acba10875a8fa92c2b1bc0ee3a64f3 |
+   | JetBrainsMono-LightItalic.ttf        | 175140 | 2f89ffacfae34ea945574b959eafe1d877b1774dbd248a83933c152df0829354 |
+   | JetBrainsMono-Medium.ttf             | 173444 | 7b4faad50d02844b8b7e3bfc7df575c2587291c01febfebb83b83d7c37238447 |
+   | JetBrainsMono-MediumItalic.ttf       | 176680 | 543008ddb1bdd61e0bf534c25cee6083beb7adbfee64df1bcb79b0550eab1ca2 |
+   | JetBrainsMono-Regular.ttf            | 171876 | 1f376439c75ab33392eb7a2f5ec999809493b378728d723327655c9fcb45cea9 |
+   | JetBrainsMono-Thin.ttf               | 169480 | e53e50213b604f9a7a3c6aca14318606a0ba051fe0822870cfdc6599623cc982 |
+   | JetBrainsMono-ThinItalic.ttf         | 172548 | a88204af54b61ee99b505c52ea6e9f57284fbdf6eaecbe7e8f3a0b8e1aa4e5cf |
+   | JetBrainsMonoNL-Bold.ttf             | 116608 | 743a6972e7e0cd0fe2ee7b4af68df4d4653aca76e4607da9ef84c52a87a1a21e |
+   | JetBrainsMonoNL-BoldItalic.ttf       | 120048 | 5f99b4bc6b03f37e5998d81d808f77448fe6f8ffc7ef95270846b3e600a882de |
+   | JetBrainsMonoNL-ExtraBold.ttf        | 118208 | 657796682c7fb623291eaa927f3ee5e95737bdb72d59162f0d95eb2ef141065a |
+   | JetBrainsMonoNL-ExtraBoldItalic.ttf  | 120868 | 6904d84356ada4fd21d13271fb98f678c355e609cedcc6e47d216d87b289786d |
+   | JetBrainsMonoNL-ExtraLight.ttf       | 116040 | 34c937e62955c3bf11da18cef87d6ef979fa6188056e23dc141d2c1b7e7ab742 |
+   | JetBrainsMonoNL-ExtraLightItalic.ttf | 118404 | 6d7d8be53328a8cd5778856554df8cc3d85926c3a9fa7e25662220f680f24871 |
+   | JetBrainsMonoNL-Italic.ttf           | 119268 | bcfb4034cca9fe09316327c3e823036d1bbacd8e45d2f123a9a80793277b2d4d |
+   | JetBrainsMonoNL-Light.ttf            | 116204 | 8544e664f2853fee7e43bf41d37dcb0f21dbcacdca8c3a87a73177bb162d8252 |
+   | JetBrainsMonoNL-LightItalic.ttf      | 119040 | cdba0280a599e76f183cdaba85c40bc8b3c3e9bd483a5d3f253e320f2771eaff |
+   | JetBrainsMonoNL-Medium.ttf           | 115960 | ce7528a1c7d3f774e2a49aca1cfad4fadefc59548c332a45eaaf1025c33b154a |
+   | JetBrainsMonoNL-MediumItalic.ttf     | 120040 | 291009509860181d042619d8c101e7c84b7381f509a93c894f0422f62b09ef3b |
+   | JetBrainsMonoNL-Regular.ttf          | 115148 | 81364b2eff560aaaaf0e47bac0743edbf9baff67d9f3e5bf10e841b9841bea29 |
+   | JetBrainsMonoNL-Thin.ttf             | 114644 | bde82a63bf6c3aa865fc8870b5cc7fd8298a5114785dbecfc0b8dcbc09a17d3b |
+   | JetBrainsMonoNL-ThinItalic.ttf       | 117928 | 232226ccb1e29ffa531898a2a9890a5a8ccf8ecd96071d6b40e0af6d57988c06 |
    :end:
 
    #+call: update-checksums(replacements=jetbrainsmono-csums)

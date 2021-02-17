@@ -101,32 +101,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '8c7f27df5824afe4d83ec4827646aef4b845e31a967bd1c2d635a7b324202054',
-        163964,
+        '1f376439c75ab33392eb7a2f5ec999809493b378728d723327655c9fcb45cea9',
+        171876,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        'd02e658030761319ede19b3438e5c2bd2deadf7947847978aea1e17b1edc72bd',
-        165408,
+        '4e350d30a649ebbaaa6dd2e38a1f38c4c5fa6692516af47be33dbeec42d58763',
+        173264,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        '886d1932b40c46b651a7e5ee18bcdf5674e9cd66ef14e6534c780037dbd77d9d',
-        167596,
+        'd7972492ce345c58cf8984f65e30c3ccd190738582ded5852f5083e27f3ba068',
+        175656,
       ),
       _JetBrainsMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        '55757a65cd7775b7f3b1efae754c9029058eb3b6590d6035411312ad815f8057',
-        167680,
+        'e6cded7e6933741aad7fc09c6db0536bea14b83b8accd5288346bd7367112f30',
+        175800,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -275,7 +275,7 @@ class _JetBrainsMonoFile extends DynamicFontsFile {
       : super(expectedFileHash, expectedLength);
 
   static const name = 'JetBrainsMono';
-  static const version = '2.210';
+  static const version = '2.225';
 
   final DynamicFontsVariant variant;
 
