@@ -7,7 +7,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  dynamic_fonts: ^1.1.0
+  dynamic_fonts: ^2.0.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
   file_picker_writable: ^2.0.0-nullsafety.2
@@ -21,8 +21,8 @@ dependencies:
   flutter_charset_detector: ^0.3.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
-  google_fonts: ^1.0.0
-  http: ^0.12.0+4
+  google_fonts: ^2.0.0
+  http: ^0.13.0
   intl: ^0.17.0
   native_state: ^1.1.0
   org_flutter: ^0.9.0

@@ -315,8 +315,12 @@ class _OrgManualButton extends StatelessWidget {
         primary: Theme.of(context).buttonColor,
         onPrimary: DefaultTextStyle.of(context).style.color,
       ),
-      onPressed: () => loadHttpUrl(context,
-          'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org'),
+      onPressed: () => loadHttpUrl(
+        context,
+        Uri.parse(
+          'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org',
+        ),
+      ),
     );
   }
 }

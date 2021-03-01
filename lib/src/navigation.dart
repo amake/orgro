@@ -16,8 +16,8 @@ import 'package:orgro/src/preferences.dart';
 
 const _kRestoreOrgControllerStateKey = 'restore_org_controller_state';
 
-Future<bool> loadHttpUrl(BuildContext context, String url) async {
-  final title = Uri.parse(url).pathSegments.last;
+Future<bool> loadHttpUrl(BuildContext context, Uri url) async {
+  final title = url.pathSegments.last;
   final content = time(
     'load url',
     () => http.get(url).then(
