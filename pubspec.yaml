@@ -18,7 +18,7 @@ dependencies:
     #   ref: android-file-not-found
   flutter:
     sdk: flutter
-  flutter_charset_detector: ^0.3.0
+  flutter_charset_detector: ^1.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
   google_fonts: ^2.0.0
