@@ -110,7 +110,7 @@ packages:
       name: flutter_highlight
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -122,7 +122,7 @@ packages:
       name: flutter_tex_js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.6"
+    version: "1.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -141,7 +141,7 @@ packages:
       name: highlight
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   http:
     dependency: "direct main"
     description:
@@ -204,14 +204,14 @@ packages:
       name: org_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.0"
+    version: "1.0.0-nullsafety.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "1.0.0-nullsafety.0"
   path:
     dependency: transitive
     description:
@@ -267,7 +267,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "4.0.2"
   platform:
     dependency: transitive
     description:
