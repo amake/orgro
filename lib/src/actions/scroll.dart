@@ -29,8 +29,8 @@ class ScrollTopButton extends StatelessWidget {
 
 PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    child: const Text('Scroll to top'),
     value: () => _scrollToTop(context),
+    child: const Text('Scroll to top'),
   );
 }
 
@@ -48,7 +48,7 @@ class ScrollBottomButton extends StatelessWidget {
 
 PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    child: const Text('Scroll to bottom'),
     value: () => _scrollToBottom(context),
+    child: const Text('Scroll to bottom'),
   );
 }

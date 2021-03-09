@@ -49,17 +49,17 @@ class _StartPageState extends State<StartPage>
         if (hasRecentFiles) ...[
           const PopupMenuDivider(),
           PopupMenuItem<VoidCallback>(
-            child: const Text('Orgro Manual'),
             value: () => _openOrgroManual(context),
+            child: const Text('Orgro Manual'),
           ),
           const PopupMenuDivider(),
           const PopupMenuItem<VoidCallback>(
-            child: Text('Support · Feedback'),
             value: _visitSupportLink,
+            child: Text('Support · Feedback'),
           ),
           PopupMenuItem<VoidCallback>(
-            child: const Text('Licenses'),
             value: () => _openLicensePage(context),
+            child: const Text('Licenses'),
           ),
         ]
       ],
@@ -71,9 +71,9 @@ class _StartPageState extends State<StartPage>
       return null;
     }
     return FloatingActionButton(
-      child: const Icon(Icons.add),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
       foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      child: const Icon(Icons.add),
     );
   }
 
@@ -294,12 +294,12 @@ class _PickFileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: const Text('Open File'),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).accentColor,
         onPrimary: Theme.of(context).accentTextTheme.button.color,
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
+      child: const Text('Open File'),
     );
   }
 }
@@ -310,7 +310,6 @@ class _OrgManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: const Text('Open Org Manual'),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).buttonColor,
         onPrimary: DefaultTextStyle.of(context).style.color,
@@ -321,6 +320,7 @@ class _OrgManualButton extends StatelessWidget {
           'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org',
         ),
       ),
+      child: const Text('Open Org Manual'),
     );
   }
 }
@@ -331,12 +331,12 @@ class _OrgroManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: const Text('Open Orgro Manual'),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).buttonColor,
         onPrimary: DefaultTextStyle.of(context).style.color,
       ),
       onPressed: () => _openOrgroManual(context),
+      child: const Text('Open Orgro Manual'),
     );
   }
 }
@@ -369,9 +369,9 @@ class _LicensesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: const Text('Licenses'),
       onPressed: () => _openLicensePage(context),
       style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
+      child: const Text('Licenses'),
     );
   }
 }

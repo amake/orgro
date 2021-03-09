@@ -120,10 +120,10 @@ class _DocumentPageWrapper extends StatelessWidget {
       hideMarkup: prefs.readerMode,
       child: DocumentPage(
         title: title,
-        child: OrgDocumentWidget(doc, shrinkWrap: true),
         textScale: prefs.textScale,
         fontFamily: prefs.fontFamily,
         readerMode: prefs.readerMode,
+        child: OrgDocumentWidget(doc, shrinkWrap: true),
       ),
     );
   }

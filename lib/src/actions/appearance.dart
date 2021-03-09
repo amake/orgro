@@ -3,7 +3,6 @@ import 'package:orgro/src/appearance.dart';
 
 PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    child: const Text('Appearance…'),
     value: () async {
       final appearance = Appearance.of(context);
       final newMode = await _chooseThemeMode(context, appearance.mode);
@@ -11,6 +10,7 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
         appearance.setMode(newMode);
       }
     },
+    child: const Text('Appearance…'),
   );
 }
 

@@ -22,7 +22,7 @@ void main() {
 }
 
 Widget buildApp() => SavedState(
-      child: const PreferencesProvider(child: MyApp(), waiting: _Splash()),
+      child: const PreferencesProvider(waiting: _Splash(), child: MyApp()),
     );
 
 // Not the "real" splash screen; just something to cover the blank while waiting

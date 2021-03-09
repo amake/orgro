@@ -223,7 +223,6 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 800),
               child: OrgRootWidget(
-                child: widget.child,
                 style: textStyle,
                 onLinkTap: (url) {
                   debugPrint('Launching URL: $url');
@@ -233,6 +232,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
                     narrow(context, widget.title, section),
                 onLocalSectionLinkTap: (section) =>
                     narrow(context, widget.title, section),
+                child: widget.child,
               ),
             ),
           ),
@@ -259,12 +259,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       return null;
     }
     return FloatingActionButton(
-      child: _Badge(
-        child: const Icon(Icons.search),
-        visible: _searchDelegate.hasQuery,
-      ),
       onPressed: () => _searchDelegate.start(context),
       foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      child: _Badge(
+        visible: _searchDelegate.hasQuery,
+        child: const Icon(Icons.search),
+      ),
     );
   }
 }
