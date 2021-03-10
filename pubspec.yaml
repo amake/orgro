@@ -10,7 +10,7 @@ dependencies:
   dynamic_fonts: ^2.0.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
-  file_picker_writable: ^2.0.0-nullsafety.2
+  file_picker_writable: ^2.0.0
   # file_picker_writable:
   #   path: ../file_picker_writable
     # git:
@@ -25,7 +25,7 @@ dependencies:
   http: ^0.13.0
   intl: ^0.17.0
   native_state: ^1.1.0
-  org_flutter: ^1.0.0-nullsafety.0
+  org_flutter: ^1.0.0
   # org_flutter:
   #   path: ../org_flutter
   shared_preferences: ^2.0.0
