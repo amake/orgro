@@ -182,6 +182,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         // Scaffold makes it into the body's context
         body: Builder(
           builder: (context) => CustomScrollView(
+            restorationId: 'document_scroll_view',
             slivers: [
               _buildAppBar(context, searchMode: searchMode),
               _buildDocument(context),

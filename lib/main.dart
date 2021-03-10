@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:native_state/native_state.dart';
 import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
@@ -21,8 +20,9 @@ void main() {
   runApp(buildApp());
 }
 
-Widget buildApp() => SavedState(
-      child: const PreferencesProvider(waiting: _Splash(), child: MyApp()),
+Widget buildApp() => const PreferencesProvider(
+      waiting: _Splash(),
+      child: MyApp(),
     );
 
 // Not the "real" splash screen; just something to cover the blank while waiting
@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> with AppearanceState {
   Widget build(BuildContext context) {
     return buildWithAppearance(builder: (context) {
       return MaterialApp(
+        restorationScopeId: 'orgro_root',
         debugShowCheckedModeBanner: !kScreenshotMode,
         title: 'Orgro',
         theme: ThemeData.from(

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:native_state/native_state.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -23,10 +22,11 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage>
-    with RecentFilesState, PlatformOpenHandler, StateRestoration {
+    with RecentFilesState, PlatformOpenHandler, RestorationMixin {
   @override
-  Widget build(BuildContext context) =>
-      buildWithRecentFiles(builder: (context) {
+  Widget build(BuildContext context) => UnmanagedRestorationScope(
+      bucket: bucket,
+      child: buildWithRecentFiles(builder: (context) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Orgro'),
@@ -39,7 +39,7 @@ class _StartPageState extends State<StartPage>
           ),
           floatingActionButton: _buildFloatingActionButton(context),
         );
-      });
+      }));
 
   Iterable<Widget> _buildActions() sync* {
     yield PopupMenuButton<VoidCallback>(
@@ -91,8 +91,11 @@ class _StartPageState extends State<StartPage>
   }
 
   @override
-  void restoreState(SavedStateData savedState) {
-    final restoreId = savedState.getString(_kRestoreOpenFileIdKey);
+  String get restorationId => 'start_page';
+
+  @override
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
+    final restoreId = bucket?.read<String>(_kRestoreOpenFileIdKey);
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
       Future.delayed(const Duration(microseconds: 0), () async {
@@ -110,8 +113,7 @@ class _StartPageState extends State<StartPage>
   void _rememberFile(RecentFile recentFile) {
     addRecentFile(recentFile);
     debugPrint('Saving file ID to state');
-    SavedState.of(context)
-        .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
+    bucket?.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
   }
 }
 
@@ -260,7 +262,7 @@ Future<RecentFile> _loadFile(
     fileInfoFuture,
     onClose: () {
       debugPrint('Clearing saved state');
-      SavedState.of(context).remove(_kRestoreOpenFileIdKey);
+      RestorationScope.of(context)?.remove<String>(_kRestoreOpenFileIdKey);
     },
   );
   RecentFile result;
@@ -283,8 +285,10 @@ Future<void> _loadAndRememberFile(
   if (recentFile != null) {
     RecentFiles.of(context).add(recentFile);
     debugPrint('Saving file ID to state');
-    await SavedState.of(context)
-        .putString(_kRestoreOpenFileIdKey, recentFile.identifier);
+    RestorationScope.of(context)?.write<String>(
+      _kRestoreOpenFileIdKey,
+      recentFile.identifier,
+    );
   }
 }
 

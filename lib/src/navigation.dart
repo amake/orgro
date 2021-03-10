@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -7,14 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:native_state/native_state.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
-
-const _kRestoreOrgControllerStateKey = 'restore_org_controller_state';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri url) async {
   final title = url.pathSegments.last;
@@ -66,8 +62,7 @@ Future<bool> loadDocument(
     }
   });
   final push =
-      Navigator.push<void>(context, _buildDocumentRoute(context, parsed))
-        ..whenComplete(() => _clearOrgState(context));
+      Navigator.push<void>(context, _buildDocumentRoute(context, parsed));
   if (onClose != null) {
     push.whenComplete(onClose);
   }
@@ -113,39 +108,23 @@ class _DocumentPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = Preferences.of(context);
-    return OrgController(
-      root: doc,
-      initialState: _restoreOrgState(context),
-      stateListener: (state) => _saveOrgState(context, state),
-      hideMarkup: prefs.readerMode,
-      child: DocumentPage(
-        title: title,
-        textScale: prefs.textScale,
-        fontFamily: prefs.fontFamily,
-        readerMode: prefs.readerMode,
-        child: OrgDocumentWidget(doc, shrinkWrap: true),
+    return RootRestorationScope(
+      restorationId: 'org_page_root',
+      child: OrgController(
+        root: doc,
+        hideMarkup: prefs.readerMode,
+        restorationId: 'org_page',
+        child: DocumentPage(
+          title: title,
+          textScale: prefs.textScale,
+          fontFamily: prefs.fontFamily,
+          readerMode: prefs.readerMode,
+          child: OrgDocumentWidget(doc, shrinkWrap: true),
+        ),
       ),
     );
   }
 }
-
-Map<String, dynamic> _restoreOrgState(BuildContext context) {
-  final state =
-      SavedState.of(context).getString(_kRestoreOrgControllerStateKey);
-  if (state != null) {
-    return json.decode(state) as Map<String, dynamic>;
-  } else {
-    return null;
-  }
-}
-
-void _saveOrgState(BuildContext context, Map<String, dynamic> state) {
-  final string = json.encode(state);
-  SavedState.of(context).putString(_kRestoreOrgControllerStateKey, string);
-}
-
-void _clearOrgState(BuildContext context) =>
-    SavedState.of(context).remove(_kRestoreOrgControllerStateKey);
 
 void narrow(BuildContext context, String title, OrgSection section) {
   final viewSettings = ViewSettings.of(context);

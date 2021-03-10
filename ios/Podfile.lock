@@ -7,8 +7,6 @@ PODS:
     - UniversalDetector2
   - flutter_tex_js (0.0.1):
     - Flutter
-  - native_state (0.0.1):
-    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -22,7 +20,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_charset_detector (from `.symlinks/plugins/flutter_charset_detector/ios`)
   - flutter_tex_js (from `.symlinks/plugins/flutter_tex_js/ios`)
-  - native_state (from `.symlinks/plugins/native_state/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -40,8 +37,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_charset_detector/ios"
   flutter_tex_js:
     :path: ".symlinks/plugins/flutter_tex_js/ios"
-  native_state:
-    :path: ".symlinks/plugins/native_state/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
@@ -54,7 +49,6 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_charset_detector: c446c2d0da8991a0bd3dbb9842ff3af415484582
   flutter_tex_js: 010eab32e3bc329fe1b6d48efd8a3b0c0506bb50
-  native_state: f9996d96d651408a9d9d5e0738aed4cbcdd5165c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   UniversalDetector2: 8b226f8a7c8a65a6c449848cb664f92fb83cf81b
