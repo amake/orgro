@@ -232,7 +232,6 @@ class _FiraGoFile extends DynamicFontsFile {
       case FontStyle.italic:
         return 'Italic';
     }
-    throw Exception('Unknown style: ${variant.fontStyle}');
   }
 
   @override

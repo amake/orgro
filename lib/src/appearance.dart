@@ -3,12 +3,11 @@ import 'package:orgro/src/preferences.dart';
 
 class Appearance extends InheritedWidget {
   const Appearance({
-    @required this.mode,
-    @required this.setMode,
-    @required Widget child,
-    Key key,
-  })  : assert(mode != null),
-        super(child: child, key: key);
+    required this.mode,
+    required this.setMode,
+    required Widget child,
+    Key? key,
+  }) : super(child: child, key: key);
 
   final ThemeMode mode;
   final ValueChanged<ThemeMode> setMode;
@@ -17,12 +16,12 @@ class Appearance extends InheritedWidget {
   bool updateShouldNotify(Appearance oldWidget) => mode != oldWidget.mode;
 
   static Appearance of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<Appearance>();
+      context.dependOnInheritedWidgetOfExactType<Appearance>()!;
 }
 
 mixin AppearanceState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
-  ThemeMode _mode;
+  late ThemeMode _mode;
 
   void _load() {
     _mode = themeModeFromString(_prefs.themeMode) ?? _kDefaultThemeMode;
@@ -43,7 +42,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     _load();
   }
 
-  Widget buildWithAppearance({@required WidgetBuilder builder}) {
+  Widget buildWithAppearance({required WidgetBuilder builder}) {
     return Appearance(
       mode: _mode,
       setMode: setMode,
@@ -52,7 +51,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
   }
 }
 
-String themeModeToString(ThemeMode value) {
+String? themeModeToString(ThemeMode? value) {
   switch (value) {
     case ThemeMode.system:
       return _kThemeModeSystem;
@@ -60,11 +59,12 @@ String themeModeToString(ThemeMode value) {
       return _kThemeModeLight;
     case ThemeMode.dark:
       return _kThemeModeDark;
+    case null:
+      return null;
   }
-  return null;
 }
 
-ThemeMode themeModeFromString(String value) {
+ThemeMode? themeModeFromString(String? value) {
   switch (value) {
     case _kThemeModeSystem:
       return ThemeMode.system;

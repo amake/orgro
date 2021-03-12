@@ -6,17 +6,17 @@ void _scrollTo(ScrollController controller, double position) =>
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
 void _scrollToTop(BuildContext context) {
-  final controller = PrimaryScrollController.of(context);
+  final controller = PrimaryScrollController.of(context)!;
   _scrollTo(controller, controller.position.minScrollExtent);
 }
 
 void _scrollToBottom(BuildContext context) {
-  final controller = PrimaryScrollController.of(context);
+  final controller = PrimaryScrollController.of(context)!;
   _scrollTo(controller, controller.position.maxScrollExtent);
 }
 
 class ScrollTopButton extends StatelessWidget {
-  const ScrollTopButton({Key key}) : super(key: key);
+  const ScrollTopButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
 }
 
 class ScrollBottomButton extends StatelessWidget {
-  const ScrollBottomButton({Key key}) : super(key: key);
+  const ScrollBottomButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

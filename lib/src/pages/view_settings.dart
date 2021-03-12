@@ -3,16 +3,16 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
 mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
-  double _textScale;
+  double? _textScale;
 
-  double get textScale => _textScale;
+  double get textScale => _textScale!;
 
   set textScale(double value) {
     Preferences.of(context).textScale = value;
     setState(() => _textScale = value);
   }
 
-  String _fontFamily;
+  late String _fontFamily;
 
   String get fontFamily => _fontFamily;
 
@@ -21,7 +21,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _fontFamily = value);
   }
 
-  bool _readerMode;
+  late bool _readerMode;
 
   bool get readerMode => _readerMode;
 
@@ -30,13 +30,13 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _readerMode = value);
   }
 
-  double get initialTextScale;
+  double? get initialTextScale;
 
-  String get initialFontFamily;
+  String? get initialFontFamily;
 
-  bool get initialReaderMode;
+  bool? get initialReaderMode;
 
-  String get queryString;
+  String? get queryString;
 
   @override
   void initState() {
@@ -52,13 +52,13 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   }
 
   TextStyle get textStyle =>
-      loadFontWithVariants(_fontFamily).copyWith(fontSize: 18 * _textScale);
+      loadFontWithVariants(_fontFamily).copyWith(fontSize: 18 * textScale);
 
-  Widget buildWithViewSettings({@required WidgetBuilder builder}) {
+  Widget buildWithViewSettings({required WidgetBuilder builder}) {
     return ViewSettings(
       textScale: textScale,
       fontFamily: fontFamily,
-      queryString: queryString,
+      queryString: queryString!,
       readerMode: readerMode,
       // Builder required to get ViewSettings into the context
       child: Builder(builder: builder),
@@ -68,18 +68,13 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
 
 class ViewSettings extends InheritedWidget {
   const ViewSettings({
-    @required Widget child,
-    @required this.textScale,
-    @required this.fontFamily,
-    @required this.queryString,
-    @required this.readerMode,
-    Key key,
-  })  : assert(child != null),
-        assert(textScale != null),
-        assert(fontFamily != null),
-        assert(queryString != null),
-        assert(readerMode != null),
-        super(child: child, key: key);
+    required Widget child,
+    required this.textScale,
+    required this.fontFamily,
+    required this.queryString,
+    required this.readerMode,
+    Key? key,
+  }) : super(child: child, key: key);
 
   final double textScale;
   final String fontFamily;
@@ -94,5 +89,5 @@ class ViewSettings extends InheritedWidget {
       readerMode != oldWidget.readerMode;
 
   static ViewSettings of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ViewSettings>();
+      context.dependOnInheritedWidgetOfExactType<ViewSettings>()!;
 }

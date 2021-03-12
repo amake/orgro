@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
 class StartPage extends StatefulWidget {
-  const StartPage({Key key}) : super(key: key);
+  const StartPage({Key? key}) : super(key: key);
 
   @override
   _StartPageState createState() => _StartPageState();
@@ -66,13 +66,13 @@ class _StartPageState extends State<StartPage>
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+  Widget? _buildFloatingActionButton(BuildContext context) {
     if (!hasRecentFiles) {
       return null;
     }
     return FloatingActionButton(
       onPressed: () => _loadAndRememberFile(context, pickFile()),
-      foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      foregroundColor: Theme.of(context).accentTextTheme.button?.color,
       child: const Icon(Icons.add),
     );
   }
@@ -94,7 +94,7 @@ class _StartPageState extends State<StartPage>
   String get restorationId => 'start_page';
 
   @override
-  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     final restoreId = bucket?.read<String>(_kRestoreOpenFileIdKey);
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
@@ -110,7 +110,10 @@ class _StartPageState extends State<StartPage>
     }
   }
 
-  void _rememberFile(RecentFile recentFile) {
+  void _rememberFile(RecentFile? recentFile) {
+    if (recentFile == null) {
+      return;
+    }
     addRecentFile(recentFile);
     debugPrint('Saving file ID to state');
     bucket?.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
@@ -118,7 +121,7 @@ class _StartPageState extends State<StartPage>
 }
 
 class _EmptyBody extends StatelessWidget {
-  const _EmptyBody({Key key}) : super(key: key);
+  const _EmptyBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +157,7 @@ class _EmptyBody extends StatelessWidget {
 }
 
 class _RecentFilesBody extends StatelessWidget {
-  const _RecentFilesBody({Key key}) : super(key: key);
+  const _RecentFilesBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +182,7 @@ class _RecentFilesBody extends StatelessWidget {
 }
 
 class _ListHeader extends StatelessWidget {
-  const _ListHeader({@required this.title, Key key})
-      : assert(title != null),
-        super(key: key);
+  const _ListHeader({required this.title, Key? key}) : super(key: key);
 
   final Widget title;
 
@@ -205,9 +206,7 @@ class _ListHeader extends StatelessWidget {
 final _kLastOpenedFormat = DateFormat.yMd().add_jm();
 
 class _RecentFileListTile extends StatelessWidget {
-  const _RecentFileListTile(this.recentFile, {Key key})
-      : assert(recentFile != null),
-        super(key: key);
+  const _RecentFileListTile(this.recentFile, {Key? key}) : super(key: key);
 
   final RecentFile recentFile;
 
@@ -233,9 +232,8 @@ class _RecentFileListTile extends StatelessWidget {
 }
 
 class _SwipeDeleteBackground extends StatelessWidget {
-  const _SwipeDeleteBackground({@required this.alignment, Key key})
-      : assert(alignment != null),
-        super(key: key);
+  const _SwipeDeleteBackground({required this.alignment, Key? key})
+      : super(key: key);
 
   final AlignmentGeometry alignment;
 
@@ -247,15 +245,15 @@ class _SwipeDeleteBackground extends StatelessWidget {
       color: Colors.red,
       child: Icon(
         Icons.delete,
-        color: Theme.of(context).accentTextTheme.button.color,
+        color: Theme.of(context).accentTextTheme.button?.color,
       ),
     );
   }
 }
 
-Future<RecentFile> _loadFile(
+Future<RecentFile?> _loadFile(
   BuildContext context,
-  FutureOr<OpenFileInfo> fileInfoFuture,
+  FutureOr<OpenFileInfo?> fileInfoFuture,
 ) async {
   final loaded = await loadDocument(
     context,
@@ -265,13 +263,21 @@ Future<RecentFile> _loadFile(
       RestorationScope.of(context)?.remove<String>(_kRestoreOpenFileIdKey);
     },
   );
-  RecentFile result;
+  RecentFile? result;
   if (loaded) {
     final fileInfo = await fileInfoFuture;
-    if (fileInfo.identifier != null) {
-      result = RecentFile(fileInfo.identifier, fileInfo.title, DateTime.now());
+    if (fileInfo == null) {
+      // User canceled
     } else {
-      debugPrint("Couldn't obtain persistent access to ${fileInfo.title}");
+      if (fileInfo.identifier != null) {
+        result = RecentFile(
+          fileInfo.identifier!,
+          fileInfo.title,
+          DateTime.now(),
+        );
+      } else {
+        debugPrint("Couldn't obtain persistent access to ${fileInfo.title}");
+      }
     }
   }
   return result;
@@ -279,7 +285,7 @@ Future<RecentFile> _loadFile(
 
 Future<void> _loadAndRememberFile(
   BuildContext context,
-  FutureOr<OpenFileInfo> fileInfoFuture,
+  FutureOr<OpenFileInfo?> fileInfoFuture,
 ) async {
   final recentFile = await _loadFile(context, fileInfoFuture);
   if (recentFile != null) {
@@ -293,14 +299,14 @@ Future<void> _loadAndRememberFile(
 }
 
 class _PickFileButton extends StatelessWidget {
-  const _PickFileButton({Key key}) : super(key: key);
+  const _PickFileButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).accentColor,
-        onPrimary: Theme.of(context).accentTextTheme.button.color,
+        onPrimary: Theme.of(context).accentTextTheme.button?.color,
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
       child: const Text('Open File'),
@@ -309,7 +315,7 @@ class _PickFileButton extends StatelessWidget {
 }
 
 class _OrgManualButton extends StatelessWidget {
-  const _OrgManualButton({Key key}) : super(key: key);
+  const _OrgManualButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +336,7 @@ class _OrgManualButton extends StatelessWidget {
 }
 
 class _OrgroManualButton extends StatelessWidget {
-  const _OrgroManualButton({Key key}) : super(key: key);
+  const _OrgroManualButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +355,7 @@ void _openOrgroManual(BuildContext context) =>
     loadAsset(context, 'assets/orgro-manual.org');
 
 class _SupportLink extends StatelessWidget {
-  const _SupportLink({Key key}) : super(key: key);
+  const _SupportLink({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +374,7 @@ void _visitSupportLink() => launch(
     );
 
 class _LicensesButton extends StatelessWidget {
-  const _LicensesButton({Key key}) : super(key: key);
+  const _LicensesButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

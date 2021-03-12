@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ProgressPage extends StatelessWidget {
-  const ProgressPage({Key key}) : super(key: key);
+  const ProgressPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

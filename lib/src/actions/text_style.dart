@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 
-_PersistentPopupMenuItem textScaleMenuItem(
+_PersistentPopupMenuItem<VoidCallback> textScaleMenuItem(
   BuildContext context, {
-  @required double textScale,
-  @required Function(double) onChanged,
+  required double textScale,
+  required Function(double) onChanged,
 }) {
-  assert(textScale != null);
-  assert(onChanged != null);
-  return _PersistentPopupMenuItem(
+  return _PersistentPopupMenuItem<VoidCallback>(
     child: TextSizeAdjuster(
       onChanged: onChanged,
       value: textScale,
@@ -19,14 +17,12 @@ _PersistentPopupMenuItem textScaleMenuItem(
   );
 }
 
-_PersistentPopupMenuItem fontFamilyMenuItem(
+_PersistentPopupMenuItem<VoidCallback> fontFamilyMenuItem(
   BuildContext context, {
-  @required String fontFamily,
-  @required Function(String) onChanged,
+  required String fontFamily,
+  required Function(String) onChanged,
 }) {
-  assert(fontFamily != null);
-  assert(onChanged != null);
-  return _PersistentPopupMenuItem(
+  return _PersistentPopupMenuItem<VoidCallback>(
     child: FontFamilySelector(
       onChanged: onChanged,
       value: fontFamily,
@@ -36,16 +32,12 @@ _PersistentPopupMenuItem fontFamilyMenuItem(
 
 class TextStyleButton extends StatefulWidget {
   const TextStyleButton({
-    @required this.textScale,
-    @required this.onTextScaleChanged,
-    @required this.fontFamily,
-    @required this.onFontFamilyChanged,
-    Key key,
-  })  : assert(textScale != null),
-        assert(onTextScaleChanged != null),
-        assert(fontFamily != null),
-        assert(onFontFamilyChanged != null),
-        super(key: key);
+    required this.textScale,
+    required this.onTextScaleChanged,
+    required this.fontFamily,
+    required this.onFontFamilyChanged,
+    Key? key,
+  }) : super(key: key);
 
   final double textScale;
   final Function(double) onTextScaleChanged;
@@ -63,7 +55,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
     return IconButton(
       icon: const Icon(Icons.format_size),
       onPressed: () =>
-          Overlay.of(context).insertAll(_overlays(context).toList()),
+          Overlay.of(context)?.insertAll(_overlays(context).toList()),
     );
   }
 
@@ -73,7 +65,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
       duration: const Duration(milliseconds: 150),
     );
     final position = _buttonPosition(context);
-    OverlayEntry buttonsOverlay, barrierOverlay;
+    late OverlayEntry buttonsOverlay, barrierOverlay;
 
     Future<void> _closeOverlay() async {
       await animationController.reverse();
@@ -118,7 +110,8 @@ class _TextStyleButtonState extends State<TextStyleButton>
   RelativeRect _buttonPosition(BuildContext context) {
     // Copied from PopupMenuButtonState.showButtonMenu()
     final button = context.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final overlay =
+        Overlay.of(context)?.context.findRenderObject() as RenderBox;
     return RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
@@ -132,11 +125,10 @@ class _TextStyleButtonState extends State<TextStyleButton>
 
 class PopupPalette extends AnimatedWidget {
   const PopupPalette({
-    @required Animation<double> animation,
-    @required this.child,
-    Key key,
-  })  : assert(child != null),
-        super(key: key, listenable: animation);
+    required Animation<double> animation,
+    required this.child,
+    Key? key,
+  }) : super(key: key, listenable: animation);
 
   final Widget child;
 
@@ -145,7 +137,7 @@ class PopupPalette extends AnimatedWidget {
     final animation = listenable as Animation<double>;
     return Material(
       type: MaterialType.card,
-      elevation: PopupMenuTheme.of(context)?.elevation ?? 8,
+      elevation: PopupMenuTheme.of(context).elevation ?? 8,
       child: SizeTransition(
         sizeFactor: animation,
         axis: Axis.horizontal,
@@ -161,12 +153,10 @@ class PopupPalette extends AnimatedWidget {
 
 class TextSizeAdjuster extends StatefulWidget {
   const TextSizeAdjuster({
-    @required this.value,
-    @required this.onChanged,
-    Key key,
-  })  : assert(value != null),
-        assert(onChanged != null),
-        super(key: key);
+    required this.value,
+    required this.onChanged,
+    Key? key,
+  }) : super(key: key);
 
   final double value;
   final Function(double) onChanged;
@@ -179,7 +169,7 @@ const _kTextSizeAdjustmentIncrement = 10;
 const _kTextSizeAdjustmentFactor = 100;
 
 class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
-  double _value;
+  late double _value;
 
   @override
   void initState() {
@@ -224,24 +214,22 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
 
 class FontFamilySelector extends StatefulWidget {
   const FontFamilySelector({
-    @required this.value,
-    @required this.onChanged,
+    required this.value,
+    required this.onChanged,
     this.onOpen,
-    Key key,
-  })  : assert(value != null),
-        assert(onChanged != null),
-        super(key: key);
+    Key? key,
+  }) : super(key: key);
 
   final String value;
   final Function(String) onChanged;
-  final VoidCallback onOpen;
+  final VoidCallback? onOpen;
 
   @override
   _FontFamilySelectorState createState() => _FontFamilySelectorState();
 }
 
 class _FontFamilySelectorState extends State<FontFamilySelector> {
-  String _value;
+  late String _value;
 
   @override
   void initState() {
@@ -249,7 +237,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
     _value = widget.value;
   }
 
-  void _setValue(String newValue) {
+  void _setValue(String? newValue) {
     if (newValue != null) {
       if (mounted) {
         setState(() => _value = newValue);
@@ -274,7 +262,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
     );
   }
 
-  Future<String> _choose(BuildContext context) async => showDialog<String>(
+  Future<String?> _choose(BuildContext context) async => showDialog<String>(
         context: context,
         builder: (context) => SimpleDialog(
           children: [
@@ -292,9 +280,8 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
 
 /// A popup menu item that doesn't close when tapped and doesn't provide its own
 /// [InkWell], unlike [PopupMenuItem].
-// ignore: prefer_void_to_null
-class _PersistentPopupMenuItem extends PopupMenuEntry<Null> {
-  const _PersistentPopupMenuItem({@required this.child, Key key})
+class _PersistentPopupMenuItem<T> extends PopupMenuEntry<T> {
+  const _PersistentPopupMenuItem({required this.child, Key? key})
       : super(key: key);
 
   final Widget child;
@@ -306,7 +293,7 @@ class _PersistentPopupMenuItem extends PopupMenuEntry<Null> {
   double get height => kMinInteractiveDimension;
 
   @override
-  bool represents(Object value) => false;
+  bool represents(Object? value) => false;
 }
 
 class _PersistentPopupMenuItemState extends State<_PersistentPopupMenuItem> {

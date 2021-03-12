@@ -7,17 +7,14 @@ import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
 class RecentFile {
-  RecentFile.fromJson(Map<String, Object> json)
+  RecentFile.fromJson(Map<String, dynamic> json)
       : this(
           json['identifier'] as String,
           json['name'] as String,
           DateTime.fromMillisecondsSinceEpoch(json['lastOpened'] as int),
         );
 
-  RecentFile(this.identifier, this.name, this.lastOpened)
-      : assert(identifier != null),
-        assert(name != null),
-        assert(lastOpened != null);
+  RecentFile(this.identifier, this.name, this.lastOpened);
   final String identifier;
   final String name;
   final DateTime lastOpened;
@@ -56,14 +53,11 @@ class RecentFile {
 class RecentFiles extends InheritedWidget {
   const RecentFiles(
     this.list, {
-    @required this.add,
-    @required this.remove,
-    @required Widget child,
-    Key key,
-  })  : assert(list != null),
-        assert(add != null),
-        assert(remove != null),
-        super(child: child, key: key);
+    required this.add,
+    required this.remove,
+    required Widget child,
+    Key? key,
+  }) : super(child: child, key: key);
 
   final List<RecentFile> list;
   final ValueChanged<RecentFile> add;
@@ -76,13 +70,13 @@ class RecentFiles extends InheritedWidget {
       remove != oldWidget.remove;
 
   static RecentFiles of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<RecentFiles>();
+      context.dependOnInheritedWidgetOfExactType<RecentFiles>()!;
 }
 
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
-  List<RecentFile> _recentFiles;
-  _LifecycleEventHandler _lifecycleEventHandler;
+  late List<RecentFile> _recentFiles;
+  _LifecycleEventHandler? _lifecycleEventHandler;
 
   bool get hasRecentFiles => _recentFiles.isNotEmpty;
 
@@ -121,12 +115,12 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _reload);
-    WidgetsBinding.instance.addObserver(_lifecycleEventHandler);
+    WidgetsBinding.instance?.addObserver(_lifecycleEventHandler!);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler);
+    WidgetsBinding.instance?.removeObserver(_lifecycleEventHandler!);
     super.dispose();
   }
 
@@ -141,7 +135,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   void _load() {
     _recentFiles = _prefs.recentFilesJson
         .map<dynamic>(json.decode)
-        .cast<Map<String, Object>>()
+        .cast<Map<String, dynamic>>()
         .map((json) => RecentFile.fromJson(json))
         .toList(growable: false);
   }
@@ -152,7 +146,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     setState(_load);
   }
 
-  Widget buildWithRecentFiles({@required WidgetBuilder builder}) {
+  Widget buildWithRecentFiles({required WidgetBuilder builder}) {
     return RecentFiles(
       _recentFiles,
       add: addRecentFile,
@@ -166,7 +160,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
 class _LifecycleEventHandler extends WidgetsBindingObserver {
   _LifecycleEventHandler({this.onResume});
 
-  final VoidCallback onResume;
+  final VoidCallback? onResume;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

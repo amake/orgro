@@ -9,9 +9,9 @@ import 'package:url_launcher/url_launcher.dart';
 class DocumentPage extends StatefulWidget {
   DocumentPage.defaults(
     ViewSettings settings, {
-    @required String title,
-    @required Widget child,
-    Key key,
+    required String title,
+    required Widget child,
+    Key? key,
   }) : this(
           title: title,
           child: child,
@@ -23,41 +23,40 @@ class DocumentPage extends StatefulWidget {
         );
 
   const DocumentPage({
-    @required this.title,
-    @required this.child,
+    required this.title,
+    required this.child,
     this.textScale,
     this.fontFamily,
     this.initialQuery,
     this.readerMode,
-    Key key,
-  })  : assert(child != null),
-        super(key: key);
+    Key? key,
+  }) : super(key: key);
 
   final String title;
   final Widget child;
-  final double textScale;
-  final String fontFamily;
-  final String initialQuery;
-  final bool readerMode;
+  final double? textScale;
+  final String? fontFamily;
+  final String? initialQuery;
+  final bool? readerMode;
 
   @override
   _DocumentPageState createState() => _DocumentPageState();
 }
 
 class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
-  MySearchDelegate _searchDelegate;
+  late MySearchDelegate _searchDelegate;
 
   @override
-  String get initialFontFamily => widget.fontFamily;
+  String? get initialFontFamily => widget.fontFamily;
 
   @override
-  bool get initialReaderMode => widget.readerMode;
+  bool? get initialReaderMode => widget.readerMode;
 
   @override
-  double get initialTextScale => widget.textScale;
+  double? get initialTextScale => widget.textScale;
 
   @override
-  String get queryString => _searchDelegate.queryString;
+  String? get queryString => _searchDelegate.queryString;
 
   double get _screenWidth => MediaQuery.of(context).size.width;
 
@@ -100,13 +99,11 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Widget _title(bool searchMode) {
     if (searchMode) {
       return _searchDelegate.buildSearchField();
-    } else if (widget.title != null) {
+    } else {
       return Text(
         widget.title,
         overflow: TextOverflow.fade,
       );
-    } else {
-      return const Text('Orgro');
     }
   }
 
@@ -199,12 +196,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   Widget _buildAppBar(
     BuildContext context, {
-    @required bool searchMode,
+    required bool searchMode,
   }) {
     return PrimaryScrollController(
       // Context of app bar(?) lacks access to the primary scroll controller, so
       // we supply it explicitly from parent context
-      controller: PrimaryScrollController.of(context),
+      controller: PrimaryScrollController.of(context)!,
       child: SliverAppBar(
         title: _title(searchMode),
         actions: _actions(searchMode).toList(growable: false),
@@ -252,16 +249,16 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         : doc;
   }
 
-  Widget _buildFloatingActionButton(
+  Widget? _buildFloatingActionButton(
     BuildContext context, {
-    @required bool searchMode,
+    required bool searchMode,
   }) {
     if (searchMode) {
       return null;
     }
     return FloatingActionButton(
       onPressed: () => _searchDelegate.start(context),
-      foregroundColor: Theme.of(context).accentTextTheme.button.color,
+      foregroundColor: Theme.of(context).accentTextTheme.button?.color,
       child: _Badge(
         visible: _searchDelegate.hasQuery,
         child: const Icon(Icons.search),
@@ -272,9 +269,9 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
 class _Badge extends StatelessWidget {
   const _Badge({
-    @required this.child,
-    @required this.visible,
-    Key key,
+    required this.child,
+    required this.visible,
+    Key? key,
   }) : super(key: key);
 
   final Widget child;

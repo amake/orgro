@@ -14,7 +14,7 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   );
 }
 
-Future<ThemeMode> _chooseThemeMode(BuildContext context, ThemeMode current) =>
+Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
     showDialog<ThemeMode>(
       context: context,
       builder: (context) => SimpleDialog(
@@ -38,5 +38,4 @@ String themeModeToDisplayString(ThemeMode value) {
     case ThemeMode.dark:
       return 'Dark';
   }
-  return null;
 }

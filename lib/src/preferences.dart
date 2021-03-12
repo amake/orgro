@@ -18,27 +18,26 @@ const _kThemeModeKey = 'theme_mode';
 
 class Preferences extends InheritedWidget {
   static Preferences of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<Preferences>();
+      context.dependOnInheritedWidgetOfExactType<Preferences>()!;
 
-  const Preferences(this._prefs, {Widget child, Key key})
-      : assert(_prefs != null),
-        super(child: child, key: key);
+  const Preferences(this._prefs, {required Widget child, Key? key})
+      : super(child: child, key: key);
 
   final SharedPreferences _prefs;
 
   Future<void> reload() => _prefs.reload();
 
-  String get fontFamily => _prefs.getString(_kFontFamilyKey);
+  String? get fontFamily => _prefs.getString(_kFontFamilyKey);
 
-  set fontFamily(String value) => _prefs.setString(_kFontFamilyKey, value);
+  set fontFamily(String? value) => _setOrRemove(_kFontFamilyKey, value);
 
-  double get textScale => _prefs.getDouble(_kTextScaleKey);
+  double? get textScale => _prefs.getDouble(_kTextScaleKey);
 
-  set textScale(double value) => _prefs.setDouble(_kTextScaleKey, value);
+  set textScale(double? value) => _setOrRemove(_kTextScaleKey, value);
 
-  bool get readerMode => _prefs.getBool(_kReaderModeKey);
+  bool? get readerMode => _prefs.getBool(_kReaderModeKey);
 
-  set readerMode(bool value) => _prefs.setBool(_kReaderModeKey, value);
+  set readerMode(bool? value) => _setOrRemove(_kReaderModeKey, value);
 
   List<String> get recentFilesJson =>
       _prefs.getStringList(_kRecentFilesJsonKey) ?? [];
@@ -46,20 +45,33 @@ class Preferences extends InheritedWidget {
   set recentFilesJson(List<String> value) =>
       _prefs.setStringList(_kRecentFilesJsonKey, value);
 
-  String get themeMode => _prefs.getString(_kThemeModeKey);
+  String? get themeMode => _prefs.getString(_kThemeModeKey);
 
-  set themeMode(String value) => _prefs.setString(_kThemeModeKey, value);
+  set themeMode(String? value) => _setOrRemove(_kThemeModeKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
+
+  Future<bool> _setOrRemove<T>(String key, T? value) {
+    if (value == null) {
+      return _prefs.remove(key);
+    } else if (value is String) {
+      return _prefs.setString(key, value);
+    } else if (value is bool) {
+      return _prefs.setBool(key, value);
+    } else if (value is double) {
+      return _prefs.setDouble(key, value);
+    } else {
+      throw Exception('Unknown type: $T');
+    }
+  }
 }
 
 class PreferencesProvider extends StatelessWidget {
-  const PreferencesProvider({@required this.child, this.waiting, Key key})
-      : assert(child != null),
-        super(key: key);
+  const PreferencesProvider({required this.child, this.waiting, Key? key})
+      : super(key: key);
   final Widget child;
-  final Widget waiting;
+  final Widget? waiting;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +79,7 @@ class PreferencesProvider extends StatelessWidget {
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Preferences(snapshot.data, child: child);
+          return Preferences(snapshot.data!, child: child);
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
         } else {

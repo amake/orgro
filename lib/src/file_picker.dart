@@ -9,7 +9,7 @@ import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 
-Future<OpenFileInfo> pickFile() async =>
+Future<OpenFileInfo?> pickFile() async =>
     FilePickerWritable().openFile(OpenFileInfo._fromExternal);
 
 Future<OpenFileInfo> readFileWithIdentifier(String identifier) async =>
@@ -34,12 +34,12 @@ class OpenFileInfo {
   ) async =>
       OpenFileInfo(
         externalFileInfo.persistable ? externalFileInfo.identifier : null,
-        externalFileInfo.fileName,
+        externalFileInfo.fileName ?? file.uri.pathSegments.last,
         await _readFile(file),
       );
 
   OpenFileInfo(this.identifier, this.title, this.content);
-  final String identifier;
+  final String? identifier;
   final String title;
   final FutureOr<String> content;
 
@@ -56,7 +56,7 @@ class OpenFileInfo {
 
 class ParsedOrgFileInfo {
   ParsedOrgFileInfo(this.identifier, this.title, this.doc);
-  final String identifier;
+  final String? identifier;
   final String title;
   final OrgDocument doc;
 }
@@ -67,7 +67,7 @@ Future<OrgDocument> parse(String content) async =>
 OrgDocument _parse(String text) => OrgDocument.parse(text);
 
 mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
-  FilePickerState _filePickerState;
+  late FilePickerState _filePickerState;
 
   @override
   void initState() {

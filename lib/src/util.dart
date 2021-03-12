@@ -7,7 +7,7 @@ extension IterUtils<T> on Iterable<T> {
     }
   }
 
-  Iterable<T> unique({Set<T> cache}) sync* {
+  Iterable<T> unique({Set<T>? cache}) sync* {
     final seen = cache ?? <T>{};
     for (final item in this) {
       if (seen.contains(item)) {

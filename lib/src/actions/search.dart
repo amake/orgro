@@ -3,11 +3,10 @@ import 'package:flutter/widgets.dart';
 
 class MySearchDelegate {
   MySearchDelegate({
-    @required this.onQueryChanged,
-    @required this.onQuerySubmitted,
-    String initialQuery,
-  })  : _searchController = TextEditingController(text: initialQuery),
-        assert(onQueryChanged != null) {
+    required this.onQueryChanged,
+    required this.onQuerySubmitted,
+    String? initialQuery,
+  }) : _searchController = TextEditingController(text: initialQuery) {
     _searchController.addListener(_searchQueryChanged);
   }
 
@@ -27,7 +26,7 @@ class MySearchDelegate {
   }
 
   void start(BuildContext context) {
-    ModalRoute.of(context)
+    ModalRoute.of(context)!
         .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
     searchMode.value = true;
   }
@@ -50,11 +49,10 @@ class MySearchDelegate {
 
 class SearchButton extends StatelessWidget {
   const SearchButton({
-    @required this.hasQuery,
-    @required this.onPressed,
-    Key key,
-  })  : assert(hasQuery != null),
-        super(key: key);
+    required this.hasQuery,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
   final VoidCallback onPressed;
   final bool hasQuery;
 
@@ -96,11 +94,11 @@ class SearchField extends StatelessWidget {
     this._controller, {
     this.onClear,
     this.onSubmitted,
-    Key key,
+    Key? key,
   }) : super(key: key);
   final TextEditingController _controller;
-  final VoidCallback onClear;
-  final Function(String) onSubmitted;
+  final VoidCallback? onClear;
+  final Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +106,7 @@ class SearchField extends StatelessWidget {
     // regular text in the AppBar
     final theme = Theme.of(context);
     final style = DefaultTextStyle.of(context).style;
-    final color = style.color.withOpacity(0.7);
+    final color = style.color?.withOpacity(0.7);
     final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(
@@ -137,7 +135,7 @@ class SearchField extends StatelessWidget {
             child: ValueListenableBuilder<TextEditingValue>(
               valueListenable: _controller,
               builder: (context, value, child) =>
-                  value.text.isNotEmpty ? child : const SizedBox.shrink(),
+                  value.text.isNotEmpty ? child! : const SizedBox.shrink(),
               child: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: onClear,

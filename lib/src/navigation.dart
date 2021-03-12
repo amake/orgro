@@ -45,8 +45,8 @@ Future<bool> loadAsset(BuildContext context, String key) async {
 
 Future<bool> loadDocument(
   BuildContext context,
-  FutureOr<OpenFileInfo> fileInfo, {
-  FutureOr<dynamic> Function() onClose,
+  FutureOr<OpenFileInfo?> fileInfo, {
+  FutureOr<dynamic> Function()? onClose,
 }) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
@@ -71,16 +71,16 @@ Future<bool> loadDocument(
 
 PageRoute _buildDocumentRoute(
   BuildContext context,
-  Future<ParsedOrgFileInfo> parsed,
+  Future<ParsedOrgFileInfo?> parsed,
 ) {
   return MaterialPageRoute<void>(
-    builder: (context) => FutureBuilder<ParsedOrgFileInfo>(
+    builder: (context) => FutureBuilder<ParsedOrgFileInfo?>(
       future: parsed,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return _DocumentPageWrapper(
-            doc: snapshot.data.doc,
-            title: snapshot.data.title,
+            doc: snapshot.data!.doc,
+            title: snapshot.data!.title,
           );
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
@@ -95,12 +95,10 @@ PageRoute _buildDocumentRoute(
 
 class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
-    @required this.doc,
-    @required this.title,
-    Key key,
-  })  : assert(doc != null),
-        assert(title != null),
-        super(key: key);
+    required this.doc,
+    required this.title,
+    Key? key,
+  }) : super(key: key);
 
   final OrgDocument doc;
   final String title;
