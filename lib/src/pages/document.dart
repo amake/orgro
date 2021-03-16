@@ -230,6 +230,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
                     narrow(context, widget.title, section),
                 onLocalSectionLinkTap: (section) =>
                     narrow(context, widget.title, section),
+                loadImage: _loadImage,
                 child: widget.child,
               ),
             ),
@@ -262,6 +263,24 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       child: _Badge(
         visible: _searchDelegate.hasQuery,
         child: const Icon(Icons.search),
+      ),
+    );
+  }
+
+  Widget? _loadImage(OrgLink link) {
+    if (!looksLikeUrl(link.location)) {
+      // Only remote images supported for now
+      return null;
+    }
+    return GestureDetector(
+      onLongPress: () => showInteractive(
+        context,
+        link.location,
+        Image.network(link.location),
+      ),
+      child: Image.network(
+        link.location,
+        scale: MediaQuery.of(context).devicePixelRatio,
       ),
     );
   }

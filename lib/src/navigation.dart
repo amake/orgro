@@ -148,3 +148,15 @@ void narrow(BuildContext context, String title, OrgSection section) {
     ),
   );
 }
+
+void showInteractive(BuildContext context, String title, Widget child) {
+  Navigator.push<void>(
+    context,
+    MaterialPageRoute(
+      builder: (builder) => Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: InteractiveViewer(child: Center(child: child)),
+      ),
+    ),
+  );
+}
