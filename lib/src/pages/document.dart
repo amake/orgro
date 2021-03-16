@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
@@ -276,11 +277,13 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       onLongPress: () => showInteractive(
         context,
         link.location,
-        Image.network(link.location),
+        Image(image: CachedNetworkImageProvider(link.location)),
       ),
-      child: Image.network(
-        link.location,
-        scale: MediaQuery.of(context).devicePixelRatio,
+      child: Image(
+        image: CachedNetworkImageProvider(
+          link.location,
+          scale: MediaQuery.of(context).devicePixelRatio,
+        ),
       ),
     );
   }
