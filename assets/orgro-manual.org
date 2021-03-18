@@ -164,6 +164,17 @@ The default emphasis markers are supported:
 
 Hide the emphasis markers with [[*Reader Mode][Reader Mode]].
 
+** Remote Images
+
+HTTP(S) links to images can be optionally loaded and displayed inline:
+
+[[https://orgro.org/assets/appicon.png]]
+
+Long touch an image to open it in a view where you can zoom and pan.
+
+Images are cached on your device. To clear the cache and reset your choice if
+you chose =Always= or =Never=, see the action menu on the top screen.
+
 ** Other
 
 Other syntaxes that are highlighted but not (yet) interpreted in any special
