@@ -115,6 +115,7 @@ class _DocumentPageWrapper extends StatelessWidget {
         child: ViewSettings.defaults(
           context,
           child: DocumentPage(
+            doc: doc,
             title: title,
             child: OrgDocumentWidget(doc, shrinkWrap: true),
           ),
@@ -138,6 +139,7 @@ void narrow(BuildContext context, String title, OrgSection section) {
         child: ViewSettings(
           data: viewSettings,
           child: DocumentPage(
+            doc: section,
             title: '$title › narrow',
             initialQuery: viewSettings.queryString,
             child: OrgSectionWidget(

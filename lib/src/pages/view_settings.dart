@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
+enum RemoteImagesPolicy { allow, deny, ask }
+
 mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
   ViewSettingsData get _parent => ViewSettings.of(context);
@@ -33,6 +35,17 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _readerMode = value);
   }
 
+  RemoteImagesPolicy? _remoteImagesPolicy;
+
+  RemoteImagesPolicy get remoteImagesPolicy => _remoteImagesPolicy!;
+
+  void setRemoteImagesPolicy(RemoteImagesPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.remoteImagesPolicy = value;
+    }
+    setState(() => _remoteImagesPolicy = value);
+  }
+
   String? get queryString;
 
   @override
@@ -41,6 +54,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _fontFamily ??= _parent.fontFamily;
     _readerMode ??= _parent.readerMode;
     _textScale ??= _parent.textScale;
+    _remoteImagesPolicy ??= _parent.remoteImagesPolicy;
   }
 
   TextStyle get textStyle =>
@@ -53,6 +67,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
         fontFamily: fontFamily,
         queryString: queryString!,
         readerMode: readerMode,
+        remoteImagesPolicy: remoteImagesPolicy,
       ),
       // Builder required to get ViewSettings into the context
       child: Builder(builder: builder),
@@ -94,6 +109,8 @@ class ViewSettingsData {
       fontFamily: prefs.fontFamily ?? kDefaultFontFamily,
       queryString: kDefaultQueryString,
       readerMode: prefs.readerMode ?? kDefaultReaderMode,
+      remoteImagesPolicy:
+          prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
     );
   }
 
@@ -102,12 +119,14 @@ class ViewSettingsData {
     required this.fontFamily,
     required this.queryString,
     required this.readerMode,
+    required this.remoteImagesPolicy,
   });
 
   final double textScale;
   final String fontFamily;
   final String? queryString;
   final bool readerMode;
+  final RemoteImagesPolicy remoteImagesPolicy;
 
   @override
   bool operator ==(Object other) =>
@@ -115,9 +134,15 @@ class ViewSettingsData {
       textScale == other.textScale &&
       fontFamily == other.fontFamily &&
       queryString == other.queryString &&
-      readerMode == other.readerMode;
+      readerMode == other.readerMode &&
+      remoteImagesPolicy == other.remoteImagesPolicy;
 
   @override
-  int get hashCode =>
-      hashValues(textScale, fontFamily, queryString, readerMode);
+  int get hashCode => hashValues(
+        textScale,
+        fontFamily,
+        queryString,
+        readerMode,
+        remoteImagesPolicy,
+      );
 }

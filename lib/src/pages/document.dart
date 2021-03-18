@@ -5,16 +5,19 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/view_settings.dart';
+import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
+    required this.doc,
     required this.title,
     required this.child,
     this.initialQuery,
     Key? key,
   }) : super(key: key);
 
+  final OrgTree doc;
   final String title;
   final Widget child;
   final String? initialQuery;
@@ -50,6 +53,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
+    _hasRemoteImages = widget.doc.hasRemoteImages();
   }
 
   void _doQuery(String query) {
@@ -187,6 +191,10 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Widget _buildDocument(BuildContext context) {
     final doc = SliverList(
       delegate: SliverChildListDelegate([
+        _RemoteImagePermissionsBanner(
+          visible: _askPermissionToLoadRemoteImages,
+          onResult: setRemoteImagesPolicy,
+        ),
         buildWithViewSettings(
           builder: (context) => Center(
             child: ConstrainedBox(
@@ -238,9 +246,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     );
   }
 
+  late bool _hasRemoteImages;
+
+  bool get _askPermissionToLoadRemoteImages =>
+      remoteImagesPolicy == RemoteImagesPolicy.ask && _hasRemoteImages;
+
   Widget? _loadImage(OrgLink link) {
     if (!looksLikeUrl(link.location)) {
       // Only remote images supported for now
+      return null;
+    }
+    if (remoteImagesPolicy != RemoteImagesPolicy.allow) {
       return null;
     }
     return GestureDetector(
@@ -293,6 +309,68 @@ class _Badge extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _RemoteImagePermissionsBanner extends StatelessWidget {
+  const _RemoteImagePermissionsBanner({
+    required this.visible,
+    required this.onResult,
+    Key? key,
+  }) : super(key: key);
+
+  final Function(RemoteImagesPolicy, {bool persist}) onResult;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 100),
+      transitionBuilder: (child, animation) =>
+          SizeTransition(sizeFactor: animation, child: child),
+      child: visible
+          ? MaterialBanner(
+              content: const Text(
+                'This document contains remote images. Would you like to load them?',
+              ),
+              leading: const Icon(Icons.photo),
+              actions: [
+                _BannerButton(
+                  text: 'Always',
+                  onPressed: () =>
+                      onResult(RemoteImagesPolicy.allow, persist: true),
+                ),
+                _BannerButton(
+                  text: 'Never',
+                  onPressed: () =>
+                      onResult(RemoteImagesPolicy.deny, persist: true),
+                ),
+                _BannerButton(
+                  text: 'Just once',
+                  onPressed: () =>
+                      onResult(RemoteImagesPolicy.allow, persist: false),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+}
+
+class _BannerButton extends StatelessWidget {
+  const _BannerButton({required this.text, required this.onPressed, Key? key})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(primary: Theme.of(context).accentColor),
+      onPressed: onPressed,
+      child: Text(text.toUpperCase()),
     );
   }
 }
