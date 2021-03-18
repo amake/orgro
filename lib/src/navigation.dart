@@ -112,12 +112,12 @@ class _DocumentPageWrapper extends StatelessWidget {
         root: doc,
         hideMarkup: prefs.readerMode,
         restorationId: 'org_page',
-        child: DocumentPage(
-          title: title,
-          textScale: prefs.textScale,
-          fontFamily: prefs.fontFamily,
-          readerMode: prefs.readerMode,
-          child: OrgDocumentWidget(doc, shrinkWrap: true),
+        child: ViewSettings.defaults(
+          context,
+          child: DocumentPage(
+            title: title,
+            child: OrgDocumentWidget(doc, shrinkWrap: true),
+          ),
         ),
       ),
     );
@@ -135,13 +135,16 @@ void narrow(BuildContext context, String title, OrgSection section) {
         // Continue to use the true document root so that links to sections
         // outside the narrowed section can be resolved
         root: orgController.root,
-        child: DocumentPage.defaults(
-          viewSettings,
-          title: '$title › narrow',
-          child: OrgSectionWidget(
-            section,
-            root: true,
-            shrinkWrap: true,
+        child: ViewSettings(
+          data: viewSettings,
+          child: DocumentPage(
+            title: '$title › narrow',
+            initialQuery: viewSettings.queryString,
+            child: OrgSectionWidget(
+              section,
+              root: true,
+              shrinkWrap: true,
+            ),
           ),
         ),
       ),

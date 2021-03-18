@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const kDefaultFontFamily = 'Fira Code';
 // Default text scale is from system:
 // MediaQuery.textScaleFactorOf(context);
+const String? kDefaultQueryString = null;
 const kDefaultReaderMode = false;
 
 const kMaxRecentFiles = 10;

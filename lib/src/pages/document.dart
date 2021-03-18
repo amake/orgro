@@ -8,37 +8,16 @@ import 'package:orgro/src/pages/view_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
-  DocumentPage.defaults(
-    ViewSettings settings, {
-    required String title,
-    required Widget child,
-    Key? key,
-  }) : this(
-          title: title,
-          child: child,
-          textScale: settings.textScale,
-          fontFamily: settings.fontFamily,
-          initialQuery: settings.queryString,
-          readerMode: settings.readerMode,
-          key: key,
-        );
-
   const DocumentPage({
     required this.title,
     required this.child,
-    this.textScale,
-    this.fontFamily,
     this.initialQuery,
-    this.readerMode,
     Key? key,
   }) : super(key: key);
 
   final String title;
   final Widget child;
-  final double? textScale;
-  final String? fontFamily;
   final String? initialQuery;
-  final bool? readerMode;
 
   @override
   _DocumentPageState createState() => _DocumentPageState();
@@ -46,15 +25,6 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   late MySearchDelegate _searchDelegate;
-
-  @override
-  String? get initialFontFamily => widget.fontFamily;
-
-  @override
-  bool? get initialReaderMode => widget.readerMode;
-
-  @override
-  double? get initialTextScale => widget.textScale;
 
   @override
   String? get queryString => _searchDelegate.queryString;
