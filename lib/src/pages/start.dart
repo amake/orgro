@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:orgro/src/actions/appearance.dart';
+import 'package:orgro/src/actions/cache.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -46,6 +47,7 @@ class _StartPageState extends State<StartPage>
       onSelected: (callback) => callback(),
       itemBuilder: (context) => [
         appearanceMenuItem(context),
+        clearCacheMenuItem(context),
         if (hasRecentFiles) ...[
           const PopupMenuDivider(),
           PopupMenuItem<VoidCallback>(
