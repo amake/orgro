@@ -1,7 +1,22 @@
+import 'dart:io';
+
 import 'package:dynamic_fonts/dynamic_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<void> clearFontCache() async {
+  final dir = await getApplicationSupportDirectory();
+  final deleted = <String>[];
+  for (final entry in dir.listSync()) {
+    if (entry is File && entry.path.endsWith('.ttf')) {
+      entry.deleteSync();
+      deleted.add(entry.path);
+    }
+  }
+  debugPrint('Deleted cached fonts: $deleted');
+}
 
 const _kCustomFonts = [
   _FiraGoFile.name,
