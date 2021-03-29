@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
-enum RemoteImagesPolicy { allow, deny, ask }
-
 mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
   ViewSettingsData get _parent => ViewSettings.of(context);

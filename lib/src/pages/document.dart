@@ -5,6 +5,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/view_settings.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum RemoteImagesPolicy { allow, deny, ask }
+
 const kDefaultFontFamily = 'Fira Code';
 // Default text scale is from system:
 // MediaQuery.textScaleFactorOf(context);
