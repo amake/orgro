@@ -8,7 +8,7 @@ environment:
   flutter: ">=2.1.0-12.2.pre"
 
 dependencies:
-  cached_network_image: ^3.0.0-nullsafety
+  cached_network_image: ^3.0.0
   dynamic_fonts: ^2.0.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
