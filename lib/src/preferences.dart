@@ -3,6 +3,7 @@ import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum RemoteImagesPolicy { allow, deny, ask }
+enum LocalLinksPolicy { deny, ask }
 
 const kDefaultFontFamily = 'Fira Code';
 // Default text scale is from system:
@@ -10,6 +11,7 @@ const kDefaultFontFamily = 'Fira Code';
 const String? kDefaultQueryString = null;
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
+const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
 
 const kMaxRecentFiles = 10;
 
@@ -17,7 +19,9 @@ const _kFontFamilyKey = 'font_family';
 const _kTextScaleKey = 'text_scale';
 const _kReaderModeKey = 'reader_mode';
 const _kRemoteImagesPolicyKey = 'remote_images_policy';
+const _kLocalLinksPolicyKey = 'local_links_policy';
 const _kRecentFilesJsonKey = 'recent_files_json';
+const _kAccessibleDirectoriesKey = 'accessible_directories_json';
 
 const _kThemeModeKey = 'theme_mode';
 
@@ -59,6 +63,19 @@ class Preferences extends InheritedWidget {
 
   set remoteImagesPolicy(RemoteImagesPolicy? value) =>
       _setOrRemove(_kRemoteImagesPolicyKey, remoteImagesPolicyToString(value));
+
+  LocalLinksPolicy? get localLinksPolicy =>
+      localLinksPolicyFromString(_prefs.getString(_kLocalLinksPolicyKey));
+
+  set localLinksPolicy(LocalLinksPolicy? value) =>
+      _setOrRemove(_kLocalLinksPolicyKey, localLinksPolicyToString(value));
+
+  /// Pairs of [URI, Identifier] splatted into a flat list
+  List<String> get accessibleDirs =>
+      _prefs.getStringList(_kAccessibleDirectoriesKey) ?? [];
+
+  set accessibleDirs(List<String> value) =>
+      _prefs.setStringList(_kAccessibleDirectoriesKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
@@ -129,3 +146,27 @@ String? remoteImagesPolicyToString(RemoteImagesPolicy? value) {
 const _kRemoteImagesPolicyAllow = 'remote_images_policy_allow';
 const _kRemoteImagesPolicyDeny = 'remote_images_policy_deny';
 const _kRemoteImagesPolicyAsk = 'remote_images_policy_ask';
+
+LocalLinksPolicy? localLinksPolicyFromString(String? value) {
+  switch (value) {
+    case _kLocalLinksPolicyDeny:
+      return LocalLinksPolicy.deny;
+    case _kLocalLinksPolicyAsk:
+      return LocalLinksPolicy.ask;
+  }
+  return null;
+}
+
+String? localLinksPolicyToString(LocalLinksPolicy? value) {
+  switch (value) {
+    case LocalLinksPolicy.deny:
+      return _kLocalLinksPolicyDeny;
+    case LocalLinksPolicy.ask:
+      return _kLocalLinksPolicyAsk;
+    case null:
+      return null;
+  }
+}
+
+const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
+const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';

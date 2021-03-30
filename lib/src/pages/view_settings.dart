@@ -44,6 +44,17 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _remoteImagesPolicy = value);
   }
 
+  LocalLinksPolicy? _localLinksPolicy;
+
+  LocalLinksPolicy get localLinksPolicy => _localLinksPolicy!;
+
+  void setLocalLinksPolicy(LocalLinksPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.localLinksPolicy = value;
+    }
+    setState(() => _localLinksPolicy = value);
+  }
+
   String? get queryString;
 
   @override
@@ -53,6 +64,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _readerMode ??= _parent.readerMode;
     _textScale ??= _parent.textScale;
     _remoteImagesPolicy ??= _parent.remoteImagesPolicy;
+    _localLinksPolicy ??= _parent.localLinksPolicy;
   }
 
   TextStyle get textStyle =>
@@ -66,6 +78,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
         queryString: queryString!,
         readerMode: readerMode,
         remoteImagesPolicy: remoteImagesPolicy,
+        localLinksPolicy: localLinksPolicy,
       ),
       // Builder required to get ViewSettings into the context
       child: Builder(builder: builder),
@@ -109,6 +122,7 @@ class ViewSettingsData {
       readerMode: prefs.readerMode ?? kDefaultReaderMode,
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
+      localLinksPolicy: prefs.localLinksPolicy ?? kDefaultLocalLinksPolicy,
     );
   }
 
@@ -118,6 +132,7 @@ class ViewSettingsData {
     required this.queryString,
     required this.readerMode,
     required this.remoteImagesPolicy,
+    required this.localLinksPolicy,
   });
 
   final double textScale;
@@ -125,6 +140,7 @@ class ViewSettingsData {
   final String? queryString;
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
+  final LocalLinksPolicy localLinksPolicy;
 
   @override
   bool operator ==(Object other) =>
@@ -133,7 +149,8 @@ class ViewSettingsData {
       fontFamily == other.fontFamily &&
       queryString == other.queryString &&
       readerMode == other.readerMode &&
-      remoteImagesPolicy == other.remoteImagesPolicy;
+      remoteImagesPolicy == other.remoteImagesPolicy &&
+      localLinksPolicy == other.localLinksPolicy;
 
   @override
   int get hashCode => hashValues(
@@ -142,5 +159,6 @@ class ViewSettingsData {
         queryString,
         readerMode,
         remoteImagesPolicy,
+        localLinksPolicy,
       );
 }
