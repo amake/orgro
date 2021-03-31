@@ -58,6 +58,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     _hasRemoteImages = widget.doc.hasRemoteImages();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initViewSettings();
+  }
+
   void _doQuery(String query) {
     final pattern = RegExp(
       RegExp.escape(query),

@@ -57,9 +57,8 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
 
   String? get queryString;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  /// Call this from [State.didChangeDependencies]
+  void initViewSettings() {
     _fontFamily ??= _parent.fontFamily;
     _readerMode ??= _parent.readerMode;
     _textScale ??= _parent.textScale;
