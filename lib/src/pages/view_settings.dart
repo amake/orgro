@@ -11,7 +11,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   double get textScale => _textScale!;
 
   set textScale(double value) {
-    _prefs.textScale = value;
+    _prefs.setTextScale(value);
     setState(() => _textScale = value);
   }
 
@@ -20,7 +20,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   String get fontFamily => _fontFamily!;
 
   set fontFamily(String value) {
-    _prefs.fontFamily = value;
+    _prefs.setFontFamily(value);
     setState(() => _fontFamily = value);
   }
 
@@ -29,7 +29,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
   bool get readerMode => _readerMode!;
 
   set readerMode(bool value) {
-    _prefs.readerMode = value;
+    _prefs.setReaderMode(value);
     setState(() => _readerMode = value);
   }
 
@@ -39,7 +39,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
 
   void setRemoteImagesPolicy(RemoteImagesPolicy value, {bool persist = false}) {
     if (persist) {
-      _prefs.remoteImagesPolicy = value;
+      _prefs.setRemoteImagesPolicy(value);
     }
     setState(() => _remoteImagesPolicy = value);
   }
@@ -50,7 +50,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
 
   void setLocalLinksPolicy(LocalLinksPolicy value, {bool persist = false}) {
     if (persist) {
-      _prefs.localLinksPolicy = value;
+      _prefs.setLocalLinksPolicy(value);
     }
     setState(() => _localLinksPolicy = value);
   }

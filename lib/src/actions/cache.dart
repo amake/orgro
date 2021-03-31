@@ -7,7 +7,8 @@ PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
     value: () async {
       await DefaultCacheManager().emptyCache();
-      Preferences.of(context).remoteImagesPolicy = kDefaultRemoteImagesPolicy;
+      final prefs = Preferences.of(context);
+      await prefs.setRemoteImagesPolicy(kDefaultRemoteImagesPolicy);
       await clearFontCache();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Cache cleared')));

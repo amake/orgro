@@ -38,43 +38,48 @@ class Preferences extends InheritedWidget {
 
   String? get fontFamily => _prefs.getString(_kFontFamilyKey);
 
-  set fontFamily(String? value) => _setOrRemove(_kFontFamilyKey, value);
+  Future<bool> setFontFamily(String? value) =>
+      _setOrRemove(_kFontFamilyKey, value);
 
   double? get textScale => _prefs.getDouble(_kTextScaleKey);
 
-  set textScale(double? value) => _setOrRemove(_kTextScaleKey, value);
+  Future<bool> setTextScale(double? value) =>
+      _setOrRemove(_kTextScaleKey, value);
 
   bool? get readerMode => _prefs.getBool(_kReaderModeKey);
 
-  set readerMode(bool? value) => _setOrRemove(_kReaderModeKey, value);
+  // ignore: avoid_positional_boolean_parameters
+  Future<bool> setReaderMode(bool? value) =>
+      _setOrRemove(_kReaderModeKey, value);
 
   List<String> get recentFilesJson =>
       _prefs.getStringList(_kRecentFilesJsonKey) ?? [];
 
-  set recentFilesJson(List<String> value) =>
+  Future<bool> setRecentFilesJson(List<String> value) =>
       _prefs.setStringList(_kRecentFilesJsonKey, value);
 
   String? get themeMode => _prefs.getString(_kThemeModeKey);
 
-  set themeMode(String? value) => _setOrRemove(_kThemeModeKey, value);
+  Future<bool> setThemeMode(String? value) =>
+      _setOrRemove(_kThemeModeKey, value);
 
   RemoteImagesPolicy? get remoteImagesPolicy =>
       remoteImagesPolicyFromString(_prefs.getString(_kRemoteImagesPolicyKey));
 
-  set remoteImagesPolicy(RemoteImagesPolicy? value) =>
+  Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy? value) =>
       _setOrRemove(_kRemoteImagesPolicyKey, remoteImagesPolicyToString(value));
 
   LocalLinksPolicy? get localLinksPolicy =>
       localLinksPolicyFromString(_prefs.getString(_kLocalLinksPolicyKey));
 
-  set localLinksPolicy(LocalLinksPolicy? value) =>
+  Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
       _setOrRemove(_kLocalLinksPolicyKey, localLinksPolicyToString(value));
 
   /// Pairs of [URI, Identifier] splatted into a flat list
   List<String> get accessibleDirs =>
       _prefs.getStringList(_kAccessibleDirectoriesKey) ?? [];
 
-  set accessibleDirs(List<String> value) =>
+  Future<bool> setAccessibleDirs(List<String> value) =>
       _prefs.setStringList(_kAccessibleDirectoriesKey, value);
 
   @override

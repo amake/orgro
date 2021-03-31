@@ -105,10 +105,10 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     setState(() {
       _recentFiles = files;
     });
-    _prefs.recentFilesJson = files
+    _prefs.setRecentFilesJson(files
         .map((file) => file.toJson())
         .map(json.encode)
-        .toList(growable: false);
+        .toList(growable: false));
   }
 
   @override

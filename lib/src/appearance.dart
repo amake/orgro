@@ -31,7 +31,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     setState(() {
       _mode = mode;
     });
-    _prefs.themeMode = themeModeToString(mode);
+    _prefs.setThemeMode(themeModeToString(mode));
   }
 
   @override
