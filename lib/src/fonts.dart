@@ -8,14 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 Future<void> clearFontCache() async {
   final dir = await getApplicationSupportDirectory();
-  final deleted = <String>[];
   for (final entry in dir.listSync()) {
     if (entry is File && entry.path.endsWith('.ttf')) {
       entry.deleteSync();
-      deleted.add(entry.path);
+      debugPrint('Deleted cached font: ${entry.path}');
     }
   }
-  debugPrint('Deleted cached fonts: $deleted');
 }
 
 const _kCustomFonts = [
