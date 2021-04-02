@@ -356,7 +356,7 @@ class _OrgroManualButton extends StatelessWidget {
 }
 
 void _openOrgroManual(BuildContext context) =>
-    loadAsset(context, 'assets/orgro-manual.org');
+    loadAsset(context, 'assets/manual/orgro-manual.org');
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink({Key? key}) : super(key: key);

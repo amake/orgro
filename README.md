@@ -40,7 +40,7 @@ powers this application and is available as a separate library,
 - "Reader mode" where extraneous markup is hidden
 - Inline and block LaTeX rendering
 
-See the [manual](./assets/orgro-manual.org) for details.
+See the [manual](./assets/manual/orgro-manual.org) for details.
 
 # Limitations
 

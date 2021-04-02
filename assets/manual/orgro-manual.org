@@ -164,9 +164,17 @@ The default emphasis markers are supported:
 
 Hide the emphasis markers with [[*Reader Mode][Reader Mode]].
 
-** Remote Images
+** Images
 
-HTTP(S) links to images can be optionally loaded and displayed inline:
+Images referenced by relative paths can be displayed when Orgro has the required
+access permissions:
+
+[[./orgro-icon.png]]
+
+Orgro will prompt you to grant any required permissions with a banner at the top
+of the document.
+
+Further, HTTP(S) links to images can be optionally loaded and displayed inline:
 
 [[https://orgro.org/assets/appicon.png]]
 
