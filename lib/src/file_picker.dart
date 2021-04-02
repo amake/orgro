@@ -2,69 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_charset_detector/flutter_charset_detector.dart';
-import 'package:org_flutter/org_flutter.dart';
-import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/data_source.dart';
 
-Future<OpenFileInfo?> pickFile() async =>
-    FilePickerWritable().openFile(OpenFileInfo._fromExternal);
+Future<NativeDataSource?> pickFile() async =>
+    FilePickerWritable().openFile(LoadedNativeDataSource.fromExternal);
 
-Future<OpenFileInfo> readFileWithIdentifier(String identifier) async =>
-    FilePickerWritable()
-        .readFile(identifier: identifier, reader: OpenFileInfo._fromExternal);
-
-Future<String> _readFile(File file) async {
-  try {
-    return await file.readAsString();
-  } on Exception {
-    final bytes = await file.readAsBytes();
-    final decoded = await CharsetDetector.autoDecode(bytes);
-    debugPrint('Decoded file as ${decoded.charset}');
-    return decoded.string;
-  }
-}
-
-class OpenFileInfo {
-  static Future<OpenFileInfo> _fromExternal(
-    FileInfo externalFileInfo,
-    File file,
-  ) async =>
-      OpenFileInfo(
-        externalFileInfo.persistable ? externalFileInfo.identifier : null,
-        externalFileInfo.fileName ?? file.uri.pathSegments.last,
-        await _readFile(file),
-      );
-
-  OpenFileInfo(this.identifier, this.title, this.content);
-  final String? identifier;
-  final String title;
-  final FutureOr<String> content;
-
-  Future<ParsedOrgFileInfo> toParsed() async {
-    try {
-      final parsed = await parse(await content);
-      return ParsedOrgFileInfo(identifier, title, parsed);
-    } on Exception catch (e, s) {
-      await logError(e, s);
-      rethrow;
-    }
-  }
-}
-
-class ParsedOrgFileInfo {
-  ParsedOrgFileInfo(this.identifier, this.title, this.doc);
-  final String? identifier;
-  final String title;
-  final OrgDocument doc;
-}
-
-Future<OrgDocument> parse(String content) async =>
-    time('parse', () => compute(_parse, content));
-
-OrgDocument _parse(String text) => OrgDocument.parse(text);
+Future<NativeDataSource> readFileWithIdentifier(String identifier) async =>
+    FilePickerWritable().readFile(
+        identifier: identifier, reader: LoadedNativeDataSource.fromExternal);
 
 mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   late FilePickerState _filePickerState;
@@ -78,9 +25,9 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   }
 
   Future<bool> _loadFile(FileInfo fileInfo, File file) async {
-    OpenFileInfo openFileInfo;
+    NativeDataSource openFileInfo;
     try {
-      openFileInfo = await OpenFileInfo._fromExternal(fileInfo, file);
+      openFileInfo = await LoadedNativeDataSource.fromExternal(fileInfo, file);
       // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       await _displayError(e.toString());
@@ -89,7 +36,7 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
     return loadFileFromPlatform(openFileInfo);
   }
 
-  Future<bool> loadFileFromPlatform(OpenFileInfo info);
+  Future<bool> loadFileFromPlatform(NativeDataSource info);
 
   Future<bool> _handleError(ErrorEvent event) async {
     await _displayError(event.message);

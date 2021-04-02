@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/actions/cache.dart';
+import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -80,7 +81,7 @@ class _StartPageState extends State<StartPage>
   }
 
   @override
-  Future<bool> loadFileFromPlatform(OpenFileInfo info) async {
+  Future<bool> loadFileFromPlatform(NativeDataSource info) async {
     // We can't use _loadAndRememberFile because RecentFiles is not in this
     // context
     final recentFile = await _loadFile(context, info);
@@ -255,11 +256,11 @@ class _SwipeDeleteBackground extends StatelessWidget {
 
 Future<RecentFile?> _loadFile(
   BuildContext context,
-  FutureOr<OpenFileInfo?> fileInfoFuture,
+  FutureOr<NativeDataSource?> dataSource,
 ) async {
   final loaded = await loadDocument(
     context,
-    fileInfoFuture,
+    dataSource,
     onClose: () {
       debugPrint('Clearing saved state');
       RestorationScope.of(context)?.remove<String>(_kRestoreOpenFileIdKey);
@@ -267,18 +268,19 @@ Future<RecentFile?> _loadFile(
   );
   RecentFile? result;
   if (loaded) {
-    final fileInfo = await fileInfoFuture;
-    if (fileInfo == null) {
+    final source = await dataSource;
+    if (source == null) {
       // User canceled
     } else {
-      if (fileInfo.identifier != null) {
+      final identifier = source.identifier;
+      if (identifier != null) {
         result = RecentFile(
-          fileInfo.identifier!,
-          fileInfo.title,
+          identifier,
+          source.name,
           DateTime.now(),
         );
       } else {
-        debugPrint("Couldn't obtain persistent access to ${fileInfo.title}");
+        debugPrint("Couldn't obtain persistent access to ${source.name}");
       }
     }
   }
@@ -287,7 +289,7 @@ Future<RecentFile?> _loadFile(
 
 Future<void> _loadAndRememberFile(
   BuildContext context,
-  FutureOr<OpenFileInfo?> fileInfoFuture,
+  FutureOr<NativeDataSource?> fileInfoFuture,
 ) async {
   final recentFile = await _loadFile(context, fileInfoFuture);
   if (recentFile != null) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
+import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/banners.dart';
 import 'package:orgro/src/pages/view_settings.dart';
@@ -14,6 +15,7 @@ class DocumentPage extends StatefulWidget {
   const DocumentPage({
     required this.doc,
     required this.title,
+    required this.dataSource,
     required this.child,
     this.initialQuery,
     Key? key,
@@ -21,6 +23,7 @@ class DocumentPage extends StatefulWidget {
 
   final OrgTree doc;
   final String title;
+  final DataSource dataSource;
   final Widget child;
   final String? initialQuery;
 
@@ -214,9 +217,9 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
                   return launch(url, forceSafariVC: false);
                 },
                 onSectionLongPress: (section) =>
-                    narrow(context, widget.title, section),
+                    narrow(context, widget.dataSource, section),
                 onLocalSectionLinkTap: (section) =>
-                    narrow(context, widget.title, section),
+                    narrow(context, widget.dataSource, section),
                 loadImage: _loadImage,
                 child: widget.child,
               ),
