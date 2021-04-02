@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
@@ -6,6 +5,7 @@ import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/banners.dart';
+import 'package:orgro/src/pages/image.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
@@ -276,19 +276,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     if (remoteImagesPolicy != RemoteImagesPolicy.allow) {
       return null;
     }
-    return GestureDetector(
-      onLongPress: () => showInteractive(
-        context,
-        link.location,
-        Image(image: CachedNetworkImageProvider(link.location)),
-      ),
-      child: Image(
-        image: CachedNetworkImageProvider(
-          link.location,
-          scale: MediaQuery.of(context).devicePixelRatio,
-        ),
-      ),
-    );
+    return RemoteImage(link.location);
   }
 }
 
