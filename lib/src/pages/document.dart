@@ -58,13 +58,19 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
-    _hasRemoteImages = widget.doc.hasRemoteImages();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     initViewSettings();
+    _analyzeDoc();
+  }
+
+  Future<void> _analyzeDoc() async {
+    setState(() {
+      _hasRemoteImages ??= widget.doc.hasRemoteImages();
+    });
   }
 
   void _doQuery(String query) {
@@ -257,10 +263,10 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     );
   }
 
-  late bool _hasRemoteImages;
+  bool? _hasRemoteImages;
 
   bool get _askPermissionToLoadRemoteImages =>
-      remoteImagesPolicy == RemoteImagesPolicy.ask && _hasRemoteImages;
+      remoteImagesPolicy == RemoteImagesPolicy.ask && _hasRemoteImages == true;
 
   Widget? _loadImage(OrgLink link) {
     if (!looksLikeUrl(link.location)) {
