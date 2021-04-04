@@ -74,9 +74,23 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       accessibleDirs ??= Preferences.of(context).accessibleDirs;
       await source.resolveParent(accessibleDirs.keyValueListAsMap());
     }
+
+    var hasRemoteImages = _hasRemoteImages ?? false;
+    var hasRelativeLinks = _hasRelativeLinks ?? false;
+    widget.doc.visit<OrgLink>((link) {
+      hasRemoteImages |=
+          looksLikeImagePath(link.location) && looksLikeUrl(link.location);
+      try {
+        hasRelativeLinks |= OrgFileLink.parse(link.location).isRelative;
+      } on Exception {
+        // Not a file link
+      }
+      return !(hasRemoteImages && hasRelativeLinks);
+    });
+
     setState(() {
-      _hasRemoteImages ??= widget.doc.hasRemoteImages();
-      _hasRelativeLinks ??= widget.doc.hasRelativeLinks();
+      _hasRemoteImages ??= hasRemoteImages;
+      _hasRelativeLinks ??= hasRelativeLinks;
     });
   }
 
