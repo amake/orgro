@@ -21,6 +21,10 @@ abstract class DataSource {
 
   // ignore: avoid_returning_this
   DataSource get minimize => this;
+
+  FutureOr<DataSource> resolveRelative(String relativePath);
+
+  bool get needsToResolveParent => false;
 }
 
 class WebDataSource extends DataSource {
@@ -50,6 +54,10 @@ class WebDataSource extends DataSource {
       rethrow;
     }
   }
+
+  @override
+  WebDataSource resolveRelative(String relativePath) =>
+      WebDataSource(uri.resolve(relativePath));
 }
 
 class AssetDataSource extends DataSource {
@@ -63,6 +71,10 @@ class AssetDataSource extends DataSource {
   @override
   FutureOr<Uint8List> get bytes async =>
       (await rootBundle.load(key)).buffer.asUint8List();
+
+  @override
+  DataSource resolveRelative(String relativePath) =>
+      AssetDataSource(Uri.parse(key).resolve(relativePath).toString());
 }
 
 class NativeDataSource extends DataSource {
@@ -74,6 +86,10 @@ class NativeDataSource extends DataSource {
   /// The URI that identifies the native file
   final String uri;
 
+  /// The persistent identifier of this source's parent directory. Needed for
+  /// resolving relative links.
+  String? _parentDirIdentifier;
+
   @override
   FutureOr<String> get content => FilePickerWritable()
       .readFile(identifier: identifier!, reader: (_, file) => _readFile(file));
@@ -81,6 +97,44 @@ class NativeDataSource extends DataSource {
   @override
   FutureOr<Uint8List> get bytes => FilePickerWritable().readFile(
       identifier: identifier!, reader: (_, file) => file.readAsBytes());
+
+  @override
+  FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
+    final resolved = await FilePickerWritable().resolveRelativePath(
+        directoryIdentifier: _parentDirIdentifier!, relativePath: relativePath);
+    if (resolved is! FileInfo) {
+      throw Exception('$relativePath resolved to a non-file: $resolved');
+    }
+    return NativeDataSource(
+      resolved.fileName ?? Uri.parse(resolved.uri).pathSegments.last,
+      resolved.identifier,
+      resolved.uri,
+    );
+  }
+
+  @override
+  bool get needsToResolveParent => _parentDirIdentifier == null;
+
+  Future<void> resolveParent(Map<String, String> accessibleDirs) async =>
+      _parentDirIdentifier ??= await _findParentDirIdentifier(accessibleDirs);
+
+  Future<String?> _findParentDirIdentifier(
+    Map<String, String> accessibleDirs,
+  ) async {
+    debugPrint('Accessible dirs: $accessibleDirs');
+    for (final dirId in accessibleDirs.values) {
+      debugPrint('Resolving parent of $uri relative to $dirId');
+      try {
+        final parent = await FilePickerWritable()
+            .getDirectory(rootIdentifier: dirId, fileIdentifier: identifier!);
+        debugPrint('Found file $uri parent dir: ${parent.uri}');
+        return parent.identifier;
+      } on Exception {
+        // Next
+      }
+    }
+    return null;
+  }
 }
 
 class LoadedNativeDataSource extends NativeDataSource {
@@ -104,6 +158,14 @@ class LoadedNativeDataSource extends NativeDataSource {
 
   @override
   DataSource get minimize => NativeDataSource(name, identifier, uri);
+}
+
+class NativeDirectoryInfo {
+  NativeDirectoryInfo(this.name, this.identifier, this.uri);
+
+  final String name;
+  final String identifier;
+  final String uri;
 }
 
 class ParsedOrgFileInfo {
