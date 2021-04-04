@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/banners.dart';
 import 'package:orgro/src/pages/image.dart';
@@ -67,9 +68,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     _analyzeDoc();
   }
 
-  Future<void> _analyzeDoc() async {
+  Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
+    final source = widget.dataSource;
+    if (source is NativeDataSource && source.needsToResolveParent) {
+      accessibleDirs ??= Preferences.of(context).accessibleDirs;
+      await source.resolveParent(accessibleDirs.keyValueListAsMap());
+    }
     setState(() {
       _hasRemoteImages ??= widget.doc.hasRemoteImages();
+      _hasRelativeLinks ??= widget.doc.hasRelativeLinks();
     });
   }
 
@@ -208,6 +215,14 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Widget _buildDocument(BuildContext context) {
     final doc = SliverList(
       delegate: SliverChildListDelegate([
+        DirectoryPermissionsBanner(
+          visible: _askForDirectoryPermissions,
+          onDismiss: () =>
+              setLocalLinksPolicy(LocalLinksPolicy.deny, persist: false),
+          onForbid: () =>
+              setLocalLinksPolicy(LocalLinksPolicy.deny, persist: true),
+          onAllow: _pickDirectory,
+        ),
         RemoteImagePermissionsBanner(
           visible: _askPermissionToLoadRemoteImages,
           onResult: setRemoteImagesPolicy,
@@ -263,10 +278,38 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     );
   }
 
+  bool? _hasRelativeLinks;
+
+  bool get _askForDirectoryPermissions =>
+      localLinksPolicy == LocalLinksPolicy.ask &&
+      _hasRelativeLinks == true &&
+      widget.dataSource.needsToResolveParent;
+
+  Future<void> _pickDirectory() async {
+    final source = widget.dataSource;
+    if (source is! NativeDataSource) {
+      return;
+    }
+    final dirInfo = await pickDirectory(initialDirUri: source.uri);
+    if (dirInfo == null) {
+      return;
+    }
+    final prefs = Preferences.of(context);
+    debugPrint(
+        'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
+    final accessibleDirs = prefs.accessibleDirs
+      ..add(dirInfo.uri)
+      ..add(dirInfo.identifier);
+    await prefs.setAccessibleDirs(accessibleDirs);
+    await _analyzeDoc(accessibleDirs: accessibleDirs);
+  }
+
   bool? _hasRemoteImages;
 
   bool get _askPermissionToLoadRemoteImages =>
-      remoteImagesPolicy == RemoteImagesPolicy.ask && _hasRemoteImages == true;
+      remoteImagesPolicy == RemoteImagesPolicy.ask &&
+      _hasRemoteImages == true &&
+      !_askForDirectoryPermissions;
 
   Widget? _loadImage(OrgLink link) {
     if (looksLikeUrl(link.location)) {

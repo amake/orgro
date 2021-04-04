@@ -9,6 +9,18 @@ import 'package:orgro/src/data_source.dart';
 Future<NativeDataSource?> pickFile() async =>
     FilePickerWritable().openFile(LoadedNativeDataSource.fromExternal);
 
+Future<NativeDirectoryInfo?> pickDirectory({String? initialDirUri}) async {
+  final dirInfo =
+      await FilePickerWritable().openDirectory(initialDirUri: initialDirUri);
+  return dirInfo == null
+      ? null
+      : NativeDirectoryInfo(
+          dirInfo.fileName ?? 'unknown',
+          dirInfo.identifier,
+          dirInfo.uri,
+        );
+}
+
 Future<NativeDataSource> readFileWithIdentifier(String identifier) async =>
     FilePickerWritable().readFile(
         identifier: identifier, reader: LoadedNativeDataSource.fromExternal);

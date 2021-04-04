@@ -22,6 +22,21 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension ListUtils<T> on List<T> {
+  Map<T, T> keyValueListAsMap() {
+    if ((length % 2) != 0) {
+      throw Exception('List must have an even number of elements');
+    }
+    final result = <T, T>{};
+    for (var i = 0; i < length; i += 2) {
+      final key = this[i];
+      final value = this[i + 1];
+      result[key] = value;
+    }
+    return result;
+  }
+}
+
 extension OrgTreeUtils on OrgTree {
   bool hasRemoteImages() {
     var result = false;
@@ -32,4 +47,18 @@ extension OrgTreeUtils on OrgTree {
     });
     return result;
   }
+
+  bool hasRelativeLinks() {
+    var result = false;
+    visit<OrgLink>((link) {
+      result |= looksLikeRelativePath(link.location);
+      return !result;
+    });
+    return result;
+  }
 }
+
+bool looksLikeRelativePath(String text) =>
+    _relativePathLikeRegexp.hasMatch(text);
+
+final _relativePathLikeRegexp = RegExp(r'^\.');
