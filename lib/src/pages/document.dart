@@ -269,14 +269,37 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       remoteImagesPolicy == RemoteImagesPolicy.ask && _hasRemoteImages == true;
 
   Widget? _loadImage(OrgLink link) {
-    if (!looksLikeUrl(link.location)) {
-      // Only remote images supported for now
-      return null;
+    if (looksLikeUrl(link.location)) {
+      return _loadRemoteImage(link);
     }
+    try {
+      final fileLink = OrgFileLink.parse(link.location);
+      if (fileLink.isRelative) {
+        return _loadLocalImage(fileLink);
+      }
+    } on Exception {
+      // Not a file link
+    }
+    // Absolute paths, and...?
+    return null;
+  }
+
+  Widget? _loadRemoteImage(OrgLink link) {
+    assert(looksLikeUrl(link.location));
     if (remoteImagesPolicy != RemoteImagesPolicy.allow) {
       return null;
     }
     return RemoteImage(link.location);
+  }
+
+  Widget? _loadLocalImage(OrgFileLink link) {
+    if (widget.dataSource.needsToResolveParent) {
+      return null;
+    }
+    return LocalImage(
+      dataSource: widget.dataSource,
+      relativePath: link.body,
+    );
   }
 }
 
