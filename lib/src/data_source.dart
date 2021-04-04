@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
@@ -16,6 +17,7 @@ abstract class DataSource {
   final String name;
 
   FutureOr<String> get content;
+  FutureOr<Uint8List> get bytes;
 
   // ignore: avoid_returning_this
   DataSource get minimize => this;
@@ -29,6 +31,10 @@ class WebDataSource extends DataSource {
   @override
   FutureOr<String> get content async =>
       time('load url', () async => (await _response).body);
+
+  @override
+  FutureOr<Uint8List> get bytes =>
+      time('load url', () async => (await _response).bodyBytes);
 
   Future<http.Response> get _response async {
     try {
@@ -53,6 +59,10 @@ class AssetDataSource extends DataSource {
 
   @override
   FutureOr<String> get content => rootBundle.loadString(key);
+
+  @override
+  FutureOr<Uint8List> get bytes async =>
+      (await rootBundle.load(key)).buffer.asUint8List();
 }
 
 class NativeDataSource extends DataSource {
@@ -67,6 +77,10 @@ class NativeDataSource extends DataSource {
   @override
   FutureOr<String> get content => FilePickerWritable()
       .readFile(identifier: identifier!, reader: (_, file) => _readFile(file));
+
+  @override
+  FutureOr<Uint8List> get bytes => FilePickerWritable().readFile(
+      identifier: identifier!, reader: (_, file) => file.readAsBytes());
 }
 
 class LoadedNativeDataSource extends NativeDataSource {
