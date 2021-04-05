@@ -16,6 +16,10 @@ abstract class DataSource {
   /// A user-facing name for this data source
   final String name;
 
+  /// A string that uniquely identifies this data source ([name] may collide for
+  /// differing sources but this should not)
+  String get id;
+
   FutureOr<String> get content;
   FutureOr<Uint8List> get bytes;
 
@@ -31,6 +35,9 @@ class WebDataSource extends DataSource {
   WebDataSource(this.uri) : super(uri.pathSegments.last);
 
   final Uri uri;
+
+  @override
+  String get id => uri.toString();
 
   @override
   FutureOr<String> get content async =>
@@ -66,6 +73,9 @@ class AssetDataSource extends DataSource {
   final String key;
 
   @override
+  String get id => key;
+
+  @override
   FutureOr<String> get content => rootBundle.loadString(key);
 
   @override
@@ -89,6 +99,9 @@ class NativeDataSource extends DataSource {
   /// The persistent identifier of this source's parent directory. Needed for
   /// resolving relative links.
   String? _parentDirIdentifier;
+
+  @override
+  String get id => uri;
 
   @override
   FutureOr<String> get content => FilePickerWritable()

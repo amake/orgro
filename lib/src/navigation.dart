@@ -78,11 +78,11 @@ class _DocumentPageWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final prefs = Preferences.of(context);
     return RootRestorationScope(
-      restorationId: 'org_page_root',
+      restorationId: 'org_page_root:${dataSource.id}',
       child: OrgController(
         root: doc,
         hideMarkup: prefs.readerMode,
-        restorationId: 'org_page',
+        restorationId: 'org_page:${dataSource.id}',
         child: ViewSettings.defaults(
           context,
           child: DocumentPage(
