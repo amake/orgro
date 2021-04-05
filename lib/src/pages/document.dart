@@ -247,10 +247,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               constraints: const BoxConstraints(maxWidth: 800),
               child: OrgRootWidget(
                 style: textStyle,
-                onLinkTap: (url) {
-                  debugPrint('Launching URL: $url');
-                  return launch(url, forceSafariVC: false);
-                },
+                onLinkTap: _openLink,
                 onSectionLongPress: (section) =>
                     narrow(context, widget.dataSource, section),
                 onLocalSectionLinkTap: (section) =>
@@ -290,6 +287,16 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         child: const Icon(Icons.search),
       ),
     );
+  }
+
+  Future<bool> _openLink(String url) {
+    if (looksLikeRelativePath(url) && url.endsWith('.org')) {
+      final resolved = widget.dataSource.resolveRelative(url);
+      return loadDocument(context, resolved);
+    } else {
+      debugPrint('Launching URL: $url');
+      return launch(url, forceSafariVC: false);
+    }
   }
 
   bool? _hasRelativeLinks;
