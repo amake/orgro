@@ -14,8 +14,8 @@ Future<T> time<T>(String tag, FutureOr<T> Function() func) async {
   return ret;
 }
 
-Future logError(Object e, StackTrace s) async {
+Object logError(Object e, StackTrace s) {
   debugPrint(e.toString());
-  debugPrint(s.toString());
+  debugPrintStack(stackTrace: s);
   return e;
 }

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 
 class RemoteImage extends StatelessWidget {
@@ -54,8 +55,7 @@ class LocalImage extends StatelessWidget {
       final relative = await dataSource.resolveRelative(relativePath);
       return await relative.bytes;
     } on Exception catch (e, s) {
-      debugPrint(e.toString());
-      debugPrint(s.toString());
+      logError(e, s);
       rethrow;
     }
   }

@@ -56,8 +56,7 @@ class WebDataSource extends DataSource {
         throw Exception();
       }
     } on Exception catch (e, s) {
-      debugPrint(e.toString());
-      debugPrint(s.toString());
+      logError(e, s);
       rethrow;
     }
   }
@@ -187,7 +186,7 @@ class ParsedOrgFileInfo {
       final parsed = await parse(await source.content);
       return ParsedOrgFileInfo(source.minimize, parsed);
     } on Exception catch (e, s) {
-      await logError(e, s);
+      logError(e, s);
       rethrow;
     }
   }
