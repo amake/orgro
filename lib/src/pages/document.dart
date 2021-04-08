@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -290,13 +291,19 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     );
   }
 
-  Future<bool> _openLink(String url) {
+  Future<bool> _openLink(String url) async {
     if (looksLikeRelativePath(url) && url.endsWith('.org')) {
       final resolved = widget.dataSource.resolveRelative(url);
       return loadDocument(context, resolved);
     } else {
       debugPrint('Launching URL: $url');
-      return launch(url, forceSafariVC: false);
+      try {
+        return await launch(url, forceSafariVC: false);
+      } on PlatformException catch (e, s) {
+        logError(e, s);
+        showErrorSnackBar(context, e.message ?? e.code);
+        return false;
+      }
     }
   }
 

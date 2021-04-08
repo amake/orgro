@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Set to true to make debug builds look like release builds. Useful for taking
 // App Store screenshots on the iOS Simulator.
@@ -18,4 +20,16 @@ Object logError(Object e, StackTrace s) {
   debugPrint(e.toString());
   debugPrintStack(stackTrace: s);
   return e;
+}
+
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
+    BuildContext context, Object msgObject) {
+  String message;
+  if (msgObject is PlatformException) {
+    message = msgObject.message ?? msgObject.code;
+  } else {
+    message = msgObject.toString();
+  }
+  return ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message)));
 }
