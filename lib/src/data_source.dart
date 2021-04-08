@@ -128,14 +128,14 @@ class NativeDataSource extends DataSource {
   @override
   bool get needsToResolveParent => _parentDirIdentifier == null;
 
-  Future<void> resolveParent(Map<String, String> accessibleDirs) async =>
+  Future<void> resolveParent(List<String> accessibleDirs) async =>
       _parentDirIdentifier ??= await _findParentDirIdentifier(accessibleDirs);
 
   Future<String?> _findParentDirIdentifier(
-    Map<String, String> accessibleDirs,
+    List<String> accessibleDirs,
   ) async {
     debugPrint('Accessible dirs: $accessibleDirs');
-    for (final dirId in accessibleDirs.values) {
+    for (final dirId in accessibleDirs) {
       debugPrint('Resolving parent of $uri relative to $dirId');
       try {
         final parent = await FilePickerWritable()

@@ -73,7 +73,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     final source = widget.dataSource;
     if (source is NativeDataSource && source.needsToResolveParent) {
       accessibleDirs ??= Preferences.of(context).accessibleDirs;
-      await source.resolveParent(accessibleDirs.keyValueListAsMap());
+      await source.resolveParent(accessibleDirs);
     }
 
     var hasRemoteImages = _hasRemoteImages ?? false;
@@ -319,9 +319,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     final prefs = Preferences.of(context);
     debugPrint(
         'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-    final accessibleDirs = prefs.accessibleDirs
-      ..add(dirInfo.uri)
-      ..add(dirInfo.identifier);
+    final accessibleDirs = prefs.accessibleDirs..add(dirInfo.identifier);
     await prefs.setAccessibleDirs(accessibleDirs);
     await _analyzeDoc(accessibleDirs: accessibleDirs);
   }
