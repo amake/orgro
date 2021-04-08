@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/banners.dart';
@@ -65,7 +66,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   void didChangeDependencies() {
     super.didChangeDependencies();
     initViewSettings();
-    _analyzeDoc();
+    time('analyze', _analyzeDoc);
   }
 
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
