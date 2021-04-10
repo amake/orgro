@@ -19,8 +19,3 @@ extension IterUtils<T> on Iterable<T> {
     }
   }
 }
-
-bool looksLikeRelativePath(String text) =>
-    _relativePathLikeRegexp.hasMatch(text);
-
-final _relativePathLikeRegexp = RegExp(r'^\.');

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -11,7 +10,6 @@ import 'package:orgro/src/pages/banners.dart';
 import 'package:orgro/src/pages/image.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
@@ -292,19 +290,40 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   }
 
   Future<bool> _openLink(String url) async {
-    if (looksLikeRelativePath(url) && url.endsWith('.org')) {
-      final resolved = widget.dataSource.resolveRelative(url);
-      return loadDocument(context, resolved);
-    } else {
-      debugPrint('Launching URL: $url');
-      try {
-        return await launch(url, forceSafariVC: false);
-      } on PlatformException catch (e, s) {
-        logError(e, s);
-        showErrorSnackBar(context, e.message ?? e.code);
-        return false;
-      }
+    try {
+      final link = OrgFileLink.parse(url);
+      return _openFileLink(link);
+    } on Exception {
+      // Wasn't a file link
     }
+
+    // Handle as a general URL
+    try {
+      debugPrint('Launching URL: $url');
+      return await launch(url, forceSafariVC: false);
+    } on Exception catch (e, s) {
+      logError(e, s);
+      showErrorSnackBar(context, e);
+    }
+    return false;
+  }
+
+  Future<bool> _openFileLink(OrgFileLink link) async {
+    if (!link.isRelative || !link.body.endsWith('.org')) {
+      return false;
+    }
+    if (widget.dataSource.needsToResolveParent) {
+      _showDirectoryPermissionsSnackBar(context);
+      return false;
+    }
+    try {
+      final resolved = await widget.dataSource.resolveRelative(link.body);
+      return loadDocument(context, resolved);
+    } on Exception catch (e, s) {
+      logError(e, s);
+      showErrorSnackBar(context, e);
+    }
+    return false;
   }
 
   bool? _hasRelativeLinks;
@@ -330,6 +349,21 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     await prefs.setAccessibleDirs(accessibleDirs);
     await _analyzeDoc(accessibleDirs: accessibleDirs);
   }
+
+  void _showDirectoryPermissionsSnackBar(BuildContext context) =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            "Orgro doesn't have permission to resolve relative links",
+          ),
+          action: _canResolveRelativeLinks == true
+              ? SnackBarAction(
+                  label: 'Grant access'.toUpperCase(),
+                  onPressed: _pickDirectory,
+                )
+              : null,
+        ),
+      );
 
   bool? _hasRemoteImages;
 
