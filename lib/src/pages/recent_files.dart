@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
@@ -95,8 +97,13 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     _save(newFiles);
   }
 
-  void removeRecentFile(RecentFile recentFile) {
+  Future<void> removeRecentFile(RecentFile recentFile) async {
     debugPrint('Removing recent file: $recentFile');
+    try {
+      await disposeNativeSourceIdentifier(recentFile.identifier);
+    } on Exception catch (e, s) {
+      logError(e, s);
+    }
     final newFiles = List.of(_recentFiles)..remove(recentFile);
     _save(newFiles);
   }

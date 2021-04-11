@@ -28,6 +28,9 @@ Future<NativeDataSource> readFileWithIdentifier(String identifier) async =>
 Future<bool> canObtainNativeDirectoryPermissions() async =>
     FilePickerWritable().isDirectoryAccessSupported();
 
+Future<void> disposeNativeSourceIdentifier(String identifier) =>
+    FilePickerWritable().disposeIdentifier(identifier);
+
 mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   late FilePickerState _filePickerState;
 
