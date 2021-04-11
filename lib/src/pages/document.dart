@@ -75,6 +75,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       await source.resolveParent(accessibleDirs);
     }
 
+    final canResolveRelativeLinks =
+        _canResolveRelativeLinks ?? await canObtainNativeDirectoryPermissions();
     var hasRemoteImages = _hasRemoteImages ?? false;
     var hasRelativeLinks = _hasRelativeLinks ?? false;
     widget.doc.visit<OrgLink>((link) {
@@ -85,12 +87,13 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       } on Exception {
         // Not a file link
       }
-      return !(hasRemoteImages && hasRelativeLinks);
+      return !hasRemoteImages || (!hasRelativeLinks && canResolveRelativeLinks);
     });
 
     setState(() {
       _hasRemoteImages ??= hasRemoteImages;
       _hasRelativeLinks ??= hasRelativeLinks;
+      _canResolveRelativeLinks ??= canResolveRelativeLinks;
     });
   }
 
@@ -328,9 +331,13 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   bool? _hasRelativeLinks;
 
+  // Android 4.4 and earlier doesn't have APIs to get directory info
+  bool? _canResolveRelativeLinks;
+
   bool get _askForDirectoryPermissions =>
       localLinksPolicy == LocalLinksPolicy.ask &&
       _hasRelativeLinks == true &&
+      _canResolveRelativeLinks == true &&
       widget.dataSource.needsToResolveParent;
 
   Future<void> _pickDirectory() async {
