@@ -76,32 +76,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '18309f118c7a7d9641347d9a3e912500fbacaecc7932fba225f01e419c35f51e',
-        3006344,
+        '91ee1c455c6be95581fa616865e88f5d8aad26d55256e9332486689794c85fa2',
+        3315776,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        '34530de43016bb4eff1933fa9b29871c420aa99d62ef15ef70ed2c33614dfc2d',
-        3005968,
+        '3b57fbb8d0cb87589048eca03d9a5f936503baafd2937bf28ca3fe73ae3132bb',
+        3312144,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        '90b806f9ba15be46bacd2d819d6c5c5afc820bba3fc438e28dc336eada299ce4',
-        3120264,
+        '1469d20037c2e019df297afd5c1cd26b22c9dd0916e2f548c1c4e290838299c2',
+        3453164,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        'beb8a1c7bdb9b3f12fd4e6270dd269c519c73a1038cf78261b8978b7df32d2f3',
-        3126788,
+        'b6af99873ad4c3799ec80f9a85e8f965ddf2c2b42431cba4a30c7991e0e57f3a',
+        3457108,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -259,7 +259,7 @@ class _IosevkaFile extends DynamicFontsFile {
       : super(expectedFileHash, expectedLength);
 
   static const name = 'Iosevka';
-  static const version = '5.2.1';
+  static const version = '6.0.0';
 
   final DynamicFontsVariant variant;
 
