@@ -146,8 +146,8 @@ Drawers are collapsed by default, but can be opened by touching the header.
 
 External links open in your web browser:
 
-- Org-style bracketed links [[https://github.com/amake/sponsor][like this]]
-- Raw URLs like https://github.com/amake/sponsor
+- Org-style bracketed links [[https://github.com/sponsors/amake][like this]]
+- Raw URLs like https://github.com/sponsors/amake
 
 Links to other sections in the same document open in a narrowed view. See [[*Narrowing][Narrowing]].
 
