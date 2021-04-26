@@ -3,6 +3,8 @@ description: An Org file viewer
 version: 1.17.0+42
 homepage: https://github.com/amake/orgro
 
+publish_to: none
+
 environment:
   sdk: ">=2.12.0 <3.0.0"
   flutter: ">=2.2.0-10.1.pre"
@@ -12,12 +14,12 @@ dependencies:
   dynamic_fonts: ^2.0.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
-  file_picker_writable: ^2.0.0
-  # file_picker_writable:
+  # file_picker_writable: ^2.0.0
+  file_picker_writable:
   #   path: ../file_picker_writable
-    # git:
-    #   url: https://github.com/amake/file_picker_writable.git
-    #   ref: android-file-not-found
+    git:
+      url: https://github.com/amake/file_picker_writable.git
+      ref: directory-picker
   flutter:
     sdk: flutter
   flutter_charset_detector: ^1.0.0
