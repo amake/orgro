@@ -1,12 +1,12 @@
 # Orgro
 
-An [org-mode](https://orgmode.org/) file viewer for iOS and Android
+An [Org Mode](https://orgmode.org/) file viewer for iOS and Android
 
 <img width="300" src="https://orgro.org/assets/screenshot/flutter_02.png">
 
 _See https://orgro.org for a demo video_
 
-# What is org-mode?
+# What is Org Mode?
 
 Imagine a plain-text markup language like Markdown, but married to an
 application that is a literate programming environment and life organizer. In
@@ -14,11 +14,11 @@ application that is a literate programming environment and life organizer. In
 
 # Why?
 
-I started taking notes in org-mode at work, then found myself wanting to view
+I started taking notes in Org Mode at work, then found myself wanting to view
 them on my tablet in meetings. By default on iOS you can't open an `.org` file
 at all, as the OS doesn't even know that it's plain text.
 
-Other mobile org-mode apps are focused on very different things like to-dos or
+Other mobile Org Mode apps are focused on very different things like to-dos or
 task management; Orgro is instead first and foremost a *viewer*, letting you see
 and search the contents of your org files.
 
@@ -29,7 +29,7 @@ powers this application and is available as a separate library,
 
 # Features
 
-- Syntax highlighting for most org-mode syntax structures
+- Syntax highlighting for most Org Mode syntax structures
 - Expand and collapse sections, blocks, and drawers
 - Reflow text for easy viewing on narrow screens
 - Pretty table rendering
@@ -46,7 +46,7 @@ See the [manual](./assets/manual/orgro-manual.org) for details.
 
 Orgro is a viewer. It does not support editing at all.
 
-Many org-mode syntax structures are highlighted but not meaningfully
+Many Org Mode syntax structures are highlighted but not meaningfully
 interpreted.
 
 # FAQ

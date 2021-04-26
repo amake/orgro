@@ -1,4 +1,4 @@
-Orgro is an org-mode file viewer with lots of features for comfortable reading on the go:
+Orgro is an Org Mode file viewer with lots of features for comfortable reading on the go:
 
 - Reflowed text for easy viewing on mobile screens
 

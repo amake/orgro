@@ -1,6 +1,6 @@
 Welcome to Orgro
 
-Orgro is an [[https://orgmode.org/][org-mode]] file viewer.
+Orgro is an [[https://orgmode.org/][Org Mode]] file viewer.
 
 Files open in "overview" visibility mode, with top sections folded.
 
@@ -8,7 +8,7 @@ Tap a section header to expand it ↓
 
 * Supported features
 
-Orgro can understand the following org-mode features:
+Orgro can understand the following Org Mode features:
 
 ** Sections
 
@@ -212,7 +212,7 @@ places:
 
 * Visibility Cycling
 
-Rotate sections between expanded and collapsed states just like org-mode in
+Rotate sections between expanded and collapsed states just like Org Mode in
 Emacs:
 
 1. Overview: Show only top-level headlines
