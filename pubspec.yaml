@@ -1,7 +1,7 @@
 name: orgro
 description: An Org file viewer
 version: 1.17.0+42
-homepage: https://github.com/amake/orgro
+homepage: https://orgro.org
 
 publish_to: none
 
