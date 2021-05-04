@@ -536,4 +536,4 @@ packages:
     version: "5.1.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=2.2.0-10.1.pre"
+  flutter: ">=2.2.0-10.2.pre"
