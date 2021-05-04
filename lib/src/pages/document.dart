@@ -361,7 +361,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
-            "Orgro doesn't have permission to resolve relative links",
+            'Orgro doesn’t have permission to resolve relative links',
           ),
           action: _canResolveRelativeLinks == true
               ? SnackBarAction(

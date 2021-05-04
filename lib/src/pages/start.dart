@@ -280,7 +280,7 @@ Future<RecentFile?> _loadFile(
           DateTime.now(),
         );
       } else {
-        debugPrint("Couldn't obtain persistent access to ${source.name}");
+        debugPrint('Couldn’t obtain persistent access to ${source.name}');
       }
     }
   }
