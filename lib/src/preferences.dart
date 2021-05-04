@@ -75,7 +75,7 @@ class Preferences extends InheritedWidget {
   Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
       _setOrRemove(_kLocalLinksPolicyKey, localLinksPolicyToString(value));
 
-  /// Pairs of [URI, Identifier] splatted into a flat list
+  /// List of identifiers
   List<String> get accessibleDirs =>
       _prefs.getStringList(_kAccessibleDirectoriesKey) ?? [];
 
