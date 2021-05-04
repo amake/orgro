@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -121,7 +122,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _reload);
+    _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _onResume);
     WidgetsBinding.instance?.addObserver(_lifecycleEventHandler!);
   }
 
@@ -145,6 +146,22 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
         .cast<Map<String, dynamic>>()
         .map((json) => RecentFile.fromJson(json))
         .toList(growable: false);
+  }
+
+  void _onResume() {
+    if (Platform.isAndroid) {
+      // Only reload on resume on Android:
+      //
+      // - On Android there could be new Recent File entries due to other
+      //   activities, but on iOS there is only a single "activity" so no
+      //   pressing need to reload
+      //
+      // - On iOS a resume event occurs when returning from file/directory
+      //   pickers, when we are likely to want to store something in shared
+      //   prefs. Shared prefs are committed asynchronously on iOS (`commit` is
+      //   a noop) so reloading at this point will clear what we just stored.
+      _reload();
+    }
   }
 
   Future<void> _reload() async {
