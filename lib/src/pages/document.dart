@@ -341,20 +341,25 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       widget.dataSource.needsToResolveParent;
 
   Future<void> _pickDirectory() async {
-    final source = widget.dataSource;
-    if (source is! NativeDataSource) {
-      return;
+    try {
+      final source = widget.dataSource;
+      if (source is! NativeDataSource) {
+        return;
+      }
+      final dirInfo = await pickDirectory(initialDirUri: source.uri);
+      if (dirInfo == null) {
+        return;
+      }
+      final prefs = Preferences.of(context);
+      debugPrint(
+          'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
+      final accessibleDirs = prefs.accessibleDirs..add(dirInfo.identifier);
+      await prefs.setAccessibleDirs(accessibleDirs);
+      await _analyzeDoc(accessibleDirs: accessibleDirs);
+    } on Exception catch (e, s) {
+      logError(e, s);
+      showErrorSnackBar(context, e);
     }
-    final dirInfo = await pickDirectory(initialDirUri: source.uri);
-    if (dirInfo == null) {
-      return;
-    }
-    final prefs = Preferences.of(context);
-    debugPrint(
-        'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-    final accessibleDirs = prefs.accessibleDirs..add(dirInfo.identifier);
-    await prefs.setAccessibleDirs(accessibleDirs);
-    await _analyzeDoc(accessibleDirs: accessibleDirs);
   }
 
   void _showDirectoryPermissionsSnackBar(BuildContext context) =>
