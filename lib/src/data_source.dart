@@ -112,6 +112,9 @@ class NativeDataSource extends DataSource {
 
   @override
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
+    if (_parentDirIdentifier == null) {
+      throw Exception('Can’t resolve path relative to this document');
+    }
     final resolved = await FilePickerWritable().resolveRelativePath(
         directoryIdentifier: _parentDirIdentifier!, relativePath: relativePath);
     if (resolved is! FileInfo) {
