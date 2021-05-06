@@ -104,7 +104,7 @@ packages:
     description:
       path: "."
       ref: directory-picker
-      resolved-ref: "20bc343c39b7f04f6b6335348dcd21e9216a55e8"
+      resolved-ref: "0844a79943ba69c4923fdfed96c875f15831b085"
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "2.0.0"
@@ -152,7 +152,7 @@ packages:
       name: flutter_tex_js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.4"
+    version: "1.2.5"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
