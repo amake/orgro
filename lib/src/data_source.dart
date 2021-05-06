@@ -125,7 +125,8 @@ class NativeDataSource extends DataSource {
   }
 
   @override
-  bool get needsToResolveParent => _parentDirIdentifier == null;
+  bool get needsToResolveParent =>
+      identifier != null && _parentDirIdentifier == null;
 
   Future<void> resolveParent(List<String> accessibleDirs) async =>
       _parentDirIdentifier ??= await _findParentDirIdentifier(accessibleDirs);
