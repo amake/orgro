@@ -272,10 +272,9 @@ Future<RecentFile?> _loadFile(
     if (source == null) {
       // User canceled
     } else {
-      final identifier = source.identifier;
-      if (identifier != null) {
+      if (source.persistable) {
         result = RecentFile(
-          identifier,
+          source.identifier,
           source.name,
           DateTime.now(),
         );

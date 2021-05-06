@@ -87,10 +87,18 @@ class AssetDataSource extends DataSource {
 }
 
 class NativeDataSource extends DataSource {
-  NativeDataSource(String name, this.identifier, this.uri) : super(name);
+  NativeDataSource(
+    String name,
+    this.identifier,
+    this.uri, {
+    required this.persistable,
+  }) : super(name);
 
-  /// The persistent identifier used to read the file via native APIs
-  final String? identifier;
+  /// The identifier used to read the file via native APIs
+  final String identifier;
+
+  /// Whether [identifier] is persistable across app relaunches
+  final bool persistable;
 
   /// The URI that identifies the native file
   final String uri;
@@ -104,11 +112,11 @@ class NativeDataSource extends DataSource {
 
   @override
   FutureOr<String> get content => FilePickerWritable()
-      .readFile(identifier: identifier!, reader: (_, file) => _readFile(file));
+      .readFile(identifier: identifier, reader: (_, file) => _readFile(file));
 
   @override
   FutureOr<Uint8List> get bytes => FilePickerWritable().readFile(
-      identifier: identifier!, reader: (_, file) => file.readAsBytes());
+      identifier: identifier, reader: (_, file) => file.readAsBytes());
 
   @override
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
@@ -124,12 +132,12 @@ class NativeDataSource extends DataSource {
       resolved.fileName ?? Uri.parse(resolved.uri).pathSegments.last,
       resolved.identifier,
       resolved.uri,
+      persistable: resolved.persistable,
     );
   }
 
   @override
-  bool get needsToResolveParent =>
-      identifier != null && _parentDirIdentifier == null;
+  bool get needsToResolveParent => persistable && _parentDirIdentifier == null;
 
   Future<void> resolveParent(List<String> accessibleDirs) async =>
       _parentDirIdentifier ??= await _findParentDirIdentifier(accessibleDirs);
@@ -142,7 +150,7 @@ class NativeDataSource extends DataSource {
       debugPrint('Resolving parent of $uri relative to $dirId');
       try {
         final parent = await FilePickerWritable()
-            .getDirectory(rootIdentifier: dirId, fileIdentifier: identifier!);
+            .getDirectory(rootIdentifier: dirId, fileIdentifier: identifier);
         debugPrint('Found file $uri parent dir: ${parent.uri}');
         return parent.identifier;
       } on Exception {
@@ -160,20 +168,27 @@ class LoadedNativeDataSource extends NativeDataSource {
   ) async =>
       LoadedNativeDataSource(
         externalFileInfo.fileName ?? file.uri.pathSegments.last,
-        externalFileInfo.persistable ? externalFileInfo.identifier : null,
+        externalFileInfo.identifier,
         externalFileInfo.uri,
         await _readFile(file),
+        persistable: externalFileInfo.persistable,
       );
 
   LoadedNativeDataSource(
-      String name, String? identifier, String uri, this.content)
-      : super(name, identifier, uri);
+      String name, String identifier, String uri, this.content,
+      {required bool persistable})
+      : super(name, identifier, uri, persistable: persistable);
 
   @override
   final String content;
 
   @override
-  DataSource get minimize => NativeDataSource(name, identifier, uri);
+  DataSource get minimize => NativeDataSource(
+        name,
+        identifier,
+        uri,
+        persistable: persistable,
+      );
 }
 
 class NativeDirectoryInfo {
