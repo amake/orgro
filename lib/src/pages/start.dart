@@ -14,6 +14,8 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/recent_files.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _version = String.fromEnvironment('ORGRO_VERSION', defaultValue: 'dev');
+
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
 class StartPage extends StatefulWidget {
@@ -144,10 +146,11 @@ class _EmptyBody extends StatelessWidget {
               ],
               const SizedBox(height: 80),
               const _SupportLink(),
+              const _LicensesButton(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const _LicensesButton(),
+                  const _VersionInfoButton(),
                   fontPreloader(context),
                 ],
               ),
@@ -394,4 +397,21 @@ void _openLicensePage(BuildContext context) => Navigator.push(
       MaterialPageRoute<void>(
         builder: (context) => const LicensePage(),
       ),
+    );
+
+class _VersionInfoButton extends StatelessWidget {
+  const _VersionInfoButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: _visitChangelogLink,
+      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
+      child: const Text('v$_version'),
+    );
+  }
+}
+
+void _visitChangelogLink() => launch(
+      'https://orgro.org/changelog/',
+      forceSafariVC: false,
     );

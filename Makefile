@@ -1,5 +1,11 @@
+version_define = --dart-define=ORGRO_VERSION=$(shell sed -nE 's/version: *(([0-9.])+)\+.*/\1/p' pubspec.yaml)
+
 .PHONY: all
 all: release
+
+.PHONY: run
+run:
+	flutter run $(version_define) $(args)
 
 .PHONY: test
 test: ## Run tests
@@ -12,8 +18,8 @@ dirty-check:
 
 .PHONY: build
 build:
-	flutter build appbundle
-	flutter build ios
+	flutter build appbundle $(version_define)
+	flutter build ios $(version_define)
 
 .PHONY: archive
 archive:
