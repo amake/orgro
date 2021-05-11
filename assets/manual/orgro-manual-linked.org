@@ -1,3 +1,10 @@
 This is a file relatively linked from the main Orgro manual file.
 
 There's not much to see here!
+
+* Section
+  :PROPERTIES:
+  :CUSTOM_ID: a-section
+  :END:
+
+  This section is just here to demonstrate linking directly to sections!

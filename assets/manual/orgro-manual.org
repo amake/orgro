@@ -210,10 +210,20 @@ way:
 - Macro references :: {{{date}}}
 
 * Narrowing
+  :PROPERTIES:
+  :ID:       2F5F32A8-5DB9-4FE7-BAAE-8BD328A73228
+  :CUSTOM_ID: narrowing-section
+  :END:
 
 Orgro can "narrow" the view to a specific section in two ways:
 
-- Open a section link
+- Open a link to a section
+  - file:::#narrowing-section
+  - file:::*Narrowing
+  - id:2F5F32A8-5DB9-4FE7-BAAE-8BD328A73228
+  - Even in other files:
+    - file:orgro-manual-linked.org::#a-section
+    - file:orgro-manual-linked.org::*Section
 - Long touch a section headline
 
 Close the narrowed view by touching the Back button in the top app bar.
