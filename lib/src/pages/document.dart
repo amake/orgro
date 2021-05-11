@@ -18,6 +18,7 @@ class DocumentPage extends StatefulWidget {
     required this.title,
     required this.dataSource,
     required this.child,
+    this.initialTarget,
     this.initialQuery,
     Key? key,
   }) : super(key: key);
@@ -26,6 +27,7 @@ class DocumentPage extends StatefulWidget {
   final String title;
   final DataSource dataSource;
   final Widget child;
+  final String? initialTarget;
   final String? initialQuery;
 
   @override
@@ -59,6 +61,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
+    WidgetsBinding.instance?.addPostFrameCallback((_) => _openInitialTarget());
   }
 
   @override
@@ -66,6 +69,16 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     super.didChangeDependencies();
     initViewSettings();
     time('analyze', _analyzeDoc);
+  }
+
+  void _openInitialTarget() {
+    final target = widget.initialTarget;
+    if (target != null) {
+      final section = OrgController.of(context).sectionForTarget(target);
+      if (section != null) {
+        narrow(context, widget.dataSource, section);
+      }
+    }
   }
 
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
@@ -321,7 +334,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     }
     try {
       final resolved = await widget.dataSource.resolveRelative(link.body);
-      return loadDocument(context, resolved);
+      return loadDocument(context, resolved, target: link.extra);
     } on Exception catch (e, s) {
       logError(e, s);
       showErrorSnackBar(context, e);

@@ -18,6 +18,7 @@ Future<bool> loadDocument(
   BuildContext context,
   FutureOr<DataSource?> dataSource, {
   FutureOr<dynamic> Function()? onClose,
+  String? target,
 }) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
@@ -32,8 +33,10 @@ Future<bool> loadDocument(
       return Future.value(null);
     }
   });
-  final push =
-      Navigator.push<void>(context, _buildDocumentRoute(context, parsed));
+  final push = Navigator.push<void>(
+    context,
+    _buildDocumentRoute(context, parsed, target),
+  );
   if (onClose != null) {
     push.whenComplete(onClose);
   }
@@ -43,6 +46,7 @@ Future<bool> loadDocument(
 PageRoute _buildDocumentRoute(
   BuildContext context,
   Future<ParsedOrgFileInfo?> parsed,
+  String? target,
 ) {
   return MaterialPageRoute<void>(
     builder: (context) => FutureBuilder<ParsedOrgFileInfo?>(
@@ -52,6 +56,7 @@ PageRoute _buildDocumentRoute(
           return _DocumentPageWrapper(
             doc: snapshot.data!.doc,
             dataSource: snapshot.data!.dataSource,
+            target: target,
           );
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
@@ -68,11 +73,13 @@ class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
     required this.doc,
     required this.dataSource,
+    required this.target,
     Key? key,
   }) : super(key: key);
 
   final OrgDocument doc;
   final DataSource dataSource;
+  final String? target;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +96,7 @@ class _DocumentPageWrapper extends StatelessWidget {
             doc: doc,
             title: dataSource.name,
             dataSource: dataSource,
+            initialTarget: target,
             child: OrgDocumentWidget(doc, shrinkWrap: true),
           ),
         ),
