@@ -61,7 +61,7 @@ class _AboutItem extends StatelessWidget {
     return TextButton.icon(
       onPressed: onPressed,
       label: Text(label.toUpperCase()),
-      icon: const Icon(Icons.open_in_new),
+      icon: const Icon(Icons.open_in_browser),
     );
   }
 }
