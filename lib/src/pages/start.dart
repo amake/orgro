@@ -11,10 +11,8 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/about.dart';
 import 'package:orgro/src/pages/recent_files.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-const _version = String.fromEnvironment('ORGRO_VERSION', defaultValue: 'dev');
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
@@ -60,7 +58,7 @@ class _StartPageState extends State<StartPage>
         ],
         const PopupMenuDivider(),
         PopupMenuItem<VoidCallback>(
-          value: () => _openAboutDialog(context),
+          value: () => openAboutDialog(context),
           child: const Text('About'),
         ),
       ],
@@ -363,92 +361,20 @@ class _SupportLink extends StatelessWidget {
     return TextButton.icon(
       icon: const Icon(Icons.help),
       label: const Text('Support · Feedback'),
-      onPressed: _visitSupportLink,
+      onPressed: visitSupportLink,
       style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
     );
   }
 }
-
-class _AppIcon extends StatelessWidget {
-  const _AppIcon({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: Image.asset(
-        'assets/manual/orgro-icon.png',
-        scale: MediaQuery.of(context).devicePixelRatio,
-      ),
-    );
-  }
-}
-
-class _AboutItem extends StatelessWidget {
-  const _AboutItem({
-    required this.label,
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
-
-  final String label;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: onPressed,
-      label: Text(label.toUpperCase()),
-      icon: const Icon(Icons.open_in_new),
-    );
-  }
-}
-
-void _openAboutDialog(BuildContext context) {
-  showAboutDialog(
-    context: context,
-    applicationName: 'Orgro',
-    applicationVersion: _version,
-    applicationIcon: const Padding(
-      padding: EdgeInsets.all(8),
-      child: _AppIcon(),
-    ),
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          _AboutItem(
-            label: 'Support · Feedback',
-            onPressed: _visitSupportLink,
-          ),
-          _AboutItem(
-            label: 'Changelog',
-            onPressed: _visitChangelogLink,
-          ),
-        ],
-      ),
-    ],
-  );
-}
-
-void _visitSupportLink() => launch(
-      'https://github.com/amake/orgro/issues',
-      forceSafariVC: false,
-    );
 
 class _VersionInfoButton extends StatelessWidget {
   const _VersionInfoButton({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: _visitChangelogLink,
+      onPressed: visitChangelogLink,
       style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
-      child: const Text('v$_version'),
+      child: const Text('v$orgroVersion'),
     );
   }
 }
-
-void _visitChangelogLink() => launch(
-      'https://orgro.org/changelog/',
-      forceSafariVC: false,
-    );
