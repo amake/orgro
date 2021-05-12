@@ -142,7 +142,6 @@ class _EmptyBody extends StatelessWidget {
               ],
               const SizedBox(height: 80),
               const _SupportLink(),
-              const _LicensesButton(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -435,26 +434,6 @@ void _openAboutDialog(BuildContext context) {
 void _visitSupportLink() => launch(
       'https://github.com/amake/orgro/issues',
       forceSafariVC: false,
-    );
-
-class _LicensesButton extends StatelessWidget {
-  const _LicensesButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => _openLicensePage(context),
-      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
-      child: const Text('Licenses'),
-    );
-  }
-}
-
-void _openLicensePage(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => const LicensePage(),
-      ),
     );
 
 class _VersionInfoButton extends StatelessWidget {
