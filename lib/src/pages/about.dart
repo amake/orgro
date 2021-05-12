@@ -5,29 +5,45 @@ const orgroVersion =
     String.fromEnvironment('ORGRO_VERSION', defaultValue: 'dev');
 
 void openAboutDialog(BuildContext context) {
-  showAboutDialog(
+  showDialog<void>(
     context: context,
-    applicationName: 'Orgro',
-    applicationVersion: orgroVersion,
-    applicationIcon: const Padding(
-      padding: EdgeInsets.all(8),
-      child: _AppIcon(),
-    ),
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          _AboutItem(
-            label: 'Support · Feedback',
-            onPressed: visitSupportLink,
-          ),
-          _AboutItem(
-            label: 'Changelog',
-            onPressed: visitChangelogLink,
+    builder: (context) {
+      Widget dialog = AboutDialog(
+        applicationName: 'Orgro',
+        applicationVersion: orgroVersion,
+        applicationIcon: const Padding(
+          padding: EdgeInsets.all(8),
+          child: _AppIcon(),
+        ),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              _AboutItem(
+                label: 'Support · Feedback',
+                onPressed: visitSupportLink,
+              ),
+              _AboutItem(
+                label: 'Changelog',
+                onPressed: visitChangelogLink,
+              ),
+            ],
           ),
         ],
-      ),
-    ],
+      );
+      if (Theme.of(context).brightness == Brightness.dark) {
+        // Very dumb workaround for our primary color (the default label color
+        // for TextButton) being too dark in dark mode
+        dialog = TextButtonTheme(
+          data: TextButtonThemeData(
+            style: TextButton.styleFrom(
+                primary: DefaultTextStyle.of(context).style.color),
+          ),
+          child: dialog,
+        );
+      }
+      return dialog;
+    },
   );
 }
 
