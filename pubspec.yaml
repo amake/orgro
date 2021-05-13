@@ -28,7 +28,7 @@ dependencies:
   google_fonts: ^2.0.0
   http: ^0.13.0
   intl: ^0.17.0
-  org_flutter: ^1.0.0
+  org_flutter: ^1.4.0
   # org_flutter:
     # path: ../org_flutter
   shared_preferences: ^2.0.0
