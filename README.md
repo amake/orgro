@@ -56,9 +56,9 @@ See [here](https://orgro.org/faq/)
 # Get it
 
 Orgro is available on the [App
-Store](https://apps.apple.com/us/app/orgro/id1512580074?uo=4) and [Google
-Play](https://play.google.com/store/apps/details?id=com.madlonkay.orgro), or you
-can build and install from source:
+Store](https://apps.apple.com/us/app/orgro/id1512580074?uo=4), [Google
+Play](https://play.google.com/store/apps/details?id=com.madlonkay.orgro), [F-Droid](https://f-droid.org/packages/com.madlonkay.orgro/)
+or you can build and install from source:
 
 1. Install [Flutter](https://flutter.dev/)
 2. Clone this repo
