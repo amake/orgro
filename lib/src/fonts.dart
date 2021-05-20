@@ -174,7 +174,7 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'Cousine',
   'Share Tech Mono',
   'Anonymous Pro',
-  'VT323',
+  // 'VT323',
   'Fira Mono',
   'Space Mono',
   'Overpass Mono',
@@ -184,7 +184,7 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'B612 Mono',
   'Nova Mono',
   'Fira Code',
-  'Major Mono Display'
+  // 'Major Mono Display',
 };
 
 TextStyle loadFontWithVariants(String family) {
