@@ -10,7 +10,6 @@
   - Additional fonts manually made available for dynamic download via the
     [[https://pub.dev/packages/dynamic_fonts][dynamic_fonts]] package
     - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
-    - [[https://www.jetbrains.com/lp/mono/][JetBrains Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
 
   This file documents how the last category is prepared in literate-programming
@@ -90,66 +89,6 @@
 
    #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
      aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
-   #+end_src
-
-** JetBrains Mono
-
-   Download
-
-   #+begin_src bash :dir ../tmp :mkdirp t :var version="2.225"
-     curl -LO https://github.com/JetBrains/JetBrainsMono/releases/download/v$version/JetBrainsMono-$version.zip
-     rm -r JetBrainsMono
-     mkdir JetBrainsMono
-     unzip JetBrainsMono-$version.zip -d JetBrainsMono/$version
-   #+end_src
-
-   Checksum
-
-   #+name: jetbrainsmono-csums
-   #+begin_src bash :dir ../tmp/JetBrainsMono :results table drawer replace
-     for ttf in */fonts/ttf/*.ttf; do
-         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
-     done
-   #+end_src
-
-   #+RESULTS: jetbrainsmono-csums
-   :results:
-   | JetBrainsMono-Bold.ttf               | 173264 | 4e350d30a649ebbaaa6dd2e38a1f38c4c5fa6692516af47be33dbeec42d58763 |
-   | JetBrainsMono-BoldItalic.ttf         | 175800 | e6cded7e6933741aad7fc09c6db0536bea14b83b8accd5288346bd7367112f30 |
-   | JetBrainsMono-ExtraBold.ttf          | 175812 | f796e8bb2ffcfd7e635155635a5eab86ce0190a3f710a945a92da29e631c5372 |
-   | JetBrainsMono-ExtraBoldItalic.ttf    | 178492 | 35176daf8a62befb3c2a854b07765a2fc186bbb4c8ba3b8f3124b5102f4121fd |
-   | JetBrainsMono-ExtraLight.ttf         | 171732 | f37e808b66d5350c935245e71071d95238d0d423fced5d1f011c7f603443213f |
-   | JetBrainsMono-ExtraLightItalic.ttf   | 173496 | acf566b08df2025d17aa93bce75311998576689ed21416d35b915cf8a9e66d6f |
-   | JetBrainsMono-Italic.ttf             | 175656 | d7972492ce345c58cf8984f65e30c3ccd190738582ded5852f5083e27f3ba068 |
-   | JetBrainsMono-Light.ttf              | 173244 | 87b45464e17c8555424f23f50e4ab3df73acba10875a8fa92c2b1bc0ee3a64f3 |
-   | JetBrainsMono-LightItalic.ttf        | 175140 | 2f89ffacfae34ea945574b959eafe1d877b1774dbd248a83933c152df0829354 |
-   | JetBrainsMono-Medium.ttf             | 173444 | 7b4faad50d02844b8b7e3bfc7df575c2587291c01febfebb83b83d7c37238447 |
-   | JetBrainsMono-MediumItalic.ttf       | 176680 | 543008ddb1bdd61e0bf534c25cee6083beb7adbfee64df1bcb79b0550eab1ca2 |
-   | JetBrainsMono-Regular.ttf            | 171876 | 1f376439c75ab33392eb7a2f5ec999809493b378728d723327655c9fcb45cea9 |
-   | JetBrainsMono-Thin.ttf               | 169480 | e53e50213b604f9a7a3c6aca14318606a0ba051fe0822870cfdc6599623cc982 |
-   | JetBrainsMono-ThinItalic.ttf         | 172548 | a88204af54b61ee99b505c52ea6e9f57284fbdf6eaecbe7e8f3a0b8e1aa4e5cf |
-   | JetBrainsMonoNL-Bold.ttf             | 116608 | 743a6972e7e0cd0fe2ee7b4af68df4d4653aca76e4607da9ef84c52a87a1a21e |
-   | JetBrainsMonoNL-BoldItalic.ttf       | 120048 | 5f99b4bc6b03f37e5998d81d808f77448fe6f8ffc7ef95270846b3e600a882de |
-   | JetBrainsMonoNL-ExtraBold.ttf        | 118208 | 657796682c7fb623291eaa927f3ee5e95737bdb72d59162f0d95eb2ef141065a |
-   | JetBrainsMonoNL-ExtraBoldItalic.ttf  | 120868 | 6904d84356ada4fd21d13271fb98f678c355e609cedcc6e47d216d87b289786d |
-   | JetBrainsMonoNL-ExtraLight.ttf       | 116040 | 34c937e62955c3bf11da18cef87d6ef979fa6188056e23dc141d2c1b7e7ab742 |
-   | JetBrainsMonoNL-ExtraLightItalic.ttf | 118404 | 6d7d8be53328a8cd5778856554df8cc3d85926c3a9fa7e25662220f680f24871 |
-   | JetBrainsMonoNL-Italic.ttf           | 119268 | bcfb4034cca9fe09316327c3e823036d1bbacd8e45d2f123a9a80793277b2d4d |
-   | JetBrainsMonoNL-Light.ttf            | 116204 | 8544e664f2853fee7e43bf41d37dcb0f21dbcacdca8c3a87a73177bb162d8252 |
-   | JetBrainsMonoNL-LightItalic.ttf      | 119040 | cdba0280a599e76f183cdaba85c40bc8b3c3e9bd483a5d3f253e320f2771eaff |
-   | JetBrainsMonoNL-Medium.ttf           | 115960 | ce7528a1c7d3f774e2a49aca1cfad4fadefc59548c332a45eaaf1025c33b154a |
-   | JetBrainsMonoNL-MediumItalic.ttf     | 120040 | 291009509860181d042619d8c101e7c84b7381f509a93c894f0422f62b09ef3b |
-   | JetBrainsMonoNL-Regular.ttf          | 115148 | 81364b2eff560aaaaf0e47bac0743edbf9baff67d9f3e5bf10e841b9841bea29 |
-   | JetBrainsMonoNL-Thin.ttf             | 114644 | bde82a63bf6c3aa865fc8870b5cc7fd8298a5114785dbecfc0b8dcbc09a17d3b |
-   | JetBrainsMonoNL-ThinItalic.ttf       | 117928 | 232226ccb1e29ffa531898a2a9890a5a8ccf8ecd96071d6b40e0af6d57988c06 |
-   :end:
-
-   #+call: update-checksums(replacements=jetbrainsmono-csums)
-
-   Deploy to S3
-
-   #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
-     aws s3 $dryrun sync --exclude '*' --include 'JetBrainsMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
    #+end_src
 
 ** Custom Iosevka

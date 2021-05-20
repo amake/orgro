@@ -19,7 +19,6 @@ Future<void> clearFontCache() async {
 const _kCustomFonts = [
   _FiraGoFile.name,
   _IosevkaFile.name,
-  _JetBrainsMonoFile.name,
 ];
 
 void _initCustomFonts() {
@@ -106,46 +105,6 @@ void _initCustomFonts() {
       (acc, file) => acc..[file.variant] = file,
     ),
   );
-  DynamicFonts.register(
-    _JetBrainsMonoFile.name,
-    [
-      _JetBrainsMonoFile(
-        const DynamicFontsVariant(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-        ),
-        '1f376439c75ab33392eb7a2f5ec999809493b378728d723327655c9fcb45cea9',
-        171876,
-      ),
-      _JetBrainsMonoFile(
-        const DynamicFontsVariant(
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.normal,
-        ),
-        '4e350d30a649ebbaaa6dd2e38a1f38c4c5fa6692516af47be33dbeec42d58763',
-        173264,
-      ),
-      _JetBrainsMonoFile(
-        const DynamicFontsVariant(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.italic,
-        ),
-        'd7972492ce345c58cf8984f65e30c3ccd190738582ded5852f5083e27f3ba068',
-        175656,
-      ),
-      _JetBrainsMonoFile(
-        const DynamicFontsVariant(
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.italic,
-        ),
-        'e6cded7e6933741aad7fc09c6db0536bea14b83b8accd5288346bd7367112f30',
-        175800,
-      ),
-    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
-      {},
-      (acc, file) => acc..[file.variant] = file,
-    ),
-  );
 }
 
 Iterable<String> get availableFontFamilies sync* {
@@ -185,6 +144,9 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'Nova Mono',
   'Fira Code',
   // 'Major Mono Display',
+
+  // Added post-1.19.0
+  'JetBrains Mono',
 };
 
 TextStyle loadFontWithVariants(String family) {
@@ -280,34 +242,4 @@ class _IosevkaFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
-}
-
-class _JetBrainsMonoFile extends DynamicFontsFile {
-  _JetBrainsMonoFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
-
-  static const name = 'JetBrainsMono';
-  static const version = '2.225';
-
-  final DynamicFontsVariant variant;
-
-  bool get _italic => variant.fontStyle == FontStyle.italic;
-
-  bool get _bold => variant.fontWeight == FontWeight.bold;
-
-  String get _variantSlug {
-    if (_bold && _italic) {
-      return 'BoldItalic';
-    } else if (_bold) {
-      return 'Bold';
-    } else if (_italic) {
-      return 'Italic';
-    } else {
-      return 'Regular';
-    }
-  }
-
-  @override
-  String get url =>
-      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/JetBrainsMono/$version/fonts/ttf/JetBrainsMono-$_variantSlug.ttf';
 }
