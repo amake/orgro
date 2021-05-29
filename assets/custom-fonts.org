@@ -117,12 +117,12 @@
    #+end_src
 
    #+RESULTS:
-   : v6.0.1
+   : v7.0.0
 
    Configuration: Tangle the following
 
    #+begin_src yaml :tangle ../../Iosevka/private-build-plans.toml
-     [buildPlans.iosevka-orgro]       # <iosevka-custom> is your plan name
+     [buildPlans.iosevka-orgro]      # <iosevka-custom> is your plan name
      family = "Iosevka Orgro"        # Font menu family name
      # spacing = "normal"               # Optional; Values: `normal`, `term`, `fontconfig-mono`, or `fixed`
      # serifs = "sans"                  # Optional; Values: `sans` or `slab`
@@ -146,8 +146,8 @@
 
      # Optional; Configure single character's variant for Italic only; Overrides [design]
      # [buildPlans.iosevka-custom.variants.italic]
-     # i = 'serifed-tailed'
-     # l = 'serifed-tailed'
+     # i = 'tailed-serifed'
+     # l = 'tailed-serifed'
 
      # End variant section
      ###################################################################################################
@@ -289,10 +289,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 3310616 | a985f630df03dd99bb05cff93ae40ad5633e50f1746fb26b208fbde3644dadfa |
-   | iosevka-orgro-bolditalic.ttf | 3456720 | 5b513a2bd4b850117df76e2c3719c9ca1825159228fbd4c0e64d72eb7c96174e |
-   | iosevka-orgro-italic.ttf     | 3453632 | 8ca7ec11d28384aeaf019512749edf38aefd14adc4bd8fcfd95d80d9e57a2fa4 |
-   | iosevka-orgro-regular.ttf    | 3317388 | 9a592451f45258bd5886ae7e2044c38f6bc4a25625b89c7df388f8ee5701c651 |
+   | iosevka-orgro-bold.ttf       | 4376360 | 1c212b6b95fbd122adf87cf69366105562e70154efa0f89173746a28298a27c4 |
+   | iosevka-orgro-bolditalic.ttf | 4578532 | 5bb172a06997d6b867260e85a0507c0004148835f8259c620a679d851f9282af |
+   | iosevka-orgro-italic.ttf     | 4586640 | 8cba283c34e0d71da9a7460dc18b0fadec09d89fa3d460c557a3cecb3a2a8d2d |
+   | iosevka-orgro-regular.ttf    | 4375832 | 6ec6be2297da5bf2d445abd24db95a641e1c2b05a7f974b50357b05d2a7b7d33 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
