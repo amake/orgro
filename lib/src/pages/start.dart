@@ -71,7 +71,7 @@ class _StartPageState extends State<StartPage>
     }
     return FloatingActionButton(
       onPressed: () => _loadAndRememberFile(context, pickFile()),
-      foregroundColor: Theme.of(context).accentTextTheme.button?.color,
+      foregroundColor: Theme.of(context).colorScheme.onSecondary,
       child: const Icon(Icons.add),
     );
   }
@@ -193,7 +193,7 @@ class _ListHeader extends StatelessWidget {
         // my best guess
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         child: title,
       ),
@@ -244,7 +244,7 @@ class _SwipeDeleteBackground extends StatelessWidget {
       color: Colors.red,
       child: Icon(
         Icons.delete,
-        color: Theme.of(context).accentTextTheme.button?.color,
+        color: Theme.of(context).colorScheme.onSecondary,
       ),
     );
   }
@@ -304,8 +304,8 @@ class _PickFileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).accentColor,
-        onPrimary: Theme.of(context).accentTextTheme.button?.color,
+        primary: Theme.of(context).colorScheme.secondary,
+        onPrimary: Theme.of(context).colorScheme.onSecondary,
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
       child: const Text('Open File'),
@@ -319,10 +319,6 @@ class _OrgManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).buttonColor,
-        onPrimary: DefaultTextStyle.of(context).style.color,
-      ),
       onPressed: () => loadHttpUrl(
         context,
         Uri.parse(
@@ -340,10 +336,6 @@ class _OrgroManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).buttonColor,
-        onPrimary: DefaultTextStyle.of(context).style.color,
-      ),
       onPressed: () => _openOrgroManual(context),
       child: const Text('Open Orgro Manual'),
     );

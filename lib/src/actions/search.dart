@@ -79,7 +79,7 @@ class SearchButton extends StatelessWidget {
               width: kMinInteractiveDimension / 6,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
           ),
@@ -121,7 +121,7 @@ class SearchField extends StatelessWidget {
         style: style,
         controller: _controller,
         textInputAction: TextInputAction.search,
-        cursorColor: theme.accentColor,
+        cursorColor: theme.colorScheme.secondary,
         onSubmitted: onSubmitted,
         decoration: InputDecoration(
           hintText: 'Search...',

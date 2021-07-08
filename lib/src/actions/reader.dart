@@ -26,7 +26,7 @@ class ReaderModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.chrome_reader_mode),
-      color: enabled ? Theme.of(context).accentColor : null,
+      color: enabled ? Theme.of(context).colorScheme.secondary : null,
       onPressed: () => onChanged(!enabled),
     );
   }

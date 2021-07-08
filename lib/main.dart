@@ -64,8 +64,10 @@ class _MyAppState extends State<MyApp> with AppearanceState {
           colorScheme: ColorScheme.light(
             primary: _kPrimaryColor,
             primaryVariant: _kPrimaryColorVariant,
+            onPrimary: Colors.white,
             secondary: _kSecondaryColor,
             secondaryVariant: _kSecondaryColorVariant,
+            onSecondary: Colors.white,
           ),
           textTheme: Typography.englishLike2018,
         ),
@@ -73,8 +75,10 @@ class _MyAppState extends State<MyApp> with AppearanceState {
           colorScheme: ColorScheme.dark(
             primary: _kPrimaryColor,
             primaryVariant: _kPrimaryColorVariant,
+            onPrimary: Colors.white,
             secondary: _kSecondaryColor,
             secondaryVariant: _kSecondaryColorVariant,
+            onSecondary: Colors.white,
           ),
           textTheme: Typography.englishLike2018,
         ),

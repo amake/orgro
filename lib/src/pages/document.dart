@@ -297,7 +297,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     }
     return FloatingActionButton(
       onPressed: () => _searchDelegate.start(context),
-      foregroundColor: Theme.of(context).accentTextTheme.button?.color,
+      foregroundColor: Theme.of(context).colorScheme.onSecondary,
       child: _Badge(
         visible: _searchDelegate.hasQuery,
         child: const Icon(Icons.search),
