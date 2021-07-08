@@ -102,7 +102,7 @@
    System prerequisites: Install with MacPorts
 
    #+begin_src bash :dir /sudo::
-     port install npm6 ttfautohint
+     port install npm7 ttfautohint
    #+end_src
 
    Additional preparation and updating
@@ -117,7 +117,7 @@
    #+end_src
 
    #+RESULTS:
-   : v7.1.0
+   : v7.2.6
 
    Configuration: Tangle the following
 
@@ -289,10 +289,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 4338688 | 303652200365320a8fa5cc0c4ae4f723be14267646d67ca60ca152dc0bf573ab |
-   | iosevka-orgro-bolditalic.ttf | 4550460 | f4389652996637b1960b64c9c8b17db59ea2ba643ee4227deca8e8eca44129da |
-   | iosevka-orgro-italic.ttf     | 4554032 | 985dbaa97bfe7368c27b0911ef155207c098e9adbbc0632f73c057c0c1fba529 |
-   | iosevka-orgro-regular.ttf    | 4348932 | 860e1794e65091eeefdaa2b8134ba1bdf52f96ea39624963f391d61b6ced44e7 |
+   | iosevka-orgro-bold.ttf       | 4372060 | db062eb105addf7ae55ee45470827880ef280421b7af4f7312dfc030411926c6 |
+   | iosevka-orgro-bolditalic.ttf | 4584196 | 44d1ac0a26cba1d3002c04534b55d1a996d7052e3c2903150cecb95767269ecf |
+   | iosevka-orgro-italic.ttf     | 4585860 | b65d8e8162ddbb0a73e192f17bcce162357521ae1054dc67ab539ca8aa159aa4 |
+   | iosevka-orgro-regular.ttf    | 4381960 | 2c85dc38c8c2e8dec8e78e89efc1b9fbcad88a76de923ca63287de26ca386c55 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
