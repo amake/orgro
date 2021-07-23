@@ -109,13 +109,7 @@ class SearchField extends StatelessWidget {
     final color = style.color?.withOpacity(0.7);
     final iconTheme = IconThemeData(color: color);
     return Theme(
-      data: theme.copyWith(
-        primaryColor: color,
-        accentColor: color,
-        hintColor: color,
-        disabledColor: color,
-        colorScheme: theme.colorScheme.copyWith(onSurface: color),
-      ),
+      data: theme.copyWith(hintColor: color),
       child: TextField(
         autofocus: true,
         style: style,
