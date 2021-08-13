@@ -117,7 +117,7 @@
    #+end_src
 
    #+RESULTS:
-   : v7.3.3
+   : v9.0.1
 
    Configuration: Tangle the following
 
@@ -192,14 +192,25 @@
 
      ###################################################################################################
      # Override default building slope sets
-     # Format: <upright|italic|oblique> = <"normal"|"italic"|"oblique">
      # When this section is absent, all slopes would be built.
 
-     [buildPlans.iosevka-orgro.slopes]
-     upright = "normal"
-     italic = "italic"
-     # oblique = "oblique"
+     [buildPlans.iosevka-orgro.slopes.upright]
+     angle = 0             # Angle in degrees. Valid range [0, 15]
+     shape = "upright"     # Slope grade used for shape selection.  `upright` | `oblique` | `italic`
+     menu  = "upright"     # Slope grade used for naming.           `upright` | `oblique` | `italic`
+     css   = "normal"      # Slope grade used for webfont CSS.      `normal`  | `oblique` | `italic`
 
+     # [buildPlans.iosevka-custom.slopes.oblique]
+     # angle = 9.4
+     # shape = "oblique"
+     # menu  = "oblique"
+     # css   = "oblique"
+
+     [buildPlans.iosevka-orgro.slopes.italic]
+     angle = 9.4
+     shape = "italic"
+     menu  = "italic"
+     css   = "italic"
      # End slope section
      ###################################################################################################
 
@@ -289,10 +300,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 4420864 | be72ecd1dff34997e7253d14560dfa8f26f5cb08220d58e7c125a94546c39521 |
-   | iosevka-orgro-bolditalic.ttf | 4633344 | 1abd8c05671cb04557d9a03853cbddf012084161db76291c0547e6f0079f1e20 |
-   | iosevka-orgro-italic.ttf     | 4633016 | 2a56f9e3ea117f4b8044ce9df259034b7c16847d5c435ff65970df1d1e2d6b74 |
-   | iosevka-orgro-regular.ttf    | 4430072 | e656dbe4b3385eaa04071063ecce0d69e61a72ee6fe22e75923c91c06705bb71 |
+   | iosevka-orgro-bold.ttf       | 4707804 | 726c5ad567d9ffaf3864a6a5ae32512357cbd1f5abf2ff6cb6ed5173d12e2687 |
+   | iosevka-orgro-bolditalic.ttf | 4896668 | a30fe656c967ea4b07bdaa2f385d8ad678950cd14991e81b5bc2d61739c70639 |
+   | iosevka-orgro-italic.ttf     | 4902792 | 25df7ae4df0c2bcde1e06aabd76544fbd15c8e55b6498f883a75e3e29b6f4fdf |
+   | iosevka-orgro-regular.ttf    | 4721360 | 4127324c449005531829743c4162a303c4c3af0bee705d31a0cfc0656204bef6 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
