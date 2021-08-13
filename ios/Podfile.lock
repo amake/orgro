@@ -56,7 +56,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_charset_detector: c446c2d0da8991a0bd3dbb9842ff3af415484582
   flutter_tex_js: 010eab32e3bc329fe1b6d48efd8a3b0c0506bb50
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
