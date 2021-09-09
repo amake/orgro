@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorPage extends StatelessWidget {
   const ErrorPage({required this.error, Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Error'),
+        title: Text(AppLocalizations.of(context)!.pageTitleError),
       ),
       body: Center(
         child: Padding(

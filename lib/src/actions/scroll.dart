@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void _scrollTo(ScrollController controller, double position) =>
     controller.animateTo(position,
@@ -30,7 +31,7 @@ class ScrollTopButton extends StatelessWidget {
 PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
     value: () => _scrollToTop(context),
-    child: const Text('Scroll to top'),
+    child: Text(AppLocalizations.of(context)!.menuItemScrollTop),
   );
 }
 
@@ -49,6 +50,6 @@ class ScrollBottomButton extends StatelessWidget {
 PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
     value: () => _scrollToBottom(context),
-    child: const Text('Scroll to bottom'),
+    child: Text(AppLocalizations.of(context)!.menuItemScrollBottom),
   );
 }

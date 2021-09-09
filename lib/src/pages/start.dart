@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/actions/cache.dart';
@@ -31,7 +32,7 @@ class _StartPageState extends State<StartPage>
       child: buildWithRecentFiles(builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Orgro'),
+            title: Text(AppLocalizations.of(context)!.appTitle),
             actions: _buildActions().toList(growable: false),
           ),
           body: AnimatedSwitcher(
@@ -53,13 +54,13 @@ class _StartPageState extends State<StartPage>
           const PopupMenuDivider(),
           PopupMenuItem<VoidCallback>(
             value: () => _openOrgroManual(context),
-            child: const Text('Orgro Manual'),
+            child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
           ),
         ],
         const PopupMenuDivider(),
         PopupMenuItem<VoidCallback>(
           value: () => openAboutDialog(context),
-          child: const Text('About'),
+          child: Text(AppLocalizations.of(context)!.menuItemAbout),
         ),
       ],
     );
@@ -168,7 +169,11 @@ class _RecentFilesBody extends StatelessWidget {
           itemCount: recentFiles.length + 1,
           itemBuilder: (context, idx) {
             if (idx == 0) {
-              return const _ListHeader(title: Text('Recent files'));
+              return _ListHeader(
+                title: Text(
+                  AppLocalizations.of(context)!.sectionHeaderRecentFiles,
+                ),
+              );
             } else {
               final recentFile = recentFiles[idx - 1];
               return _RecentFileListTile(recentFile);
@@ -308,7 +313,7 @@ class _PickFileButton extends StatelessWidget {
         onPrimary: Theme.of(context).colorScheme.onSecondary,
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
-      child: const Text('Open File'),
+      child: Text(AppLocalizations.of(context)!.buttonOpenFile),
     );
   }
 }
@@ -325,7 +330,7 @@ class _OrgManualButton extends StatelessWidget {
           'https://code.orgmode.org/bzg/org-mode/raw/master/doc/org-manual.org',
         ),
       ),
-      child: const Text('Open Org Manual'),
+      child: Text(AppLocalizations.of(context)!.buttonOpenOrgManual),
     );
   }
 }
@@ -337,7 +342,7 @@ class _OrgroManualButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => _openOrgroManual(context),
-      child: const Text('Open Orgro Manual'),
+      child: Text(AppLocalizations.of(context)!.buttonOpenOrgroManual),
     );
   }
 }
@@ -352,7 +357,7 @@ class _SupportLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton.icon(
       icon: const Icon(Icons.help),
-      label: const Text('Support · Feedback'),
+      label: Text(AppLocalizations.of(context)!.buttonSupport),
       onPressed: visitSupportLink,
       style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
     );
@@ -366,7 +371,7 @@ class _VersionInfoButton extends StatelessWidget {
     return TextButton(
       onPressed: visitChangelogLink,
       style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
-      child: const Text('v$orgroVersion'),
+      child: Text(AppLocalizations.of(context)!.buttonVersion(orgroVersion)),
     );
   }
 }

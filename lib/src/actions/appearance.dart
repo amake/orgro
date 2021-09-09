@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/appearance.dart';
 
 PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
@@ -10,7 +11,7 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
         appearance.setMode(newMode);
       }
     },
-    child: const Text('Appearance…'),
+    child: Text(AppLocalizations.of(context)!.menuItemAppearance),
   );
 }
 
@@ -22,20 +23,20 @@ Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
           for (final mode in ThemeMode.values)
             CheckboxListTile(
               value: current == mode,
-              title: Text(themeModeToDisplayString(mode)),
+              title: Text(themeModeToDisplayString(context, mode)),
               onChanged: (_) => Navigator.pop(context, mode),
             ),
         ],
       ),
     );
 
-String themeModeToDisplayString(ThemeMode value) {
+String themeModeToDisplayString(BuildContext context, ThemeMode value) {
   switch (value) {
     case ThemeMode.system:
-      return 'Automatic';
+      return AppLocalizations.of(context)!.appearanceModeAutomatic;
     case ThemeMode.light:
-      return 'Light';
+      return AppLocalizations.of(context)!.appearanceModeLight;
     case ThemeMode.dark:
-      return 'Dark';
+      return AppLocalizations.of(context)!.appearanceModeDark;
   }
 }

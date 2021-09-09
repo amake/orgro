@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 PopupMenuItem<VoidCallback> readerModeMenuItem(
   BuildContext context, {
@@ -8,7 +9,7 @@ PopupMenuItem<VoidCallback> readerModeMenuItem(
   return CheckedPopupMenuItem<VoidCallback>(
     checked: enabled,
     value: () => onChanged(!enabled),
-    child: const Text('Reader mode'),
+    child: Text(AppLocalizations.of(context)!.menuItemReaderMode),
   );
 }
 

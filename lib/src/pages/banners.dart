@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/preferences.dart';
 
 class RemoteImagePermissionsBanner extends StatelessWidget {
@@ -19,23 +20,24 @@ class RemoteImagePermissionsBanner extends StatelessWidget {
           SizeTransition(sizeFactor: animation, child: child),
       child: visible
           ? MaterialBanner(
-              content: const Text(
-                'This document contains remote images. Would you like to load them?',
+              content: Text(
+                AppLocalizations.of(context)!.bannerBodyRemoteImages,
               ),
               leading: const Icon(Icons.photo),
               actions: [
                 _BannerButton(
-                  text: 'Always',
+                  text:
+                      AppLocalizations.of(context)!.bannerBodyActionShowAlways,
                   onPressed: () =>
                       onResult(RemoteImagesPolicy.allow, persist: true),
                 ),
                 _BannerButton(
-                  text: 'Never',
+                  text: AppLocalizations.of(context)!.bannerBodyActionShowNever,
                   onPressed: () =>
                       onResult(RemoteImagesPolicy.deny, persist: true),
                 ),
                 _BannerButton(
-                  text: 'Just once',
+                  text: AppLocalizations.of(context)!.bannerBodyActionShowOnce,
                   onPressed: () =>
                       onResult(RemoteImagesPolicy.allow, persist: false),
                 ),
@@ -68,21 +70,23 @@ class DirectoryPermissionsBanner extends StatelessWidget {
           SizeTransition(sizeFactor: animation, child: child),
       child: visible
           ? MaterialBanner(
-              content: const Text(
-                'This document contains relative links. Would you like to grant access?',
+              content: Text(
+                AppLocalizations.of(context)!.bannerBodyRelativeLinks,
               ),
               leading: const Icon(Icons.photo),
               actions: [
                 _BannerButton(
-                  text: 'Not now',
+                  text:
+                      AppLocalizations.of(context)!.bannerBodyActionGrantNotNow,
                   onPressed: onDismiss,
                 ),
                 _BannerButton(
-                  text: 'Never',
+                  text:
+                      AppLocalizations.of(context)!.bannerBodyActionGrantNever,
                   onPressed: onForbid,
                 ),
                 _BannerButton(
-                  text: 'Grant access',
+                  text: AppLocalizations.of(context)!.bannerBodyActionGrantNow,
                   onPressed: onAllow,
                 ),
               ],

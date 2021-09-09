@@ -1,3 +1,61 @@
 {
-  "appTitle": "Orgro"
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Appearance…",
+  "menuItemClearCache": "Clear cache",
+  "menuItemOrgroManual": "Orgro Manual",
+  "menuItemAbout": "About",
+
+  "appearanceModeAutomatic": "Automatic",
+  "appearanceModeLight": "Light",
+  "appearanceModeDark": "Dark",
+
+  "snackbarMessageCacheCleared": "Cache cleared",
+
+  "aboutLinkSupport": "Support · Feedback",
+  "aboutLinkChangelog": "Changelog",
+
+  "buttonOpenFile": "Open File",
+  "buttonOpenOrgroManual": "Open Orgro Manual",
+  "buttonOpenOrgManual": "Open Org Manual",
+
+  "buttonSupport": "Support · Feedback",
+  "buttonVersion": "v{version}",
+  "@buttonVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+
+  "sectionHeaderRecentFiles": "Recent files",
+
+  "menuItemReaderMode": "Reader mode",
+  "menuItemScrollTop": "Scroll to top",
+  "menuItemScrollBottom": "Scroll to bottom",
+
+  "hintTextSearch": "Search...",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro doesn’t have permission to resolve relative links",
+  "snackbarActionGrantAccess": "Grant access",
+
+  "dialogTitleError": "Error",
+
+  "pageTitleError": "Error",
+  "pageTitleLoading": "Loading...",
+  "pageTitleNarrow": "{name} › narrow",
+  "@pageTitleNarrow": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
+  "bannerBodyRemoteImages": "This document contains remote images. Would you like to load them?",
+  "bannerBodyActionShowAlways": "Always",
+  "bannerBodyActionShowNever": "Never",
+  "bannerBodyActionShowOnce": "Just once",
+
+  "bannerBodyRelativeLinks": "This document contains relative links. Would you like to grant access?",
+  "bannerBodyActionGrantNotNow": "Not now",
+  "bannerBodyActionGrantNever": "Never",
+  "bannerBodyActionGrantNow": "Grant access"
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/pages/pages.dart';
@@ -120,7 +121,8 @@ void narrow(BuildContext context, DataSource dataSource, OrgSection section) {
           data: viewSettings,
           child: DocumentPage(
             doc: section,
-            title: '${dataSource.name} › narrow',
+            title:
+                AppLocalizations.of(context)!.pageTitleNarrow(dataSource.name),
             dataSource: dataSource,
             initialQuery: viewSettings.queryString,
             child: OrgSectionWidget(

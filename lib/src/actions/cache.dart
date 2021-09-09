@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -20,9 +21,13 @@ PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
       }
       await prefs.setAccessibleDirs(const []);
       await clearFontCache();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Cache cleared')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.snackbarMessageCacheCleared),
+        ),
+      );
     },
-    child: const Text('Clear cache'),
+    child: Text(AppLocalizations.of(context)!.menuItemClearCache),
   );
 }

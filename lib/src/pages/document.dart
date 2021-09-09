@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/data_source.dart';
@@ -378,12 +379,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   void _showDirectoryPermissionsSnackBar(BuildContext context) =>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Orgro doesn’t have permission to resolve relative links',
+          content: Text(
+            AppLocalizations.of(context)!
+                .snackbarMessageNeedsDirectoryPermissions,
           ),
           action: _canResolveRelativeLinks == true
               ? SnackBarAction(
-                  label: 'Grant access'.toUpperCase(),
+                  label: AppLocalizations.of(context)!
+                      .snackbarActionGrantAccess
+                      .toUpperCase(),
                   onPressed: _pickDirectory,
                 )
               : null,

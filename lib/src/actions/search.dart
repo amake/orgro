@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MySearchDelegate {
   MySearchDelegate({
@@ -118,7 +119,7 @@ class SearchField extends StatelessWidget {
         cursorColor: theme.colorScheme.secondary,
         onSubmitted: onSubmitted,
         decoration: InputDecoration(
-          hintText: 'Search...',
+          hintText: AppLocalizations.of(context)!.hintTextSearch,
           border: InputBorder.none,
           prefixIcon: IconTheme.merge(
             data: iconTheme,

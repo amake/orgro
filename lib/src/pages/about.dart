@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const orgroVersion =
@@ -9,7 +10,7 @@ void openAboutDialog(BuildContext context) {
     context: context,
     builder: (context) {
       Widget dialog = AboutDialog(
-        applicationName: 'Orgro',
+        applicationName: AppLocalizations.of(context)!.appTitle,
         applicationVersion: orgroVersion,
         applicationIcon: const Padding(
           padding: EdgeInsets.all(8),
@@ -18,13 +19,13 @@ void openAboutDialog(BuildContext context) {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               _AboutItem(
-                label: 'Support · Feedback',
+                label: AppLocalizations.of(context)!.aboutLinkSupport,
                 onPressed: visitSupportLink,
               ),
               _AboutItem(
-                label: 'Changelog',
+                label: AppLocalizations.of(context)!.aboutLinkChangelog,
                 onPressed: visitChangelogLink,
               ),
             ],
