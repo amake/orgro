@@ -22,6 +22,8 @@ dependencies:
       ref: directory-picker
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_charset_detector: ^1.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
@@ -40,6 +42,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/manual/

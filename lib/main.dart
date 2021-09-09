@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
@@ -58,8 +59,10 @@ class _MyAppState extends State<MyApp> with AppearanceState {
     return buildWithAppearance(builder: (context) {
       return MaterialApp(
         restorationScopeId: 'orgro_root',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: !kScreenshotMode,
-        title: 'Orgro',
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: ThemeData.from(
           colorScheme: ColorScheme.light(
             primary: _kPrimaryColor,
