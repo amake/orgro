@@ -207,7 +207,10 @@ class _ListHeader extends StatelessWidget {
   }
 }
 
-final _kLastOpenedFormat = DateFormat.yMd().add_jm();
+// Do not make format object a constant because it will break dynamic UI
+// language switching
+String _formatLastOpenedDate(DateTime date, String locale) =>
+    DateFormat.yMd(locale).add_jm().format(date);
 
 class _RecentFileListTile extends StatelessWidget {
   const _RecentFileListTile(this.recentFile, {Key? key}) : super(key: key);
@@ -225,7 +228,10 @@ class _RecentFileListTile extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.insert_drive_file),
         title: Text(recentFile.name),
-        subtitle: Text(_kLastOpenedFormat.format(recentFile.lastOpened)),
+        subtitle: Text(
+          _formatLastOpenedDate(
+              recentFile.lastOpened, AppLocalizations.of(context)!.localeName),
+        ),
         onTap: () async => _loadAndRememberFile(
           context,
           readFileWithIdentifier(recentFile.identifier),
