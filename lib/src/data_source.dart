@@ -6,9 +6,11 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/error.dart';
 
 abstract class DataSource {
   DataSource(this.name);
@@ -53,7 +55,11 @@ class WebDataSource extends DataSource {
       if (response.statusCode == 200) {
         return response;
       } else {
-        throw Exception();
+        throw OrgroError(
+          'Unexpected HTTP response: $response',
+          localizedMessage: (context) => AppLocalizations.of(context)!
+              .errorUnexpectedHttpResponse(response),
+        );
       }
     } on Exception catch (e, s) {
       logError(e, s);
@@ -121,12 +127,20 @@ class NativeDataSource extends DataSource {
   @override
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
     if (_parentDirIdentifier == null) {
-      throw Exception('Can’t resolve path relative to this document');
+      throw OrgroError(
+        'Can’t resolve path relative to this document',
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorCannotResolveRelativePath,
+      );
     }
     final resolved = await FilePickerWritable().resolveRelativePath(
         directoryIdentifier: _parentDirIdentifier!, relativePath: relativePath);
     if (resolved is! FileInfo) {
-      throw Exception('$relativePath resolved to a non-file: $resolved');
+      throw OrgroError(
+        '$relativePath resolved to a non-file: $resolved',
+        localizedMessage: (context) => AppLocalizations.of(context)!
+            .errorPathResolvedToNonFile(relativePath, resolved.uri),
+      );
     }
     return NativeDataSource(
       resolved.fileName ?? Uri.parse(resolved.uri).pathSegments.last,

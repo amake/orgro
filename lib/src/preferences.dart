@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,7 +97,11 @@ class Preferences extends InheritedWidget {
     } else if (value is double) {
       return _prefs.setDouble(key, value);
     } else {
-      throw Exception('Unknown type: $T');
+      throw OrgroError(
+        'Unknown type: $T',
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorUnknownType(T),
+      );
     }
   }
 }

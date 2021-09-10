@@ -57,5 +57,26 @@
   "bannerBodyRelativeLinks": "This document contains relative links. Would you like to grant access?",
   "bannerBodyActionGrantNotNow": "Not now",
   "bannerBodyActionGrantNever": "Never",
-  "bannerBodyActionGrantNow": "Grant access"
+  "bannerBodyActionGrantNow": "Grant access",
+
+  "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
+  "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
+  "@errorPathResolvedToNonFile": {
+    "placeholders": {
+      "path": {},
+      "resolved": {}
+    }
+  },
+  "errorUnknownType": "Unknown type: {type}",
+  "@errorUnknownType": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "errorUnexpectedHttpResponse": "Unexpected HTTP response: {response}",
+  "@errorUnexpectedHttpResponse": {
+    "placeholders": {
+      "response": {}
+    }
+  }
 }

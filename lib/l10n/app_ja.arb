@@ -47,5 +47,10 @@
   "bannerBodyRelativeLinks": "本ドキュメントには相対リンクが含まれています。アクセスを許可しますか？",
   "bannerBodyActionGrantNotNow": "今は許可しない",
   "bannerBodyActionGrantNever": "許可しない",
-  "bannerBodyActionGrantNow": "許可"
+  "bannerBodyActionGrantNow": "許可",
+
+  "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
+  "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",
+  "errorUnknownType": "不明な型: {type}",
+  "errorUnexpectedHttpResponse": "予期しない HTTP レスポンス: {response}"
 }
