@@ -35,7 +35,7 @@ archive:
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: dirty-check test build archive
+release: dirty-check l10n-check test build archive
 
 .PHONY: help
 help: ## Show this help text
