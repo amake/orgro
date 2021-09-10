@@ -74,11 +74,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   void _openInitialTarget() {
     final target = widget.initialTarget;
-    if (target != null) {
-      final section = OrgController.of(context).sectionForTarget(target);
-      if (section != null) {
-        narrow(context, widget.dataSource, section);
-      }
+    if (target == null || target.isEmpty) {
+      return;
+    }
+    OrgSection? section;
+    try {
+      section = OrgController.of(context).sectionForTarget(target);
+    } on Exception catch (e, s) {
+      logError(e, s);
+    }
+    if (section != null) {
+      narrow(context, widget.dataSource, section);
     }
   }
 
