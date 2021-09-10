@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:orgro/src/error.dart';
 
 // Set to true to make debug builds look like release builds. Useful for taking
 // App Store screenshots on the iOS Simulator.
@@ -27,6 +28,8 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
   String message;
   if (msgObject is PlatformException) {
     message = msgObject.message ?? msgObject.code;
+  } else if (msgObject is OrgroError) {
+    message = msgObject.localizedMessage(context);
   } else {
     message = msgObject.toString();
   }
