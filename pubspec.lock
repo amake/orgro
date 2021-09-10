@@ -548,4 +548,4 @@ packages:
     version: "0.2.0"
 sdks:
   dart: ">=2.13.0 <3.0.0"
-  flutter: ">=2.5.0-5.2.pre"
+  flutter: ">=2.5.0-5.3.pre"
