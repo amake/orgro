@@ -10,6 +10,7 @@
   - Additional fonts manually made available for dynamic download via the
     [[https://pub.dev/packages/dynamic_fonts][dynamic_fonts]] package
     - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
+    - [[https://rubjo.github.io/victor-mono/][Victor Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
 
   This file documents how the last category is prepared in literate-programming
@@ -89,6 +90,59 @@
 
    #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
      aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
+   #+end_src
+
+** Victor Mono
+
+   Download
+
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="1.5.0"
+     curl -LO https://github.com/rubjo/victor-mono/raw/v$version/public/VictorMonoAll.zip
+     rm -r VictorMono
+     mkdir VictorMono
+     unzip VictorMonoAll.zip -d VictorMono/$version
+   #+end_src
+
+   Checksum
+
+   #+name: victormono-csums
+   #+begin_src bash :dir ../tmp/VictorMono :results table drawer replace
+     for ttf in */TTF/*.ttf; do
+         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS: victormono-csums
+   :results:
+   | VictorMono-Bold.ttf              | 173460 | 042e9c88e69fdc411179c77a81d0d57ecb764a874d0b0699a1c168e103cf1156 |
+   | VictorMono-BoldItalic.ttf        | 224008 | 6c9a7bd3cbd7525df2a07287a4e3cef7167f7e24cae20193421daafa19e22628 |
+   | VictorMono-BoldOblique.ttf       | 182904 | 0a2c55bdf0b54ad980807119883d19fb4d50618743f7b4bba3c272e1d3356578 |
+   | VictorMono-ExtraLight.ttf        | 167232 | 1cfa184a2f7bd2f11aaf1e477d0eda4a838ee87ecad631fdc80e2716da727863 |
+   | VictorMono-ExtraLightItalic.ttf  | 212644 | 38e3652da2cd7d933e875500f2ff45482e62c12ad648743d2a6492ce8e96f6d0 |
+   | VictorMono-ExtraLightOblique.ttf | 175480 | c3c55fbd87b4fc45b66d2c88f845070fce141df55818f2d41c98324ab36e85f3 |
+   | VictorMono-Italic.ttf            | 214504 | 046e7d73978b269d9776a0768138d6141e8ec102134d33b8c6d17e936bb2815c |
+   | VictorMono-Light.ttf             | 168236 | 7d57b0583fca7dcd2693900cb6cb6b21f526a6f1d017656362b852a7ced6d6fa |
+   | VictorMono-LightItalic.ttf       | 214672 | 575f2a8a2dd2dbec859663c6e54f385f5ee6852ce0834fd83ffd2278e2a6289d |
+   | VictorMono-LightOblique.ttf      | 176256 | 5ff5c8b484bc9735179278aa41e0b5578b482cf40aa153e4eee39fd1cbd78bdb |
+   | VictorMono-Medium.ttf            | 170884 | 2cda0cc326050f3c253ff0e4d26bfe48fdb3785ecacf52efeeee582d593570a6 |
+   | VictorMono-MediumItalic.ttf      | 221612 | 816d3935f334d414fa41b6fa59401d6fa9ab105ae69c98bde311e623917423c5 |
+   | VictorMono-MediumOblique.ttf     | 180408 | 76e12f0e927c693c488899472a84bf00873e7fa66cb7f734d2c7f2927464b096 |
+   | VictorMono-Oblique.ttf           | 176852 | bd0d7e70a278b27cdb98c48e8aea0fb53a35412e73c410d463c2d460c9f561c4 |
+   | VictorMono-Regular.ttf           | 168620 | b7d40fe10e0fe50383e7d4d0d4304747ed31cb805e1cc791d25e64396f1e7ff6 |
+   | VictorMono-SemiBold.ttf          | 171972 | abec4f2b2b9dab011eccd40964967a68150691c562fd57394503eed7ecd29115 |
+   | VictorMono-SemiBoldItalic.ttf    | 219916 | cf0c9d82859f8b393374165d015fd09214cd73078298266b0f5100f1d17a9508 |
+   | VictorMono-SemiBoldOblique.ttf   | 179544 | 0ac563e661818b844dadfd8d99d97feffd892843af981f89a0679f21071cc02b |
+   | VictorMono-Thin.ttf              | 167328 | 83d16a85c2438dd18cf0efc824627f9e85fd16d2b357d9e42fb79ad210534915 |
+   | VictorMono-ThinItalic.ttf        | 213848 | e26d705e4cd7bacc6fafbc366cdcc0cd2a1b126b3372e522e7b3341ae455e258 |
+   | VictorMono-ThinOblique.ttf       | 175988 | 002a07baf906592d05b340c92fb94c3fd9b58a86cc277d075a1e1d21c13b54f6 |
+   :end:
+
+   #+call: update-checksums(replacements=victormono-csums)
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
+     aws s3 $dryrun sync --exclude '*' --include 'VictorMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
    #+end_src
 
 ** Custom Iosevka

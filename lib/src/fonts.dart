@@ -19,6 +19,7 @@ Future<void> clearFontCache() async {
 const _kCustomFonts = [
   _FiraGoFile.name,
   _IosevkaFile.name,
+  _VictorMonoFile.name,
 ];
 
 void _initCustomFonts() {
@@ -99,6 +100,46 @@ void _initCustomFonts() {
         ),
         '54875afe7df1af436154c0e3e70c7a9be689edd84c1d0c06c4f1d00bfc3c8e9c',
         5005100,
+      ),
+    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
+      {},
+      (acc, file) => acc..[file.variant] = file,
+    ),
+  );
+  DynamicFonts.register(
+    _VictorMonoFile.name,
+    [
+      _VictorMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        ),
+        'b7d40fe10e0fe50383e7d4d0d4304747ed31cb805e1cc791d25e64396f1e7ff6',
+        168620,
+      ),
+      _VictorMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+        ),
+        '042e9c88e69fdc411179c77a81d0d57ecb764a874d0b0699a1c168e103cf1156',
+        173460,
+      ),
+      _VictorMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.italic,
+        ),
+        '046e7d73978b269d9776a0768138d6141e8ec102134d33b8c6d17e936bb2815c',
+        214504,
+      ),
+      _VictorMonoFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        '6c9a7bd3cbd7525df2a07287a4e3cef7167f7e24cae20193421daafa19e22628',
+        224008,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -242,4 +283,18 @@ class _IosevkaFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://d35za8cqizqhg.cloudfront.net/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
+}
+
+class _VictorMonoFile extends DynamicFontsFile {
+  _VictorMonoFile(this.variant, String expectedFileHash, int expectedLength)
+      : super(expectedFileHash, expectedLength);
+
+  static const name = 'Victor Mono';
+  static const version = '1.5.0';
+
+  final DynamicFontsVariant variant;
+
+  @override
+  String get url =>
+      'https://d35za8cqizqhg.cloudfront.net/assets/fonts/VictorMono/$version/TTF/VictorMono-${variant.toApiFilenamePart()}.ttf';
 }
