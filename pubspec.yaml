@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   cached_network_image: ^3.0.0
-  dynamic_fonts: ^2.0.0
+  dynamic_fonts: ^2.1.0-eager.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
   # file_picker_writable: ^2.0.0

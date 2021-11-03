@@ -65,6 +65,7 @@ void _initCustomFonts() {
       {},
       (acc, file) => acc..[file.variant] = file,
     ),
+    eager: true,
   );
   DynamicFonts.register(
     _IosevkaFile.name,
@@ -105,6 +106,7 @@ void _initCustomFonts() {
       {},
       (acc, file) => acc..[file.variant] = file,
     ),
+    eager: true,
   );
   DynamicFonts.register(
     _VictorMonoFile.name,
@@ -145,6 +147,7 @@ void _initCustomFonts() {
       {},
       (acc, file) => acc..[file.variant] = file,
     ),
+    eager: true,
   );
 }
 
@@ -206,20 +209,21 @@ TextStyle loadFontWithVariants(String family) {
 
 TextStyle _loadGoogleFont(String fontFamily) {
   // Load actual bold and italic to avoid synthetics
-  GoogleFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
-  GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
-  GoogleFonts.getFont(fontFamily,
-      fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
+  //
+  // You might think this would work (it *does* download all of these variants)
+  // but actually each variant is registered as a separate font, so we *still*
+  // get synthetic bold and italic. See
+  // https://github.com/material-foundation/google-fonts-flutter/issues/35#issuecomment-959043020
+  //
+  // GoogleFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
+  // GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
+  // GoogleFonts.getFont(fontFamily,
+  //     fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
   return GoogleFonts.getFont(fontFamily);
 }
 
 TextStyle _loadDynamicFont(String fontFamily) {
   _initCustomFonts();
-  // Load actual bold and italic to avoid synthetics
-  DynamicFonts.getFont(fontFamily, fontWeight: FontWeight.bold);
-  DynamicFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
-  DynamicFonts.getFont(fontFamily,
-      fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
   return DynamicFonts.getFont(fontFamily);
 }
 
