@@ -1,0 +1,82 @@
+{
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Вигляд…",
+  "menuItemClearCache": "Очистити кеш",
+  "menuItemOrgroManual": "Посібник Orgro",
+  "menuItemAbout": "Про застосунок",
+
+  "appearanceModeAutomatic": "Автоматичний",
+  "appearanceModeLight": "Світлий",
+  "appearanceModeDark": "Темний",
+
+  "snackbarMessageCacheCleared": "Кеш очищено",
+
+  "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
+  "aboutLinkChangelog": "Список змін",
+
+  "buttonOpenFile": "Відкрити файл",
+  "buttonOpenOrgroManual": "Відкрити Посібник Orgro",
+  "buttonOpenOrgManual": "Відкрити Посібник Org",
+
+  "buttonSupport": "Підтримка · Зворотній звʼязок",
+  "buttonVersion": "в{version}",
+  "@buttonVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+
+  "sectionHeaderRecentFiles": "Останні файли",
+
+  "menuItemReaderMode": "Режим читання",
+  "menuItemScrollTop": "Прокрутити вверх",
+  "menuItemScrollBottom": "Прокрутити вниз",
+
+  "hintTextSearch": "Шукати...",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
+  "snackbarActionGrantAccess": "Надати дозвіл",
+
+  "dialogTitleError": "Помилка",
+
+  "pageTitleError": "Помилка",
+  "pageTitleLoading": "Завантаження...",
+  "pageTitleNarrow": "{name} › гілка",
+  "@pageTitleNarrow": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
+  "bannerBodyRemoteImages": "Цей документ містить віддалені зображення. Бажаєте завантажувати їх?",
+  "bannerBodyActionShowAlways": "Завжди",
+  "bannerBodyActionShowNever": "Ніколи",
+  "bannerBodyActionShowOnce": "Лише раз",
+
+  "bannerBodyRelativeLinks": "Цей документ містить відносні посилання. Бажаєте надати дозвіл?",
+  "bannerBodyActionGrantNotNow": "Не зараз",
+  "bannerBodyActionGrantNever": "Ніколи",
+  "bannerBodyActionGrantNow": "Надати дозвіл",
+
+  "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
+  "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
+  "@errorPathResolvedToNonFile": {
+    "placeholders": {
+      "path": {},
+      "resolved": {}
+    }
+  },
+  "errorUnknownType": "Невідомий тип: {type}",
+  "@errorUnknownType": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}",
+  "@errorUnexpectedHttpResponse": {
+    "placeholders": {
+      "response": {}
+    }
+  }
+}
