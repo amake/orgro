@@ -7,7 +7,7 @@ ui_string_keys = jq -r 'keys | .[] | select(startswith("@") | not)' $(1)
 all: release
 
 .PHONY: run
-run:
+run: ## Run app with full environment
 	flutter run $(version_define) $(args)
 
 .PHONY: test
