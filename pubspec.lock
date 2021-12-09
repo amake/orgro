@@ -267,7 +267,7 @@ packages:
       name: org_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   path:
     dependency: transitive
     description:
