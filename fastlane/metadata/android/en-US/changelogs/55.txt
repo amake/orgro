@@ -1,0 +1,2 @@
+- Added Ukranian localization (thanks, @andmizyk)
+- Bug fixes
