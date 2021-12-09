@@ -46,7 +46,7 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [displayName: '@string/app_name']
-        resConfigs 'ja' // No need to list base locale (en)
+        resConfigs 'ja', 'uk' // No need to list base locale (en)
     }
 
     signingConfigs {
