@@ -10,6 +10,7 @@ import 'package:orgro/src/pages/banners.dart';
 import 'package:orgro/src/pages/image.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPage extends StatefulWidget {
@@ -266,7 +267,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         buildWithViewSettings(
           builder: (context) => Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
+              constraints: BoxConstraints(maxWidth: _maxDocWidth(context)),
               child: OrgRootWidget(
                 style: textStyle,
                 onLinkTap: _openLink,
@@ -292,6 +293,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     return _bigScreen
         ? SliverPadding(padding: const EdgeInsets.all(16), sliver: doc)
         : doc;
+  }
+
+  // Calculate the maximum document width as 72 of the character 'M' with the
+  // user's preferred font size and family
+  double _maxDocWidth(BuildContext context) {
+    final mBox = renderedBounds(
+      context,
+      const BoxConstraints(),
+      Text.rich(const TextSpan(text: 'M'), style: textStyle),
+    );
+    return 72 * mBox.toRect().width;
   }
 
   Widget? _buildFloatingActionButton(

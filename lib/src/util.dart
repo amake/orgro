@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 extension IterUtils<T> on Iterable<T> {
   Iterable<R> zipMap<R, U>(Iterable<U> b, R Function(T, U) visit) sync* {
     final iterA = iterator;
@@ -18,4 +20,18 @@ extension IterUtils<T> on Iterable<T> {
       }
     }
   }
+}
+
+TextBox renderedBounds(
+  BuildContext context,
+  BoxConstraints constraints,
+  Text text,
+) {
+  final widget = text.build(context) as RichText;
+  final renderObject = widget.createRenderObject(context);
+  renderObject.layout(constraints);
+  return renderObject
+      .getBoxesForSelection(TextSelection(
+          baseOffset: 0, extentOffset: widget.text.toPlainText().length))
+      .first;
 }
