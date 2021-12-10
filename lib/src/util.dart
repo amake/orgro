@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 extension IterUtils<T> on Iterable<T> {
@@ -35,3 +38,7 @@ TextBox renderedBounds(
           baseOffset: 0, extentOffset: widget.text.toPlainText().length))
       .first;
 }
+
+final platformShortcutKey = Platform.isIOS || Platform.isMacOS
+    ? LogicalKeyboardKey.meta
+    : LogicalKeyboardKey.control;

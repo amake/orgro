@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:orgro/src/actions/appearance.dart';
@@ -13,6 +14,7 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/about.dart';
 import 'package:orgro/src/pages/recent_files.dart';
+import 'package:orgro/src/util.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
@@ -34,10 +36,13 @@ class _StartPageState extends State<StartPage>
             title: Text(AppLocalizations.of(context)!.appTitle),
             actions: _buildActions().toList(growable: false),
           ),
-          body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child:
-                hasRecentFiles ? const _RecentFilesBody() : const _EmptyBody(),
+          body: _KeyboardShortcuts(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: hasRecentFiles
+                  ? const _RecentFilesBody()
+                  : const _EmptyBody(),
+            ),
           ),
           floatingActionButton: _buildFloatingActionButton(context),
         );
@@ -116,6 +121,25 @@ class _StartPageState extends State<StartPage>
     addRecentFile(recentFile);
     debugPrint('Saving file ID to state');
     bucket?.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
+  }
+}
+
+class _KeyboardShortcuts extends StatelessWidget {
+  const _KeyboardShortcuts({required this.child, Key? key}) : super(key: key);
+
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return CallbackShortcuts(
+      bindings: {
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO): () =>
+            _loadAndRememberFile(context, pickFile()),
+      },
+      child: Focus(
+        autofocus: true,
+        child: child,
+      ),
+    );
   }
 }
 

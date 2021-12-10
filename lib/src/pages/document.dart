@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -213,13 +214,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       builder: (context, searchMode, child) => Scaffold(
         // Builder is here to ensure that the primary scroll controller set by the
         // Scaffold makes it into the body's context
-        body: Builder(
-          builder: (context) => CustomScrollView(
-            restorationId: 'document_scroll_view',
-            slivers: [
-              _buildAppBar(context, searchMode: searchMode),
-              _buildDocument(context),
-            ],
+        body: _KeyboardShortcuts(
+          child: Builder(
+            builder: (context) => CustomScrollView(
+              restorationId: 'document_scroll_view',
+              slivers: [
+                _buildAppBar(context, searchMode: searchMode),
+                _buildDocument(context),
+              ],
+            ),
           ),
         ),
         floatingActionButton: _buildFloatingActionButton(
@@ -449,6 +452,25 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     return LocalImage(
       dataSource: widget.dataSource,
       relativePath: link.body,
+    );
+  }
+}
+
+class _KeyboardShortcuts extends StatelessWidget {
+  const _KeyboardShortcuts({required this.child, Key? key}) : super(key: key);
+
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    return CallbackShortcuts(
+      bindings: {
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW): () =>
+            Navigator.maybePop(context),
+      },
+      child: Focus(
+        autofocus: true,
+        child: child,
+      ),
     );
   }
 }
