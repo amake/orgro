@@ -66,10 +66,10 @@ class _MyAppState extends State<MyApp> with AppearanceState {
         theme: ThemeData.from(
           colorScheme: ColorScheme.light(
             primary: _kPrimaryColor,
-            primaryVariant: _kPrimaryColorVariant,
+            primaryContainer: _kPrimaryColorVariant,
             onPrimary: Colors.white,
             secondary: _kSecondaryColor,
-            secondaryVariant: _kSecondaryColorVariant,
+            secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
           textTheme: Typography.englishLike2018,
@@ -77,10 +77,10 @@ class _MyAppState extends State<MyApp> with AppearanceState {
         darkTheme: ThemeData.from(
           colorScheme: ColorScheme.dark(
             primary: _kPrimaryColor,
-            primaryVariant: _kPrimaryColorVariant,
+            primaryContainer: _kPrimaryColorVariant,
             onPrimary: Colors.white,
             secondary: _kSecondaryColor,
-            secondaryVariant: _kSecondaryColorVariant,
+            secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
           textTheme: Typography.englishLike2018,
