@@ -32,7 +32,16 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion flutter.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -40,12 +49,11 @@ android {
 
     defaultConfig {
         applicationId "com.madlonkay.orgro"
-        minSdkVersion 19
-        targetSdkVersion 31
+        minSdkVersion 19 //flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [displayName: '@string/app_name']
+        manifestPlaceholders += [displayName: '@string/app_name']
         resConfigs 'ja', 'uk' // No need to list base locale (en)
     }
 
@@ -61,11 +69,11 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            manifestPlaceholders = [displayName: '@string/app_name_debug']
+            manifestPlaceholders += [displayName: '@string/app_name_debug']
         }
         profile {
             applicationIdSuffix '.profile'
-            manifestPlaceholders = [displayName: '@string/app_name_profile']
+            manifestPlaceholders += [displayName: '@string/app_name_profile']
         }
         release {
             signingConfig signingConfigs.release
@@ -79,7 +87,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
