@@ -1,0 +1,13 @@
+Welcome to *Orgro*, a /mobile/ [[https://orgmode.org/][Org Mode]] _file viewer_.
+
+#+begin_src lisp
+  (defun fact (n) ; Code!
+    (if (<= n 1) 1 (* n (fact (- n 1)))))
+#+end_src
+
+| Tables!       |    Foo | Bar  |
+|---------------+--------+------|
+| Lorem /ipsum/ | 30.000 | 🚀   |
+| あいうえお    |  -1e24 | >3.5 |
+
+$$ \LaTeX $$ inline & block: $$ \int_a^b f(x)dx $$
