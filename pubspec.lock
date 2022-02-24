@@ -597,4 +597,4 @@ packages:
     version: "0.2.0+1"
 sdks:
   dart: ">=2.16.0-100.0.dev <3.0.0"
-  flutter: ">=2.10.0"
+  flutter: ">=2.11.0-0.1.pre"
