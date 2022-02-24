@@ -1,0 +1,3 @@
+- Support keyboard shortcuts to open, close documents
+- Improve layout on large screens
+- Bug fixes
