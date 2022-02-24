@@ -53,8 +53,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // No need to list base locale (en)
+        resConfigs 'ja', 'uk'
         manifestPlaceholders += [displayName: '@string/app_name']
-        resConfigs 'ja', 'uk' // No need to list base locale (en)
     }
 
     signingConfigs {
