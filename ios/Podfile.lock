@@ -2,10 +2,10 @@ PODS:
   - file_picker_writable (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_charset_detector (0.0.1):
+  - flutter_charset_detector_ios (0.0.1):
     - Flutter
     - UniversalDetector2
-  - flutter_tex_js (0.0.1):
+  - flutter_tex_js_ios (0.0.1):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -24,8 +24,8 @@ PODS:
 DEPENDENCIES:
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
-  - flutter_charset_detector (from `.symlinks/plugins/flutter_charset_detector/ios`)
-  - flutter_tex_js (from `.symlinks/plugins/flutter_tex_js/ios`)
+  - flutter_charset_detector_ios (from `.symlinks/plugins/flutter_charset_detector_ios/ios`)
+  - flutter_tex_js_ios (from `.symlinks/plugins/flutter_tex_js_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -41,10 +41,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
     :path: Flutter
-  flutter_charset_detector:
-    :path: ".symlinks/plugins/flutter_charset_detector/ios"
-  flutter_tex_js:
-    :path: ".symlinks/plugins/flutter_tex_js/ios"
+  flutter_charset_detector_ios:
+    :path: ".symlinks/plugins/flutter_charset_detector_ios/ios"
+  flutter_tex_js_ios:
+    :path: ".symlinks/plugins/flutter_tex_js_ios/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   shared_preferences_ios:
@@ -57,8 +57,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_charset_detector: c446c2d0da8991a0bd3dbb9842ff3af415484582
-  flutter_tex_js: 010eab32e3bc329fe1b6d48efd8a3b0c0506bb50
+  flutter_charset_detector_ios: abec55ca673f135d99aaaf5beee8e6ebbcb6aae5
+  flutter_tex_js_ios: f0ddb462f0dc7dc66ebb40aa0dbcb96d87e9afd6
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
