@@ -123,12 +123,12 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   void initState() {
     super.initState();
     _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _onResume);
-    WidgetsBinding.instance?.addObserver(_lifecycleEventHandler!);
+    WidgetsBinding.instance.addObserver(_lifecycleEventHandler!);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(_lifecycleEventHandler!);
+    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler!);
     super.dispose();
   }
 

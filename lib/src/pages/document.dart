@@ -63,7 +63,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _openInitialTarget());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openInitialTarget());
   }
 
   @override
