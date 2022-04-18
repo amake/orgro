@@ -172,7 +172,7 @@
    #+end_src
 
    #+RESULTS:
-   : v15.1.0
+   : v15.2.0
 
    Configuration: Tangle the following
 
@@ -355,10 +355,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 5436988 | 8ed198a7b09580fa9b2da9d0bce3e43a3e6588309c562270f5ec4902a96cb686 |
-   | iosevka-orgro-bolditalic.ttf | 5665852 | 6a085fe57a4484d41270d370f34e48f371bbab7396ef7ee2abc4a574a5240d26 |
-   | iosevka-orgro-italic.ttf     | 5659808 | 50c3240de1ef56860e951dcfa22034b0cceb989808fac80c9300136c79286be8 |
-   | iosevka-orgro-regular.ttf    | 5439232 | 30cb9368e523aec2d4203d56b6768fbabb1c68a0b63e85f9bb5a6f0c034283af |
+   | iosevka-orgro-bold.ttf       | 5439624 | ae9de755abeace5d653d88680c403eb3ea098613fafa1f3386cf314861c0254b |
+   | iosevka-orgro-bolditalic.ttf | 5667352 | a04ebf91107b9e289ee5b31654097c11dbeed1100dcb43229733f7df60d8c25a |
+   | iosevka-orgro-italic.ttf     | 5661936 | 7154722dea9c166839e55135284ed9e8eb0bf4f128f0d0f53ce363c0f8c95d29 |
+   | iosevka-orgro-regular.ttf    | 5442116 | 8478036b58e69ca1e2c796ad8f3340faa2d2c440c1d89f38cc03ab2727bde4ff |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
@@ -366,7 +366,8 @@
 
    #+begin_src bash :dir ../../Iosevka :var dryrun="--dryrun"
      ver=$(git describe --tags)
-     aws s3 $dryrun sync --exclude '*' --include 'ttf/*' --acl public-read dist/iosevka-orgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'ttf/*' --acl public-read \
+         dist/iosevka-orgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
    #+end_src
 
 ** Updating sizes and checksums
