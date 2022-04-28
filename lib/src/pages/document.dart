@@ -33,7 +33,7 @@ class DocumentPage extends StatefulWidget {
   final String? initialQuery;
 
   @override
-  _DocumentPageState createState() => _DocumentPageState();
+  State createState() => _DocumentPageState();
 }
 
 class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
@@ -337,7 +337,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     // Handle as a general URL
     try {
       debugPrint('Launching URL: $url');
-      return await launch(url, forceSafariVC: false);
+      return await launchUrl(Uri.parse(url),
+          mode: LaunchMode.externalApplication);
     } on Exception catch (e, s) {
       logError(e, s);
       showErrorSnackBar(context, e);
@@ -355,6 +356,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     }
     try {
       final resolved = await widget.dataSource.resolveRelative(link.body);
+      if (!mounted) return false;
       return loadDocument(context, resolved, target: link.extra);
     } on Exception catch (e, s) {
       logError(e, s);
@@ -382,6 +384,9 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       }
       final dirInfo = await pickDirectory(initialDirUri: source.uri);
       if (dirInfo == null) {
+        return;
+      }
+      if (!mounted) {
         return;
       }
       final prefs = Preferences.of(context);

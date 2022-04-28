@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:orgro/src/fonts.dart';
 
-_PersistentPopupMenuItem<VoidCallback> textScaleMenuItem(
+PopupMenuEntry<VoidCallback> textScaleMenuItem(
   BuildContext context, {
   required double textScale,
   required Function(double) onChanged,
@@ -16,7 +16,7 @@ _PersistentPopupMenuItem<VoidCallback> textScaleMenuItem(
   );
 }
 
-_PersistentPopupMenuItem<VoidCallback> fontFamilyMenuItem(
+PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   BuildContext context, {
   required String fontFamily,
   required Function(String) onChanged,
@@ -44,7 +44,7 @@ class TextStyleButton extends StatefulWidget {
   final Function(String) onFontFamilyChanged;
 
   @override
-  _TextStyleButtonState createState() => _TextStyleButtonState();
+  State createState() => _TextStyleButtonState();
 }
 
 class _TextStyleButtonState extends State<TextStyleButton>
@@ -161,7 +161,7 @@ class TextSizeAdjuster extends StatefulWidget {
   final Function(double) onChanged;
 
   @override
-  _TextSizeAdjusterState createState() => _TextSizeAdjusterState();
+  State createState() => _TextSizeAdjusterState();
 }
 
 const _kTextSizeAdjustmentIncrement = 10;
@@ -224,7 +224,7 @@ class FontFamilySelector extends StatefulWidget {
   final VoidCallback? onOpen;
 
   @override
-  _FontFamilySelectorState createState() => _FontFamilySelectorState();
+  State createState() => _FontFamilySelectorState();
 }
 
 class _FontFamilySelectorState extends State<FontFamilySelector> {

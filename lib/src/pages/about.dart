@@ -83,12 +83,12 @@ class _AboutItem extends StatelessWidget {
   }
 }
 
-void visitSupportLink() => launch(
-      'https://github.com/amake/orgro/issues',
-      forceSafariVC: false,
+void visitSupportLink() => launchUrl(
+      Uri.parse('https://github.com/amake/orgro/issues'),
+      mode: LaunchMode.externalApplication,
     );
 
-void visitChangelogLink() => launch(
-      'https://orgro.org/changelog/',
-      forceSafariVC: false,
+void visitChangelogLink() => launchUrl(
+      Uri.parse('https://orgro.org/changelog/'),
+      mode: LaunchMode.externalApplication,
     );

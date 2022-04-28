@@ -22,7 +22,7 @@ class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
   @override
-  _StartPageState createState() => _StartPageState();
+  State createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage>
@@ -320,11 +320,13 @@ Future<void> _loadAndRememberFile(
   BuildContext context,
   FutureOr<NativeDataSource?> fileInfoFuture,
 ) async {
+  final recentFiles = RecentFiles.of(context);
+  final restorationScope = RestorationScope.of(context);
   final recentFile = await _loadFile(context, fileInfoFuture);
   if (recentFile != null) {
-    RecentFiles.of(context).add(recentFile);
+    recentFiles.add(recentFile);
     debugPrint('Saving file ID to state');
-    RestorationScope.of(context)?.write<String>(
+    restorationScope?.write<String>(
       _kRestoreOpenFileIdKey,
       recentFile.identifier,
     );

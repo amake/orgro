@@ -7,10 +7,14 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
 PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
+  final prefs = Preferences.of(context);
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final snackBar = SnackBar(
+    content: Text(AppLocalizations.of(context)!.snackbarMessageCacheCleared),
+  );
   return PopupMenuItem<VoidCallback>(
     value: () async {
       await DefaultCacheManager().emptyCache();
-      final prefs = Preferences.of(context);
       await prefs.setRemoteImagesPolicy(kDefaultRemoteImagesPolicy);
       for (final dir in prefs.accessibleDirs) {
         try {
@@ -21,12 +25,7 @@ PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
       }
       await prefs.setAccessibleDirs(const []);
       await clearFontCache();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(AppLocalizations.of(context)!.snackbarMessageCacheCleared),
-        ),
-      );
+      scaffoldMessenger.showSnackBar(snackBar);
     },
     child: Text(AppLocalizations.of(context)!.menuItemClearCache),
   );
