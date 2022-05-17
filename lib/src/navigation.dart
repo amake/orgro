@@ -73,8 +73,7 @@ class _DocumentPageWrapper extends StatelessWidget {
     required this.doc,
     required this.dataSource,
     required this.target,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final OrgDocument doc;
   final DataSource dataSource;

@@ -58,9 +58,9 @@ class RecentFiles extends InheritedWidget {
     this.list, {
     required this.add,
     required this.remove,
-    required Widget child,
-    Key? key,
-  }) : super(child: child, key: key);
+    required super.child,
+    super.key,
+  });
 
   final List<RecentFile> list;
   final ValueChanged<RecentFile> add;

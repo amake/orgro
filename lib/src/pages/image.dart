@@ -7,7 +7,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 
 class RemoteImage extends StatelessWidget {
-  const RemoteImage(this.url, {Key? key}) : super(key: key);
+  const RemoteImage(this.url, {super.key});
 
   final String url;
   @override
@@ -32,8 +32,8 @@ class LocalImage extends StatelessWidget {
   const LocalImage({
     required this.dataSource,
     required this.relativePath,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final DataSource dataSource;
   final String relativePath;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorPage extends StatelessWidget {
-  const ErrorPage({required this.error, Key? key}) : super(key: key);
+  const ErrorPage({required this.error, super.key});
 
   final String error;
 

@@ -51,8 +51,8 @@ class SearchButton extends StatelessWidget {
   const SearchButton({
     required this.hasQuery,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final VoidCallback onPressed;
   final bool hasQuery;
 
@@ -94,8 +94,8 @@ class SearchField extends StatelessWidget {
     this._controller, {
     this.onClear,
     this.onSubmitted,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final TextEditingController _controller;
   final VoidCallback? onClear;
   final Function(String)? onSubmitted;

@@ -19,7 +19,7 @@ import 'package:orgro/src/util.dart';
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
 class StartPage extends StatefulWidget {
-  const StartPage({Key? key}) : super(key: key);
+  const StartPage({super.key});
 
   @override
   State createState() => _StartPageState();
@@ -125,7 +125,7 @@ class _StartPageState extends State<StartPage>
 }
 
 class _KeyboardShortcuts extends StatelessWidget {
-  const _KeyboardShortcuts({required this.child, Key? key}) : super(key: key);
+  const _KeyboardShortcuts({required this.child});
 
   final Widget child;
   @override
@@ -144,7 +144,7 @@ class _KeyboardShortcuts extends StatelessWidget {
 }
 
 class _EmptyBody extends StatelessWidget {
-  const _EmptyBody({Key? key}) : super(key: key);
+  const _EmptyBody();
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +180,7 @@ class _EmptyBody extends StatelessWidget {
 }
 
 class _RecentFilesBody extends StatelessWidget {
-  const _RecentFilesBody({Key? key}) : super(key: key);
+  const _RecentFilesBody();
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +209,7 @@ class _RecentFilesBody extends StatelessWidget {
 }
 
 class _ListHeader extends StatelessWidget {
-  const _ListHeader({required this.title, Key? key}) : super(key: key);
+  const _ListHeader({required this.title});
 
   final Widget title;
 
@@ -236,7 +236,7 @@ String _formatLastOpenedDate(DateTime date, String locale) =>
     DateFormat.yMd(locale).add_jm().format(date);
 
 class _RecentFileListTile extends StatelessWidget {
-  const _RecentFileListTile(this.recentFile, {Key? key}) : super(key: key);
+  const _RecentFileListTile(this.recentFile);
 
   final RecentFile recentFile;
 
@@ -265,8 +265,7 @@ class _RecentFileListTile extends StatelessWidget {
 }
 
 class _SwipeDeleteBackground extends StatelessWidget {
-  const _SwipeDeleteBackground({required this.alignment, Key? key})
-      : super(key: key);
+  const _SwipeDeleteBackground({required this.alignment});
 
   final AlignmentGeometry alignment;
 
@@ -334,7 +333,7 @@ Future<void> _loadAndRememberFile(
 }
 
 class _PickFileButton extends StatelessWidget {
-  const _PickFileButton({Key? key}) : super(key: key);
+  const _PickFileButton();
 
   @override
   Widget build(BuildContext context) {
@@ -350,7 +349,7 @@ class _PickFileButton extends StatelessWidget {
 }
 
 class _OrgManualButton extends StatelessWidget {
-  const _OrgManualButton({Key? key}) : super(key: key);
+  const _OrgManualButton();
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +366,7 @@ class _OrgManualButton extends StatelessWidget {
 }
 
 class _OrgroManualButton extends StatelessWidget {
-  const _OrgroManualButton({Key? key}) : super(key: key);
+  const _OrgroManualButton();
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +381,7 @@ void _openOrgroManual(BuildContext context) =>
     loadAsset(context, 'assets/manual/orgro-manual.org');
 
 class _SupportLink extends StatelessWidget {
-  const _SupportLink({Key? key}) : super(key: key);
+  const _SupportLink();
 
   @override
   Widget build(BuildContext context) {
@@ -396,7 +395,7 @@ class _SupportLink extends StatelessWidget {
 }
 
 class _VersionInfoButton extends StatelessWidget {
-  const _VersionInfoButton({Key? key}) : super(key: key);
+  const _VersionInfoButton();
   @override
   Widget build(BuildContext context) {
     return TextButton(

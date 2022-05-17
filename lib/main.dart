@@ -23,13 +23,13 @@ void main() {
 
 Widget buildApp() => const PreferencesProvider(
       waiting: _Splash(),
-      child: MyApp(),
+      child: _MyApp(),
     );
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load
 class _Splash extends StatelessWidget {
-  const _Splash({Key? key}) : super(key: key);
+  const _Splash();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,14 +46,14 @@ const _kPrimaryColorVariant = Color(0xff00352f);
 const _kSecondaryColor = Colors.deepOrangeAccent;
 final _kSecondaryColorVariant = Colors.deepOrangeAccent.shade700;
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class _MyApp extends StatefulWidget {
+  const _MyApp();
 
   @override
   State createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with AppearanceState {
+class _MyAppState extends State<_MyApp> with AppearanceState {
   @override
   Widget build(BuildContext context) {
     return buildWithAppearance(builder: (context) {

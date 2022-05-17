@@ -5,6 +5,7 @@ import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum RemoteImagesPolicy { allow, deny, ask }
+
 enum LocalLinksPolicy { deny, ask }
 
 const kDefaultFontFamily = 'Fira Code';
@@ -31,8 +32,7 @@ class Preferences extends InheritedWidget {
   static Preferences of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<Preferences>()!;
 
-  const Preferences(this._prefs, {required Widget child, Key? key})
-      : super(child: child, key: key);
+  const Preferences(this._prefs, {required super.child, super.key});
 
   final SharedPreferences _prefs;
 
@@ -107,8 +107,7 @@ class Preferences extends InheritedWidget {
 }
 
 class PreferencesProvider extends StatelessWidget {
-  const PreferencesProvider({required this.child, this.waiting, Key? key})
-      : super(key: key);
+  const PreferencesProvider({required this.child, this.waiting, super.key});
   final Widget child;
   final Widget? waiting;
 

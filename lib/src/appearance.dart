@@ -5,9 +5,9 @@ class Appearance extends InheritedWidget {
   const Appearance({
     required this.mode,
     required this.setMode,
-    required Widget child,
-    Key? key,
-  }) : super(child: child, key: key);
+    required super.child,
+    super.key,
+  });
 
   final ThemeMode mode;
   final ValueChanged<ThemeMode> setMode;

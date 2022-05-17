@@ -16,7 +16,7 @@ void _scrollToBottom(BuildContext context) {
 }
 
 class ScrollTopButton extends StatelessWidget {
-  const ScrollTopButton({Key? key}) : super(key: key);
+  const ScrollTopButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
 }
 
 class ScrollBottomButton extends StatelessWidget {
-  const ScrollBottomButton({Key? key}) : super(key: key);
+  const ScrollBottomButton({super.key});
 
   @override
   Widget build(BuildContext context) {

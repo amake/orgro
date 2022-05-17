@@ -22,8 +22,8 @@ class DocumentPage extends StatefulWidget {
     required this.child,
     this.initialTarget,
     this.initialQuery,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final OrgTree doc;
   final String title;
@@ -462,7 +462,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 }
 
 class _KeyboardShortcuts extends StatelessWidget {
-  const _KeyboardShortcuts({required this.child, Key? key}) : super(key: key);
+  const _KeyboardShortcuts({required this.child});
 
   final Widget child;
   @override
@@ -484,8 +484,7 @@ class _Badge extends StatelessWidget {
   const _Badge({
     required this.child,
     required this.visible,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool visible;

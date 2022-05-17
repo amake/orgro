@@ -17,8 +17,8 @@ class ReaderModeButton extends StatelessWidget {
   const ReaderModeButton({
     required this.enabled,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool enabled;
   final Function(bool) onChanged;

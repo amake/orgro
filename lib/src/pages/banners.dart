@@ -6,8 +6,8 @@ class RemoteImagePermissionsBanner extends StatelessWidget {
   const RemoteImagePermissionsBanner({
     required this.visible,
     required this.onResult,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Function(RemoteImagesPolicy, {bool persist}) onResult;
   final bool visible;
@@ -54,8 +54,8 @@ class DirectoryPermissionsBanner extends StatelessWidget {
     required this.onDismiss,
     required this.onForbid,
     required this.onAllow,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final VoidCallback onDismiss;
   final VoidCallback onForbid;
@@ -97,8 +97,7 @@ class DirectoryPermissionsBanner extends StatelessWidget {
 }
 
 class _BannerButton extends StatelessWidget {
-  const _BannerButton({required this.text, required this.onPressed, Key? key})
-      : super(key: key);
+  const _BannerButton({required this.text, required this.onPressed});
 
   final VoidCallback onPressed;
   final String text;

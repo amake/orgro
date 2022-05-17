@@ -49,7 +49,7 @@ void openAboutDialog(BuildContext context) {
 }
 
 class _AppIcon extends StatelessWidget {
-  const _AppIcon({Key? key}) : super(key: key);
+  const _AppIcon();
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +67,7 @@ class _AboutItem extends StatelessWidget {
   const _AboutItem({
     required this.label,
     required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String label;
   final VoidCallback onPressed;

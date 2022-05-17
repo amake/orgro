@@ -35,8 +35,8 @@ class TextStyleButton extends StatefulWidget {
     required this.onTextScaleChanged,
     required this.fontFamily,
     required this.onFontFamilyChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final double textScale;
   final Function(double) onTextScaleChanged;
@@ -78,7 +78,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
         top: position.top,
         right: position.right,
         child: PopupPalette(
-          animation: animationController,
+          listenable: animationController,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -124,10 +124,10 @@ class _TextStyleButtonState extends State<TextStyleButton>
 
 class PopupPalette extends AnimatedWidget {
   const PopupPalette({
-    required Animation<double> animation,
+    required super.listenable,
     required this.child,
-    Key? key,
-  }) : super(key: key, listenable: animation);
+    super.key,
+  });
 
   final Widget child;
 
@@ -154,8 +154,8 @@ class TextSizeAdjuster extends StatefulWidget {
   const TextSizeAdjuster({
     required this.value,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final double value;
   final Function(double) onChanged;
@@ -216,8 +216,8 @@ class FontFamilySelector extends StatefulWidget {
     required this.value,
     required this.onChanged,
     this.onOpen,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String value;
   final Function(String) onChanged;
@@ -280,8 +280,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
 /// A popup menu item that doesn't close when tapped and doesn't provide its own
 /// [InkWell], unlike [PopupMenuItem].
 class _PersistentPopupMenuItem<T> extends PopupMenuEntry<T> {
-  const _PersistentPopupMenuItem({required this.child, Key? key})
-      : super(key: key);
+  const _PersistentPopupMenuItem({required this.child});
 
   final Widget child;
 

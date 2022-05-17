@@ -97,10 +97,10 @@ class ViewSettings extends InheritedWidget {
         );
 
   const ViewSettings({
-    required Widget child,
+    required super.child,
     required this.data,
-    Key? key,
-  }) : super(child: child, key: key);
+    super.key,
+  });
 
   final ViewSettingsData data;
   @override
