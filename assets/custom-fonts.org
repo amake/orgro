@@ -96,7 +96,7 @@
 
    Download
 
-   #+begin_src bash :dir ../tmp :mkdirp t :var version="1.5.2"
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="1.5.3"
      curl -LO https://github.com/rubjo/victor-mono/raw/v$version/public/VictorMonoAll.zip
      rm -r VictorMono
      mkdir VictorMono
@@ -114,27 +114,27 @@
 
    #+RESULTS: victormono-csums
    :results:
-   | VictorMono-Bold.ttf              | 174468 | f02dfef6317a64067f4d856a026d5a0c2df38ef75c82007f7f0ec5907b368ab2 |
-   | VictorMono-BoldItalic.ttf        | 225032 | 826912630f6d84908712d2bb46c0345ef9aa4b89c23a4e9507bb5cccd38edcda |
-   | VictorMono-BoldOblique.ttf       | 183920 | 8f14aa6c10b8bda7d09e5ca72e3dabf4729fcb8379941e8b4e3bbb113bd4c340 |
-   | VictorMono-ExtraLight.ttf        | 168232 | b4662fede17af963af111e062f371235f918e2f79e645719537d75bb46174da1 |
-   | VictorMono-ExtraLightItalic.ttf  | 213660 | ed9c9c59b941529516652fa1111c159d2d4cb534b2683efd7861211383c77995 |
-   | VictorMono-ExtraLightOblique.ttf | 176480 | 944897027b85ace53a63d98a81e48d54181595d16be56ff6e284d8a0ccba9d24 |
-   | VictorMono-Italic.ttf            | 215520 | 07ee4251ee33aa83d4ec8a6402f7435fddb8936728e0c6b71039a1060011cae5 |
-   | VictorMono-Light.ttf             | 169236 | 3c22c1ce79eaad2fc2513bfaad08df77466d54d173cf0cd779c4752b2421ed59 |
-   | VictorMono-LightItalic.ttf       | 215732 | 5df5ebbc96750ffac8af5aac1b1ef47e1a5c2ba30eca33f56eb16d6aabb3d238 |
-   | VictorMono-LightOblique.ttf      | 177268 | 0a7aba82d589d3329e6f8fad69174c1dabf08d8ffb755fb6cf4de60aca838d2b |
-   | VictorMono-Medium.ttf            | 171884 | 01dd60e230ec1bf5d9a9cef62914abc062c79a508d033371f54546b5b6e1ef6d |
-   | VictorMono-MediumItalic.ttf      | 222672 | 4aafd6f861dce7150be0534eb031e735f5ccef1b0c1b7797e3f735f672d85bec |
-   | VictorMono-MediumOblique.ttf     | 181420 | 8ffe0246f0c6270b3d4d1c334738f9ac9a518bd06b2268dc8351c77bf3cfc4ef |
-   | VictorMono-Oblique.ttf           | 177860 | 25be8b402a8bc5eafca407b23c7f84635566790ac64afe88966a1794dca86ebe |
-   | VictorMono-Regular.ttf           | 169620 | 9ca29f10c1858a703622b44259bd5f1f6508b9b373003d18a2aa51f4e381bfcf |
-   | VictorMono-SemiBold.ttf          | 172976 | f161ae29c82e090b7d347118d099391d8798a196daeddbf3ceeceb97a0f546a5 |
-   | VictorMono-SemiBoldItalic.ttf    | 220932 | 73562690a818a132edb8e7cb80dd8a63354bd208c6ca43bcf8e908553367f20e |
-   | VictorMono-SemiBoldOblique.ttf   | 180552 | ed2d01253d22152a38131d0e5690b6051c7310792298d179686b5b2dae39a670 |
-   | VictorMono-Thin.ttf              | 168328 | b54f964b69a83289d44a54fbdce6a7d5b55635f28a7b94c2b281b844ab6c0a9b |
-   | VictorMono-ThinItalic.ttf        | 214908 | 6ac32ce4128d0f4f70e35bf114471b85605502a3cf4424086750d3b7c01a1c38 |
-   | VictorMono-ThinOblique.ttf       | 177000 | a7ba99125f99e1778794670f2b651b9d0208fd39cb58695d7c3e41766b7d3d8e |
+   | VictorMono-Bold.ttf              | 176360 | 8a09d1ce29df3b842c74c30f0a713461b80e79eea65e6b4324132df6b3f1c2c4 |
+   | VictorMono-BoldItalic.ttf        | 226964 | 7a1fe4c98c75e7a0948afe3f9f449151d30b5702c8217ef821da180e4b25e833 |
+   | VictorMono-BoldOblique.ttf       | 185596 | dafb31be14b7551d60799e931e6cc94b2e8bc8ba35d935a6db766a5aec1f751b |
+   | VictorMono-ExtraLight.ttf        | 170112 | afd1233f9f28be7a47fa19d87320fb2512252e96b013dbe8479a51d235b0ee04 |
+   | VictorMono-ExtraLightItalic.ttf  | 215596 | 683ea40ff1abd5de1a4c95a9fefe6ed344fa913cef36f137857e56185169f21d |
+   | VictorMono-ExtraLightOblique.ttf | 178160 | 36b963eaa9345292c1b7b2dcc8dac82e979d742e0ed69fea2db7f6df0be5138e |
+   | VictorMono-Italic.ttf            | 217468 | 15d91689b35fae7071c2e43dab13532dcadf3ab6a0247dff3bad899415654647 |
+   | VictorMono-Light.ttf             | 171132 | 6a53779092d3cf40146aea17578855d39fbbcdc779743272e12c66762cbba06c |
+   | VictorMono-LightItalic.ttf       | 217684 | ee4d63cd98554fadb3deac194a7cf128bf1bd1dd0d5cd97db28c5e7602adad3d |
+   | VictorMono-LightOblique.ttf      | 178964 | 946a99ddc4c5bacdba5bd52f3244b879cac6f7b6c073af573d6a71d56cb9be4d |
+   | VictorMono-Medium.ttf            | 173780 | 25f062a116d8a01aefaa6b4963c75959e3a49e3d69531c23f66e2d8ec27eff86 |
+   | VictorMono-MediumItalic.ttf      | 224620 | 8b3a8fcb5e0f487542f59a79ca107cfcce31360e2355848716afd4ca50e1919f |
+   | VictorMono-MediumOblique.ttf     | 183112 | d0c334c545132e1bea556b227f5e7b692532cc58b096759c74655ebdafdf11fb |
+   | VictorMono-Oblique.ttf           | 179552 | c778ee69c03fcccc0b1563d6dd19e2459c88dae81942e85d64572689dc41f422 |
+   | VictorMono-Regular.ttf           | 171516 | 9b9c3863e68a572984eb48964c414e0da42960bfcb37dc497bbe3c7e47028cab |
+   | VictorMono-SemiBold.ttf          | 174864 | 5e4225396ca6cc200a78c794bfe0ef118efeb0e5095049e3665946209b59e75b |
+   | VictorMono-SemiBoldItalic.ttf    | 222880 | c3c1ea5150cc1b62e8a4e918c70a6dd2af1cd82e8f3e718a0b6275a070d23f73 |
+   | VictorMono-SemiBoldOblique.ttf   | 182244 | c72f12e036e5f2e5551a52f4d4caaea64f7f9a1a12a133c8fd03493bb643f4c6 |
+   | VictorMono-Thin.ttf              | 170224 | 3900d59bb5b60d5443db3fd1653affef0bb7e75f8236eadff1d62b9f7afb450d |
+   | VictorMono-ThinItalic.ttf        | 216848 | deaf7a3ecb83a8b8f18628c985a1534ac8d150fc03e2a62da1f1ad845d979592 |
+   | VictorMono-ThinOblique.ttf       | 178684 | 9fe25bb9ae25f9d199c3926dedd3c353bf1deff4f9c2e4efb34a67209d96b30d |
    :end:
 
    #+call: update-checksums(replacements=victormono-csums)
