@@ -89,7 +89,7 @@
    Deploy to S3
 
    #+begin_src bash :dir ../../FiraGO :var dryrun="--dryrun"
-     aws s3 $dryrun sync --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'FiraGO_TTF_*' --acl public-read Fonts 's3://orgro/assets/fonts/'
    #+end_src
 
 ** Victor Mono
@@ -142,7 +142,7 @@
    Deploy to S3
 
    #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
-     aws s3 $dryrun sync --exclude '*' --include 'VictorMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'VictorMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
    #+end_src
 
 ** Custom Iosevka
