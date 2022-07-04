@@ -271,15 +271,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           builder: (context) => Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: _maxDocWidth(context)),
-              child: OrgRootWidget(
-                style: textStyle,
-                onLinkTap: _openLink,
-                onSectionLongPress: (section) =>
-                    narrow(context, widget.dataSource, section),
-                onLocalSectionLinkTap: (section) =>
-                    narrow(context, widget.dataSource, section),
-                loadImage: _loadImage,
-                child: widget.child,
+              child: SelectionArea(
+                child: OrgRootWidget(
+                  style: textStyle,
+                  onLinkTap: _openLink,
+                  onSectionLongPress: (section) =>
+                      narrow(context, widget.dataSource, section),
+                  onLocalSectionLinkTap: (section) =>
+                      narrow(context, widget.dataSource, section),
+                  loadImage: _loadImage,
+                  child: widget.child,
+                ),
               ),
             ),
           ),
