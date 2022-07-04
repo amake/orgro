@@ -152,7 +152,7 @@ class ViewSettingsData {
       localLinksPolicy == other.localLinksPolicy;
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
         textScale,
         fontFamily,
         queryString,

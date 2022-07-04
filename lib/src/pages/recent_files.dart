@@ -30,7 +30,7 @@ class RecentFile {
       lastOpened == other.lastOpened;
 
   @override
-  int get hashCode => hashValues(identifier, name, lastOpened);
+  int get hashCode => Object.hash(identifier, name, lastOpened);
 
   Map<String, Object> toJson() => {
         'identifier': identifier,

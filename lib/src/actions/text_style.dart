@@ -66,7 +66,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
     final position = _buttonPosition(context);
     late OverlayEntry buttonsOverlay, barrierOverlay;
 
-    Future<void> _closeOverlay() async {
+    Future<void> closeOverlay() async {
       await animationController.reverse();
       barrierOverlay.remove();
       buttonsOverlay.remove();
@@ -89,7 +89,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
               FontFamilySelector(
                 value: widget.fontFamily,
                 onChanged: widget.onFontFamilyChanged,
-                onOpen: _closeOverlay,
+                onOpen: closeOverlay,
               )
             ],
           ),
@@ -98,7 +98,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
     });
     yield barrierOverlay = OverlayEntry(builder: (context) {
       return GestureDetector(
-        onTapDown: (_) => _closeOverlay(),
+        onTapDown: (_) => closeOverlay(),
         behavior: HitTestBehavior.opaque,
       );
     });
