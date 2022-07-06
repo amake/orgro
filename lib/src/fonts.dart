@@ -116,32 +116,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '9b9c3863e68a572984eb48964c414e0da42960bfcb37dc497bbe3c7e47028cab',
-        171516,
+        'f9ad2fdc82aaf8e05dc6b7f46923ba4f0c35200067d8974671c13fb898b39ce3',
+        184692,
       ),
       _VictorMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        '8a09d1ce29df3b842c74c30f0a713461b80e79eea65e6b4324132df6b3f1c2c4',
-        176360,
+        'ed641d97b729c179a00a1f84b5c33006e1e592a48090191dae3181781ac008d9',
+        192920,
       ),
       _VictorMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        '15d91689b35fae7071c2e43dab13532dcadf3ab6a0247dff3bad899415654647',
-        217468,
+        '9193aea602749f757723cd3bf59bfb532c3bbd3ff7a4bc7ecb50b88ea8f6d6ac',
+        231304,
       ),
       _VictorMonoFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        '7a1fe4c98c75e7a0948afe3f9f449151d30b5702c8217ef821da180e4b25e833',
-        226964,
+        'f2382a8cd453838784464b768918b34fff81ff1110a969af87089af2b37cf9cd',
+        241804,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -294,7 +294,7 @@ class _VictorMonoFile extends DynamicFontsFile {
       : super(expectedFileHash, expectedLength);
 
   static const name = 'Victor Mono';
-  static const version = '1.5.3';
+  static const version = '1.5.4';
 
   final DynamicFontsVariant variant;
 
