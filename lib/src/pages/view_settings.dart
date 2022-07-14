@@ -55,6 +55,15 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _localLinksPolicy = value);
   }
 
+  bool? _fullWidth;
+
+  bool get fullWidth => _fullWidth!;
+
+  set fullWidth(bool value) {
+    _prefs.setFullWidth(value);
+    setState(() => _fullWidth = value);
+  }
+
   String? get queryString;
 
   /// Call this from [State.didChangeDependencies]
@@ -64,6 +73,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _textScale ??= _parent.textScale;
     _remoteImagesPolicy ??= _parent.remoteImagesPolicy;
     _localLinksPolicy ??= _parent.localLinksPolicy;
+    _fullWidth ??= _parent.fullWidth;
   }
 
   TextStyle get textStyle =>
@@ -78,6 +88,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
         readerMode: readerMode,
         remoteImagesPolicy: remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy,
+        fullWidth: fullWidth,
       ),
       // Builder required to get ViewSettings into the context
       child: Builder(builder: builder),
@@ -122,6 +133,7 @@ class ViewSettingsData {
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
       localLinksPolicy: prefs.localLinksPolicy ?? kDefaultLocalLinksPolicy,
+      fullWidth: prefs.fullWidth ?? kDefaultFullWidth,
     );
   }
 
@@ -132,6 +144,7 @@ class ViewSettingsData {
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
+    required this.fullWidth,
   });
 
   final double textScale;
@@ -140,6 +153,7 @@ class ViewSettingsData {
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
+  final bool fullWidth;
 
   @override
   bool operator ==(Object other) =>
@@ -149,7 +163,8 @@ class ViewSettingsData {
       queryString == other.queryString &&
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
-      localLinksPolicy == other.localLinksPolicy;
+      localLinksPolicy == other.localLinksPolicy &&
+      fullWidth == other.fullWidth;
 
   @override
   int get hashCode => Object.hash(
@@ -159,5 +174,6 @@ class ViewSettingsData {
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,
+        fullWidth,
       );
 }

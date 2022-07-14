@@ -15,6 +15,7 @@ const String? kDefaultQueryString = null;
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
 const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
+const kDefaultFullWidth = false;
 
 const kMaxRecentFiles = 10;
 
@@ -25,6 +26,7 @@ const _kRemoteImagesPolicyKey = 'remote_images_policy';
 const _kLocalLinksPolicyKey = 'local_links_policy';
 const _kRecentFilesJsonKey = 'recent_files_json';
 const _kAccessibleDirectoriesKey = 'accessible_directories_json';
+const _kFullWidthKey = 'full_width';
 
 const _kThemeModeKey = 'theme_mode';
 
@@ -50,7 +52,6 @@ class Preferences extends InheritedWidget {
 
   bool? get readerMode => _prefs.getBool(_kReaderModeKey);
 
-  // ignore: avoid_positional_boolean_parameters
   Future<bool> setReaderMode(bool? value) =>
       _setOrRemove(_kReaderModeKey, value);
 
@@ -83,6 +84,10 @@ class Preferences extends InheritedWidget {
 
   Future<bool> setAccessibleDirs(List<String> value) =>
       _prefs.setStringList(_kAccessibleDirectoriesKey, value);
+
+  bool? get fullWidth => _prefs.getBool(_kFullWidthKey);
+
+  Future<bool> setFullWidth(bool? value) => _setOrRemove(_kFullWidthKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;

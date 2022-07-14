@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
+import 'package:orgro/src/actions/geometry.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -170,6 +171,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           enabled: readerMode,
           onChanged: _setReaderMode,
         );
+        if (_allowFullScreen(context)) {
+          yield FullWidthButton(
+            enabled: fullWidth,
+            onChanged: (value) => fullWidth = value,
+          );
+        }
         yield const ScrollTopButton();
         yield const ScrollBottomButton();
       } else {
@@ -192,6 +199,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               enabled: readerMode,
               onChanged: _setReaderMode,
             ),
+            if (_allowFullScreen(context))
+              fullWidthMenuItem(
+                context,
+                enabled: fullWidth,
+                onChanged: (value) => fullWidth = value,
+              ),
             const PopupMenuDivider(),
             // Disused because icon button is always visible now
             // PopupMenuItem<VoidCallback>(
@@ -270,20 +283,18 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           onResult: setRemoteImagesPolicy,
         ),
         buildWithViewSettings(
-          builder: (context) => Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxDocWidth(context)),
-              child: SelectionArea(
-                child: OrgRootWidget(
-                  style: textStyle,
-                  onLinkTap: _openLink,
-                  onSectionLongPress: (section) =>
-                      narrow(context, widget.dataSource, section),
-                  onLocalSectionLinkTap: (section) =>
-                      narrow(context, widget.dataSource, section),
-                  loadImage: _loadImage,
-                  child: widget.child,
-                ),
+          builder: (context) => _maybeConstrainWidth(
+            context,
+            child: SelectionArea(
+              child: OrgRootWidget(
+                style: textStyle,
+                onLinkTap: _openLink,
+                onSectionLongPress: (section) =>
+                    narrow(context, widget.dataSource, section),
+                onLocalSectionLinkTap: (section) =>
+                    narrow(context, widget.dataSource, section),
+                loadImage: _loadImage,
+                child: widget.child,
               ),
             ),
           ),
@@ -304,9 +315,32 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
       : child;
 
+  Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) =>
+      fullWidth
+          ? child
+          : Center(
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(maxWidth: _maxAllowedWidth(context)),
+                child: child,
+              ),
+            );
+
+  bool _allowFullScreen(BuildContext context) =>
+      _maxRecommendedWidth(context) +
+          _kBigScreenDocumentPadding.left +
+          _kBigScreenDocumentPadding.right +
+          // org_flutter default theme has 8px padding on left + right
+          // TODO(aaron): make this publically accessible
+          16 <
+      _screenWidth;
+
+  double _maxAllowedWidth(BuildContext context) =>
+      fullWidth ? _screenWidth : _maxRecommendedWidth(context);
+
   // Calculate the maximum document width as 72 of the character 'M' with the
   // user's preferred font size and family
-  double _maxDocWidth(BuildContext context) {
+  double _maxRecommendedWidth(BuildContext context) {
     final mBox = renderedBounds(
       context,
       const BoxConstraints(),
