@@ -14,6 +14,8 @@ import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _kBigScreenDocumentPadding = EdgeInsets.all(16);
+
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
     required this.doc,
@@ -292,13 +294,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ]),
     );
 
-    // Add some extra padding on big screens to make things not feel so
-    // tight. We can do this instead of adjusting the [OrgTheme.rootPadding]
-    // because we are shrinkwapping the document
-    return _bigScreen
-        ? SliverPadding(padding: const EdgeInsets.all(16), sliver: doc)
-        : doc;
+    return _maybePadForBigScreen(doc);
   }
+
+  // Add some extra padding on big screens to make things not feel so
+  // tight. We can do this instead of adjusting the [OrgTheme.rootPadding]
+  // because we are shrinkwapping the document
+  Widget _maybePadForBigScreen(Widget child) => _bigScreen
+      ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
+      : child;
 
   // Calculate the maximum document width as 72 of the character 'M' with the
   // user's preferred font size and family
