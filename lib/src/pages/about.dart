@@ -38,7 +38,7 @@ void openAboutDialog(BuildContext context) {
         dialog = TextButtonTheme(
           data: TextButtonThemeData(
             style: TextButton.styleFrom(
-                primary: DefaultTextStyle.of(context).style.color),
+                foregroundColor: DefaultTextStyle.of(context).style.color),
           ),
           child: dialog,
         );

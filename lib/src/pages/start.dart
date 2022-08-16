@@ -339,8 +339,8 @@ class _PickFileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).colorScheme.secondary,
-        onPrimary: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
       child: Text(AppLocalizations.of(context)!.buttonOpenFile),
@@ -389,7 +389,8 @@ class _SupportLink extends StatelessWidget {
       icon: const Icon(Icons.help),
       label: Text(AppLocalizations.of(context)!.buttonSupport),
       onPressed: visitSupportLink,
-      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
+      style: TextButton.styleFrom(
+          foregroundColor: Theme.of(context).disabledColor),
     );
   }
 }
@@ -400,7 +401,8 @@ class _VersionInfoButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: visitChangelogLink,
-      style: TextButton.styleFrom(primary: Theme.of(context).disabledColor),
+      style: TextButton.styleFrom(
+          foregroundColor: Theme.of(context).disabledColor),
       child: Text(AppLocalizations.of(context)!.buttonVersion(orgroVersion)),
     );
   }

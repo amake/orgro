@@ -256,7 +256,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
         _setValue(selection);
       },
       style: TextButton.styleFrom(
-        primary: DefaultTextStyle.of(context).style.color,
+        foregroundColor: DefaultTextStyle.of(context).style.color,
       ),
     );
   }
