@@ -32,6 +32,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    namespace 'com.madlonkay.orgro'
+
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
