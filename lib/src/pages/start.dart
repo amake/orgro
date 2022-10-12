@@ -287,12 +287,13 @@ Future<RecentFile?> _loadFile(
   BuildContext context,
   FutureOr<NativeDataSource?> dataSource,
 ) async {
+  final restorationScope = RestorationScope.of(context);
   final loaded = await loadDocument(
     context,
     dataSource,
     onClose: () {
       debugPrint('Clearing saved state');
-      RestorationScope.of(context)?.remove<String>(_kRestoreOpenFileIdKey);
+      restorationScope?.remove<String>(_kRestoreOpenFileIdKey);
     },
   );
   RecentFile? result;
