@@ -262,6 +262,10 @@ Adjust the text size and font.
 - Narrow screens (phones) :: in the action menu
 - Wide screens (tablets) :: icon button in the top app bar
 
+* Full screen width
+
+On large screens, optionally let the document take up the entire screen width.
+
 * Questions and Feedback
 
 Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
