@@ -54,7 +54,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
     return IconButton(
       icon: const Icon(Icons.format_size),
       onPressed: () =>
-          Overlay.of(context)?.insertAll(_overlays(context).toList()),
+          Overlay.of(context).insertAll(_overlays(context).toList()),
     );
   }
 
@@ -109,8 +109,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
   RelativeRect _buttonPosition(BuildContext context) {
     // Copied from PopupMenuButtonState.showButtonMenu()
     final button = context.findRenderObject() as RenderBox;
-    final overlay =
-        Overlay.of(context)?.context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     return RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
