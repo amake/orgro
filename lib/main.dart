@@ -72,7 +72,6 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
             secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
-          textTheme: Typography.englishLike2018,
         ),
         darkTheme: ThemeData.from(
           colorScheme: ColorScheme.dark(
@@ -83,7 +82,6 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
             secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
-          textTheme: Typography.englishLike2018,
         ),
         themeMode: Appearance.of(context).mode,
         home: const StartPage(),
