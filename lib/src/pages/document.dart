@@ -315,16 +315,19 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
       : child;
 
-  Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) =>
-      fullWidth
-          ? child
-          : Center(
-              child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxWidth: _maxAllowedWidth(context)),
-                child: child,
-              ),
-            );
+  Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) {
+    if (fullWidth || !_bigScreen || !_allowFullScreen(context)) {
+      return child;
+    }
+    final inset = (_screenWidth -
+            _maxRecommendedWidth(context) -
+            _kBigScreenDocumentPadding.left) /
+        2;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: inset),
+      child: child,
+    );
+  }
 
   bool _allowFullScreen(BuildContext context) =>
       _maxRecommendedWidth(context) +
@@ -334,9 +337,6 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           // TODO(aaron): make this publically accessible
           16 <
       _screenWidth;
-
-  double _maxAllowedWidth(BuildContext context) =>
-      fullWidth ? _screenWidth : _maxRecommendedWidth(context);
 
   // Calculate the maximum document width as 72 of the character 'M' with the
   // user's preferred font size and family
