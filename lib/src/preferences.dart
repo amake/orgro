@@ -111,22 +111,35 @@ class Preferences extends InheritedWidget {
   }
 }
 
-class PreferencesProvider extends StatelessWidget {
+class PreferencesProvider extends StatefulWidget {
   const PreferencesProvider({required this.child, this.waiting, super.key});
   final Widget child;
   final Widget? waiting;
 
   @override
+  State<PreferencesProvider> createState() => _PreferencesProviderState();
+}
+
+class _PreferencesProviderState extends State<PreferencesProvider> {
+  late Future<SharedPreferences> _instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _instance = SharedPreferences.getInstance();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<SharedPreferences>(
-      future: SharedPreferences.getInstance(),
+      future: _instance,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Preferences(snapshot.data!, child: child);
+          return Preferences(snapshot.data!, child: widget.child);
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
         } else {
-          return waiting ?? const SizedBox.shrink();
+          return widget.waiting ?? const SizedBox.shrink();
         }
       },
     );

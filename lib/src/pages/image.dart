@@ -28,7 +28,7 @@ class RemoteImage extends StatelessWidget {
   }
 }
 
-class LocalImage extends StatelessWidget {
+class LocalImage extends StatefulWidget {
   const LocalImage({
     required this.dataSource,
     required this.relativePath,
@@ -39,20 +39,22 @@ class LocalImage extends StatelessWidget {
   final String relativePath;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(
-        context,
-        relativePath,
-        _futureImage(),
-      ),
-      child: _futureImage(scale: MediaQuery.of(context).devicePixelRatio),
-    );
+  State<LocalImage> createState() => _LocalImageState();
+}
+
+class _LocalImageState extends State<LocalImage> {
+  late Future<Uint8List?> _bytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _bytes = _getBytes();
   }
 
   Future<Uint8List?> _getBytes() async {
     try {
-      final relative = await dataSource.resolveRelative(relativePath);
+      final relative =
+          await widget.dataSource.resolveRelative(widget.relativePath);
       return await relative.bytes;
     } on Exception catch (e, s) {
       logError(e, s);
@@ -60,10 +62,21 @@ class LocalImage extends StatelessWidget {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () => showInteractive(
+        context,
+        widget.relativePath,
+        _futureImage(),
+      ),
+      child: _futureImage(scale: MediaQuery.of(context).devicePixelRatio),
+    );
+  }
+
   Widget _futureImage({double scale = 1}) {
-    final bytes = _getBytes();
     return FutureBuilder<Uint8List?>(
-      future: bytes,
+      future: _bytes,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Image.memory(snapshot.data!, scale: scale);
