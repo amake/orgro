@@ -293,7 +293,7 @@ Future<RecentFile?> _loadFile(
     dataSource,
     onClose: () {
       debugPrint('Clearing saved state');
-      restorationScope?.remove<String>(_kRestoreOpenFileIdKey);
+      restorationScope.remove<String>(_kRestoreOpenFileIdKey);
     },
   );
   RecentFile? result;
@@ -326,7 +326,7 @@ Future<void> _loadAndRememberFile(
   if (recentFile != null) {
     recentFiles.add(recentFile);
     debugPrint('Saving file ID to state');
-    restorationScope?.write<String>(
+    restorationScope.write<String>(
       _kRestoreOpenFileIdKey,
       recentFile.identifier,
     );

@@ -255,7 +255,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     return PrimaryScrollController(
       // Context of app bar(?) lacks access to the primary scroll controller, so
       // we supply it explicitly from parent context
-      controller: PrimaryScrollController.of(context)!,
+      controller: PrimaryScrollController.of(context),
       child: SliverAppBar(
         title: _title(searchMode),
         actions: _actions(searchMode).toList(growable: false),
