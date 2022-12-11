@@ -213,18 +213,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "7c547d318681c4de73229e0d2889d2c40055258f2babfa9de5904f9e99ffac91"
+      sha256: bae4ce6922e59c2c08e595376b5ca4a6571152b27f7d694940867e97968fbace
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: "520cc2fc01d6797941094fa337c3405cd8e7a5449c6a87d65743063d0512ffc0"
+      sha256: "6f15aeb3bf3b253db1a7457d8d3167b440d2c97b8f3cb3bf1dfb3879ef3155ab"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
@@ -551,10 +551,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite
-      sha256: d21c022832f139b89922738e200c07387a49c549bf36c35654418e19ff76d161
+      sha256: "2b1697c7b78576fdc722c358f16f62171bd56e92dc13422d9e44be3fc446c276"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0+3"
+    version: "2.2.2"
   sqflite_common:
     dependency: transitive
     description:
@@ -583,10 +583,10 @@ packages:
     dependency: transitive
     description:
       name: string_scanner
-      sha256: "862015c5db1f3f3c4ea3b94dc2490363a84262994b88902315ed74be1155612f"
+      sha256: "556692adab6cfa87322a115640c11f13cb77b3f076ddcc5d6ae3c20242bedcde"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   synchronized:
     dependency: transitive
     description:
@@ -607,10 +607,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: c9aba3b3dbfe8878845dfab5fa096eb8de7b62231baeeb1cea8e3ee81ca8c6d8
+      sha256: ad540f65f92caa91bf21dfc8ffb8c589d6e4dc0c2267818b4cc2792857706206
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.15"
+    version: "0.4.16"
   typed_data:
     dependency: transitive
     description:
