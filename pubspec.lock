@@ -163,10 +163,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_charset_detector_ios
-      sha256: "09ccf0e87bcc3d8912367300d283f70e72ad30a2e00b9a7e0b8a9ffc765f6749"
+      sha256: e0e2c7b819cd1f7c9a50da94bf7f0e6d7a095eb64e81196ec758e77793903d43
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.2"
   flutter_charset_detector_platform_interface:
     dependency: transitive
     description:
