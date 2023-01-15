@@ -42,3 +42,26 @@ TextBox renderedBounds(
 final platformShortcutKey = Platform.isIOS || Platform.isMacOS
     ? LogicalKeyboardKey.meta
     : LogicalKeyboardKey.control;
+
+extension GlobalPaintBounds on BuildContext {
+  Rect? get _globalPaintBounds {
+    final renderObject = findRenderObject();
+    if (renderObject == null) return null;
+
+    final translation = renderObject.getTransformTo(null).getTranslation();
+    return renderObject.paintBounds.shift(Offset(translation.x, translation.y));
+  }
+}
+
+extension TopBoundComparator on GlobalKey {
+  int compareByTopBound(GlobalKey other) {
+    final thisBounds = currentContext?._globalPaintBounds;
+    final otherBounds = other.currentContext?._globalPaintBounds;
+    if (thisBounds != null && otherBounds != null) {
+      return thisBounds.top.compareTo(otherBounds.top);
+    }
+    if (thisBounds == null && otherBounds != null) return -1;
+    if (thisBounds != null && otherBounds == null) return 1;
+    return 0;
+  }
+}

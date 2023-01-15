@@ -35,6 +35,28 @@
   "menuItemScrollBottom": "Прокрутити вниз",
 
   "hintTextSearch": "Шукати...",
+  "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
+  "@searchHits": {
+    "placeholders": {
+      "n": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "searchResultSelection": "{current} / {total}",
+  "@searchResultSelection": {
+    "placeholders": {
+      "current": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",

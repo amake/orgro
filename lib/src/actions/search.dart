@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/util.dart';
 
 class MySearchDelegate {
   MySearchDelegate({
@@ -139,5 +143,99 @@ class SearchField extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SearchResultsNavigation extends StatefulWidget {
+  const SearchResultsNavigation({super.key});
+
+  @override
+  State<SearchResultsNavigation> createState() =>
+      _SearchResultsNavigationState();
+}
+
+class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
+  int _i = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = OrgController.of(context);
+    final foregroundColor = Theme.of(context).colorScheme.onSecondary;
+    return ValueListenableBuilder(
+      valueListenable: controller.searchResultKeys,
+      builder: (context, value, child) {
+        if (value.isEmpty) _resetIndex();
+        return Wrap(
+          direction: Axis.vertical,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            FloatingActionButton(
+              onPressed:
+                  value.isEmpty ? null : () => _scrollToRelativeIndex(-1),
+              foregroundColor: foregroundColor,
+              mini: true,
+              child: const Icon(Icons.keyboard_arrow_up),
+            ),
+            GestureDetector(
+              onTap: value.isEmpty ? null : () => _scrollToRelativeIndex(0),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
+                    _i == -1
+                        ? AppLocalizations.of(context)!.searchHits(value.length)
+                        : AppLocalizations.of(context)!
+                            .searchResultSelection(_i + 1, value.length),
+                    textAlign: TextAlign.center,
+                    style: DefaultTextStyle.of(context).style.copyWith(
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            FloatingActionButton(
+              onPressed: value.isEmpty ? null : () => _scrollToRelativeIndex(1),
+              foregroundColor: foregroundColor,
+              mini: true,
+              child: const Icon(Icons.keyboard_arrow_down),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _resetIndex() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() => _i = -1);
+    });
+  }
+
+  List<SearchResultKey> _sortedKeys(BuildContext context) {
+    final keys = List.of(OrgController.of(context).searchResultKeys.value);
+    keys.sort((a, b) => a.compareByTopBound(b));
+    return keys;
+  }
+
+  void _scrollToRelativeIndex(int relIdx) {
+    final keys = _sortedKeys(context);
+    if (_i >= 0 && _i < keys.length) keys[_i].currentState?.selected = false;
+    final i = (_i + relIdx + keys.length) % keys.length;
+    final key = keys[i];
+    key.currentState?.selected = true;
+    _scrollTo(key);
+    setState(() => _i = i);
+  }
+
+  void _scrollTo(SearchResultKey key) {
+    debugPrint('Scrolling to $key');
+    final keyContext = key.currentContext;
+    if (keyContext != null) {
+      Scrollable.ensureVisible(
+        keyContext,
+        duration: const Duration(milliseconds: 100),
+      );
+    }
   }
 }

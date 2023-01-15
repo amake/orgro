@@ -354,7 +354,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     required bool searchMode,
   }) {
     if (searchMode) {
-      return null;
+      return const SearchResultsNavigation();
     }
     return FloatingActionButton(
       onPressed: () => _searchDelegate.start(context),

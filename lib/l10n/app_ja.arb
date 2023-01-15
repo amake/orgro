@@ -30,6 +30,28 @@
   "menuItemScrollBottom": "下へスクロール",
 
   "hintTextSearch": "検索...",
+  "searchHits": "{n}件",
+  "@searchHits": {
+    "placeholders": {
+      "n": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "searchResultSelection": "{current} / {total}",
+  "@searchResultSelection": {
+    "placeholders": {
+      "current": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
 
   "snackbarMessageNeedsDirectoryPermissions": "相対リンクを解決する権限がありません",
   "snackbarActionGrantAccess": "許可する",
