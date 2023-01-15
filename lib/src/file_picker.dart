@@ -32,7 +32,7 @@ Future<void> disposeNativeSourceIdentifier(String identifier) =>
     FilePickerWritable().disposeIdentifier(identifier);
 
 mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
-  late FilePickerState _filePickerState;
+  late final FilePickerState _filePickerState;
 
   @override
   void initState() {

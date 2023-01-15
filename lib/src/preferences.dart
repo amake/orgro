@@ -121,7 +121,7 @@ class PreferencesProvider extends StatefulWidget {
 }
 
 class _PreferencesProviderState extends State<PreferencesProvider> {
-  late Future<SharedPreferences> _instance;
+  late final Future<SharedPreferences> _instance;
 
   @override
   void initState() {

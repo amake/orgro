@@ -64,7 +64,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
       duration: const Duration(milliseconds: 150),
     );
     final position = _buttonPosition(context);
-    late OverlayEntry buttonsOverlay, barrierOverlay;
+    late final OverlayEntry buttonsOverlay, barrierOverlay;
 
     Future<void> closeOverlay() async {
       await animationController.reverse();
