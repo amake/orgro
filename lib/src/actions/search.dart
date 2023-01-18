@@ -160,7 +160,6 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   @override
   Widget build(BuildContext context) {
     final controller = OrgController.of(context);
-    final foregroundColor = Theme.of(context).colorScheme.onSecondary;
     return ValueListenableBuilder(
       valueListenable: controller.searchResultKeys,
       builder: (context, value, child) {
@@ -169,11 +168,9 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
           direction: Axis.vertical,
           crossAxisAlignment: WrapCrossAlignment.end,
           children: [
-            FloatingActionButton(
+            _DisablableMiniFloatingActionButton(
               onPressed:
                   value.isEmpty ? null : () => _scrollToRelativeIndex(-1),
-              foregroundColor: foregroundColor,
-              mini: true,
               child: const Icon(Icons.keyboard_arrow_up),
             ),
             GestureDetector(
@@ -194,10 +191,8 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
                 ),
               ),
             ),
-            FloatingActionButton(
+            _DisablableMiniFloatingActionButton(
               onPressed: value.isEmpty ? null : () => _scrollToRelativeIndex(1),
-              foregroundColor: foregroundColor,
-              mini: true,
               child: const Icon(Icons.keyboard_arrow_down),
             ),
           ],
@@ -238,4 +233,28 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
       );
     }
   }
+}
+
+class _DisablableMiniFloatingActionButton extends StatelessWidget {
+  const _DisablableMiniFloatingActionButton({this.onPressed, this.child});
+
+  final VoidCallback? onPressed;
+  final Widget? child;
+
+  bool get _enabled => onPressed != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: onPressed,
+      foregroundColor: Theme.of(context).colorScheme.onSecondary,
+      backgroundColor: _backgroundColor(context),
+      mini: true,
+      child: child,
+    );
+  }
+
+  Color? _backgroundColor(BuildContext context) => _enabled
+      ? null // default
+      : Theme.of(context).disabledColor;
 }
