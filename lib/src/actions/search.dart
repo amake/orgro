@@ -167,7 +167,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
         if (value.isEmpty) _resetIndex();
         return Wrap(
           direction: Axis.vertical,
-          crossAxisAlignment: WrapCrossAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.end,
           children: [
             FloatingActionButton(
               onPressed:
