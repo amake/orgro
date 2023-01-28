@@ -28,7 +28,7 @@ dependencies:
   flutter_charset_detector: ^1.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.1
   http: ^0.13.0
   intl: ^0.17.0
   org_flutter: ^2.1.0
