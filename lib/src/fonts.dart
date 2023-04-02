@@ -256,7 +256,7 @@ class _FiraGoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://assets.orgro.org/assets/fonts/FiraGO_TTF_$version/$_dir/FiraGO-${variant.toApiFilenamePart()}.ttf';
+      'https://cdn.orgro.org/assets/fonts/FiraGO_TTF_$version/$_dir/FiraGO-${variant.toApiFilenamePart()}.ttf';
 }
 
 class _IosevkaFile extends DynamicFontsFile {
@@ -286,7 +286,7 @@ class _IosevkaFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://assets.orgro.org/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
+      'https://cdn.orgro.org/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
 }
 
 class _VictorMonoFile extends DynamicFontsFile {
@@ -300,5 +300,5 @@ class _VictorMonoFile extends DynamicFontsFile {
 
   @override
   String get url =>
-      'https://assets.orgro.org/assets/fonts/VictorMono/$version/TTF/VictorMono-${variant.toApiFilenamePart()}.ttf';
+      'https://cdn.orgro.org/assets/fonts/VictorMono/$version/TTF/VictorMono-${variant.toApiFilenamePart()}.ttf';
 }
