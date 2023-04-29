@@ -121,7 +121,8 @@ shown with their "pretty" replacement characters: \Omega \leftrightarrow
 
 ** Lists
 
-List content is shown with content reflowed for easy reading on narrow screens.
+When [[*Reader Mode][Reader Mode]] is enabled, list content is shown with content reflowed for
+easy reading on narrow screens.
 
 - foo
   - [X] bar
@@ -230,9 +231,9 @@ Close the narrowed view by touching the Back button in the top app bar.
 
 * Reader Mode
 
-Enable Reader Mode to hide emphasis markers and make meta lines (lines starting
-with =#+=) less prominent. The Reader Mode toggle can be found in one of two
-places:
+Enable Reader Mode to reflow text, hide emphasis markers, and make meta lines
+(lines starting with =#+=) less prominent. The Reader Mode toggle can be found
+in one of two places:
 
 - Narrow screens (phones) :: =Reader mode= in the action menu
 - Wide screens (tablets) :: icon button in the top app bar
