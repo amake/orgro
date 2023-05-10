@@ -7,7 +7,7 @@ publish_to: none
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
-  flutter: ">=3.7.0-1.4.pre"
+  flutter: ">=3.10.0"
 
 dependencies:
   cached_network_image: ^3.0.0
@@ -31,7 +31,7 @@ dependencies:
   #   path: ../flutter_charset_detector
   google_fonts: ^4.0.1
   http: ^0.13.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   org_flutter: ^3.1.0-pre.1
   # org_flutter:
     # path: ../org_flutter
