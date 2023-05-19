@@ -33,8 +33,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace 'com.madlonkay.orgro'
-
     compileSdkVersion flutter.compileSdkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,7 +51,8 @@ android {
 
     defaultConfig {
         applicationId "com.madlonkay.orgro"
-        minSdkVersion 19 //flutter.minSdkVersion
+        // file_picker_writable requires at least SDK 19
+        minSdkVersion Math.max(flutter.minSdkVersion, 19)
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
