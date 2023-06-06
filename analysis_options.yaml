@@ -2,3 +2,5 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   strong-mode:
+  exclude:
+  - flutter
