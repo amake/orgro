@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.madlonkay.orgro">
+          xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Remove unneeded permission coming from file_picker_writable; see
          https://github.com/hpoul/file_picker_writable/issues/15 -->
