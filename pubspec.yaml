@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   cached_network_image: ^3.0.0
-  dynamic_fonts: ^2.1.0-eager.0
+  dynamic_fonts: ^2.2.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
   # file_picker_writable: ^2.0.0
@@ -29,8 +29,8 @@ dependencies:
   flutter_charset_detector: ^1.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector
-  google_fonts: ^4.0.1
-  http: ^0.13.0
+  google_fonts: ^5.1.0
+  http: ^1.1.0
   intl: ^0.18.0
   org_flutter: ^3.1.0-pre.1
   # org_flutter:
