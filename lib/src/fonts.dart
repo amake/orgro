@@ -191,6 +191,15 @@ const _kMonospaceGoogleFontFamilies = <String>{
 
   // Added post-1.19.0
   'JetBrains Mono',
+  'Azeret Mono',
+  'Chivo Mono',
+  'Fragment Mono',
+  'Martian Mono',
+  'Noto Sans Mono',
+  'Red Hat Mono',
+  'Spline Sans Mono',
+  // 'Syne Mono',
+  // 'Xanh Mono',
 };
 
 TextStyle loadFontWithVariants(String family) {
