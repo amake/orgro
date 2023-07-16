@@ -437,7 +437,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       await _analyzeDoc(accessibleDirs: accessibleDirs);
     } on Exception catch (e, s) {
       logError(e, s);
-      showErrorSnackBar(context, e);
+      if (mounted) showErrorSnackBar(context, e);
     }
   }
 
