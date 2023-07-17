@@ -172,7 +172,7 @@
    #+end_src
 
    #+RESULTS:
-   : v24.1.1
+   : v25.0.1
 
    Configuration: Tangle the following
 
@@ -355,10 +355,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 7915740 | 79ad4d6421ec7c66d3a30d7bbaaf38e2f4592c5d49e35e9519ec2354407976f5 |
-   | iosevka-orgro-bolditalic.ttf | 8187620 | 97b23fb59d86cacf2232cfe3d790441e628552110836f2619609179a3fb9a5aa |
-   | iosevka-orgro-italic.ttf     | 8200496 | c037ff61f1ee8efc5f4a14d6deff7e9f5bb8f73927fd15e14f845880846e3cef |
-   | iosevka-orgro-regular.ttf    | 7939152 | 67ecf48bb7515fbee232b2d644d5261b9fa6813c1658e4e2a9f26f484647f889 |
+   | iosevka-orgro-bold.ttf       | 8613392 | 56276fae7b11c66e60b5763b2e2b81795cacecbee396bf78a48891326d29210a |
+   | iosevka-orgro-bolditalic.ttf | 9051868 | 05a8ebbcd453502edaf2686e870e62c7a39708fe937d3b3eeaf5d8e85b05dfd3 |
+   | iosevka-orgro-italic.ttf     | 9028968 | 067f9788a182444129418181244410e01be0b2d4089214e368fbf49d948c977c |
+   | iosevka-orgro-regular.ttf    | 8636080 | f392256ced9fa0611cf4c9fc7152992ceac32bedce5de3729204a5be687f964c |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
