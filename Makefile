@@ -27,15 +27,11 @@ l10n-check: ## Check l10n data for issues
 .PHONY: build
 build:
 	flutter build appbundle $(version_define)
-	flutter build ios $(version_define)
-
-.PHONY: archive
-archive:
-	cd ios && xcodebuild -configuration Release -workspace Runner.xcworkspace -scheme Runner archive -sdk iphoneos
+	flutter build ipa $(version_define)
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: dirty-check l10n-check test build archive
+release: dirty-check l10n-check test build
 
 .PHONY: help
 help: ## Show this help text
