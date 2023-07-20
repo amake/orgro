@@ -53,6 +53,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(DISPLAY_NAME)</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(DISPLAY_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
