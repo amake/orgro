@@ -12,6 +12,7 @@
     - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
     - [[https://rubjo.github.io/victor-mono/][Victor Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
+    - [[https://files.ax86.net/terminus-ttf/][Terminus]]
 
   This file documents how the last category is prepared in literate-programming
   style.
@@ -143,6 +144,42 @@
 
    #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
      aws s3 $dryrun sync --no-progress --exclude '*' --include 'VictorMono/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
+   #+end_src
+
+** Terminus
+
+   Download
+
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="4.49.3"
+     curl -LO https://files.ax86.net/terminus-ttf/files/$version/terminus-ttf-$version.zip
+     rm -rf Terminus
+     mkdir Terminus
+     unzip terminus-ttf-$version.zip -d Terminus
+   #+end_src
+
+   Checksum
+
+   #+name: terminus-csums
+   #+begin_src bash :dir ../tmp/Terminus :results table drawer replace
+     for ttf in */*.ttf; do
+         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS: terminus-csums
+   :results:
+   | TerminusTTF-4.49.3.ttf             | 500668 | f668ad7884635e112bcfa2ced6ccb9550128f643bf539cb049bd90bd8afbf4b3 |
+   | TerminusTTF-Bold-4.49.3.ttf        | 500572 | 6be22b2f690c54a848da85cbbb2461843105214ef74f4a71ba139fbeecb25ef5 |
+   | TerminusTTF-Bold-Italic-4.49.3.ttf | 546696 | 115392036be665973d8dae3038708ce173f14af6b1888bdf3817961c23535be6 |
+   | TerminusTTF-Italic-4.49.3.ttf      | 525996 | 525ee0ced02939f1a0eedb7f56be5328d255aa49d96cd5bc48070b6d276585c2 |
+   :end:
+
+   #+call: update-checksums(replacements=terminus-csums)
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'Terminus/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
    #+end_src
 
 ** Custom Iosevka

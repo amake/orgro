@@ -20,6 +20,7 @@ const _kCustomFonts = [
   _FiraGoFile.name,
   _IosevkaFile.name,
   _VictorMonoFile.name,
+  _TerminusFile.name,
 ];
 
 void _initCustomFonts() {
@@ -142,6 +143,47 @@ void _initCustomFonts() {
         ),
         'f070ea46f8a812c57c8db27a36fdd5dcb7cdbb390c8517d616db5c7bd47fcd52',
         255796,
+      ),
+    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
+      {},
+      (acc, file) => acc..[file.variant] = file,
+    ),
+    eager: true,
+  );
+  DynamicFonts.register(
+    _TerminusFile.name,
+    [
+      _TerminusFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        ),
+        'f668ad7884635e112bcfa2ced6ccb9550128f643bf539cb049bd90bd8afbf4b3',
+        500668,
+      ),
+      _TerminusFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+        ),
+        '6be22b2f690c54a848da85cbbb2461843105214ef74f4a71ba139fbeecb25ef5',
+        500572,
+      ),
+      _TerminusFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.italic,
+        ),
+        '525ee0ced02939f1a0eedb7f56be5328d255aa49d96cd5bc48070b6d276585c2',
+        525996,
+      ),
+      _TerminusFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        '115392036be665973d8dae3038708ce173f14af6b1888bdf3817961c23535be6',
+        546696,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -310,4 +352,34 @@ class _VictorMonoFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://cdn.orgro.org/assets/fonts/VictorMono/$version/TTF/VictorMono-${variant.toApiFilenamePart()}.ttf';
+}
+
+class _TerminusFile extends DynamicFontsFile {
+  _TerminusFile(this.variant, String expectedFileHash, int expectedLength)
+      : super(expectedFileHash, expectedLength);
+
+  static const name = 'Terminus';
+  static const version = '4.49.3';
+
+  final DynamicFontsVariant variant;
+
+  bool get _italic => variant.fontStyle == FontStyle.italic;
+
+  bool get _bold => variant.fontWeight == FontWeight.bold;
+
+  String get _variantSlug {
+    if (_bold && _italic) {
+      return 'Bold-Italic-';
+    } else if (_bold) {
+      return 'Bold-';
+    } else if (_italic) {
+      return 'Italic-';
+    } else {
+      return '';
+    }
+  }
+
+  @override
+  String get url =>
+      'https://cdn.orgro.org/assets/fonts/Terminus/terminus-ttf-$version/TerminusTTF-$_variantSlug$version.ttf';
 }
