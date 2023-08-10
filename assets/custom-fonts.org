@@ -99,7 +99,7 @@
 
    #+begin_src bash :dir ../tmp :mkdirp t :var version="1.5.5"
      curl -LO https://github.com/rubjo/victor-mono/raw/v$version/public/VictorMonoAll.zip
-     rm -r VictorMono
+     rm -rf VictorMono
      mkdir VictorMono
      unzip VictorMonoAll.zip -d VictorMono/$version
    #+end_src
