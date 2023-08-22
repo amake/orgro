@@ -126,7 +126,7 @@ class ViewSettingsData {
   factory ViewSettingsData.defaults(BuildContext context) {
     final prefs = Preferences.of(context);
     return ViewSettingsData(
-      textScale: prefs.textScale ?? MediaQuery.textScaleFactorOf(context),
+      textScale: prefs.textScale ?? kDefaultTextScale,
       fontFamily: prefs.fontFamily ?? kDefaultFontFamily,
       queryString: kDefaultQueryString,
       readerMode: prefs.readerMode ?? kDefaultReaderMode,

@@ -9,8 +9,7 @@ enum RemoteImagesPolicy { allow, deny, ask }
 enum LocalLinksPolicy { deny, ask }
 
 const kDefaultFontFamily = 'Fira Code';
-// Default text scale is from system:
-// MediaQuery.textScaleFactorOf(context);
+const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
