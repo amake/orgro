@@ -247,7 +247,6 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: onPressed,
-      foregroundColor: Theme.of(context).colorScheme.onSecondary,
       backgroundColor: _backgroundColor(context),
       mini: true,
       child: child,

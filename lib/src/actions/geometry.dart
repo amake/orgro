@@ -32,7 +32,7 @@ class FullWidthButton extends StatelessWidget {
         angle: pi / 2,
         child: const Icon(Icons.expand),
       ),
-      color: enabled ? Theme.of(context).colorScheme.secondary : null,
+      color: enabled ? Theme.of(context).colorScheme.primary : null,
       onPressed: () => onChanged(!enabled),
     );
   }
