@@ -76,8 +76,9 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _fullWidth ??= _parent.fullWidth;
   }
 
-  TextStyle get textStyle =>
-      loadFontWithVariants(fontFamily).copyWith(fontSize: 18 * textScale);
+  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
+        fontSize: TextScaler.linear(textScale).scale(18),
+      );
 
   Widget buildWithViewSettings({required WidgetBuilder builder}) {
     return ViewSettings(
