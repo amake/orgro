@@ -346,18 +346,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "36a0e06117f3337f5bc81ae0266939f6c2b197e36eb43694ad830c59730e7d81"
+      sha256: a6064468473cbb8c3dd62691b497c52de48324e12dd288f0ffa480d16358d08b
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "4.0.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: b21b9277c4049510211c9df4f004ed6d37523928c3d64323ac10e711ac19fdd1
+      sha256: "70c2c387e7055ee99480ac274eee331fcf470a6ea04c6edb1c414fb7e23735e6"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "4.0.0"
   path:
     dependency: transitive
     description:
@@ -426,10 +426,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: cb3798bef7fc021ac45b308f4b51208a152792445cce0448c9a4ba5879dd8750
+      sha256: eeb2d1428ee7f4170e2bd498827296a18d4e7fc462b71727d111c0ac7707cfa6
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "6.0.1"
   platform:
     dependency: transitive
     description:
@@ -735,10 +735,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: "5bc72e1e45e941d825fd7468b9b4cc3b9327942649aeb6fc5cdbf135f0a86e84"
+      sha256: af5e77e9b83f2f4adc5d3f0a4ece1c7f45a2467b695c2540381bac793e34e556
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.4.2"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
   flutter: ">=3.14.0-0.1.pre"
