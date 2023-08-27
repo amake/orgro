@@ -76,6 +76,7 @@ class _StartPageState extends State<StartPage>
     }
     return FloatingActionButton(
       onPressed: () => _loadAndRememberFile(context, pickFile()),
+      foregroundColor: Theme.of(context).colorScheme.onSecondary,
       child: const Icon(Icons.add),
     );
   }
@@ -216,7 +217,12 @@ class _ListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: DefaultTextStyle.merge(
-        style: Theme.of(context).textTheme.bodyLarge,
+        // Couldn't find actual specs for list subheader typography so this is
+        // my best guess
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
         child: title,
       ),
       trailing: fontPreloader(context),
@@ -348,7 +354,7 @@ class _OrgManualButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
+    return ElevatedButton(
       onPressed: () => loadHttpUrl(
         context,
         Uri.parse(
@@ -365,7 +371,7 @@ class _OrgroManualButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
+    return ElevatedButton(
       onPressed: () => _openOrgroManual(context),
       child: Text(AppLocalizations.of(context)!.buttonOpenOrgroManual),
     );
