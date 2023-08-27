@@ -46,6 +46,10 @@ const _kPrimaryColorVariant = Color(0xff00352f);
 const _kSecondaryColor = Colors.deepOrangeAccent;
 final _kSecondaryColorVariant = Colors.deepOrangeAccent.shade700;
 
+// TODO(aaron): Revert 13570c217d60907ff898331c259a1317e6cdbc3d when moving to
+// Material 3
+const _kUseMaterial3 = false;
+
 class _MyApp extends StatefulWidget {
   const _MyApp();
 
@@ -72,6 +76,7 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
             secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
+          useMaterial3: _kUseMaterial3,
         ),
         darkTheme: ThemeData.from(
           colorScheme: ColorScheme.dark(
@@ -82,6 +87,7 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
             secondaryContainer: _kSecondaryColorVariant,
             onSecondary: Colors.white,
           ),
+          useMaterial3: _kUseMaterial3,
         ),
         themeMode: Appearance.of(context).mode,
         home: const StartPage(),
