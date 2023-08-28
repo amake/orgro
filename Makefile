@@ -32,6 +32,7 @@ build:
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
 release: dirty-check l10n-check test build
+	open -a Transporter build/ios/ipa/Orgro.ipa
 
 .PHONY: help
 help: ## Show this help text
