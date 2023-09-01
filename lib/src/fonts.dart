@@ -242,6 +242,11 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'Spline Sans Mono',
   // 'Syne Mono',
   // 'Xanh Mono',
+
+  // By user request
+  'Roboto Slab',
+  'Merriweather',
+  'PT Serif',
 };
 
 TextStyle loadFontWithVariants(String family) {
