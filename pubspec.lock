@@ -749,4 +749,4 @@ packages:
     version: "6.4.2"
 sdks:
   dart: ">=3.1.0 <4.0.0"
-  flutter: ">=3.14.0-0.1.pre"
+  flutter: ">=3.14.0-0.2.pre"
