@@ -292,6 +292,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
                     narrow(context, widget.dataSource, section),
                 onLocalSectionLinkTap: (section) =>
                     narrow(context, widget.dataSource, section),
+                onListItemTap: _onListItemTap,
                 loadImage: _loadImage,
                 child: switch (doc) {
                   OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
@@ -461,6 +462,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               : null,
         ),
       );
+
+  void _onListItemTap(OrgListItem item) {
+    final newTree =
+        _doc.editNode(item)!.replace(item.toggleCheckbox()).commit();
+    DocumentProvider.of(context)!.setDoc(newTree as OrgTree);
+  }
 
   bool? _hasRemoteImages;
 

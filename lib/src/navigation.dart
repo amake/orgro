@@ -167,10 +167,13 @@ class _DocumentProviderState extends State<DocumentProvider> {
     super.initState();
   }
 
+  void _setDoc(OrgTree doc) => setState(() => _doc = doc);
+
   @override
   Widget build(BuildContext context) {
     return DocumentProviderData(
       doc: _doc,
+      setDoc: _setDoc,
       child: widget.child,
     );
   }
@@ -179,11 +182,13 @@ class _DocumentProviderState extends State<DocumentProvider> {
 class DocumentProviderData extends InheritedWidget {
   const DocumentProviderData({
     required this.doc,
+    required this.setDoc,
     required super.child,
     super.key,
   });
 
   final OrgTree doc;
+  final Function(OrgTree) setDoc;
 
   @override
   bool updateShouldNotify(DocumentProviderData oldWidget) =>
