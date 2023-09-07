@@ -101,29 +101,36 @@ class _DocumentPageWrapper extends StatelessWidget {
   }
 }
 
-void narrow(BuildContext context, DataSource dataSource, OrgSection section) {
+Future<OrgSection?> narrow(
+    BuildContext context, DataSource dataSource, OrgSection section) {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
-  Navigator.push<void>(
+  return Navigator.push<OrgSection>(
     context,
     MaterialPageRoute(
       builder: (context) => DocumentProvider(
         doc: section,
         child: Builder(builder: (context) {
-          return OrgController.defaults(
-            orgController,
-            // Continue to use the true document root so that links to sections
-            // outside the narrowed section can be resolved
-            //
-            // TODO(aaron): figure out how this should work with editing
-            root: orgController.root,
-            child: ViewSettings(
-              data: viewSettings,
-              child: DocumentPage(
-                title: AppLocalizations.of(context)!
-                    .pageTitleNarrow(dataSource.name),
-                dataSource: dataSource,
-                initialQuery: viewSettings.queryString,
+          return WillPopScope(
+            onWillPop: () async {
+              Navigator.pop(context, DocumentProvider.of(context)!.doc);
+              return false;
+            },
+            child: OrgController.defaults(
+              orgController,
+              // Continue to use the true document root so that links to sections
+              // outside the narrowed section can be resolved
+              //
+              // TODO(aaron): figure out how this should work with editing
+              root: orgController.root,
+              child: ViewSettings(
+                data: viewSettings,
+                child: DocumentPage(
+                  title: AppLocalizations.of(context)!
+                      .pageTitleNarrow(dataSource.name),
+                  dataSource: dataSource,
+                  initialQuery: viewSettings.queryString,
+                ),
               ),
             ),
           );
