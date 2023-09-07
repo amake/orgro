@@ -89,8 +89,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       logError(e, s);
     }
     if (section != null) {
-      narrow(context, widget.dataSource, section);
+      _doNarrow(section);
     }
+  }
+
+  void _doNarrow(OrgSection section) async {
+    final newSection = await narrow(context, widget.dataSource, section);
+    if (newSection == null || identical(newSection, section)) {
+      return;
+    }
+    final newDoc = _doc.editNode(section)!.replace(newSection).commit();
+    _updateDocument(newDoc as OrgTree);
   }
 
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
@@ -291,10 +300,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               child: OrgRootWidget(
                 style: textStyle,
                 onLinkTap: _openLink,
-                onSectionLongPress: (section) =>
-                    narrow(context, widget.dataSource, section),
-                onLocalSectionLinkTap: (section) =>
-                    narrow(context, widget.dataSource, section),
+                onSectionLongPress: _doNarrow,
+                onLocalSectionLinkTap: _doNarrow,
                 onListItemTap: _onListItemTap,
                 loadImage: _loadImage,
                 child: switch (doc) {
