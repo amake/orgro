@@ -19,19 +19,15 @@ const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
-    required this.doc,
     required this.title,
     required this.dataSource,
-    required this.child,
     this.initialTarget,
     this.initialQuery,
     super.key,
   });
 
-  final OrgTree doc;
   final String title;
   final DataSource dataSource;
-  final Widget child;
   final String? initialTarget;
   final String? initialQuery;
 
@@ -41,6 +37,8 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   late MySearchDelegate _searchDelegate;
+
+  OrgTree get _doc => DocumentProvider.of(context)!.doc;
 
   @override
   String? get queryString => _searchDelegate.queryString;
@@ -103,7 +101,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         _canResolveRelativeLinks ?? await canObtainNativeDirectoryPermissions();
     var hasRemoteImages = _hasRemoteImages ?? false;
     var hasRelativeLinks = _hasRelativeLinks ?? false;
-    widget.doc.visit<OrgLink>((link) {
+    _doc.visit<OrgLink>((link) {
       hasRemoteImages |=
           looksLikeImagePath(link.location) && looksLikeUrl(link.location);
       try {
@@ -268,7 +266,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   }
 
   Widget _buildDocument(BuildContext context) {
-    final doc = SliverList(
+    final doc = _doc;
+    final result = SliverList(
       delegate: SliverChildListDelegate([
         DirectoryPermissionsBanner(
           visible: _askForDirectoryPermissions,
@@ -294,7 +293,11 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
                 onLocalSectionLinkTap: (section) =>
                     narrow(context, widget.dataSource, section),
                 loadImage: _loadImage,
-                child: widget.child,
+                child: switch (doc) {
+                  OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
+                  OrgSection() =>
+                    OrgSectionWidget(doc, root: true, shrinkWrap: true)
+                },
               ),
             ),
           ),
@@ -305,7 +308,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ]),
     );
 
-    return _maybePadForBigScreen(doc);
+    return _maybePadForBigScreen(result);
   }
 
   // Add some extra padding on big screens to make things not feel so

@@ -52,10 +52,12 @@ PageRoute _buildDocumentRoute(
       future: parsed,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _DocumentPageWrapper(
+          return DocumentProvider(
             doc: snapshot.data!.doc,
-            dataSource: snapshot.data!.dataSource,
-            target: target,
+            child: _DocumentPageWrapper(
+              dataSource: snapshot.data!.dataSource,
+              target: target,
+            ),
           );
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
@@ -70,12 +72,10 @@ PageRoute _buildDocumentRoute(
 
 class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
-    required this.doc,
     required this.dataSource,
     required this.target,
   });
 
-  final OrgDocument doc;
   final DataSource dataSource;
   final String? target;
 
@@ -85,17 +85,15 @@ class _DocumentPageWrapper extends StatelessWidget {
     return RootRestorationScope(
       restorationId: 'org_page_root:${dataSource.id}',
       child: OrgController(
-        root: doc,
+        root: DocumentProvider.of(context)!.doc,
         hideMarkup: prefs.readerMode,
         restorationId: 'org_page:${dataSource.id}',
         child: ViewSettings.defaults(
           context,
           child: DocumentPage(
-            doc: doc,
             title: dataSource.name,
             dataSource: dataSource,
             initialTarget: target,
-            child: OrgDocumentWidget(doc, shrinkWrap: true),
           ),
         ),
       ),
@@ -109,26 +107,27 @@ void narrow(BuildContext context, DataSource dataSource, OrgSection section) {
   Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => OrgController.defaults(
-        orgController,
-        // Continue to use the true document root so that links to sections
-        // outside the narrowed section can be resolved
-        root: orgController.root,
-        child: ViewSettings(
-          data: viewSettings,
-          child: DocumentPage(
-            doc: section,
-            title:
-                AppLocalizations.of(context)!.pageTitleNarrow(dataSource.name),
-            dataSource: dataSource,
-            initialQuery: viewSettings.queryString,
-            child: OrgSectionWidget(
-              section,
-              root: true,
-              shrinkWrap: true,
+      builder: (context) => DocumentProvider(
+        doc: section,
+        child: Builder(builder: (context) {
+          return OrgController.defaults(
+            orgController,
+            // Continue to use the true document root so that links to sections
+            // outside the narrowed section can be resolved
+            //
+            // TODO(aaron): figure out how this should work with editing
+            root: orgController.root,
+            child: ViewSettings(
+              data: viewSettings,
+              child: DocumentPage(
+                title: AppLocalizations.of(context)!
+                    .pageTitleNarrow(dataSource.name),
+                dataSource: dataSource,
+                initialQuery: viewSettings.queryString,
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     ),
   );
@@ -144,4 +143,49 @@ void showInteractive(BuildContext context, String title, Widget child) {
       ),
     ),
   );
+}
+
+class DocumentProvider extends StatefulWidget {
+  static DocumentProviderData? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DocumentProviderData>();
+
+  const DocumentProvider({required this.doc, required this.child, super.key});
+
+  final OrgTree doc;
+  final Widget child;
+
+  @override
+  State<DocumentProvider> createState() => _DocumentProviderState();
+}
+
+class _DocumentProviderState extends State<DocumentProvider> {
+  late OrgTree _doc;
+
+  @override
+  void initState() {
+    _doc = widget.doc;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DocumentProviderData(
+      doc: _doc,
+      child: widget.child,
+    );
+  }
+}
+
+class DocumentProviderData extends InheritedWidget {
+  const DocumentProviderData({
+    required this.doc,
+    required super.child,
+    super.key,
+  });
+
+  final OrgTree doc;
+
+  @override
+  bool updateShouldNotify(DocumentProviderData oldWidget) =>
+      doc != oldWidget.doc;
 }
