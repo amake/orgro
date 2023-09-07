@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -466,7 +469,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   void _onListItemTap(OrgListItem item) {
     final newTree =
         _doc.editNode(item)!.replace(item.toggleCheckbox()).commit();
-    DocumentProvider.of(context)!.setDoc(newTree as OrgTree);
+    _updateDocument(newTree as OrgTree);
   }
 
   bool? _hasRemoteImages;
@@ -508,6 +511,25 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       dataSource: widget.dataSource,
       relativePath: link.body,
     );
+  }
+
+  Timer? _writeTimer;
+
+  void _updateDocument(OrgTree newDoc) async {
+    DocumentProvider.of(context)!.setDoc(newDoc);
+    final source = widget.dataSource;
+    if (source is NativeDataSource && newDoc is OrgDocument) {
+      _writeTimer?.cancel();
+      _writeTimer = Timer(const Duration(seconds: 3), () async {
+        await source.write(newDoc.toMarkup());
+        if (kDebugMode && mounted) {
+          showErrorSnackBar(
+            context,
+            AppLocalizations.of(context)!.savedMessage,
+          );
+        }
+      });
+    }
   }
 }
 

@@ -149,6 +149,9 @@ class NativeDataSource extends DataSource {
     );
   }
 
+  Future<FileInfo> write(String content) => FilePickerWritable().writeFile(
+      identifier: identifier, writer: (file) => file.writeAsString(content));
+
   @override
   bool get needsToResolveParent => persistable && _parentDirIdentifier == null;
 

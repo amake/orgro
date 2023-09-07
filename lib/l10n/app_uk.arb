@@ -82,6 +82,8 @@
   "bannerBodyActionGrantNever": "Ніколи",
   "bannerBodyActionGrantNow": "Надати дозвіл",
 
+  "savedMessage": "Saved",
+
   "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
   "@errorPathResolvedToNonFile": {

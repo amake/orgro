@@ -82,6 +82,8 @@
   "bannerBodyActionGrantNever": "Never",
   "bannerBodyActionGrantNow": "Grant access",
 
+  "savedMessage": "Saved",
+
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
   "@errorPathResolvedToNonFile": {
