@@ -60,7 +60,7 @@
 
   "pageTitleError": "エラー",
   "pageTitleLoading": "ロード中...",
-  "pageTitleNarrow": "{name} › narrow",
+  "pageTitleNarrow": "{name} › ナロー",
 
   "sectionActionNarrow": "ナロー",
   "sectionActionCycleTodo": "TODO を巡回",
