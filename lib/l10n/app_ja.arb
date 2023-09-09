@@ -62,6 +62,9 @@
   "pageTitleLoading": "ロード中...",
   "pageTitleNarrow": "{name} › narrow",
 
+  "sectionActionNarrow": "ナロー",
+  "sectionActionCycleTodo": "TODO を巡回",
+
   "bannerBodyRemoteImages": "本ドキュメントにはリモート画像が含まれています。表示しますか？",
   "bannerBodyActionShowAlways": "常に表示",
   "bannerBodyActionShowNever": "表示しない",

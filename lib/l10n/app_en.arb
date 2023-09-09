@@ -72,6 +72,9 @@
     }
   },
 
+  "sectionActionNarrow": "Narrow",
+  "sectionActionCycleTodo": "Cycle TODO",
+
   "bannerBodyRemoteImages": "This document contains remote images. Would you like to load them?",
   "bannerBodyActionShowAlways": "Always",
   "bannerBodyActionShowNever": "Never",

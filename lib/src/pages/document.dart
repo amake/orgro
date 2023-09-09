@@ -102,6 +102,38 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     _updateDocument(newDoc as OrgTree);
   }
 
+  void _onSectionLongPress(OrgSection section) async {
+    final action = await showDialog<SectionAction>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        children: [
+          for (final action in SectionAction.values)
+            ListTile(
+              title: Text(sectionActionToDisplayString(context, action)),
+              onTap: () => Navigator.pop(context, action),
+            ),
+        ],
+      ),
+    );
+
+    if (!mounted) return;
+
+    switch (action) {
+      case SectionAction.narrow:
+        _doNarrow(section);
+        return;
+      case SectionAction.cycleTodo:
+        final newDoc = _doc
+            .editNode(section.headline)!
+            .replace(section.headline.cycleTodo())
+            .commit() as OrgTree;
+        _updateDocument(newDoc);
+        return;
+      case null:
+        return;
+    }
+  }
+
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
     final source = widget.dataSource;
     if (source is NativeDataSource && source.needsToResolveParent) {
@@ -300,7 +332,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
               child: OrgRootWidget(
                 style: textStyle,
                 onLinkTap: _openLink,
-                onSectionLongPress: _doNarrow,
+                onSectionLongPress: _onSectionLongPress,
                 onLocalSectionLinkTap: _doNarrow,
                 onListItemTap: _onListItemTap,
                 loadImage: _loadImage,
@@ -595,3 +627,15 @@ class _Badge extends StatelessWidget {
     );
   }
 }
+
+enum SectionAction { narrow, cycleTodo }
+
+String sectionActionToDisplayString(
+  BuildContext context,
+  SectionAction action,
+) =>
+    switch (action) {
+      SectionAction.narrow => AppLocalizations.of(context)!.sectionActionNarrow,
+      SectionAction.cycleTodo =>
+        AppLocalizations.of(context)!.sectionActionCycleTodo
+    };

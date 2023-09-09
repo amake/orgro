@@ -72,6 +72,9 @@
     }
   },
 
+  "sectionActionNarrow": "Narrow",
+  "sectionActionCycleTodo": "Cycle TODO",
+
   "bannerBodyRemoteImages": "Цей документ містить віддалені зображення. Бажаєте завантажувати їх?",
   "bannerBodyActionShowAlways": "Завжди",
   "bannerBodyActionShowNever": "Ніколи",
