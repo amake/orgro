@@ -96,6 +96,52 @@ class DirectoryPermissionsBanner extends StatelessWidget {
   }
 }
 
+class SavePermissionsBanner extends StatelessWidget {
+  const SavePermissionsBanner({
+    required this.visible,
+    required this.onResult,
+    super.key,
+  });
+
+  final Function(SaveChangesPolicy, {bool persist}) onResult;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 100),
+      transitionBuilder: (child, animation) =>
+          SizeTransition(sizeFactor: animation, child: child),
+      child: visible
+          ? MaterialBanner(
+              content: Text(
+                AppLocalizations.of(context)!.bannerBodySaveDocument,
+              ),
+              leading: const Icon(Icons.save),
+              actions: [
+                _BannerButton(
+                  text:
+                      AppLocalizations.of(context)!.bannerBodyActionSaveAlways,
+                  onPressed: () =>
+                      onResult(SaveChangesPolicy.allow, persist: true),
+                ),
+                _BannerButton(
+                  text: AppLocalizations.of(context)!.bannerBodyActionSaveNever,
+                  onPressed: () =>
+                      onResult(SaveChangesPolicy.deny, persist: true),
+                ),
+                _BannerButton(
+                  text: AppLocalizations.of(context)!.bannerBodyActionSaveOnce,
+                  onPressed: () =>
+                      onResult(SaveChangesPolicy.allow, persist: false),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+}
+
 class _BannerButton extends StatelessWidget {
   const _BannerButton({required this.text, required this.onPressed});
 

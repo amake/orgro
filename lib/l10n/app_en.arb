@@ -85,6 +85,11 @@
   "bannerBodyActionGrantNever": "Never",
   "bannerBodyActionGrantNow": "Grant access",
 
+  "bannerBodySaveDocument": "Would you like to save changes to this document? This is an experimental feature. Make sure to back up your files.",
+  "bannerBodyActionSaveAlways": "Always",
+  "bannerBodyActionSaveNever": "Never",
+  "bannerBodyActionSaveOnce": "Just this time",
+
   "savedMessage": "Saved",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",

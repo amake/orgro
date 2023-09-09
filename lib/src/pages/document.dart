@@ -325,6 +325,10 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           visible: _askPermissionToLoadRemoteImages,
           onResult: setRemoteImagesPolicy,
         ),
+        SavePermissionsBanner(
+          visible: _askPermissionToSaveChanges,
+          onResult: setSaveChangesPolicy,
+        ),
         buildWithViewSettings(
           builder: (context) => _maybeConstrainWidth(
             context,
@@ -552,12 +556,19 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     );
   }
 
+  bool get _askPermissionToSaveChanges =>
+      saveChangesPolicy == SaveChangesPolicy.ask &&
+      !_askForDirectoryPermissions &&
+      !_askPermissionToLoadRemoteImages;
+
   Timer? _writeTimer;
 
   void _updateDocument(OrgTree newDoc) async {
     DocumentProvider.of(context)!.setDoc(newDoc);
     final source = widget.dataSource;
-    if (source is NativeDataSource && newDoc is OrgDocument) {
+    if (saveChangesPolicy == SaveChangesPolicy.allow &&
+        source is NativeDataSource &&
+        newDoc is OrgDocument) {
       _writeTimer?.cancel();
       _writeTimer = Timer(const Duration(seconds: 3), () async {
         await source.write(newDoc.toMarkup());

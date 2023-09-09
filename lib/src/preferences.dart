@@ -8,12 +8,15 @@ enum RemoteImagesPolicy { allow, deny, ask }
 
 enum LocalLinksPolicy { deny, ask }
 
+enum SaveChangesPolicy { allow, deny, ask }
+
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
 const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
+const kDefaultSaveChangesPolicy = SaveChangesPolicy.ask;
 const kDefaultFullWidth = false;
 
 const kMaxRecentFiles = 10;
@@ -23,6 +26,7 @@ const _kTextScaleKey = 'text_scale';
 const _kReaderModeKey = 'reader_mode';
 const _kRemoteImagesPolicyKey = 'remote_images_policy';
 const _kLocalLinksPolicyKey = 'local_links_policy';
+const _kSaveChangesPolicyKey = 'save_changes_policy';
 const _kRecentFilesJsonKey = 'recent_files_json';
 const _kAccessibleDirectoriesKey = 'accessible_directories_json';
 const _kFullWidthKey = 'full_width';
@@ -76,6 +80,12 @@ class Preferences extends InheritedWidget {
 
   Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
       _setOrRemove(_kLocalLinksPolicyKey, localLinksPolicyToString(value));
+
+  SaveChangesPolicy? get saveChangesPolicy =>
+      saveChangesPolicyFromString(_prefs.getString(_kSaveChangesPolicyKey));
+
+  Future<bool> setSaveChangesPolicy(SaveChangesPolicy? value) =>
+      _setOrRemove(_kSaveChangesPolicyKey, saveChangesPolicyToString(value));
 
   /// List of identifiers
   List<String> get accessibleDirs =>
@@ -197,3 +207,32 @@ String? localLinksPolicyToString(LocalLinksPolicy? value) {
 
 const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
 const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';
+
+SaveChangesPolicy? saveChangesPolicyFromString(String? value) {
+  switch (value) {
+    case _kSaveChangesPolicyAllow:
+      return SaveChangesPolicy.allow;
+    case _kSaveChangesPolicyDeny:
+      return SaveChangesPolicy.deny;
+    case _kSaveChangesPolicyAsk:
+      return SaveChangesPolicy.ask;
+  }
+  return null;
+}
+
+String? saveChangesPolicyToString(SaveChangesPolicy? value) {
+  switch (value) {
+    case SaveChangesPolicy.allow:
+      return _kSaveChangesPolicyAllow;
+    case SaveChangesPolicy.deny:
+      return _kSaveChangesPolicyDeny;
+    case SaveChangesPolicy.ask:
+      return _kSaveChangesPolicyAsk;
+    case null:
+      return null;
+  }
+}
+
+const _kSaveChangesPolicyAllow = 'save_changes_policy_allow';
+const _kSaveChangesPolicyDeny = 'save_changes_policy_deny';
+const _kSaveChangesPolicyAsk = 'save_changes_policy_ask';

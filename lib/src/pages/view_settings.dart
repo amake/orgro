@@ -55,6 +55,17 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     setState(() => _localLinksPolicy = value);
   }
 
+  SaveChangesPolicy? _saveChangesPolicy;
+
+  SaveChangesPolicy get saveChangesPolicy => _saveChangesPolicy!;
+
+  void setSaveChangesPolicy(SaveChangesPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.setSaveChangesPolicy(value);
+    }
+    setState(() => _saveChangesPolicy = value);
+  }
+
   bool? _fullWidth;
 
   bool get fullWidth => _fullWidth!;
@@ -73,6 +84,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
     _textScale ??= _parent.textScale;
     _remoteImagesPolicy ??= _parent.remoteImagesPolicy;
     _localLinksPolicy ??= _parent.localLinksPolicy;
+    _saveChangesPolicy ??= _parent.saveChangesPolicy;
     _fullWidth ??= _parent.fullWidth;
   }
 
@@ -89,6 +101,7 @@ mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
         readerMode: readerMode,
         remoteImagesPolicy: remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy,
+        saveChangesPolicy: saveChangesPolicy,
         fullWidth: fullWidth,
       ),
       // Builder required to get ViewSettings into the context
@@ -134,6 +147,7 @@ class ViewSettingsData {
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
       localLinksPolicy: prefs.localLinksPolicy ?? kDefaultLocalLinksPolicy,
+      saveChangesPolicy: prefs.saveChangesPolicy ?? kDefaultSaveChangesPolicy,
       fullWidth: prefs.fullWidth ?? kDefaultFullWidth,
     );
   }
@@ -145,6 +159,7 @@ class ViewSettingsData {
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
+    required this.saveChangesPolicy,
     required this.fullWidth,
   });
 
@@ -154,6 +169,7 @@ class ViewSettingsData {
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
+  final SaveChangesPolicy saveChangesPolicy;
   final bool fullWidth;
 
   @override
@@ -165,6 +181,7 @@ class ViewSettingsData {
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
+      saveChangesPolicy == other.saveChangesPolicy &&
       fullWidth == other.fullWidth;
 
   @override
@@ -175,6 +192,7 @@ class ViewSettingsData {
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,
+        saveChangesPolicy,
         fullWidth,
       );
 }

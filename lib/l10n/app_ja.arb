@@ -75,6 +75,11 @@
   "bannerBodyActionGrantNever": "許可しない",
   "bannerBodyActionGrantNow": "許可",
 
+  "bannerBodySaveDocument": "変更を保存しますか？これは実験的な機能です。ファイルをバックアップしておいてください。",
+  "bannerBodyActionSaveAlways": "常に保存",
+  "bannerBodyActionSaveNever": "保存しない",
+  "bannerBodyActionSaveOnce": "今回だけ",
+
   "savedMessage": "保存しました",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
