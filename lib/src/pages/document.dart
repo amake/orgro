@@ -576,12 +576,17 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         newDoc is OrgDocument) {
       _writeTimer?.cancel();
       _writeTimer = Timer(const Duration(seconds: 3), () async {
-        await source.write(newDoc.toMarkup());
-        if (kDebugMode && mounted) {
-          showErrorSnackBar(
-            context,
-            AppLocalizations.of(context)!.savedMessage,
-          );
+        try {
+          await source.write(newDoc.toMarkup());
+          if (kDebugMode && mounted) {
+            showErrorSnackBar(
+              context,
+              AppLocalizations.of(context)!.savedMessage,
+            );
+          }
+        } on Exception catch (e, s) {
+          logError(e, s);
+          if (mounted) showErrorSnackBar(context, e);
         }
       });
     }
