@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -578,7 +577,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       _writeTimer = Timer(const Duration(seconds: 3), () async {
         try {
           await source.write(newDoc.toMarkup());
-          if (kDebugMode && mounted) {
+          if (mounted) {
             showErrorSnackBar(
               context,
               AppLocalizations.of(context)!.savedMessage,
