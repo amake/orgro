@@ -558,8 +558,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   bool get _askPermissionToSaveChanges =>
       saveChangesPolicy == SaveChangesPolicy.ask &&
+      _canSaveChanges &&
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages;
+
+  bool get _canSaveChanges =>
+      widget.dataSource is NativeDataSource && _doc is OrgDocument;
 
   Timer? _writeTimer;
 
@@ -567,6 +571,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     DocumentProvider.of(context)!.setDoc(newDoc);
     final source = widget.dataSource;
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
+        _canSaveChanges &&
         source is NativeDataSource &&
         newDoc is OrgDocument) {
       _writeTimer?.cancel();
