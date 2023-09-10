@@ -85,7 +85,7 @@
   "bannerBodyActionGrantNever": "Ніколи",
   "bannerBodyActionGrantNow": "Надати дозвіл",
 
-  "bannerBodySaveDocument": "Would you like to save changes to this document? This is an experimental feature. Make sure to back up your files.",
+  "bannerBodySaveDocumentOrg": "Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]",
   "bannerBodyActionSaveAlways": "Always",
   "bannerBodyActionSaveNever": "Never",
   "bannerBodyActionSaveOnce": "Just this time",

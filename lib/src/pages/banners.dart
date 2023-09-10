@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RemoteImagePermissionsBanner extends StatelessWidget {
   const RemoteImagePermissionsBanner({
@@ -114,8 +116,12 @@ class SavePermissionsBanner extends StatelessWidget {
           SizeTransition(sizeFactor: animation, child: child),
       child: visible
           ? MaterialBanner(
-              content: Text(
-                AppLocalizations.of(context)!.bannerBodySaveDocument,
+              content: OrgText(
+                AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
+                onLinkTap: (link) => launchUrl(
+                  Uri.parse(link),
+                  mode: LaunchMode.externalApplication,
+                ),
               ),
               leading: const Icon(Icons.save),
               actions: [

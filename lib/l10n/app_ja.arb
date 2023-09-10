@@ -75,7 +75,7 @@
   "bannerBodyActionGrantNever": "許可しない",
   "bannerBodyActionGrantNow": "許可",
 
-  "bannerBodySaveDocument": "変更を保存しますか？これは実験的な機能です。ファイルをバックアップしておいてください。",
+  "bannerBodySaveDocumentOrg": "変更を保存しますか？*これは実験的な機能です。*ファイルをバックアップしておいてください。[[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][詳細]]",
   "bannerBodyActionSaveAlways": "常に保存",
   "bannerBodyActionSaveNever": "保存しない",
   "bannerBodyActionSaveOnce": "今回だけ",
