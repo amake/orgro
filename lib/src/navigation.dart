@@ -120,8 +120,6 @@ Future<OrgSection?> narrow(
               orgController,
               // Continue to use the true document root so that links to sections
               // outside the narrowed section can be resolved
-              //
-              // TODO(aaron): figure out how this should work with editing
               root: orgController.root,
               child: ViewSettings(
                 data: viewSettings,
