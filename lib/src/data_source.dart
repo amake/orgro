@@ -132,6 +132,7 @@ class NativeDataSource extends DataSource {
             AppLocalizations.of(context)!.errorCannotResolveRelativePath,
       );
     }
+    // TODO(aaron): See if we can resolve to a non-existent file for writing
     final resolved = await FilePickerWritable().resolveRelativePath(
         directoryIdentifier: _parentDirIdentifier!, relativePath: relativePath);
     if (resolved is! FileInfo) {
