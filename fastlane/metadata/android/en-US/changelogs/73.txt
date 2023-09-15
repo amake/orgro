@@ -1,0 +1,3 @@
+- Undo/redo edits
+- Share unsaved edits
+- Jump to footnotes
