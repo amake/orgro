@@ -201,13 +201,17 @@ Long touch an image to open it in a view where you can zoom and pan.
 Images are cached on your device. To clear the cache and reset your choice if
 you chose =Always= or =Never=, see the action menu on the top screen.
 
+** Footnotes
+
+Jump to named foonotes by touching a footnote reference.[fn:1]
+
 ** Other
 
 Other syntaxes that are highlighted but not (yet) interpreted in any special
 way:
 
 - Timestamps and ranges :: [2020-05-05 Tue]
-- Footnotes :: guess what[fn:: this is a footnote]
+- Anonymous footnotes :: guess what[fn:: this is an anonymous footnote]
 - Macro references :: {{{date}}}
 
 * Narrowing
@@ -270,3 +274,7 @@ On large screens, optionally let the document take up the entire screen width.
 * Questions and Feedback
 
 Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
+
+* Footnotes
+
+[fn:1] Tap the reference here to jump back.
