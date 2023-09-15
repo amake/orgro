@@ -80,6 +80,11 @@
   "bannerBodyActionSaveNever": "保存しない",
   "bannerBodyActionSaveOnce": "今回だけ",
 
+  "saveChangesDialogTitle": "変更を保存しますか？",
+  "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
+  "saveActionShare": "共有する",
+  "saveActionDiscard": "破棄する",
+
   "savedMessage": "保存しました",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",

@@ -15,6 +15,7 @@ import 'package:orgro/src/pages/image.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
@@ -267,23 +268,26 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: _searchDelegate.searchMode,
-      builder: (context, searchMode, child) => Scaffold(
-        // Builder is here to ensure that the primary scroll controller set by the
-        // Scaffold makes it into the body's context
-        body: _KeyboardShortcuts(
-          child: Builder(
-            builder: (context) => CustomScrollView(
-              restorationId: 'document_scroll_view',
-              slivers: [
-                _buildAppBar(context, searchMode: searchMode),
-                _buildDocument(context),
-              ],
+      builder: (context, searchMode, child) => WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          // Builder is here to ensure that the primary scroll controller set by the
+          // Scaffold makes it into the body's context
+          body: _KeyboardShortcuts(
+            child: Builder(
+              builder: (context) => CustomScrollView(
+                restorationId: 'document_scroll_view',
+                slivers: [
+                  _buildAppBar(context, searchMode: searchMode),
+                  _buildDocument(context),
+                ],
+              ),
             ),
           ),
-        ),
-        floatingActionButton: _buildFloatingActionButton(
-          context,
-          searchMode: searchMode,
+          floatingActionButton: _buildFloatingActionButton(
+            context,
+            searchMode: searchMode,
+          ),
         ),
       ),
     );
@@ -566,8 +570,11 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   Timer? _writeTimer;
 
+  bool _dirty = false;
+
   void _updateDocument(OrgTree newDoc) async {
     DocumentProvider.of(context)!.setDoc(newDoc);
+    _dirty = true;
     final source = widget.dataSource;
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
@@ -577,6 +584,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       _writeTimer = Timer(const Duration(seconds: 3), () async {
         try {
           await source.write(newDoc.toMarkup());
+          _dirty = false;
           if (mounted) {
             showErrorSnackBar(
               context,
@@ -589,6 +597,54 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         }
       });
     }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (!_dirty) return true;
+
+    // Don't try to save anything other than a root document
+    final doc = DocumentProvider.of(context)!.doc;
+    if (doc is! OrgDocument) return true;
+
+    final source = widget.dataSource;
+    if (saveChangesPolicy == SaveChangesPolicy.allow &&
+        _canSaveChanges &&
+        source is NativeDataSource) {
+      await source.write(doc.toMarkup());
+    } else {
+      final action = await showDialog<SaveAction>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(Icons.save),
+          title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
+          content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
+          actions: [
+            for (final action in SaveAction.values)
+              ListTile(
+                title: Text(action.toDisplayString(context)),
+                onTap: () => Navigator.pop(context, action),
+              ),
+          ],
+        ),
+      );
+      switch (action) {
+        case SaveAction.share:
+          final result = await Share.shareWithResult(doc.toMarkup());
+          switch (result.status) {
+            case ShareResultStatus.success: // fallthrough
+            case ShareResultStatus.unavailable:
+              break;
+            case ShareResultStatus.dismissed:
+              return false; // Cancel the pop
+          }
+          break;
+        case SaveAction.discard:
+          break;
+        case null:
+          return false; // Cancel the pop
+      }
+    }
+    return true;
   }
 }
 
@@ -659,3 +715,12 @@ String sectionActionToDisplayString(
       SectionAction.cycleTodo =>
         AppLocalizations.of(context)!.sectionActionCycleTodo
     };
+
+enum SaveAction { share, discard }
+
+extension SaveActionDisplayString on SaveAction {
+  String toDisplayString(BuildContext context) => switch (this) {
+        SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
+        SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
+      };
+}

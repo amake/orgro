@@ -90,6 +90,11 @@
   "bannerBodyActionSaveNever": "Never",
   "bannerBodyActionSaveOnce": "Just this time",
 
+  "saveChangesDialogTitle": "Save changes?",
+  "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
+  "saveActionShare": "Share",
+  "saveActionDiscard": "Discard",
+
   "savedMessage": "Saved",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
