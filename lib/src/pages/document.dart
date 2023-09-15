@@ -109,7 +109,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         children: [
           for (final action in SectionAction.values)
             ListTile(
-              title: Text(sectionActionToDisplayString(context, action)),
+              title: Text(action.toDisplayString(context)),
               onTap: () => Navigator.pop(context, action),
             ),
         ],
@@ -706,15 +706,14 @@ class _Badge extends StatelessWidget {
 
 enum SectionAction { narrow, cycleTodo }
 
-String sectionActionToDisplayString(
-  BuildContext context,
-  SectionAction action,
-) =>
-    switch (action) {
-      SectionAction.narrow => AppLocalizations.of(context)!.sectionActionNarrow,
-      SectionAction.cycleTodo =>
-        AppLocalizations.of(context)!.sectionActionCycleTodo
-    };
+extension SectionActionDisplayString on SectionAction {
+  String toDisplayString(BuildContext context) => switch (this) {
+        SectionAction.narrow =>
+          AppLocalizations.of(context)!.sectionActionNarrow,
+        SectionAction.cycleTodo =>
+          AppLocalizations.of(context)!.sectionActionCycleTodo
+      };
+}
 
 enum SaveAction { share, discard }
 

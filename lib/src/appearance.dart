@@ -24,14 +24,15 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
   late ThemeMode _mode;
 
   void _load() {
-    _mode = themeModeFromString(_prefs.themeMode) ?? _kDefaultThemeMode;
+    _mode =
+        ThemeModePersistence.fromString(_prefs.themeMode) ?? _kDefaultThemeMode;
   }
 
   void setMode(ThemeMode mode) {
     setState(() {
       _mode = mode;
     });
-    _prefs.setThemeMode(themeModeToString(mode));
+    _prefs.setThemeMode(mode.persistableString);
   }
 
   @override
@@ -51,29 +52,25 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
   }
 }
 
-String? themeModeToString(ThemeMode? value) {
-  switch (value) {
-    case ThemeMode.system:
-      return _kThemeModeSystem;
-    case ThemeMode.light:
-      return _kThemeModeLight;
-    case ThemeMode.dark:
-      return _kThemeModeDark;
-    case null:
-      return null;
-  }
-}
+extension ThemeModePersistence on ThemeMode? {
+  String? get persistableString => switch (this) {
+        ThemeMode.system => _kThemeModeSystem,
+        ThemeMode.light => _kThemeModeLight,
+        ThemeMode.dark => _kThemeModeDark,
+        null => null
+      };
 
-ThemeMode? themeModeFromString(String? value) {
-  switch (value) {
-    case _kThemeModeSystem:
-      return ThemeMode.system;
-    case _kThemeModeLight:
-      return ThemeMode.light;
-    case _kThemeModeDark:
-      return ThemeMode.dark;
+  static ThemeMode? fromString(String? value) {
+    switch (value) {
+      case _kThemeModeSystem:
+        return ThemeMode.system;
+      case _kThemeModeLight:
+        return ThemeMode.light;
+      case _kThemeModeDark:
+        return ThemeMode.dark;
+    }
+    return null;
   }
-  return null;
 }
 
 const _kThemeModeSystem = 'theme_mode_system';

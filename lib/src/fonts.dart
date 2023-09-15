@@ -301,14 +301,10 @@ class _FiraGoFile extends DynamicFontsFile {
 
   final DynamicFontsVariant variant;
 
-  String get _dir {
-    switch (variant.fontStyle) {
-      case FontStyle.normal:
-        return 'Roman';
-      case FontStyle.italic:
-        return 'Italic';
-    }
-  }
+  String get _dir => switch (variant.fontStyle) {
+        FontStyle.normal => 'Roman',
+        FontStyle.italic => 'Italic',
+      };
 
   @override
   String get url =>

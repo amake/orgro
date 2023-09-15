@@ -70,22 +70,25 @@ class Preferences extends InheritedWidget {
       _setOrRemove(_kThemeModeKey, value);
 
   RemoteImagesPolicy? get remoteImagesPolicy =>
-      remoteImagesPolicyFromString(_prefs.getString(_kRemoteImagesPolicyKey));
+      RemoteImagesPolicyPersistence.fromString(
+          _prefs.getString(_kRemoteImagesPolicyKey));
 
   Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy? value) =>
-      _setOrRemove(_kRemoteImagesPolicyKey, remoteImagesPolicyToString(value));
+      _setOrRemove(_kRemoteImagesPolicyKey, value.persistableString);
 
   LocalLinksPolicy? get localLinksPolicy =>
-      localLinksPolicyFromString(_prefs.getString(_kLocalLinksPolicyKey));
+      LocalLinksPolicyPersistence.fromString(
+          _prefs.getString(_kLocalLinksPolicyKey));
 
   Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
-      _setOrRemove(_kLocalLinksPolicyKey, localLinksPolicyToString(value));
+      _setOrRemove(_kLocalLinksPolicyKey, value.persistableString);
 
   SaveChangesPolicy? get saveChangesPolicy =>
-      saveChangesPolicyFromString(_prefs.getString(_kSaveChangesPolicyKey));
+      SaveChangesPolicyPersistence.fromString(
+          _prefs.getString(_kSaveChangesPolicyKey));
 
   Future<bool> setSaveChangesPolicy(SaveChangesPolicy? value) =>
-      _setOrRemove(_kSaveChangesPolicyKey, saveChangesPolicyToString(value));
+      _setOrRemove(_kSaveChangesPolicyKey, value.persistableString);
 
   /// List of identifiers
   List<String> get accessibleDirs =>
@@ -155,82 +158,71 @@ class _PreferencesProviderState extends State<PreferencesProvider> {
   }
 }
 
-RemoteImagesPolicy? remoteImagesPolicyFromString(String? value) {
-  switch (value) {
-    case _kRemoteImagesPolicyAllow:
-      return RemoteImagesPolicy.allow;
-    case _kRemoteImagesPolicyDeny:
-      return RemoteImagesPolicy.deny;
-    case _kRemoteImagesPolicyAsk:
-      return RemoteImagesPolicy.ask;
+extension RemoteImagesPolicyPersistence on RemoteImagesPolicy? {
+  static RemoteImagesPolicy? fromString(String? value) {
+    switch (value) {
+      case _kRemoteImagesPolicyAllow:
+        return RemoteImagesPolicy.allow;
+      case _kRemoteImagesPolicyDeny:
+        return RemoteImagesPolicy.deny;
+      case _kRemoteImagesPolicyAsk:
+        return RemoteImagesPolicy.ask;
+    }
+    return null;
   }
-  return null;
-}
 
-String? remoteImagesPolicyToString(RemoteImagesPolicy? value) {
-  switch (value) {
-    case RemoteImagesPolicy.allow:
-      return _kRemoteImagesPolicyAllow;
-    case RemoteImagesPolicy.deny:
-      return _kRemoteImagesPolicyDeny;
-    case RemoteImagesPolicy.ask:
-      return _kRemoteImagesPolicyAsk;
-    case null:
-      return null;
-  }
+  String? get persistableString => switch (this) {
+        RemoteImagesPolicy.allow => _kRemoteImagesPolicyAllow,
+        RemoteImagesPolicy.deny => _kRemoteImagesPolicyDeny,
+        RemoteImagesPolicy.ask => _kRemoteImagesPolicyAsk,
+        null => null,
+      };
 }
 
 const _kRemoteImagesPolicyAllow = 'remote_images_policy_allow';
 const _kRemoteImagesPolicyDeny = 'remote_images_policy_deny';
 const _kRemoteImagesPolicyAsk = 'remote_images_policy_ask';
 
-LocalLinksPolicy? localLinksPolicyFromString(String? value) {
-  switch (value) {
-    case _kLocalLinksPolicyDeny:
-      return LocalLinksPolicy.deny;
-    case _kLocalLinksPolicyAsk:
-      return LocalLinksPolicy.ask;
+extension LocalLinksPolicyPersistence on LocalLinksPolicy? {
+  static LocalLinksPolicy? fromString(String? value) {
+    switch (value) {
+      case _kLocalLinksPolicyDeny:
+        return LocalLinksPolicy.deny;
+      case _kLocalLinksPolicyAsk:
+        return LocalLinksPolicy.ask;
+    }
+    return null;
   }
-  return null;
-}
 
-String? localLinksPolicyToString(LocalLinksPolicy? value) {
-  switch (value) {
-    case LocalLinksPolicy.deny:
-      return _kLocalLinksPolicyDeny;
-    case LocalLinksPolicy.ask:
-      return _kLocalLinksPolicyAsk;
-    case null:
-      return null;
-  }
+  String? get persistableString => switch (this) {
+        LocalLinksPolicy.deny => _kLocalLinksPolicyDeny,
+        LocalLinksPolicy.ask => _kLocalLinksPolicyAsk,
+        null => null,
+      };
 }
 
 const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
 const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';
 
-SaveChangesPolicy? saveChangesPolicyFromString(String? value) {
-  switch (value) {
-    case _kSaveChangesPolicyAllow:
-      return SaveChangesPolicy.allow;
-    case _kSaveChangesPolicyDeny:
-      return SaveChangesPolicy.deny;
-    case _kSaveChangesPolicyAsk:
-      return SaveChangesPolicy.ask;
+extension SaveChangesPolicyPersistence on SaveChangesPolicy? {
+  static SaveChangesPolicy? fromString(String? value) {
+    switch (value) {
+      case _kSaveChangesPolicyAllow:
+        return SaveChangesPolicy.allow;
+      case _kSaveChangesPolicyDeny:
+        return SaveChangesPolicy.deny;
+      case _kSaveChangesPolicyAsk:
+        return SaveChangesPolicy.ask;
+    }
+    return null;
   }
-  return null;
-}
 
-String? saveChangesPolicyToString(SaveChangesPolicy? value) {
-  switch (value) {
-    case SaveChangesPolicy.allow:
-      return _kSaveChangesPolicyAllow;
-    case SaveChangesPolicy.deny:
-      return _kSaveChangesPolicyDeny;
-    case SaveChangesPolicy.ask:
-      return _kSaveChangesPolicyAsk;
-    case null:
-      return null;
-  }
+  String? get persistableString => switch (this) {
+        SaveChangesPolicy.allow => _kSaveChangesPolicyAllow,
+        SaveChangesPolicy.deny => _kSaveChangesPolicyDeny,
+        SaveChangesPolicy.ask => _kSaveChangesPolicyAsk,
+        null => null
+      };
 }
 
 const _kSaveChangesPolicyAllow = 'save_changes_policy_allow';

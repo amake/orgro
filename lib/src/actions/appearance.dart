@@ -23,20 +23,18 @@ Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
           for (final mode in ThemeMode.values)
             CheckboxListTile(
               value: current == mode,
-              title: Text(themeModeToDisplayString(context, mode)),
+              title: Text(mode.toDisplayString(context)),
               onChanged: (_) => Navigator.pop(context, mode),
             ),
         ],
       ),
     );
 
-String themeModeToDisplayString(BuildContext context, ThemeMode value) {
-  switch (value) {
-    case ThemeMode.system:
-      return AppLocalizations.of(context)!.appearanceModeAutomatic;
-    case ThemeMode.light:
-      return AppLocalizations.of(context)!.appearanceModeLight;
-    case ThemeMode.dark:
-      return AppLocalizations.of(context)!.appearanceModeDark;
-  }
+extension ThemeModeDisplayString on ThemeMode {
+  String toDisplayString(BuildContext context) => switch (this) {
+        ThemeMode.system =>
+          AppLocalizations.of(context)!.appearanceModeAutomatic,
+        ThemeMode.light => AppLocalizations.of(context)!.appearanceModeLight,
+        ThemeMode.dark => AppLocalizations.of(context)!.appearanceModeDark,
+      };
 }
