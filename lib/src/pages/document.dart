@@ -225,6 +225,9 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
+            undoMenuItem(context, onChanged: _undo),
+            redoMenuItem(context, onChanged: _redo),
+            const PopupMenuDivider(),
             textScaleMenuItem(
               context,
               textScale: textScale,
@@ -572,18 +575,32 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   bool _dirty = false;
 
-  void _updateDocument(OrgTree newDoc) async {
-    DocumentProvider.of(context)!.setDoc(newDoc);
+  Future<void> _updateDocument(OrgTree newDoc) async {
+    DocumentProvider.of(context)!.pushDoc(newDoc);
+    await _onDocChanged(newDoc);
+  }
+
+  Future<void> _undo() async {
+    final doc = DocumentProvider.of(context)!.undo();
+    await _onDocChanged(doc);
+  }
+
+  Future<void> _redo() async {
+    final doc = DocumentProvider.of(context)!.redo();
+    await _onDocChanged(doc);
+  }
+
+  Future<void> _onDocChanged(OrgTree doc) async {
     _dirty = true;
     final source = widget.dataSource;
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
-        newDoc is OrgDocument) {
+        doc is OrgDocument) {
       _writeTimer?.cancel();
       _writeTimer = Timer(const Duration(seconds: 3), () async {
         try {
-          await source.write(newDoc.toMarkup());
+          await source.write(doc.toMarkup());
           _dirty = false;
           if (mounted) {
             showErrorSnackBar(

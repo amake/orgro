@@ -34,6 +34,9 @@
   "menuItemScrollTop": "Прокрутити вверх",
   "menuItemScrollBottom": "Прокрутити вниз",
 
+  "menuItemUndo": "Undo",
+  "menuItemRedo": "Redo",
+
   "hintTextSearch": "Шукати...",
   "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
   "@searchHits": {

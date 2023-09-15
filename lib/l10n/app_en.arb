@@ -34,6 +34,9 @@
   "menuItemScrollTop": "Scroll to top",
   "menuItemScrollBottom": "Scroll to bottom",
 
+  "menuItemUndo": "Undo",
+  "menuItemRedo": "Redo",
+
   "hintTextSearch": "Search...",
   "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
   "@searchHits": {

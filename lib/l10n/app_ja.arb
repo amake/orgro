@@ -29,6 +29,9 @@
   "menuItemScrollTop": "上へスクロール",
   "menuItemScrollBottom": "下へスクロール",
 
+  "menuItemUndo": "取り消す",
+  "menuItemRedo": "やり直す",
+
   "hintTextSearch": "検索...",
   "searchHits": "{n}件",
   "@searchHits": {
