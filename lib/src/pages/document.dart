@@ -333,7 +333,12 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         ),
         SavePermissionsBanner(
           visible: _askPermissionToSaveChanges,
-          onResult: setSaveChangesPolicy,
+          onResult: (value, {required bool persist}) {
+            setSaveChangesPolicy(value, persist: persist);
+            if (value == SaveChangesPolicy.allow && _dirty) {
+              _updateDocument(_doc);
+            }
+          },
         ),
         buildWithViewSettings(
           builder: (context) => _maybeConstrainWidth(

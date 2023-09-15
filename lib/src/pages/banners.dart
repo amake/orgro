@@ -105,7 +105,7 @@ class SavePermissionsBanner extends StatelessWidget {
     super.key,
   });
 
-  final Function(SaveChangesPolicy, {bool persist}) onResult;
+  final Function(SaveChangesPolicy, {required bool persist}) onResult;
   final bool visible;
 
   @override
