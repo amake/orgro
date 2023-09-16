@@ -41,12 +41,13 @@ powers this application and is available as a separate library,
 - Narrowing
 - "Reader mode" where extraneous markup is hidden
 - Inline and block LaTeX rendering
+- Jump to/from footnotes
+- Limited editing capability
+  ([details](https://orgro.org/faq/#can-i-edit-my-files-with-orgro))
 
 See the [manual](./assets/manual/orgro-manual.org) for details.
 
 # Limitations
-
-Orgro is a viewer. It does not support editing at all.
 
 Many Org Mode syntax structures are highlighted but not meaningfully
 interpreted.
@@ -57,11 +58,11 @@ See [here](https://orgro.org/faq/)
 
 # Get it
 
-Orgro is available on the [App
-Store](https://apps.apple.com/us/app/orgro/id1512580074?uo=4), [Google
-Play](https://play.google.com/store/apps/details?id=com.madlonkay.orgro), and
-[F-Droid](https://f-droid.org/packages/com.madlonkay.orgro/), or you can build
-and install from source:
+Orgro is available on the
+[App Store](https://apps.apple.com/us/app/orgro/id1512580074?uo=4),
+[Google Play](https://play.google.com/store/apps/details?id=com.madlonkay.orgro),
+and [F-Droid](https://f-droid.org/packages/com.madlonkay.orgro/), or you can
+build and install from source:
 
 1. Install [Flutter](https://flutter.dev/)
 2. Clone this repo
