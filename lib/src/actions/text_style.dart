@@ -6,7 +6,7 @@ import 'package:orgro/src/fonts.dart';
 PopupMenuEntry<VoidCallback> textScaleMenuItem(
   BuildContext context, {
   required double textScale,
-  required Function(double) onChanged,
+  required void Function(double) onChanged,
 }) {
   return _PersistentPopupMenuItem<VoidCallback>(
     child: TextSizeAdjuster(
@@ -19,7 +19,7 @@ PopupMenuEntry<VoidCallback> textScaleMenuItem(
 PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   BuildContext context, {
   required String fontFamily,
-  required Function(String) onChanged,
+  required void Function(String) onChanged,
 }) {
   return _PersistentPopupMenuItem<VoidCallback>(
     child: FontFamilySelector(
@@ -39,9 +39,9 @@ class TextStyleButton extends StatefulWidget {
   });
 
   final double textScale;
-  final Function(double) onTextScaleChanged;
+  final void Function(double) onTextScaleChanged;
   final String fontFamily;
-  final Function(String) onFontFamilyChanged;
+  final void Function(String) onFontFamilyChanged;
 
   @override
   State createState() => _TextStyleButtonState();
@@ -157,7 +157,7 @@ class TextSizeAdjuster extends StatefulWidget {
   });
 
   final double value;
-  final Function(double) onChanged;
+  final void Function(double) onChanged;
 
   @override
   State createState() => _TextSizeAdjusterState();
@@ -219,7 +219,7 @@ class FontFamilySelector extends StatefulWidget {
   });
 
   final String value;
-  final Function(String) onChanged;
+  final void Function(String) onChanged;
   final VoidCallback? onOpen;
 
   @override
@@ -284,7 +284,7 @@ class _PersistentPopupMenuItem<T> extends PopupMenuEntry<T> {
   final Widget child;
 
   @override
-  State<StatefulWidget> createState() => _PersistentPopupMenuItemState();
+  State<StatefulWidget> createState() => _PersistentPopupMenuItemState<T>();
 
   @override
   double get height => kMinInteractiveDimension;
@@ -293,7 +293,8 @@ class _PersistentPopupMenuItem<T> extends PopupMenuEntry<T> {
   bool represents(Object? value) => false;
 }
 
-class _PersistentPopupMenuItemState extends State<_PersistentPopupMenuItem> {
+class _PersistentPopupMenuItemState<T>
+    extends State<_PersistentPopupMenuItem<T>> {
   @override
   Widget build(BuildContext context) {
     return Container(

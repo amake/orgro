@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 PopupMenuItem<VoidCallback> fullWidthMenuItem(
   BuildContext context, {
   required bool enabled,
-  required Function(bool) onChanged,
+  required void Function(bool) onChanged,
 }) {
   return CheckedPopupMenuItem<VoidCallback>(
     checked: enabled,
@@ -23,7 +23,7 @@ class FullWidthButton extends StatelessWidget {
   });
 
   final bool enabled;
-  final Function(bool) onChanged;
+  final void Function(bool) onChanged;
 
   @override
   Widget build(BuildContext context) {

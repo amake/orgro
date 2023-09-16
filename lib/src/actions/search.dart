@@ -14,8 +14,8 @@ class MySearchDelegate {
     _searchController.addListener(_searchQueryChanged);
   }
 
-  final Function(String) onQueryChanged;
-  final Function(String) onQuerySubmitted;
+  final void Function(String) onQueryChanged;
+  final void Function(String) onQuerySubmitted;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
 
@@ -102,7 +102,7 @@ class SearchField extends StatelessWidget {
   });
   final TextEditingController _controller;
   final VoidCallback? onClear;
-  final Function(String)? onSubmitted;
+  final void Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {

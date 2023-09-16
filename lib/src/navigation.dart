@@ -43,7 +43,7 @@ Future<bool> loadDocument(
   return parsed.then((value) => value != null);
 }
 
-PageRoute _buildDocumentRoute(
+PageRoute<void> _buildDocumentRoute(
   BuildContext context,
   Future<ParsedOrgFileInfo?> parsed,
   String? target,
@@ -234,7 +234,7 @@ class DocumentProviderData extends InheritedWidget {
   });
 
   final OrgTree doc;
-  final Function(OrgTree) pushDoc;
+  final void Function(OrgTree) pushDoc;
   final OrgTree Function() undo;
   final OrgTree Function() redo;
   final bool canUndo;

@@ -11,7 +11,7 @@ class RemoteImagePermissionsBanner extends StatelessWidget {
     super.key,
   });
 
-  final Function(RemoteImagesPolicy, {bool persist}) onResult;
+  final void Function(RemoteImagesPolicy, {bool persist}) onResult;
   final bool visible;
 
   @override
@@ -105,7 +105,7 @@ class SavePermissionsBanner extends StatelessWidget {
     super.key,
   });
 
-  final Function(SaveChangesPolicy, {required bool persist}) onResult;
+  final void Function(SaveChangesPolicy, {required bool persist}) onResult;
   final bool visible;
 
   @override
