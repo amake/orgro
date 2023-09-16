@@ -335,9 +335,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
           visible: _askPermissionToSaveChanges,
           onResult: (value, {required bool persist}) {
             setSaveChangesPolicy(value, persist: persist);
-            if (value == SaveChangesPolicy.allow && _dirty) {
-              _updateDocument(_doc);
-            }
+            if (_dirty) _onDocChanged(_doc);
           },
         ),
         buildWithViewSettings(
