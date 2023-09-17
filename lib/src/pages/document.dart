@@ -626,45 +626,54 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     final doc = DocumentProvider.of(context)!.doc;
     if (doc is! OrgDocument) return true;
 
+    // Save now, if possible
     final source = widget.dataSource;
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
       await source.write(doc.toMarkup());
-    } else {
-      final action = await showDialog<SaveAction>(
-        context: context,
-        builder: (context) => AlertDialog(
-          icon: const Icon(Icons.save),
-          title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
-          content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
-          actions: [
-            for (final action in SaveAction.values)
-              ListTile(
-                title: Text(action.toDisplayString(context)),
-                onTap: () => Navigator.pop(context, action),
-              ),
-          ],
-        ),
-      );
-      switch (action) {
-        case SaveAction.share:
-          final result = await Share.shareWithResult(doc.toMarkup());
-          switch (result.status) {
-            case ShareResultStatus.success: // fallthrough
-            case ShareResultStatus.unavailable:
-              break;
-            case ShareResultStatus.dismissed:
-              return false; // Cancel the pop
-          }
-          break;
-        case SaveAction.discard:
-          break;
-        case null:
-          return false; // Cancel the pop
-      }
+      return true;
     }
-    return true;
+
+    // Prompt to share
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.save),
+        title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
+        content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
+        actions: [
+          Builder(builder: (context) {
+            return ListTile(
+              title: Text(SaveAction.share.toDisplayString(context)),
+              onTap: () async {
+                final navigator = Navigator.of(context);
+
+                // Compute origin of share sheet for tablets
+                final box = context.findRenderObject() as RenderBox?;
+                final origin = box!.localToGlobal(Offset.zero) & box.size;
+
+                final result = await Share.shareWithResult(
+                  doc.toMarkup(),
+                  sharePositionOrigin: origin,
+                );
+
+                // Don't close popup unless user successfully shared
+                if (result.status == ShareResultStatus.success) {
+                  navigator.pop(true);
+                }
+              },
+            );
+          }),
+          ListTile(
+            title: Text(SaveAction.discard.toDisplayString(context)),
+            onTap: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    );
+
+    return result == true;
   }
 }
 
