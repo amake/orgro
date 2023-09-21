@@ -14,9 +14,11 @@ dependencies:
   dynamic_fonts: ^2.2.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
-  # file_picker_writable: ^2.0.0
+  # file_picker_writable: ^2.1.0
   file_picker_writable:
-  #   path: ../file_picker_writable
+    # path: ../file_picker_writable
+    # Using private fork pending merge of
+    # https://github.com/hpoul/file_picker_writable/pull/20
     git:
       url: https://github.com/amake/file_picker_writable.git
       ref: directory-picker
