@@ -28,9 +28,9 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.5
   flutter_cache_manager: ^3.3.0
-  flutter_charset_detector: ^1.0.0
+  flutter_charset_detector: ^2.0.0
   # flutter_charset_detector:
-  #   path: ../flutter_charset_detector
+  #   path: ../flutter_charset_detector/flutter_charset_detector
   google_fonts: ^6.0.0
   http: ^1.1.0
   intl: ^0.18.0

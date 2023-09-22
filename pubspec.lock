@@ -163,18 +163,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_charset_detector
-      sha256: edc87079f3c8917f2fa5620e594d10deef81bbf3d7a89cf99441dec955a06d9f
+      sha256: "45de8a4b4255c1ea850a30955e7456091899ed4ff8b75593e14ec59f629b4b56"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "2.0.0"
   flutter_charset_detector_android:
     dependency: transitive
     description:
       name: flutter_charset_detector_android
-      sha256: "2439a3bf418fe0fb962fc3dc9d0401c3561a497017bc587b9c48a47490f9c428"
+      sha256: babec2ae41c37853a5d9f9fc0fd494c2f062fb17178c9f6690fb8cd293c5ad68
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "2.0.0"
   flutter_charset_detector_ios:
     dependency: transitive
     description:
