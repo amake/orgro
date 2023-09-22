@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -191,14 +199,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  flutter_highlight:
-    dependency: transitive
-    description:
-      name: flutter_highlight
-      sha256: "7b96333867aa07e122e245c033b8ad622e4e3a42a1a2372cbb098a2541d8782c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -229,18 +229,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js
-      sha256: "3a9afe230fbcedff11ee7864c6099541433cce41b8751977c46413c2bad9dcb0"
+      sha256: "8e731a5c89a07a75d86c83a20fa8810c5f6ea88b34b3f05746b1f59416cb2622"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   flutter_tex_js_android:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "9e4c99f0e1e13fd1783ad27eae138fd0658753d41d9f2f3b06f3593dc1d9c2a9"
+      sha256: a9ee7de26cdf86d2c816859b7817d71d81e200799738b576aca60db371c990f8
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "2.0.0"
   flutter_tex_js_ios:
     dependency: transitive
     description:
@@ -278,14 +278,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
-  highlight:
+  highlighting:
     dependency: transitive
     description:
-      name: highlight
-      sha256: "5353a83ffe3e3eca7df0abfb72dcf3fa66cc56b953728e7113ad4ad88497cf21"
+      name: highlighting
+      sha256: "196005ed9c98ee559939fcecd466fa941b9e99b3a93394691b86780ad4da50f3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.9.0+11.8.0"
   http:
     dependency: "direct main"
     description:
@@ -378,10 +378,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "4d064a4d6707dd5fb1a124c1230fca1aff1ad42d8e089864832cb59725c97898"
+      sha256: "07bb55596b98f7c2ef2db80160052a24054afae39f468d44f142bd0a08297418"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "4.3.1"
   org_parser:
     dependency: transitive
     description:
@@ -643,6 +643,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   typed_data:
     dependency: transitive
     description:
