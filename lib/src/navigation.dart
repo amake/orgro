@@ -112,10 +112,11 @@ Future<OrgSection?> narrow(
       builder: (context) => DocumentProvider(
         doc: section,
         child: Builder(builder: (context) {
-          return WillPopScope(
-            onWillPop: () async {
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (didPop) async {
+              if (didPop) return;
               Navigator.pop(context, DocumentProvider.of(context)!.doc);
-              return false;
             },
             child: OrgController.defaults(
               orgController,

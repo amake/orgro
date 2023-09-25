@@ -271,8 +271,9 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: _searchDelegate.searchMode,
-      builder: (context, searchMode, child) => WillPopScope(
-        onWillPop: _onWillPop,
+      builder: (context, searchMode, child) => PopScope(
+        canPop: !_dirty || _doc is! OrgDocument,
+        onPopInvoked: _onPopInvoked,
         child: Scaffold(
           // Builder is here to ensure that the primary scroll controller set by the
           // Scaffold makes it into the body's context
@@ -619,12 +620,15 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     }
   }
 
-  Future<bool> _onWillPop() async {
-    if (!_dirty) return true;
+  Future<void> _onPopInvoked(bool didPop) async {
+    if (didPop) return;
+    if (!_dirty) return;
 
     // Don't try to save anything other than a root document
-    final doc = DocumentProvider.of(context)!.doc;
-    if (doc is! OrgDocument) return true;
+    final doc = _doc;
+    if (doc is! OrgDocument) return;
+
+    final navigator = Navigator.of(context);
 
     // Save now, if possible
     final source = widget.dataSource;
@@ -632,7 +636,8 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
         _canSaveChanges &&
         source is NativeDataSource) {
       await source.write(doc.toMarkup());
-      return true;
+      navigator.pop();
+      return;
     }
 
     // Prompt to share
@@ -673,7 +678,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       ),
     );
 
-    return result == true;
+    if (result == true) navigator.pop();
   }
 }
 
