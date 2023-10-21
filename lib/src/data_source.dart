@@ -93,11 +93,11 @@ class AssetDataSource extends DataSource {
 
 class NativeDataSource extends DataSource {
   NativeDataSource(
-    String name,
+    super.name,
     this.identifier,
     this.uri, {
     required this.persistable,
-  }) : super(name);
+  });
 
   /// The identifier used to read the file via native APIs
   final String identifier;
@@ -192,9 +192,12 @@ class LoadedNativeDataSource extends NativeDataSource {
       );
 
   LoadedNativeDataSource(
-      String name, String identifier, String uri, this.content,
-      {required bool persistable})
-      : super(name, identifier, uri, persistable: persistable);
+    super.name,
+    super.identifier,
+    super.uri,
+    this.content, {
+    required super.persistable,
+  });
 
   @override
   final String content;
