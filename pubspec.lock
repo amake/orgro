@@ -370,18 +370,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: cf1cf99a2f6db4f0a54f0c79dc6daa1c16a9da79fba573e7468cef4e7c229ff0
+      sha256: "9f1bac056141bcbeffca5bd055cb3b67bda7eb6211499a250592d519f6082e1c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.5.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: "63811cdf66f70c3485c469b9c87e45f504922185ae443875788b035ed6a3e9e9"
+      sha256: e4f6208d034ce4a14d7ead7b72e677b558addfaa6d406a8dc72d0a7d5b1d9ff7
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "5.2.0"
   path:
     dependency: transitive
     description:
@@ -446,6 +446,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  petit_lisp:
+    dependency: transitive
+    description:
+      name: petit_lisp
+      sha256: "49d00270a66b6cc33bedd90029a343adf191dabacbc290ae43808691c20a8bba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.0"
   petitparser:
     dependency: transitive
     description:
@@ -767,10 +775,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "14f1f70c51119012600c5f1f60ca68efda5a9b6077748163c6af2893ec5df8fc"
+      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1-beta"
+    version: "0.3.0"
   win32:
     dependency: transitive
     description:
@@ -796,5 +804,5 @@ packages:
     source: hosted
     version: "6.4.2"
 sdks:
-  dart: ">=3.2.0-157.0.dev <4.0.0"
+  dart: ">=3.2.0-194.0.dev <4.0.0"
   flutter: ">=3.15.0-15.2.pre"

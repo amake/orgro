@@ -294,3 +294,37 @@ Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]]
 * Footnotes
 
 [fn:1] Tap the reference here to jump back.
+
+* Local Variables
+
+Emacs allows defining a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html][local variables list]] like below. Orgro can interpret the
+following settings from the local variables list:
+
+- ~org-entities-user~ :: Specify additional [[*Prettified entities][entities]] for prettification. Syntax
+  is the same as the “real” ~org-entities-user~, but only name and utf-8
+  replacement are used:
+
+  1. Name
+  2. LaTeX replacement
+  3. LaTeX mathp
+  4. HTML replacement
+  5. ASCII replacement
+  6. Latin1 replacement
+  7. utf-8 replacement
+
+  With the setting in this file, you can use e.g. ~\﻿avocado~ to display \avocado.
+
+- ~org-entities-local~ :: Same as ~org-entities-user~ but for use when you don’t
+  want to overwrite your global ~org-entities-user~ value or include the entire
+  value in your local variables. This is applied after the defaults and
+  ~org-entities-user~.
+
+To avoid having the local variables list show up in your exported docs, put it
+under a section with the =COMMENT= keyword or =noexport= tag.
+
+# Local Variables:
+# org-entities-user: (
+#   ("avocado" "[avocado]" nil "&#129361;" "[avocado]" "[avocado]" "🥑")
+#   ("snowman" "[snowman]" nil "&#9731;" "[snowman]" "[snowman]" "☃")
+# )
+# End:

@@ -88,6 +88,7 @@ class _DocumentPageWrapper extends StatelessWidget {
       child: OrgController(
         root: DocumentProvider.of(context)!.doc,
         hideMarkup: prefs.readerMode,
+        interpretEmbeddedSettings: true,
         restorationId: 'org_page:${dataSource.id}',
         child: ViewSettings.defaults(
           context,
