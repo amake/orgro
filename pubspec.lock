@@ -805,4 +805,4 @@ packages:
     version: "6.4.2"
 sdks:
   dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=3.15.0-15.2.pre"
+  flutter: ">=3.16.0-0.4.pre"
