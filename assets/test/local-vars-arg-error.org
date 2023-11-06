@@ -1,0 +1,5 @@
+The local variables list in this file triggers an argument error.
+
+# Local Variables:
+# org-entities-user: ("foo")
+# End:

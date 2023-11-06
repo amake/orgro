@@ -1,0 +1,5 @@
+The local variables list in this file triggers an evaluation timeout.
+
+# Local Variables:
+# eval: (while t)
+# End:

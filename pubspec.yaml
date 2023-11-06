@@ -53,3 +53,4 @@ flutter:
   assets:
     - assets/manual/
     - assets/fonts/
+    - assets/test/

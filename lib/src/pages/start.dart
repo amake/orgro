@@ -61,6 +61,13 @@ class _StartPageState extends State<StartPage>
             child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
           ),
         ],
+        if (!kReleaseMode && !kScreenshotMode) ...[
+          const PopupMenuDivider(),
+          PopupMenuItem<VoidCallback>(
+            value: () => _openTestFile(context),
+            child: Text(AppLocalizations.of(context)!.menuItemTestFile),
+          ),
+        ],
         const PopupMenuDivider(),
         PopupMenuItem<VoidCallback>(
           value: () => openAboutDialog(context),
@@ -380,6 +387,9 @@ class _OrgroManualButton extends StatelessWidget {
 
 void _openOrgroManual(BuildContext context) =>
     loadAsset(context, 'assets/manual/orgro-manual.org');
+
+void _openTestFile(BuildContext context) =>
+    loadAsset(context, 'assets/test/test.org');
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();

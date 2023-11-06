@@ -1,0 +1,6 @@
+The local variables list in this file allows using the \snowman entity.
+
+# Local Variables:
+# org-entities-user: ()
+# eval: (add-to-list 'org-entities-user '("snowman" "[snowman]" nil "&#9731;" "[snowman]" "[snowman]" "☃"))
+# End:

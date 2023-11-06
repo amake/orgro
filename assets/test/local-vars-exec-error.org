@@ -1,0 +1,5 @@
+The local variables list in this file triggers an execution error.
+
+# Local Variables:
+# eval: (+ 1 null)
+# End:

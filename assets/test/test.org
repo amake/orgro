@@ -1,0 +1,10 @@
+* Local variables
+
+Normal cases
+- [[file:local-vars-eval.org][Evaluation]]
+
+Error cases
+- [[file:local-vars-parser-error.org][Parser error]]
+- [[file:local-vars-exec-error.org][Execution error]]
+- [[file:local-vars-timeout-error.org][Timeout error]]
+- [[file:local-vars-arg-error.org][Argument error]]

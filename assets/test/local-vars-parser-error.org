@@ -1,0 +1,5 @@
+The local variables list in this file triggers a parser error.
+
+# Local Variables:
+# foo: (
+# End:
