@@ -4,6 +4,7 @@
   "menuItemAppearance": "Appearance…",
   "menuItemClearCache": "Clear cache",
   "menuItemOrgroManual": "Orgro Manual",
+  "menuItemTestFile": "Test File",
   "menuItemAbout": "About",
 
   "appearanceModeAutomatic": "Automatic",
@@ -118,6 +119,34 @@
   "@errorUnexpectedHttpResponse": {
     "placeholders": {
       "response": {}
+    }
+  },
+  "errorOrgParser": "Parser error: {result}",
+  "@errorOrgParser": {
+    "placeholders": {
+      "result": {}
+    }
+  },
+  "errorOrgExecution": "Execution error in the below code: {message}\n\n{code}",
+  "@errorOrgExecution": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "errorOrgTimeout": "Evaluation of the below code timed out after {timeout}ms.\n\n{code}",
+  "@errorOrgTimeout": {
+    "placeholders": {
+      "timeout": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "code": {}
+    }
+  },
+  "errorOrgArgument": "Invalid argument: {item}",
+  "@errorOrgArgument": {
+    "placeholders": {
+      "item": {}
     }
   }
 }

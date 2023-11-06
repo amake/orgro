@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
 
@@ -89,6 +91,10 @@ class _DocumentPageWrapper extends StatelessWidget {
         root: DocumentProvider.of(context)!.doc,
         hideMarkup: prefs.readerMode,
         interpretEmbeddedSettings: true,
+        // errorHandler is invoked during build, so we need to schedule the
+        // snack bar for after the frame
+        errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
+            (_) => showErrorSnackBar(context, OrgroError.from(e))),
         restorationId: 'org_page:${dataSource.id}',
         child: ViewSettings.defaults(
           context,

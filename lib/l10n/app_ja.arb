@@ -4,6 +4,7 @@
   "menuItemAppearance": "外観…",
   "menuItemClearCache": "キャッシュを削除",
   "menuItemOrgroManual": "Orgroマニュアル",
+  "menuItemTestFile": "テストファイル",
   "menuItemAbout": "アプリについて",
 
   "appearanceModeAutomatic": "自動",
@@ -93,5 +94,33 @@
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
   "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",
   "errorUnknownType": "不明な型: {type}",
-  "errorUnexpectedHttpResponse": "予期しない HTTP レスポンス: {response}"
+  "errorUnexpectedHttpResponse": "予期しない HTTP レスポンス: {response}",
+  "errorOrgParser": "パーサーエラー: {result}",
+  "@errorOrgParser": {
+    "placeholders": {
+      "result": {}
+    }
+  },
+  "errorOrgExecution": "以下のコードに実行エラーが発生しました: {message}\n\n{code}",
+  "@errorOrgExecution": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "errorOrgTimeout": "以下のコードの実行が {timeout}ms でタイムアウトしました\n\n{code}",
+  "@errorOrgTimeout": {
+    "placeholders": {
+      "timeout": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "code": {}
+    }
+  },
+  "errorOrgArgument": "不正な引数: {item}",
+  "@errorOrgArgument": {
+    "placeholders": {
+      "item": {}
+    }
+  }
 }
