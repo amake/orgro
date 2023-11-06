@@ -26,6 +26,7 @@ l10n-check: ## Check l10n data for issues
 
 .PHONY: build
 build:
+	find ./assets -name '*~' -delete
 	flutter build appbundle $(version_define)
 	flutter build ipa $(version_define)
 
