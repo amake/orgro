@@ -386,10 +386,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: dbf6691826091f28ea427dd58b527c4bc0c56f727509a3c8cbd8b280fd200807
+      sha256: "546c9188271a05e27197bf4962ffe2e02bc969f1c60fca0fa6e43c0a9ffdc9ce"
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.1"
+    version: "4.8.0"
   org_parser:
     dependency: transitive
     description:
@@ -466,10 +466,10 @@ packages:
     dependency: transitive
     description:
       name: petit_lisp
-      sha256: "10f7d5bca66ae2718d347d0e8bb8a25b385e11252873d8751e8e916db0150a1b"
+      sha256: "559c9e7656e994b246da4c5e1eec778e8dabe284707a9b81c779557dcd824962"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.0"
+    version: "6.4.0"
   petitparser:
     dependency: transitive
     description:
