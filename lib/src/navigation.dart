@@ -8,7 +8,6 @@ import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
-import 'package:orgro/src/preferences.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri uri) =>
     loadDocument(context, WebDataSource(uri));
@@ -84,24 +83,26 @@ class _DocumentPageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prefs = Preferences.of(context);
     return RootRestorationScope(
       restorationId: 'org_page_root:${dataSource.id}',
-      child: OrgController(
-        root: DocumentProvider.of(context)!.doc,
-        hideMarkup: prefs.readerMode,
-        interpretEmbeddedSettings: true,
-        // errorHandler is invoked during build, so we need to schedule the
-        // snack bar for after the frame
-        errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
-            (_) => showErrorSnackBar(context, OrgroError.from(e))),
-        restorationId: 'org_page:${dataSource.id}',
-        child: ViewSettings.defaults(
-          context,
-          child: DocumentPage(
-            title: dataSource.name,
-            dataSource: dataSource,
-            initialTarget: target,
+      child: ViewSettings.defaults(
+        context,
+        // Get ViewSettings into the context
+        child: Builder(
+          builder: (context) => OrgController(
+            root: DocumentProvider.of(context)!.doc,
+            hideMarkup: ViewSettings.of(context).readerMode,
+            interpretEmbeddedSettings: true,
+            // errorHandler is invoked during build, so we need to schedule the
+            // snack bar for after the frame
+            errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
+                (_) => showErrorSnackBar(context, OrgroError.from(e))),
+            restorationId: 'org_page:${dataSource.id}',
+            child: DocumentPage(
+              title: dataSource.name,
+              dataSource: dataSource,
+              initialTarget: target,
+            ),
           ),
         ),
       ),
@@ -118,20 +119,20 @@ Future<OrgSection?> narrow(
     MaterialPageRoute(
       builder: (context) => DocumentProvider(
         doc: section,
-        child: Builder(builder: (context) {
-          return PopScope(
-            canPop: false,
-            onPopInvoked: (didPop) async {
-              if (didPop) return;
-              Navigator.pop(context, DocumentProvider.of(context)!.doc);
-            },
-            child: OrgController.defaults(
-              orgController,
-              // Continue to use the true document root so that links to sections
-              // outside the narrowed section can be resolved
-              root: orgController.root,
-              child: ViewSettings(
-                data: viewSettings,
+        child: ViewSettings(
+          data: viewSettings.data,
+          child: Builder(builder: (context) {
+            return PopScope(
+              canPop: false,
+              onPopInvoked: (didPop) async {
+                if (didPop) return;
+                Navigator.pop(context, DocumentProvider.of(context)!.doc);
+              },
+              child: OrgController.defaults(
+                orgController,
+                // Continue to use the true document root so that links to sections
+                // outside the narrowed section can be resolved
+                root: orgController.root,
                 child: DocumentPage(
                   title: AppLocalizations.of(context)!
                       .pageTitleNarrow(dataSource.name),
@@ -139,9 +140,9 @@ Future<OrgSection?> narrow(
                   initialQuery: viewSettings.queryString,
                 ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     ),
   );

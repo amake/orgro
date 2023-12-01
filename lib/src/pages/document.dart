@@ -38,13 +38,12 @@ class DocumentPage extends StatefulWidget {
   State createState() => _DocumentPageState();
 }
 
-class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
+class _DocumentPageState extends State<DocumentPage> {
   late MySearchDelegate _searchDelegate;
 
   OrgTree get _doc => DocumentProvider.of(context)!.doc;
 
-  @override
-  String? get queryString => _searchDelegate.queryString;
+  InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
   double get _screenWidth => MediaQuery.of(context).size.width;
 
@@ -73,7 +72,6 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    initViewSettings();
     time('analyze', _analyzeDoc);
   }
 
@@ -170,6 +168,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       caseSensitive: false,
     );
     OrgController.of(context).search(pattern);
+    _viewSettings.queryString = query;
   }
 
   @override
@@ -197,6 +196,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     //     onPressed: () => _searchDelegate.start(context),
     //   );
     // }
+    final viewSettings = _viewSettings;
     if (!searchMode || _biggishScreen) {
       yield IconButton(
         icon: const Icon(Icons.repeat),
@@ -204,19 +204,19 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       );
       if (_bigScreen) {
         yield TextStyleButton(
-          textScale: textScale,
-          onTextScaleChanged: (value) => textScale = value,
-          fontFamily: fontFamily,
-          onFontFamilyChanged: (value) => fontFamily = value,
+          textScale: viewSettings.textScale,
+          onTextScaleChanged: (value) => viewSettings.textScale = value,
+          fontFamily: viewSettings.fontFamily,
+          onFontFamilyChanged: (value) => viewSettings.fontFamily = value,
         );
         yield ReaderModeButton(
-          enabled: readerMode,
-          onChanged: _setReaderMode,
+          enabled: viewSettings.readerMode,
+          onChanged: (value) => viewSettings.readerMode = value,
         );
         if (_allowFullScreen(context)) {
           yield FullWidthButton(
-            enabled: fullWidth,
-            onChanged: (value) => fullWidth = value,
+            enabled: viewSettings.fullWidth,
+            onChanged: (value) => viewSettings.fullWidth = value,
           );
         }
         yield const ScrollTopButton();
@@ -230,25 +230,25 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
             const PopupMenuDivider(),
             textScaleMenuItem(
               context,
-              textScale: textScale,
-              onChanged: (value) => textScale = value,
+              textScale: viewSettings.textScale,
+              onChanged: (value) => viewSettings.textScale = value,
             ),
             fontFamilyMenuItem(
               context,
-              fontFamily: fontFamily,
-              onChanged: (value) => fontFamily = value,
+              fontFamily: viewSettings.fontFamily,
+              onChanged: (value) => viewSettings.fontFamily = value,
             ),
             const PopupMenuDivider(),
             readerModeMenuItem(
               context,
-              enabled: readerMode,
-              onChanged: _setReaderMode,
+              enabled: viewSettings.readerMode,
+              onChanged: (value) => viewSettings.readerMode = value,
             ),
             if (_allowFullScreen(context))
               fullWidthMenuItem(
                 context,
-                enabled: fullWidth,
-                onChanged: (value) => fullWidth = value,
+                enabled: viewSettings.fullWidth,
+                onChanged: (value) => viewSettings.fullWidth = value,
               ),
             const PopupMenuDivider(),
             // Disused because icon button is always visible now
@@ -263,9 +263,6 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       }
     }
   }
-
-  void _setReaderMode(bool enabled) =>
-      readerMode = OrgController.of(context).hideMarkup = enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -317,45 +314,44 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   }
 
   Widget _buildDocument(BuildContext context) {
+    final viewSettings = _viewSettings;
     final doc = _doc;
     final result = SliverList(
       delegate: SliverChildListDelegate([
         DirectoryPermissionsBanner(
           visible: _askForDirectoryPermissions,
-          onDismiss: () =>
-              setLocalLinksPolicy(LocalLinksPolicy.deny, persist: false),
-          onForbid: () =>
-              setLocalLinksPolicy(LocalLinksPolicy.deny, persist: true),
+          onDismiss: () => viewSettings
+              .setLocalLinksPolicy(LocalLinksPolicy.deny, persist: false),
+          onForbid: () => viewSettings
+              .setLocalLinksPolicy(LocalLinksPolicy.deny, persist: true),
           onAllow: _pickDirectory,
         ),
         RemoteImagePermissionsBanner(
           visible: _askPermissionToLoadRemoteImages,
-          onResult: setRemoteImagesPolicy,
+          onResult: viewSettings.setRemoteImagesPolicy,
         ),
         SavePermissionsBanner(
           visible: _askPermissionToSaveChanges,
           onResult: (value, {required bool persist}) {
-            setSaveChangesPolicy(value, persist: persist);
+            viewSettings.setSaveChangesPolicy(value, persist: persist);
             if (_dirty) _onDocChanged(_doc);
           },
         ),
-        buildWithViewSettings(
-          builder: (context) => _maybeConstrainWidth(
-            context,
-            child: SelectionArea(
-              child: OrgRootWidget(
-                style: textStyle,
-                onLinkTap: _openLink,
-                onSectionLongPress: _onSectionLongPress,
-                onLocalSectionLinkTap: _doNarrow,
-                onListItemTap: _onListItemTap,
-                loadImage: _loadImage,
-                child: switch (doc) {
-                  OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
-                  OrgSection() =>
-                    OrgSectionWidget(doc, root: true, shrinkWrap: true)
-                },
-              ),
+        _maybeConstrainWidth(
+          context,
+          child: SelectionArea(
+            child: OrgRootWidget(
+              style: viewSettings.textStyle,
+              onLinkTap: _openLink,
+              onSectionLongPress: _onSectionLongPress,
+              onLocalSectionLinkTap: _doNarrow,
+              onListItemTap: _onListItemTap,
+              loadImage: _loadImage,
+              child: switch (doc) {
+                OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
+                OrgSection() =>
+                  OrgSectionWidget(doc, root: true, shrinkWrap: true)
+              },
             ),
           ),
         ),
@@ -376,7 +372,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
       : child;
 
   Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) {
-    if (fullWidth || !_bigScreen || !_allowFullScreen(context)) {
+    if (_viewSettings.fullWidth || !_bigScreen || !_allowFullScreen(context)) {
       return child;
     }
     final inset = (_screenWidth -
@@ -404,7 +400,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
     final mBox = renderedBounds(
       context,
       const BoxConstraints(),
-      Text.rich(const TextSpan(text: 'M'), style: textStyle),
+      Text.rich(const TextSpan(text: 'M'), style: _viewSettings.textStyle),
     );
     return 72 * mBox.toRect().width;
   }
@@ -471,7 +467,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   bool? _canResolveRelativeLinks;
 
   bool get _askForDirectoryPermissions =>
-      localLinksPolicy == LocalLinksPolicy.ask &&
+      _viewSettings.localLinksPolicy == LocalLinksPolicy.ask &&
       _hasRelativeLinks == true &&
       _canResolveRelativeLinks == true &&
       widget.dataSource.needsToResolveParent;
@@ -528,7 +524,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   bool? _hasRemoteImages;
 
   bool get _askPermissionToLoadRemoteImages =>
-      remoteImagesPolicy == RemoteImagesPolicy.ask &&
+      _viewSettings.remoteImagesPolicy == RemoteImagesPolicy.ask &&
       _hasRemoteImages == true &&
       !_askForDirectoryPermissions;
 
@@ -550,7 +546,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
   Widget? _loadRemoteImage(OrgLink link) {
     assert(looksLikeUrl(link.location));
-    if (remoteImagesPolicy != RemoteImagesPolicy.allow) {
+    if (_viewSettings.remoteImagesPolicy != RemoteImagesPolicy.allow) {
       return null;
     }
     return RemoteImage(link.location);
@@ -567,7 +563,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   }
 
   bool get _askPermissionToSaveChanges =>
-      saveChangesPolicy == SaveChangesPolicy.ask &&
+      _viewSettings.saveChangesPolicy == SaveChangesPolicy.ask &&
       _canSaveChanges &&
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages;
@@ -597,7 +593,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
   Future<void> _onDocChanged(OrgTree doc) async {
     _dirty = true;
     final source = widget.dataSource;
-    if (saveChangesPolicy == SaveChangesPolicy.allow &&
+    if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
         doc is OrgDocument) {
@@ -632,7 +628,7 @@ class _DocumentPageState extends State<DocumentPage> with ViewSettingsState {
 
     // Save now, if possible
     final source = widget.dataSource;
-    if (saveChangesPolicy == SaveChangesPolicy.allow &&
+    if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
       await source.write(doc.toMarkup());

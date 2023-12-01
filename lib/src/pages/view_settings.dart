@@ -2,115 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
-mixin ViewSettingsState<T extends StatefulWidget> on State<T> {
-  Preferences get _prefs => Preferences.of(context);
-  ViewSettingsData get _parent => ViewSettings.of(context);
+class ViewSettings extends StatefulWidget {
+  static InheritedViewSettings of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedViewSettings>()!;
 
-  double? _textScale;
-
-  double get textScale => _textScale!;
-
-  set textScale(double value) {
-    _prefs.setTextScale(value);
-    setState(() => _textScale = value);
-  }
-
-  String? _fontFamily;
-
-  String get fontFamily => _fontFamily!;
-
-  set fontFamily(String value) {
-    _prefs.setFontFamily(value);
-    setState(() => _fontFamily = value);
-  }
-
-  bool? _readerMode;
-
-  bool get readerMode => _readerMode!;
-
-  set readerMode(bool value) {
-    _prefs.setReaderMode(value);
-    setState(() => _readerMode = value);
-  }
-
-  RemoteImagesPolicy? _remoteImagesPolicy;
-
-  RemoteImagesPolicy get remoteImagesPolicy => _remoteImagesPolicy!;
-
-  void setRemoteImagesPolicy(RemoteImagesPolicy value, {bool persist = false}) {
-    if (persist) {
-      _prefs.setRemoteImagesPolicy(value);
-    }
-    setState(() => _remoteImagesPolicy = value);
-  }
-
-  LocalLinksPolicy? _localLinksPolicy;
-
-  LocalLinksPolicy get localLinksPolicy => _localLinksPolicy!;
-
-  void setLocalLinksPolicy(LocalLinksPolicy value, {bool persist = false}) {
-    if (persist) {
-      _prefs.setLocalLinksPolicy(value);
-    }
-    setState(() => _localLinksPolicy = value);
-  }
-
-  SaveChangesPolicy? _saveChangesPolicy;
-
-  SaveChangesPolicy get saveChangesPolicy => _saveChangesPolicy!;
-
-  void setSaveChangesPolicy(SaveChangesPolicy value, {bool persist = false}) {
-    if (persist) {
-      _prefs.setSaveChangesPolicy(value);
-    }
-    setState(() => _saveChangesPolicy = value);
-  }
-
-  bool? _fullWidth;
-
-  bool get fullWidth => _fullWidth!;
-
-  set fullWidth(bool value) {
-    _prefs.setFullWidth(value);
-    setState(() => _fullWidth = value);
-  }
-
-  String? get queryString;
-
-  /// Call this from [State.didChangeDependencies]
-  void initViewSettings() {
-    _fontFamily ??= _parent.fontFamily;
-    _readerMode ??= _parent.readerMode;
-    _textScale ??= _parent.textScale;
-    _remoteImagesPolicy ??= _parent.remoteImagesPolicy;
-    _localLinksPolicy ??= _parent.localLinksPolicy;
-    _saveChangesPolicy ??= _parent.saveChangesPolicy;
-    _fullWidth ??= _parent.fullWidth;
-  }
-
-  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
-        fontSize: TextScaler.linear(textScale).scale(18),
-      );
-
-  Widget buildWithViewSettings({required WidgetBuilder builder}) {
-    return ViewSettings(
-      data: ViewSettingsData(
-        textScale: textScale,
-        fontFamily: fontFamily,
-        queryString: queryString!,
-        readerMode: readerMode,
-        remoteImagesPolicy: remoteImagesPolicy,
-        localLinksPolicy: localLinksPolicy,
-        saveChangesPolicy: saveChangesPolicy,
-        fullWidth: fullWidth,
-      ),
-      // Builder required to get ViewSettings into the context
-      child: Builder(builder: builder),
-    );
-  }
-}
-
-class ViewSettings extends InheritedWidget {
   ViewSettings.defaults(
     BuildContext context, {
     required Widget child,
@@ -121,19 +16,100 @@ class ViewSettings extends InheritedWidget {
           key: key,
         );
 
-  const ViewSettings({
+  const ViewSettings({required this.data, required this.child, super.key});
+
+  final Widget child;
+  final ViewSettingsData data;
+
+  @override
+  State<ViewSettings> createState() => _ViewSettingsState();
+}
+
+class _ViewSettingsState extends State<ViewSettings> {
+  late ViewSettingsData _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = widget.data;
+  }
+
+  void _update(ViewSettingsData data) => setState(() => _data = data);
+
+  @override
+  Widget build(BuildContext context) =>
+      InheritedViewSettings(_data, _update, Preferences.of(context),
+          child: widget.child);
+}
+
+class InheritedViewSettings extends InheritedWidget {
+  const InheritedViewSettings(
+    this.data,
+    this._update,
+    this._prefs, {
     required super.child,
-    required this.data,
     super.key,
   });
 
   final ViewSettingsData data;
-  @override
-  bool updateShouldNotify(ViewSettings oldWidget) => data != oldWidget.data;
+  final Preferences _prefs;
+  final void Function(ViewSettingsData) _update;
 
-  static ViewSettingsData of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ViewSettings>()?.data ??
-      ViewSettingsData.defaults(context);
+  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
+        fontSize: TextScaler.linear(textScale).scale(18),
+      );
+
+  double get textScale => data.textScale;
+  set textScale(double value) {
+    _prefs.setTextScale(value);
+    _update(data.copyWith(textScale: value));
+  }
+
+  String get fontFamily => data.fontFamily;
+  set fontFamily(String value) {
+    _prefs.setFontFamily(value);
+    _update(data.copyWith(fontFamily: value));
+  }
+
+  String? get queryString => data.queryString;
+  set queryString(String? value) => _update(data.copyWith(queryString: value));
+
+  bool get readerMode => data.readerMode;
+  set readerMode(bool value) {
+    _prefs.setReaderMode(value);
+    _update(data.copyWith(readerMode: value));
+  }
+
+  RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
+  void setRemoteImagesPolicy(RemoteImagesPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.setRemoteImagesPolicy(value);
+    }
+    _update(data.copyWith(remoteImagesPolicy: value));
+  }
+
+  LocalLinksPolicy get localLinksPolicy => data.localLinksPolicy;
+  void setLocalLinksPolicy(LocalLinksPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.setLocalLinksPolicy(value);
+    }
+    _update(data.copyWith(localLinksPolicy: value));
+  }
+
+  SaveChangesPolicy get saveChangesPolicy => data.saveChangesPolicy;
+  void setSaveChangesPolicy(SaveChangesPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.setSaveChangesPolicy(value);
+    }
+    _update(data.copyWith(saveChangesPolicy: value));
+  }
+
+  bool get fullWidth => data.fullWidth;
+  set fullWidth(bool value) => _update(data.copyWith(fullWidth: value));
+
+  @override
+  bool updateShouldNotify(InheritedViewSettings oldWidget) =>
+      data != oldWidget.data;
 }
 
 class ViewSettingsData {
@@ -171,6 +147,27 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final bool fullWidth;
+
+  ViewSettingsData copyWith({
+    double? textScale,
+    String? fontFamily,
+    String? queryString,
+    bool? readerMode,
+    RemoteImagesPolicy? remoteImagesPolicy,
+    LocalLinksPolicy? localLinksPolicy,
+    SaveChangesPolicy? saveChangesPolicy,
+    bool? fullWidth,
+  }) =>
+      ViewSettingsData(
+        textScale: textScale ?? this.textScale,
+        fontFamily: fontFamily ?? this.fontFamily,
+        queryString: queryString ?? this.queryString,
+        readerMode: readerMode ?? this.readerMode,
+        remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
+        localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
+        saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
+        fullWidth: fullWidth ?? this.fullWidth,
+      );
 
   @override
   bool operator ==(Object other) =>
