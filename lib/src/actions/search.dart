@@ -27,6 +27,7 @@ class MySearchDelegate {
 
   void dispose() {
     _searchController.dispose();
+    searchMode.dispose();
   }
 
   void start(BuildContext context) {
