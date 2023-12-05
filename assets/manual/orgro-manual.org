@@ -295,6 +295,22 @@ Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]]
 
 [fn:1] Tap the reference here to jump back.
 
+* STARTUP keywords
+
+Org Mode supports a variety of options for controlling the initial appearance of
+a document. These are specified with the ~#+STARTUP:~ keyword like so:
+
+#+STARTUP: overview nohideblocks showstars
+
+Options recognized by Orgro:
+
+- [no]hideblocks
+- [no]hidedrawers
+- hidestars / showstars
+- entitiespretty / entitiesplain
+- [no]inlineimages
+- [no]fold / overview / content / show[2..5]levels / showall / showeverything
+
 * Local Variables
 
 Emacs allows defining a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html][local variables list]] like below. Orgro can interpret the
@@ -318,6 +334,13 @@ following settings from the local variables list:
   want to overwrite your global ~org-entities-user~ value or include the entire
   value in your local variables. This is applied after the defaults and
   ~org-entities-user~.
+
+- ~org-pretty-entities~ :: Whether to prettify entities. Pretty entities are
+  enabled by default; you can use this to disable them.
+
+- ~org-hide-emphasis-markers~ :: Whether to hide emphasis markers. Emphasis
+  markers are hidden in [[*Reader Mode][Reader Mode]], but this allows hiding them outside of
+  Reader Mode as well.
 
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.
