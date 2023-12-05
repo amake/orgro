@@ -7,6 +7,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
 import 'package:orgro/src/components/banners.dart';
+import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/image.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
