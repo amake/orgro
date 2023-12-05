@@ -1,0 +1,5 @@
+:PROPERTIES:
+:foo:      bar
+:END:
+
+#+STARTUP: nohidedrawers

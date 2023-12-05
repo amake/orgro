@@ -1,6 +1,9 @@
+#+STARTUP: showall
+
 * Local variables
 
 Normal cases
+- [[file:local-vars-set.org][Set]]
 - [[file:local-vars-eval.org][Evaluation]]
 
 Error cases
@@ -8,3 +11,11 @@ Error cases
 - [[file:local-vars-exec-error.org][Execution error]]
 - [[file:local-vars-timeout-error.org][Timeout error]]
 - [[file:local-vars-arg-error.org][Argument error]]
+
+* STARTUP keywords
+
+- [[file:startup-hideblocks.org][hideblocks]]
+- [[file:startup-nohidedrawers.org][nohidedrawers]]
+- [[file:startup-entitiesplain.org][entitiesplain]]
+- [[file:startup-entitiespretty.org][entitiespretty]]
+- [[file:startup-hidestars.org][hidestars]]

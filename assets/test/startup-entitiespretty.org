@@ -1,0 +1,3 @@
+\smiley
+
+#+STARTUP: entitiespretty
