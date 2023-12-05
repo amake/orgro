@@ -12,6 +12,7 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/banners.dart';
 import 'package:orgro/src/pages/image.dart';
+import 'package:orgro/src/pages/slidable_action.dart';
 import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
@@ -100,36 +101,22 @@ class _DocumentPageState extends State<DocumentPage> {
     _updateDocument(newDoc as OrgTree);
   }
 
-  void _onSectionLongPress(OrgSection section) async {
-    final action = await showDialog<SectionAction>(
-      context: context,
-      builder: (context) => SimpleDialog(
-        children: [
-          for (final action in SectionAction.values)
-            ListTile(
-              title: Text(action.toDisplayString(context)),
-              onTap: () => Navigator.pop(context, action),
-            ),
-        ],
+  void _onSectionLongPress(OrgSection section) async => _doNarrow(section);
+
+  List<Widget> _onSectionSlide(OrgSection section) {
+    return [
+      ResponsiveSlidableAction(
+        label: AppLocalizations.of(context)!.sectionActionCycleTodo,
+        icon: Icons.repeat,
+        onPressed: () {
+          final newDoc = _doc
+              .editNode(section.headline)!
+              .replace(section.headline.cycleTodo())
+              .commit() as OrgTree;
+          _updateDocument(newDoc);
+        },
       ),
-    );
-
-    if (!mounted) return;
-
-    switch (action) {
-      case SectionAction.narrow:
-        _doNarrow(section);
-        return;
-      case SectionAction.cycleTodo:
-        final newDoc = _doc
-            .editNode(section.headline)!
-            .replace(section.headline.cycleTodo())
-            .commit() as OrgTree;
-        _updateDocument(newDoc);
-        return;
-      case null:
-        return;
-    }
+    ];
   }
 
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
@@ -344,6 +331,7 @@ class _DocumentPageState extends State<DocumentPage> {
               style: viewSettings.textStyle,
               onLinkTap: _openLink,
               onSectionLongPress: _onSectionLongPress,
+              onSectionSlide: _onSectionSlide,
               onLocalSectionLinkTap: _doNarrow,
               onListItemTap: _onListItemTap,
               loadImage: _loadImage,
@@ -732,17 +720,6 @@ class _Badge extends StatelessWidget {
       ],
     );
   }
-}
-
-enum SectionAction { narrow, cycleTodo }
-
-extension SectionActionDisplayString on SectionAction {
-  String toDisplayString(BuildContext context) => switch (this) {
-        SectionAction.narrow =>
-          AppLocalizations.of(context)!.sectionActionNarrow,
-        SectionAction.cycleTodo =>
-          AppLocalizations.of(context)!.sectionActionCycleTodo
-      };
 }
 
 enum SaveAction { share, discard }
