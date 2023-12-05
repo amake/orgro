@@ -386,10 +386,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "546c9188271a05e27197bf4962ffe2e02bc969f1c60fca0fa6e43c0a9ffdc9ce"
+      sha256: "0a43e5e8578f5e0958371dc44792da55ab1f7bfc62aac124941bc977e41e771d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.0"
+    version: "5.0.1"
   org_parser:
     dependency: transitive
     description:

@@ -91,7 +91,9 @@ class _DocumentPageWrapper extends StatelessWidget {
         child: Builder(
           builder: (context) => OrgController(
             root: DocumentProvider.of(context)!.doc,
-            hideMarkup: ViewSettings.of(context).readerMode,
+            settings: ViewSettings.of(context).readerMode
+                ? OrgSettings.hideMarkup
+                : const OrgSettings(),
             interpretEmbeddedSettings: true,
             // errorHandler is invoked during build, so we need to schedule the
             // snack bar for after the frame
@@ -133,6 +135,9 @@ Future<OrgSection?> narrow(
                 // Continue to use the true document root so that links to sections
                 // outside the narrowed section can be resolved
                 root: orgController.root,
+                settings: ViewSettings.of(context).readerMode
+                    ? OrgSettings.hideMarkup
+                    : const OrgSettings(),
                 child: DocumentPage(
                   title: AppLocalizations.of(context)!
                       .pageTitleNarrow(dataSource.name),
