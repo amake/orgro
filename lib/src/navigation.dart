@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';

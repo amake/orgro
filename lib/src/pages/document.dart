@@ -6,14 +6,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
+import 'package:orgro/src/components/banners.dart';
+import 'package:orgro/src/components/image.dart';
+import 'package:orgro/src/components/slidable_action.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
-import 'package:orgro/src/pages/banners.dart';
-import 'package:orgro/src/pages/image.dart';
-import 'package:orgro/src/pages/slidable_action.dart';
-import 'package:orgro/src/pages/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:share_plus/share_plus.dart';
@@ -119,6 +119,7 @@ class _DocumentPageState extends State<DocumentPage> {
     ];
   }
 
+  // TODO(aaron): Hoist analysis up, like into DocumentProvider
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
     final source = widget.dataSource;
     if (source is NativeDataSource && source.needsToResolveParent) {
