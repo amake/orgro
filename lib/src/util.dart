@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -64,4 +65,12 @@ extension TopBoundComparator on GlobalKey {
     if (thisBounds != null && otherBounds == null) return 1;
     return 0;
   }
+}
+
+VoidCallback debounce(VoidCallback func, Duration duration) {
+  Timer? timer;
+  return () {
+    timer?.cancel();
+    timer = Timer(duration, func);
+  };
 }

@@ -11,7 +11,10 @@ class MySearchDelegate {
     required this.onQuerySubmitted,
     String? initialQuery,
   }) : _searchController = TextEditingController(text: initialQuery) {
-    _searchController.addListener(_searchQueryChanged);
+    _searchController.addListener(debounce(
+      _searchQueryChanged,
+      const Duration(milliseconds: 500),
+    ));
   }
 
   final void Function(String) onQueryChanged;
