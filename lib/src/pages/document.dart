@@ -401,6 +401,7 @@ class _DocumentPageState extends State<DocumentPage> {
       return const SearchResultsNavigation();
     }
     return FloatingActionButton(
+      heroTag: '${widget.title}FAB',
       onPressed: () => _searchDelegate.start(context),
       foregroundColor: Theme.of(context).colorScheme.onSecondary,
       child: _Badge(

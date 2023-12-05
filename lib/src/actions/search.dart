@@ -170,6 +170,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
           crossAxisAlignment: WrapCrossAlignment.end,
           children: [
             _DisablableMiniFloatingActionButton(
+              heroTag: 'prevSearchHitFAB',
               onPressed:
                   value.isEmpty ? null : () => _scrollToRelativeIndex(-1),
               child: const Icon(Icons.keyboard_arrow_up),
@@ -193,6 +194,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
               ),
             ),
             _DisablableMiniFloatingActionButton(
+              heroTag: 'nextSearchHitFAB',
               onPressed: value.isEmpty ? null : () => _scrollToRelativeIndex(1),
               child: const Icon(Icons.keyboard_arrow_down),
             ),
@@ -237,16 +239,22 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
 }
 
 class _DisablableMiniFloatingActionButton extends StatelessWidget {
-  const _DisablableMiniFloatingActionButton({this.onPressed, this.child});
+  const _DisablableMiniFloatingActionButton({
+    this.onPressed,
+    this.heroTag,
+    this.child,
+  });
 
   final VoidCallback? onPressed;
   final Widget? child;
+  final Object? heroTag;
 
   bool get _enabled => onPressed != null;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: heroTag,
       onPressed: onPressed,
       foregroundColor: Theme.of(context).colorScheme.onSecondary,
       backgroundColor: _backgroundColor(context),
