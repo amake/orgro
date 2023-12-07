@@ -470,18 +470,11 @@ class _DocumentPageState extends State<DocumentPage> {
         return;
       }
       final dirInfo = await pickDirectory(initialDirUri: source.uri);
-      if (dirInfo == null) {
-        return;
-      }
-      if (!mounted) {
-        return;
-      }
-      final prefs = Preferences.of(context);
+      if (dirInfo == null) return;
+      if (!mounted) return;
       debugPrint(
           'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-      final accessibleDirs = prefs.accessibleDirs..add(dirInfo.identifier);
-      await prefs.setAccessibleDirs(accessibleDirs);
-      await _analyzeDoc(accessibleDirs: accessibleDirs);
+      await DocumentProvider.of(context).addAccessibleDir(dirInfo.identifier);
     } on Exception catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);

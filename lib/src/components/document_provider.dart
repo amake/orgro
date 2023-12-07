@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/preferences.dart';
 
 const _kMaxUndoStackSize = 10;
 
@@ -28,6 +29,7 @@ class DocumentProvider extends StatefulWidget {
 class _DocumentProviderState extends State<DocumentProvider> {
   List<OrgTree> _docs = [];
   late DataSource _dataSource;
+  List<String> _accessibleDirs = [];
   int _cursor = 0;
 
   @override
@@ -35,6 +37,24 @@ class _DocumentProviderState extends State<DocumentProvider> {
     super.initState();
     _docs = [widget.doc];
     _dataSource = widget.dataSource;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _accessibleDirs = Preferences.of(context).accessibleDirs;
+  }
+
+  Future<void> _addAccessibleDir(String dir) async {
+    final accessibleDirs = _accessibleDirs..add(dir);
+    await Preferences.of(context).setAccessibleDirs(accessibleDirs);
+    final dataSource = _dataSource;
+    if (dataSource is NativeDataSource && dataSource.needsToResolveParent) {
+      await dataSource.resolveParent(accessibleDirs);
+    }
+    setState(() {
+      _accessibleDirs = accessibleDirs;
+    });
   }
 
   void _pushDoc(OrgTree doc) {
@@ -72,6 +92,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
     return InheritedDocumentProvider(
       doc: _docs[_cursor],
       dataSource: _dataSource,
+      addAccessibleDir: _addAccessibleDir,
       pushDoc: _pushDoc,
       undo: _undo,
       redo: _redo,
@@ -86,6 +107,7 @@ class InheritedDocumentProvider extends InheritedWidget {
   const InheritedDocumentProvider({
     required this.doc,
     required this.dataSource,
+    required this.addAccessibleDir,
     required this.pushDoc,
     required this.undo,
     required this.redo,
@@ -97,6 +119,7 @@ class InheritedDocumentProvider extends InheritedWidget {
 
   final OrgTree doc;
   final DataSource dataSource;
+  final Future<void> Function(String) addAccessibleDir;
   final Future<void> Function(OrgTree) pushDoc;
   final OrgTree Function() undo;
   final OrgTree Function() redo;
