@@ -6,8 +6,8 @@ import 'package:org_flutter/org_flutter.dart';
 const _kMaxUndoStackSize = 10;
 
 class DocumentProvider extends StatefulWidget {
-  static DocumentProviderData? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<DocumentProviderData>();
+  static InheritedDocumentProvider? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedDocumentProvider>();
 
   const DocumentProvider({required this.doc, required this.child, super.key});
 
@@ -61,7 +61,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
 
   @override
   Widget build(BuildContext context) {
-    return DocumentProviderData(
+    return InheritedDocumentProvider(
       doc: _docs[_cursor],
       pushDoc: _pushDoc,
       undo: _undo,
@@ -73,8 +73,8 @@ class _DocumentProviderState extends State<DocumentProvider> {
   }
 }
 
-class DocumentProviderData extends InheritedWidget {
-  const DocumentProviderData({
+class InheritedDocumentProvider extends InheritedWidget {
+  const InheritedDocumentProvider({
     required this.doc,
     required this.pushDoc,
     required this.undo,
@@ -93,6 +93,6 @@ class DocumentProviderData extends InheritedWidget {
   final bool canRedo;
 
   @override
-  bool updateShouldNotify(DocumentProviderData oldWidget) =>
+  bool updateShouldNotify(InheritedDocumentProvider oldWidget) =>
       doc != oldWidget.doc;
 }
