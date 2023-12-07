@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/data_source.dart';
 
 const _kMaxUndoStackSize = 10;
 
@@ -9,9 +10,15 @@ class DocumentProvider extends StatefulWidget {
   static InheritedDocumentProvider of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<InheritedDocumentProvider>()!;
 
-  const DocumentProvider({required this.doc, required this.child, super.key});
+  const DocumentProvider({
+    required this.doc,
+    required this.dataSource,
+    required this.child,
+    super.key,
+  });
 
   final OrgTree doc;
+  final DataSource dataSource;
   final Widget child;
 
   @override
@@ -20,13 +27,14 @@ class DocumentProvider extends StatefulWidget {
 
 class _DocumentProviderState extends State<DocumentProvider> {
   List<OrgTree> _docs = [];
-  late int _cursor;
+  late DataSource _dataSource;
+  int _cursor = 0;
 
   @override
   void initState() {
-    _docs = [widget.doc];
-    _cursor = 0;
     super.initState();
+    _docs = [widget.doc];
+    _dataSource = widget.dataSource;
   }
 
   void _pushDoc(OrgTree doc) {
@@ -63,6 +71,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
   Widget build(BuildContext context) {
     return InheritedDocumentProvider(
       doc: _docs[_cursor],
+      dataSource: _dataSource,
       pushDoc: _pushDoc,
       undo: _undo,
       redo: _redo,
@@ -76,6 +85,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
 class InheritedDocumentProvider extends InheritedWidget {
   const InheritedDocumentProvider({
     required this.doc,
+    required this.dataSource,
     required this.pushDoc,
     required this.undo,
     required this.redo,
@@ -86,7 +96,8 @@ class InheritedDocumentProvider extends InheritedWidget {
   });
 
   final OrgTree doc;
-  final void Function(OrgTree) pushDoc;
+  final DataSource dataSource;
+  final Future<void> Function(OrgTree) pushDoc;
   final OrgTree Function() undo;
   final OrgTree Function() redo;
   final bool canUndo;
@@ -94,5 +105,5 @@ class InheritedDocumentProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedDocumentProvider oldWidget) =>
-      doc != oldWidget.doc;
+      doc != oldWidget.doc || dataSource != oldWidget.dataSource;
 }

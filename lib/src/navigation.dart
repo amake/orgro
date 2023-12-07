@@ -56,9 +56,9 @@ PageRoute<void> _buildDocumentRoute(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return DocumentProvider(
+            dataSource: snapshot.data!.dataSource,
             doc: snapshot.data!.doc,
             child: _DocumentPageWrapper(
-              dataSource: snapshot.data!.dataSource,
               target: target,
             ),
           );
@@ -75,15 +75,15 @@ PageRoute<void> _buildDocumentRoute(
 
 class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
-    required this.dataSource,
     required this.target,
   });
 
-  final DataSource dataSource;
   final String? target;
 
   @override
   Widget build(BuildContext context) {
+    final docProvider = DocumentProvider.of(context);
+    final dataSource = docProvider.dataSource;
     return RootRestorationScope(
       restorationId: 'org_page_root:${dataSource.id}',
       child: ViewSettings.defaults(
@@ -91,7 +91,7 @@ class _DocumentPageWrapper extends StatelessWidget {
         // Get ViewSettings into the context
         child: Builder(
           builder: (context) => OrgController(
-            root: DocumentProvider.of(context).doc,
+            root: docProvider.doc,
             settings: ViewSettings.of(context).readerMode
                 ? OrgSettings.hideMarkup
                 : const OrgSettings(),
@@ -103,7 +103,6 @@ class _DocumentPageWrapper extends StatelessWidget {
             restorationId: 'org_page:${dataSource.id}',
             child: DocumentPage(
               title: dataSource.name,
-              dataSource: dataSource,
               initialTarget: target,
             ),
           ),
@@ -122,6 +121,7 @@ Future<OrgSection?> narrow(
     MaterialPageRoute(
       builder: (context) => DocumentProvider(
         doc: section,
+        dataSource: dataSource,
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
@@ -142,7 +142,6 @@ Future<OrgSection?> narrow(
                 child: DocumentPage(
                   title: AppLocalizations.of(context)!
                       .pageTitleNarrow(dataSource.name),
-                  dataSource: dataSource,
                   initialQuery: viewSettings.queryString,
                 ),
               ),

@@ -25,14 +25,12 @@ const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
     required this.title,
-    required this.dataSource,
     this.initialTarget,
     this.initialQuery,
     super.key,
   });
 
   final String title;
-  final DataSource dataSource;
   final String? initialTarget;
   final String? initialQuery;
 
@@ -44,6 +42,7 @@ class _DocumentPageState extends State<DocumentPage> {
   late MySearchDelegate _searchDelegate;
 
   OrgTree get _doc => DocumentProvider.of(context).doc;
+  DataSource get _dataSource => DocumentProvider.of(context).dataSource;
 
   InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
@@ -94,7 +93,7 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   void _doNarrow(OrgSection section) async {
-    final newSection = await narrow(context, widget.dataSource, section);
+    final newSection = await narrow(context, _dataSource, section);
     if (newSection == null || identical(newSection, section)) {
       return;
     }
@@ -122,7 +121,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   // TODO(aaron): Hoist analysis up, like into DocumentProvider
   Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
-    final source = widget.dataSource;
+    final source = _dataSource;
     if (source is NativeDataSource && source.needsToResolveParent) {
       accessibleDirs ??= Preferences.of(context).accessibleDirs;
       await source.resolveParent(accessibleDirs);
@@ -437,12 +436,13 @@ class _DocumentPageState extends State<DocumentPage> {
     if (!link.isRelative || !link.body.endsWith('.org')) {
       return false;
     }
-    if (widget.dataSource.needsToResolveParent) {
+    final source = _dataSource;
+    if (source.needsToResolveParent) {
       _showDirectoryPermissionsSnackBar(context);
       return false;
     }
     try {
-      final resolved = await widget.dataSource.resolveRelative(link.body);
+      final resolved = await source.resolveRelative(link.body);
       if (!mounted) return false;
       return loadDocument(context, resolved, target: link.extra);
     } on Exception catch (e, s) {
@@ -461,11 +461,11 @@ class _DocumentPageState extends State<DocumentPage> {
       _viewSettings.localLinksPolicy == LocalLinksPolicy.ask &&
       _hasRelativeLinks == true &&
       _canResolveRelativeLinks == true &&
-      widget.dataSource.needsToResolveParent;
+      _dataSource.needsToResolveParent;
 
   Future<void> _pickDirectory() async {
     try {
-      final source = widget.dataSource;
+      final source = _dataSource;
       if (source is! NativeDataSource) {
         return;
       }
@@ -544,11 +544,12 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Widget? _loadLocalImage(OrgFileLink link) {
-    if (widget.dataSource.needsToResolveParent) {
+    final source = _dataSource;
+    if (source.needsToResolveParent) {
       return null;
     }
     return LocalImage(
-      dataSource: widget.dataSource,
+      dataSource: source,
       relativePath: link.body,
     );
   }
@@ -560,7 +561,7 @@ class _DocumentPageState extends State<DocumentPage> {
       !_askPermissionToLoadRemoteImages;
 
   bool get _canSaveChanges =>
-      widget.dataSource is NativeDataSource && _doc is OrgDocument;
+      _dataSource is NativeDataSource && _doc is OrgDocument;
 
   Timer? _writeTimer;
 
@@ -583,7 +584,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Future<void> _onDocChanged(OrgTree doc) async {
     _dirty = true;
-    final source = widget.dataSource;
+    final source = _dataSource;
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
@@ -618,7 +619,7 @@ class _DocumentPageState extends State<DocumentPage> {
     final navigator = Navigator.of(context);
 
     // Save now, if possible
-    final source = widget.dataSource;
+    final source = _dataSource;
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
