@@ -48,11 +48,12 @@ class _DocumentProviderState extends State<DocumentProvider> {
   Future<void> _addAccessibleDir(String dir) async {
     final accessibleDirs = _accessibleDirs..add(dir);
     await Preferences.of(context).setAccessibleDirs(accessibleDirs);
-    final dataSource = _dataSource;
+    var dataSource = _dataSource;
     if (dataSource is NativeDataSource && dataSource.needsToResolveParent) {
-      await dataSource.resolveParent(accessibleDirs);
+      dataSource = await dataSource.resolveParent(accessibleDirs);
     }
     setState(() {
+      _dataSource = dataSource;
       _accessibleDirs = accessibleDirs;
     });
   }

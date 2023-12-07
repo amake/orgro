@@ -12,7 +12,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 
 abstract class DataSource {
-  DataSource(this.name);
+  const DataSource(this.name);
 
   /// A user-facing name for this data source
   final String name;
@@ -92,11 +92,12 @@ class AssetDataSource extends DataSource {
 }
 
 class NativeDataSource extends DataSource {
-  NativeDataSource(
+  const NativeDataSource(
     super.name,
     this.identifier,
     this.uri, {
     required this.persistable,
+    this.parentDirIdentifier,
   });
 
   /// The identifier used to read the file via native APIs
@@ -110,7 +111,7 @@ class NativeDataSource extends DataSource {
 
   /// The persistent identifier of this source's parent directory. Needed for
   /// resolving relative links.
-  String? _parentDirIdentifier;
+  final String? parentDirIdentifier;
 
   @override
   String get id => uri;
@@ -125,7 +126,7 @@ class NativeDataSource extends DataSource {
 
   @override
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
-    if (_parentDirIdentifier == null) {
+    if (parentDirIdentifier == null) {
       throw OrgroError(
         'Can’t resolve path relative to this document',
         localizedMessage: (context) =>
@@ -134,7 +135,7 @@ class NativeDataSource extends DataSource {
     }
     // TODO(aaron): See if we can resolve to a non-existent file for writing
     final resolved = await FilePickerWritable().resolveRelativePath(
-        directoryIdentifier: _parentDirIdentifier!, relativePath: relativePath);
+        directoryIdentifier: parentDirIdentifier!, relativePath: relativePath);
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
@@ -154,10 +155,20 @@ class NativeDataSource extends DataSource {
       identifier: identifier, writer: (file) => file.writeAsString(content));
 
   @override
-  bool get needsToResolveParent => persistable && _parentDirIdentifier == null;
+  bool get needsToResolveParent => persistable && parentDirIdentifier == null;
 
-  Future<void> resolveParent(List<String> accessibleDirs) async =>
-      _parentDirIdentifier ??= await _findParentDirIdentifier(accessibleDirs);
+  Future<NativeDataSource> resolveParent(List<String> accessibleDirs) async {
+    if (parentDirIdentifier != null) return this;
+    final parentId = await _findParentDirIdentifier(accessibleDirs);
+    if (parentId == null) return this;
+    return NativeDataSource(
+      name,
+      identifier,
+      uri,
+      persistable: persistable,
+      parentDirIdentifier: parentId,
+    );
+  }
 
   Future<String?> _findParentDirIdentifier(
     List<String> accessibleDirs,
@@ -209,6 +220,10 @@ class LoadedNativeDataSource extends NativeDataSource {
         uri,
         persistable: persistable,
       );
+
+  @override
+  Future<LoadedNativeDataSource> resolveParent(List<String> accessibleDirs) =>
+      throw UnimplementedError();
 }
 
 class NativeDirectoryInfo {
