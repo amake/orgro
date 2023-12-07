@@ -6,8 +6,8 @@ import 'package:org_flutter/org_flutter.dart';
 const _kMaxUndoStackSize = 10;
 
 class DocumentProvider extends StatefulWidget {
-  static InheritedDocumentProvider? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<InheritedDocumentProvider>();
+  static InheritedDocumentProvider of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedDocumentProvider>()!;
 
   const DocumentProvider({required this.doc, required this.child, super.key});
 

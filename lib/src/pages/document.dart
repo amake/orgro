@@ -43,7 +43,7 @@ class DocumentPage extends StatefulWidget {
 class _DocumentPageState extends State<DocumentPage> {
   late MySearchDelegate _searchDelegate;
 
-  OrgTree get _doc => DocumentProvider.of(context)!.doc;
+  OrgTree get _doc => DocumentProvider.of(context).doc;
 
   InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
@@ -567,17 +567,17 @@ class _DocumentPageState extends State<DocumentPage> {
   bool _dirty = false;
 
   Future<void> _updateDocument(OrgTree newDoc) async {
-    DocumentProvider.of(context)!.pushDoc(newDoc);
+    DocumentProvider.of(context).pushDoc(newDoc);
     await _onDocChanged(newDoc);
   }
 
   Future<void> _undo() async {
-    final doc = DocumentProvider.of(context)!.undo();
+    final doc = DocumentProvider.of(context).undo();
     await _onDocChanged(doc);
   }
 
   Future<void> _redo() async {
-    final doc = DocumentProvider.of(context)!.redo();
+    final doc = DocumentProvider.of(context).redo();
     await _onDocChanged(doc);
   }
 

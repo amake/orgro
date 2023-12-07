@@ -91,7 +91,7 @@ class _DocumentPageWrapper extends StatelessWidget {
         // Get ViewSettings into the context
         child: Builder(
           builder: (context) => OrgController(
-            root: DocumentProvider.of(context)!.doc,
+            root: DocumentProvider.of(context).doc,
             settings: ViewSettings.of(context).readerMode
                 ? OrgSettings.hideMarkup
                 : const OrgSettings(),
@@ -129,7 +129,7 @@ Future<OrgSection?> narrow(
               canPop: false,
               onPopInvoked: (didPop) async {
                 if (didPop) return;
-                Navigator.pop(context, DocumentProvider.of(context)!.doc);
+                Navigator.pop(context, DocumentProvider.of(context).doc);
               },
               child: OrgController.defaults(
                 orgController,

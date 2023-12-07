@@ -8,7 +8,7 @@ PopupMenuItem<VoidCallback> undoMenuItem(
 }) {
   return PopupMenuItem<VoidCallback>(
     value: onChanged,
-    enabled: DocumentProvider.of(context)!.canUndo,
+    enabled: DocumentProvider.of(context).canUndo,
     child: Text(AppLocalizations.of(context)!.menuItemUndo),
   );
 }
@@ -19,7 +19,7 @@ PopupMenuItem<VoidCallback> redoMenuItem(
 }) {
   return PopupMenuItem<VoidCallback>(
     value: onChanged,
-    enabled: DocumentProvider.of(context)!.canRedo,
+    enabled: DocumentProvider.of(context).canRedo,
     child: Text(AppLocalizations.of(context)!.menuItemRedo),
   );
 }
