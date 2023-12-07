@@ -125,25 +125,18 @@ Future<OrgSection?> narrow(
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
-            return PopScope(
-              canPop: false,
-              onPopInvoked: (didPop) async {
-                if (didPop) return;
-                Navigator.pop(context, DocumentProvider.of(context).doc);
-              },
-              child: OrgController.defaults(
-                orgController,
-                // Continue to use the true document root so that links to sections
-                // outside the narrowed section can be resolved
-                root: orgController.root,
-                settings: ViewSettings.of(context).readerMode
-                    ? OrgSettings.hideMarkup
-                    : const OrgSettings(),
-                child: DocumentPage(
-                  title: AppLocalizations.of(context)!
-                      .pageTitleNarrow(dataSource.name),
-                  initialQuery: viewSettings.queryString,
-                ),
+            return OrgController.defaults(
+              orgController,
+              // Continue to use the true document root so that links to sections
+              // outside the narrowed section can be resolved
+              root: orgController.root,
+              settings: ViewSettings.of(context).readerMode
+                  ? OrgSettings.hideMarkup
+                  : const OrgSettings(),
+              child: DocumentPage(
+                title: AppLocalizations.of(context)!
+                    .pageTitleNarrow(dataSource.name),
+                initialQuery: viewSettings.queryString,
               ),
             );
           }),
