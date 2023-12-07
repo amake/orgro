@@ -8,6 +8,7 @@ import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/document_provider.dart';
+import 'package:orgro/src/components/fab.dart';
 import 'package:orgro/src/components/image.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
@@ -364,20 +365,15 @@ class _DocumentPageState extends State<DocumentPage> {
   Widget? _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
-  }) {
-    if (searchMode) {
-      return const SearchResultsNavigation();
-    }
-    return FloatingActionButton(
-      heroTag: '${widget.title}FAB',
-      onPressed: () => _searchDelegate.start(context),
-      foregroundColor: Theme.of(context).colorScheme.onSecondary,
-      child: _Badge(
-        visible: _searchDelegate.hasQuery,
-        child: const Icon(Icons.search),
-      ),
-    );
-  }
+  }) =>
+      searchMode
+          ? const SearchResultsNavigation()
+          : BadgableFloatingActionButton(
+              badgeVisible: _searchDelegate.hasQuery,
+              onPressed: () => _searchDelegate.start(context),
+              heroTag: '${widget.title}FAB',
+              child: const Icon(Icons.search),
+            );
 
   Future<bool> _openLink(String url) async {
     try {
@@ -654,43 +650,6 @@ class _KeyboardShortcuts extends StatelessWidget {
         autofocus: true,
         child: child,
       ),
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  const _Badge({
-    required this.child,
-    required this.visible,
-  });
-
-  final Widget child;
-  final bool visible;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        child,
-        // Badge indicating an active query. The size and positioning is
-        // manually adjusted to match the icon it adorns.
-        Positioned(
-          top: 0,
-          right: 2,
-          child: Visibility(
-            visible: visible,
-            child: Container(
-              height: 8,
-              width: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red.shade800,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
