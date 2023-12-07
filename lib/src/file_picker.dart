@@ -46,7 +46,6 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
     NativeDataSource openFileInfo;
     try {
       openFileInfo = await LoadedNativeDataSource.fromExternal(fileInfo, file);
-      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       await _displayError(e.toString());
       return false;
