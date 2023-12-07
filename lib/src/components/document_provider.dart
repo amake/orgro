@@ -50,17 +50,30 @@ class _DocumentProviderState extends State<DocumentProvider> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _accessibleDirs = Preferences.of(context).accessibleDirs;
+    _resolveDataSourceParent(_accessibleDirs).then((dataSource) {
+      if (dataSource != null) {
+        setState(() => _dataSource = dataSource);
+      }
+    });
+  }
+
+  Future<DataSource?> _resolveDataSourceParent(
+      List<String> accessibleDirs) async {
+    final dataSource = _dataSource;
+    if (dataSource is NativeDataSource && dataSource.needsToResolveParent) {
+      return dataSource.resolveParent(accessibleDirs);
+    }
+    return null;
   }
 
   Future<void> _addAccessibleDir(String dir) async {
     final accessibleDirs = _accessibleDirs..add(dir);
     await Preferences.of(context).setAccessibleDirs(accessibleDirs);
-    var dataSource = _dataSource;
-    if (dataSource is NativeDataSource && dataSource.needsToResolveParent) {
-      dataSource = await dataSource.resolveParent(accessibleDirs);
-    }
+    final dataSource = await _resolveDataSourceParent(accessibleDirs);
     setState(() {
-      _dataSource = dataSource;
+      if (dataSource != null) {
+        _dataSource = dataSource;
+      }
       _accessibleDirs = accessibleDirs;
     });
   }
