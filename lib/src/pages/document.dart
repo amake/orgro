@@ -67,13 +67,10 @@ class _DocumentPageState extends State<DocumentPage> {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
     );
+    canObtainNativeDirectoryPermissions().then(
+      (value) => setState(() => _canResolveRelativeLinks = value),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) => _openInitialTarget());
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    time('analyze', _analyzeDoc);
   }
 
   void _openInitialTarget() {
@@ -117,36 +114,6 @@ class _DocumentPageState extends State<DocumentPage> {
         },
       ),
     ];
-  }
-
-  // TODO(aaron): Hoist analysis up, like into DocumentProvider
-  Future<void> _analyzeDoc({List<String>? accessibleDirs}) async {
-    final source = _dataSource;
-    if (source is NativeDataSource && source.needsToResolveParent) {
-      accessibleDirs ??= Preferences.of(context).accessibleDirs;
-      await source.resolveParent(accessibleDirs);
-    }
-
-    final canResolveRelativeLinks =
-        _canResolveRelativeLinks ?? await canObtainNativeDirectoryPermissions();
-    var hasRemoteImages = _hasRemoteImages ?? false;
-    var hasRelativeLinks = _hasRelativeLinks ?? false;
-    _doc.visit<OrgLink>((link) {
-      hasRemoteImages |=
-          looksLikeImagePath(link.location) && looksLikeUrl(link.location);
-      try {
-        hasRelativeLinks |= OrgFileLink.parse(link.location).isRelative;
-      } on Exception {
-        // Not a file link
-      }
-      return !hasRemoteImages || (!hasRelativeLinks && canResolveRelativeLinks);
-    });
-
-    setState(() {
-      _hasRemoteImages ??= hasRemoteImages;
-      _hasRelativeLinks ??= hasRelativeLinks;
-      _canResolveRelativeLinks ??= canResolveRelativeLinks;
-    });
   }
 
   void _doQuery(String query) {
@@ -452,7 +419,8 @@ class _DocumentPageState extends State<DocumentPage> {
     return false;
   }
 
-  bool? _hasRelativeLinks;
+  bool? get _hasRelativeLinks =>
+      DocumentProvider.of(context).analysis.hasRelativeLinks;
 
   // Android 4.4 and earlier doesn't have APIs to get directory info
   bool? _canResolveRelativeLinks;
@@ -505,7 +473,8 @@ class _DocumentPageState extends State<DocumentPage> {
     _updateDocument(newTree as OrgTree);
   }
 
-  bool? _hasRemoteImages;
+  bool? get _hasRemoteImages =>
+      DocumentProvider.of(context).analysis.hasRemoteImages;
 
   bool get _askPermissionToLoadRemoteImages =>
       _viewSettings.remoteImagesPolicy == RemoteImagesPolicy.ask &&

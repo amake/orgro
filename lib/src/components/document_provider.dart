@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
 
 const _kMaxUndoStackSize = 10;
@@ -28,6 +30,7 @@ class DocumentProvider extends StatefulWidget {
 
 class _DocumentProviderState extends State<DocumentProvider> {
   List<OrgTree> _docs = [];
+  List<DocumentAnalysis> _analyses = [];
   late DataSource _dataSource;
   List<String> _accessibleDirs = [];
   int _cursor = 0;
@@ -36,6 +39,10 @@ class _DocumentProviderState extends State<DocumentProvider> {
   void initState() {
     super.initState();
     _docs = [widget.doc];
+    _analyses = [const DocumentAnalysis()];
+    _analyze(widget.doc).then((analysis) {
+      setState(() => _analyses[0] = analysis);
+    });
     _dataSource = widget.dataSource;
   }
 
@@ -58,17 +65,27 @@ class _DocumentProviderState extends State<DocumentProvider> {
     });
   }
 
-  void _pushDoc(OrgTree doc) {
+  Future<void> _pushDoc(OrgTree doc) async {
+    final analysis = await _analyze(doc);
     setState(() {
-      _docs = [
-        // +2 is because we keep the doc at _cursor and the new doc, so the
-        // total will be _kMaxUndoStackSize.
-        ..._docs.sublist(max(0, _cursor - _kMaxUndoStackSize + 2), _cursor + 1),
-        doc
-      ];
+      _docs = _pushAtIndexAndTrim(_docs, doc, _cursor, _kMaxUndoStackSize);
+      _analyses =
+          _pushAtIndexAndTrim(_analyses, analysis, _cursor, _kMaxUndoStackSize);
       _cursor = _docs.length - 1;
     });
   }
+
+  static List<T> _pushAtIndexAndTrim<T>(
+    List<T> list,
+    T item,
+    int idx,
+    int maxLen,
+  ) =>
+      [
+        // +2 is because we keep the item at idx and the new item, so the total
+        // will be maxLen
+        ...list.sublist(max(0, idx - maxLen + 2), idx + 1), item,
+      ];
 
   bool get _canUndo => _cursor >= 1;
 
@@ -93,6 +110,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
     return InheritedDocumentProvider(
       doc: _docs[_cursor],
       dataSource: _dataSource,
+      analysis: _analyses[_cursor],
       addAccessibleDir: _addAccessibleDir,
       pushDoc: _pushDoc,
       undo: _undo,
@@ -108,6 +126,7 @@ class InheritedDocumentProvider extends InheritedWidget {
   const InheritedDocumentProvider({
     required this.doc,
     required this.dataSource,
+    required this.analysis,
     required this.addAccessibleDir,
     required this.pushDoc,
     required this.undo,
@@ -120,6 +139,7 @@ class InheritedDocumentProvider extends InheritedWidget {
 
   final OrgTree doc;
   final DataSource dataSource;
+  final DocumentAnalysis analysis;
   final Future<void> Function(String) addAccessibleDir;
   final Future<void> Function(OrgTree) pushDoc;
   final OrgTree Function() undo;
@@ -129,5 +149,48 @@ class InheritedDocumentProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedDocumentProvider oldWidget) =>
-      doc != oldWidget.doc || dataSource != oldWidget.dataSource;
+      doc != oldWidget.doc ||
+      dataSource != oldWidget.dataSource ||
+      analysis != oldWidget.analysis;
+}
+
+Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
+      final canResolveRelativeLinks =
+          await canObtainNativeDirectoryPermissions();
+      var hasRemoteImages = false;
+      var hasRelativeLinks = false;
+      doc.visit<OrgLink>((link) {
+        hasRemoteImages |=
+            looksLikeImagePath(link.location) && looksLikeUrl(link.location);
+        try {
+          hasRelativeLinks |= OrgFileLink.parse(link.location).isRelative;
+        } on Exception {
+          // Not a file link
+        }
+        return !hasRemoteImages ||
+            (!hasRelativeLinks && canResolveRelativeLinks);
+      });
+      return DocumentAnalysis(
+        hasRemoteImages: hasRemoteImages,
+        hasRelativeLinks: hasRelativeLinks,
+      );
+    });
+
+class DocumentAnalysis {
+  const DocumentAnalysis({
+    this.hasRemoteImages,
+    this.hasRelativeLinks,
+  });
+
+  final bool? hasRemoteImages;
+  final bool? hasRelativeLinks;
+
+  @override
+  bool operator ==(Object other) =>
+      other is DocumentAnalysis &&
+      hasRemoteImages == other.hasRemoteImages &&
+      hasRelativeLinks == other.hasRelativeLinks;
+
+  @override
+  int get hashCode => Object.hash(hasRemoteImages, hasRelativeLinks);
 }
