@@ -130,6 +130,7 @@ class _DocumentPageState extends State<DocumentPage> {
   @override
   void dispose() {
     _searchDelegate.dispose();
+    _dirty.dispose();
     super.dispose();
   }
 
@@ -224,28 +225,33 @@ class _DocumentPageState extends State<DocumentPage> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: _searchDelegate.searchMode,
-      builder: (context, searchMode, _) => PopScope(
-        canPop: false,
-        onPopInvoked: _onPopInvoked,
-        child: Scaffold(
-          // Builder is here to ensure that the primary scroll controller set by the
-          // Scaffold makes it into the body's context
-          body: _KeyboardShortcuts(
-            child: Builder(
-              builder: (context) => CustomScrollView(
-                restorationId: 'document_scroll_view',
-                slivers: [
-                  _buildAppBar(context, searchMode: searchMode),
-                  _buildDocument(context),
-                ],
+      builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
+        valueListenable: _dirty,
+        builder: (context, dirty, _) {
+          return PopScope(
+            canPop: !dirty || _doc is! OrgDocument,
+            onPopInvoked: _onPopInvoked,
+            child: Scaffold(
+              // Builder is here to ensure that the primary scroll controller set by the
+              // Scaffold makes it into the body's context
+              body: _KeyboardShortcuts(
+                child: Builder(
+                  builder: (context) => CustomScrollView(
+                    restorationId: 'document_scroll_view',
+                    slivers: [
+                      _buildAppBar(context, searchMode: searchMode),
+                      _buildDocument(context),
+                    ],
+                  ),
+                ),
+              ),
+              floatingActionButton: _buildFloatingActionButton(
+                context,
+                searchMode: searchMode,
               ),
             ),
-          ),
-          floatingActionButton: _buildFloatingActionButton(
-            context,
-            searchMode: searchMode,
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -290,7 +296,7 @@ class _DocumentPageState extends State<DocumentPage> {
           visible: _askPermissionToSaveChanges,
           onResult: (value, {required bool persist}) {
             viewSettings.setSaveChangesPolicy(value, persist: persist);
-            if (_dirty) _onDocChanged(_doc);
+            if (_dirty.value) _onDocChanged(_doc);
           },
         ),
         _maybeConstrainWidth(
@@ -523,7 +529,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Timer? _writeTimer;
 
-  bool _dirty = false;
+  final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
   Future<void> _updateDocument(OrgTree newDoc) async {
     DocumentProvider.of(context).pushDoc(newDoc);
@@ -541,7 +547,7 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Future<void> _onDocChanged(OrgTree doc) async {
-    _dirty = true;
+    _dirty.value = true;
     final source = _dataSource;
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
@@ -551,7 +557,7 @@ class _DocumentPageState extends State<DocumentPage> {
       _writeTimer = Timer(const Duration(seconds: 3), () async {
         try {
           await source.write(doc.toMarkup());
-          _dirty = false;
+          _dirty.value = false;
           if (mounted) {
             showErrorSnackBar(
               context,
@@ -569,19 +575,13 @@ class _DocumentPageState extends State<DocumentPage> {
   Future<void> _onPopInvoked(bool didPop) async {
     if (didPop) return;
 
-    final navigator = Navigator.of(context);
+    assert(_dirty.value);
+
     final doc = _doc;
-
-    if (!_dirty) {
-      navigator.pop(doc);
-      return;
-    }
-
     // Don't try to save anything other than a root document
-    if (doc is! OrgDocument) {
-      navigator.pop(doc);
-      return;
-    }
+    if (doc is! OrgDocument) return;
+
+    final navigator = Navigator.of(context);
 
     // Save now, if possible
     final source = _dataSource;
@@ -589,7 +589,7 @@ class _DocumentPageState extends State<DocumentPage> {
         _canSaveChanges &&
         source is NativeDataSource) {
       await source.write(doc.toMarkup());
-      navigator.pop(doc);
+      navigator.pop();
       return;
     }
 
@@ -631,7 +631,7 @@ class _DocumentPageState extends State<DocumentPage> {
       ),
     );
 
-    if (result == true) navigator.pop(doc);
+    if (result == true) navigator.pop();
   }
 }
 
