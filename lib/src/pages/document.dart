@@ -584,8 +584,25 @@ class _DocumentPageState extends State<DocumentPage> {
     final navigator = Navigator.of(context);
 
     // Save now, if possible
+    final viewSettings = _viewSettings;
+    var saveChangesPolicy = viewSettings.saveChangesPolicy;
     final source = _dataSource;
-    if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
+    if (viewSettings.saveChangesPolicy == SaveChangesPolicy.ask &&
+        _canSaveChanges) {
+      final result = await showDialog<(SaveChangesPolicy, bool)>(
+        context: context,
+        builder: (context) => const SavePermissionDialog(),
+      );
+      if (result == null) {
+        return;
+      } else {
+        final (newPolicy, persist) = result;
+        saveChangesPolicy = newPolicy;
+        viewSettings.setSaveChangesPolicy(newPolicy, persist: persist);
+      }
+    }
+
+    if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
       await source.write(doc.toMarkup());

@@ -1,7 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class SavePermissionDialog extends StatelessWidget {
+  const SavePermissionDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.save),
+      title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
+      // SizedBox with any finite height needed because AlertDialog uses
+      // IntrinsicWidth and this needs something to work with, apparently;
+      // see https://stackoverflow.com/a/60896702/448068
+      //
+      // TODO(aaron): Should this be inside OrgText instead?
+      content: SizedBox(
+          width: double.maxFinite,
+          child: OrgText(
+            AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
+            onLinkTap: (link) => launchUrl(
+              Uri.parse(link),
+              mode: LaunchMode.externalApplication,
+            ),
+          )),
+      actions: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveOnce),
+          onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, false)),
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveAlways),
+          onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, true)),
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveNever),
+          onTap: () => Navigator.pop(context, (SaveChangesPolicy.deny, true)),
+        ),
+      ],
+    );
+  }
+}
 
 class ShareUnsaveableChangesDialog extends StatelessWidget {
   const ShareUnsaveableChangesDialog({required this.doc, super.key});
