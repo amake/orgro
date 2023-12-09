@@ -4,11 +4,37 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class _NicelyTimedBanner extends StatelessWidget {
+class _NicelyTimedBanner extends StatefulWidget {
   const _NicelyTimedBanner({required this.visible, required this.child});
 
   final bool visible;
   final Widget child;
+
+  @override
+  State<_NicelyTimedBanner> createState() => _NicelyTimedBannerState();
+}
+
+class _NicelyTimedBannerState extends State<_NicelyTimedBanner> {
+  bool _ready = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    final animation = route?.animation;
+    if (animation != null && animation.status != AnimationStatus.completed) {
+      _ready = false;
+      animation.addStatusListener(_onRouteAnimationStatusChanged);
+    }
+  }
+
+  void _onRouteAnimationStatusChanged(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      setState(() => _ready = true);
+      final route = ModalRoute.of(context);
+      route!.animation?.removeStatusListener(_onRouteAnimationStatusChanged);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +42,7 @@ class _NicelyTimedBanner extends StatelessWidget {
       duration: const Duration(milliseconds: 100),
       transitionBuilder: (child, animation) =>
           SizeTransition(sizeFactor: animation, child: child),
-      child: visible ? child : const SizedBox.shrink(),
+      child: _ready && widget.visible ? widget.child : const SizedBox.shrink(),
     );
   }
 }
