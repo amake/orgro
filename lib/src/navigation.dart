@@ -113,15 +113,17 @@ class _DocumentPageWrapper extends StatelessWidget {
 }
 
 Future<OrgSection?> narrow(
-    BuildContext context, DataSource dataSource, OrgSection section) {
+    BuildContext context, DataSource dataSource, OrgSection section) async {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
-  return Navigator.push<OrgSection>(
+  OrgSection? result;
+  await Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (context) => DocumentProvider(
         doc: section,
         dataSource: dataSource,
+        pushListener: (doc) => result = doc as OrgSection,
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
@@ -144,6 +146,7 @@ Future<OrgSection?> narrow(
       ),
     ),
   );
+  return result;
 }
 
 void showInteractive(BuildContext context, String title, Widget child) {

@@ -17,12 +17,14 @@ class DocumentProvider extends StatefulWidget {
     required this.doc,
     required this.dataSource,
     required this.child,
+    this.pushListener,
     super.key,
   });
 
   final OrgTree doc;
   final DataSource dataSource;
   final Widget child;
+  final void Function(OrgTree)? pushListener;
 
   @override
   State<DocumentProvider> createState() => _DocumentProviderState();
@@ -79,6 +81,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
   }
 
   Future<void> _pushDoc(OrgTree doc) async {
+    widget.pushListener?.call(doc);
     final analysis = await _analyze(doc);
     setState(() {
       _docs = _pushAtIndexAndTrim(_docs, doc, _cursor, _kMaxUndoStackSize);
