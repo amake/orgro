@@ -17,14 +17,14 @@ class DocumentProvider extends StatefulWidget {
     required this.doc,
     required this.dataSource,
     required this.child,
-    this.pushListener,
+    this.onDocChanged,
     super.key,
   });
 
   final OrgTree doc;
   final DataSource dataSource;
   final Widget child;
-  final void Function(OrgTree)? pushListener;
+  final void Function(OrgTree)? onDocChanged;
 
   @override
   State<DocumentProvider> createState() => _DocumentProviderState();
@@ -81,7 +81,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
   }
 
   Future<void> _pushDoc(OrgTree doc) async {
-    widget.pushListener?.call(doc);
+    widget.onDocChanged?.call(doc);
     final analysis = await _analyze(doc);
     setState(() {
       _docs = _pushAtIndexAndTrim(_docs, doc, _cursor, _kMaxUndoStackSize);
@@ -109,7 +109,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
     if (!_canUndo) throw Exception("can't undo");
     final newCursor = _cursor - 1;
     setState(() => _cursor = newCursor);
-    return _docs[newCursor];
+    final newDoc = _docs[newCursor];
+    widget.onDocChanged?.call(newDoc);
+    return newDoc;
   }
 
   bool get _canRedo => _cursor < _docs.length - 1;
@@ -118,7 +120,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
     if (!_canRedo) throw Exception("can't redo");
     final newCursor = _cursor + 1;
     setState(() => _cursor = newCursor);
-    return _docs[newCursor];
+    final newDoc = _docs[newCursor];
+    widget.onDocChanged?.call(newDoc);
+    return newDoc;
   }
 
   @override

@@ -123,7 +123,7 @@ Future<OrgSection?> narrow(
       builder: (context) => DocumentProvider(
         doc: section,
         dataSource: dataSource,
-        pushListener: (doc) => result = doc as OrgSection,
+        onDocChanged: (doc) => result = doc as OrgSection,
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
