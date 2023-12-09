@@ -7,6 +7,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
 import 'package:orgro/src/components/banners.dart';
+import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
 import 'package:orgro/src/components/image.dart';
@@ -18,7 +19,6 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
@@ -596,39 +596,7 @@ class _DocumentPageState extends State<DocumentPage> {
     // Prompt to share
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(Icons.save),
-        title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
-        content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
-        actions: [
-          Builder(builder: (context) {
-            return ListTile(
-              title: Text(SaveAction.share.toDisplayString(context)),
-              onTap: () async {
-                final navigator = Navigator.of(context);
-
-                // Compute origin of share sheet for tablets
-                final box = context.findRenderObject() as RenderBox?;
-                final origin = box!.localToGlobal(Offset.zero) & box.size;
-
-                final result = await Share.shareWithResult(
-                  doc.toMarkup(),
-                  sharePositionOrigin: origin,
-                );
-
-                // Don't close popup unless user successfully shared
-                if (result.status == ShareResultStatus.success) {
-                  navigator.pop(true);
-                }
-              },
-            );
-          }),
-          ListTile(
-            title: Text(SaveAction.discard.toDisplayString(context)),
-            onTap: () => Navigator.pop(context, true),
-          ),
-        ],
-      ),
+      builder: (context) => ShareUnsaveableChangesDialog(doc: doc),
     );
 
     if (result == true) navigator.pop();
@@ -652,13 +620,4 @@ class _KeyboardShortcuts extends StatelessWidget {
       ),
     );
   }
-}
-
-enum SaveAction { share, discard }
-
-extension SaveActionDisplayString on SaveAction {
-  String toDisplayString(BuildContext context) => switch (this) {
-        SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
-        SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
-      };
 }
