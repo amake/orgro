@@ -13,7 +13,7 @@ run: ## Run app with full environment
 .PHONY: test
 test: ## Run tests
 	flutter analyze
-	flutter test test
+	flutter test
 
 .PHONY: dirty-check
 dirty-check:
