@@ -4,6 +4,23 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+class _NicelyTimedBanner extends StatelessWidget {
+  const _NicelyTimedBanner({required this.visible, required this.child});
+
+  final bool visible;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 100),
+      transitionBuilder: (child, animation) =>
+          SizeTransition(sizeFactor: animation, child: child),
+      child: visible ? child : const SizedBox.shrink(),
+    );
+  }
+}
+
 class RemoteImagePermissionsBanner extends StatelessWidget {
   const RemoteImagePermissionsBanner({
     required this.visible,
@@ -16,36 +33,28 @@ class RemoteImagePermissionsBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 100),
-      transitionBuilder: (child, animation) =>
-          SizeTransition(sizeFactor: animation, child: child),
-      child: visible
-          ? MaterialBanner(
-              content: Text(
-                AppLocalizations.of(context)!.bannerBodyRemoteImages,
-              ),
-              leading: const Icon(Icons.photo),
-              actions: [
-                _BannerButton(
-                  text:
-                      AppLocalizations.of(context)!.bannerBodyActionShowAlways,
-                  onPressed: () =>
-                      onResult(RemoteImagesPolicy.allow, persist: true),
-                ),
-                _BannerButton(
-                  text: AppLocalizations.of(context)!.bannerBodyActionShowNever,
-                  onPressed: () =>
-                      onResult(RemoteImagesPolicy.deny, persist: true),
-                ),
-                _BannerButton(
-                  text: AppLocalizations.of(context)!.bannerBodyActionShowOnce,
-                  onPressed: () =>
-                      onResult(RemoteImagesPolicy.allow, persist: false),
-                ),
-              ],
-            )
-          : const SizedBox.shrink(),
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: Text(
+          AppLocalizations.of(context)!.bannerBodyRemoteImages,
+        ),
+        leading: const Icon(Icons.photo),
+        actions: [
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionShowAlways,
+            onPressed: () => onResult(RemoteImagesPolicy.allow, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionShowNever,
+            onPressed: () => onResult(RemoteImagesPolicy.deny, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionShowOnce,
+            onPressed: () => onResult(RemoteImagesPolicy.allow, persist: false),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -66,34 +75,28 @@ class DirectoryPermissionsBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 100),
-      transitionBuilder: (child, animation) =>
-          SizeTransition(sizeFactor: animation, child: child),
-      child: visible
-          ? MaterialBanner(
-              content: Text(
-                AppLocalizations.of(context)!.bannerBodyRelativeLinks,
-              ),
-              leading: const Icon(Icons.photo),
-              actions: [
-                _BannerButton(
-                  text:
-                      AppLocalizations.of(context)!.bannerBodyActionGrantNotNow,
-                  onPressed: onDismiss,
-                ),
-                _BannerButton(
-                  text:
-                      AppLocalizations.of(context)!.bannerBodyActionGrantNever,
-                  onPressed: onForbid,
-                ),
-                _BannerButton(
-                  text: AppLocalizations.of(context)!.bannerBodyActionGrantNow,
-                  onPressed: onAllow,
-                ),
-              ],
-            )
-          : const SizedBox.shrink(),
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: Text(
+          AppLocalizations.of(context)!.bannerBodyRelativeLinks,
+        ),
+        leading: const Icon(Icons.photo),
+        actions: [
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionGrantNotNow,
+            onPressed: onDismiss,
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionGrantNever,
+            onPressed: onForbid,
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionGrantNow,
+            onPressed: onAllow,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -110,40 +113,32 @@ class SavePermissionsBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 100),
-      transitionBuilder: (child, animation) =>
-          SizeTransition(sizeFactor: animation, child: child),
-      child: visible
-          ? MaterialBanner(
-              content: OrgText(
-                AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-                onLinkTap: (link) => launchUrl(
-                  Uri.parse(link),
-                  mode: LaunchMode.externalApplication,
-                ),
-              ),
-              leading: const Icon(Icons.save),
-              actions: [
-                _BannerButton(
-                  text:
-                      AppLocalizations.of(context)!.bannerBodyActionSaveAlways,
-                  onPressed: () =>
-                      onResult(SaveChangesPolicy.allow, persist: true),
-                ),
-                _BannerButton(
-                  text: AppLocalizations.of(context)!.bannerBodyActionSaveNever,
-                  onPressed: () =>
-                      onResult(SaveChangesPolicy.deny, persist: true),
-                ),
-                _BannerButton(
-                  text: AppLocalizations.of(context)!.bannerBodyActionSaveOnce,
-                  onPressed: () =>
-                      onResult(SaveChangesPolicy.allow, persist: false),
-                ),
-              ],
-            )
-          : const SizedBox.shrink(),
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: OrgText(
+          AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
+          onLinkTap: (link) => launchUrl(
+            Uri.parse(link),
+            mode: LaunchMode.externalApplication,
+          ),
+        ),
+        leading: const Icon(Icons.save),
+        actions: [
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionSaveAlways,
+            onPressed: () => onResult(SaveChangesPolicy.allow, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionSaveNever,
+            onPressed: () => onResult(SaveChangesPolicy.deny, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionSaveOnce,
+            onPressed: () => onResult(SaveChangesPolicy.allow, persist: false),
+          ),
+        ],
+      ),
     );
   }
 }
