@@ -23,7 +23,7 @@ class SavePermissionDialog extends StatelessWidget {
           child: OrgText(
             AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
             onLinkTap: (link) => launchUrl(
-              Uri.parse(link),
+              Uri.parse(link.location),
               mode: LaunchMode.externalApplication,
             ),
           )),

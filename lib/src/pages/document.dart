@@ -381,18 +381,18 @@ class _DocumentPageState extends State<DocumentPage> {
               child: const Icon(Icons.search),
             );
 
-  Future<bool> _openLink(String url) async {
+  Future<bool> _openLink(OrgLink link) async {
     try {
-      final link = OrgFileLink.parse(url);
-      return _openFileLink(link);
+      final parsed = OrgFileLink.parse(link.location);
+      return _openFileLink(parsed);
     } on Exception {
       // Wasn't a file link
     }
 
     // Handle as a general URL
     try {
-      debugPrint('Launching URL: $url');
-      return await launchUrl(Uri.parse(url),
+      debugPrint('Launching URL: ${link.location}');
+      return await launchUrl(Uri.parse(link.location),
           mode: LaunchMode.externalApplication);
     } on Exception catch (e, s) {
       logError(e, s);
