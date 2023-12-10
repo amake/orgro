@@ -74,3 +74,10 @@ VoidCallback debounce(VoidCallback func, Duration duration) {
     timer = Timer(duration, func);
   };
 }
+
+String joinPath(String base, String rest) {
+  if (rest.isEmpty) return base;
+  if (base.isEmpty) return rest;
+  if (base.endsWith('/')) return '$base$rest';
+  return '$base/$rest';
+}

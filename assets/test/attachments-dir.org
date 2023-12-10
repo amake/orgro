@@ -1,0 +1,5 @@
+:PROPERTIES:
+:DIR:      ../manual/
+:END:
+
+[[attachment:orgro-icon.png]]

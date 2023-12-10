@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
+import 'package:orgro/src/attachments.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
@@ -383,8 +384,8 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Future<bool> _openLink(OrgLink link) async {
     try {
-      final parsed = OrgFileLink.parse(link.location);
-      return _openFileLink(parsed);
+      final fileLink = convertLinkResolvingAttachments(_doc, link);
+      return _openFileLink(fileLink);
     } on Exception {
       // Wasn't a file link
     }
@@ -488,7 +489,7 @@ class _DocumentPageState extends State<DocumentPage> {
       return _loadRemoteImage(link);
     }
     try {
-      final fileLink = OrgFileLink.parse(link.location);
+      final fileLink = convertLinkResolvingAttachments(_doc, link);
       if (fileLink.isRelative) {
         return _loadLocalImage(fileLink);
       }

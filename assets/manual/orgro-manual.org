@@ -205,6 +205,21 @@ you chose =Always= or =Never=, see the action menu on the top screen.
 
 Jump to named foonotes by touching a footnote reference.[fn:1]
 
+** Attachments                                                       :ATTACH:
+   :PROPERTIES:
+   :ID:       C259CE94-D4C8-4C4F-9C9E-9ABE446E7DA3
+   :END:
+
+Orgro can show attached images and open links to attached Org Mode files like
+so:
+
+[[attachment:orgro-icon.png]]
+
+[[attachment:orgro-manual-attachment.org]]
+
+Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
+section for details.
+
 ** Other
 
 Other syntaxes that are highlighted but not (yet) interpreted in any special
