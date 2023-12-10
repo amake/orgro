@@ -289,7 +289,8 @@ Activate with the button in the top app bar.
 Touch the floating search button in the lower right of the screen. A search
 field will appear in the top app bar; enter your query here. Relevant sections
 will be expanded, while sections without hits will be collapsed. Hits are
-highlighted.
+highlighted. Navigate hits with the up and down buttons in the lower right of
+the screen.
 
 * Text Style
 
