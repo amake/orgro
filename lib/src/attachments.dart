@@ -1,6 +1,7 @@
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/util.dart';
 
+// TODO(aaron): Move this into org_flutter or org_parser?
 OrgFileLink convertLinkResolvingAttachments(OrgTree tree, OrgLink link) {
   final parsed = OrgFileLink.parse(link.location);
   if (parsed.scheme != 'attachment:') return parsed;
