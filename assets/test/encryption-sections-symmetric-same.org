@@ -1,0 +1,21 @@
+# -*- buffer-auto-save-file-name: nil; -*-
+
+The sections below are symmetrically encrypted with the password =foobar=.
+
+* My Darkest Secrets                                                  :crypt:
+
+-----BEGIN PGP MESSAGE-----
+
+jA0ECQMIWvmDbeq5/VDw0j8BLSfNl1dqXGHvl6hNIbjZwKM5rSUwLl2MEPp9Oimj
+pkiwWy3Rx3/IRtcie6IuUiUJdi7TUP+QXf9IYVV//2g=
+=5Wo5
+-----END PGP MESSAGE-----
+
+* My Indented Secrets                                                 :crypt:
+
+  -----BEGIN PGP MESSAGE-----
+
+  jA0ECQMISaR2xJXb1Jzy0j4BIVF884v3+Z1B0oFjKNUibap9cShK2CY0iu3N/1mC
+  wRpygA1+DXm46hmKAQ5vcUvliklV8tWtsfjtSNNA2g==
+  =G+Zx
+  -----END PGP MESSAGE-----
