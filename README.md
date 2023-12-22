@@ -4,9 +4,7 @@
 
 An [Org Mode](https://orgmode.org/) file viewer for iOS and Android
 
-<img width="300" src="https://orgro.org/assets/screenshot/flutter_02.png">
-
-_See https://orgro.org for a demo video_
+https://github.com/amake/orgro/assets/2172537/a3d841a3-84f3-4c34-9381-c73ab4dc9249
 
 # What is Org Mode?
 
