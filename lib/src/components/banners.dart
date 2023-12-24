@@ -169,6 +169,46 @@ class SavePermissionsBanner extends StatelessWidget {
   }
 }
 
+class DecryptContentBanner extends StatelessWidget {
+  const DecryptContentBanner({
+    required this.visible,
+    required this.onAccept,
+    required this.onDeny,
+    super.key,
+  });
+
+  final VoidCallback onAccept;
+  final void Function(DecryptPolicy, {required bool persist}) onDeny;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: const Text(
+          'This document contains encrypted content. Decrypt it now?',
+        ),
+        leading: const Icon(Icons.lock),
+        actions: [
+          _BannerButton(
+            text: 'Decrypt',
+            onPressed: onAccept,
+          ),
+          _BannerButton(
+            text: 'Not now',
+            onPressed: () => onDeny(DecryptPolicy.deny, persist: false),
+          ),
+          _BannerButton(
+            text: 'Never',
+            onPressed: () => onDeny(DecryptPolicy.deny, persist: true),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _BannerButton extends StatelessWidget {
   const _BannerButton({required this.text, required this.onPressed});
 

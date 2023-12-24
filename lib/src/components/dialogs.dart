@@ -96,3 +96,32 @@ extension SaveActionDisplayString on SaveAction {
         SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
       };
 }
+
+class InputPasswordDialog extends StatelessWidget {
+  const InputPasswordDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.lock),
+      title: const Text('Password'),
+      content: TextField(
+        autofocus: true,
+        obscureText: true,
+        onSubmitted: (value) => Navigator.pop(context, value),
+      ),
+    );
+  }
+}
+
+class ProgressIndicatorDialog extends StatelessWidget {
+  const ProgressIndicatorDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const AlertDialog(
+      title: Text('Decrypting...'),
+      content: LinearProgressIndicator(),
+    );
+  }
+}
