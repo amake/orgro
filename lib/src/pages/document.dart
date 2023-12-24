@@ -653,8 +653,11 @@ class _DocumentPageState extends State<DocumentPage> {
     );
     if (password == null) return;
     if (!mounted) return;
+    var canceled = false;
     time('decrypt', () => compute(decrypt, (blocks, password)))
-        .then((decrypted) => Navigator.pop(context, decrypted));
+        .then((decrypted) {
+      if (!canceled) Navigator.pop(context, decrypted);
+    });
     final result = await showDialog<List<String?>>(
       context: context,
       builder: (context) => ProgressIndicatorDialog(
@@ -662,8 +665,8 @@ class _DocumentPageState extends State<DocumentPage> {
     );
     if (!mounted) return;
     if (result == null) {
-      showErrorSnackBar(
-          context, AppLocalizations.of(context)!.errorDecryptionFailed);
+      // Canceled
+      canceled = true;
       return;
     }
     OrgTree newDoc = _doc;
