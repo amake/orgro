@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dart_pg:
+    dependency: "direct main"
+    description:
+      name: dart_pg
+      sha256: "07f082f30a4ba024c181fd57906ea487d6e826d9c3281e0d6289fc17212a47c7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.5"
   dynamic_fonts:
     dependency: "direct main"
     description:
@@ -146,6 +154,14 @@ packages:
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "2.1.0+1"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      sha256: "25517a4deb0c03aa0f32fd12db525856438902d9c16536311e76cdc57b31d7d1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -310,6 +326,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.7"
   leak_tracker:
     dependency: transitive
     description:
@@ -386,18 +410,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "0bb754da89f7528d0dd81ff61403dc61382728e470ccec0abf9fa07b440344af"
+      sha256: f99f7128594c5ddae8a345525073a8a3d6dee51f3378ae3bcac509d7db430393
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "5.2.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: "5745d233316b3f8cf27ff9082987c8cdcec792c7e6d138f2203aed4a30a99238"
+      sha256: d73bbf50aa9765ce3a624422dc9c37020fb83a816d983a15f846ba310064eb83
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.4.0"
   path:
     dependency: transitive
     description:
@@ -478,6 +502,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  pinenacl:
+    dependency: transitive
+    description:
+      name: pinenacl
+      sha256: "3a5503637587d635647c93ea9a8fecf48a420cc7deebe6f1fc85c2a5637ab327"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
   platform:
     dependency: transitive
     description:
@@ -494,6 +526,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.7"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      sha256: "7c1e5f0d23c9016c5bbd8b1473d0d3fb3fc851b876046039509e18e0c7485f2c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.3"
   quiver:
     dependency: transitive
     description:

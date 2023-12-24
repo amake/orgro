@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +17,7 @@ import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
@@ -300,6 +302,11 @@ class _DocumentPageState extends State<DocumentPage> {
             if (_dirty.value) _onDocChanged(_doc);
           },
         ),
+        DecryptContentBanner(
+          visible: _askToDecrypt,
+          onAccept: _decryptContent,
+          onDeny: viewSettings.setDecryptPolicy,
+        ),
         _maybeConstrainWidth(
           context,
           child: SelectionArea(
@@ -314,7 +321,8 @@ class _DocumentPageState extends State<DocumentPage> {
               child: switch (doc) {
                 OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
                 OrgSection() =>
-                  OrgSectionWidget(doc, root: true, shrinkWrap: true)
+                  OrgSectionWidget(doc, root: true, shrinkWrap: true),
+                _ => throw Exception('Unexpected document type: $doc'),
               },
             ),
           ),
@@ -621,6 +629,60 @@ class _DocumentPageState extends State<DocumentPage> {
     );
 
     if (result == true) navigator.pop();
+  }
+
+  bool? get _hasEncryptedContent =>
+      DocumentProvider.of(context).analysis.hasEncryptedContent;
+
+  bool get _askToDecrypt =>
+      _viewSettings.decryptPolicy == DecryptPolicy.ask &&
+      _hasEncryptedContent == true &&
+      !_askForDirectoryPermissions &&
+      !_askPermissionToLoadRemoteImages &&
+      !_askPermissionToSaveChanges;
+
+  Future<void> _decryptContent() async {
+    final blocks = <OrgPgpBlock>[];
+    _doc.visit<OrgPgpBlock>((block) {
+      blocks.add(block);
+      return true;
+    });
+    final password = await showDialog<String>(
+      context: context,
+      builder: (context) => const InputPasswordDialog(),
+    );
+    if (password == null) return;
+    if (!mounted) return;
+    time('decrypt', () => compute(decrypt, (blocks, password)))
+        .then((decrypted) => Navigator.pop(context, decrypted));
+    final result = await showDialog<List<String?>>(
+      context: context,
+      builder: (context) => const ProgressIndicatorDialog(),
+    );
+    if (!mounted) return;
+    if (result == null) {
+      showErrorSnackBar(context, 'Decryption failed');
+      return;
+    }
+    OrgTree newDoc = _doc;
+    for (final (i, plaintext) in result.indexed) {
+      if (plaintext == null) {
+        showErrorSnackBar(context, 'Decryption failed');
+        continue;
+      }
+      final block = blocks[i];
+      try {
+        final replacement =
+            OrgDecryptedContent.fromDecryptedResult(block, plaintext);
+        newDoc =
+            newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
+      } catch (e, s) {
+        logError(e, s);
+        showErrorSnackBar(context, 'Failed to parse plaintext');
+        continue;
+      }
+    }
+    await _updateDocument(newDoc);
   }
 }
 
