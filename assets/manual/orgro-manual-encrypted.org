@@ -1,0 +1,13 @@
+# -*- buffer-auto-save-file-name: nil; -*-
+
+The section below is symmetrically encrypted with the password =foobar=.
+
+* My Darkest Secrets                                                  :crypt:
+
+-----BEGIN PGP MESSAGE-----
+
+jA0ECQMI61s6hG/FWB3w0mUB6ANj1cd5GxU8rvR3vqPq7JjPyxiERIXiiCKrWZ+a
+ojoFarRGV0GMp/yvq2LklHqOvOCjwPExJIMFaKPvSV9lO4mcFQc1u6yn3KTtB4oj
+dMVyWPu9EfsubEquiqHEpj826O46Lw==
+=hIfy
+-----END PGP MESSAGE-----

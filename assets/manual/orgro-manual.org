@@ -220,6 +220,16 @@ so:
 Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
 section for details.
 
+** Encryption
+
+Orgro recognizes encrypted content (OpenPGP/RFC 4880 messages starting with
+=-----BEGIN PGP MESSAGE-----=) and will offer to allow you to decrypt it. Only
+symmetrically (passphrase-only) encrypted messages can be decrypted.
+
+Note that changes to decrypted content cannot be saved.
+
+[[file:orgro-manual-encrypted.org][Example]]
+
 ** Other
 
 Other syntaxes that are highlighted but not (yet) interpreted in any special
