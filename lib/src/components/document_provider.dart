@@ -80,7 +80,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
     });
   }
 
-  Future<void> _pushDoc(OrgTree doc) async {
+  Future<bool> _pushDoc(OrgTree doc) async {
+    if (doc == _docs[_cursor]) return false;
+
     widget.onDocChanged?.call(doc);
     final analysis = await _analyze(doc);
     setState(() {
@@ -89,6 +91,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
           _pushAtIndexAndTrim(_analyses, analysis, _cursor, _kMaxUndoStackSize);
       _cursor = _docs.length - 1;
     });
+    return true;
   }
 
   static List<T> _pushAtIndexAndTrim<T>(
@@ -161,7 +164,7 @@ class InheritedDocumentProvider extends InheritedWidget {
   final DataSource dataSource;
   final DocumentAnalysis analysis;
   final Future<void> Function(String) addAccessibleDir;
-  final Future<void> Function(OrgTree) pushDoc;
+  final Future<bool> Function(OrgTree) pushDoc;
   final OrgTree Function() undo;
   final OrgTree Function() redo;
   final bool canUndo;

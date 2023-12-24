@@ -532,9 +532,12 @@ class _DocumentPageState extends State<DocumentPage> {
 
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
-  Future<void> _updateDocument(OrgTree newDoc) async {
-    DocumentProvider.of(context).pushDoc(newDoc);
-    await _onDocChanged(newDoc);
+  Future<bool> _updateDocument(OrgTree newDoc) async {
+    final pushed = await DocumentProvider.of(context).pushDoc(newDoc);
+    if (pushed) {
+      await _onDocChanged(newDoc);
+    }
+    return pushed;
   }
 
   Future<void> _undo() async {
