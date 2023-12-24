@@ -10,6 +10,8 @@ enum LocalLinksPolicy { deny, ask }
 
 enum SaveChangesPolicy { allow, deny, ask }
 
+enum DecryptPolicy { deny, ask }
+
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
@@ -17,6 +19,7 @@ const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
 const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
 const kDefaultSaveChangesPolicy = SaveChangesPolicy.ask;
+const kDefaultDecryptPolicy = DecryptPolicy.ask;
 const kDefaultFullWidth = false;
 
 const kMaxRecentFiles = 10;
@@ -27,6 +30,7 @@ const _kReaderModeKey = 'reader_mode';
 const _kRemoteImagesPolicyKey = 'remote_images_policy';
 const _kLocalLinksPolicyKey = 'local_links_policy';
 const _kSaveChangesPolicyKey = 'save_changes_policy';
+const _kDecryptPolicyKey = 'decrypt_policy';
 const _kRecentFilesJsonKey = 'recent_files_json';
 const _kAccessibleDirectoriesKey = 'accessible_directories_json';
 const _kFullWidthKey = 'full_width';
@@ -89,6 +93,12 @@ class Preferences extends InheritedWidget {
 
   Future<bool> setSaveChangesPolicy(SaveChangesPolicy? value) =>
       _setOrRemove(_kSaveChangesPolicyKey, value.persistableString);
+
+  DecryptPolicy? get decryptPolicy =>
+      DecryptPolicyPersistence.fromString(_prefs.getString(_kDecryptPolicyKey));
+
+  Future<bool> setDecryptPolicy(DecryptPolicy? value) =>
+      _setOrRemove(_kDecryptPolicyKey, value.persistableString);
 
   /// List of identifiers
   List<String> get accessibleDirs =>
@@ -228,3 +238,24 @@ extension SaveChangesPolicyPersistence on SaveChangesPolicy? {
 const _kSaveChangesPolicyAllow = 'save_changes_policy_allow';
 const _kSaveChangesPolicyDeny = 'save_changes_policy_deny';
 const _kSaveChangesPolicyAsk = 'save_changes_policy_ask';
+
+extension DecryptPolicyPersistence on DecryptPolicy? {
+  static DecryptPolicy? fromString(String? value) {
+    switch (value) {
+      case _kDecryptPolicyDeny:
+        return DecryptPolicy.deny;
+      case _kDecryptPolicyAsk:
+        return DecryptPolicy.ask;
+    }
+    return null;
+  }
+
+  String? get persistableString => switch (this) {
+        DecryptPolicy.deny => _kDecryptPolicyDeny,
+        DecryptPolicy.ask => _kDecryptPolicyAsk,
+        null => null,
+      };
+}
+
+const _kDecryptPolicyDeny = 'decrypt_policy_deny';
+const _kDecryptPolicyAsk = 'decrypt_policy_ask';

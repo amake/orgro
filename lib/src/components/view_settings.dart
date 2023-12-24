@@ -104,6 +104,14 @@ class InheritedViewSettings extends InheritedWidget {
     _update(data.copyWith(saveChangesPolicy: value));
   }
 
+  DecryptPolicy get decryptPolicy => data.decryptPolicy;
+  void setDecryptPolicy(DecryptPolicy value, {bool persist = false}) {
+    if (persist) {
+      _prefs.setDecryptPolicy(value);
+    }
+    _update(data.copyWith(decryptPolicy: value));
+  }
+
   bool get fullWidth => data.fullWidth;
   set fullWidth(bool value) => _update(data.copyWith(fullWidth: value));
 
@@ -124,6 +132,7 @@ class ViewSettingsData {
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
       localLinksPolicy: prefs.localLinksPolicy ?? kDefaultLocalLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy ?? kDefaultSaveChangesPolicy,
+      decryptPolicy: prefs.decryptPolicy ?? kDefaultDecryptPolicy,
       fullWidth: prefs.fullWidth ?? kDefaultFullWidth,
     );
   }
@@ -136,6 +145,7 @@ class ViewSettingsData {
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
+    required this.decryptPolicy,
     required this.fullWidth,
   });
 
@@ -146,6 +156,7 @@ class ViewSettingsData {
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
+  final DecryptPolicy decryptPolicy;
   final bool fullWidth;
 
   ViewSettingsData copyWith({
@@ -156,6 +167,7 @@ class ViewSettingsData {
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
+    DecryptPolicy? decryptPolicy,
     bool? fullWidth,
   }) =>
       ViewSettingsData(
@@ -166,6 +178,7 @@ class ViewSettingsData {
         remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
         saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
+        decryptPolicy: decryptPolicy ?? this.decryptPolicy,
         fullWidth: fullWidth ?? this.fullWidth,
       );
 
@@ -179,6 +192,7 @@ class ViewSettingsData {
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
+      decryptPolicy == other.decryptPolicy &&
       fullWidth == other.fullWidth;
 
   @override
@@ -190,6 +204,7 @@ class ViewSettingsData {
         remoteImagesPolicy,
         localLinksPolicy,
         saveChangesPolicy,
+        decryptPolicy,
         fullWidth,
       );
 }
