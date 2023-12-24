@@ -186,22 +186,20 @@ class DecryptContentBanner extends StatelessWidget {
     return _NicelyTimedBanner(
       visible: visible,
       child: MaterialBanner(
-        content: const Text(
-          'This document contains encrypted content. Decrypt it now?',
-        ),
+        content: Text(AppLocalizations.of(context)!.bannerBodyDecryptContent),
         leading: const Icon(Icons.lock),
         actions: [
           _BannerButton(
-            text: 'Decrypt',
+            text: AppLocalizations.of(context)!.bannerBodyActionDecryptNow,
             onPressed: onAccept,
           ),
           _BannerButton(
-            text: 'Not now',
-            onPressed: () => onDeny(DecryptPolicy.deny, persist: false),
+            text: AppLocalizations.of(context)!.bannerBodyActionDecryptNever,
+            onPressed: () => onDeny(DecryptPolicy.deny, persist: true),
           ),
           _BannerButton(
-            text: 'Never',
-            onPressed: () => onDeny(DecryptPolicy.deny, persist: true),
+            text: AppLocalizations.of(context)!.bannerBodyActionDecryptNotNow,
+            onPressed: () => onDeny(DecryptPolicy.deny, persist: false),
           ),
         ],
       ),

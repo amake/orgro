@@ -94,12 +94,21 @@
   "bannerBodyActionSaveNever": "Never",
   "bannerBodyActionSaveOnce": "Just this time",
 
+  "bannerBodyDecryptContent": "This document contains encrypted content. Decrypt it now?",
+  "bannerBodyActionDecryptNow": "Decrypt",
+  "bannerBodyActionDecryptNotNow": "Not now",
+  "bannerBodyActionDecryptNever": "Never",
+
   "saveChangesDialogTitle": "Save changes?",
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
   "saveActionShare": "Share",
   "saveActionDiscard": "Discard",
 
   "savedMessage": "Saved",
+
+  "inputPasswordDialogTitle": "Enter password",
+
+  "decryptingProgressDialogTitle": "Decrypting…",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
@@ -148,5 +157,6 @@
     "placeholders": {
       "item": {}
     }
-  }
+  },
+  "errorDecryptionFailed": "Decryption failed"
 }

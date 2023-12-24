@@ -657,17 +657,20 @@ class _DocumentPageState extends State<DocumentPage> {
         .then((decrypted) => Navigator.pop(context, decrypted));
     final result = await showDialog<List<String?>>(
       context: context,
-      builder: (context) => const ProgressIndicatorDialog(),
+      builder: (context) => ProgressIndicatorDialog(
+          title: AppLocalizations.of(context)!.decryptingProgressDialogTitle),
     );
     if (!mounted) return;
     if (result == null) {
-      showErrorSnackBar(context, 'Decryption failed');
+      showErrorSnackBar(
+          context, AppLocalizations.of(context)!.errorDecryptionFailed);
       return;
     }
     OrgTree newDoc = _doc;
     for (final (i, plaintext) in result.indexed) {
       if (plaintext == null) {
-        showErrorSnackBar(context, 'Decryption failed');
+        showErrorSnackBar(
+            context, AppLocalizations.of(context)!.errorDecryptionFailed);
         continue;
       }
       final block = blocks[i];
@@ -678,7 +681,7 @@ class _DocumentPageState extends State<DocumentPage> {
             newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
       } catch (e, s) {
         logError(e, s);
-        showErrorSnackBar(context, 'Failed to parse plaintext');
+        showErrorSnackBar(context, e);
         continue;
       }
     }

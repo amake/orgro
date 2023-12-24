@@ -84,12 +84,21 @@
   "bannerBodyActionSaveNever": "保存しない",
   "bannerBodyActionSaveOnce": "今回だけ",
 
+  "bannerBodyDecryptContent": "本ドキュメントに暗号化されたコンテンツが含まれています。復号しますか？",
+  "bannerBodyActionDecryptNow": "復号する",
+  "bannerBodyActionDecryptNotNow": "今は復号しない",
+  "bannerBodyActionDecryptNever": "復号しない",
+
   "saveChangesDialogTitle": "変更を保存しますか？",
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
   "saveActionShare": "共有する",
   "saveActionDiscard": "破棄する",
 
   "savedMessage": "保存しました",
+
+  "inputPasswordDialogTitle": "パスワード入力",
+
+  "decryptingProgressDialogTitle": "復号中…",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
   "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",
@@ -122,5 +131,6 @@
     "placeholders": {
       "item": {}
     }
-  }
+  },
+  "errorDecryptionFailed": "復号が失敗しました"
 }

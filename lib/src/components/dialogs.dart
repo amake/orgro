@@ -104,7 +104,7 @@ class InputPasswordDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.lock),
-      title: const Text('Password'),
+      title: Text(AppLocalizations.of(context)!.inputPasswordDialogTitle),
       content: TextField(
         autofocus: true,
         obscureText: true,
@@ -115,13 +115,15 @@ class InputPasswordDialog extends StatelessWidget {
 }
 
 class ProgressIndicatorDialog extends StatelessWidget {
-  const ProgressIndicatorDialog({super.key});
+  const ProgressIndicatorDialog({required this.title, super.key});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    return const AlertDialog(
-      title: Text('Decrypting...'),
-      content: LinearProgressIndicator(),
+    return AlertDialog(
+      title: Text(title),
+      content: const LinearProgressIndicator(),
     );
   }
 }
