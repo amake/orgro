@@ -182,20 +182,30 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
           await canObtainNativeDirectoryPermissions();
       var hasRemoteImages = false;
       var hasRelativeLinks = false;
-      doc.visit<OrgLink>((link) {
-        hasRemoteImages |=
-            looksLikeImagePath(link.location) && looksLikeUrl(link.location);
-        try {
-          hasRelativeLinks |= OrgFileLink.parse(link.location).isRelative;
-        } on Exception {
-          // Not a file link
+      var hasEncryptedContent = false;
+      doc.visit<OrgLeafNode>((node) {
+        if (node is OrgLink) {
+          hasRemoteImages |=
+              looksLikeImagePath(node.location) && looksLikeUrl(node.location);
+          try {
+            hasRelativeLinks |= OrgFileLink.parse(node.location).isRelative;
+          } on Exception {
+            // Not a file link
+          }
+          return !hasRemoteImages ||
+              (!hasRelativeLinks && canResolveRelativeLinks) ||
+              !hasEncryptedContent;
+        } else if (node is OrgPgpBlock) {
+          hasEncryptedContent = true;
+          return !hasRemoteImages ||
+              (!hasRelativeLinks && canResolveRelativeLinks);
         }
-        return !hasRemoteImages ||
-            (!hasRelativeLinks && canResolveRelativeLinks);
+        return true;
       });
       return DocumentAnalysis(
         hasRemoteImages: hasRemoteImages,
         hasRelativeLinks: hasRelativeLinks,
+        hasEncryptedContent: hasEncryptedContent,
       );
     });
 
@@ -203,17 +213,21 @@ class DocumentAnalysis {
   const DocumentAnalysis({
     this.hasRemoteImages,
     this.hasRelativeLinks,
+    this.hasEncryptedContent,
   });
 
   final bool? hasRemoteImages;
   final bool? hasRelativeLinks;
+  final bool? hasEncryptedContent;
 
   @override
   bool operator ==(Object other) =>
       other is DocumentAnalysis &&
       hasRemoteImages == other.hasRemoteImages &&
-      hasRelativeLinks == other.hasRelativeLinks;
+      hasRelativeLinks == other.hasRelativeLinks &&
+      hasEncryptedContent == other.hasEncryptedContent;
 
   @override
-  int get hashCode => Object.hash(hasRemoteImages, hasRelativeLinks);
+  int get hashCode =>
+      Object.hash(hasRemoteImages, hasRelativeLinks, hasEncryptedContent);
 }
