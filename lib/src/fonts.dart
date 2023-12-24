@@ -76,32 +76,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        'e50b24cddb55735afdf4eae86b50779d5033e7048bf5c22c4753cf74dbfe34ab',
-        8364588,
+        '1efa53fead9a52b452fae8bf83a57405f1f063e54cead4a3bcf63127c84c5329',
+        8657708,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        '185d6e714708eab2114bb658a6d3496ba3ef7d5a7e7251aa5b51a30e65c2bccd',
-        8343728,
+        'fcb26698b091a4ef52263c1b4b48ffab99e7bd118a4855aac7c3b51f49c55e2b',
+        8675932,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        'f9035171923c47424ca3782b63ebe17da7ceb71a30996166f5d38bd0ff53e3a1',
-        8628444,
+        '22b48b21e6c850f83069e9880e8d584628e2d8e54390f871942db67af312b564',
+        8947408,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        'd919bc2c923c72029ab81d5804b7d7ede99e04f1ec55278a4cce460fdb5893f3',
-        8639320,
+        'ca6fe527914a5f6bdcaaf0c24474e0bb301517be4a66209516e95bd3451f5136',
+        8977668,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -316,7 +316,7 @@ class _IosevkaFile extends DynamicFontsFile {
       : super(expectedFileHash, expectedLength);
 
   static const name = 'Iosevka';
-  static const version = '27.3.5';
+  static const version = '28.0.2';
 
   final DynamicFontsVariant variant;
 
@@ -326,19 +326,19 @@ class _IosevkaFile extends DynamicFontsFile {
 
   String get _variantSlug {
     if (_bold && _italic) {
-      return 'bolditalic';
+      return 'BoldItalic';
     } else if (_bold) {
-      return 'bold';
+      return 'Bold';
     } else if (_italic) {
-      return 'italic';
+      return 'Italic';
     } else {
-      return 'regular';
+      return 'Regular';
     }
   }
 
   @override
   String get url =>
-      'https://cdn.orgro.org/assets/fonts/iosevka-orgro-v$version/ttf/iosevka-orgro-$_variantSlug.ttf';
+      'https://cdn.orgro.org/assets/fonts/iosevka-orgro-v$version/TTF/IosevkaOrgro-$_variantSlug.ttf';
 }
 
 class _VictorMonoFile extends DynamicFontsFile {

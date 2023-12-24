@@ -209,35 +209,41 @@
    #+end_src
 
    #+RESULTS:
-   : v27.3.5
+   : v28.0.2
 
    Configuration: Tangle the following
 
    #+begin_src yaml :tangle ../../Iosevka/private-build-plans.toml
-     [buildPlans.iosevka-orgro]      # <iosevka-custom> is your plan name
+     ### See https://github.com/be5invis/Iosevka/blob/master/doc/custom-build.md for comprehensive
+     ### documentation of the options in this file
+
+     [buildPlans.IosevkaOrgro]      # <IosevkaCustom> is your plan name
      family = "Iosevka Orgro"        # Font menu family name
      # spacing = "normal"               # Optional; Values: `normal`, `term`, `fontconfig-mono`, or `fixed`
      # serifs = "sans"                  # Optional; Values: `sans` or `slab`
+     # exportGlyphNames = false       # Set this to true for ligature support in Kitty (increased file size)
+
+     # webfontFormats = ['ttf', 'woff2']
 
      ###################################################################################################
      # Configure variants
 
      # Optional; Whether to inherit a `ss##` variant
-     # [buildPlans.iosevka-custom.variants]
+     # [buildPlans.IosevkaOrgro.variants]
      # inherits = "ss01"
 
      # Optional; Configure single character's variant
-     [buildPlans.iosevka-orgro.variants.design]
-     # g = 'single-storey'
+     [buildPlans.IosevkaOrgro.variants.design]
+     # g = 'single-storey-serifless'
      asterisk = 'penta-low'
 
      # Optional; Configure single character's variant for Upright and Oblique; Overrides [design]
-     # [buildPlans.iosevka-custom.variants.upright]
+     # [buildPlans.IosevkaOrgro.variants.upright]
      # i = 'zshaped'
      # l = 'zshaped'
 
      # Optional; Configure single character's variant for Italic only; Overrides [design]
-     # [buildPlans.iosevka-custom.variants.italic]
+     # [buildPlans.IosevkaOrgro.variants.italic]
      # i = 'tailed-serifed'
      # l = 'tailed-serifed'
 
@@ -247,7 +253,7 @@
      ###################################################################################################
      # Configure ligations
 
-     # [buildPlans.iosevka-custom.ligations]
+     # [buildPlans.IosevkaOrgro.ligations]
      # inherits = "default-calt"   # Optional; inherits an existing ligation set
      # disables = []               # Optional; disable specific ligation groups, overrides inherited ligation set
      # enables  = []               # Optional; enable specific ligation groups, overrides inherited ligation set
@@ -264,17 +270,17 @@
      #             and "shape" properly only supports number between 100 and 900 (inclusive).
      #             If you decide to use custom weights you have to define all the weights you
      #             plan to use otherwise they will not be built.
-     [buildPlans.iosevka-orgro.weights.regular]
+     [buildPlans.IosevkaOrgro.weights.Regular]
      shape = 400  # Weight for glyph shapes.
      menu  = 400  # Weight for the font's names.
      css   = 400  # Weight for webfont CSS.
 
-     # [buildPlans.iosevka-custom.weights.book]
+     # [buildPlans.IosevkaOrgro.weights.Book]
      # shape = 450
      # menu  = 450  # Use 450 here to name the font's weight "Book"
      # css   = 450
 
-     [buildPlans.iosevka-orgro.weights.bold]
+     [buildPlans.IosevkaOrgro.weights.Bold]
      shape = 700
      menu  = 700
      css   = 700
@@ -286,19 +292,19 @@
      # Override default building slope sets
      # When this section is absent, all slopes would be built.
 
-     [buildPlans.iosevka-orgro.slopes.upright]
+     [buildPlans.IosevkaOrgro.slopes.Upright]
      angle = 0             # Angle in degrees. Valid range [0, 15]
      shape = "upright"     # Slope grade used for shape selection.  `upright` | `oblique` | `italic`
      menu  = "upright"     # Slope grade used for naming.           `upright` | `oblique` | `italic`
      css   = "normal"      # Slope grade used for webfont CSS.      `normal`  | `oblique` | `italic`
 
-     # [buildPlans.iosevka-custom.slopes.oblique]
+     # [buildPlans.IosevkaOrgro.slopes.Oblique]
      # angle = 9.4
      # shape = "oblique"
      # menu  = "oblique"
      # css   = "oblique"
 
-     [buildPlans.iosevka-orgro.slopes.italic]
+     [buildPlans.IosevkaOrgro.slopes.Italic]
      angle = 9.4
      shape = "italic"
      menu  = "italic"
@@ -317,12 +323,12 @@
      #             If you decide to use custom widths you have to define all the widths you plan to use,
      #             otherwise they will not be built.
 
-     [buildPlans.iosevka-orgro.widths.normal]
+     [buildPlans.IosevkaOrgro.widths.Normal]
      shape = 500        # Unit Width, measured in 1/1000 em.
      menu  = 5          # Width grade for the font's names.
      css   = "normal"   # "font-stretch' property of webfont CSS.
 
-     # [buildPlans.iosevka-custom.widths.extended]
+     # [buildPlans.IosevkaOrgro.widths.Extended]
      # shape = 600
      # menu  = 7
      # css   = "expanded"
@@ -335,7 +341,7 @@
      # Specify character ranges in the section below to exclude certain characters from the font being
      # built. Remove this section when this feature is not needed.
 
-     # [buildPlans.iosevka-custom.exclude-chars]
+     # [buildPlans.IosevkaOrgro.excludeChars]
      # ranges = [[10003, 10008]]
 
      # End character exclusion
@@ -348,7 +354,7 @@
      # following section to build PUA characters that are generated from the OpenType ligatures.
      # Remove this section when compatibility ligatures are not needed.
 
-     # [[buildPlans.iosevka-custom.compatibility-ligatures]]
+     # [[buildPlans.IosevkaOrgro.compatibilityLigatures]]
      # unicode = 57600 # 0xE100
      # featureTag = 'calt'
      # sequence = '<*>'
@@ -361,7 +367,7 @@
      # Certain metrics like line height (leading) could be overridden in your build plan file.
      # Edit the values to change the metrics. Remove this section when overriding is not needed.
 
-     # [buildPlans.iosevka-custom.metric-override]
+     # [buildPlans.IosevkaOrgro.metricOverride]
      # leading = 1250
      # winMetricAscenderPad = 0
      # winMetricDescenderPad = 0
@@ -379,23 +385,23 @@
    #+begin_src bash :dir ../../Iosevka :async
      npm ci
      npm run clean
-     npm run build -- ttf::iosevka-orgro
+     npm run build -- ttf::IosevkaOrgro
    #+end_src
 
    Checksum
 
    #+name: iosevka-csums
-   #+begin_src bash :dir ../../Iosevka/dist/iosevka-orgro/ttf :results table replace
+   #+begin_src bash :dir ../../Iosevka/dist/IosevkaOrgro/TTF :results table replace
      for ttf in *.ttf; do
          echo $ttf $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
      done
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | iosevka-orgro-bold.ttf       | 8343728 | 185d6e714708eab2114bb658a6d3496ba3ef7d5a7e7251aa5b51a30e65c2bccd |
-   | iosevka-orgro-bolditalic.ttf | 8639320 | d919bc2c923c72029ab81d5804b7d7ede99e04f1ec55278a4cce460fdb5893f3 |
-   | iosevka-orgro-italic.ttf     | 8628444 | f9035171923c47424ca3782b63ebe17da7ceb71a30996166f5d38bd0ff53e3a1 |
-   | iosevka-orgro-regular.ttf    | 8364588 | e50b24cddb55735afdf4eae86b50779d5033e7048bf5c22c4753cf74dbfe34ab |
+   | IosevkaOrgro-Bold.ttf       | 8675932 | fcb26698b091a4ef52263c1b4b48ffab99e7bd118a4855aac7c3b51f49c55e2b |
+   | IosevkaOrgro-BoldItalic.ttf | 8977668 | ca6fe527914a5f6bdcaaf0c24474e0bb301517be4a66209516e95bd3451f5136 |
+   | IosevkaOrgro-Italic.ttf     | 8947408 | 22b48b21e6c850f83069e9880e8d584628e2d8e54390f871942db67af312b564 |
+   | IosevkaOrgro-Regular.ttf    | 8657708 | 1efa53fead9a52b452fae8bf83a57405f1f063e54cead4a3bcf63127c84c5329 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
@@ -403,8 +409,8 @@
 
    #+begin_src bash :dir ../../Iosevka :var dryrun="--dryrun"
      ver=$(git describe --tags)
-     aws s3 $dryrun sync --no-progress --exclude '*' --include 'ttf/*' --acl public-read \
-         dist/iosevka-orgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'TTF/*' --acl public-read \
+         dist/IosevkaOrgro "s3://orgro/assets/fonts/iosevka-orgro-$ver/"
    #+end_src
 
 ** Updating sizes and checksums
