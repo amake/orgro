@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/serialization.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,8 +68,11 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
               final box = context.findRenderObject() as RenderBox?;
               final origin = box!.localToGlobal(Offset.zero) & box.size;
 
+              final markup = await serializeWithProgressUI(context, doc);
+              if (markup == null) return;
+
               final result = await Share.shareWithResult(
-                doc.toMarkup(),
+                markup,
                 sharePositionOrigin: origin,
               );
 

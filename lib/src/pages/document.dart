@@ -21,6 +21,7 @@ import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -571,7 +572,8 @@ class _DocumentPageState extends State<DocumentPage> {
         _writeFuture = time('save', () async {
           try {
             debugPrint('starting auto save');
-            await time('write', () => source.write(doc.toMarkup()));
+            final markup = await serialize(doc);
+            await time('write', () => source.write(markup));
             _dirty.value = false;
             if (mounted) {
               showErrorSnackBar(
@@ -643,7 +645,9 @@ class _DocumentPageState extends State<DocumentPage> {
         source is NativeDataSource) {
       debugPrint('synchronously saving now');
       _writeTimer?.cancel();
-      await source.write(doc.toMarkup());
+      final markup = await serializeWithProgressUI(context, doc);
+      if (markup == null) return;
+      await time('write', () => source.write(markup));
       navigator.pop();
       return;
     }
