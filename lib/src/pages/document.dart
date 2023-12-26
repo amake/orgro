@@ -540,9 +540,9 @@ class _DocumentPageState extends State<DocumentPage> {
 
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
-  Future<bool> _updateDocument(OrgTree newDoc) async {
+  Future<bool> _updateDocument(OrgTree newDoc, {bool dirty = true}) async {
     final pushed = await DocumentProvider.of(context).pushDoc(newDoc);
-    if (pushed) {
+    if (pushed && dirty) {
       await _onDocChanged(newDoc);
     }
     return pushed;
@@ -688,7 +688,7 @@ class _DocumentPageState extends State<DocumentPage> {
         continue;
       }
     }
-    await _updateDocument(newDoc);
+    await _updateDocument(newDoc, dirty: false);
   }
 }
 
