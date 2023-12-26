@@ -16,14 +16,14 @@ Future<T> time<T>(String tag, FutureOr<T> Function() func) async {
   return ret;
 }
 
-Object logError(Object e, StackTrace s) {
+Object? logError(Object? e, StackTrace s) {
   debugPrint(e.toString());
   debugPrintStack(stackTrace: s);
   return e;
 }
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
-    BuildContext context, Object msgObject) {
+    BuildContext context, Object? msgObject) {
   String message;
   if (msgObject is PlatformException) {
     message = msgObject.message ?? msgObject.code;
