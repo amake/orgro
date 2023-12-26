@@ -419,10 +419,10 @@ packages:
     dependency: transitive
     description:
       name: org_parser
-      sha256: d73bbf50aa9765ce3a624422dc9c37020fb83a816d983a15f846ba310064eb83
+      sha256: "42284e1b92b68fa90291dcd24db3bdd17844a1880faa7fd4156468f535b63021"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "5.5.0"
   path:
     dependency: transitive
     description:
@@ -451,10 +451,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: e595b98692943b4881b219f0a9e3945118d3c16bd7e2813f98ec6e532d905f72
+      sha256: "477184d672607c0a3bf68fbbf601805f92ef79c82b64b4d6eb318cbca4c48668"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   path_provider_foundation:
     dependency: transitive
     description:

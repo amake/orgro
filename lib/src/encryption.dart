@@ -21,3 +21,33 @@ List<String?> decrypt((List<OrgPgpBlock> blocks, String password) args) {
   }
   return result;
 }
+
+String _encrypt(OrgDecryptedContent content, String password) {
+  final message = OpenPGPSync.encrypt(
+    OpenPGPSync.createTextMessage(content.toCleartextMarkup()),
+    passwords: [password],
+  );
+  return message.armor();
+}
+
+class OrgroSerializer extends DecryptedContentSerializer {
+  OrgroSerializer(
+    this.block, {
+    required this.cleartext,
+    required this.password,
+  });
+
+  final OrgPgpBlock block;
+  final String cleartext;
+  final String password;
+
+  @override
+  String toMarkup(OrgDecryptedContent content) {
+    if (cleartext == content.toCleartextMarkup()) {
+      // Cleartext hasn't changed; write back the old cyphertext
+      return block.toMarkup();
+    }
+    // Reencrypt with the same password
+    return _encrypt(content, password);
+  }
+}

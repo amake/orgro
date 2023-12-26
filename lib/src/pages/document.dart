@@ -712,8 +712,10 @@ class _DocumentPageState extends State<DocumentPage> {
       }
       final block = blocks[i];
       try {
-        final replacement =
-            OrgDecryptedContent.fromDecryptedResult(block, cleartext);
+        final replacement = OrgDecryptedContent.fromDecryptedResult(
+          cleartext,
+          OrgroSerializer(block, cleartext: cleartext, password: password),
+        );
         newDoc =
             newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
       } catch (e, s) {
