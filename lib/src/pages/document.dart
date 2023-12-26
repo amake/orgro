@@ -700,8 +700,8 @@ class _DocumentPageState extends State<DocumentPage> {
       return;
     }
     OrgTree newDoc = _doc;
-    for (final (i, plaintext) in result.indexed) {
-      if (plaintext == null) {
+    for (final (i, cleartext) in result.indexed) {
+      if (cleartext == null) {
         showErrorSnackBar(
             context, AppLocalizations.of(context)!.errorDecryptionFailed);
         continue;
@@ -709,7 +709,7 @@ class _DocumentPageState extends State<DocumentPage> {
       final block = blocks[i];
       try {
         final replacement =
-            OrgDecryptedContent.fromDecryptedResult(block, plaintext);
+            OrgDecryptedContent.fromDecryptedResult(block, cleartext);
         newDoc =
             newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
       } catch (e, s) {
