@@ -537,6 +537,7 @@ class _DocumentPageState extends State<DocumentPage> {
       _dataSource is NativeDataSource && _doc is OrgDocument;
 
   Timer? _writeTimer;
+  Future<void>? _writeFuture;
 
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
@@ -566,20 +567,23 @@ class _DocumentPageState extends State<DocumentPage> {
         source is NativeDataSource &&
         doc is OrgDocument) {
       _writeTimer?.cancel();
-      _writeTimer = Timer(const Duration(seconds: 3), () async {
-        try {
-          await source.write(doc.toMarkup());
-          _dirty.value = false;
-          if (mounted) {
-            showErrorSnackBar(
-              context,
-              AppLocalizations.of(context)!.savedMessage,
-            );
+      _writeTimer = Timer(const Duration(seconds: 3), () {
+        _writeFuture = time('save', () async {
+          try {
+            debugPrint('starting auto save');
+            await time('write', () => source.write(doc.toMarkup()));
+            _dirty.value = false;
+            if (mounted) {
+              showErrorSnackBar(
+                context,
+                AppLocalizations.of(context)!.savedMessage,
+              );
+            }
+          } on Exception catch (e, s) {
+            logError(e, s);
+            if (mounted) showErrorSnackBar(context, e);
           }
-        } on Exception catch (e, s) {
-          logError(e, s);
-          if (mounted) showErrorSnackBar(context, e);
-        }
+        }).whenComplete(() => _writeFuture = null);
       });
     }
   }
@@ -594,6 +598,26 @@ class _DocumentPageState extends State<DocumentPage> {
     if (doc is! OrgDocument) return;
 
     final navigator = Navigator.of(context);
+
+    // If we are already in the middle of saving, wait for that to finish
+    final writeFuture = _writeFuture;
+    if (writeFuture != null) {
+      debugPrint('waiting for autosave to finish');
+      showDialog<String>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const ProgressIndicatorDialog(
+          title: 'Saving document',
+        ),
+      );
+      await writeFuture.whenComplete(() => navigator.pop());
+      if (!_dirty.value) {
+        navigator.pop();
+        return;
+      }
+    }
+
+    if (!mounted) return;
 
     // Save now, if possible
     final viewSettings = _viewSettings;
