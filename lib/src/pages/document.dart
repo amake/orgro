@@ -641,6 +641,8 @@ class _DocumentPageState extends State<DocumentPage> {
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
+      debugPrint('synchronously saving now');
+      _writeTimer?.cancel();
       await source.write(doc.toMarkup());
       navigator.pop();
       return;
