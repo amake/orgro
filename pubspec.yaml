@@ -11,7 +11,14 @@ environment:
 
 dependencies:
   cached_network_image: ^3.0.0
-  dart_pg: ^1.1.5
+  # dart_pg: ^1.1.5
+  dart_pg:
+    # path: ../dart-pg
+    # Using private fork for sync API
+    # https://github.com/web-of-trust/dart-pg/issues/4
+    git:
+      url: https://github.com/amake/dart-pg.git
+      ref: sync
   dynamic_fonts: ^2.2.0
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter

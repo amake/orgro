@@ -100,10 +100,11 @@ packages:
   dart_pg:
     dependency: "direct main"
     description:
-      name: dart_pg
-      sha256: "07f082f30a4ba024c181fd57906ea487d6e826d9c3281e0d6289fc17212a47c7"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: sync
+      resolved-ref: d3f8b26a7c0e635884a3c9c06f5231c27409048a
+      url: "https://github.com/amake/dart-pg.git"
+    source: git
     version: "1.1.5"
   dynamic_fonts:
     dependency: "direct main"
