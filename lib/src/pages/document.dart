@@ -683,6 +683,10 @@ class _DocumentPageState extends State<DocumentPage> {
     time('decrypt', () => compute(decrypt, (blocks, password)))
         .then((decrypted) {
       if (!canceled) Navigator.pop(context, decrypted);
+    }).onError((error, stackTrace) {
+      showErrorSnackBar(context, error);
+      logError(error, stackTrace);
+      if (!canceled) Navigator.pop(context);
     });
     final result = await showDialog<List<String?>>(
       context: context,
