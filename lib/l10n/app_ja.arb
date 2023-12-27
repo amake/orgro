@@ -79,6 +79,9 @@
   "inputPasswordDialogTitle": "パスワード入力",
 
   "decryptingProgressDialogTitle": "復号中…",
+  "encryptingProgressDialogTitle": "暗号化中…",
+  "serializingProgressDialogTitle": "書き出し中…",
+  "savingProgressDialogTitle": "保存中…",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
   "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",

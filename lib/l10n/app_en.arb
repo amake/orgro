@@ -109,6 +109,9 @@
   "inputPasswordDialogTitle": "Enter password",
 
   "decryptingProgressDialogTitle": "Decrypting…",
+  "encryptingProgressDialogTitle": "Encrypting…",
+  "serializingProgressDialogTitle": "Serializing…",
+  "savingProgressDialogTitle": "Saving…",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",

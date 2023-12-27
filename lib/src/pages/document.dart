@@ -608,8 +608,8 @@ class _DocumentPageState extends State<DocumentPage> {
       showDialog<String>(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const ProgressIndicatorDialog(
-          title: 'Saving document',
+        builder: (context) => ProgressIndicatorDialog(
+          title: AppLocalizations.of(context)!.savingProgressDialogTitle,
         ),
       );
       await writeFuture.whenComplete(() => navigator.pop());
