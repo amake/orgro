@@ -226,7 +226,9 @@ Orgro recognizes encrypted content (OpenPGP/RFC 4880 messages starting with
 =-----BEGIN PGP MESSAGE-----=) and will offer to allow you to decrypt it. Only
 symmetrically (passphrase-only) encrypted messages can be decrypted.
 
-Note that changes to decrypted content cannot be saved.
+If edited, decrypted content will be reencrypted with the same password on save.
+To make this possible, Orgro retains the password in memory until the document
+is closed. The password is not permanently stored anywhere.
 
 [[file:orgro-manual-encrypted.org][Example]]
 
