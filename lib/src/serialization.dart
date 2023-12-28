@@ -31,5 +31,8 @@ Future<String?> serializeWithProgressUI(
           : AppLocalizations.of(context)!.serializingProgressDialogTitle,
     ),
   );
+  if (result == null) {
+    canceled = true;
+  }
   return result;
 }
