@@ -233,7 +233,7 @@ class _DocumentPageState extends State<DocumentPage> {
         valueListenable: _dirty,
         builder: (context, dirty, _) {
           return PopScope(
-            canPop: !dirty || _doc is! OrgDocument,
+            canPop: searchMode || !dirty || _doc is! OrgDocument,
             onPopInvoked: _onPopInvoked,
             child: Scaffold(
               // Builder is here to ensure that the primary scroll controller set by the
