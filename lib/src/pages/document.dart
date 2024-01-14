@@ -71,11 +71,27 @@ class _DocumentPageState extends State<DocumentPage> {
       },
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
+      onKeywordsChanged: (keywords) {
+        // TODO(aaron): implement
+        print('AMK keywords changed: $keywords');
+      },
+      onTagsChanged: (tags) {
+        // TODO(aaron): implement
+        print('AMK tags changed: $tags');
+      },
     );
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => _canResolveRelativeLinks = value),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) => _openInitialTarget());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final analysis = DocumentProvider.of(context).analysis;
+    _searchDelegate.keywords = analysis.keywords ?? [];
+    _searchDelegate.tags = analysis.tags ?? [];
   }
 
   void _openInitialTarget() {
@@ -229,9 +245,9 @@ class _DocumentPageState extends State<DocumentPage> {
             canPop: searchMode || !dirty || _doc is! OrgDocument,
             onPopInvoked: _onPopInvoked,
             child: Scaffold(
-              // Builder is here to ensure that the primary scroll controller set by the
-              // Scaffold makes it into the body's context
               body: _KeyboardShortcuts(
+                // Builder is here to ensure that the primary scroll controller set by the
+                // Scaffold makes it into the body's context
                 child: Builder(
                   builder: (context) => CustomScrollView(
                     restorationId: 'document_scroll_view',
@@ -242,10 +258,16 @@ class _DocumentPageState extends State<DocumentPage> {
                   ),
                 ),
               ),
-              floatingActionButton: _buildFloatingActionButton(
-                context,
-                searchMode: searchMode,
+              // Builder is here to ensure that the Scaffold makes it into the
+              // body's context
+              floatingActionButton: Builder(
+                builder: (context) => _buildFloatingActionButton(
+                  context,
+                  searchMode: searchMode,
+                ),
               ),
+              bottomSheet:
+                  searchMode ? _searchDelegate.buildBottomSheet() : null,
             ),
           );
         },
@@ -371,7 +393,7 @@ class _DocumentPageState extends State<DocumentPage> {
     return 72 * mBox.toRect().width;
   }
 
-  Widget? _buildFloatingActionButton(
+  Widget _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
   }) =>

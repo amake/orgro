@@ -26,6 +26,18 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension ChildrenIterUtils on Iterable<Widget> {
+  Iterable<Widget> separatedBy(Widget separator) sync* {
+    final iter = iterator;
+    if (!iter.moveNext()) return;
+    yield iter.current;
+    while (iter.moveNext()) {
+      yield separator;
+      yield iter.current;
+    }
+  }
+}
+
 TextBox renderedBounds(
   BuildContext context,
   BoxConstraints constraints,

@@ -7,31 +7,61 @@ class MySearchDelegate {
   MySearchDelegate({
     required this.onQueryChanged,
     required this.onQuerySubmitted,
+    required this.onKeywordsChanged,
+    required this.onTagsChanged,
     String? initialQuery,
   }) : _searchController = TextEditingController(text: initialQuery) {
     _searchController.addListener(debounce(
       _searchQueryChanged,
       const Duration(milliseconds: 500),
     ));
+    _selectedKeywords
+        .addListener(() => onKeywordsChanged(_selectedKeywords.value));
+    _selectedTags.addListener(() => onTagsChanged(_selectedTags.value));
   }
 
   final void Function(String) onQueryChanged;
   final void Function(String) onQuerySubmitted;
+  final void Function(List<String>) onKeywordsChanged;
+  final void Function(List<String>) onTagsChanged;
+  List<String> keywords = [];
+  List<String> tags = [];
+  final ValueNotifier<List<String>> _selectedKeywords = ValueNotifier([]);
+  final ValueNotifier<List<String>> _selectedTags = ValueNotifier([]);
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();
 
   Widget buildSearchField() => SearchField(
         _searchController,
+        keywords: _selectedKeywords,
+        tags: _selectedTags,
         focusNode: _searchFocusNode,
         onClear: _clearSearchQuery,
         onSubmitted: onQuerySubmitted,
+      );
+
+  Widget buildBottomSheet() => BottomSheet(
+        enableDrag: false,
+        showDragHandle: false,
+        onClosing: () {
+          // This should never happen
+          debugPrint('Closing bottom sheet');
+        },
+        builder: (context) => _FilterChipsInput(
+          keywords: keywords,
+          tags: tags,
+          selectedKeywords: _selectedKeywords,
+          selectedTags: _selectedTags,
+        ),
       );
 
   void dispose() {
     _searchController.dispose();
     searchMode.dispose();
     _searchFocusNode.dispose();
+    _selectedKeywords.dispose();
+    _selectedTags.dispose();
   }
 
   void start(BuildContext context) {
@@ -47,19 +77,85 @@ class MySearchDelegate {
 
   void _clearSearchQuery() {
     _searchController.clear();
+    // Apply immediately because we debounce in the listener
     onQuerySubmitted(_searchController.text);
+    // These don't debounce in the listener so we just assign
+    _selectedKeywords.value = [];
+    _selectedTags.value = [];
   }
 
   void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
-  bool get hasQuery => _searchController.value.text.isNotEmpty;
+  bool get hasQuery =>
+      _searchController.value.text.isNotEmpty ||
+      _selectedKeywords.value.isNotEmpty ||
+      _selectedTags.value.isNotEmpty;
 
   String get queryString => _searchController.value.text;
+}
+
+class _FilterChipsInput extends StatelessWidget {
+  const _FilterChipsInput({
+    required this.keywords,
+    required this.tags,
+    required this.selectedKeywords,
+    required this.selectedTags,
+  });
+
+  final List<String> keywords;
+  final List<String> tags;
+  final ValueNotifier<List<String>> selectedKeywords;
+  final ValueNotifier<List<String>> selectedTags;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: selectedKeywords,
+      builder: (context, selectedKeywordsVal, _) {
+        return ValueListenableBuilder(
+          valueListenable: selectedTags,
+          builder: (context, selectedTagsVal, _) {
+            return SizedBox(
+              width: double.infinity,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    for (final keyword in keywords)
+                      if (selectedKeywordsVal.isEmpty)
+                        _KeywordChip(
+                          keyword,
+                          onPressed: () => selectedKeywords.value = [
+                            ...selectedKeywordsVal,
+                            keyword
+                          ],
+                        ),
+                    for (final tag in tags)
+                      if (!selectedTagsVal.contains(tag))
+                        _TagChip(
+                          tag,
+                          onPressed: () =>
+                              selectedTags.value = [...selectedTagsVal, tag],
+                        ),
+                  ]
+                      .separatedBy(const SizedBox(width: 8))
+                      .toList(growable: false),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
+    required this.keywords,
+    required this.tags,
     required this.focusNode,
     this.onClear,
     this.onSubmitted,
@@ -67,6 +163,8 @@ class SearchField extends StatelessWidget {
   });
   final TextEditingController _controller;
   final FocusNode focusNode;
+  final ValueNotifier<List<String>> keywords;
+  final ValueNotifier<List<String>> tags;
   final VoidCallback? onClear;
   final void Function(String)? onSubmitted;
 
@@ -80,35 +178,110 @@ class SearchField extends StatelessWidget {
     final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(hintColor: color),
-      child: TextField(
-        autofocus: true,
-        focusNode: focusNode,
-        style: style,
-        controller: _controller,
-        textInputAction: TextInputAction.search,
-        cursorColor: theme.colorScheme.secondary,
-        onSubmitted: onSubmitted,
-        decoration: InputDecoration(
-          hintText: AppLocalizations.of(context)!.hintTextSearch,
-          border: InputBorder.none,
-          prefixIcon: IconTheme.merge(
-            data: iconTheme,
-            child: const Icon(Icons.search),
-          ),
-          suffixIcon: IconTheme.merge(
-            data: iconTheme,
-            child: ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _controller,
-              builder: (context, value, child) =>
-                  value.text.isNotEmpty ? child! : const SizedBox.shrink(),
-              child: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: onClear,
+      child: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ValueListenableBuilder(
+            valueListenable: keywords,
+            builder: (context, keywordsVal, _) => ValueListenableBuilder(
+              valueListenable: tags,
+              builder: (context, tagsVal, _) => Row(
+                children: [
+                  ...[
+                    for (final keyword in keywordsVal)
+                      _KeywordChip(
+                        keyword,
+                        onDeleted: () => keywords.value = List.of(keywordsVal)
+                          ..remove(keyword),
+                      ),
+                  ].separatedBy(const SizedBox(width: 8)),
+                  ...[
+                    for (final tag in tagsVal)
+                      _TagChip(
+                        tag,
+                        onDeleted: () =>
+                            tags.value = List.of(tagsVal)..remove(tag),
+                      ),
+                  ].separatedBy(const SizedBox(width: 8)),
+                  if (keywordsVal.isNotEmpty || tagsVal.isNotEmpty)
+                    const Icon(Icons.drag_indicator),
+                  ConstrainedBox(
+                    constraints: constraints.copyWith(
+                        maxWidth: keywordsVal.isNotEmpty || tagsVal.isNotEmpty
+                            ? constraints.maxWidth - IconTheme.of(context).size!
+                            : constraints.maxWidth),
+                    child: TextField(
+                      autofocus: true,
+                      focusNode: focusNode,
+                      style: style,
+                      controller: _controller,
+                      textInputAction: TextInputAction.search,
+                      cursorColor: theme.colorScheme.secondary,
+                      onSubmitted: onSubmitted,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.hintTextSearch,
+                        border: InputBorder.none,
+                        prefixIcon: IconTheme.merge(
+                          data: iconTheme,
+                          child: const Icon(Icons.search),
+                        ),
+                        suffixIcon: IconTheme.merge(
+                          data: iconTheme,
+                          child: ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _controller,
+                            builder: (context, value, child) =>
+                                value.text.isNotEmpty
+                                    ? child!
+                                    : const SizedBox.shrink(),
+                            child: IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: onClear,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _KeywordChip extends StatelessWidget {
+  const _KeywordChip(this.keyword, {this.onPressed, this.onDeleted});
+  final String keyword;
+  final VoidCallback? onPressed;
+  final VoidCallback? onDeleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputChip(
+      avatar: const Icon(Icons.check),
+      label: Text(keyword),
+      onPressed: onPressed,
+      onDeleted: onDeleted,
+    );
+  }
+}
+
+class _TagChip extends StatelessWidget {
+  const _TagChip(this.tag, {this.onPressed, this.onDeleted});
+  final String tag;
+  final VoidCallback? onPressed;
+  final VoidCallback? onDeleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputChip(
+      avatar: const Icon(Icons.label),
+      label: Text(tag),
+      onPressed: onPressed,
+      onDeleted: onDeleted,
     );
   }
 }

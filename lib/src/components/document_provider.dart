@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
@@ -202,10 +203,27 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
         }
         return true;
       });
+
+      final keywords = <String>{};
+      final tags = <String>{};
+      doc.visitSections((section) {
+        final keyword = section.headline.keyword?.value;
+        if (keyword != null) {
+          keywords.add(keyword);
+        }
+        final sectionTags = section.headline.tags;
+        if (sectionTags != null) {
+          tags.addAll(sectionTags.values);
+        }
+        return true;
+      });
+
       return DocumentAnalysis(
         hasRemoteImages: hasRemoteImages,
         hasRelativeLinks: hasRelativeLinks,
         hasEncryptedContent: hasEncryptedContent,
+        keywords: keywords.toList(growable: false),
+        tags: tags.toList(growable: false),
       );
     });
 
@@ -214,20 +232,31 @@ class DocumentAnalysis {
     this.hasRemoteImages,
     this.hasRelativeLinks,
     this.hasEncryptedContent,
+    this.keywords,
+    this.tags,
   });
 
   final bool? hasRemoteImages;
   final bool? hasRelativeLinks;
   final bool? hasEncryptedContent;
+  final List<String>? keywords;
+  final List<String>? tags;
 
   @override
   bool operator ==(Object other) =>
       other is DocumentAnalysis &&
       hasRemoteImages == other.hasRemoteImages &&
       hasRelativeLinks == other.hasRelativeLinks &&
-      hasEncryptedContent == other.hasEncryptedContent;
+      hasEncryptedContent == other.hasEncryptedContent &&
+      listEquals(keywords, other.keywords) &&
+      listEquals(tags, other.tags);
 
   @override
-  int get hashCode =>
-      Object.hash(hasRemoteImages, hasRelativeLinks, hasEncryptedContent);
+  int get hashCode => Object.hash(
+        hasRemoteImages,
+        hasRelativeLinks,
+        hasEncryptedContent,
+        keywords == null ? null : Object.hashAll(keywords!),
+        tags == null ? null : Object.hashAll(tags!),
+      );
 }
