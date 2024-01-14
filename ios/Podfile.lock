@@ -63,7 +63,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_charset_detector_ios: 5157d0104855b9deb78e1395515a287197bc2d55
   flutter_tex_js_ios: babbfcf08c2586a67d7ee713dbb5e8acdff19dd6
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -74,6 +74,6 @@ SPEC CHECKSUMS:
   UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
-PODFILE CHECKSUM: 7e4bf43f93927ec900e3cefd2ac8cc0a12d14d07
+PODFILE CHECKSUM: 12493ef27cb9170072186c3bbc894b59f1f9ea5d
 
 COCOAPODS: 1.14.3
