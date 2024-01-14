@@ -19,9 +19,11 @@ class MySearchDelegate {
   final void Function(String) onQuerySubmitted;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
+  final FocusNode _searchFocusNode = FocusNode();
 
   Widget buildSearchField() => SearchField(
         _searchController,
+        focusNode: _searchFocusNode,
         onClear: _clearSearchQuery,
         onSubmitted: onQuerySubmitted,
       );
@@ -29,12 +31,14 @@ class MySearchDelegate {
   void dispose() {
     _searchController.dispose();
     searchMode.dispose();
+    _searchFocusNode.dispose();
   }
 
   void start(BuildContext context) {
     ModalRoute.of(context)!
         .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
     searchMode.value = true;
+    _searchFocusNode.requestFocus();
   }
 
   void _stopSearch() {
@@ -56,11 +60,13 @@ class MySearchDelegate {
 class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
+    required this.focusNode,
     this.onClear,
     this.onSubmitted,
     super.key,
   });
   final TextEditingController _controller;
+  final FocusNode focusNode;
   final VoidCallback? onClear;
   final void Function(String)? onSubmitted;
 
@@ -76,6 +82,7 @@ class SearchField extends StatelessWidget {
       data: theme.copyWith(hintColor: color),
       child: TextField(
         autofocus: true,
+        focusNode: focusNode,
         style: style,
         controller: _controller,
         textInputAction: TextInputAction.search,
