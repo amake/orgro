@@ -150,13 +150,6 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Iterable<Widget> _actions(bool searchMode) sync* {
-    // Disused in favor of Floating Action Button:
-    // if (!searchMode) {
-    //   yield SearchButton(
-    //     hasQuery: _searchDelegate.hasQuery,
-    //     onPressed: () => _searchDelegate.start(context),
-    //   );
-    // }
     final viewSettings = _viewSettings;
     if (!searchMode || _biggishScreen) {
       yield IconButton(

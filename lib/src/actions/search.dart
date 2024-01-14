@@ -53,48 +53,6 @@ class MySearchDelegate {
   String get queryString => _searchController.value.text;
 }
 
-class SearchButton extends StatelessWidget {
-  const SearchButton({
-    required this.hasQuery,
-    required this.onPressed,
-    super.key,
-  });
-  final VoidCallback onPressed;
-  final bool hasQuery;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: onPressed,
-        ),
-        // Badge indicating an active query. The size and positioning is
-        // manually adjusted to match the icon it adorns. The icon is assumed to
-        // take up an a kMinInteractiveDimension × kMinInteractiveDimension
-        // area.
-        Positioned(
-          top: kMinInteractiveDimension / 3,
-          right: kMinInteractiveDimension / 3,
-          child: Visibility(
-            visible: hasQuery,
-            child: Container(
-              height: kMinInteractiveDimension / 6,
-              width: kMinInteractiveDimension / 6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
