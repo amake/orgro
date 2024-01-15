@@ -65,7 +65,7 @@ class _DocumentPageState extends State<DocumentPage> {
     super.initState();
     _searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
-        if (query.length > 3) {
+        if (query.isEmpty || query.length > 3) {
           _doQuery(query);
         }
       },
@@ -131,15 +131,7 @@ class _DocumentPageState extends State<DocumentPage> {
     ];
   }
 
-  void _doQuery(String query) {
-    final pattern = RegExp(
-      RegExp.escape(query),
-      unicode: true,
-      caseSensitive: false,
-    );
-    OrgController.of(context).search(pattern);
-    _viewSettings.queryString = query;
-  }
+  void _doQuery(String query) => _viewSettings.queryString = query;
 
   @override
   void dispose() {

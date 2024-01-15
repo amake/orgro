@@ -90,27 +90,39 @@ class _DocumentPageWrapper extends StatelessWidget {
         context,
         // Get ViewSettings into the context
         child: Builder(
-          builder: (context) => OrgController(
-            root: docProvider.doc,
-            settings: ViewSettings.of(context).readerMode
-                ? OrgSettings.hideMarkup
-                : const OrgSettings(),
-            interpretEmbeddedSettings: true,
-            // errorHandler is invoked during build, so we need to schedule the
-            // snack bar for after the frame
-            errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
-                (_) => showErrorSnackBar(context, OrgroError.from(e))),
-            restorationId: 'org_page:${dataSource.id}',
-            child: DocumentPage(
-              title: dataSource.name,
-              initialTarget: target,
-            ),
-          ),
+          builder: (context) {
+            final viewSettings = ViewSettings.of(context);
+            return OrgController(
+              root: docProvider.doc,
+              settings: viewSettings.readerMode
+                  ? OrgSettings.hideMarkup
+                  : const OrgSettings(),
+              interpretEmbeddedSettings: true,
+              searchQuery: _searchPattern(viewSettings.queryString),
+              // errorHandler is invoked during build, so we need to schedule the
+              // snack bar for after the frame
+              errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => showErrorSnackBar(context, OrgroError.from(e))),
+              restorationId: 'org_page:${dataSource.id}',
+              child: DocumentPage(
+                title: dataSource.name,
+                initialTarget: target,
+              ),
+            );
+          },
         ),
       ),
     );
   }
 }
+
+Pattern? _searchPattern(String? queryString) => queryString == null
+    ? null
+    : RegExp(
+        RegExp.escape(queryString),
+        unicode: true,
+        caseSensitive: false,
+      );
 
 Future<OrgSection?> narrow(
     BuildContext context, DataSource dataSource, OrgSection section) async {
@@ -127,14 +139,16 @@ Future<OrgSection?> narrow(
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
+            final viewSettings = ViewSettings.of(context);
             return OrgController.defaults(
               orgController,
               // Continue to use the true document root so that links to sections
               // outside the narrowed section can be resolved
               root: orgController.root,
-              settings: ViewSettings.of(context).readerMode
+              settings: viewSettings.readerMode
                   ? OrgSettings.hideMarkup
                   : const OrgSettings(),
+              searchQuery: _searchPattern(viewSettings.queryString),
               child: DocumentPage(
                 title: AppLocalizations.of(context)!
                     .pageTitleNarrow(dataSource.name),
