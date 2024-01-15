@@ -99,6 +99,7 @@ class _DocumentPageWrapper extends StatelessWidget {
                   : const OrgSettings(),
               interpretEmbeddedSettings: true,
               searchQuery: _searchPattern(viewSettings.queryString),
+              sparseQuery: _sparseQuery(viewSettings),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame
               errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
@@ -123,6 +124,17 @@ Pattern? _searchPattern(String? queryString) => queryString == null
         unicode: true,
         caseSensitive: false,
       );
+
+OrgQueryMatcher? _sparseQuery(InheritedViewSettings viewSettings) {
+  if (viewSettings.filterKeywords.isEmpty && viewSettings.filterTags.isEmpty) {
+    return null;
+  }
+  return OrgQueryAndMatcher([
+    ...viewSettings.filterKeywords.map((value) =>
+        OrgQueryPropertyMatcher(property: 'TODO', operator: '=', value: value)),
+    ...viewSettings.filterTags.map((value) => OrgQueryTagMatcher(value)),
+  ]);
+}
 
 Future<OrgSection?> narrow(
     BuildContext context, DataSource dataSource, OrgSection section) async {
@@ -149,6 +161,7 @@ Future<OrgSection?> narrow(
                   ? OrgSettings.hideMarkup
                   : const OrgSettings(),
               searchQuery: _searchPattern(viewSettings.queryString),
+              sparseQuery: _sparseQuery(viewSettings),
               child: DocumentPage(
                 title: AppLocalizations.of(context)!
                     .pageTitleNarrow(dataSource.name),
