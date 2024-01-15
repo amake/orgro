@@ -71,14 +71,8 @@ class _DocumentPageState extends State<DocumentPage> {
       },
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
-      onKeywordsChanged: (keywords) {
-        // TODO(aaron): implement
-        print('AMK keywords changed: $keywords');
-      },
-      onTagsChanged: (tags) {
-        // TODO(aaron): implement
-        print('AMK tags changed: $tags');
-      },
+      onKeywordsChanged: (value) => _viewSettings.filterKeywords = value,
+      onTagsChanged: (value) => _viewSettings.filterTags = value,
     );
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => _canResolveRelativeLinks = value),

@@ -15,6 +15,8 @@ enum DecryptPolicy { deny, ask }
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
+const kDefaultFilterKeywords = <String>[];
+const kDefaultFilterTags = <String>[];
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
 const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;

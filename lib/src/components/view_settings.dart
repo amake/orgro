@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
@@ -74,6 +75,14 @@ class InheritedViewSettings extends InheritedWidget {
   String? get queryString => data.queryString;
   set queryString(String? value) => _update(data.copyWith(queryString: value));
 
+  List<String> get filterKeywords => data.filterKeywords;
+  set filterKeywords(List<String> value) =>
+      _update(data.copyWith(filterKeywords: value));
+
+  List<String> get filterTags => data.filterTags;
+  set filterTags(List<String> value) =>
+      _update(data.copyWith(filterTags: value));
+
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
     _prefs.setReaderMode(value);
@@ -127,6 +136,8 @@ class ViewSettingsData {
       textScale: prefs.textScale ?? kDefaultTextScale,
       fontFamily: prefs.fontFamily ?? kDefaultFontFamily,
       queryString: kDefaultQueryString,
+      filterKeywords: kDefaultFilterKeywords,
+      filterTags: kDefaultFilterTags,
       readerMode: prefs.readerMode ?? kDefaultReaderMode,
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
@@ -141,6 +152,8 @@ class ViewSettingsData {
     required this.textScale,
     required this.fontFamily,
     required this.queryString,
+    required this.filterKeywords,
+    required this.filterTags,
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -152,6 +165,8 @@ class ViewSettingsData {
   final double textScale;
   final String fontFamily;
   final String? queryString;
+  final List<String> filterKeywords;
+  final List<String> filterTags;
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -163,6 +178,8 @@ class ViewSettingsData {
     double? textScale,
     String? fontFamily,
     String? queryString,
+    List<String>? filterKeywords,
+    List<String>? filterTags,
     bool? readerMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -174,6 +191,8 @@ class ViewSettingsData {
         textScale: textScale ?? this.textScale,
         fontFamily: fontFamily ?? this.fontFamily,
         queryString: queryString ?? this.queryString,
+        filterKeywords: filterKeywords ?? this.filterKeywords,
+        filterTags: filterTags ?? this.filterTags,
         readerMode: readerMode ?? this.readerMode,
         remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -188,6 +207,8 @@ class ViewSettingsData {
       textScale == other.textScale &&
       fontFamily == other.fontFamily &&
       queryString == other.queryString &&
+      listEquals(filterKeywords, other.filterKeywords) &&
+      listEquals(filterTags, other.filterTags) &&
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -200,6 +221,8 @@ class ViewSettingsData {
         textScale,
         fontFamily,
         queryString,
+        Object.hashAll(filterKeywords),
+        Object.hashAll(filterTags),
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,
