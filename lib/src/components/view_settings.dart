@@ -83,6 +83,10 @@ class InheritedViewSettings extends InheritedWidget {
   set filterTags(List<String> value) =>
       _update(data.copyWith(filterTags: value));
 
+  List<String> get filterPriorities => data.filterPriorities;
+  set filterPriorities(List<String> value) =>
+      _update(data.copyWith(filterPriorities: value));
+
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
     _prefs.setReaderMode(value);
@@ -138,6 +142,7 @@ class ViewSettingsData {
       queryString: kDefaultQueryString,
       filterKeywords: kDefaultFilterKeywords,
       filterTags: kDefaultFilterTags,
+      filterPriorities: kDefaultFilterPriorities,
       readerMode: prefs.readerMode ?? kDefaultReaderMode,
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
@@ -154,6 +159,7 @@ class ViewSettingsData {
     required this.queryString,
     required this.filterKeywords,
     required this.filterTags,
+    required this.filterPriorities,
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -167,6 +173,7 @@ class ViewSettingsData {
   final String? queryString;
   final List<String> filterKeywords;
   final List<String> filterTags;
+  final List<String> filterPriorities;
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -180,6 +187,7 @@ class ViewSettingsData {
     String? queryString,
     List<String>? filterKeywords,
     List<String>? filterTags,
+    List<String>? filterPriorities,
     bool? readerMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -193,6 +201,7 @@ class ViewSettingsData {
         queryString: queryString ?? this.queryString,
         filterKeywords: filterKeywords ?? this.filterKeywords,
         filterTags: filterTags ?? this.filterTags,
+        filterPriorities: filterPriorities ?? this.filterPriorities,
         readerMode: readerMode ?? this.readerMode,
         remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -209,6 +218,7 @@ class ViewSettingsData {
       queryString == other.queryString &&
       listEquals(filterKeywords, other.filterKeywords) &&
       listEquals(filterTags, other.filterTags) &&
+      listEquals(filterPriorities, other.filterPriorities) &&
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -223,6 +233,7 @@ class ViewSettingsData {
         queryString,
         Object.hashAll(filterKeywords),
         Object.hashAll(filterTags),
+        Object.hashAll(filterPriorities),
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,

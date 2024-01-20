@@ -206,6 +206,7 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
 
       final keywords = <String>{};
       final tags = <String>{};
+      final priorities = <String>{};
       doc.visitSections((section) {
         final keyword = section.headline.keyword?.value;
         if (keyword != null) {
@@ -214,6 +215,10 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
         final sectionTags = section.headline.tags;
         if (sectionTags != null) {
           tags.addAll(sectionTags.values);
+        }
+        final priority = section.headline.priority?.value;
+        if (priority != null) {
+          priorities.add(priority);
         }
         return true;
       });
@@ -224,6 +229,7 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
         hasEncryptedContent: hasEncryptedContent,
         keywords: keywords.toList(growable: false),
         tags: tags.toList(growable: false),
+        priorities: priorities.toList(growable: false),
       );
     });
 
@@ -234,6 +240,7 @@ class DocumentAnalysis {
     this.hasEncryptedContent,
     this.keywords,
     this.tags,
+    this.priorities,
   });
 
   final bool? hasRemoteImages;
@@ -241,6 +248,7 @@ class DocumentAnalysis {
   final bool? hasEncryptedContent;
   final List<String>? keywords;
   final List<String>? tags;
+  final List<String>? priorities;
 
   @override
   bool operator ==(Object other) =>
@@ -249,7 +257,8 @@ class DocumentAnalysis {
       hasRelativeLinks == other.hasRelativeLinks &&
       hasEncryptedContent == other.hasEncryptedContent &&
       listEquals(keywords, other.keywords) &&
-      listEquals(tags, other.tags);
+      listEquals(tags, other.tags) &&
+      listEquals(priorities, other.priorities);
 
   @override
   int get hashCode => Object.hash(
@@ -258,5 +267,6 @@ class DocumentAnalysis {
         hasEncryptedContent,
         keywords == null ? null : Object.hashAll(keywords!),
         tags == null ? null : Object.hashAll(tags!),
+        priorities == null ? null : Object.hashAll(priorities!),
       );
 }

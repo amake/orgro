@@ -73,6 +73,7 @@ class _DocumentPageState extends State<DocumentPage> {
       initialQuery: widget.initialQuery,
       onKeywordsChanged: (value) => _viewSettings.filterKeywords = value,
       onTagsChanged: (value) => _viewSettings.filterTags = value,
+      onPrioritiesChanged: (value) => _viewSettings.filterPriorities = value,
     );
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => _canResolveRelativeLinks = value),
@@ -86,6 +87,7 @@ class _DocumentPageState extends State<DocumentPage> {
     final analysis = DocumentProvider.of(context).analysis;
     _searchDelegate.keywords = analysis.keywords ?? [];
     _searchDelegate.tags = analysis.tags ?? [];
+    _searchDelegate.priorities = analysis.priorities ?? [];
   }
 
   void _openInitialTarget() {

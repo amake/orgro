@@ -126,13 +126,17 @@ Pattern? _searchPattern(String? queryString) => queryString == null
       );
 
 OrgQueryMatcher? _sparseQuery(InheritedViewSettings viewSettings) {
-  if (viewSettings.filterKeywords.isEmpty && viewSettings.filterTags.isEmpty) {
+  if (viewSettings.filterKeywords.isEmpty &&
+      viewSettings.filterTags.isEmpty &&
+      viewSettings.filterPriorities.isEmpty) {
     return null;
   }
   return OrgQueryAndMatcher([
     ...viewSettings.filterKeywords.map((value) =>
         OrgQueryPropertyMatcher(property: 'TODO', operator: '=', value: value)),
     ...viewSettings.filterTags.map((value) => OrgQueryTagMatcher(value)),
+    ...viewSettings.filterPriorities.map((value) => OrgQueryPropertyMatcher(
+        property: 'PRIORITY', operator: '=', value: value)),
   ]);
 }
 
