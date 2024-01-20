@@ -1,0 +1,62 @@
+This file has a variety of sections with filterable properties for testing
+sparse trees.
+
+* foo                                                               :foo:top:
+foo content
+
+** sub-foo-1                                                   :foo:sub:sub1:
+sub-foo-1 content
+
+*** sub-sub-foo-1                                        :foo:subsub:subsub1:
+sub-sub-foo-1 content
+
+**** sub-sub-sub-foo-1                             :foo:subsubsub:subsubsub1:
+sub-sub-sub-foo-1 content
+
+** sub-foo-2                                                   :foo:sub:sub2:
+sub-foo-2 content
+
+*** sub-sub-foo-2
+sub-sub-foo-2 content
+
+* TODO bar                                                              :bar:
+bar content
+
+** TODO sub-bar-1                                                       :bar:
+sub-bar-1 content
+
+*** sub-sub-bar-1
+sub-sub-bar-1 content
+
+** TODO sub-bar-2                                                       :bar:
+sub-bar-2 content
+
+*** sub-sub-bar-2
+sub-sub-bar-2 content
+
+** DONE sub-bar-3                                                       :bar:
+sub-bar-3 content
+
+*** sub-sub-bar-3
+sub-sub-bar-3 content
+
+* [#A] baz                                                              :baz:
+baz content
+
+** [#A] sub-baz-1                                                       :baz:
+sub-baz-1 content
+
+*** sub-sub-baz-1
+sub-sub-baz-1 content
+
+** [#A] sub-baz-2                                                       :baz:
+sub-baz-2 content
+
+*** sub-sub-baz-2
+sub-sub-baz-2 content
+
+** [#C] sub-baz-3                                                       :baz:
+sub-baz-3 content
+
+*** sub-sub-baz-3
+sub-sub-baz-3 content

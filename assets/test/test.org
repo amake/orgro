@@ -1,5 +1,9 @@
 #+STARTUP: showall
 
+* Visibility
+
+- [[file:visibility-sparse.org][Sparse trees]]
+
 * Local variables
 
 Normal cases
