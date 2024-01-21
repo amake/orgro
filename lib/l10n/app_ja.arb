@@ -83,6 +83,7 @@
   "inputPasswordDialogTitle": "パスワード入力",
 
   "inputCustomFilterDialogTitle": "カスタムフィルタ",
+  "inputCustomFilterDialogHistoryButton": "履歴",
 
   "decryptingProgressDialogTitle": "復号中…",
   "encryptingProgressDialogTitle": "暗号化中…",

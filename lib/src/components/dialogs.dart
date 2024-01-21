@@ -132,7 +132,6 @@ class ProgressIndicatorDialog extends StatelessWidget {
   }
 }
 
-// TODO(aaron): remember query history
 class InputFilterQueryDialog extends StatefulWidget {
   const InputFilterQueryDialog({super.key});
 
@@ -157,15 +156,14 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final history = Preferences.of(context).customFilterQueries;
     return AlertDialog(
       icon: const Icon(Icons.filter_alt),
       title: Text(AppLocalizations.of(context)!.inputCustomFilterDialogTitle),
       content: TextField(
         controller: _controller,
         autofocus: true,
-        onSubmitted: (value) {
-          if (_validate(value)) Navigator.pop(context, value);
-        },
+        onSubmitted: _confirm,
       ),
       actions: [
         _DialogButton(
@@ -176,6 +174,15 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
             mode: LaunchMode.externalApplication,
           ),
         ),
+        if (history.isNotEmpty)
+          _DialogButton(
+            text: AppLocalizations.of(context)!
+                .inputCustomFilterDialogHistoryButton,
+            onPressed: () async {
+              final entry = await _pickFromHistory(context, history);
+              if (entry != null) _controller.text = entry;
+            },
+          ),
         _DialogButton(
           text: AppLocalizations.of(context)!.dialogActionCancel,
           onPressed: () => Navigator.pop(context),
@@ -184,9 +191,8 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
           valueListenable: _controller,
           builder: (context, value, _) => _DialogButton(
             text: AppLocalizations.of(context)!.dialogActionConfirm,
-            onPressed: _validate(value.text)
-                ? () => Navigator.pop(context, value.text)
-                : null,
+            onPressed:
+                _validate(value.text) ? () => _confirm(value.text) : null,
           ),
         ),
       ],
@@ -203,6 +209,35 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
       return false;
     }
   }
+
+  Future<void> _confirm(String value) async {
+    if (!_validate(value)) return;
+    _updateHistory(value);
+    Navigator.pop(context, value);
+  }
+
+  void _updateHistory(String value) {
+    final prefs = Preferences.of(context);
+    if (!prefs.customFilterQueries.contains(value)) {
+      prefs.setCustomFilterQueries(
+          [value, ...prefs.customFilterQueries.take(9)]);
+    }
+  }
+
+  Future<String?> _pickFromHistory(
+          BuildContext context, List<String> history) =>
+      showDialog<String>(
+        context: context,
+        builder: (context) => SimpleDialog(
+          children: [
+            for (final entry in history)
+              ListTile(
+                title: Text(entry),
+                onTap: () => Navigator.pop(context, entry),
+              )
+          ],
+        ),
+      );
 }
 
 class _DialogButton extends StatelessWidget {

@@ -17,6 +17,7 @@ PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
       await DefaultCacheManager().emptyCache();
       await prefs.setRemoteImagesPolicy(kDefaultRemoteImagesPolicy);
       await prefs.setSaveChangesPolicy(kDefaultSaveChangesPolicy);
+      await prefs.setCustomFilterQueries(const []);
       for (final dir in prefs.accessibleDirs) {
         try {
           await disposeNativeSourceIdentifier(dir);

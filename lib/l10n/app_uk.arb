@@ -83,6 +83,7 @@
   "inputPasswordDialogTitle": "Enter password",
 
   "inputCustomFilterDialogTitle": "Custom filter query",
+  "inputCustomFilterDialogHistoryButton": "History",
 
   "decryptingProgressDialogTitle": "Decrypting…",
   "encryptingProgressDialogTitle": "Encrypting…",

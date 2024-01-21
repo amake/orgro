@@ -37,6 +37,7 @@ const _kSaveChangesPolicyKey = 'save_changes_policy';
 const _kDecryptPolicyKey = 'decrypt_policy';
 const _kRecentFilesJsonKey = 'recent_files_json';
 const _kAccessibleDirectoriesKey = 'accessible_directories_json';
+const _kCustomFilterQueriesKey = 'custom_filter_queries_json';
 const _kFullWidthKey = 'full_width';
 
 const _kThemeModeKey = 'theme_mode';
@@ -110,6 +111,12 @@ class Preferences extends InheritedWidget {
 
   Future<bool> setAccessibleDirs(List<String> value) =>
       _prefs.setStringList(_kAccessibleDirectoriesKey, value);
+
+  List<String> get customFilterQueries =>
+      _prefs.getStringList(_kCustomFilterQueriesKey) ?? [];
+
+  Future<bool> setCustomFilterQueries(List<String> value) =>
+      _prefs.setStringList(_kCustomFilterQueriesKey, value);
 
   bool? get fullWidth => _prefs.getBool(_kFullWidthKey);
 
