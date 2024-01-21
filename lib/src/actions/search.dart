@@ -12,7 +12,10 @@ class MySearchDelegate {
     required this.onQuerySubmitted,
     required this.onFilterChanged,
     String? initialQuery,
-  }) : _searchController = TextEditingController(text: initialQuery) {
+    FilterData? initialFilter,
+  })  : _searchController = TextEditingController(text: initialQuery),
+        _selectedFilter =
+            ValueNotifier(initialFilter ?? FilterData.defaults()) {
     _searchController.addListener(debounce(
       _searchQueryChanged,
       const Duration(milliseconds: 500),
@@ -26,8 +29,7 @@ class MySearchDelegate {
   List<String> keywords = [];
   List<String> tags = [];
   List<String> priorities = [];
-  final ValueNotifier<FilterData> _selectedFilter =
-      ValueNotifier(FilterData.defaults());
+  final ValueNotifier<FilterData> _selectedFilter;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();

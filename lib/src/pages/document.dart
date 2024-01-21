@@ -32,12 +32,14 @@ class DocumentPage extends StatefulWidget {
     required this.title,
     this.initialTarget,
     this.initialQuery,
+    this.initialFilter,
     super.key,
   });
 
   final String title;
   final String? initialTarget;
   final String? initialQuery;
+  final FilterData? initialFilter;
 
   @override
   State createState() => _DocumentPageState();
@@ -71,6 +73,7 @@ class _DocumentPageState extends State<DocumentPage> {
       },
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
+      initialFilter: widget.initialFilter,
       onFilterChanged: (value) => _viewSettings.filterData = value,
     );
     canObtainNativeDirectoryPermissions().then(

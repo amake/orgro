@@ -170,6 +170,7 @@ Future<OrgSection?> narrow(
                 title: AppLocalizations.of(context)!
                     .pageTitleNarrow(dataSource.name),
                 initialQuery: viewSettings.queryString,
+                initialFilter: viewSettings.filterData,
               ),
             );
           }),
