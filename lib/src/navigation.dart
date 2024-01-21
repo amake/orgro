@@ -130,6 +130,8 @@ OrgQueryMatcher? _sparseQuery(FilterData filterData) {
     return null;
   }
   return OrgQueryAndMatcher([
+    if (filterData.customFilter.isNotEmpty)
+      OrgQueryMatcher.fromMarkup(filterData.customFilter),
     ...filterData.keywords.map((value) =>
         OrgQueryPropertyMatcher(property: 'TODO', operator: '=', value: value)),
     ...filterData.tags.map((value) => OrgQueryTagMatcher(value)),

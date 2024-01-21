@@ -131,3 +131,94 @@ class ProgressIndicatorDialog extends StatelessWidget {
     );
   }
 }
+
+// TODO(aaron): remember query history
+class InputFilterQueryDialog extends StatefulWidget {
+  const InputFilterQueryDialog({super.key});
+
+  @override
+  State<InputFilterQueryDialog> createState() => _InputFilterQueryDialogState();
+}
+
+class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.filter_alt),
+      title: Text(AppLocalizations.of(context)!.inputCustomFilterDialogTitle),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        onSubmitted: (value) {
+          if (_validate(value)) Navigator.pop(context, value);
+        },
+      ),
+      actions: [
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionHelp,
+          onPressed: () => launchUrl(
+            Uri.parse(
+                'https://orgmode.org/manual/Matching-tags-and-properties.html'),
+            mode: LaunchMode.externalApplication,
+          ),
+        ),
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionCancel,
+          onPressed: () => Navigator.pop(context),
+        ),
+        ValueListenableBuilder(
+          valueListenable: _controller,
+          builder: (context, value, _) => _DialogButton(
+            text: AppLocalizations.of(context)!.dialogActionConfirm,
+            onPressed: _validate(value.text)
+                ? () => Navigator.pop(context, value.text)
+                : null,
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool _validate(String value) {
+    if (value.isEmpty) return false;
+
+    try {
+      OrgQueryMatcher.fromMarkup(value);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+}
+
+class _DialogButton extends StatelessWidget {
+  const _DialogButton({required this.text, required this.onPressed});
+
+  final VoidCallback? onPressed;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text.toUpperCase(),
+        textAlign: TextAlign.end,
+      ),
+    );
+  }
+}

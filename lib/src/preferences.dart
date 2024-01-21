@@ -18,6 +18,7 @@ const String? kDefaultQueryString = null;
 const kDefaultFilterKeywords = <String>[];
 const kDefaultFilterTags = <String>[];
 const kDefaultFilterPriorities = <String>[];
+const kDefaultCustomFilter = '';
 const kDefaultReaderMode = false;
 const kDefaultRemoteImagesPolicy = RemoteImagesPolicy.ask;
 const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;

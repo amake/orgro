@@ -36,11 +36,15 @@
   "hintTextSearch": "Шукати...",
   "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
   "searchResultSelection": "{current} / {total}",
+  "customFilterChipName": "Custom",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",
 
   "dialogTitleError": "Помилка",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "Cancel",
+  "dialogActionHelp": "Help",
 
   "pageTitleError": "Помилка",
   "pageTitleLoading": "Завантаження...",
@@ -77,6 +81,8 @@
   "savedMessage": "Saved",
 
   "inputPasswordDialogTitle": "Enter password",
+
+  "inputCustomFilterDialogTitle": "Custom filter query",
 
   "decryptingProgressDialogTitle": "Decrypting…",
   "encryptingProgressDialogTitle": "Encrypting…",

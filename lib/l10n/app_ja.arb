@@ -36,11 +36,15 @@
   "hintTextSearch": "検索...",
   "searchHits": "{n}件",
   "searchResultSelection": "{current} / {total}",
+  "customFilterChipName": "カスタム",
 
   "snackbarMessageNeedsDirectoryPermissions": "相対リンクを解決する権限がありません",
   "snackbarActionGrantAccess": "許可する",
 
   "dialogTitleError": "エラー",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "キャンセル",
+  "dialogActionHelp": "ヘルプ",
 
   "pageTitleError": "エラー",
   "pageTitleLoading": "ロード中...",
@@ -77,6 +81,8 @@
   "savedMessage": "保存しました",
 
   "inputPasswordDialogTitle": "パスワード入力",
+
+  "inputCustomFilterDialogTitle": "カスタムフィルタ",
 
   "decryptingProgressDialogTitle": "復号中…",
   "encryptingProgressDialogTitle": "暗号化中…",

@@ -225,19 +225,26 @@ class FilterData {
         keywords: kDefaultFilterKeywords,
         tags: kDefaultFilterTags,
         priorities: kDefaultFilterPriorities,
+        customFilter: kDefaultCustomFilter,
       );
 
   const FilterData({
     required this.keywords,
     required this.tags,
     required this.priorities,
+    required this.customFilter,
   });
 
   final List<String> keywords;
   final List<String> tags;
   final List<String> priorities;
+  final String customFilter;
 
-  bool get isEmpty => keywords.isEmpty && tags.isEmpty && priorities.isEmpty;
+  bool get isEmpty =>
+      keywords.isEmpty &&
+      tags.isEmpty &&
+      priorities.isEmpty &&
+      customFilter.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
 
@@ -245,11 +252,13 @@ class FilterData {
     List<String>? keywords,
     List<String>? tags,
     List<String>? priorities,
+    String? customFilter,
   }) =>
       FilterData(
         keywords: keywords ?? this.keywords,
         tags: tags ?? this.tags,
         priorities: priorities ?? this.priorities,
+        customFilter: customFilter ?? this.customFilter,
       );
 
   @override
@@ -257,12 +266,14 @@ class FilterData {
       other is FilterData &&
       listEquals(keywords, other.keywords) &&
       listEquals(tags, other.tags) &&
-      listEquals(priorities, other.priorities);
+      listEquals(priorities, other.priorities) &&
+      customFilter == other.customFilter;
 
   @override
   int get hashCode => Object.hash(
         Object.hashAll(keywords),
         Object.hashAll(tags),
         Object.hashAll(priorities),
+        customFilter,
       );
 }

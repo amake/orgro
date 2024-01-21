@@ -61,11 +61,15 @@
       }
     }
   },
+  "customFilterChipName": "Custom",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro doesn’t have permission to resolve relative links",
   "snackbarActionGrantAccess": "Grant access",
 
   "dialogTitleError": "Error",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "Cancel",
+  "dialogActionHelp": "Help",
 
   "pageTitleError": "Error",
   "pageTitleLoading": "Loading...",
@@ -107,6 +111,8 @@
   "savedMessage": "Saved",
 
   "inputPasswordDialogTitle": "Enter password",
+
+  "inputCustomFilterDialogTitle": "Custom filter query",
 
   "decryptingProgressDialogTitle": "Decrypting…",
   "encryptingProgressDialogTitle": "Encrypting…",
