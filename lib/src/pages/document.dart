@@ -71,9 +71,7 @@ class _DocumentPageState extends State<DocumentPage> {
       },
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
-      onKeywordsChanged: (value) => _viewSettings.filterKeywords = value,
-      onTagsChanged: (value) => _viewSettings.filterTags = value,
-      onPrioritiesChanged: (value) => _viewSettings.filterPriorities = value,
+      onFilterChanged: (value) => _viewSettings.filterData = value,
     );
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => _canResolveRelativeLinks = value),

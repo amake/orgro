@@ -75,17 +75,8 @@ class InheritedViewSettings extends InheritedWidget {
   String? get queryString => data.queryString;
   set queryString(String? value) => _update(data.copyWith(queryString: value));
 
-  List<String> get filterKeywords => data.filterKeywords;
-  set filterKeywords(List<String> value) =>
-      _update(data.copyWith(filterKeywords: value));
-
-  List<String> get filterTags => data.filterTags;
-  set filterTags(List<String> value) =>
-      _update(data.copyWith(filterTags: value));
-
-  List<String> get filterPriorities => data.filterPriorities;
-  set filterPriorities(List<String> value) =>
-      _update(data.copyWith(filterPriorities: value));
+  FilterData get filterData => data.filterData;
+  set filterData(FilterData value) => _update(data.copyWith(filterData: value));
 
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
@@ -140,9 +131,7 @@ class ViewSettingsData {
       textScale: prefs.textScale ?? kDefaultTextScale,
       fontFamily: prefs.fontFamily ?? kDefaultFontFamily,
       queryString: kDefaultQueryString,
-      filterKeywords: kDefaultFilterKeywords,
-      filterTags: kDefaultFilterTags,
-      filterPriorities: kDefaultFilterPriorities,
+      filterData: FilterData.defaults(),
       readerMode: prefs.readerMode ?? kDefaultReaderMode,
       remoteImagesPolicy:
           prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
@@ -157,9 +146,7 @@ class ViewSettingsData {
     required this.textScale,
     required this.fontFamily,
     required this.queryString,
-    required this.filterKeywords,
-    required this.filterTags,
-    required this.filterPriorities,
+    required this.filterData,
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -171,9 +158,7 @@ class ViewSettingsData {
   final double textScale;
   final String fontFamily;
   final String? queryString;
-  final List<String> filterKeywords;
-  final List<String> filterTags;
-  final List<String> filterPriorities;
+  final FilterData filterData;
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -185,9 +170,7 @@ class ViewSettingsData {
     double? textScale,
     String? fontFamily,
     String? queryString,
-    List<String>? filterKeywords,
-    List<String>? filterTags,
-    List<String>? filterPriorities,
+    FilterData? filterData,
     bool? readerMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -199,9 +182,7 @@ class ViewSettingsData {
         textScale: textScale ?? this.textScale,
         fontFamily: fontFamily ?? this.fontFamily,
         queryString: queryString ?? this.queryString,
-        filterKeywords: filterKeywords ?? this.filterKeywords,
-        filterTags: filterTags ?? this.filterTags,
-        filterPriorities: filterPriorities ?? this.filterPriorities,
+        filterData: filterData ?? this.filterData,
         readerMode: readerMode ?? this.readerMode,
         remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -216,9 +197,7 @@ class ViewSettingsData {
       textScale == other.textScale &&
       fontFamily == other.fontFamily &&
       queryString == other.queryString &&
-      listEquals(filterKeywords, other.filterKeywords) &&
-      listEquals(filterTags, other.filterTags) &&
-      listEquals(filterPriorities, other.filterPriorities) &&
+      filterData == other.filterData &&
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -231,14 +210,59 @@ class ViewSettingsData {
         textScale,
         fontFamily,
         queryString,
-        Object.hashAll(filterKeywords),
-        Object.hashAll(filterTags),
-        Object.hashAll(filterPriorities),
+        filterData,
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,
         saveChangesPolicy,
         decryptPolicy,
         fullWidth,
+      );
+}
+
+class FilterData {
+  factory FilterData.defaults() => const FilterData(
+        keywords: kDefaultFilterKeywords,
+        tags: kDefaultFilterTags,
+        priorities: kDefaultFilterPriorities,
+      );
+
+  const FilterData({
+    required this.keywords,
+    required this.tags,
+    required this.priorities,
+  });
+
+  final List<String> keywords;
+  final List<String> tags;
+  final List<String> priorities;
+
+  bool get isEmpty => keywords.isEmpty && tags.isEmpty && priorities.isEmpty;
+
+  bool get isNotEmpty => !isEmpty;
+
+  FilterData copyWith({
+    List<String>? keywords,
+    List<String>? tags,
+    List<String>? priorities,
+  }) =>
+      FilterData(
+        keywords: keywords ?? this.keywords,
+        tags: tags ?? this.tags,
+        priorities: priorities ?? this.priorities,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      other is FilterData &&
+      listEquals(keywords, other.keywords) &&
+      listEquals(tags, other.tags) &&
+      listEquals(priorities, other.priorities);
+
+  @override
+  int get hashCode => Object.hash(
+        Object.hashAll(keywords),
+        Object.hashAll(tags),
+        Object.hashAll(priorities),
       );
 }

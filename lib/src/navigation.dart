@@ -99,7 +99,7 @@ class _DocumentPageWrapper extends StatelessWidget {
                   : const OrgSettings(),
               interpretEmbeddedSettings: true,
               searchQuery: _searchPattern(viewSettings.queryString),
-              sparseQuery: _sparseQuery(viewSettings),
+              sparseQuery: _sparseQuery(viewSettings.filterData),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame
               errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
@@ -125,17 +125,15 @@ Pattern? _searchPattern(String? queryString) => queryString == null
         caseSensitive: false,
       );
 
-OrgQueryMatcher? _sparseQuery(InheritedViewSettings viewSettings) {
-  if (viewSettings.filterKeywords.isEmpty &&
-      viewSettings.filterTags.isEmpty &&
-      viewSettings.filterPriorities.isEmpty) {
+OrgQueryMatcher? _sparseQuery(FilterData filterData) {
+  if (filterData.isEmpty) {
     return null;
   }
   return OrgQueryAndMatcher([
-    ...viewSettings.filterKeywords.map((value) =>
+    ...filterData.keywords.map((value) =>
         OrgQueryPropertyMatcher(property: 'TODO', operator: '=', value: value)),
-    ...viewSettings.filterTags.map((value) => OrgQueryTagMatcher(value)),
-    ...viewSettings.filterPriorities.map((value) => OrgQueryPropertyMatcher(
+    ...filterData.tags.map((value) => OrgQueryTagMatcher(value)),
+    ...filterData.priorities.map((value) => OrgQueryPropertyMatcher(
         property: 'PRIORITY', operator: '=', value: value)),
   ]);
 }
@@ -165,7 +163,7 @@ Future<OrgSection?> narrow(
                   ? OrgSettings.hideMarkup
                   : const OrgSettings(),
               searchQuery: _searchPattern(viewSettings.queryString),
-              sparseQuery: _sparseQuery(viewSettings),
+              sparseQuery: _sparseQuery(viewSettings.filterData),
               child: DocumentPage(
                 title: AppLocalizations.of(context)!
                     .pageTitleNarrow(dataSource.name),

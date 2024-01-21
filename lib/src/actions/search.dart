@@ -1,48 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/util.dart';
 
 class MySearchDelegate {
   MySearchDelegate({
     required this.onQueryChanged,
     required this.onQuerySubmitted,
-    required this.onKeywordsChanged,
-    required this.onTagsChanged,
-    required this.onPrioritiesChanged,
+    required this.onFilterChanged,
     String? initialQuery,
   }) : _searchController = TextEditingController(text: initialQuery) {
     _searchController.addListener(debounce(
       _searchQueryChanged,
       const Duration(milliseconds: 500),
     ));
-    _selectedKeywords
-        .addListener(() => onKeywordsChanged(_selectedKeywords.value));
-    _selectedTags.addListener(() => onTagsChanged(_selectedTags.value));
-    _selectedPriorities
-        .addListener(() => onPrioritiesChanged(_selectedPriorities.value));
+    _selectedFilter.addListener(() => onFilterChanged(_selectedFilter.value));
   }
 
   final void Function(String) onQueryChanged;
   final void Function(String) onQuerySubmitted;
-  final void Function(List<String>) onKeywordsChanged;
-  final void Function(List<String>) onTagsChanged;
-  final void Function(List<String>) onPrioritiesChanged;
+  final void Function(FilterData) onFilterChanged;
   List<String> keywords = [];
   List<String> tags = [];
   List<String> priorities = [];
-  final ValueNotifier<List<String>> _selectedKeywords = ValueNotifier([]);
-  final ValueNotifier<List<String>> _selectedTags = ValueNotifier([]);
-  final ValueNotifier<List<String>> _selectedPriorities = ValueNotifier([]);
+  final ValueNotifier<FilterData> _selectedFilter =
+      ValueNotifier(FilterData.defaults());
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();
 
   Widget buildSearchField() => SearchField(
         _searchController,
-        keywords: _selectedKeywords,
-        tags: _selectedTags,
-        priorities: _selectedPriorities,
+        filterData: _selectedFilter,
         focusNode: _searchFocusNode,
         onClear: _clearSearchQuery,
         onSubmitted: onQuerySubmitted,
@@ -59,9 +49,7 @@ class MySearchDelegate {
           keywords: keywords,
           tags: tags,
           priorities: priorities,
-          selectedKeywords: _selectedKeywords,
-          selectedTags: _selectedTags,
-          selectedPriorities: _selectedPriorities,
+          selectedFilter: _selectedFilter,
         ),
       );
 
@@ -69,9 +57,7 @@ class MySearchDelegate {
     _searchController.dispose();
     searchMode.dispose();
     _searchFocusNode.dispose();
-    _selectedKeywords.dispose();
-    _selectedTags.dispose();
-    _selectedPriorities.dispose();
+    _selectedFilter.dispose();
   }
 
   void start(BuildContext context) {
@@ -90,18 +76,14 @@ class MySearchDelegate {
     // Apply immediately because we debounce in the listener
     onQuerySubmitted(_searchController.text);
     // These don't debounce in the listener so we just assign
-    _selectedKeywords.value = [];
-    _selectedTags.value = [];
-    _selectedPriorities.value = [];
+    _selectedFilter.value = FilterData.defaults();
   }
 
   void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
   bool get hasQuery =>
       _searchController.value.text.isNotEmpty ||
-      _selectedKeywords.value.isNotEmpty ||
-      _selectedTags.value.isNotEmpty ||
-      _selectedPriorities.value.isNotEmpty;
+      _selectedFilter.value.isNotEmpty;
 
   String get queryString => _searchController.value.text;
 }
@@ -111,64 +93,48 @@ class _FilterChipsInput extends StatelessWidget {
     required this.keywords,
     required this.tags,
     required this.priorities,
-    required this.selectedKeywords,
-    required this.selectedTags,
-    required this.selectedPriorities,
+    required this.selectedFilter,
   });
 
   final List<String> keywords;
   final List<String> tags;
   final List<String> priorities;
-  final ValueNotifier<List<String>> selectedKeywords;
-  final ValueNotifier<List<String>> selectedTags;
-  final ValueNotifier<List<String>> selectedPriorities;
+  final ValueNotifier<FilterData> selectedFilter;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: selectedKeywords,
-      builder: (context, selectedKeywordsVal, _) {
-        return ValueListenableBuilder(
-          valueListenable: selectedTags,
-          builder: (context, selectedTagsVal, _) => ValueListenableBuilder(
-            valueListenable: selectedPriorities,
-            builder: (context, selectedPrioritiesVal, _) => SizedBox(
-              width: double.infinity,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  children: [
-                    for (final keyword in keywords)
-                      if (selectedKeywordsVal.isEmpty)
-                        _KeywordChip(
-                          keyword,
-                          onPressed: () => selectedKeywords.value = [
-                            ...selectedKeywordsVal,
-                            keyword
-                          ],
-                        ),
-                    for (final priority in priorities)
-                      if (selectedPrioritiesVal.isEmpty)
-                        _PriorityChip(
-                          priority,
-                          onPressed: () => selectedPriorities.value = [
-                            ...selectedPrioritiesVal,
-                            priority
-                          ],
-                        ),
-                    for (final tag in tags)
-                      if (!selectedTagsVal.contains(tag))
-                        _TagChip(
-                          tag,
-                          onPressed: () =>
-                              selectedTags.value = [...selectedTagsVal, tag],
-                        ),
-                  ]
-                      .separatedBy(const SizedBox(width: 8))
-                      .toList(growable: false),
-                ),
-              ),
+      valueListenable: selectedFilter,
+      builder: (context, filter, _) {
+        return SizedBox(
+          width: double.infinity,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                for (final keyword in keywords)
+                  if (filter.keywords.isEmpty)
+                    _KeywordChip(
+                      keyword,
+                      onPressed: () => selectedFilter.value = filter
+                          .copyWith(keywords: [...filter.keywords, keyword]),
+                    ),
+                for (final priority in priorities)
+                  if (filter.priorities.isEmpty)
+                    _PriorityChip(
+                      priority,
+                      onPressed: () => selectedFilter.value = filter.copyWith(
+                          priorities: [...filter.priorities, priority]),
+                    ),
+                for (final tag in tags)
+                  if (!filter.tags.contains(tag))
+                    _TagChip(
+                      tag,
+                      onPressed: () => selectedFilter.value =
+                          filter.copyWith(tags: [...filter.tags, tag]),
+                    ),
+              ].separatedBy(const SizedBox(width: 8)).toList(growable: false),
             ),
           ),
         );
@@ -180,9 +146,7 @@ class _FilterChipsInput extends StatelessWidget {
 class SearchField extends StatelessWidget {
   const SearchField(
     this._controller, {
-    required this.keywords,
-    required this.tags,
-    required this.priorities,
+    required this.filterData,
     required this.focusNode,
     this.onClear,
     this.onSubmitted,
@@ -190,9 +154,7 @@ class SearchField extends StatelessWidget {
   });
   final TextEditingController _controller;
   final FocusNode focusNode;
-  final ValueNotifier<List<String>> keywords;
-  final ValueNotifier<List<String>> tags;
-  final ValueNotifier<List<String>> priorities;
+  final ValueNotifier<FilterData> filterData;
   final VoidCallback? onClear;
   final void Function(String)? onSubmitted;
 
@@ -210,85 +172,73 @@ class SearchField extends StatelessWidget {
         builder: (context, constraints) => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ValueListenableBuilder(
-            valueListenable: keywords,
-            builder: (context, keywordsVal, _) => ValueListenableBuilder(
-              valueListenable: tags,
-              builder: (context, tagsVal, _) => ValueListenableBuilder(
-                valueListenable: priorities,
-                builder: (context, prioritiesVal, _) => Row(
-                  children: [
-                    ...[
-                      for (final keyword in keywordsVal)
-                        _KeywordChip(
-                          keyword,
-                          onDeleted: () => keywords.value = List.of(keywordsVal)
-                            ..remove(keyword),
-                        ),
-                    ].separatedBy(const SizedBox(width: 8)),
-                    ...[
-                      for (final priority in prioritiesVal)
-                        _PriorityChip(
-                          priority,
-                          onDeleted: () => priorities.value =
-                              List.of(prioritiesVal)..remove(priority),
-                        ),
-                    ].separatedBy(const SizedBox(width: 8)),
-                    ...[
-                      for (final tag in tagsVal)
-                        _TagChip(
-                          tag,
-                          onDeleted: () =>
-                              tags.value = List.of(tagsVal)..remove(tag),
-                        ),
-                    ].separatedBy(const SizedBox(width: 8)),
-                    if (keywordsVal.isNotEmpty ||
-                        tagsVal.isNotEmpty ||
-                        prioritiesVal.isNotEmpty)
-                      const Icon(Icons.drag_indicator),
-                    ConstrainedBox(
-                      constraints: constraints.copyWith(
-                          maxWidth: keywordsVal.isNotEmpty ||
-                                  tagsVal.isNotEmpty ||
-                                  prioritiesVal.isNotEmpty
-                              ? constraints.maxWidth -
-                                  IconTheme.of(context).size!
-                              : constraints.maxWidth),
-                      child: TextField(
-                        autofocus: true,
-                        focusNode: focusNode,
-                        style: style,
-                        controller: _controller,
-                        textInputAction: TextInputAction.search,
-                        cursorColor: theme.colorScheme.secondary,
-                        onSubmitted: onSubmitted,
-                        decoration: InputDecoration(
-                          hintText:
-                              AppLocalizations.of(context)!.hintTextSearch,
-                          border: InputBorder.none,
-                          prefixIcon: IconTheme.merge(
-                            data: iconTheme,
-                            child: const Icon(Icons.search),
-                          ),
-                          suffixIcon: IconTheme.merge(
-                            data: iconTheme,
-                            child: ValueListenableBuilder<TextEditingValue>(
-                              valueListenable: _controller,
-                              builder: (context, value, child) =>
-                                  value.text.isNotEmpty
-                                      ? child!
-                                      : const SizedBox.shrink(),
-                              child: IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: onClear,
-                              ),
-                            ),
+            valueListenable: filterData,
+            builder: (context, filter, _) => Row(
+              children: [
+                ...[
+                  for (final keyword in filter.keywords)
+                    _KeywordChip(
+                      keyword,
+                      onDeleted: () => filterData.value = filter.copyWith(
+                          keywords: List.of(filter.keywords)..remove(keyword)),
+                    ),
+                ].separatedBy(const SizedBox(width: 8)),
+                ...[
+                  for (final priority in filter.priorities)
+                    _PriorityChip(
+                      priority,
+                      onDeleted: () => filterData.value = filter.copyWith(
+                          priorities: List.of(filter.priorities)
+                            ..remove(priority)),
+                    ),
+                ].separatedBy(const SizedBox(width: 8)),
+                ...[
+                  for (final tag in filter.tags)
+                    _TagChip(
+                      tag,
+                      onDeleted: () => filterData.value = filter.copyWith(
+                          tags: List.of(filter.tags)..remove(tag)),
+                    ),
+                ].separatedBy(const SizedBox(width: 8)),
+                if (filter.isNotEmpty) const Icon(Icons.drag_indicator),
+                ConstrainedBox(
+                  constraints: constraints.copyWith(
+                      maxWidth: filter.isNotEmpty
+                          ? constraints.maxWidth - IconTheme.of(context).size!
+                          : constraints.maxWidth),
+                  child: TextField(
+                    autofocus: true,
+                    focusNode: focusNode,
+                    style: style,
+                    controller: _controller,
+                    textInputAction: TextInputAction.search,
+                    cursorColor: theme.colorScheme.secondary,
+                    onSubmitted: onSubmitted,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.hintTextSearch,
+                      border: InputBorder.none,
+                      prefixIcon: IconTheme.merge(
+                        data: iconTheme,
+                        child: const Icon(Icons.search),
+                      ),
+                      suffixIcon: IconTheme.merge(
+                        data: iconTheme,
+                        child: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _controller,
+                          builder: (context, value, child) =>
+                              value.text.isNotEmpty
+                                  ? child!
+                                  : const SizedBox.shrink(),
+                          child: IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: onClear,
                           ),
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
