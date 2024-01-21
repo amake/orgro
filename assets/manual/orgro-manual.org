@@ -304,6 +304,20 @@ will be expanded, while sections without hits will be collapsed. Hits are
 highlighted. Navigate hits with the up and down buttons in the lower right of
 the screen.
 
+* Sparse trees
+
+Touch the floating search button in the lower right of the screen. An input bar
+will appear at the bottom of the screen above the keyboard with filter buttons:
+
+- Custom :: Write an arbitrary sparse tree filter in a subset of the query
+  language described in the [[https://orgmode.org/manual/Matching-tags-and-properties.html][Matching tags and properties]] section of the Org
+  manual. See the [[https://orgro.org/faq][FAQ]] for details on limitations.
+
+  Orgro will remember the last 10 custom filters.
+- Keywords :: Filter by =TODO=, =DONE=, etc.
+- Priorities :: Filter by section priority, e.g. =A=, =B=, =C=
+- Tags :: Filter by section tags
+
 * Text Style
 
 Adjust the text size and font.
