@@ -88,7 +88,11 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
             onSecondary: Colors.white,
           ),
           useMaterial3: _kUseMaterial3,
-        ),
+        ).copyWith(
+            // Very dumb workaround for our primary color (the default label
+            // color for TextButton) being too dark in dark mode
+            textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(foregroundColor: Colors.white))),
         themeMode: Appearance.of(context).mode,
         home: const StartPage(),
       );

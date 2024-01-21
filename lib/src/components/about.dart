@@ -9,7 +9,7 @@ void openAboutDialog(BuildContext context) {
   showDialog<void>(
     context: context,
     builder: (context) {
-      Widget dialog = AboutDialog(
+      return AboutDialog(
         applicationName: AppLocalizations.of(context)!.appTitle,
         applicationVersion: orgroVersion,
         applicationIcon: const Padding(
@@ -32,18 +32,6 @@ void openAboutDialog(BuildContext context) {
           ),
         ],
       );
-      if (Theme.of(context).brightness == Brightness.dark) {
-        // Very dumb workaround for our primary color (the default label color
-        // for TextButton) being too dark in dark mode
-        dialog = TextButtonTheme(
-          data: TextButtonThemeData(
-            style: TextButton.styleFrom(
-                foregroundColor: DefaultTextStyle.of(context).style.color),
-          ),
-          child: dialog,
-        );
-      }
-      return dialog;
     },
   );
 }
