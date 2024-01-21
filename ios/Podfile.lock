@@ -67,12 +67,12 @@ SPEC CHECKSUMS:
   flutter_charset_detector_ios: 5157d0104855b9deb78e1395515a287197bc2d55
   flutter_tex_js_ios: babbfcf08c2586a67d7ee713dbb5e8acdff19dd6
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
-  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
+  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
 
 PODFILE CHECKSUM: 12493ef27cb9170072186c3bbc894b59f1f9ea5d
 
