@@ -228,16 +228,26 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
           BuildContext context, List<String> history) =>
       showDialog<String>(
         context: context,
-        builder: (context) => SimpleDialog(
-          children: [
-            for (final entry in history)
-              ListTile(
-                title: Text(entry),
-                onTap: () => Navigator.pop(context, entry),
-              )
-          ],
-        ),
+        builder: (context) => const CustomFilterHistoryDialog(),
       );
+}
+
+class CustomFilterHistoryDialog extends StatelessWidget {
+  const CustomFilterHistoryDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final history = Preferences.of(context).customFilterQueries;
+    return SimpleDialog(
+      children: [
+        for (final entry in history)
+          ListTile(
+            title: Text(entry),
+            onTap: () => Navigator.pop(context, entry),
+          )
+      ],
+    );
+  }
 }
 
 class _DialogButton extends StatelessWidget {

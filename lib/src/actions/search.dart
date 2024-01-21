@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
 class MySearchDelegate {
@@ -129,6 +130,20 @@ class _FilterChipsInput extends StatelessWidget {
                             filter.copyWith(customFilter: newQuery);
                       }
                     },
+                    onLongPress:
+                        Preferences.of(context).customFilterQueries.isNotEmpty
+                            ? () async {
+                                final newQuery = await showDialog<String>(
+                                  context: context,
+                                  builder: (context) =>
+                                      const CustomFilterHistoryDialog(),
+                                );
+                                if (newQuery != null) {
+                                  selectedFilter.value =
+                                      filter.copyWith(customFilter: newQuery);
+                                }
+                              }
+                            : null,
                   ),
                 for (final keyword in keywords)
                   if (filter.keywords.isEmpty)
@@ -318,26 +333,35 @@ class _PriorityChip extends StatelessWidget {
 }
 
 class _CustomChip extends StatelessWidget {
-  const _CustomChip({this.label, this.query, this.onPressed, this.onDeleted})
-      : assert(label != null || query != null);
+  const _CustomChip({
+    this.label,
+    this.query,
+    this.onPressed,
+    this.onDeleted,
+    this.onLongPress,
+  }) : assert(label != null || query != null);
 
   final String? query;
   final String? label;
   final VoidCallback? onPressed;
   final VoidCallback? onDeleted;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
-    return InputChip(
-      avatar: const Icon(Icons.edit),
-      label: label != null
-          ? Text(label!)
-          : ConstrainedBox(
-              constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width / 4),
-              child: Text(query!)),
-      onPressed: onPressed,
-      onDeleted: onDeleted,
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: InputChip(
+        avatar: const Icon(Icons.edit),
+        label: label != null
+            ? Text(label!)
+            : ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width / 4),
+                child: Text(query!)),
+        onPressed: onPressed,
+        onDeleted: onDeleted,
+      ),
     );
   }
 }

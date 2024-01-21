@@ -313,7 +313,8 @@ will appear at the bottom of the screen above the keyboard with filter buttons:
   language described in the [[https://orgmode.org/manual/Matching-tags-and-properties.html][Matching tags and properties]] section of the Org
   manual. See the [[https://orgro.org/faq][FAQ]] for details on limitations.
 
-  Orgro will remember the last 10 custom filters.
+  Orgro will remember the last 10 custom filters. Long press the “Custom” button
+  to directly apply a past filter.
 - Keywords :: Filter by =TODO=, =DONE=, etc.
 - Priorities :: Filter by section priority, e.g. =A=, =B=, =C=
 - Tags :: Filter by section tags
