@@ -218,8 +218,8 @@ class SearchField extends StatelessWidget {
                       onDeleted: () => filterData.value = filter.copyWith(
                           tags: List.of(filter.tags)..remove(tag)),
                     ),
+                  if (filter.isNotEmpty) const Icon(Icons.drag_indicator),
                 ].separatedBy(const SizedBox(width: 8)),
-                if (filter.isNotEmpty) const Icon(Icons.drag_indicator),
                 ConstrainedBox(
                   constraints: constraints.copyWith(
                       maxWidth: filter.isNotEmpty
