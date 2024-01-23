@@ -59,4 +59,22 @@ sub-sub-baz-2 content
 sub-baz-3 content
 
 *** sub-sub-baz-3
+    :PROPERTIES:
+    :lorem:     ipsum
+    :END:
 sub-sub-baz-3 content
+
+* hoge
+hoge content
+
+** fuga
+fuga content
+
+*** piyo
+piyo content
+
+**** TODO [#A] hogepiyo                                         :foo:bar:baz:
+     :PROPERTIES:
+     :lorem:    ipsum
+     :END:
+hogepiyo content
