@@ -79,8 +79,7 @@ class MySearchDelegate {
     _searchController.clear();
     // Apply immediately because we debounce in the listener
     onQuerySubmitted(_searchController.text);
-    // These don't debounce in the listener so we just assign
-    _selectedFilter.value = FilterData.defaults();
+    // It's somehow surprising to clear the filter here as well, so don't
   }
 
   void _searchQueryChanged() => onQueryChanged(_searchController.text);
