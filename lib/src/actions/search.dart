@@ -202,82 +202,93 @@ class SearchField extends StatelessWidget {
     final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(hintColor: color),
-      child: LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: ValueListenableBuilder(
-            valueListenable: filterData,
-            builder: (context, filter, _) => Row(
-              children: [
-                ...[
-                  if (filter.customFilter.isNotEmpty)
-                    _CustomChip(
-                      query: filter.customFilter,
-                      onDeleted: () =>
-                          filterData.value = filter.copyWith(customFilter: ''),
-                    ),
-                  for (final keyword in filter.keywords)
-                    _KeywordChip(
-                      keyword,
-                      onDeleted: () => filterData.value = filter.copyWith(
-                          keywords: List.of(filter.keywords)..remove(keyword)),
-                    ),
-                  for (final priority in filter.priorities)
-                    _PriorityChip(
-                      priority,
-                      onDeleted: () => filterData.value = filter.copyWith(
-                          priorities: List.of(filter.priorities)
-                            ..remove(priority)),
-                    ),
-                  for (final tag in filter.tags)
-                    _TagChip(
-                      tag,
-                      onDeleted: () => filterData.value = filter.copyWith(
-                          tags: List.of(filter.tags)..remove(tag)),
-                    ),
-                  if (filter.isNotEmpty) const Icon(Icons.drag_indicator),
-                ].separatedBy(const SizedBox(width: 8)),
-                ConstrainedBox(
-                  constraints: constraints.copyWith(
-                      maxWidth: filter.isNotEmpty
-                          ? constraints.maxWidth - IconTheme.of(context).size!
-                          : constraints.maxWidth),
-                  child: TextField(
-                    autofocus: true,
-                    focusNode: focusNode,
-                    style: style,
-                    controller: _controller,
-                    textInputAction: TextInputAction.search,
-                    cursorColor: theme.colorScheme.secondary,
-                    onSubmitted: onSubmitted,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.hintTextSearch,
-                      border: InputBorder.none,
-                      prefixIcon: IconTheme.merge(
-                        data: iconTheme,
-                        child: const Icon(Icons.search),
-                      ),
-                      suffixIcon: IconTheme.merge(
-                        data: iconTheme,
-                        child: ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: _controller,
-                          builder: (context, value, child) =>
-                              value.text.isNotEmpty
-                                  ? child!
-                                  : const SizedBox.shrink(),
-                          child: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: onClear,
+      child: Row(
+        children: [
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ValueListenableBuilder(
+                  valueListenable: filterData,
+                  builder: (context, filter, _) => Row(
+                    children: [
+                      ...[
+                        if (filter.customFilter.isNotEmpty)
+                          _CustomChip(
+                            query: filter.customFilter,
+                            onDeleted: () => filterData.value =
+                                filter.copyWith(customFilter: ''),
+                          ),
+                        for (final keyword in filter.keywords)
+                          _KeywordChip(
+                            keyword,
+                            onDeleted: () => filterData.value = filter.copyWith(
+                                keywords: List.of(filter.keywords)
+                                  ..remove(keyword)),
+                          ),
+                        for (final priority in filter.priorities)
+                          _PriorityChip(
+                            priority,
+                            onDeleted: () => filterData.value = filter.copyWith(
+                                priorities: List.of(filter.priorities)
+                                  ..remove(priority)),
+                          ),
+                        for (final tag in filter.tags)
+                          _TagChip(
+                            tag,
+                            onDeleted: () => filterData.value = filter.copyWith(
+                                tags: List.of(filter.tags)..remove(tag)),
+                          ),
+                        if (filter.isNotEmpty)
+                          IconTheme.merge(
+                            data: iconTheme,
+                            child: const Icon(Icons.drag_indicator),
+                          ),
+                      ].separatedBy(const SizedBox(width: 8)),
+                      ConstrainedBox(
+                        constraints: filter.isNotEmpty
+                            ? BoxConstraints.tightFor(
+                                width: constraints.maxWidth -
+                                    IconTheme.of(context).size!)
+                            : constraints,
+                        child: TextField(
+                          autofocus: true,
+                          focusNode: focusNode,
+                          style: style,
+                          controller: _controller,
+                          textInputAction: TextInputAction.search,
+                          cursorColor: theme.colorScheme.secondary,
+                          onSubmitted: onSubmitted,
+                          decoration: InputDecoration(
+                            hintText:
+                                AppLocalizations.of(context)!.hintTextSearch,
+                            border: InputBorder.none,
+                            prefixIcon: IconTheme.merge(
+                              data: iconTheme,
+                              child: const Icon(Icons.search),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _controller,
+            builder: (context, value, child) =>
+                value.text.isNotEmpty ? child! : const SizedBox.shrink(),
+            child: IconTheme.merge(
+              data: iconTheme,
+              child: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: onClear,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
