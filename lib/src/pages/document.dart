@@ -256,7 +256,7 @@ class _DocumentPageState extends State<DocumentPage> {
                 ),
               ),
               bottomSheet:
-                  searchMode ? _searchDelegate.buildBottomSheet() : null,
+                  searchMode ? _searchDelegate.buildBottomSheet(context) : null,
             ),
           );
         },

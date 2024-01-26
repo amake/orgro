@@ -41,20 +41,31 @@ class MySearchDelegate {
         onSubmitted: onQuerySubmitted,
       );
 
-  Widget buildBottomSheet() => BottomSheet(
-        enableDrag: false,
-        showDragHandle: false,
-        onClosing: () {
-          // This should never happen
-          debugPrint('Closing bottom sheet');
-        },
-        builder: (context) => FilterChipsInput(
+  Widget buildBottomSheet(BuildContext context) {
+    // Hack around bottom sheet not respecting bottom safe area:
+    // https://github.com/flutter/flutter/issues/69676
+    //
+    // Get the padding here because it will be zero in the BottomSheet's
+    // builder's context.
+    final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    return BottomSheet(
+      enableDrag: false,
+      showDragHandle: false,
+      onClosing: () {
+        // This should never happen
+        debugPrint('Closing bottom sheet');
+      },
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: FilterChipsInput(
           keywords: keywords,
           tags: tags,
           priorities: priorities,
           selectedFilter: _selectedFilter,
         ),
-      );
+      ),
+    );
+  }
 
   void dispose() {
     _searchController.dispose();
