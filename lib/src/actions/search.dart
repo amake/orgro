@@ -206,89 +206,76 @@ class SearchResultsNavigation extends StatefulWidget {
 
 class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   int _i = -1;
-  int _count = 0;
+  List<SearchResultKey> _keys = [];
   late OrgControllerData _controller;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _controller = OrgController.of(context);
-    _controller.searchResultKeys.addListener(_adjustIndex);
+    _controller.searchResultKeys.addListener(_update);
   }
 
   @override
   void dispose() {
-    _controller.searchResultKeys.removeListener(_adjustIndex);
+    _controller.searchResultKeys.removeListener(_update);
     super.dispose();
   }
 
-  void _adjustIndex() {
+  void _update() {
     if (!mounted) return;
     final keys = _controller.searchResultKeys.value;
-    if (_count != keys.length) {
+    // Key instances can change on rebuild, so we only look at the count
+    if (_keys.length != keys.length) {
       final sortedKeys = List.of(keys)..sort((a, b) => a.compareByTopBound(b));
       final i =
           sortedKeys.indexWhere((key) => key.currentState?.selected == true);
       setState(() {
         _i = i;
-        _count = sortedKeys.length;
+        _keys = sortedKeys;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _controller.searchResultKeys,
-      builder: (context, value, child) {
-        final sortedKeys = List.of(value)
-          ..sort((a, b) => a.compareByTopBound(b));
-        return Wrap(
-          direction: Axis.vertical,
-          crossAxisAlignment: WrapCrossAlignment.end,
-          children: [
-            _DisablableMiniFloatingActionButton(
-              heroTag: 'prevSearchHitFAB',
-              onPressed: sortedKeys.isEmpty
-                  ? null
-                  : () => _scrollToRelativeIndex(sortedKeys, -1),
-              child: const Icon(Icons.keyboard_arrow_up),
-            ),
-            GestureDetector(
-              onTap: sortedKeys.isEmpty
-                  ? null
-                  : () => _scrollToRelativeIndex(sortedKeys, 0),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Text(
-                    _i == -1
-                        ? AppLocalizations.of(context)!
-                            .searchHits(sortedKeys.length)
-                        : AppLocalizations.of(context)!
-                            .searchResultSelection(_i + 1, sortedKeys.length),
-                    textAlign: TextAlign.center,
-                    style: DefaultTextStyle.of(context).style.copyWith(
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
+    return Wrap(
+      direction: Axis.vertical,
+      crossAxisAlignment: WrapCrossAlignment.end,
+      children: [
+        _DisablableMiniFloatingActionButton(
+          heroTag: 'prevSearchHitFAB',
+          onPressed: _keys.isEmpty ? null : () => _scrollToRelativeIndex(-1),
+          child: const Icon(Icons.keyboard_arrow_up),
+        ),
+        GestureDetector(
+          onTap: _keys.isEmpty ? null : () => _scrollToRelativeIndex(0),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                _i == -1
+                    ? AppLocalizations.of(context)!.searchHits(_keys.length)
+                    : AppLocalizations.of(context)!
+                        .searchResultSelection(_i + 1, _keys.length),
+                textAlign: TextAlign.center,
+                style: DefaultTextStyle.of(context).style.copyWith(
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ),
-            _DisablableMiniFloatingActionButton(
-              heroTag: 'nextSearchHitFAB',
-              onPressed: sortedKeys.isEmpty
-                  ? null
-                  : () => _scrollToRelativeIndex(sortedKeys, 1),
-              child: const Icon(Icons.keyboard_arrow_down),
-            ),
-          ],
-        );
-      },
+          ),
+        ),
+        _DisablableMiniFloatingActionButton(
+          heroTag: 'nextSearchHitFAB',
+          onPressed: _keys.isEmpty ? null : () => _scrollToRelativeIndex(1),
+          child: const Icon(Icons.keyboard_arrow_down),
+        ),
+      ],
     );
   }
 
-  void _scrollToRelativeIndex(List<SearchResultKey> keys, int relIdx) {
+  void _scrollToRelativeIndex(int relIdx) {
     // Empty selection special cases
     if (_i == -1) {
       // Don't "go to" empty selection
@@ -296,9 +283,9 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
       // Wrap backwards from empty selection
       if (relIdx == -1) relIdx = 0;
     }
-    if (_i >= 0 && _i < keys.length) keys[_i].currentState?.selected = false;
-    final i = (_i + relIdx + keys.length) % keys.length;
-    final key = keys[i];
+    if (_i >= 0 && _i < _keys.length) _keys[_i].currentState?.selected = false;
+    final i = (_i + relIdx + _keys.length) % _keys.length;
+    final key = _keys[i];
     key.currentState?.selected = true;
     _scrollTo(key);
     setState(() => _i = i);
