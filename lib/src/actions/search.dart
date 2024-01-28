@@ -226,10 +226,12 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
     if (!mounted) return;
     final keys = _controller.searchResultKeys.value;
     if (_count != keys.length) {
-      final i = keys.indexWhere((key) => key.currentState?.selected == true);
+      final sortedKeys = List.of(keys)..sort((a, b) => a.compareByTopBound(b));
+      final i =
+          sortedKeys.indexWhere((key) => key.currentState?.selected == true);
       setState(() {
         _i = i;
-        _count = keys.length;
+        _count = sortedKeys.length;
       });
     }
   }
