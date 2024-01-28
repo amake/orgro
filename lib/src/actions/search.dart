@@ -206,14 +206,39 @@ class SearchResultsNavigation extends StatefulWidget {
 
 class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   int _i = -1;
+  int _count = 0;
+  late OrgControllerData _controller;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller = OrgController.of(context);
+    _controller.searchResultKeys.addListener(_adjustIndex);
+  }
+
+  @override
+  void dispose() {
+    _controller.searchResultKeys.removeListener(_adjustIndex);
+    super.dispose();
+  }
+
+  void _adjustIndex() {
+    if (!mounted) return;
+    final keys = _controller.searchResultKeys.value;
+    if (_count != keys.length) {
+      final i = keys.indexWhere((key) => key.currentState?.selected == true);
+      setState(() {
+        _i = i;
+        _count = keys.length;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = OrgController.of(context);
     return ValueListenableBuilder(
-      valueListenable: controller.searchResultKeys,
+      valueListenable: _controller.searchResultKeys,
       builder: (context, value, child) {
-        if (value.isEmpty) _resetIndex();
         final sortedKeys = List.of(value)
           ..sort((a, b) => a.compareByTopBound(b));
         return Wrap(
@@ -259,12 +284,6 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
         );
       },
     );
-  }
-
-  void _resetIndex() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() => _i = -1);
-    });
   }
 
   void _scrollToRelativeIndex(List<SearchResultKey> keys, int relIdx) {
