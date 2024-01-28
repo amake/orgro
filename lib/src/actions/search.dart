@@ -214,26 +214,32 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
       valueListenable: controller.searchResultKeys,
       builder: (context, value, child) {
         if (value.isEmpty) _resetIndex();
+        final sortedKeys = List.of(value)
+          ..sort((a, b) => a.compareByTopBound(b));
         return Wrap(
           direction: Axis.vertical,
           crossAxisAlignment: WrapCrossAlignment.end,
           children: [
             _DisablableMiniFloatingActionButton(
               heroTag: 'prevSearchHitFAB',
-              onPressed:
-                  value.isEmpty ? null : () => _scrollToRelativeIndex(-1),
+              onPressed: sortedKeys.isEmpty
+                  ? null
+                  : () => _scrollToRelativeIndex(sortedKeys, -1),
               child: const Icon(Icons.keyboard_arrow_up),
             ),
             GestureDetector(
-              onTap: value.isEmpty ? null : () => _scrollToRelativeIndex(0),
+              onTap: sortedKeys.isEmpty
+                  ? null
+                  : () => _scrollToRelativeIndex(sortedKeys, 0),
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Text(
                     _i == -1
-                        ? AppLocalizations.of(context)!.searchHits(value.length)
+                        ? AppLocalizations.of(context)!
+                            .searchHits(sortedKeys.length)
                         : AppLocalizations.of(context)!
-                            .searchResultSelection(_i + 1, value.length),
+                            .searchResultSelection(_i + 1, sortedKeys.length),
                     textAlign: TextAlign.center,
                     style: DefaultTextStyle.of(context).style.copyWith(
                       fontFeatures: const [FontFeature.tabularFigures()],
@@ -244,7 +250,9 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
             ),
             _DisablableMiniFloatingActionButton(
               heroTag: 'nextSearchHitFAB',
-              onPressed: value.isEmpty ? null : () => _scrollToRelativeIndex(1),
+              onPressed: sortedKeys.isEmpty
+                  ? null
+                  : () => _scrollToRelativeIndex(sortedKeys, 1),
               child: const Icon(Icons.keyboard_arrow_down),
             ),
           ],
@@ -259,14 +267,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
     });
   }
 
-  List<SearchResultKey> _sortedKeys(BuildContext context) {
-    final keys = List.of(OrgController.of(context).searchResultKeys.value);
-    keys.sort((a, b) => a.compareByTopBound(b));
-    return keys;
-  }
-
-  void _scrollToRelativeIndex(int relIdx) {
-    final keys = _sortedKeys(context);
+  void _scrollToRelativeIndex(List<SearchResultKey> keys, int relIdx) {
     if (_i >= 0 && _i < keys.length) keys[_i].currentState?.selected = false;
     final i = (_i + relIdx + keys.length) % keys.length;
     final key = keys[i];
