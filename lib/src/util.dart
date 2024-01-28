@@ -58,11 +58,17 @@ final platformShortcutKey = Platform.isIOS || Platform.isMacOS
 
 extension GlobalPaintBounds on BuildContext {
   Rect? get _globalPaintBounds {
-    final renderObject = findRenderObject();
-    if (renderObject == null) return null;
+    if (!mounted) return null;
+    try {
+      final renderObject = findRenderObject();
+      if (renderObject == null) return null;
 
-    final translation = renderObject.getTransformTo(null).getTranslation();
-    return renderObject.paintBounds.shift(Offset(translation.x, translation.y));
+      final translation = renderObject.getTransformTo(null).getTranslation();
+      return renderObject.paintBounds
+          .shift(Offset(translation.x, translation.y));
+    } catch (_) {
+      return null;
+    }
   }
 }
 
