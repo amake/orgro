@@ -287,6 +287,13 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   }
 
   void _scrollToRelativeIndex(List<SearchResultKey> keys, int relIdx) {
+    // Empty selection special cases
+    if (_i == -1) {
+      // Don't "go to" empty selection
+      if (relIdx == 0) return;
+      // Wrap backwards from empty selection
+      if (relIdx == -1) relIdx = 0;
+    }
     if (_i >= 0 && _i < keys.length) keys[_i].currentState?.selected = false;
     final i = (_i + relIdx + keys.length) % keys.length;
     final key = keys[i];
