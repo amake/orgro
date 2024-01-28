@@ -1,0 +1,2 @@
+- Support “sparse tree”-style filtering
+- Bug fixes
