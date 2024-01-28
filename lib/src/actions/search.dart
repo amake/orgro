@@ -225,16 +225,11 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   void _update() {
     if (!mounted) return;
     final keys = _controller.searchResultKeys.value;
-    // Key instances can change on rebuild, so we only look at the count
-    if (_keys.length != keys.length) {
-      final sortedKeys = List.of(keys)..sort((a, b) => a.compareByTopBound(b));
-      final i =
-          sortedKeys.indexWhere((key) => key.currentState?.selected == true);
-      setState(() {
-        _i = i;
-        _keys = sortedKeys;
-      });
-    }
+    final sortedKeys = List.of(keys)..sort((a, b) => a.compareByTopBound(b));
+    setState(() {
+      _i = sortedKeys.indexWhere((key) => key.currentState?.selected == true);
+      _keys = sortedKeys;
+    });
   }
 
   @override
