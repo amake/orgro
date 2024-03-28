@@ -42,7 +42,7 @@ dependencies:
   flutter_slidable: ^3.0.1
   google_fonts: ^6.0.0
   http: ^1.1.0
-  intl: ^0.18.0
+  intl: ^0.19.0
   org_flutter: ^6.0.3
   # org_flutter:
     # path: ../org_flutter

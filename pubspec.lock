@@ -180,50 +180,50 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_charset_detector
-      sha256: "5d4796d43dac2f37e14149b0f0c676fa08e8eb1ada8e99342a838d971d2fb9b1"
+      sha256: "39b96e9da701d8ea0ef3192854f3bf089df45d7832d5616f047e2a1d34ac0b18"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   flutter_charset_detector_android:
     dependency: transitive
     description:
       name: flutter_charset_detector_android
-      sha256: "43d0c0063242d036b873ade737ebae38716af5cd8b2a4df1754adfd186d58e2c"
+      sha256: bee057133d5f134fe211523a27200dd22c782b93777f43359a571bd2c77da2cc
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.1"
   flutter_charset_detector_darwin:
     dependency: transitive
     description:
       name: flutter_charset_detector_darwin
-      sha256: d17c1847366a0501449d95d18a43417585841afe10200ceefb4422e6b7fccefb
+      sha256: daac20390275efb92fbb14350fe11286c5e29c7b80d6b0867f52d760f0d69763
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_charset_detector_platform_interface:
     dependency: transitive
     description:
       name: flutter_charset_detector_platform_interface
-      sha256: fcb61de27285031164c945aca4b42e4d36f9a9e359212f21ab652275c9c723ec
+      sha256: "1c09ed7b314a5a9dde76057b98b7d35458ba881eed03d5e5b6f7f74b4869d18c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter_charset_detector_web:
     dependency: transitive
     description:
       name: flutter_charset_detector_web
-      sha256: d09ae58db7785aad951f41bf990a991b40d0e86d0b51c9af74a82b01fbbad8e9
+      sha256: b547194e97e15d2cca17e957ad7f373b48abf35080e645ac5b6976d129b0265d
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   flutter_lints:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: e2a421b7e59244faef694ba7b30562e489c2b489866e505074eb005cd7060db7
+      sha256: "9e8c3858111da373efc5aa341de011d9bd23e2c5c5e0c62bccf32438e192d7b1"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -262,18 +262,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "4905004dcce0de104e58bf09667f9484cc99c9ddeb3a2c142e690047d1ddb169"
+      sha256: cd671525f65ddf1fc3e134c30b9c89f9f45c86a2d3bc75cf5e1c494b47d9dc75
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.0"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: "5ce406e086b084c3a18b370ed3c0f5da5865afecad24a31649a217ca75e0fdbe"
+      sha256: e54530559095c83de9fd5a1efc24394b1146653e21fdfcb8801226000b0c3620
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
@@ -331,10 +331,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.1"
+    version: "0.19.0"
   js:
     dependency: transitive
     description:
@@ -547,10 +547,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "43ac87de6e10afabc85c445745a7b799e04de84cebaa4fd7bf55a5e1e9604d29"
+      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
       url: "https://pub.dev"
     source: hosted
-    version: "3.7.4"
+    version: "3.8.0"
   quiver:
     dependency: transitive
     description:
@@ -664,10 +664,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite
-      sha256: a9016f495c927cb90557c909ff26a6d92d9bd54fc42ba92e19d4e79d61e798c6
+      sha256: "5ce2e1a15e822c3b4bfb5400455775e421da7098eed8adc8f26298ada7c9308c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.3"
   sqflite_common:
     dependency: transitive
     description:
@@ -848,10 +848,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: a2662fb1f114f4296cf3f5a50786a2d888268d7776cf681aa17d660ffa23b246
+      sha256: a75f83f14ad81d5fe4b3319710b90dec37da0e22612326b696c9e1b8f34bbf48
       url: "https://pub.dev"
     source: hosted
-    version: "14.0.0"
+    version: "14.2.0"
   web:
     dependency: transitive
     description:
@@ -864,10 +864,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "8cb58b45c47dcb42ab3651533626161d6b67a2921917d8d429791f76972b3480"
+      sha256: "0a989dc7ca2bb51eac91e8fd00851297cfffd641aa7538b165c62637ca0eaa4a"
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.4.0"
   xdg_directories:
     dependency: transitive
     description:
