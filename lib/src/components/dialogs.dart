@@ -71,7 +71,7 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
               final markup = await serializeWithProgressUI(context, doc);
               if (markup == null) return;
 
-              final result = await Share.shareWithResult(
+              final result = await Share.share(
                 markup,
                 sharePositionOrigin: origin,
               );
