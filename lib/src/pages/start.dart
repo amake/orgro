@@ -110,6 +110,7 @@ class _StartPageState extends State<StartPage>
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
       Future.delayed(const Duration(microseconds: 0), () async {
+        if (!mounted) return;
         // We can't use _loadAndRememberFile because RecentFiles is not in this
         // context
         final recentFile = await _loadFile(

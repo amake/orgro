@@ -232,7 +232,7 @@ class _DocumentPageState extends State<DocumentPage> {
         builder: (context, dirty, _) {
           return PopScope(
             canPop: searchMode || !dirty || _doc is! OrgDocument,
-            onPopInvoked: _onPopInvoked,
+            onPopInvokedWithResult: _onPopInvoked,
             child: Scaffold(
               body: _KeyboardShortcuts(
                 // Builder is here to ensure that the primary scroll controller set by the
@@ -594,7 +594,7 @@ class _DocumentPageState extends State<DocumentPage> {
     }
   }
 
-  Future<void> _onPopInvoked(bool didPop) async {
+  Future<void> _onPopInvoked(bool didPop, dynamic result) async {
     if (didPop) return;
 
     assert(_dirty.value);
@@ -690,11 +690,11 @@ class _DocumentPageState extends State<DocumentPage> {
     var canceled = false;
     time('decrypt', () => compute(decrypt, (blocks, password)))
         .then((decrypted) {
-      if (!canceled) Navigator.pop(context, decrypted);
+      if (!canceled && mounted) Navigator.pop(context, decrypted);
     }).onError((error, stackTrace) {
-      showErrorSnackBar(context, error);
+      if (mounted) showErrorSnackBar(context, error);
       logError(error, stackTrace);
-      if (!canceled) Navigator.pop(context);
+      if (!canceled && mounted) Navigator.pop(context);
     });
     final result = await showDialog<List<String?>>(
       context: context,

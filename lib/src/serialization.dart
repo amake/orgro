@@ -16,11 +16,11 @@ Future<String?> serializeWithProgressUI(
 ) async {
   var canceled = false;
   serialize(node).then((value) {
-    if (!canceled) Navigator.pop(context, value);
+    if (!canceled && context.mounted) Navigator.pop(context, value);
   }).onError((error, stackTrace) {
-    showErrorSnackBar(context, error);
+    if (context.mounted) showErrorSnackBar(context, error);
     logError(error, stackTrace);
-    if (!canceled) Navigator.pop(context);
+    if (!canceled && context.mounted) Navigator.pop(context);
   });
   final willEncrypt = node.find<OrgDecryptedContent>((_) => true) != null;
   final result = await showDialog<String>(

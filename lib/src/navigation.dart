@@ -31,7 +31,7 @@ Future<bool> loadDocument(
       // There was no fileーthe user canceled so close the route. We wait until
       // here to know if the user canceled because when the user doesn't cancel
       // it is expensive to resolve the opened file.
-      Navigator.pop(context);
+      if (context.mounted) Navigator.pop(context);
       return Future.value(null);
     }
   });
