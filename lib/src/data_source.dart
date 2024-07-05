@@ -41,8 +41,14 @@ class WebDataSource extends DataSource {
   String get id => uri.toString();
 
   @override
-  FutureOr<String> get content async =>
-      time('load url', () async => (await _response).body);
+  FutureOr<String> get content async {
+    final response = await time('load url', () => _response);
+    try {
+      return response.body;
+    } on Exception {
+      return await _readBytes(response.bodyBytes);
+    }
+  }
 
   @override
   FutureOr<Uint8List> get bytes =>
@@ -80,7 +86,13 @@ class AssetDataSource extends DataSource {
   String get id => key;
 
   @override
-  FutureOr<String> get content => rootBundle.loadString(key);
+  FutureOr<String> get content async {
+    try {
+      return await rootBundle.loadString(key);
+    } on Exception {
+      return await _readBytes(await bytes);
+    }
+  }
 
   @override
   FutureOr<Uint8List> get bytes async =>
@@ -259,9 +271,12 @@ Future<String> _readFile(File file) async {
   try {
     return await file.readAsString();
   } on Exception {
-    final bytes = await file.readAsBytes();
-    final decoded = await CharsetDetector.autoDecode(bytes);
-    debugPrint('Decoded file as ${decoded.charset}');
-    return decoded.string;
+    return await _readBytes(await file.readAsBytes());
   }
+}
+
+Future<String> _readBytes(Uint8List bytes) async {
+  final decoded = await CharsetDetector.autoDecode(bytes);
+  debugPrint('Decoded bytes as ${decoded.charset}');
+  return decoded.string;
 }
