@@ -48,8 +48,7 @@ android {
 
     defaultConfig {
         applicationId "com.madlonkay.orgro"
-        // file_picker_writable requires at least SDK 19
-        minSdkVersion Math.max(flutter.minSdkVersion, 19)
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
