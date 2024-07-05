@@ -2,8 +2,9 @@ PODS:
   - file_picker_writable (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_charset_detector_ios (0.0.1):
+  - flutter_charset_detector_darwin (0.0.1):
     - Flutter
+    - FlutterMacOS
     - UniversalDetector2 (= 2.0.1)
   - flutter_tex_js_ios (0.0.1):
     - Flutter
@@ -25,7 +26,7 @@ PODS:
 DEPENDENCIES:
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
-  - flutter_charset_detector_ios (from `.symlinks/plugins/flutter_charset_detector_ios/ios`)
+  - flutter_charset_detector_darwin (from `.symlinks/plugins/flutter_charset_detector_darwin/darwin`)
   - flutter_tex_js_ios (from `.symlinks/plugins/flutter_tex_js_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -42,8 +43,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
     :path: Flutter
-  flutter_charset_detector_ios:
-    :path: ".symlinks/plugins/flutter_charset_detector_ios/ios"
+  flutter_charset_detector_darwin:
+    :path: ".symlinks/plugins/flutter_charset_detector_darwin/darwin"
   flutter_tex_js_ios:
     :path: ".symlinks/plugins/flutter_tex_js_ios/ios"
   path_provider_foundation:
@@ -60,14 +61,14 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   file_picker_writable: 67959f5c516feb5121693a14eda63fcbe6cbb6dc
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_charset_detector_ios: 5157d0104855b9deb78e1395515a287197bc2d55
+  flutter_charset_detector_darwin: fb3692d6d72cb6afcce7b0dd1a9516be6e78556e
   flutter_tex_js_ios: babbfcf08c2586a67d7ee713dbb5e8acdff19dd6
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: 12493ef27cb9170072186c3bbc894b59f1f9ea5d
 

@@ -291,7 +291,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/UniversalDetector2/UniversalDetector2.framework",
 				"${BUILT_PRODUCTS_DIR}/file_picker_writable/file_picker_writable.framework",
-				"${BUILT_PRODUCTS_DIR}/flutter_charset_detector_ios/flutter_charset_detector_ios.framework",
+				"${BUILT_PRODUCTS_DIR}/flutter_charset_detector_darwin/flutter_charset_detector_darwin.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_tex_js_ios/flutter_tex_js_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_foundation/path_provider_foundation.framework",
 				"${BUILT_PRODUCTS_DIR}/share_plus/share_plus.framework",
@@ -303,7 +303,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UniversalDetector2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/file_picker_writable.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_charset_detector_ios.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_charset_detector_darwin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_tex_js_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/path_provider_foundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/share_plus.framework",
