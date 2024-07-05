@@ -96,7 +96,7 @@ class AssetDataSource extends DataSource {
 
   @override
   FutureOr<Uint8List> get bytes async =>
-      (await rootBundle.load(key)).buffer.asUint8List();
+      Uint8List.sublistView(await rootBundle.load(key));
 
   @override
   DataSource resolveRelative(String relativePath) =>
