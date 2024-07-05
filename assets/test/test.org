@@ -34,3 +34,7 @@ Symmetric
 - [[file:encryption-section-symmetric.org][Single section]]
 - [[file:encryption-sections-symmetric-same.org][Multiple sections, same password]]
 - [[file:encryption-sections-symmetric-different.org][Multiple sections, different passwords]]
+
+* Encoding
+
+- [[file:encoding-sjis.org][Shift JIS]]

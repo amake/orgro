@@ -1,0 +1,7 @@
+* English
+
+This file is encoded in Shift JIS.
+
+* 日本語
+
+このファイルのエンコーディングはShift JISです。
