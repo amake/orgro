@@ -47,7 +47,7 @@ dependencies:
   # org_flutter:
     # path: ../org_flutter
   path_provider: ^2.0.9
-  share_plus: ^9.0.0
+  share_plus: ^10.0.1
   shared_preferences: ^2.0.0
   url_launcher: ^6.0.0
 
