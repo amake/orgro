@@ -28,7 +28,7 @@ class RemoteImage extends StatelessWidget {
     if (_isSvg(url)) {
       return SvgPicture.network(url);
     } else {
-      return Image(image: CachedNetworkImageProvider(url));
+      return CachedNetworkImage(imageUrl: url);
     }
   }
 
@@ -36,11 +36,9 @@ class RemoteImage extends StatelessWidget {
     if (_isSvg(url)) {
       return SvgPicture.network(url);
     } else {
-      return Image(
-        image: CachedNetworkImageProvider(
-          url,
-          scale: MediaQuery.of(context).devicePixelRatio,
-        ),
+      return CachedNetworkImage(
+        imageUrl: url,
+        scale: MediaQuery.of(context).devicePixelRatio,
       );
     }
   }
