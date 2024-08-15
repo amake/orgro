@@ -1,6 +1,7 @@
-import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:orgro/src/data_source.dart';
@@ -44,7 +45,7 @@ class RemoteImage extends StatelessWidget {
   }
 }
 
-class LocalImage extends StatefulWidget {
+class LocalImage extends StatelessWidget {
   const LocalImage({
     required this.dataSource,
     required this.relativePath,
@@ -55,10 +56,82 @@ class LocalImage extends StatefulWidget {
   final String relativePath;
 
   @override
-  State<LocalImage> createState() => _LocalImageState();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () => showInteractive(context, relativePath, _image()),
+      child: _image(minimizeSize: true),
+    );
+  }
+
+  Widget _image({bool minimizeSize = false}) => _isSvg(relativePath)
+      ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
+      : _LocalOtherImage(
+          dataSource: dataSource,
+          relativePath: relativePath,
+          minimizeSize: minimizeSize,
+        );
 }
 
-class _LocalImageState extends State<LocalImage> {
+class _LocalOtherImage extends StatelessWidget {
+  const _LocalOtherImage({
+    required this.dataSource,
+    required this.relativePath,
+    required this.minimizeSize,
+  });
+
+  final DataSource dataSource;
+  final String relativePath;
+  final bool minimizeSize;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!minimizeSize) {
+      return Image(
+        image: _DataSourceImage(dataSource, relativePath),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
+      );
+    }
+    return LayoutBuilder(builder: (context, constraints) {
+      final scale = MediaQuery.of(context).devicePixelRatio;
+      return Image(
+        image: ResizeImage.resizeIfNeeded(
+            constraints.hasBoundedWidth
+                ? (constraints.maxWidth * scale).toInt()
+                : null,
+            constraints.hasBoundedHeight
+                ? (constraints.maxHeight * scale).toInt()
+                : null,
+            _DataSourceImage(
+              dataSource,
+              relativePath,
+              scale: scale,
+            )),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
+      );
+    });
+  }
+}
+
+class _LocalSvgImage extends StatefulWidget {
+  _LocalSvgImage({
+    required this.dataSource,
+    required this.relativePath,
+  }) : assert(_isSvg(relativePath));
+
+  final DataSource dataSource;
+  final String relativePath;
+
+  @override
+  State<_LocalSvgImage> createState() => _LocalSvgImageState();
+}
+
+class _LocalSvgImageState extends State<_LocalSvgImage> {
   late Future<Uint8List?> _bytes;
 
   @override
@@ -80,36 +153,97 @@ class _LocalImageState extends State<LocalImage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(
-        context,
-        widget.relativePath,
-        _futureImage(),
-      ),
-      child: _futureImage(scale: MediaQuery.of(context).devicePixelRatio),
-    );
-  }
-
-  Widget _futureImage({double scale = 1}) {
     return FutureBuilder<Uint8List?>(
       future: _bytes,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _isSvg(widget.relativePath)
-              ? SvgPicture.memory(snapshot.data!)
-              : Image.memory(snapshot.data!, scale: scale);
+          return SvgPicture.memory(snapshot.data!);
         } else if (snapshot.hasError) {
-          return Row(
-            children: [
-              const Icon(Icons.error),
-              const SizedBox(width: 8),
-              Flexible(child: Text(snapshot.error.toString()))
-            ],
-          );
+          return _ImageError(snapshot.error.toString());
         } else {
           return const CircularProgressIndicator();
         }
       },
     );
   }
+}
+
+class _ImageError extends StatelessWidget {
+  const _ImageError(this.error);
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(Icons.error),
+        const SizedBox(width: 8),
+        Flexible(child: Text(error))
+      ],
+    );
+  }
+}
+
+// Copied largely from FileImage
+class _DataSourceImage extends ImageProvider<_DataSourceImage> {
+  const _DataSourceImage(this.dataSource, this.relativePath, {this.scale = 1});
+
+  final DataSource dataSource;
+  final String relativePath;
+  final double scale;
+
+  @override
+  Future<_DataSourceImage> obtainKey(ImageConfiguration configuration) {
+    return SynchronousFuture<_DataSourceImage>(this);
+  }
+
+  @override
+  @protected
+  ImageStreamCompleter loadImage(
+      _DataSourceImage key, ImageDecoderCallback decode) {
+    return MultiFrameImageStreamCompleter(
+      codec: _loadAsync(key, decode: decode),
+      scale: key.scale,
+      debugLabel: key.dataSource.id,
+      informationCollector: () => <DiagnosticsNode>[
+        ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
+      ],
+    );
+  }
+
+  Future<ui.Codec> _loadAsync(
+    _DataSourceImage key, {
+    required ImageDecoderCallback decode,
+  }) async {
+    assert(key == this);
+
+    final relative = await key.dataSource.resolveRelative(key.relativePath);
+    final bytes = await relative.bytes;
+    if (bytes.isEmpty) {
+      // The file may become available later.
+      PaintingBinding.instance.imageCache.evict(key);
+      throw StateError(
+          '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.');
+    }
+    return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is _DataSourceImage &&
+        other.dataSource.id == dataSource.id &&
+        other.relativePath == relativePath &&
+        other.scale == scale;
+  }
+
+  @override
+  int get hashCode => Object.hash(dataSource.id, relativePath, scale);
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, '_DataSourceImage')}("${dataSource.id} / $relativePath", scale: ${scale.toStringAsFixed(1)})';
 }
