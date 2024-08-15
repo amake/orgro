@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -118,7 +119,7 @@ class _LocalOtherImage extends StatelessWidget {
   }
 }
 
-class _LocalSvgImage extends StatefulWidget {
+class _LocalSvgImage extends StatelessWidget {
   _LocalSvgImage({
     required this.dataSource,
     required this.relativePath,
@@ -128,22 +129,27 @@ class _LocalSvgImage extends StatefulWidget {
   final String relativePath;
 
   @override
-  State<_LocalSvgImage> createState() => _LocalSvgImageState();
+  Widget build(BuildContext context) {
+    return SvgPicture(_DataSourceBytesLoader(
+      dataSource: dataSource,
+      relativePath: relativePath,
+    ));
+  }
 }
 
-class _LocalSvgImageState extends State<_LocalSvgImage> {
-  late Future<Uint8List?> _bytes;
+class _DataSourceBytesLoader extends SvgLoader<Uint8List> {
+  _DataSourceBytesLoader({
+    required this.dataSource,
+    required this.relativePath,
+  }) : assert(_isSvg(relativePath));
+
+  final DataSource dataSource;
+  final String relativePath;
 
   @override
-  void initState() {
-    super.initState();
-    _bytes = _getBytes();
-  }
-
-  Future<Uint8List?> _getBytes() async {
+  Future<Uint8List> prepareMessage(BuildContext? context) async {
     try {
-      final relative =
-          await widget.dataSource.resolveRelative(widget.relativePath);
+      final relative = await dataSource.resolveRelative(relativePath);
       return await relative.bytes;
     } on Exception catch (e, s) {
       logError(e, s);
@@ -152,19 +158,8 @@ class _LocalSvgImageState extends State<_LocalSvgImage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List?>(
-      future: _bytes,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return SvgPicture.memory(snapshot.data!);
-        } else if (snapshot.hasError) {
-          return _ImageError(snapshot.error.toString());
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
-    );
+  String provideSvg(Uint8List? message) {
+    return utf8.decode(message!, allowMalformed: true);
   }
 }
 
