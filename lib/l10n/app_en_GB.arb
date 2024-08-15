@@ -1,0 +1,172 @@
+{
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Appearance…",
+  "menuItemClearCache": "Clear cache",
+  "menuItemOrgroManual": "Orgro Manual",
+  "menuItemTestFile": "Test File",
+  "menuItemAbout": "About",
+
+  "appearanceModeAutomatic": "Automatic",
+  "appearanceModeLight": "Light",
+  "appearanceModeDark": "Dark",
+
+  "snackbarMessageCacheCleared": "Cache cleared",
+
+  "aboutLinkSupport": "Support · Feedback",
+  "aboutLinkChangelog": "Changelog",
+
+  "buttonOpenFile": "Open File",
+  "buttonOpenOrgroManual": "Open Orgro Manual",
+  "buttonOpenOrgManual": "Open Org Manual",
+
+  "buttonSupport": "Support · Feedback",
+  "buttonVersion": "v{version}",
+  "@buttonVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+
+  "sectionHeaderRecentFiles": "Recent files",
+
+  "menuItemReaderMode": "Reader mode",
+  "menuItemFullWidth": "Full width",
+  "menuItemScrollTop": "Scroll to top",
+  "menuItemScrollBottom": "Scroll to bottom",
+
+  "menuItemUndo": "Undo",
+  "menuItemRedo": "Redo",
+
+  "hintTextSearch": "Search...",
+  "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
+  "@searchHits": {
+    "placeholders": {
+      "n": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "searchResultSelection": "{current} / {total}",
+  "@searchResultSelection": {
+    "placeholders": {
+      "current": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "customFilterChipName": "Custom",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro doesn’t have permission to resolve relative links",
+  "snackbarActionGrantAccess": "Grant access",
+
+  "dialogTitleError": "Error",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "Cancel",
+  "dialogActionHelp": "Help",
+
+  "pageTitleError": "Error",
+  "pageTitleLoading": "Loading...",
+  "pageTitleNarrow": "{name} › narrow",
+  "@pageTitleNarrow": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
+  "sectionActionNarrow": "Narrow",
+  "sectionActionCycleTodo": "Cycle TODO",
+
+  "bannerBodyRemoteImages": "This document contains remote images. Would you like to load them?",
+  "bannerBodyActionShowAlways": "Always",
+  "bannerBodyActionShowNever": "Never",
+  "bannerBodyActionShowOnce": "Just once",
+
+  "bannerBodyRelativeLinks": "This document contains relative links. Would you like to grant access?",
+  "bannerBodyActionGrantNotNow": "Not now",
+  "bannerBodyActionGrantNever": "Never",
+  "bannerBodyActionGrantNow": "Grant access",
+
+  "bannerBodySaveDocumentOrg": "Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]",
+  "bannerBodyActionSaveAlways": "Always",
+  "bannerBodyActionSaveNever": "Never",
+  "bannerBodyActionSaveOnce": "Just this time",
+
+  "bannerBodyDecryptContent": "This document contains encrypted content. Decrypt it now?",
+  "bannerBodyActionDecryptNow": "Decrypt",
+  "bannerBodyActionDecryptNotNow": "Not now",
+  "bannerBodyActionDecryptNever": "Never",
+
+  "saveChangesDialogTitle": "Save changes?",
+  "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
+  "saveActionShare": "Share",
+  "saveActionDiscard": "Discard",
+
+  "savedMessage": "Saved",
+
+  "inputPasswordDialogTitle": "Enter password",
+
+  "inputCustomFilterDialogTitle": "Custom filter query",
+  "inputCustomFilterDialogHistoryButton": "History",
+
+  "decryptingProgressDialogTitle": "Decrypting…",
+  "encryptingProgressDialogTitle": "Encrypting…",
+  "serializingProgressDialogTitle": "Serialising…",
+  "savingProgressDialogTitle": "Saving…",
+
+  "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
+  "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
+  "@errorPathResolvedToNonFile": {
+    "placeholders": {
+      "path": {},
+      "resolved": {}
+    }
+  },
+  "errorUnknownType": "Unknown type: {type}",
+  "@errorUnknownType": {
+    "placeholders": {
+      "type": {}
+    }
+  },
+  "errorUnexpectedHttpResponse": "Unexpected HTTP response: {response}",
+  "@errorUnexpectedHttpResponse": {
+    "placeholders": {
+      "response": {}
+    }
+  },
+  "errorOrgParser": "Parser error: {result}",
+  "@errorOrgParser": {
+    "placeholders": {
+      "result": {}
+    }
+  },
+  "errorOrgExecution": "Execution error in the below code: {message}\n\n{code}",
+  "@errorOrgExecution": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "errorOrgTimeout": "Evaluation of the below code timed out after {timeout}ms.\n\n{code}",
+  "@errorOrgTimeout": {
+    "placeholders": {
+      "timeout": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "code": {}
+    }
+  },
+  "errorOrgArgument": "Invalid argument: {item}",
+  "@errorOrgArgument": {
+    "placeholders": {
+      "item": {}
+    }
+  },
+  "errorDecryptionFailed": "Decryption failed"
+}

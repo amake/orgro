@@ -53,7 +53,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         // No need to list base locale (en)
-        resourceConfigurations += ['ja', 'uk']
+        resourceConfigurations += ['ja', 'uk', 'en_GB']
         manifestPlaceholders += [displayName: '@string/app_name']
     }
 
