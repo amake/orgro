@@ -1,5 +1,9 @@
 #+STARTUP: showall
 
+* Media
+
+- [[file:media-svg.org][SVG image]]
+
 * Visibility
 
 - [[file:visibility-sparse.org][Sparse trees]]
