@@ -28,21 +28,37 @@ class RemoteImage extends StatelessWidget {
 
   Widget _image(BuildContext context, String url) {
     if (_isSvg(url)) {
-      return SvgPicture.network(url);
+      return SvgPicture.network(
+        url,
+        placeholderBuilder: (context) => const CircularProgressIndicator(),
+      );
     } else {
-      return Image(image: CachedNetworkImageProvider(url));
+      return Image(
+        image: CachedNetworkImageProvider(url),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
+      );
     }
   }
 
   Widget _scaledImage(BuildContext context, String url) {
     if (_isSvg(url)) {
-      return SvgPicture.network(url);
+      return SvgPicture.network(
+        url,
+        placeholderBuilder: (context) => const CircularProgressIndicator(),
+      );
     } else {
       return Image(
         image: CachedNetworkImageProvider(
           url,
           scale: MediaQuery.of(context).devicePixelRatio,
         ),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
   }
@@ -132,10 +148,13 @@ class _LocalSvgImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture(_DataSourceBytesLoader(
-      dataSource: dataSource,
-      relativePath: relativePath,
-    ));
+    return SvgPicture(
+      _DataSourceBytesLoader(
+        dataSource: dataSource,
+        relativePath: relativePath,
+      ),
+      placeholderBuilder: (context) => const CircularProgressIndicator(),
+    );
   }
 }
 
