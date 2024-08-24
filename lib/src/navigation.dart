@@ -10,6 +10,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/editor.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/theme.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri uri) =>
     loadDocument(context, WebDataSource(uri));
@@ -198,17 +199,41 @@ Future<void> showInteractive(
 }
 
 Future<OrgTree?> showTextEditor(
-    BuildContext context, String name, OrgTree tree) async {
+  BuildContext context,
+  String name,
+  OrgTree tree,
+) async {
+  final viewSettings = ViewSettings.of(context).data;
   final result = await Navigator.push<String?>(
     context,
     MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (builder) => EditorPage(
-        text: tree.toMarkup(),
-        title: AppLocalizations.of(context)!.pageTitleEditing(name),
+      builder: (builder) => _InvertedBrightness(
+        child: ViewSettings(
+          data: viewSettings,
+          child: EditorPage(
+            text: tree.toMarkup(),
+            title: AppLocalizations.of(context)!.pageTitleEditing(name),
+          ),
+        ),
       ),
     ),
   );
 
   return result == null ? null : await parse(result);
+}
+
+class _InvertedBrightness extends StatelessWidget {
+  const _InvertedBrightness({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return Theme(
+      data: brightness == Brightness.light ? orgroDarkTheme : orgroLightTheme,
+      child: child,
+    );
+  }
 }

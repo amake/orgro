@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orgro/src/components/dialogs.dart';
+import 'package:orgro/src/components/view_settings.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -92,6 +93,11 @@ class _PlainTextEditorState extends State<PlainTextEditor> {
       maxLines: null,
       expands: true,
       onChanged: widget.onChanged,
+      decoration: const InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.all(8),
+      ),
+      style: ViewSettings.of(context).textStyle,
     );
   }
 }
