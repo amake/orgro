@@ -50,6 +50,8 @@
   "pageTitleLoading": "Завантаження...",
   "pageTitleNarrow": "{name} › гілка",
 
+  "pageTitleEditing": "{name} › editing",
+
   "sectionActionNarrow": "Narrow",
   "sectionActionCycleTodo": "Cycle TODO",
 
@@ -77,6 +79,10 @@
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
   "saveActionShare": "Share",
   "saveActionDiscard": "Discard",
+
+  "discardChangesDialogTitle": "Discard changes?",
+  "discardActionDiscard": "Discard",
+  "discardActionCancel": "Cancel",
 
   "savedMessage": "Saved",
 

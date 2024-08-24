@@ -8,6 +8,7 @@ import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
+import 'package:orgro/src/pages/editor.dart';
 import 'package:orgro/src/pages/pages.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri uri) =>
@@ -108,6 +109,7 @@ class _DocumentPageWrapper extends StatelessWidget {
               child: DocumentPage(
                 title: dataSource.name,
                 initialTarget: target,
+                root: true,
               ),
             );
           },
@@ -140,18 +142,18 @@ OrgQueryMatcher? _sparseQuery(FilterData filterData) {
   ]);
 }
 
-Future<OrgSection?> narrow(
+Future<OrgTree?> narrow(
     BuildContext context, DataSource dataSource, OrgSection section) async {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
-  OrgSection? result;
+  OrgTree? result;
   await Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (context) => DocumentProvider(
         doc: section,
         dataSource: dataSource,
-        onDocChanged: (doc) => result = doc as OrgSection,
+        onDocChanged: (doc) => result = doc,
         child: ViewSettings(
           data: viewSettings.data,
           child: Builder(builder: (context) {
@@ -171,6 +173,7 @@ Future<OrgSection?> narrow(
                     .pageTitleNarrow(dataSource.name),
                 initialQuery: viewSettings.queryString,
                 initialFilter: viewSettings.filterData,
+                root: false,
               ),
             );
           }),
@@ -181,8 +184,9 @@ Future<OrgSection?> narrow(
   return result;
 }
 
-void showInteractive(BuildContext context, String title, Widget child) {
-  Navigator.push<void>(
+Future<void> showInteractive(
+    BuildContext context, String title, Widget child) async {
+  return await Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (builder) => Scaffold(
@@ -191,4 +195,20 @@ void showInteractive(BuildContext context, String title, Widget child) {
       ),
     ),
   );
+}
+
+Future<OrgTree?> showTextEditor(
+    BuildContext context, String name, OrgTree tree) async {
+  final result = await Navigator.push<String?>(
+    context,
+    MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (builder) => EditorPage(
+        text: tree.toMarkup(),
+        title: AppLocalizations.of(context)!.pageTitleEditing(name),
+      ),
+    ),
+  );
+
+  return result == null ? null : await parse(result);
 }

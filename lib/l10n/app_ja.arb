@@ -50,6 +50,8 @@
   "pageTitleLoading": "ロード中...",
   "pageTitleNarrow": "{name} › ナロー",
 
+  "pageTitleEditing": "{name} › 編集",
+
   "sectionActionNarrow": "ナロー",
   "sectionActionCycleTodo": "TODO を巡回",
 
@@ -77,6 +79,10 @@
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
   "saveActionShare": "共有する",
   "saveActionDiscard": "破棄する",
+
+  "discardChangesDialogTitle": "変更を破棄しますか？",
+  "discardActionDiscard": "破棄する",
+  "discardActionCancel": "キャンセル",
 
   "savedMessage": "保存しました",
 

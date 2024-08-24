@@ -33,6 +33,7 @@ class DocumentPage extends StatefulWidget {
     this.initialTarget,
     this.initialQuery,
     this.initialFilter,
+    required this.root,
     super.key,
   });
 
@@ -40,6 +41,7 @@ class DocumentPage extends StatefulWidget {
   final String? initialTarget;
   final String? initialQuery;
   final FilterData? initialFilter;
+  final bool root;
 
   @override
   State createState() => _DocumentPageState();
@@ -107,13 +109,34 @@ class _DocumentPageState extends State<DocumentPage> {
     }
   }
 
-  void _doNarrow(OrgSection section) async {
+  Future<void> _doNarrow(OrgSection section) async {
+    final controller = OrgController.of(context);
     final newSection = await narrow(context, _dataSource, section);
     if (newSection == null || identical(newSection, section)) {
       return;
     }
-    final newDoc = _doc.editNode(section)!.replace(newSection).commit();
-    _updateDocument(newDoc as OrgTree);
+    OrgNode newDoc;
+    switch (newSection) {
+      case OrgSection():
+        newDoc = _doc.editNode(section)!.replace(newSection).commit();
+        break;
+      case OrgDocument():
+        // If the narrowed section was edited, an OrgDocument will come back. An
+        // OrgDocument may have leading content; for now we silently drop it.
+        //
+        // TODO(aaron): Try to retain added leading content
+        var zipper = _doc.editNode(section)!.replace(newSection.sections.first);
+        for (final newSec in newSection.sections.skip(1)) {
+          zipper = zipper.insertRight(newSec);
+        }
+        newDoc = zipper.commit();
+        controller.adaptVisibility(newDoc as OrgTree,
+            defaultState: OrgVisibilityState.children);
+        break;
+      default:
+        throw Exception('Unexpected section type: $newSection');
+    }
+    await _updateDocument(newDoc as OrgTree);
   }
 
   void _onSectionLongPress(OrgSection section) async => _doNarrow(section);
@@ -231,7 +254,8 @@ class _DocumentPageState extends State<DocumentPage> {
         valueListenable: _dirty,
         builder: (context, dirty, _) {
           return PopScope(
-            canPop: searchMode || !dirty || _doc is! OrgDocument,
+            canPop:
+                searchMode || !dirty || _doc is! OrgDocument || !widget.root,
             onPopInvokedWithResult: _onPopInvoked,
             child: Scaffold(
               body: _KeyboardShortcuts(
@@ -334,6 +358,8 @@ class _DocumentPageState extends State<DocumentPage> {
         ),
         // Bottom padding to compensate for Floating Action Button:
         // FAB height (56px) + padding (16px) = 72px
+        //
+        // TODO(aaron): Include edit FAB?
         const SizedBox(height: 72),
       ]),
     );
@@ -388,12 +414,34 @@ class _DocumentPageState extends State<DocumentPage> {
   }) =>
       searchMode
           ? const SearchResultsNavigation()
-          : BadgableFloatingActionButton(
-              badgeVisible: _searchDelegate.hasQuery,
-              onPressed: () => _searchDelegate.start(context),
-              heroTag: '${widget.title}FAB',
-              child: const Icon(Icons.search),
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  onPressed: _doEdit,
+                  heroTag: '${widget.title}EditFAB',
+                  mini: true,
+                  child: const Icon(Icons.edit),
+                ),
+                const SizedBox(height: 16),
+                BadgableFloatingActionButton(
+                  badgeVisible: _searchDelegate.hasQuery,
+                  onPressed: () => _searchDelegate.start(context),
+                  heroTag: '${widget.title}FAB',
+                  child: const Icon(Icons.search),
+                ),
+              ],
             );
+
+  Future<void> _doEdit() async {
+    final controller = OrgController.of(context);
+    final newDoc = await showTextEditor(context, _dataSource.name, _doc);
+    if (newDoc != null) {
+      controller.adaptVisibility(newDoc,
+          defaultState: OrgVisibilityState.children);
+      await _updateDocument(newDoc);
+    }
+  }
 
   Future<bool> _openLink(OrgLink link) async {
     try {
@@ -539,7 +587,7 @@ class _DocumentPageState extends State<DocumentPage> {
       !_askPermissionToLoadRemoteImages;
 
   bool get _canSaveChanges =>
-      _dataSource is NativeDataSource && _doc is OrgDocument;
+      _dataSource is NativeDataSource && _doc is OrgDocument && widget.root;
 
   Timer? _writeTimer;
   Future<void>? _writeFuture;
@@ -601,7 +649,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
     final doc = _doc;
     // Don't try to save anything other than a root document
-    if (doc is! OrgDocument) return;
+    if (doc is! OrgDocument || !widget.root) return;
 
     final navigator = Navigator.of(context);
 

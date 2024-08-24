@@ -101,6 +101,28 @@ extension SaveActionDisplayString on SaveAction {
       };
 }
 
+class DiscardChangesDialog extends StatelessWidget {
+  const DiscardChangesDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.warning),
+      title: Text(AppLocalizations.of(context)!.discardChangesDialogTitle),
+      actions: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.discardActionDiscard),
+          onTap: () => Navigator.pop(context, true),
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.discardActionCancel),
+          onTap: () => Navigator.pop(context, false),
+        ),
+      ],
+    );
+  }
+}
+
 class InputPasswordDialog extends StatelessWidget {
   const InputPasswordDialog({super.key});
 
