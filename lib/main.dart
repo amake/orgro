@@ -6,6 +6,7 @@ import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/theme.dart';
 
 void main() {
   LicenseRegistry.addLicense(() async* {
@@ -35,20 +36,10 @@ class _Splash extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: _kPrimaryColor,
+      color: orgroPrimaryColor,
     );
   }
 }
-
-// https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=006058&secondary.color=ff6e40
-const _kPrimaryColor = Color(0xff006058);
-const _kPrimaryColorVariant = Color(0xff00352f);
-const _kSecondaryColor = Colors.deepOrangeAccent;
-final _kSecondaryColorVariant = Colors.deepOrangeAccent.shade700;
-
-// TODO(aaron): Revert 13570c217d60907ff898331c259a1317e6cdbc3d when moving to
-// Material 3
-const _kUseMaterial3 = false;
 
 class _MyApp extends StatefulWidget {
   const _MyApp();
@@ -67,32 +58,8 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
         supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: !kScreenshotMode,
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-        theme: ThemeData.from(
-          colorScheme: ColorScheme.light(
-            primary: _kPrimaryColor,
-            primaryContainer: _kPrimaryColorVariant,
-            onPrimary: Colors.white,
-            secondary: _kSecondaryColor,
-            secondaryContainer: _kSecondaryColorVariant,
-            onSecondary: Colors.white,
-          ),
-          useMaterial3: _kUseMaterial3,
-        ),
-        darkTheme: ThemeData.from(
-          colorScheme: ColorScheme.dark(
-            primary: _kPrimaryColor,
-            primaryContainer: _kPrimaryColorVariant,
-            onPrimary: Colors.white,
-            secondary: _kSecondaryColor,
-            secondaryContainer: _kSecondaryColorVariant,
-            onSecondary: Colors.white,
-          ),
-          useMaterial3: _kUseMaterial3,
-        ).copyWith(
-            // Very dumb workaround for our primary color (the default label
-            // color for TextButton) being too dark in dark mode
-            textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(foregroundColor: Colors.white))),
+        theme: orgroLightTheme,
+        darkTheme: orgroDarkTheme,
         themeMode: Appearance.of(context).mode,
         home: const StartPage(),
       );
