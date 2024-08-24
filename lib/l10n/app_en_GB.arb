@@ -22,11 +22,6 @@
 
   "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
-  "@buttonVersion": {
-    "placeholders": {
-      "version": {}
-    }
-  },
 
   "sectionHeaderRecentFiles": "Recent files",
 
@@ -40,27 +35,7 @@
 
   "hintTextSearch": "Search...",
   "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
-  "@searchHits": {
-    "placeholders": {
-      "n": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "searchResultSelection": "{current} / {total}",
-  "@searchResultSelection": {
-    "placeholders": {
-      "current": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "total": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "customFilterChipName": "Custom",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro doesn’t have permission to resolve relative links",
@@ -74,11 +49,6 @@
   "pageTitleError": "Error",
   "pageTitleLoading": "Loading...",
   "pageTitleNarrow": "{name} › narrow",
-  "@pageTitleNarrow": {
-    "placeholders": {
-      "name": {}
-    }
-  },
 
   "sectionActionNarrow": "Narrow",
   "sectionActionCycleTodo": "Cycle TODO",
@@ -122,51 +92,11 @@
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
-  "@errorPathResolvedToNonFile": {
-    "placeholders": {
-      "path": {},
-      "resolved": {}
-    }
-  },
   "errorUnknownType": "Unknown type: {type}",
-  "@errorUnknownType": {
-    "placeholders": {
-      "type": {}
-    }
-  },
   "errorUnexpectedHttpResponse": "Unexpected HTTP response: {response}",
-  "@errorUnexpectedHttpResponse": {
-    "placeholders": {
-      "response": {}
-    }
-  },
   "errorOrgParser": "Parser error: {result}",
-  "@errorOrgParser": {
-    "placeholders": {
-      "result": {}
-    }
-  },
   "errorOrgExecution": "Execution error in the below code: {message}\n\n{code}",
-  "@errorOrgExecution": {
-    "placeholders": {
-      "message": {}
-    }
-  },
   "errorOrgTimeout": "Evaluation of the below code timed out after {timeout}ms.\n\n{code}",
-  "@errorOrgTimeout": {
-    "placeholders": {
-      "timeout": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "code": {}
-    }
-  },
   "errorOrgArgument": "Invalid argument: {item}",
-  "@errorOrgArgument": {
-    "placeholders": {
-      "item": {}
-    }
-  },
   "errorDecryptionFailed": "Decryption failed"
 }
