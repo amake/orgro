@@ -232,10 +232,11 @@ packages:
   flutter_slidable:
     dependency: "direct main"
     description:
-      name: flutter_slidable
-      sha256: "2c5611c0b44e20d180e4342318e1bbc28b0a44ad2c442f5df16962606fd3e8e3"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "3280106581fc8d54eae45f4a446f92cae36d7837"
+      url: "https://github.com/letsar/flutter_slidable.git"
+    source: git
     version: "3.1.1"
   flutter_svg:
     dependency: "direct main"
