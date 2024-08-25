@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/filter.dart';
+import 'package:orgro/src/components/bottom.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/util.dart';
 
@@ -42,27 +43,12 @@ class MySearchDelegate {
       );
 
   Widget buildBottomSheet(BuildContext context) {
-    // Hack around bottom sheet not respecting bottom safe area:
-    // https://github.com/flutter/flutter/issues/69676
-    //
-    // Get the padding here because it will be zero in the BottomSheet's
-    // builder's context.
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-    return BottomSheet(
-      enableDrag: false,
-      showDragHandle: false,
-      onClosing: () {
-        // This should never happen
-        debugPrint('Closing bottom sheet');
-      },
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: FilterChipsInput(
-          keywords: keywords,
-          tags: tags,
-          priorities: priorities,
-          selectedFilter: _selectedFilter,
-        ),
+    return BottomInputBar(
+      child: FilterChipsInput(
+        keywords: keywords,
+        tags: tags,
+        priorities: priorities,
+        selectedFilter: _selectedFilter,
       ),
     );
   }
