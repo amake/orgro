@@ -36,7 +36,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.5
   flutter_cache_manager: ^3.3.0
-  flutter_charset_detector: ^3.0.0
+  flutter_charset_detector: ^4.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector/flutter_charset_detector
   flutter_slidable: ^3.0.1

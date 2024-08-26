@@ -180,18 +180,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_charset_detector
-      sha256: "39b96e9da701d8ea0ef3192854f3bf089df45d7832d5616f047e2a1d34ac0b18"
+      sha256: d7c11a82c2c51cb35a010b42c64001afb8a9e4d7be1f57620604d386d3467ad1
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "4.0.0"
   flutter_charset_detector_android:
     dependency: transitive
     description:
       name: flutter_charset_detector_android
-      sha256: bee057133d5f134fe211523a27200dd22c782b93777f43359a571bd2c77da2cc
+      sha256: "443145e8fc8515b3b32aee375691e40dd59197a86a2ae153166bc88c8200d83b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "3.0.0"
   flutter_charset_detector_darwin:
     dependency: transitive
     description:
@@ -596,10 +596,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: a7e8467e9181cef109f601e3f65765685786c1a738a83d7fbbde377589c0d974
+      sha256: "480ba4345773f56acda9abf5f50bd966f581dac5d514e5fc4a18c62976bbba7e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   shared_preferences_foundation:
     dependency: transitive
     description:
