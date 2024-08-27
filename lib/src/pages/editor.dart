@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:orgro/src/components/bottom.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
@@ -101,10 +102,7 @@ class _EditorPageState extends State<EditorPage> {
                     // - Sections
                     IconButton(
                       icon: const Icon(Icons.link),
-                      // TODO(aaron): Make this nicer?
-                      // - Detect whether selection is URL or description?
-                      // - Somehow check clipboard?
-                      onPressed: () => _wrapSelection('[[', '][description]]'),
+                      onPressed: _insertLink,
                     ),
                   ],
                 ),
@@ -129,6 +127,24 @@ class _EditorPageState extends State<EditorPage> {
     ContextMenuController.removeAny();
   }
 
+  void _insertLink() async {
+    final value = _controller.value;
+    final selection = value.selection.textInside(value.text);
+    final url = _tryParseUrl(selection) ??
+        (await Clipboard.hasStrings()
+            ? _tryParseUrl(
+                (await Clipboard.getData(Clipboard.kTextPlain))?.text)
+            : null);
+    final description = url == null ? selection : null;
+    final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
+    _controller.value = value.replaced(value.selection, replacement).copyWith(
+          selection: TextSelection.collapsed(
+            offset: value.selection.baseOffset + replacement.length - 2,
+          ),
+        );
+    ContextMenuController.removeAny();
+  }
+
   Future<void> _onPopInvoked(bool didPop, dynamic result) async {
     if (didPop) return;
 
@@ -140,4 +156,15 @@ class _EditorPageState extends State<EditorPage> {
     );
     if (result == true) navigator.pop();
   }
+}
+
+String? _tryParseUrl(String? str) {
+  if (str == null) return null;
+  final uri = Uri.tryParse(str);
+  if (uri == null) return null;
+  // Uri.tryParse is very lenient and will accept lots of things other than what
+  // people usually think of as URLs so we filter out anything that doesn't have
+  // a scheme.
+  if (uri.scheme.isEmpty) return null;
+  return str;
 }
