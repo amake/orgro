@@ -27,7 +27,12 @@ class _EditorPageState extends State<EditorPage> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.text);
+    _controller = TextEditingController(text: widget.text)
+      ..addListener(() {
+        if (_controller.text != _after) {
+          setState(() => _after = _controller.text);
+        }
+      });
   }
 
   @override
@@ -60,7 +65,6 @@ class _EditorPageState extends State<EditorPage> {
                 focusNode: _focusNode,
                 maxLines: null,
                 expands: true,
-                onChanged: (val) => setState(() => _after = val),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8),
