@@ -1,1 +1,1 @@
-org,mode,org-mode,emacs,markup,viewer,notes,todo,memo,organize,latex
+org,mode,org-mode,emacs,markup,viewer,editor,notes,todo,memo,organize,latex
