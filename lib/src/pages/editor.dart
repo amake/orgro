@@ -60,7 +60,14 @@ class _EditorPageState extends State<EditorPage> {
           onChanged: (val) => setState(() => _after = val),
           decoration: const InputDecoration(
             border: InputBorder.none,
-            contentPadding: EdgeInsets.all(8),
+            contentPadding: EdgeInsets.only(
+              top: 8,
+              left: 8,
+              right: 8,
+              // Bottom padding to compensate for bottom sheet:
+              // IconButton height (24px) * 2 + padding (8px) = 32px
+              bottom: 64,
+            ),
           ),
           style: ViewSettings.of(context).textStyle,
         ),
