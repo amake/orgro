@@ -81,7 +81,10 @@ class _DocumentPageState extends State<DocumentPage> {
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => _canResolveRelativeLinks = value),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) => _openInitialTarget());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _openInitialTarget();
+      _ensureOpenOnNarrow();
+    });
   }
 
   @override
@@ -107,6 +110,17 @@ class _DocumentPageState extends State<DocumentPage> {
     if (section != null) {
       _doNarrow(section);
     }
+  }
+
+  void _ensureOpenOnNarrow() {
+    if (widget.root) return;
+    OrgController.of(context).setVisibilityOf(
+      _doc,
+      (state) => switch (state) {
+        OrgVisibilityState.folded => OrgVisibilityState.children,
+        _ => state,
+      },
+    );
   }
 
   Future<void> _doNarrow(OrgSection section) async {
