@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:orgro/src/components/bottom.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 
@@ -52,70 +51,68 @@ class _EditorPageState extends State<EditorPage> {
             )
           ],
         ),
-        body: TextField(
-          controller: _controller,
-          focusNode: _focusNode,
-          maxLines: null,
-          expands: true,
-          onChanged: (val) => setState(() => _after = val),
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.only(
-              top: 8,
-              left: 8,
-              right: 8,
-              // Bottom padding to compensate for bottom sheet:
-              // IconButton height (24px) * 2 + padding (8px) = 32px
-              bottom: 64,
-            ),
-          ),
-          style: ViewSettings.of(context).textStyle,
-        ),
-        bottomSheet: ListenableBuilder(
-          listenable: _focusNode,
-          builder: (context, child) =>
-              _focusNode.hasFocus ? child! : const SizedBox.shrink(),
-          child: BottomInputBar(
-            child: SizedBox(
-              width: double.infinity,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.format_bold),
-                      onPressed: () => _wrapSelection('*', '*'),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.format_italic),
-                      onPressed: () => _wrapSelection('/', '/'),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.format_underline),
-                      onPressed: () => _wrapSelection('_', '_'),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.format_strikethrough),
-                      onPressed: () => _wrapSelection('+', '+'),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.code),
-                      onPressed: () => _wrapSelection('~', '~'),
-                    ),
-                    // TODO(aaron): Offer more quick-insert actions?
-                    // - Lists
-                    // - Code blocks
-                    // - Sections
-                    IconButton(
-                      icon: const Icon(Icons.link),
-                      onPressed: _insertLink,
-                    ),
-                  ],
+        body: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                maxLines: null,
+                expands: true,
+                onChanged: (val) => setState(() => _after = val),
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(8),
                 ),
+                style: ViewSettings.of(context).textStyle,
               ),
             ),
-          ),
+            ListenableBuilder(
+              listenable: _focusNode,
+              builder: (context, child) =>
+                  _focusNode.hasFocus ? child! : const SizedBox.shrink(),
+              child: SizedBox(
+                width: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.format_bold),
+                        onPressed: () => _wrapSelection('*', '*'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.format_italic),
+                        onPressed: () => _wrapSelection('/', '/'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.format_underline),
+                        onPressed: () => _wrapSelection('_', '_'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.format_strikethrough),
+                        onPressed: () => _wrapSelection('+', '+'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.code),
+                        onPressed: () => _wrapSelection('~', '~'),
+                      ),
+                      // TODO(aaron): Offer more quick-insert actions?
+                      // - Lists
+                      // - Code blocks
+                      // - Sections
+                      IconButton(
+                        icon: const Icon(Icons.link),
+                        onPressed: _insertLink,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
