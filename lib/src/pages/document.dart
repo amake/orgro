@@ -124,33 +124,75 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Future<void> _doNarrow(OrgSection section) async {
-    final controller = OrgController.of(context);
     final newSection = await narrow(context, _dataSource, section);
     if (newSection == null || identical(newSection, section)) {
       return;
     }
-    OrgNode newDoc;
-    switch (newSection) {
+    try {
+      final newDoc = _applyNarrowResult(before: section, after: newSection);
+      if (newDoc != null) await _updateDocument(newDoc as OrgTree);
+    } on Exception catch (e, s) {
+      logError(e, s);
+      if (mounted) showErrorSnackBar(context, e);
+    }
+  }
+
+  OrgNode? _applyNarrowResult({
+    required OrgSection before,
+    required OrgTree after,
+  }) {
+    switch (after) {
       case OrgSection():
-        newDoc = _doc.editNode(section)!.replace(newSection).commit();
-        break;
+        return _doc.editNode(before)!.replace(after).commit();
       case OrgDocument():
-        // If the narrowed section was edited, an OrgDocument will come back. An
-        // OrgDocument may have leading content; for now we silently drop it.
+        // If the narrowed section was edited, an OrgDocument will come back.
         //
-        // TODO(aaron): Try to retain added leading content
-        var zipper = _doc.editNode(section)!.replace(newSection.sections.first);
-        for (final newSec in newSection.sections.skip(1)) {
+        // The document may be empty:
+        if (after.content == null && after.sections.isEmpty) {
+          return null;
+        }
+        OrgSection toReplace;
+        Iterable<OrgSection> toInsert;
+        if (after.content != null) {
+          // The document may have leading content. The expected thing if
+          // editing plain text would be to append it to the previous section,
+          // but that's pretty annoying to do with zippers, so instead we wrap
+          // it in a section just so it's not lost.
+          toInsert = after.sections;
+          final headline = AppLocalizations.of(context)!.editInsertedHeadline;
+          toReplace = OrgSection(
+            OrgHeadline(
+              toInsert.firstOrNull?.headline.stars ?? before.headline.stars,
+              null,
+              null,
+              OrgContent([OrgPlainText(headline)]),
+              headline,
+              null,
+              '\n',
+            ),
+            after.content!,
+          );
+        } else {
+          // If there is no leading content then we can just insert all the
+          // sections. Note that if the sections' levels have been changed then
+          // the resulting document could be one that is impossible to obtain
+          // from parsing (i.e. improper nesting). This is hard to fix and at
+          // the moment doesn't seem to cause any problems other than surprising
+          // folding/unfolding behavior, so we just let it be.
+          toReplace = after.sections.first;
+          toInsert = after.sections.skip(1);
+        }
+        var zipper = _doc.editNode(before)!.replace(toReplace);
+        for (final newSec in toInsert) {
           zipper = zipper.insertRight(newSec);
         }
-        newDoc = zipper.commit();
-        controller.adaptVisibility(newDoc as OrgTree,
+        final newDoc = zipper.commit();
+        OrgController.of(context).adaptVisibility(newDoc as OrgTree,
             defaultState: OrgVisibilityState.children);
-        break;
+        return newDoc;
       default:
-        throw Exception('Unexpected section type: $newSection');
+        throw Exception('Unexpected section type: $after');
     }
-    await _updateDocument(newDoc as OrgTree);
   }
 
   void _onSectionLongPress(OrgSection section) async => _doNarrow(section);

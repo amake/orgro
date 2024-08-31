@@ -104,5 +104,7 @@
   "errorOrgExecution": "以下のコードに実行エラーが発生しました: {message}\n\n{code}",
   "errorOrgTimeout": "以下のコードの実行が {timeout}ms でタイムアウトしました\n\n{code}",
   "errorOrgArgument": "不正な引数: {item}",
-  "errorDecryptionFailed": "復号が失敗しました"
+  "errorDecryptionFailed": "復号が失敗しました",
+
+  "editInsertedHeadline": "[編集によって挿入]"
 }

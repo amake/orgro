@@ -179,5 +179,7 @@
       "item": {}
     }
   },
-  "errorDecryptionFailed": "Decryption failed"
+  "errorDecryptionFailed": "Decryption failed",
+
+  "editInsertedHeadline": "[Inserted by edit]"
 }
