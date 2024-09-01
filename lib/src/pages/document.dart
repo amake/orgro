@@ -510,8 +510,12 @@ class _DocumentPageState extends State<DocumentPage> {
     // Handle as a general URL
     try {
       debugPrint('Launching URL: ${link.location}');
-      return await launchUrl(Uri.parse(link.location),
+      final handled = await launchUrl(Uri.parse(link.location),
           mode: LaunchMode.externalApplication);
+      if (!handled && mounted) {
+        showErrorSnackBar(context,
+            AppLocalizations.of(context)!.errorLinkNotHandled(link.location));
+      }
     } on Exception catch (e, s) {
       logError(e, s);
       showErrorSnackBar(context, e);

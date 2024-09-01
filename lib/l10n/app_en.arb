@@ -180,6 +180,12 @@
     }
   },
   "errorDecryptionFailed": "Decryption failed",
+  "errorLinkNotHandled": "Couldn’t open link “{link}”",
+  "@errorLinkNotHandled": {
+    "placeholders": {
+      "link": {}
+    }
+  },
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

@@ -105,6 +105,7 @@
   "errorOrgTimeout": "以下のコードの実行が {timeout}ms でタイムアウトしました\n\n{code}",
   "errorOrgArgument": "不正な引数: {item}",
   "errorDecryptionFailed": "復号が失敗しました",
+  "errorLinkNotHandled": "リンク「{link}」を開けませんでした",
 
   "editInsertedHeadline": "[編集によって挿入]"
 }
