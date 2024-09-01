@@ -1,0 +1,6 @@
+- [[file:links-local.org::*Foobar][External section link to Foobar in links-local.org]]
+- [[id:430FF498-F007-4474-9085-607D9AA4524E][External ID link to Foobar (in links-local.org)]]
+  - TODO(aaron): Make this work with ~AssetDataSource~
+- [[file:links-local.org::*Hogehoge][External section link to nonexistent section in links-local.org]]
+- [[id:nonexistent-id][External ID link to nonexistent ID]]
+  - TODO(aaron): Make this work with ~AssetDataSource~

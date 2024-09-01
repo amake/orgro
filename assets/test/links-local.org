@@ -1,0 +1,20 @@
+- [[*Foobar][Local section link to Foobar]]
+- [[id:430FF498-F007-4474-9085-607D9AA4524E][Local ID link to Foobar]]
+- [[#bizzbuzz_id][Local custom ID link to Bizzbuzz]]
+- [[*Hogehoge][Local section link to nonexistent section]]
+- [[id:nonexistent-id][Local ID link to nonexistent ID]]
+- [[#hogehoge_id][Local custom ID link to nonexistent ID]]
+
+* Foobar
+  :PROPERTIES:
+  :ID:       430FF498-F007-4474-9085-607D9AA4524E
+  :END:
+
+  Foobar!
+
+* Bizzbuzz
+  :PROPERTIES:
+  :CUSTOM_ID: bizzbuzz_id
+  :END:
+
+  Bizzbuzz!

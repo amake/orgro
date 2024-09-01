@@ -1,5 +1,10 @@
 #+STARTUP: showall
 
+* Links
+
+- [[file:links-local.org][Local]]
+- [[file:links-external.org][External]]
+
 * Media
 
 - [[file:media-svg.org][SVG image]]
