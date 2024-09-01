@@ -95,6 +95,7 @@
   "encryptingProgressDialogTitle": "暗号化中…",
   "serializingProgressDialogTitle": "書き出し中…",
   "savingProgressDialogTitle": "保存中…",
+  "searchingProgressDialogTitle": "検索中…",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
   "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",
@@ -106,6 +107,7 @@
   "errorOrgArgument": "不正な引数: {item}",
   "errorDecryptionFailed": "復号が失敗しました",
   "errorLinkNotHandled": "リンク「{link}」を開けませんでした",
+  "errorExternalIdNotFound": "ID「{id}」のファイルが見つかりませんでした",
 
   "editInsertedHeadline": "[編集によって挿入]"
 }

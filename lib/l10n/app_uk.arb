@@ -95,6 +95,7 @@
   "encryptingProgressDialogTitle": "Encrypting…",
   "serializingProgressDialogTitle": "Serializing…",
   "savingProgressDialogTitle": "Saving…",
+  "searchingProgressDialogTitle": "Searching…",
 
   "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
@@ -106,6 +107,7 @@
   "errorOrgArgument": "Invalid argument: {item}",
   "errorDecryptionFailed": "Decryption failed",
   "errorLinkNotHandled": "Couldn’t open link “{link}”",
+  "errorExternalIdNotFound": "File with ID “{id}” not found",
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

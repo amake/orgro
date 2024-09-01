@@ -19,6 +19,7 @@ import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
+import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
@@ -507,6 +508,10 @@ class _DocumentPageState extends State<DocumentPage> {
       // Wasn't a file link
     }
 
+    if (isOrgIdUrl(link.location)) {
+      return await _openExternalIdLink(link.location);
+    }
+
     // Handle as a general URL
     try {
       debugPrint('Launching URL: ${link.location}');
@@ -518,7 +523,60 @@ class _DocumentPageState extends State<DocumentPage> {
       }
     } on Exception catch (e, s) {
       logError(e, s);
-      showErrorSnackBar(context, e);
+      if (mounted) showErrorSnackBar(context, e);
+    }
+    return false;
+  }
+
+  Future<bool> _openExternalIdLink(String url) async {
+    assert(isOrgIdUrl(url));
+
+    final dataSource = _dataSource;
+    if (dataSource is! NativeDataSource) {
+      debugPrint('Unsupported data source: ${dataSource.runtimeType}');
+      // TODO(aaron): report unsupported data source type to user
+      return false;
+    }
+
+    if (dataSource.needsToResolveParent) {
+      _showDirectoryPermissionsSnackBar(context);
+      return false;
+    }
+
+    final targetId = parseOrgIdUrl(url);
+
+    final accessibleDirs = Preferences.of(context).accessibleDirs;
+
+    // TODO(aaron): Find a way to make this operation cancelable
+    showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => ProgressIndicatorDialog(
+        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      ),
+    );
+
+    try {
+      // TODO(aaron): Search accessible dir that contains this document first
+      for (final dir in accessibleDirs) {
+        final foundFile = await findFileForId(id: targetId, dirIdentifier: dir);
+        if (foundFile != null && mounted) {
+          Navigator.pop(context);
+          return loadDocument(context, foundFile);
+        }
+      }
+
+      if (mounted) {
+        Navigator.pop(context);
+        showErrorSnackBar(context,
+            AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));
+      }
+    } on Exception catch (e, s) {
+      logError(e, s);
+      if (mounted) {
+        Navigator.pop(context);
+        showErrorSnackBar(context, e);
+      }
     }
     return false;
   }

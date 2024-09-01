@@ -96,6 +96,7 @@
   "encryptingProgressDialogTitle": "Encrypting…",
   "serializingProgressDialogTitle": "Serialising…",
   "savingProgressDialogTitle": "Saving…",
+  "searchingProgressDialogTitle": "Searching…",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
@@ -107,6 +108,7 @@
   "errorOrgArgument": "Invalid argument: {item}",
   "errorDecryptionFailed": "Decryption failed",
   "errorLinkNotHandled": "Couldn’t open link “{link}”",
+  "errorExternalIdNotFound": "File with ID “{id}” not found",
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

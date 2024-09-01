@@ -130,6 +130,7 @@
   "encryptingProgressDialogTitle": "Encrypting…",
   "serializingProgressDialogTitle": "Serializing…",
   "savingProgressDialogTitle": "Saving…",
+  "searchingProgressDialogTitle": "Searching…",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
@@ -184,6 +185,12 @@
   "@errorLinkNotHandled": {
     "placeholders": {
       "link": {}
+    }
+  },
+  "errorExternalIdNotFound": "File with ID “{id}” not found",
+  "@errorExternalIdNotFound": {
+    "placeholders": {
+      "id": {}
     }
   },
 
