@@ -595,6 +595,15 @@ class _DocumentPageState extends State<DocumentPage> {
       if (!mounted) return false;
       return loadDocument(context, resolved, target: link.extra);
     } on Exception catch (e, s) {
+      // TODO(aaron): Investigate failure to open relative link on iOS
+      //
+      // It seems that somehow we can have an accessibleDir that allows
+      // resolving this document, a link.body that points to a real file, but
+      // resolveRelative fails with Domain=NSCocoaErrorDomain Code=260 "The file
+      // couldn’t be opened because it doesn’t exist."
+      //
+      // Clearing accessibleDirs and making the user re-choose a parent dir
+      // seems to fix it, so maybe prompt for directory permissions again here.
       logError(e, s);
       showErrorSnackBar(context, e);
     }
