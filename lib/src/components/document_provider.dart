@@ -7,6 +7,7 @@ import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/util.dart';
 
 const _kMaxUndoStackSize = 10;
 
@@ -70,7 +71,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
   }
 
   Future<void> _addAccessibleDir(String dir) async {
-    final accessibleDirs = _accessibleDirs..add(dir);
+    final accessibleDirs = _accessibleDirs
+      ..add(dir)
+      ..unique();
     await Preferences.of(context).setAccessibleDirs(accessibleDirs);
     final dataSource = await _resolveDataSourceParent(accessibleDirs);
     setState(() {
