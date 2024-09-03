@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
 
@@ -218,8 +219,11 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
   @protected
   ImageStreamCompleter loadImage(
       _DataSourceImage key, ImageDecoderCallback decode) {
+    final chunkEvents = StreamController<ImageChunkEvent>();
+
     return MultiFrameImageStreamCompleter(
-      codec: _loadAsync(key, decode: decode),
+      codec: _loadAsync(key, chunkEvents, decode: decode),
+      chunkEvents: chunkEvents.stream,
       scale: key.scale,
       debugLabel: key.dataSource.id,
       informationCollector: () => <DiagnosticsNode>[
@@ -229,20 +233,40 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
   }
 
   Future<ui.Codec> _loadAsync(
-    _DataSourceImage key, {
+    _DataSourceImage key,
+    StreamController<ImageChunkEvent> chunkEvents, {
     required ImageDecoderCallback decode,
   }) async {
-    assert(key == this);
+    try {
+      assert(key == this);
 
-    final relative = await key.dataSource.resolveRelative(key.relativePath);
-    final bytes = await relative.bytes;
-    if (bytes.isEmpty) {
-      // The file may become available later.
-      PaintingBinding.instance.imageCache.evict(key);
-      throw StateError(
-          '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.');
+      chunkEvents.add(const ImageChunkEvent(
+        cumulativeBytesLoaded: 0,
+        expectedTotalBytes: null,
+      ));
+
+      final relative = await key.dataSource.resolveRelative(key.relativePath);
+      final bytes = await relative.bytes;
+
+      chunkEvents.add(ImageChunkEvent(
+        cumulativeBytesLoaded: bytes.length,
+        expectedTotalBytes: bytes.length,
+      ));
+
+      if (bytes.isEmpty) {
+        // The file may become available later. Throw to evict from cash.
+        throw StateError(
+            '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.');
+      }
+      return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
+    } catch (e) {
+      scheduleMicrotask(() {
+        PaintingBinding.instance.imageCache.evict(key);
+      });
+      rethrow;
+    } finally {
+      chunkEvents.close();
     }
-    return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
   }
 
   @override
