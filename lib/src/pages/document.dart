@@ -590,10 +590,21 @@ class _DocumentPageState extends State<DocumentPage> {
       _showDirectoryPermissionsSnackBar(context);
       return false;
     }
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => ProgressIndicatorDialog(
+        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      ),
+    );
+
     try {
       final resolved = await source.resolveRelative(link.body);
-      if (!mounted) return false;
-      return loadDocument(context, resolved, target: link.extra);
+      if (mounted) {
+        Navigator.pop(context);
+        return await loadDocument(context, resolved, target: link.extra);
+      }
     } on Exception catch (e, s) {
       // TODO(aaron): Investigate failure to open relative link on iOS
       //
@@ -605,7 +616,7 @@ class _DocumentPageState extends State<DocumentPage> {
       // Clearing accessibleDirs and making the user re-choose a parent dir
       // seems to fix it, so maybe prompt for directory permissions again here.
       logError(e, s);
-      showErrorSnackBar(context, e);
+      if (mounted) showErrorSnackBar(context, e);
     }
     return false;
   }
