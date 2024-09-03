@@ -548,7 +548,7 @@ class _DocumentPageState extends State<DocumentPage> {
     final accessibleDirs = Preferences.of(context).accessibleDirs;
 
     // TODO(aaron): Find a way to make this operation cancelable
-    showDialog<String>(
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) => ProgressIndicatorDialog(
