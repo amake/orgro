@@ -29,6 +29,7 @@ Future<String?> serializeWithProgressUI(
       title: willEncrypt
           ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
           : AppLocalizations.of(context)!.serializingProgressDialogTitle,
+      dismissable: true,
     ),
   );
   if (result == null) {

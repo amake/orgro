@@ -874,7 +874,9 @@ class _DocumentPageState extends State<DocumentPage> {
     final result = await showDialog<List<String?>>(
       context: context,
       builder: (context) => ProgressIndicatorDialog(
-          title: AppLocalizations.of(context)!.decryptingProgressDialogTitle),
+        title: AppLocalizations.of(context)!.decryptingProgressDialogTitle,
+        dismissable: true,
+      ),
     );
     if (!mounted) return;
     if (result == null) {

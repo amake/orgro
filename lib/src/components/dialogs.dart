@@ -141,15 +141,23 @@ class InputPasswordDialog extends StatelessWidget {
 }
 
 class ProgressIndicatorDialog extends StatelessWidget {
-  const ProgressIndicatorDialog({required this.title, super.key});
+  const ProgressIndicatorDialog({
+    required this.title,
+    this.dismissable = false,
+    super.key,
+  });
 
   final String title;
+  final bool dismissable;
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: const LinearProgressIndicator(),
+    return PopScope(
+      canPop: dismissable,
+      child: AlertDialog(
+        title: Text(title),
+        content: const LinearProgressIndicator(),
+      ),
     );
   }
 }
