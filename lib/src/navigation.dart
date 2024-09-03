@@ -144,7 +144,7 @@ OrgQueryMatcher? _sparseQuery(FilterData filterData) {
 }
 
 Future<OrgTree?> narrow(
-    BuildContext context, DataSource dataSource, OrgSection section) async {
+    BuildContext context, DataSource dataSource, OrgTree section) async {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
   OrgTree? result;

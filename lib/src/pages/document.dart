@@ -102,7 +102,7 @@ class _DocumentPageState extends State<DocumentPage> {
     if (target == null || target.isEmpty) {
       return;
     }
-    OrgSection? section;
+    OrgTree? section;
     try {
       section = OrgController.of(context).sectionForTarget(target);
     } on Exception catch (e, s) {
@@ -124,7 +124,11 @@ class _DocumentPageState extends State<DocumentPage> {
     );
   }
 
-  Future<void> _doNarrow(OrgSection section) async {
+  Future<void> _doNarrow(OrgTree section) async {
+    if (section == _doc) {
+      debugPrint('Suppressing narrow to currently open document');
+      return;
+    }
     final newSection = await narrow(context, _dataSource, section);
     if (newSection == null || identical(newSection, section)) {
       return;
@@ -139,7 +143,7 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   OrgNode? _applyNarrowResult({
-    required OrgSection before,
+    required OrgTree before,
     required OrgTree after,
   }) {
     switch (after) {
@@ -161,9 +165,13 @@ class _DocumentPageState extends State<DocumentPage> {
           // it in a section just so it's not lost.
           toInsert = after.sections;
           final headline = AppLocalizations.of(context)!.editInsertedHeadline;
+          final stars = toInsert.firstOrNull?.headline.stars ??
+              (before is OrgSection
+                  ? before.headline.stars
+                  : (value: '*', trailing: ' '));
           toReplace = OrgSection(
             OrgHeadline(
-              toInsert.firstOrNull?.headline.stars ?? before.headline.stars,
+              stars,
               null,
               null,
               OrgContent([OrgPlainText(headline)]),
