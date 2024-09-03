@@ -562,7 +562,7 @@ class _DocumentPageState extends State<DocumentPage> {
         final foundFile = await findFileForId(id: targetId, dirIdentifier: dir);
         if (foundFile != null && mounted) {
           Navigator.pop(context);
-          return loadDocument(context, foundFile, target: url);
+          return await loadDocument(context, foundFile, target: url);
         }
       }
 
