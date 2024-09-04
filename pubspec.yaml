@@ -64,6 +64,7 @@ flutter:
     - assets/manual/data/C2/59CE94-D4C8-4C4F-9C9E-9ABE446E7DA3/
     - assets/fonts/
     - assets/test/
+    - assets/licenses/
 
 dependency_overrides:
   # Work around Dart 3.5.0 breakage: https://stackoverflow.com/q/69553108

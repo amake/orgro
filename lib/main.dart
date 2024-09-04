@@ -10,8 +10,14 @@ import 'package:orgro/theme.dart';
 
 void main() {
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('assets/fonts/OFL.txt');
-    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    yield LicenseEntryWithLineBreaks(
+      ['google_fonts'],
+      await rootBundle.loadString('assets/fonts/OFL.txt'),
+    );
+    yield LicenseEntryWithLineBreaks(
+      ['LineReader'],
+      await rootBundle.loadString('assets/licenses/LICENSE-LineReader.txt'),
+    );
   });
 
   if (kReleaseMode) {
