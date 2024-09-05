@@ -204,6 +204,7 @@ Future<OrgTree?> showTextEditor(
   OrgTree tree,
 ) async {
   final viewSettings = ViewSettings.of(context).data;
+  final text = tree.toMarkup();
   final result = await Navigator.push<String?>(
     context,
     MaterialPageRoute(
@@ -212,7 +213,7 @@ Future<OrgTree?> showTextEditor(
         child: ViewSettings(
           data: viewSettings,
           child: EditorPage(
-            text: tree.toMarkup(),
+            text: text,
             title: AppLocalizations.of(context)!.pageTitleEditing(name),
           ),
         ),
