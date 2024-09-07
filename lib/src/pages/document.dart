@@ -679,6 +679,33 @@ class _DocumentPageState extends State<DocumentPage> {
         ),
       );
 
+  void _showMissingEncryptionKeySnackBar(BuildContext context) =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              AppLocalizations.of(context)!.snackbarMessageNeedsEncryptionKey),
+          action: SnackBarAction(
+            label: AppLocalizations.of(context)!
+                .snackbarActionEnterEncryptionKey
+                .toUpperCase(),
+            onPressed: () async {
+              final password = await showDialog<String>(
+                context: context,
+                builder: (context) => InputPasswordDialog(
+                  title: AppLocalizations.of(context)!
+                      .inputEncryptionPasswordDialogTitle,
+                ),
+              );
+              if (password != null && context.mounted) {
+                DocumentProvider.of(context).addPasswords(
+                  [(password: password, predicate: (_) => true)],
+                );
+              }
+            },
+          ),
+        ),
+      );
+
   void _onListItemTap(OrgListItem item) {
     final newTree =
         _doc.editNode(item)!.replace(item.toggleCheckbox()).commit();
@@ -768,9 +795,12 @@ class _DocumentPageState extends State<DocumentPage> {
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
-        doc is OrgDocument &&
-        !(analysis.needsEncryption == true &&
-            doc.missingEncryptionKey(passwords))) {
+        doc is OrgDocument) {
+      if (analysis.needsEncryption == true &&
+          doc.missingEncryptionKey(passwords)) {
+        _showMissingEncryptionKeySnackBar(context);
+        return;
+      }
       _writeTimer?.cancel();
       _writeTimer = Timer(const Duration(seconds: 3), () {
         _writeFuture = time('save', () async {

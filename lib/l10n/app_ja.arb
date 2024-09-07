@@ -41,6 +41,9 @@
   "snackbarMessageNeedsDirectoryPermissions": "相対リンクを解決する権限がありません",
   "snackbarActionGrantAccess": "許可する",
 
+  "snackbarMessageNeedsEncryptionKey": "保存できませんでした。暗号化するためのパスワードが必要",
+  "snackbarActionEnterEncryptionKey": "パスワードを入力",
+
   "dialogTitleError": "エラー",
   "dialogActionConfirm": "OK",
   "dialogActionCancel": "キャンセル",

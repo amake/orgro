@@ -41,6 +41,9 @@
   "snackbarMessageNeedsDirectoryPermissions": "Orgro doesn’t have permission to resolve relative links",
   "snackbarActionGrantAccess": "Grant access",
 
+  "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
+  "snackbarActionEnterEncryptionKey": "Enter password",
+
   "dialogTitleError": "Error",
   "dialogActionConfirm": "OK",
   "dialogActionCancel": "Cancel",

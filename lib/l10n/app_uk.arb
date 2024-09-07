@@ -41,6 +41,9 @@
   "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",
 
+  "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
+  "snackbarActionEnterEncryptionKey": "Enter password",
+
   "dialogTitleError": "Помилка",
   "dialogActionConfirm": "OK",
   "dialogActionCancel": "Cancel",
