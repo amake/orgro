@@ -374,7 +374,9 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Widget _buildDocument(BuildContext context) {
     final viewSettings = _viewSettings;
-    final doc = _doc;
+    final docProvider = DocumentProvider.of(context);
+    final doc = docProvider.doc;
+    final analysis = docProvider.analysis;
     final result = SliverList(
       delegate: SliverChildListDelegate([
         DirectoryPermissionsBanner(
@@ -393,7 +395,7 @@ class _DocumentPageState extends State<DocumentPage> {
           visible: _askPermissionToSaveChanges,
           onResult: (value, {required bool persist}) {
             viewSettings.setSaveChangesPolicy(value, persist: persist);
-            if (_dirty.value) _onDocChanged(_doc);
+            if (_dirty.value) _onDocChanged(doc, analysis);
           },
         ),
         DecryptContentBanner(
@@ -741,36 +743,41 @@ class _DocumentPageState extends State<DocumentPage> {
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
   Future<bool> _updateDocument(OrgTree newDoc, {bool dirty = true}) async {
-    final pushed = await DocumentProvider.of(context).pushDoc(newDoc);
+    final (pushed, analysis) =
+        await DocumentProvider.of(context).pushDoc(newDoc);
     if (pushed && dirty) {
-      await _onDocChanged(newDoc);
+      await _onDocChanged(newDoc, analysis);
     }
     return pushed;
   }
 
   Future<void> _undo() async {
-    final doc = DocumentProvider.of(context).undo();
-    await _onDocChanged(doc);
+    final (doc, analysis) = DocumentProvider.of(context).undo();
+    await _onDocChanged(doc, analysis);
   }
 
   Future<void> _redo() async {
-    final doc = DocumentProvider.of(context).redo();
-    await _onDocChanged(doc);
+    final (doc, analysis) = DocumentProvider.of(context).redo();
+    await _onDocChanged(doc, analysis);
   }
 
-  Future<void> _onDocChanged(OrgTree doc) async {
+  Future<void> _onDocChanged(OrgTree doc, DocumentAnalysis analysis) async {
     _dirty.value = true;
     final source = _dataSource;
+    final passwords = DocumentProvider.of(context).passwords;
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
-        doc is OrgDocument) {
+        doc is OrgDocument &&
+        !(analysis.needsEncryption == true &&
+            doc.missingEncryptionKey(passwords))) {
       _writeTimer?.cancel();
       _writeTimer = Timer(const Duration(seconds: 3), () {
         _writeFuture = time('save', () async {
           try {
             debugPrint('starting auto save');
-            final markup = await serialize(doc);
+            final serializer = OrgroSerializer.get(analysis, passwords);
+            final markup = await serialize(doc, serializer);
             await time('write', () => source.write(markup));
             _dirty.value = false;
             if (mounted) {
@@ -838,12 +845,47 @@ class _DocumentPageState extends State<DocumentPage> {
       }
     }
 
+    final docProvider = DocumentProvider.of(context);
+    var passwords = docProvider.passwords;
+    if (docProvider.analysis.needsEncryption == true &&
+        doc.missingEncryptionKey(passwords)) {
+      final password = await showDialog<String>(
+        context: context,
+        builder: (context) => InputPasswordDialog(
+          title:
+              AppLocalizations.of(context)!.inputEncryptionPasswordDialogTitle,
+          bodyText:
+              AppLocalizations.of(context)!.inputEncryptionPasswordDialogBody,
+        ),
+      );
+      if (!mounted) return;
+      if (password == null) {
+        final discard = await showDialog<bool>(
+          context: context,
+          builder: (context) => const DiscardChangesDialog(),
+        );
+        if (discard == true) {
+          navigator.pop();
+        }
+        return;
+      } else {
+        passwords = [
+          ...passwords,
+          (password: password, predicate: (_) => true)
+        ];
+      }
+    }
+
+    if (!mounted) return;
+
+    final serializer = OrgroSerializer.get(docProvider.analysis, passwords);
+
     if (saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource) {
       debugPrint('synchronously saving now');
       _writeTimer?.cancel();
-      final markup = await serializeWithProgressUI(context, doc);
+      final markup = await serializeWithProgressUI(context, doc, serializer);
       if (markup == null) return;
       await time('write', () => source.write(markup));
       navigator.pop();
@@ -853,7 +895,10 @@ class _DocumentPageState extends State<DocumentPage> {
     // Prompt to share
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => ShareUnsaveableChangesDialog(doc: doc),
+      builder: (context) => ShareUnsaveableChangesDialog(
+        doc: doc,
+        serializer: serializer,
+      ),
     );
 
     if (result == true) navigator.pop();
@@ -877,7 +922,9 @@ class _DocumentPageState extends State<DocumentPage> {
     });
     final password = await showDialog<String>(
       context: context,
-      builder: (context) => const InputPasswordDialog(),
+      builder: (context) => InputPasswordDialog(
+        title: AppLocalizations.of(context)!.inputDecryptionPasswordDialogTitle,
+      ),
     );
     if (password == null) return;
     if (!mounted) return;
@@ -904,6 +951,7 @@ class _DocumentPageState extends State<DocumentPage> {
       return;
     }
     OrgTree newDoc = _doc;
+    final toRemember = <OrgroPassword>[];
     for (final (i, cleartext) in result.indexed) {
       if (cleartext == null) {
         showErrorSnackBar(
@@ -914,8 +962,24 @@ class _DocumentPageState extends State<DocumentPage> {
       try {
         final replacement = OrgDecryptedContent.fromDecryptedResult(
           cleartext,
-          OrgroSerializer(block, cleartext: cleartext, password: password),
+          OrgroDecryptedContentSerializer(
+            block,
+            cleartext: cleartext,
+            password: password,
+          ),
         );
+        final enclosingCryptSection = newDoc.findContainingTree(
+              block,
+              where: (tree) =>
+                  tree is OrgSection && tree.tags.contains('crypt'),
+            ) ??
+            newDoc.findContainingTree(block)!;
+        if (enclosingCryptSection is OrgSection) {
+          toRemember.add((
+            password: password,
+            predicate: enclosingCryptSection.buildMatcher(),
+          ));
+        }
         newDoc =
             newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
       } catch (e, s) {
@@ -924,6 +988,7 @@ class _DocumentPageState extends State<DocumentPage> {
         continue;
       }
     }
+    DocumentProvider.of(context).addPasswords(toRemember);
     await _updateDocument(newDoc, dirty: false);
   }
 }

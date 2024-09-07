@@ -99,3 +99,11 @@ String joinPath(String base, String rest) {
   if (base.endsWith('/')) return '$base$rest';
   return '$base/$rest';
 }
+
+extension StringExtension on String {
+  (String, String) splitLeadingWhitespace() {
+    final idx = indexOf(RegExp(r'\S'));
+    if (idx == -1) return ('', this);
+    return (substring(0, idx), substring(idx));
+  }
+}

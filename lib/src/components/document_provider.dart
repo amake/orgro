@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
@@ -37,6 +38,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
   List<DocumentAnalysis> _analyses = [];
   late DataSource _dataSource;
   List<String> _accessibleDirs = [];
+  List<OrgroPassword> _passwords = [];
   int _cursor = 0;
 
   @override
@@ -84,8 +86,8 @@ class _DocumentProviderState extends State<DocumentProvider> {
     });
   }
 
-  Future<bool> _pushDoc(OrgTree doc) async {
-    if (doc == _docs[_cursor]) return false;
+  Future<(bool, DocumentAnalysis)> _pushDoc(OrgTree doc) async {
+    if (doc == _docs[_cursor]) return (false, _analyses[_cursor]);
 
     widget.onDocChanged?.call(doc);
     final analysis = await _analyze(doc);
@@ -95,7 +97,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
           _pushAtIndexAndTrim(_analyses, analysis, _cursor, _kMaxUndoStackSize);
       _cursor = _docs.length - 1;
     });
-    return true;
+    return (true, analysis);
   }
 
   static List<T> _pushAtIndexAndTrim<T>(
@@ -110,26 +112,32 @@ class _DocumentProviderState extends State<DocumentProvider> {
         ...list.sublist(max(0, idx - maxLen + 2), idx + 1), item,
       ];
 
+  void _addPasswords(Iterable<OrgroPassword> passwords) async {
+    setState(() {
+      _passwords = [..._passwords, ...passwords];
+    });
+  }
+
   bool get _canUndo => _cursor >= 1;
 
-  OrgTree _undo() {
+  (OrgTree, DocumentAnalysis) _undo() {
     if (!_canUndo) throw Exception("can't undo");
     final newCursor = _cursor - 1;
     setState(() => _cursor = newCursor);
     final newDoc = _docs[newCursor];
     widget.onDocChanged?.call(newDoc);
-    return newDoc;
+    return (newDoc, _analyses[newCursor]);
   }
 
   bool get _canRedo => _cursor < _docs.length - 1;
 
-  OrgTree _redo() {
+  (OrgTree, DocumentAnalysis) _redo() {
     if (!_canRedo) throw Exception("can't redo");
     final newCursor = _cursor + 1;
     setState(() => _cursor = newCursor);
     final newDoc = _docs[newCursor];
     widget.onDocChanged?.call(newDoc);
-    return newDoc;
+    return (newDoc, _analyses[newCursor]);
   }
 
   @override
@@ -140,6 +148,8 @@ class _DocumentProviderState extends State<DocumentProvider> {
       analysis: _analyses[_cursor],
       addAccessibleDir: _addAccessibleDir,
       pushDoc: _pushDoc,
+      passwords: List.unmodifiable(_passwords),
+      addPasswords: _addPasswords,
       undo: _undo,
       redo: _redo,
       canUndo: _canUndo,
@@ -156,6 +166,8 @@ class InheritedDocumentProvider extends InheritedWidget {
     required this.analysis,
     required this.addAccessibleDir,
     required this.pushDoc,
+    required this.passwords,
+    required this.addPasswords,
     required this.undo,
     required this.redo,
     required this.canUndo,
@@ -168,9 +180,11 @@ class InheritedDocumentProvider extends InheritedWidget {
   final DataSource dataSource;
   final DocumentAnalysis analysis;
   final Future<void> Function(String) addAccessibleDir;
-  final Future<bool> Function(OrgTree) pushDoc;
-  final OrgTree Function() undo;
-  final OrgTree Function() redo;
+  final Future<(bool, DocumentAnalysis)> Function(OrgTree) pushDoc;
+  final List<OrgroPassword> passwords;
+  final void Function(Iterable<OrgroPassword>) addPasswords;
+  final (OrgTree, DocumentAnalysis) Function() undo;
+  final (OrgTree, DocumentAnalysis) Function() redo;
   final bool canUndo;
   final bool canRedo;
 
@@ -210,7 +224,9 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
       final keywords = <String>{};
       final tags = <String>{};
       final priorities = <String>{};
+      var needsEncryption = doc.find<OrgDecryptedContent>((_) => true) != null;
       doc.visitSections((section) {
+        needsEncryption |= section.needsEncryption();
         final keyword = section.headline.keyword?.value;
         if (keyword != null) {
           keywords.add(keyword);
@@ -230,6 +246,7 @@ Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
         hasRemoteImages: hasRemoteImages,
         hasRelativeLinks: hasRelativeLinks,
         hasEncryptedContent: hasEncryptedContent,
+        needsEncryption: needsEncryption,
         keywords: keywords.toList(growable: false),
         tags: tags.toList(growable: false),
         priorities: priorities.toList(growable: false),
@@ -241,6 +258,7 @@ class DocumentAnalysis {
     this.hasRemoteImages,
     this.hasRelativeLinks,
     this.hasEncryptedContent,
+    this.needsEncryption,
     this.keywords,
     this.tags,
     this.priorities,
@@ -249,6 +267,7 @@ class DocumentAnalysis {
   final bool? hasRemoteImages;
   final bool? hasRelativeLinks;
   final bool? hasEncryptedContent;
+  final bool? needsEncryption;
   final List<String>? keywords;
   final List<String>? tags;
   final List<String>? priorities;
@@ -259,6 +278,7 @@ class DocumentAnalysis {
       hasRemoteImages == other.hasRemoteImages &&
       hasRelativeLinks == other.hasRelativeLinks &&
       hasEncryptedContent == other.hasEncryptedContent &&
+      needsEncryption == other.needsEncryption &&
       listEquals(keywords, other.keywords) &&
       listEquals(tags, other.tags) &&
       listEquals(priorities, other.priorities);
@@ -268,6 +288,7 @@ class DocumentAnalysis {
         hasRemoteImages,
         hasRelativeLinks,
         hasEncryptedContent,
+        needsEncryption,
         keywords == null ? null : Object.hashAll(keywords!),
         tags == null ? null : Object.hashAll(tags!),
         priorities == null ? null : Object.hashAll(priorities!),

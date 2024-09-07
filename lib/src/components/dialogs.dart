@@ -47,9 +47,14 @@ class SavePermissionDialog extends StatelessWidget {
 }
 
 class ShareUnsaveableChangesDialog extends StatelessWidget {
-  const ShareUnsaveableChangesDialog({required this.doc, super.key});
+  const ShareUnsaveableChangesDialog({
+    required this.doc,
+    required this.serializer,
+    super.key,
+  });
 
   final OrgDocument doc;
+  final OrgroSerializer serializer;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,11 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
               final box = context.findRenderObject() as RenderBox?;
               final origin = box!.localToGlobal(Offset.zero) & box.size;
 
-              final markup = await serializeWithProgressUI(context, doc);
+              final markup = await serializeWithProgressUI(
+                context,
+                doc,
+                serializer,
+              );
               if (markup == null) return;
 
               final result = await Share.share(
@@ -124,18 +133,33 @@ class DiscardChangesDialog extends StatelessWidget {
 }
 
 class InputPasswordDialog extends StatelessWidget {
-  const InputPasswordDialog({super.key});
+  const InputPasswordDialog({required this.title, this.bodyText, super.key});
+
+  final String title;
+  final String? bodyText;
 
   @override
   Widget build(BuildContext context) {
+    Widget content = TextField(
+      autofocus: true,
+      obscureText: true,
+      onSubmitted: (value) => Navigator.pop(context, value),
+    );
+    if (bodyText != null) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(bodyText!),
+          const SizedBox(height: 8),
+          content,
+        ],
+      );
+    }
     return AlertDialog(
       icon: const Icon(Icons.lock),
-      title: Text(AppLocalizations.of(context)!.inputPasswordDialogTitle),
-      content: TextField(
-        autofocus: true,
-        obscureText: true,
-        onSubmitted: (value) => Navigator.pop(context, value),
-      ),
+      title: Text(title),
+      content: content,
     );
   }
 }

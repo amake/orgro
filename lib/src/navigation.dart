@@ -10,6 +10,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/editor.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/serialization.dart';
 import 'package:orgro/theme.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri uri) =>
@@ -204,7 +205,7 @@ Future<OrgTree?> showTextEditor(
   OrgTree tree,
 ) async {
   final viewSettings = ViewSettings.of(context).data;
-  final text = tree.toMarkup();
+  final text = tree.toMarkup(serializer: OrgroPlaintextSerializer());
   final result = await Navigator.push<String?>(
     context,
     MaterialPageRoute(

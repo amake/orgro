@@ -86,7 +86,9 @@
 
   "savedMessage": "保存しました",
 
-  "inputPasswordDialogTitle": "パスワード入力",
+  "inputDecryptionPasswordDialogTitle": "復号のためのパスワードを入力",
+  "inputEncryptionPasswordDialogTitle": "暗号化のためのパスワードを入力",
+  "inputEncryptionPasswordDialogBody": "パスワードが未指定の Org Crypt セクションを暗号化するために使用されます。",
 
   "inputCustomFilterDialogTitle": "カスタムフィルタ",
   "inputCustomFilterDialogHistoryButton": "履歴",

@@ -86,7 +86,9 @@
 
   "savedMessage": "Saved",
 
-  "inputPasswordDialogTitle": "Enter password",
+  "inputDecryptionPasswordDialogTitle": "Enter password for decrypting",
+  "inputEncryptionPasswordDialogTitle": "Enter password for encrypting",
+  "inputEncryptionPasswordDialogBody": "This password will be used to encrypt Org Crypt sections for which no password has been specified.",
 
   "inputCustomFilterDialogTitle": "Custom filter query",
   "inputCustomFilterDialogHistoryButton": "History",
