@@ -195,65 +195,69 @@ class InheritedDocumentProvider extends InheritedWidget {
       analysis != oldWidget.analysis;
 }
 
-Future<DocumentAnalysis> _analyze(OrgTree doc) => time('analyze', () async {
-      final canResolveRelativeLinks =
-          await canObtainNativeDirectoryPermissions();
-      var hasRemoteImages = false;
-      var hasRelativeLinks = false;
-      var hasEncryptedContent = false;
-      doc.visit<OrgLeafNode>((node) {
-        if (node is OrgLink) {
-          hasRemoteImages |=
-              looksLikeImagePath(node.location) && looksLikeUrl(node.location);
-          try {
-            hasRelativeLinks |= OrgFileLink.parse(node.location).isRelative;
-          } on Exception {
-            // Not a file link
-          }
-          return !hasRemoteImages ||
-              (!hasRelativeLinks && canResolveRelativeLinks) ||
-              !hasEncryptedContent;
-        } else if (node is OrgPgpBlock) {
-          hasEncryptedContent = true;
-          return !hasRemoteImages ||
-              (!hasRelativeLinks && canResolveRelativeLinks);
-        }
-        return true;
-      });
-
-      final keywords = <String>{};
-      final tags = <String>{};
-      final priorities = <String>{};
-      var needsEncryption = doc.find<OrgDecryptedContent>((_) => true) != null;
-      doc.visitSections((section) {
-        needsEncryption |= section.needsEncryption();
-        final keyword = section.headline.keyword?.value;
-        if (keyword != null) {
-          keywords.add(keyword);
-        }
-        final sectionTags = section.headline.tags;
-        if (sectionTags != null) {
-          tags.addAll(sectionTags.values);
-        }
-        final priority = section.headline.priority?.value;
-        if (priority != null) {
-          priorities.add(priority);
-        }
-        return true;
-      });
-
-      return DocumentAnalysis(
-        hasRemoteImages: hasRemoteImages,
-        hasRelativeLinks: hasRelativeLinks,
-        hasEncryptedContent: hasEncryptedContent,
-        needsEncryption: needsEncryption,
-        keywords: keywords.toList(growable: false),
-        tags: tags.toList(growable: false),
-        priorities: priorities.toList(growable: false),
-      );
-    });
+Future<DocumentAnalysis> _analyze(OrgTree doc) => time(
+      'analyze',
+      () async => DocumentAnalysis.of(doc,
+          canResolveRelativeLinks: await canObtainNativeDirectoryPermissions()),
+    );
 
 class DocumentAnalysis {
+  factory DocumentAnalysis.of(
+    OrgTree doc, {
+    required bool canResolveRelativeLinks,
+  }) {
+    var hasRemoteImages = false;
+    var hasRelativeLinks = false;
+    var hasEncryptedContent = false;
+    doc.visit<OrgLeafNode>((node) {
+      if (node is OrgLink) {
+        hasRemoteImages |=
+            looksLikeImagePath(node.location) && looksLikeUrl(node.location);
+        try {
+          hasRelativeLinks |= OrgFileLink.parse(node.location).isRelative;
+        } on Exception {
+          // Not a file link
+        }
+      } else if (node is OrgPgpBlock) {
+        hasEncryptedContent = true;
+      }
+      return !hasRemoteImages ||
+          (!hasRelativeLinks && canResolveRelativeLinks) ||
+          !hasEncryptedContent;
+    });
+
+    final keywords = <String>{};
+    final tags = <String>{};
+    final priorities = <String>{};
+    var needsEncryption = doc.find<OrgDecryptedContent>((_) => true) != null;
+    doc.visitSections((section) {
+      needsEncryption |= section.needsEncryption();
+      final keyword = section.headline.keyword?.value;
+      if (keyword != null) {
+        keywords.add(keyword);
+      }
+      final sectionTags = section.headline.tags;
+      if (sectionTags != null) {
+        tags.addAll(sectionTags.values);
+      }
+      final priority = section.headline.priority?.value;
+      if (priority != null) {
+        priorities.add(priority);
+      }
+      return true;
+    });
+
+    return DocumentAnalysis(
+      hasRemoteImages: hasRemoteImages,
+      hasRelativeLinks: hasRelativeLinks,
+      hasEncryptedContent: hasEncryptedContent,
+      needsEncryption: needsEncryption,
+      keywords: keywords.toList(growable: false),
+      tags: tags.toList(growable: false),
+      priorities: priorities.toList(growable: false),
+    );
+  }
+
   const DocumentAnalysis({
     this.hasRemoteImages,
     this.hasRelativeLinks,
