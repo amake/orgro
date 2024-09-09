@@ -131,7 +131,10 @@ extension LinkHandler on DocumentPageState {
       // Clearing accessibleDirs and making the user re-choose a parent dir
       // seems to fix it, so maybe prompt for directory permissions again here.
       logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
+      if (mounted) {
+        Navigator.pop(context);
+        showErrorSnackBar(context, e);
+      }
     }
     return false;
   }
