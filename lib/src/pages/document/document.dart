@@ -1,30 +1,29 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
-import 'package:orgro/src/attachments.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
-import 'package:orgro/src/components/image.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
-import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/document/encryption.dart';
+import 'package:orgro/src/pages/document/images.dart';
+import 'package:orgro/src/pages/document/keyboard.dart';
+import 'package:orgro/src/pages/document/links.dart';
+import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/util.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 
@@ -45,10 +44,10 @@ class DocumentPage extends StatefulWidget {
   final bool root;
 
   @override
-  State createState() => _DocumentPageState();
+  State createState() => DocumentPageState();
 }
 
-class _DocumentPageState extends State<DocumentPage> {
+class DocumentPageState extends State<DocumentPage> {
   late MySearchDelegate _searchDelegate;
 
   OrgTree get _doc => DocumentProvider.of(context).doc;
@@ -80,11 +79,11 @@ class _DocumentPageState extends State<DocumentPage> {
       onFilterChanged: (value) => _viewSettings.filterData = value,
     );
     canObtainNativeDirectoryPermissions().then(
-      (value) => setState(() => _canResolveRelativeLinks = value),
+      (value) => setState(() => canResolveRelativeLinks = value),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _openInitialTarget();
-      _ensureOpenOnNarrow();
+      openInitialTarget();
+      ensureOpenOnNarrow();
     });
   }
 
@@ -97,114 +96,7 @@ class _DocumentPageState extends State<DocumentPage> {
     _searchDelegate.priorities = analysis.priorities ?? [];
   }
 
-  void _openInitialTarget() {
-    final target = widget.initialTarget;
-    if (target == null || target.isEmpty) {
-      return;
-    }
-    OrgTree? section;
-    try {
-      section = OrgController.of(context).sectionForTarget(target);
-    } on Exception catch (e, s) {
-      logError(e, s);
-    }
-    if (section != null) {
-      _doNarrow(section);
-    }
-  }
-
-  void _ensureOpenOnNarrow() {
-    if (widget.root) return;
-    OrgController.of(context).setVisibilityOf(
-      _doc,
-      (state) => switch (state) {
-        OrgVisibilityState.folded => OrgVisibilityState.children,
-        _ => state,
-      },
-    );
-  }
-
-  Future<void> _doNarrow(OrgTree section) async {
-    if (section == _doc) {
-      debugPrint('Suppressing narrow to currently open document');
-      return;
-    }
-    final newSection = await narrow(context, _dataSource, section);
-    if (newSection == null || identical(newSection, section)) {
-      return;
-    }
-    try {
-      final newDoc = _applyNarrowResult(before: section, after: newSection);
-      if (newDoc != null) await _updateDocument(newDoc as OrgTree);
-    } on Exception catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
-  }
-
-  OrgNode? _applyNarrowResult({
-    required OrgTree before,
-    required OrgTree after,
-  }) {
-    switch (after) {
-      case OrgSection():
-        return _doc.editNode(before)!.replace(after).commit();
-      case OrgDocument():
-        // If the narrowed section was edited, an OrgDocument will come back.
-        //
-        // The document may be empty:
-        if (after.content == null && after.sections.isEmpty) {
-          return null;
-        }
-        OrgSection toReplace;
-        Iterable<OrgSection> toInsert;
-        if (after.content != null) {
-          // The document may have leading content. The expected thing if
-          // editing plain text would be to append it to the previous section,
-          // but that's pretty annoying to do with zippers, so instead we wrap
-          // it in a section just so it's not lost.
-          toInsert = after.sections;
-          final headline = AppLocalizations.of(context)!.editInsertedHeadline;
-          final stars = toInsert.firstOrNull?.headline.stars ??
-              (before is OrgSection
-                  ? before.headline.stars
-                  : (value: '*', trailing: ' '));
-          toReplace = OrgSection(
-            OrgHeadline(
-              stars,
-              null,
-              null,
-              OrgContent([OrgPlainText(headline)]),
-              headline,
-              null,
-              '\n',
-            ),
-            after.content!,
-          );
-        } else {
-          // If there is no leading content then we can just insert all the
-          // sections. Note that if the sections' levels have been changed then
-          // the resulting document could be one that is impossible to obtain
-          // from parsing (i.e. improper nesting). This is hard to fix and at
-          // the moment doesn't seem to cause any problems other than surprising
-          // folding/unfolding behavior, so we just let it be.
-          toReplace = after.sections.first;
-          toInsert = after.sections.skip(1);
-        }
-        var zipper = _doc.editNode(before)!.replace(toReplace);
-        for (final newSec in toInsert) {
-          zipper = zipper.insertRight(newSec);
-        }
-        final newDoc = zipper.commit();
-        OrgController.of(context).adaptVisibility(newDoc as OrgTree,
-            defaultState: OrgVisibilityState.children);
-        return newDoc;
-      default:
-        throw Exception('Unexpected section type: $after');
-    }
-  }
-
-  void _onSectionLongPress(OrgSection section) async => _doNarrow(section);
+  void _onSectionLongPress(OrgSection section) async => doNarrow(section);
 
   List<Widget> _onSectionSlide(OrgSection section) {
     return [
@@ -216,7 +108,7 @@ class _DocumentPageState extends State<DocumentPage> {
               .editNode(section.headline)!
               .replace(section.headline.cycleTodo())
               .commit() as OrgTree;
-          _updateDocument(newDoc);
+          updateDocument(newDoc);
         },
       ),
     ];
@@ -323,7 +215,7 @@ class _DocumentPageState extends State<DocumentPage> {
                 searchMode || !dirty || _doc is! OrgDocument || !widget.root,
             onPopInvokedWithResult: _onPopInvoked,
             child: Scaffold(
-              body: _KeyboardShortcuts(
+              body: KeyboardShortcuts(
                 // Builder is here to ensure that the primary scroll controller set by the
                 // Scaffold makes it into the body's context
                 child: Builder(
@@ -385,7 +277,7 @@ class _DocumentPageState extends State<DocumentPage> {
               .setLocalLinksPolicy(LocalLinksPolicy.deny, persist: false),
           onForbid: () => viewSettings
               .setLocalLinksPolicy(LocalLinksPolicy.deny, persist: true),
-          onAllow: _pickDirectory,
+          onAllow: doPickDirectory,
         ),
         RemoteImagePermissionsBanner(
           visible: _askPermissionToLoadRemoteImages,
@@ -400,7 +292,7 @@ class _DocumentPageState extends State<DocumentPage> {
         ),
         DecryptContentBanner(
           visible: _askToDecrypt,
-          onAccept: _decryptContent,
+          onAccept: decryptContent,
           onDeny: viewSettings.setDecryptPolicy,
         ),
         _maybeConstrainWidth(
@@ -408,12 +300,12 @@ class _DocumentPageState extends State<DocumentPage> {
           child: SelectionArea(
             child: OrgRootWidget(
               style: viewSettings.textStyle,
-              onLinkTap: _openLink,
+              onLinkTap: openLink,
               onSectionLongPress: _onSectionLongPress,
               onSectionSlide: _onSectionSlide,
-              onLocalSectionLinkTap: _doNarrow,
+              onLocalSectionLinkTap: doNarrow,
               onListItemTap: _onListItemTap,
-              loadImage: _loadImage,
+              loadImage: loadImage,
               child: switch (doc) {
                 OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
                 OrgSection() =>
@@ -506,178 +398,21 @@ class _DocumentPageState extends State<DocumentPage> {
     if (newDoc != null) {
       controller.adaptVisibility(newDoc,
           defaultState: OrgVisibilityState.children);
-      await _updateDocument(newDoc);
+      await updateDocument(newDoc);
     }
-  }
-
-  Future<bool> _openLink(OrgLink link) async {
-    try {
-      final fileLink = convertLinkResolvingAttachments(_doc, link);
-      return _openFileLink(fileLink);
-    } on Exception {
-      // Wasn't a file link
-    }
-
-    if (isOrgIdUrl(link.location)) {
-      return await _openExternalIdLink(link.location);
-    }
-
-    // Handle as a general URL
-    try {
-      debugPrint('Launching URL: ${link.location}');
-      final handled = await launchUrl(Uri.parse(link.location),
-          mode: LaunchMode.externalApplication);
-      if (!handled && mounted) {
-        showErrorSnackBar(context,
-            AppLocalizations.of(context)!.errorLinkNotHandled(link.location));
-      }
-    } on Exception catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
-    return false;
-  }
-
-  Future<bool> _openExternalIdLink(String url) async {
-    assert(isOrgIdUrl(url));
-
-    final dataSource = _dataSource;
-    if (dataSource is! NativeDataSource) {
-      debugPrint('Unsupported data source: ${dataSource.runtimeType}');
-      // TODO(aaron): report unsupported data source type to user
-      return false;
-    }
-
-    if (dataSource.needsToResolveParent) {
-      _showDirectoryPermissionsSnackBar(context);
-      return false;
-    }
-
-    final targetId = parseOrgIdUrl(url);
-
-    final accessibleDirs = Preferences.of(context).accessibleDirs;
-
-    // TODO(aaron): Find a way to make this operation cancelable
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
-    );
-
-    try {
-      // TODO(aaron): Search accessible dir that contains this document first
-      for (final dir in accessibleDirs) {
-        final foundFile = await findFileForId(id: targetId, dirIdentifier: dir);
-        if (foundFile != null && mounted) {
-          Navigator.pop(context);
-          return await loadDocument(context, foundFile, target: url);
-        }
-      }
-
-      if (mounted) {
-        Navigator.pop(context);
-        showErrorSnackBar(context,
-            AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));
-      }
-    } on Exception catch (e, s) {
-      logError(e, s);
-      if (mounted) {
-        Navigator.pop(context);
-        showErrorSnackBar(context, e);
-      }
-    }
-    return false;
-  }
-
-  Future<bool> _openFileLink(OrgFileLink link) async {
-    if (!link.isRelative || !link.body.endsWith('.org')) {
-      return false;
-    }
-    final source = _dataSource;
-    if (source.needsToResolveParent) {
-      _showDirectoryPermissionsSnackBar(context);
-      return false;
-    }
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
-    );
-
-    try {
-      final resolved = await source.resolveRelative(link.body);
-      if (mounted) {
-        Navigator.pop(context);
-        return await loadDocument(context, resolved, target: link.extra);
-      }
-    } on Exception catch (e, s) {
-      // TODO(aaron): Investigate failure to open relative link on iOS
-      //
-      // It seems that somehow we can have an accessibleDir that allows
-      // resolving this document, a link.body that points to a real file, but
-      // resolveRelative fails with Domain=NSCocoaErrorDomain Code=260 "The file
-      // couldn’t be opened because it doesn’t exist."
-      //
-      // Clearing accessibleDirs and making the user re-choose a parent dir
-      // seems to fix it, so maybe prompt for directory permissions again here.
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
-    return false;
   }
 
   bool? get _hasRelativeLinks =>
       DocumentProvider.of(context).analysis.hasRelativeLinks;
 
   // Android 4.4 and earlier doesn't have APIs to get directory info
-  bool? _canResolveRelativeLinks;
+  bool? canResolveRelativeLinks;
 
   bool get _askForDirectoryPermissions =>
       _viewSettings.localLinksPolicy == LocalLinksPolicy.ask &&
       _hasRelativeLinks == true &&
-      _canResolveRelativeLinks == true &&
+      canResolveRelativeLinks == true &&
       _dataSource.needsToResolveParent;
-
-  Future<void> _pickDirectory() async {
-    try {
-      final source = _dataSource;
-      if (source is! NativeDataSource) {
-        return;
-      }
-      final dirInfo = await pickDirectory(initialDirUri: source.uri);
-      if (dirInfo == null) return;
-      if (!mounted) return;
-      debugPrint(
-          'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-      await DocumentProvider.of(context).addAccessibleDir(dirInfo.identifier);
-    } on Exception catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
-  }
-
-  void _showDirectoryPermissionsSnackBar(BuildContext context) =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!
-                .snackbarMessageNeedsDirectoryPermissions,
-          ),
-          action: _canResolveRelativeLinks == true
-              ? SnackBarAction(
-                  label: AppLocalizations.of(context)!
-                      .snackbarActionGrantAccess
-                      .toUpperCase(),
-                  onPressed: _pickDirectory,
-                )
-              : null,
-        ),
-      );
 
   void _showMissingEncryptionKeySnackBar(BuildContext context) =>
       ScaffoldMessenger.of(context).showSnackBar(
@@ -712,7 +447,7 @@ class _DocumentPageState extends State<DocumentPage> {
   void _onListItemTap(OrgListItem item) {
     final newTree =
         _doc.editNode(item)!.replace(item.toggleCheckbox()).commit();
-    _updateDocument(newTree as OrgTree);
+    updateDocument(newTree as OrgTree);
   }
 
   bool? get _hasRemoteImages =>
@@ -722,41 +457,6 @@ class _DocumentPageState extends State<DocumentPage> {
       _viewSettings.remoteImagesPolicy == RemoteImagesPolicy.ask &&
       _hasRemoteImages == true &&
       !_askForDirectoryPermissions;
-
-  Widget? _loadImage(OrgLink link) {
-    if (looksLikeUrl(link.location)) {
-      return _loadRemoteImage(link);
-    }
-    try {
-      final fileLink = convertLinkResolvingAttachments(_doc, link);
-      if (fileLink.isRelative) {
-        return _loadLocalImage(fileLink);
-      }
-    } on Exception {
-      // Not a file link
-    }
-    // Absolute paths, and...?
-    return null;
-  }
-
-  Widget? _loadRemoteImage(OrgLink link) {
-    assert(looksLikeUrl(link.location));
-    if (_viewSettings.remoteImagesPolicy != RemoteImagesPolicy.allow) {
-      return null;
-    }
-    return RemoteImage(link.location);
-  }
-
-  Widget? _loadLocalImage(OrgFileLink link) {
-    final source = _dataSource;
-    if (source.needsToResolveParent) {
-      return null;
-    }
-    return LocalImage(
-      dataSource: source,
-      relativePath: link.body,
-    );
-  }
 
   bool get _askPermissionToSaveChanges =>
       _viewSettings.saveChangesPolicy == SaveChangesPolicy.ask &&
@@ -772,7 +472,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
-  Future<bool> _updateDocument(OrgTree newDoc, {bool dirty = true}) async {
+  Future<bool> updateDocument(OrgTree newDoc, {bool dirty = true}) async {
     final (pushed, analysis) =
         await DocumentProvider.of(context).pushDoc(newDoc);
     if (pushed && dirty) {
@@ -951,101 +651,4 @@ class _DocumentPageState extends State<DocumentPage> {
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages &&
       !_askPermissionToSaveChanges;
-
-  Future<void> _decryptContent() async {
-    final blocks = <OrgPgpBlock>[];
-    _doc.visit<OrgPgpBlock>((block) {
-      blocks.add(block);
-      return true;
-    });
-    final password = await showDialog<String>(
-      context: context,
-      builder: (context) => InputPasswordDialog(
-        title: AppLocalizations.of(context)!.inputDecryptionPasswordDialogTitle,
-      ),
-    );
-    if (password == null) return;
-    if (!mounted) return;
-    var canceled = false;
-    time('decrypt', () => compute(decrypt, (blocks, password)))
-        .then((decrypted) {
-      if (!canceled && mounted) Navigator.pop(context, decrypted);
-    }).onError((error, stackTrace) {
-      if (mounted) showErrorSnackBar(context, error);
-      logError(error, stackTrace);
-      if (!canceled && mounted) Navigator.pop(context);
-    });
-    final result = await showDialog<List<String?>>(
-      context: context,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.decryptingProgressDialogTitle,
-        dismissable: true,
-      ),
-    );
-    if (!mounted) return;
-    if (result == null) {
-      // Canceled
-      canceled = true;
-      return;
-    }
-    OrgTree newDoc = _doc;
-    final toRemember = <OrgroPassword>[];
-    for (final (i, cleartext) in result.indexed) {
-      if (cleartext == null) {
-        showErrorSnackBar(
-            context, AppLocalizations.of(context)!.errorDecryptionFailed);
-        continue;
-      }
-      final block = blocks[i];
-      try {
-        final replacement = OrgDecryptedContent.fromDecryptedResult(
-          cleartext,
-          OrgroDecryptedContentSerializer(
-            block,
-            cleartext: cleartext,
-            password: password,
-          ),
-        );
-        final enclosingCryptSection = newDoc.findContainingTree(
-              block,
-              where: (tree) =>
-                  tree is OrgSection && tree.tags.contains('crypt'),
-            ) ??
-            newDoc.findContainingTree(block)!;
-        if (enclosingCryptSection is OrgSection) {
-          toRemember.add((
-            password: password,
-            predicate: enclosingCryptSection.buildMatcher(),
-          ));
-        }
-        newDoc =
-            newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
-      } catch (e, s) {
-        logError(e, s);
-        showErrorSnackBar(context, e);
-        continue;
-      }
-    }
-    DocumentProvider.of(context).addPasswords(toRemember);
-    await _updateDocument(newDoc, dirty: false);
-  }
-}
-
-class _KeyboardShortcuts extends StatelessWidget {
-  const _KeyboardShortcuts({required this.child});
-
-  final Widget child;
-  @override
-  Widget build(BuildContext context) {
-    return CallbackShortcuts(
-      bindings: {
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW): () =>
-            Navigator.maybePop(context),
-      },
-      child: Focus(
-        autofocus: true,
-        child: child,
-      ),
-    );
-  }
 }
