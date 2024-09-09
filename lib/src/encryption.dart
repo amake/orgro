@@ -73,6 +73,8 @@ List<String?> decrypt((List<OrgPgpBlock> blocks, String password) args) {
         message,
         passwords: [password],
       );
+      // TODO(aaron): This introduces \r to every linebreak. What to do about
+      // this?
       result.add(decrypted.literalData!.text);
     } catch (e, s) {
       result.add(null);
