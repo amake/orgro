@@ -696,10 +696,13 @@ class _DocumentPageState extends State<DocumentPage> {
                       .inputEncryptionPasswordDialogTitle,
                 ),
               );
-              if (password != null && context.mounted) {
-                DocumentProvider.of(context).addPasswords(
-                  [(password: password, predicate: (_) => true)],
-                );
+              if (password == null || !context.mounted) return;
+              final docProvider = DocumentProvider.of(context);
+              final passwords = docProvider.addPasswords(
+                [(password: password, predicate: (_) => true)],
+              );
+              if (_dirty.value) {
+                _onDocChanged(docProvider.doc, docProvider.analysis, passwords);
               }
             },
           ),
@@ -788,10 +791,15 @@ class _DocumentPageState extends State<DocumentPage> {
     await _onDocChanged(doc, analysis);
   }
 
-  Future<void> _onDocChanged(OrgTree doc, DocumentAnalysis analysis) async {
+  Future<void> _onDocChanged(
+    OrgTree doc,
+    DocumentAnalysis analysis, [
+    List<OrgroPassword>? passwords,
+  ]) async {
     _dirty.value = true;
-    final source = _dataSource;
-    final passwords = DocumentProvider.of(context).passwords;
+    final docProvider = DocumentProvider.of(context);
+    final source = docProvider.dataSource;
+    passwords ??= docProvider.passwords;
     if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
         _canSaveChanges &&
         source is NativeDataSource &&
@@ -806,7 +814,7 @@ class _DocumentPageState extends State<DocumentPage> {
         _writeFuture = time('save', () async {
           try {
             debugPrint('starting auto save');
-            final serializer = OrgroSerializer.get(analysis, passwords);
+            final serializer = OrgroSerializer.get(analysis, passwords!);
             final markup = await serialize(doc, serializer);
             await time('write', () => source.write(markup));
             _dirty.value = false;

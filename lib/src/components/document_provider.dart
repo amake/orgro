@@ -112,10 +112,10 @@ class _DocumentProviderState extends State<DocumentProvider> {
         ...list.sublist(max(0, idx - maxLen + 2), idx + 1), item,
       ];
 
-  void _addPasswords(Iterable<OrgroPassword> passwords) async {
-    setState(() {
-      _passwords = [..._passwords, ...passwords];
-    });
+  List<OrgroPassword> _addPasswords(Iterable<OrgroPassword> passwords) {
+    final newPasswords = [..._passwords, ...passwords];
+    setState(() => _passwords = newPasswords);
+    return newPasswords;
   }
 
   bool get _canUndo => _cursor >= 1;
@@ -182,7 +182,7 @@ class InheritedDocumentProvider extends InheritedWidget {
   final Future<void> Function(String) addAccessibleDir;
   final Future<(bool, DocumentAnalysis)> Function(OrgTree) pushDoc;
   final List<OrgroPassword> passwords;
-  final void Function(Iterable<OrgroPassword>) addPasswords;
+  final List<OrgroPassword> Function(Iterable<OrgroPassword>) addPasswords;
   final (OrgTree, DocumentAnalysis) Function() undo;
   final (OrgTree, DocumentAnalysis) Function() redo;
   final bool canUndo;
