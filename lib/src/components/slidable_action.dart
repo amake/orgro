@@ -32,7 +32,8 @@ class ResponsiveSlidableAction extends StatelessWidget {
           },
           style: OutlinedButton.styleFrom(
             backgroundColor: backgroundColor,
-            disabledForegroundColor: backgroundColor.withOpacity(0.38),
+            disabledForegroundColor:
+                backgroundColor.withAlpha((0.38 * 255).round()),
             foregroundColor: foregroundColor,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,

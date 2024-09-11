@@ -108,7 +108,7 @@ class SearchField extends StatelessWidget {
     // regular text in the AppBar
     final theme = Theme.of(context);
     final style = DefaultTextStyle.of(context).style;
-    final color = style.color?.withOpacity(0.7);
+    final color = style.color?.withAlpha((0.7 * 255).round());
     final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(hintColor: color),
