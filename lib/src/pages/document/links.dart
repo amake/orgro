@@ -49,7 +49,8 @@ extension LinkHandler on DocumentPageState {
     final dataSource = DocumentProvider.of(context).dataSource;
     if (dataSource is! NativeDataSource) {
       debugPrint('Unsupported data source: ${dataSource.runtimeType}');
-      // TODO(aaron): report unsupported data source type to user
+      showErrorSnackBar(
+          context, AppLocalizations.of(context)!.errorLinkNotHandled(url));
       return false;
     }
 
