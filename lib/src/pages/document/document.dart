@@ -607,10 +607,8 @@ class DocumentPageState extends State<DocumentPage> {
         }
         return;
       } else {
-        passwords = [
-          ...passwords,
-          (password: password, predicate: (_) => true)
-        ];
+        passwords = docProvider
+            .addPasswords([(password: password, predicate: (_) => true)]);
       }
     }
 
