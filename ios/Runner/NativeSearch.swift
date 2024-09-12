@@ -8,15 +8,33 @@
 import Foundation
 import Flutter
 
+private var jobs = ConcurrentSet<String>()
+
 func handleNativeSearchMethod(call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "findFileForId":
         DispatchQueue.global(qos: .userInitiated).async {
             findFileForId(call, result)
         }
+    case "cancelFindFileForId":
+        cancelFindFileForId(call, result)
     default:
         result(FlutterError(code: "UnsupportedMethod", message: "\(call.method) is not supported", details: nil))
     }
+}
+
+private func cancelFindFileForId(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
+    guard let args = call.arguments as? [String:Any?] else {
+        result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'requestId'"))
+        return
+    }
+    guard let requestId = args["requestId"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
+        return
+    }
+    let removed = jobs.remove(requestId)
+    log("Cancelling job \(requestId); cancelled: \(removed != nil)")
+    result(removed != nil)
 }
 
 private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
@@ -24,8 +42,13 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'id', 'dirIdentifier'"))
         return
     }
-    guard let id = args["id"] as? String else {
-        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'id'"))
+    guard let requestId = args["requestId"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
+        return
+    }
+    jobs.insert(requestId)
+    guard let orgId = args["orgId"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'orgId'"))
         return
     }
     guard let dirIdentifier = args["dirIdentifier"] as? String else {
@@ -59,6 +82,11 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         }
 
         for case let file as URL in fileList {
+            guard jobs.contains(requestId) else {
+                log("Quitting job \(requestId) due to cancellation")
+                break
+            }
+
             log("Looking at file \(file)")
             guard let values = try? file.resourceValues(forKeys: keys),
                   let isDirectory = values.isDirectory,
@@ -86,8 +114,8 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
 
             var fileError: NSError? = nil
             NSFileCoordinator().coordinate(readingItemAt: file, error: &fileError) { fileUrl in
-                log("Searching \(fileUrl) for ID \(id)")
-                if fileContainsId(fileUrl: fileUrl, id: id) {
+                log("Searching \(fileUrl) for ID \(orgId)")
+                if fileContainsId(fileUrl: fileUrl, id: orgId) {
                     guard let bookmark = try? fileUrl.bookmarkData() else {
                         log("Failed to get bookmark for file: \(fileUrl)")
                         return
@@ -119,6 +147,7 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
     if (!success) {
         result(nil)
     }
+    jobs.remove(requestId)
 }
 
 private let idPattern = try! NSRegularExpression(pattern: #"^\s*:ID:\s*(?<value>\S+)\s*$"#, options: [.caseInsensitive])
@@ -170,4 +199,28 @@ func log(_ message: String) {
     //#if DEBUG
         print(message)
     //#endif
+}
+
+class ConcurrentSet<T: Hashable> {
+    private var data: Set<T> = []
+    let lock = NSLock()
+
+    func insert(_ item: T) {
+        lock.lock()
+        defer { lock.unlock() }
+        data.insert(item)
+    }
+
+    func contains(_ item: T) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return data.contains(item)
+    }
+
+    @discardableResult
+    func remove(_ item: T) -> T? {
+        lock.lock()
+        defer { lock.unlock() }
+        return data.remove(item)
+    }
 }

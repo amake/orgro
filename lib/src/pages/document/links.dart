@@ -59,37 +59,48 @@ extension LinkHandler on DocumentPageState {
     }
 
     final targetId = parseOrgIdUrl(url);
+    final requestId = Object().hashCode.toString();
 
-    // TODO(aaron): Find a way to make this operation cancelable
-    showDialog<void>(
+    var canceled = false;
+    time(
+      'find file with ID',
+      () => findFileForId(
+        requestId: requestId,
+        orgId: targetId,
+        dirIdentifier: dataSource.rootDirIdentifier!,
+      ),
+    ).then((found) {
+      if (!canceled && mounted) Navigator.pop(context, (found, true));
+    }).onError((error, stackTrace) {
+      if (mounted) showErrorSnackBar(context, error);
+      logError(error, stackTrace);
+      if (!canceled && mounted) Navigator.pop(context);
+    });
+
+    final result = await showDialog<(NativeDataSource?, bool)>(
       context: context,
-      barrierDismissible: false,
       builder: (context) => ProgressIndicatorDialog(
         title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+        dismissable: true,
       ),
     );
 
-    try {
-      final foundFile = await findFileForId(
-          id: targetId, dirIdentifier: dataSource.rootDirIdentifier!);
-      if (foundFile != null && mounted) {
-        Navigator.pop(context);
-        return await loadDocument(context, foundFile, target: url);
-      }
-
-      if (mounted) {
-        Navigator.pop(context);
-        showErrorSnackBar(context,
-            AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));
-      }
-    } on Exception catch (e, s) {
-      logError(e, s);
-      if (mounted) {
-        Navigator.pop(context);
-        showErrorSnackBar(context, e);
-      }
+    if (result == null) {
+      canceled = true;
+      cancelFindFileForId(requestId: requestId);
+      return false;
     }
-    return false;
+    if (!mounted) return false;
+
+    final (foundFile, searchCompleted) = result;
+    assert(searchCompleted);
+    if (foundFile == null) {
+      showErrorSnackBar(context,
+          AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));
+      return false;
+    } else {
+      return await loadDocument(context, foundFile, target: url);
+    }
   }
 
   Future<bool> _openFileLink(OrgFileLink link) async {

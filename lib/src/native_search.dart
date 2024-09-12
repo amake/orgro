@@ -5,13 +5,15 @@ import 'package:orgro/src/data_source.dart';
 const _channel = MethodChannel('com.madlonkay.orgro/native_search');
 
 Future<NativeDataSource?> findFileForId({
-  required String id,
+  required String requestId,
+  required String orgId,
   required String dirIdentifier,
 }) async {
   final result = await _channel.invokeMapMethod<String, String>(
     'findFileForId',
     {
-      'id': id,
+      'requestId': requestId,
+      'orgId': orgId,
       'dirIdentifier': dirIdentifier,
     },
   );
@@ -22,10 +24,20 @@ Future<NativeDataSource?> findFileForId({
     // file_picker_writable
     final info = FileInfo.fromJson(result);
     return NativeDataSource(
-      info.fileName ?? id,
+      info.fileName ?? orgId,
       info.identifier,
       info.uri,
       persistable: info.persistable,
     );
   }
+}
+
+Future<bool> cancelFindFileForId({required String requestId}) async {
+  final result = await _channel.invokeMethod<bool>(
+    'cancelFindFileForId',
+    {
+      'requestId': requestId,
+    },
+  );
+  return result ?? false;
 }
