@@ -10,7 +10,6 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
-import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension LinkHandler on DocumentPageState {
@@ -61,8 +60,6 @@ extension LinkHandler on DocumentPageState {
 
     final targetId = parseOrgIdUrl(url);
 
-    final accessibleDirs = Preferences.of(context).accessibleDirs;
-
     // TODO(aaron): Find a way to make this operation cancelable
     showDialog<void>(
       context: context,
@@ -73,13 +70,11 @@ extension LinkHandler on DocumentPageState {
     );
 
     try {
-      // TODO(aaron): Search accessible dir that contains this document first
-      for (final dir in accessibleDirs) {
-        final foundFile = await findFileForId(id: targetId, dirIdentifier: dir);
-        if (foundFile != null && mounted) {
-          Navigator.pop(context);
-          return await loadDocument(context, foundFile, target: url);
-        }
+      final foundFile = await findFileForId(
+          id: targetId, dirIdentifier: dataSource.rootDirIdentifier!);
+      if (foundFile != null && mounted) {
+        Navigator.pop(context);
+        return await loadDocument(context, foundFile, target: url);
       }
 
       if (mounted) {
