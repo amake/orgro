@@ -110,7 +110,9 @@ class NativeDataSource extends DataSource {
     this.uri, {
     required this.persistable,
     this.parentDirIdentifier,
-  });
+    this.rootDirIdentifier,
+  }) : assert(parentDirIdentifier == null && rootDirIdentifier == null ||
+            parentDirIdentifier != null && rootDirIdentifier != null);
 
   /// The identifier used to read the file via native APIs
   final String identifier;
@@ -124,6 +126,10 @@ class NativeDataSource extends DataSource {
   /// The persistent identifier of this source's parent directory. Needed for
   /// resolving relative links.
   final String? parentDirIdentifier;
+
+  /// The persistent identifier of the root directory of this source. May be the
+  /// same as [parentDirIdentifier] or may be deeper.
+  final String? rootDirIdentifier;
 
   @override
   String get id => uri;
@@ -171,28 +177,30 @@ class NativeDataSource extends DataSource {
 
   Future<NativeDataSource> resolveParent(List<String> accessibleDirs) async {
     if (parentDirIdentifier != null) return this;
-    final parentId = await _findParentDirIdentifier(accessibleDirs);
-    if (parentId == null) return this;
+    final found = await _findParentDirIdentifier(accessibleDirs);
+    if (found == null) return this;
+    final (rootId, parentId) = found;
     return NativeDataSource(
       name,
       identifier,
       uri,
       persistable: persistable,
       parentDirIdentifier: parentId,
+      rootDirIdentifier: rootId,
     );
   }
 
-  Future<String?> _findParentDirIdentifier(
+  Future<(String, String)?> _findParentDirIdentifier(
     List<String> accessibleDirs,
   ) async {
     debugPrint('Accessible dirs: $accessibleDirs');
-    for (final dirId in accessibleDirs) {
-      debugPrint('Resolving parent of $uri relative to $dirId');
+    for (final rootId in accessibleDirs) {
+      debugPrint('Resolving parent of $uri relative to $rootId');
       try {
         final parent = await FilePickerWritable()
-            .getDirectory(rootIdentifier: dirId, fileIdentifier: identifier);
+            .getDirectory(rootIdentifier: rootId, fileIdentifier: identifier);
         debugPrint('Found file $uri parent dir: ${parent.uri}');
-        return parent.identifier;
+        return (rootId, parent.identifier);
       } on Exception {
         // Next
       }
