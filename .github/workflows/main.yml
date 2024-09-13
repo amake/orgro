@@ -15,7 +15,9 @@ jobs:
     - uses: actions/checkout@v4
     - uses: subosito/flutter-action@v2
       with:
-        channel: 'beta'
+        # Revert to stable due to Android issue in Flutter 3.25+
+        # https://github.com/amake/orgro/commit/893ea933f461a9ce982bec310e08d78cf47e420e
+        channel: stable
     - name: Install dependencies
       run: flutter pub get
     - name: Run tests
