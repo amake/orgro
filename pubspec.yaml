@@ -67,8 +67,6 @@ flutter:
     - assets/licenses/
 
 dependency_overrides:
-  # Work around Dart 3.5.0 breakage: https://stackoverflow.com/q/69553108
-  pinenacl: ^0.6.0
   # Work around https://github.com/letsar/flutter_slidable/issues/488
   flutter_slidable:
     git:
