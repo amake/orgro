@@ -16,7 +16,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         # Revert to stable due to Android issue in Flutter 3.25+
-        # https://github.com/amake/orgro/commit/893ea933f461a9ce982bec310e08d78cf47e420e
+        # https://github.com/amake/orgro/commit/2319ea7f598e89f29155497ca5e88b2532852a46
         channel: stable
     - name: Install dependencies
       run: flutter pub get
