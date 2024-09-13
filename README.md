@@ -2,7 +2,7 @@
 
 # Orgro
 
-An [Org Mode](https://orgmode.org/) file viewer for iOS and Android
+An [Org Mode](https://orgmode.org/) app for iOS and Android
 
 https://github.com/amake/orgro/assets/2172537/a3d841a3-84f3-4c34-9381-c73ab4dc9249
 
@@ -20,7 +20,8 @@ at all, as the OS doesn't even know that it's plain text.
 
 Other mobile Org Mode apps are focused on very different things like to-dos or
 task management; Orgro is instead first and foremost a *viewer*, letting you see
-and search the contents of your org files.
+and search the contents of your org files. (Recently it also gained editing
+capabilities. I hope to enhance these in the future.)
 
 I also wanted to try writing a parser with
 [PetitParser](https://github.com/petitparser/dart-petitparser); the result
@@ -33,14 +34,17 @@ powers this application and is available as a separate library,
 - Expand and collapse sections, blocks, and drawers
 - Reflow text for easy viewing on narrow screens
 - Pretty table rendering
-- Functional external links and section links
+- Functional external links and section links (works well with
+  [Org-roam](https://www.orgroam.com/))
 - Visibility cycling
 - Search
 - Narrowing
 - "Reader mode" where extraneous markup is hidden
 - Inline and block LaTeX rendering
 - Jump to/from footnotes
-- Limited editing capability
+- Decrypt/encrypt [Org Crypt](https://orgmode.org/manual/Org-Crypt.html)
+  sections (currently symmetric keys only)
+- Editing capability
   ([details](https://orgro.org/faq/#can-i-edit-my-files-with-orgro))
 
 See the [manual](./assets/manual/orgro-manual.org) for details.
