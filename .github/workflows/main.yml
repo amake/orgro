@@ -18,6 +18,7 @@ jobs:
         # Revert to stable due to Android issue in Flutter 3.25+
         # https://github.com/amake/orgro/commit/2319ea7f598e89f29155497ca5e88b2532852a46
         channel: stable
+        flutter-version: 3.24.x
     - name: Install dependencies
       run: flutter pub get
     - name: Run tests
