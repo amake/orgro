@@ -61,39 +61,27 @@ extension LinkHandler on DocumentPageState {
     final targetId = parseOrgIdUrl(url);
     final requestId = Object().hashCode.toString();
 
-    var canceled = false;
-    time(
-      'find file with ID',
-      () => findFileForId(
-        requestId: requestId,
-        orgId: targetId,
-        dirIdentifier: dataSource.rootDirIdentifier!,
+    final (succeeded: succeeded, result: foundFile) =
+        await cancelableProgressTask(
+      context,
+      task: time(
+        'find file with ID',
+        () => findFileForId(
+          requestId: requestId,
+          orgId: targetId,
+          dirIdentifier: dataSource.rootDirIdentifier!,
+        ),
       ),
-    ).then((found) {
-      if (!canceled && mounted) Navigator.pop(context, (found, true));
-    }).onError((error, stackTrace) {
-      if (mounted) showErrorSnackBar(context, error);
-      logError(error, stackTrace);
-      if (!canceled && mounted) Navigator.pop(context);
-    });
-
-    final result = await showDialog<(NativeDataSource?, bool)>(
-      context: context,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-        dismissable: true,
-      ),
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
     );
 
-    if (result == null) {
-      canceled = true;
+    if (!succeeded) {
       cancelFindFileForId(requestId: requestId);
       return false;
     }
+
     if (!mounted) return false;
 
-    final (foundFile, searchCompleted) = result;
-    assert(searchCompleted);
     if (foundFile == null) {
       showErrorSnackBar(context,
           AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:share_plus/share_plus.dart';
@@ -162,6 +163,47 @@ class InputPasswordDialog extends StatelessWidget {
       content: content,
     );
   }
+}
+
+Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
+  BuildContext context, {
+  required Future<T> task,
+  required String dialogTitle,
+}) async {
+  var canceled = false;
+
+  final dialogFuture = showDialog<(T, Object?)>(
+    context: context,
+    builder: (context) => ProgressIndicatorDialog(
+      title: dialogTitle,
+      dismissable: true,
+    ),
+  );
+
+  task.then((result) {
+    if (!canceled && context.mounted) Navigator.pop(context, (result, null));
+  }).onError((error, stackTrace) {
+    if (context.mounted) showErrorSnackBar(context, error);
+    logError(error, stackTrace);
+    if (!canceled && context.mounted) Navigator.pop(context, (null, error));
+  });
+
+  // Popped will be one of:
+  // - null if the user closed the dialog by tapping outside or using the back
+  //   button/gesture
+  // - (task result, null) if completed normally
+  // - (null, error) if completed with error
+  final popped = await dialogFuture;
+
+  if (popped == null) {
+    canceled = true;
+    return (succeeded: false, result: null);
+  }
+
+  final (result, error) = popped;
+  return error == null
+      ? (succeeded: true, result: result)
+      : (succeeded: false, result: null);
 }
 
 class ProgressIndicatorDialog extends StatelessWidget {

@@ -24,28 +24,14 @@ extension EncryptionHandler on DocumentPageState {
     );
     if (password == null) return;
     if (!mounted) return;
-    var canceled = false;
-    time('decrypt', () => compute(decrypt, (blocks, password)))
-        .then((decrypted) {
-      if (!canceled && mounted) Navigator.pop(context, decrypted);
-    }).onError((error, stackTrace) {
-      if (mounted) showErrorSnackBar(context, error);
-      logError(error, stackTrace);
-      if (!canceled && mounted) Navigator.pop(context);
-    });
-    final result = await showDialog<List<String?>>(
-      context: context,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.decryptingProgressDialogTitle,
-        dismissable: true,
-      ),
+
+    final (succeeded: succeeded, result: result) = await cancelableProgressTask(
+      context,
+      task: time('decrypt', () => compute(decrypt, (blocks, password))),
+      dialogTitle: AppLocalizations.of(context)!.decryptingProgressDialogTitle,
     );
-    if (!mounted) return;
-    if (result == null) {
-      // Canceled
-      canceled = true;
-      return;
-    }
+    if (!succeeded || result == null) return;
+
     OrgTree newDoc = doc;
     final toRemember = <OrgroPassword>[];
     for (final (i, cleartext) in result.indexed) {
