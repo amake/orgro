@@ -61,8 +61,7 @@ extension LinkHandler on DocumentPageState {
     final targetId = parseOrgIdUrl(url);
     final requestId = Object().hashCode.toString();
 
-    final (succeeded: succeeded, result: foundFile) =
-        await cancelableProgressTask(
+    final (:succeeded, result: foundFile) = await cancelableProgressTask(
       context,
       task: time(
         'find file with ID',

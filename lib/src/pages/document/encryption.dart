@@ -25,7 +25,7 @@ extension EncryptionHandler on DocumentPageState {
     if (password == null) return;
     if (!mounted) return;
 
-    final (succeeded: succeeded, result: result) = await cancelableProgressTask(
+    final (:succeeded, :result) = await cancelableProgressTask(
       context,
       task: time('decrypt', () => compute(decrypt, (blocks, password))),
       dialogTitle: AppLocalizations.of(context)!.decryptingProgressDialogTitle,
