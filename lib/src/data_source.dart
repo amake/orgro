@@ -273,7 +273,8 @@ class ParsedOrgFileInfo {
 Future<OrgDocument> parse(String content) async =>
     time('parse', () => compute(_parse, content));
 
-OrgDocument _parse(String text) => OrgDocument.parse(text);
+OrgDocument _parse(String text) =>
+    OrgDocument.parse(text, interpretEmbeddedSettings: true);
 
 Future<String> _readFile(File file) async {
   try {
