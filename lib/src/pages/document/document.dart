@@ -94,6 +94,8 @@ class DocumentPageState extends State<DocumentPage> {
     _searchDelegate.keywords = analysis.keywords ?? [];
     _searchDelegate.tags = analysis.tags ?? [];
     _searchDelegate.priorities = analysis.priorities ?? [];
+    _searchDelegate.todoSettings =
+        OrgController.of(context).settings.todoSettings;
   }
 
   void _onSectionLongPress(OrgSection section) async => doNarrow(section);
@@ -104,11 +106,18 @@ class DocumentPageState extends State<DocumentPage> {
         label: AppLocalizations.of(context)!.sectionActionCycleTodo,
         icon: Icons.repeat,
         onPressed: () {
-          final newDoc = _doc
-              .editNode(section.headline)!
-              .replace(section.headline.cycleTodo())
-              .commit() as OrgTree;
-          updateDocument(newDoc);
+          final todoSettings = OrgController.of(context).settings.todoSettings;
+          try {
+            final newDoc = _doc
+                .editNode(section.headline)!
+                .replace(section.headline.cycleTodo(todoSettings))
+                .commit() as OrgTree;
+            updateDocument(newDoc);
+          } catch (e, s) {
+            logError(e, s);
+            // TODO(aaron): Make this more friendly?
+            showErrorSnackBar(context, e);
+          }
         },
       ),
     ];

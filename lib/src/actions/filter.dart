@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
@@ -10,6 +11,7 @@ class FilterChipsInput extends StatelessWidget {
     required this.keywords,
     required this.tags,
     required this.priorities,
+    required this.todoSettings,
     required this.selectedFilter,
     super.key,
   });
@@ -17,6 +19,7 @@ class FilterChipsInput extends StatelessWidget {
   final List<String> keywords;
   final List<String> tags;
   final List<String> priorities;
+  final List<OrgTodoStates> todoSettings;
   final ValueNotifier<FilterData> selectedFilter;
 
   @override
@@ -65,6 +68,7 @@ class FilterChipsInput extends StatelessWidget {
                   if (filter.keywords.isEmpty)
                     _KeywordChip(
                       keyword,
+                      done: todoSettings.any((e) => e.done.contains(keyword)),
                       onPressed: () => selectedFilter.value = filter
                           .copyWith(keywords: [...filter.keywords, keyword]),
                     ),
@@ -94,11 +98,13 @@ class FilterChipsInput extends StatelessWidget {
 class SelectedFilterChips extends StatelessWidget {
   const SelectedFilterChips({
     required this.filter,
+    required this.todoSettings,
     required this.onChange,
     super.key,
   });
 
   final FilterData filter;
+  final List<OrgTodoStates> todoSettings;
   final void Function(FilterData) onChange;
 
   @override
@@ -113,6 +119,7 @@ class SelectedFilterChips extends StatelessWidget {
         for (final keyword in filter.keywords)
           _KeywordChip(
             keyword,
+            done: todoSettings.any((e) => e.done.contains(keyword)),
             onDeleted: () => onChange(filter.copyWith(
                 keywords: List.of(filter.keywords)..remove(keyword))),
           ),
@@ -134,15 +141,23 @@ class SelectedFilterChips extends StatelessWidget {
 }
 
 class _KeywordChip extends StatelessWidget {
-  const _KeywordChip(this.keyword, {this.onPressed, this.onDeleted});
+  const _KeywordChip(
+    this.keyword, {
+    required this.done,
+    this.onPressed,
+    this.onDeleted,
+  });
   final String keyword;
+  final bool done;
   final VoidCallback? onPressed;
   final VoidCallback? onDeleted;
 
   @override
   Widget build(BuildContext context) {
     return InputChip(
-      avatar: const Icon(Icons.check),
+      avatar: done
+          ? const Icon(Icons.check_circle)
+          : const Icon(Icons.check_circle_outline),
       label: Text(keyword),
       onPressed: onPressed,
       onDeleted: onDeleted,

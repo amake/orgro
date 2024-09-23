@@ -29,6 +29,7 @@ class MySearchDelegate {
   List<String> keywords = [];
   List<String> tags = [];
   List<String> priorities = [];
+  List<OrgTodoStates> todoSettings = [];
   final ValueNotifier<FilterData> _selectedFilter;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
@@ -38,6 +39,7 @@ class MySearchDelegate {
         _searchController,
         filterData: _selectedFilter,
         focusNode: _searchFocusNode,
+        todoSettings: todoSettings,
         onClear: _clearSearchQuery,
         onSubmitted: onQuerySubmitted,
       );
@@ -48,6 +50,7 @@ class MySearchDelegate {
         keywords: keywords,
         tags: tags,
         priorities: priorities,
+        todoSettings: todoSettings,
         selectedFilter: _selectedFilter,
       ),
     );
@@ -92,12 +95,14 @@ class SearchField extends StatelessWidget {
     this._controller, {
     required this.filterData,
     required this.focusNode,
+    required this.todoSettings,
     this.onClear,
     this.onSubmitted,
     super.key,
   });
   final TextEditingController _controller;
   final FocusNode focusNode;
+  final List<OrgTodoStates> todoSettings;
   final ValueNotifier<FilterData> filterData;
   final VoidCallback? onClear;
   final void Function(String)? onSubmitted;
@@ -125,6 +130,7 @@ class SearchField extends StatelessWidget {
                       ...[
                         SelectedFilterChips(
                           filter: filter,
+                          todoSettings: todoSettings,
                           onChange: (value) => filterData.value = value,
                         ),
                         if (filter.isNotEmpty)
