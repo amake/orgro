@@ -357,6 +357,14 @@ Options recognized by Orgro:
 - [no]inlineimages
 - [no]fold / overview / content / show[2..5]levels / showall / showeverything
 
+* =TODO= keywords
+
+Org Mode allows customizing headline keywords (default: =TODO=, =DONE=). Orgro
+will interpret the ~#+TODO:~, ~#+SEQ_TODO:~, and ~#+TYP_TODO:~ keywords to inform:
+
+- What are valid keywords (invalid keywords are merely part of a section title)
+- What is the next state when [[*Editing][cycling the keyword]]
+
 * Local Variables
 
 Emacs allows defining a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html][local variables list]] like below. Orgro can interpret the
