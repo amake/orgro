@@ -1,0 +1,39 @@
+#+TODO: TODO(t) | DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c)
+
+* TODO foo
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to DONE
+
+* DONE foo
+
+  - This should show with the complete color (default green)
+  - This should cycle next to REPORT
+
+* REPORT bar
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to BUG
+
+* BUG bar
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to KNOWNCAUSE
+
+* KNOWNCAUSE bar
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to FIXED
+
+* FIXED bar
+
+  - This should show with the complete color (default green)
+  - This should cycle next to CANCELED
+
+
+* CANCELED baz
+
+  - This should show with the complete color (default green)
+  - This should cycle next to have no keyword

@@ -1,0 +1,7 @@
+#+TODO:
+
+The =TODO= and =DONE= keywords should be interpreted as parts of the title and
+cycling should not work.
+
+* TODO foo
+* DONE bar
