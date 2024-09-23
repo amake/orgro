@@ -15,6 +15,11 @@ all: release
 run: ## Run app with full environment
 	$(flutter) run $(version_define) $(args)
 
+.PHONY: clean
+clean: ## Clean project
+clean:
+	$(flutter) clean
+
 .PHONY: test
 test: ## Run tests
 	$(flutter) analyze
