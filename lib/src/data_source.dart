@@ -100,7 +100,7 @@ class AssetDataSource extends DataSource {
 
   @override
   DataSource resolveRelative(String relativePath) =>
-      AssetDataSource(Uri.parse(key).resolve(relativePath).toString());
+      AssetDataSource(Uri.parse(key).resolve(relativePath).toFilePath());
 }
 
 class NativeDataSource extends DataSource {
