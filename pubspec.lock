@@ -504,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  petit_bibtex:
+    dependency: "direct main"
+    description:
+      name: petit_bibtex
+      sha256: e8d4f8078bff37fd251780516389e289480b519be372334e94a9750de8616984
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.2"
   petit_lisp:
     dependency: transitive
     description:
