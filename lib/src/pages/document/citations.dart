@@ -57,7 +57,7 @@ extension CitationHandler on DocumentPageState {
       showErrorSnackBar(
           context,
           AppLocalizations.of(context)!
-              .snackbarMessageSomeCitationsNotFound(notFound.join(',')));
+              .snackbarMessageSomeCitationsNotFound(notFound.join(', ')));
     }
 
     await showDialog<void>(
