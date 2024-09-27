@@ -103,6 +103,7 @@
   "searchingProgressDialogTitle": "Searching…",
   "citationsDialogTitle": "Citations",
 
+  "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",
   "snackbarMessageCitationsNotFound": "Citations not found",
   "snackbarMessageSomeCitationsNotFound": "Citations not found: {citations}",

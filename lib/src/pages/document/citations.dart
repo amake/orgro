@@ -14,6 +14,13 @@ extension CitationHandler on DocumentPageState {
   Future<bool> openCitation(OrgCitation citation) async {
     final doc = DocumentProvider.of(context).doc;
     final bibFiles = extractBibliograpies(doc);
+
+    if (bibFiles.isEmpty) {
+      showErrorSnackBar(context,
+          AppLocalizations.of(context)!.snackbarMessageBibliographiesNotFound);
+      return false;
+    }
+
     final keys = citation.getKeys().unique();
     if (keys.isEmpty) {
       // This should never happen, as the parser should not recognize an

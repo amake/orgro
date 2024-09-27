@@ -103,6 +103,7 @@
   "searchingProgressDialogTitle": "検索中…",
   "citationsDialogTitle": "参考文献",
 
+  "snackbarMessageBibliographiesNotFound": "参考文献ファイルの指定がありませんでした",
   "snackbarMessageCitationKeysNotFound": "文献キーが見つかりませんでした",
   "snackbarMessageCitationsNotFound": "文献情報が見つかりませんでした",
   "snackbarMessageSomeCitationsNotFound": "文献情報が見つかりませんでした: {citations}",
