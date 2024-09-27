@@ -382,6 +382,10 @@ class CitationsDialog extends StatelessWidget {
                     'phdthesis' ||
                     'techreport' =>
                       const Icon(Icons.article),
+                    // 'misc' is often used for websites; the Language icon is
+                    // an abstract globe, which in my opinion is more suggestive
+                    // of a website than Web or Public
+                    'misc' => const Icon(Icons.language),
                     _ => const Icon(Icons.question_mark)
                   },
                   title: Text(
