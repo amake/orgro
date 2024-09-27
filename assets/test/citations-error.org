@@ -1,0 +1,9 @@
+#+bibliography: test.bib
+#+bibliography: test2.bib
+#+bibliography: non-existent.bib
+
+Multiple keys; some missing[cite:@abramowitz+stegun;@knuth:1984;@foo;@bar]
+
+Only missing keys[cite:@foo]
+
+Invalid[cite:foo]

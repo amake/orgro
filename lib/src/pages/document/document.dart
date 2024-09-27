@@ -16,6 +16,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/pages/document/encryption.dart';
 import 'package:orgro/src/pages/document/images.dart';
 import 'package:orgro/src/pages/document/keyboard.dart';
@@ -314,6 +315,7 @@ class DocumentPageState extends State<DocumentPage> {
               onSectionSlide: _onSectionSlide,
               onLocalSectionLinkTap: doNarrow,
               onListItemTap: _onListItemTap,
+              onCitationTap: openCitation,
               loadImage: loadImage,
               child: switch (doc) {
                 OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),

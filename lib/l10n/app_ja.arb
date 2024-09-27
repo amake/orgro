@@ -101,6 +101,11 @@
   "serializingProgressDialogTitle": "書き出し中…",
   "savingProgressDialogTitle": "保存中…",
   "searchingProgressDialogTitle": "検索中…",
+  "citationsDialogTitle": "参考文献",
+
+  "snackbarMessageCitationKeysNotFound": "文献キーが見つかりませんでした",
+  "snackbarMessageCitationsNotFound": "文献情報が見つかりませんでした",
+  "snackbarMessageSomeCitationsNotFound": "文献情報が見つかりませんでした: {citations}",
 
   "errorCannotResolveRelativePath": "本ドキュメントからの相対パスは解決できません。",
   "errorPathResolvedToNonFile": "{path} を解決した結果はファイルではありませんでした。結果: {resolved}",

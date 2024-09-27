@@ -54,7 +54,7 @@ extension LinkHandler on DocumentPageState {
     }
 
     if (dataSource.needsToResolveParent) {
-      _showDirectoryPermissionsSnackBar(context);
+      showDirectoryPermissionsSnackBar(context);
       return false;
     }
 
@@ -96,7 +96,7 @@ extension LinkHandler on DocumentPageState {
     }
     final source = DocumentProvider.of(context).dataSource;
     if (source.needsToResolveParent) {
-      _showDirectoryPermissionsSnackBar(context);
+      showDirectoryPermissionsSnackBar(context);
       return false;
     }
 
@@ -124,7 +124,7 @@ extension LinkHandler on DocumentPageState {
     return false;
   }
 
-  void _showDirectoryPermissionsSnackBar(BuildContext context) =>
+  void showDirectoryPermissionsSnackBar(BuildContext context) =>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(

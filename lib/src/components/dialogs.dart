@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
+import 'package:petit_bibtex/bibtex.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -342,6 +344,62 @@ class CustomFilterHistoryDialog extends StatelessWidget {
             onTap: () => Navigator.pop(context, entry),
           )
       ],
+    );
+  }
+}
+
+class CitationsDialog extends StatelessWidget {
+  const CitationsDialog({required this.entries, super.key});
+
+  final List<BibTeXEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.citationsDialogTitle),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, idx) {
+              final entry = entries[idx];
+              final url = entry.getUrl();
+              final details = entry.getDetails();
+              return ListTile(
+                  leading: switch (entry.type.toLowerCase()) {
+                    'book' ||
+                    'booklet' ||
+                    'inbook' ||
+                    'incollection' ||
+                    'manual' =>
+                      const Icon(Icons.book),
+                    'conference' ||
+                    'inproceedings' ||
+                    'proceedings' =>
+                      const Icon(Icons.mic),
+                    'article' ||
+                    'mastersthesis' ||
+                    'phdthesis' ||
+                    'techreport' =>
+                      const Icon(Icons.article),
+                    _ => const Icon(Icons.question_mark)
+                  },
+                  title: Text(
+                    entry.getPrettyValue('title') ?? entry.key,
+                  ),
+                  subtitle: details.isEmpty ? null : Text(details),
+                  trailing: url == null
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.open_in_new),
+                          onPressed: () => launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          ),
+                        ));
+            },
+            itemCount: entries.length),
+      ),
     );
   }
 }

@@ -53,3 +53,8 @@ Symmetric
 * Encoding
 
 - [[file:encoding-sjis.org][Shift JIS]]
+
+* Citations
+
+- [[file:citations-normal.org][Normal]]
+- [[file:citations-error.org][Error cases]]

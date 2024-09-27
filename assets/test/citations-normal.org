@@ -1,0 +1,44 @@
+#+bibliography: test.bib
+#+bibliography: "test 2.bib"
+
+* Citation syntax
+
+- Simple[cite:@abramowitz+stegun]
+
+- Multiple keys[cite:@abramowitz+stegun;@knuth:1984]
+
+- With style[cite/mystyle:@abramowitz+stegun]
+
+- With prefixes and suffixes[cite:common pref; pref@abramowitz+stegun suff; common suff]
+
+* Presentation
+
+Taken from https://www.bibtex.com/e/entry-types/
+
+- Article[cite:@CitekeyArticle]
+
+- Book[cite:@CitekeyBook]
+
+- Booklet[cite:@CitekeyBooklet]
+
+- Inbook[cite:@CitekeyInbook]
+
+- Incollection[cite:@CitekeyIncollection]
+
+- Inproceedings[cite:@CitekeyInproceedings]
+
+- Manual[cite:@CitekeyManual]
+
+- Mastersthesis[cite:@CitekeyMastersthesis]
+
+- Misc[cite:@CitekeyMisc]
+
+- Phdthesis[cite:@CitekeyPhdthesis]
+
+- Proceedings[cite:@CitekeyProceedings]
+
+- Techreport[cite:@CitekeyTechreport]
+
+- Unpublished[cite:@CitekeyUnpublished]
+
+- All[cite:@CitekeyArticle;@CitekeyBook;@CitekeyBooklet;@CitekeyInbook;@CitekeyIncollection;@CitekeyInproceedings;@CitekeyManual;@CitekeyMastersthesis;@CitekeyMisc;@CitekeyPhdthesis;@CitekeyProceedings;@CitekeyTechreport;@CitekeyUnpublished]

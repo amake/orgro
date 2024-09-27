@@ -106,4 +106,11 @@ extension StringExtension on String {
     if (idx == -1) return ('', this);
     return (substring(0, idx), substring(idx));
   }
+
+  String trimPrefSuff(String prefix, String suffix) {
+    if (startsWith(prefix) && endsWith(suffix)) {
+      return substring(prefix.length, length - suffix.length);
+    }
+    return this;
+  }
 }

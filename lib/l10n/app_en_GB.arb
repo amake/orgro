@@ -102,6 +102,11 @@
   "serializingProgressDialogTitle": "Serialising…",
   "savingProgressDialogTitle": "Saving…",
   "searchingProgressDialogTitle": "Searching…",
+  "citationsDialogTitle": "Citations",
+
+  "snackbarMessageCitationKeysNotFound": "Citation keys not found",
+  "snackbarMessageCitationsNotFound": "Citations not found",
+  "snackbarMessageSomeCitationsNotFound": "Citations not found: {citations}",
 
   "errorCannotResolveRelativePath": "Can’t resolve path relative to this document",
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",

@@ -101,6 +101,11 @@
   "serializingProgressDialogTitle": "Serializing…",
   "savingProgressDialogTitle": "Saving…",
   "searchingProgressDialogTitle": "Searching…",
+  "citationsDialogTitle": "Citations",
+
+  "snackbarMessageCitationKeysNotFound": "Citation keys not found",
+  "snackbarMessageCitationsNotFound": "Citations not found",
+  "snackbarMessageSomeCitationsNotFound": "Citations not found: {citations}",
 
   "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
