@@ -205,6 +205,13 @@ you chose =Always= or =Never=, see the action menu on the top screen.
 
 Jump to named foonotes by touching a footnote reference.[fn:1]
 
+** Citations
+
+#+bibliography: orgro.bib
+
+Orgro can follow citations when a BibTeX bibliography has been specified like
+above[cite:@OrgroManual]. Touch a citation for details.
+
 ** Attachments                                                       :ATTACH:
    :PROPERTIES:
    :ID:       C259CE94-D4C8-4C4F-9C9E-9ABE446E7DA3
