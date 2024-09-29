@@ -39,13 +39,16 @@ powers this application and is available as a separate library,
 - Visibility cycling
 - Search
 - Narrowing
+- [Sparse Tree](https://orgmode.org/manual/Sparse-Trees.html)-style filtering
 - "Reader mode" where extraneous markup is hidden
 - Inline and block LaTeX rendering
 - Jump to/from footnotes
+- Display [Org Cite](https://orgmode.org/manual/Citations.html) citations
 - Decrypt/encrypt [Org Crypt](https://orgmode.org/manual/Org-Crypt.html)
   sections (currently symmetric keys only)
 - Editing capability
   ([details](https://orgro.org/faq/#can-i-edit-my-files-with-orgro))
+- Honor document-local `#+STARTUP:` and `#+TODO:` directives
 
 See the [manual](./assets/manual/orgro-manual.org) for details.
 
