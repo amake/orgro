@@ -47,6 +47,16 @@ void main() {
         expect(entry.getPrettyValue('url-braces'), 'http://example.com/3');
         expect(entry.getPrettyValue('url-markup'), 'http://example.com/4');
       });
+      test('Pretty DOI', () {
+        const entry = BibTeXEntry(
+          type: 'book',
+          key: 'key',
+          fields: {
+            'doi': '10.1234/5678',
+          },
+        );
+        expect(entry.getPrettyValue('doi'), 'doi:10.1234/5678');
+      });
       group('Extract URL', () {
         test('url field', () {
           const entry = BibTeXEntry(
@@ -71,6 +81,14 @@ void main() {
             fields: {'howpublished': 'i dunno'},
           );
           expect(entry.getUrl(), isNull);
+        });
+        test('DOI', () {
+          const entry = BibTeXEntry(
+            type: 'book',
+            key: 'key',
+            fields: {'doi': '10.1234/5678'},
+          );
+          expect(entry.getUrl(), Uri.parse('https://doi.org/10.1234/5678'));
         });
       });
       test('Volume', () {
@@ -143,11 +161,12 @@ void main() {
             'month': 'sep',
             'year': '2024',
             'pages': '1--10',
+            'doi': '10.1234/5678',
           },
         );
         expect(
           entry.getDetails(),
-          'Foo Bar • Pseudorandom House • New York, NY • September • 2024 • pp. 1–10',
+          'Foo Bar • Pseudorandom House • New York, NY • September • 2024 • pp. 1–10 • doi:10.1234/5678',
         );
       });
     });

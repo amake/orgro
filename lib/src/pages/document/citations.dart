@@ -137,17 +137,28 @@ extension EntryPresentation on BibTeXEntry {
     if (key == 'volume') result = 'Vol. $result';
     if (key == 'number') result = 'No. $result';
     if (key == 'month') result = _expandMonth(result);
+    if (key == 'doi' && Uri.tryParse(result)?.scheme.isEmpty == true) {
+      result = 'doi:$result';
+    }
     result = result.replaceAllMapped(
         RegExp(r'\{([^}]+)}'), (m) => m.group(1) ?? m.group(0)!);
     return result;
   }
 
   Uri? getUrl() {
-    final rawUrl = getPrettyValue('url') ?? getPrettyValue('howpublished');
+    final rawUrl = getPrettyValue('url') ??
+        getPrettyValue('doi') ??
+        getPrettyValue('howpublished');
     if (rawUrl == null) return null;
 
     final url = Uri.tryParse(rawUrl);
-    return url?.scheme.isNotEmpty == true ? url : null;
+    if (url == null) return null;
+
+    return switch (url.scheme) {
+      'doi' => url.replace(scheme: 'https', host: 'doi.org'),
+      '' => null,
+      _ => url,
+    };
   }
 
   String getDetails() {
@@ -158,7 +169,7 @@ extension EntryPresentation on BibTeXEntry {
       if (value == null) return false;
       final asUri = Uri.tryParse(value);
       if (asUri == null) return true;
-      return asUri.scheme.isEmpty;
+      return asUri.scheme.isEmpty || asUri.scheme == 'doi';
     });
     return detailValues.join(' • ');
   }
