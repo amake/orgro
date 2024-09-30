@@ -146,8 +146,8 @@ extension EntryPresentation on BibTeXEntry {
   }
 
   Uri? getUrl() {
-    final rawUrl = getPrettyValue('url') ??
-        getPrettyValue('doi') ??
+    final rawUrl = getPrettyValue('doi') ??
+        getPrettyValue('url') ??
         getPrettyValue('howpublished');
     if (rawUrl == null) return null;
 

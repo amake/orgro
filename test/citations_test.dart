@@ -90,6 +90,17 @@ void main() {
           );
           expect(entry.getUrl(), Uri.parse('https://doi.org/10.1234/5678'));
         });
+        test('DOI preferred over URL or howpublished', () {
+          const entry = BibTeXEntry(
+            type: 'book',
+            key: 'key',
+            fields: {
+              'url': 'https://example.com',
+              'doi': '10.1234/5678',
+            },
+          );
+          expect(entry.getUrl(), Uri.parse('https://doi.org/10.1234/5678'));
+        });
       });
       test('Volume', () {
         const entry = BibTeXEntry(
