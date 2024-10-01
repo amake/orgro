@@ -1,0 +1,12 @@
+#+LINK: OrgroIssue  https://github.com/amake/orgro/issues/
+#+LINK: duckduckgo https://duckduckgo.com/?q=%s
+#+LINK: "Nu Html Checker" https://validator.w3.org/nu/?doc=%h
+#+LINK: multi https://example.com/%h?q=%s
+#+LINK: multi2 https://example.com/%s?q=%s
+
+- Appending: [[OrgroIssue:105]]
+- Replacing: [[duckduckgo:OrgMode]]
+- Percent-encoding: [[Nu Html Checker:https://orgro.org]]
+- Multiple (differing) placeholders: [[multi:abc %!@]]
+- Multi2: [[multi2:abc %!@]]
+- Missing: [[foo:bar]]

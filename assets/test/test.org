@@ -4,6 +4,7 @@
 
 - [[file:links-local.org][Local]]
 - [[file:links-external.org][External]]
+- [[file:links-abbreviation.org][Abbreviations]]
 
 * Media
 

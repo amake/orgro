@@ -10,6 +10,7 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
+import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension LinkHandler on DocumentPageState {
@@ -28,14 +29,16 @@ extension LinkHandler on DocumentPageState {
 
     // Handle as a general URL
     try {
-      debugPrint('Launching URL: ${link.location}');
-      final handled = await launchUrl(Uri.parse(link.location),
-          mode: LaunchMode.externalApplication);
+      final doc = DocumentProvider.of(context).doc;
+      final url = extractUrl(doc, link);
+      debugPrint('Launching URL: $url');
+      final handled =
+          await launchUrl(url, mode: LaunchMode.externalApplication);
       if (!handled && mounted) {
-        showErrorSnackBar(context,
-            AppLocalizations.of(context)!.errorLinkNotHandled(link.location));
+        showErrorSnackBar(
+            context, AppLocalizations.of(context)!.errorLinkNotHandled(url));
       }
-    } on Exception catch (e, s) {
+    } catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
     }
@@ -159,4 +162,55 @@ extension LinkHandler on DocumentPageState {
       if (mounted) showErrorSnackBar(context, e);
     }
   }
+}
+
+Uri extractUrl(OrgTree doc, OrgLink link) {
+  // Uri.parse can fail on a link that might otherwise succeed after expanding
+  // abbreviations, so don't unconditionally try to parse the raw link.location.
+
+  final abbreviations = extractLinkAbbreviations(doc);
+  if (abbreviations.isEmpty) return Uri.parse(link.location);
+
+  final colonIdx = link.location.indexOf(':');
+  if (colonIdx == -1) return Uri.parse(link.location);
+
+  final linkword = link.location.substring(0, colonIdx);
+  final tag = link.location.substring(colonIdx + 1);
+
+  final String format;
+  try {
+    (linkword: _, :format) =
+        abbreviations.firstWhere((abbr) => abbr.linkword == linkword);
+  } on StateError {
+    return Uri.parse(link.location);
+  }
+
+  final formatted = format.contains('%s')
+      ? format.replaceFirst('%s', tag)
+      : format.contains('%h')
+          ? format.replaceFirst('%h', Uri.encodeComponent(tag))
+          : '$format$tag';
+  return Uri.tryParse(formatted) ?? Uri.parse(link.location);
+}
+
+final _abbreviationPattern =
+    RegExp(r'^(?<linkword>"[^"]+"|\S+)\s+(?<format>\S+)$');
+typedef LinkAbbreviation = ({String linkword, String format});
+
+List<LinkAbbreviation> extractLinkAbbreviations(
+  OrgTree tree,
+) {
+  final results = <LinkAbbreviation>[];
+  tree.visit<OrgMeta>((meta) {
+    if (meta.keyword.toLowerCase() == '#+link:') {
+      final trailing = meta.trailing.trim();
+      final match = _abbreviationPattern.firstMatch(trailing);
+      if (match == null) return true;
+      final linkword = match.namedGroup('linkword')!.trimPrefSuff('"', '"');
+      final format = match.namedGroup('format')!;
+      results.add((linkword: linkword, format: format));
+    }
+    return true;
+  });
+  return results;
 }
