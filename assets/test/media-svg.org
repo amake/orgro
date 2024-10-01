@@ -6,3 +6,6 @@ Asset:
 
 Network:
 https://raw.githubusercontent.com/amake/orgro/ef0eec7abef855487f3d30882bd4408018d03bf2/assets/unicorn-1.svg
+
+Asset on unusual path:
+[[file:foo: bar/unicorn-1.svg]]

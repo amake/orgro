@@ -5,3 +5,4 @@
 - [[file:links-local.org::*Hogehoge][External section link to nonexistent section in links-local.org]]
 - [[id:nonexistent-id][External ID link to nonexistent ID]]
   - TODO(aaron): Make this work with ~AssetDataSource~
+- [[file:foo: bar/links-unusual-path.org][External file link to unusal path]]
