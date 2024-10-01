@@ -117,7 +117,7 @@ extension LinkHandler on DocumentPageState {
         Navigator.pop(context);
         return await loadDocument(context, resolved, target: link.extra);
       }
-    } on Exception catch (e, s) {
+    } catch (e, s) {
       logError(e, s);
       if (mounted) {
         Navigator.pop(context);
