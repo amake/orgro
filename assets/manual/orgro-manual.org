@@ -166,6 +166,11 @@ For more details, including supported apps and OS restrictions, see the [[https:
 
 Image links are also supported; see [[*Images][Images]].
 
+#+LINK: OrgroIssue https://github.com/amake/orgro/issues/
+
+Link abbreviations are supported if they are defined via ~#+LINK:~ lines:
+[[OrgroIssue:105]]
+
 ** Emphasis
 
 The default emphasis markers are supported:
