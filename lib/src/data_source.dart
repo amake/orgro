@@ -74,7 +74,7 @@ class WebDataSource extends DataSource {
 
   @override
   WebDataSource resolveRelative(String relativePath) =>
-      WebDataSource(uri.resolve(relativePath));
+      WebDataSource(uri.resolveUri(Uri(path: relativePath)));
 }
 
 class AssetDataSource extends DataSource {
@@ -99,8 +99,8 @@ class AssetDataSource extends DataSource {
       Uint8List.sublistView(await rootBundle.load(key));
 
   @override
-  DataSource resolveRelative(String relativePath) =>
-      AssetDataSource(Uri.parse(key).resolve(relativePath).toFilePath());
+  AssetDataSource resolveRelative(String relativePath) => AssetDataSource(
+      Uri.parse(key).resolveUri(Uri(path: relativePath)).toFilePath());
 }
 
 class NativeDataSource extends DataSource {
