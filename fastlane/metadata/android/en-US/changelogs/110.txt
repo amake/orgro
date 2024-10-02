@@ -1,0 +1,2 @@
+- Support local Link Abbreviations (#+LINK:)
+- Show original text links when images fail to load
