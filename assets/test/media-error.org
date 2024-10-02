@@ -1,0 +1,14 @@
+Bad path (SVG)
+[[file:nonexistent.svg]]
+
+Bad path (Other)
+[[file:nonexistent.png]]
+
+Bad URL (SVG)
+https://example.com/nonexistent.svg
+
+Bad URL (PNG)
+https://example.com/nonexistent.png
+
+Bad, long URL (PNG)
+https://example.com/at/very/very/very/long/path/nonexistent.png

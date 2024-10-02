@@ -9,6 +9,7 @@
 * Media
 
 - [[file:media-svg.org][SVG image]]
+- [[file:media-error.org][Error cases]]
 
 * Visibility
 

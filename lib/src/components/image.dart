@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
@@ -16,9 +17,10 @@ bool _isSvg(String url) {
 }
 
 class RemoteImage extends StatelessWidget {
-  const RemoteImage(this.url, {super.key});
+  const RemoteImage(this.link, {super.key});
 
-  final String url;
+  final OrgLink link;
+  String get url => link.location;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -37,7 +39,7 @@ class RemoteImage extends StatelessWidget {
       return Image(
         image: CachedNetworkImageProvider(url),
         errorBuilder: (context, error, stackTrace) =>
-            _ImageError(error.toString()),
+            _ImageError(link: link, error: error.toString()),
         loadingBuilder: (context, child, loadingProgress) =>
             loadingProgress == null ? child : const CircularProgressIndicator(),
       );
@@ -57,7 +59,7 @@ class RemoteImage extends StatelessWidget {
           scale: MediaQuery.of(context).devicePixelRatio,
         ),
         errorBuilder: (context, error, stackTrace) =>
-            _ImageError(error.toString()),
+            _ImageError(link: link, error: error.toString()),
         loadingBuilder: (context, child, loadingProgress) =>
             loadingProgress == null ? child : const CircularProgressIndicator(),
       );
@@ -67,11 +69,13 @@ class RemoteImage extends StatelessWidget {
 
 class LocalImage extends StatelessWidget {
   const LocalImage({
+    required this.link,
     required this.dataSource,
     required this.relativePath,
     super.key,
   });
 
+  final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
 
@@ -86,6 +90,7 @@ class LocalImage extends StatelessWidget {
   Widget _image({bool minimizeSize = false}) => _isSvg(relativePath)
       ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
       : _LocalOtherImage(
+          link: link,
           dataSource: dataSource,
           relativePath: relativePath,
           minimizeSize: minimizeSize,
@@ -94,11 +99,13 @@ class LocalImage extends StatelessWidget {
 
 class _LocalOtherImage extends StatelessWidget {
   const _LocalOtherImage({
+    required this.link,
     required this.dataSource,
     required this.relativePath,
     required this.minimizeSize,
   });
 
+  final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
   final bool minimizeSize;
@@ -109,7 +116,7 @@ class _LocalOtherImage extends StatelessWidget {
       return Image(
         image: _DataSourceImage(dataSource, relativePath),
         errorBuilder: (context, error, stackTrace) =>
-            _ImageError(error.toString()),
+            _ImageError(link: link, error: error.toString()),
         loadingBuilder: (context, child, loadingProgress) =>
             loadingProgress == null ? child : const CircularProgressIndicator(),
       );
@@ -130,7 +137,7 @@ class _LocalOtherImage extends StatelessWidget {
               scale: scale,
             )),
         errorBuilder: (context, error, stackTrace) =>
-            _ImageError(error.toString()),
+            _ImageError(link: link, error: error.toString()),
         loadingBuilder: (context, child, loadingProgress) =>
             loadingProgress == null ? child : const CircularProgressIndicator(),
       );
@@ -186,17 +193,33 @@ class _DataSourceBytesLoader extends SvgLoader<Uint8List> {
 }
 
 class _ImageError extends StatelessWidget {
-  const _ImageError(this.error);
+  const _ImageError({required this.link, required this.error});
 
+  final OrgLink link;
   final String error;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.error),
+        IconButton(
+          padding: EdgeInsets.zero,
+          visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity,
+          ),
+          onPressed: () => showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              icon: const Icon(Icons.error),
+              content: Text(error),
+            ),
+          ),
+          icon: const Icon(Icons.error),
+        ),
         const SizedBox(width: 8),
-        Flexible(child: Text(error))
+        Expanded(child: OrgLinkWidget(link)),
       ],
     );
   }

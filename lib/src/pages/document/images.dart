@@ -16,7 +16,7 @@ extension ImageHandler on DocumentPageState {
     try {
       final fileLink = convertLinkResolvingAttachments(doc, link);
       if (fileLink.isRelative) {
-        return _loadLocalImage(fileLink);
+        return _loadLocalImage(link, fileLink);
       }
     } on Exception {
       // Not a file link
@@ -31,17 +31,18 @@ extension ImageHandler on DocumentPageState {
     if (viewSettings.remoteImagesPolicy != RemoteImagesPolicy.allow) {
       return null;
     }
-    return RemoteImage(link.location);
+    return RemoteImage(link);
   }
 
-  Widget? _loadLocalImage(OrgFileLink link) {
+  Widget? _loadLocalImage(OrgLink link, OrgFileLink fileLink) {
     final source = DocumentProvider.of(context).dataSource;
     if (source.needsToResolveParent) {
       return null;
     }
     return LocalImage(
+      link: link,
       dataSource: source,
-      relativePath: link.body,
+      relativePath: fileLink.body,
     );
   }
 }
