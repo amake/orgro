@@ -98,13 +98,13 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     debugPrint('Adding recent file: $newFile');
     final newFiles = [newFile]
         .followedBy(_recentFiles)
-        .take(kMaxRecentFiles)
         .unique(
           cache: LinkedHashSet(
             equals: (a, b) => a.uri == b.uri,
             hashCode: (o) => o.uri.hashCode,
           ),
         )
+        .take(kMaxRecentFiles)
         .toList(growable: false);
     _save(newFiles);
   }
