@@ -312,9 +312,10 @@ Future<RecentFile?> _loadFile(
     } else {
       if (source.persistable) {
         result = RecentFile(
-          source.identifier,
-          source.name,
-          DateTime.now(),
+          identifier: source.identifier,
+          name: source.name,
+          uri: source.uri,
+          lastOpened: DateTime.now(),
         );
       } else {
         debugPrint('Couldn’t obtain persistent access to ${source.name}');

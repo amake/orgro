@@ -12,14 +12,25 @@ import 'package:orgro/src/util.dart';
 class RecentFile {
   RecentFile.fromJson(Map<String, dynamic> json)
       : this(
-          json['identifier'] as String,
-          json['name'] as String,
-          DateTime.fromMillisecondsSinceEpoch(json['lastOpened'] as int),
+          identifier: json['identifier'] as String,
+          name: json['name'] as String,
+          // Older versions of Orgro did not store the URI, so fall back to the
+          // identifier
+          uri: (json['uri'] ?? json['identifier']) as String,
+          lastOpened:
+              DateTime.fromMillisecondsSinceEpoch(json['lastOpened'] as int),
         );
 
-  RecentFile(this.identifier, this.name, this.lastOpened);
+  RecentFile({
+    required this.identifier,
+    required this.name,
+    required this.uri,
+    required this.lastOpened,
+  });
+
   final String identifier;
   final String name;
+  final String uri;
   final DateTime lastOpened;
 
   @override
@@ -27,14 +38,16 @@ class RecentFile {
       other is RecentFile &&
       identifier == other.identifier &&
       name == other.name &&
+      uri == other.uri &&
       lastOpened == other.lastOpened;
 
   @override
-  int get hashCode => Object.hash(identifier, name, lastOpened);
+  int get hashCode => Object.hash(identifier, name, uri, lastOpened);
 
   Map<String, Object> toJson() => {
         'identifier': identifier,
         'name': name,
+        'uri': uri,
         'lastOpened': lastOpened.millisecondsSinceEpoch,
       };
 
@@ -90,8 +103,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
         .take(kMaxRecentFiles)
         .unique(
           cache: LinkedHashSet(
-            equals: (a, b) => a.identifier == b.identifier,
-            hashCode: (o) => o.identifier.hashCode,
+            equals: (a, b) => a.uri == b.uri,
+            hashCode: (o) => o.uri.hashCode,
           ),
         )
         .toList(growable: false);
