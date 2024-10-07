@@ -81,9 +81,7 @@ class RecentFiles extends InheritedWidget {
 
   @override
   bool updateShouldNotify(RecentFiles oldWidget) =>
-      !listEquals(list, oldWidget.list) ||
-      add != oldWidget.add ||
-      remove != oldWidget.remove;
+      !listEquals(list, oldWidget.list);
 
   static RecentFiles of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<RecentFiles>()!;
