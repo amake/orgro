@@ -293,16 +293,43 @@ class _RecentFileListTile extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.insert_drive_file),
         title: Text(recentFile.name),
-        subtitle: Text(
-          [
-            _formatLastOpenedDate(
-              recentFile.lastOpened,
-              AppLocalizations.of(context)!.localeName,
+        subtitle: Row(
+          children: [
+            Icon(
+              Icons.access_time,
+              size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+              applyTextScaling: true,
             ),
-            _appName(context, recentFile.uri),
-          ].whereType<String>().join(' • '),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+            const SizedBox(width: 2),
+            Text(
+              _formatLastOpenedDate(
+                recentFile.lastOpened,
+                AppLocalizations.of(context)!.localeName,
+              ),
+              style: const TextStyle(
+                fontFeatures: [FontFeature.tabularFigures()],
+              ),
+            ),
+            ...(() sync* {
+              final appName = _appName(context, recentFile.uri);
+              if (appName != null) {
+                yield const SizedBox(width: 8);
+                yield Icon(
+                  Icons.folder_outlined,
+                  size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                  applyTextScaling: true,
+                );
+                yield const SizedBox(width: 2);
+                yield Expanded(
+                  child: Text(
+                    appName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }
+            })(),
+          ],
         ),
         onTap: () async => _loadAndRememberFile(
           context,
