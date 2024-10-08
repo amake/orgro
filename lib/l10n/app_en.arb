@@ -30,6 +30,10 @@
 
   "sectionHeaderRecentFiles": "Recent files",
 
+  "fileSourceDocuments": "Documents",
+  "fileSourceDownloads": "Downloads",
+  "fileSourceGoogleDrive": "Google Drive",
+
   "menuItemReaderMode": "Reader mode",
   "menuItemFullWidth": "Full width",
   "menuItemScrollTop": "Scroll to top",

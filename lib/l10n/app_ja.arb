@@ -25,6 +25,10 @@
 
   "sectionHeaderRecentFiles": "最近のファイル",
 
+  "fileSourceDocuments": "ドキュメント",
+  "fileSourceDownloads": "ダウンロード",
+  "fileSourceGoogleDrive": "Google ドライブ",
+
   "menuItemReaderMode": "リーダーモード",
   "menuItemFullWidth": "画面幅いっぱいで表示",
   "menuItemScrollTop": "上へスクロール",

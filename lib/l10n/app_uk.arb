@@ -25,6 +25,10 @@
 
   "sectionHeaderRecentFiles": "Останні файли",
 
+  "fileSourceDocuments": "Documents",
+  "fileSourceDownloads": "Downloads",
+  "fileSourceGoogleDrive": "Google Drive",
+
   "menuItemReaderMode": "Режим читання",
   "menuItemFullWidth": "Full width",
   "menuItemScrollTop": "Прокрутити вверх",

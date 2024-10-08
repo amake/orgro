@@ -243,6 +243,40 @@ class _ListHeader extends StatelessWidget {
 String _formatLastOpenedDate(DateTime date, String locale) =>
     DateFormat.yMd(locale).add_jm().format(date);
 
+String? _appName(BuildContext context, String uriString) {
+  final uri = Uri.tryParse(uriString);
+  if (uri == null) return null;
+  // On Android we can reliably get the package name from the URI. On iOS,
+  // iCloud Drive has a distinguishable path, but all apps are in
+  // /private/var/mobile/Containers/Shared/AppGroup/GUID where the GUID is
+  // device-specific so we have no chance.
+  //
+  // Supposedly we can get the human-readable app names on Android, but it
+  // requires an invasive permission:
+  // https://developer.android.com/training/package-visibility
+  return switch (uri.scheme) {
+    'content' => switch (uri.host) {
+        'org.nextcloud.documents' => 'Nextcloud',
+        'com.google.android.apps.docs.storage' =>
+          AppLocalizations.of(context)!.fileSourceGoogleDrive,
+        'com.seafile.seadroid2.documents' => 'Seafile',
+        'com.termux.documents' => 'Termux',
+        'com.android.externalstorage.documents' =>
+          AppLocalizations.of(context)!.fileSourceDocuments,
+        'com.android.providers.downloads.documents' =>
+          AppLocalizations.of(context)!.fileSourceDownloads,
+        'com.dropbox.product.android.dbapp.document_provider.documents' =>
+          'Dropbox',
+        _ => uri.host,
+      },
+    'file' => uri.path.startsWith(
+            '/private/var/mobile/Library/Mobile%20Documents/com~apple~CloudDocs/')
+        ? 'iCloud Drive'
+        : null,
+    _ => null,
+  };
+}
+
 class _RecentFileListTile extends StatelessWidget {
   const _RecentFileListTile(this.recentFile);
 
@@ -260,8 +294,15 @@ class _RecentFileListTile extends StatelessWidget {
         leading: const Icon(Icons.insert_drive_file),
         title: Text(recentFile.name),
         subtitle: Text(
-          _formatLastOpenedDate(
-              recentFile.lastOpened, AppLocalizations.of(context)!.localeName),
+          [
+            _formatLastOpenedDate(
+              recentFile.lastOpened,
+              AppLocalizations.of(context)!.localeName,
+            ),
+            _appName(context, recentFile.uri),
+          ].whereType<String>().join(' • '),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         onTap: () async => _loadAndRememberFile(
           context,
