@@ -103,6 +103,14 @@ class _EditorPageState extends State<EditorPage> {
                         icon: const Icon(Icons.code),
                         onPressed: () => _wrapSelection('~', '~'),
                       ),
+                      IconButton(
+                        icon: const Icon(Icons.subscript),
+                        onPressed: () => _wrapSelection('_{', '}'),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.superscript),
+                        onPressed: () => _wrapSelection('^{', '}'),
+                      ),
                       // TODO(aaron): Offer more quick-insert actions?
                       // - Lists
                       // - Code blocks
