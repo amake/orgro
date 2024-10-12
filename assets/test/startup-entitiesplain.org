@@ -1,3 +1,5 @@
 \smiley
 
+a^2 + b_3 + c^{abc} + d_{xyz}
+
 #+STARTUP: entitiesplain

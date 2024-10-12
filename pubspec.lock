@@ -416,6 +416,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  more:
+    dependency: transitive
+    description:
+      name: more
+      sha256: b9372ef11909cb88a7a29e221d96fbe17eb04394f022e374a4299a6c72946108
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   octo_image:
     dependency: transitive
     description:
@@ -428,18 +436,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: cb4e1d3ec6e581ef0a85d8a78caa6dcc6d02538a856a86b5adc2129565193aca
+      sha256: dd93816f15ff494004bbe60f4bc95981c2351944a2e62f744f9f4254c836e7c0
       url: "https://pub.dev"
     source: hosted
-    version: "7.4.2"
+    version: "7.5.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: c7fe4b3f58dfbbd959e9248492ed264cab3e035fff635864047471b5bb2d6c31
+      sha256: b3abfd157484e939e99de16c2b931b6f15a8db6eb1180457155ccefcd80fcebe
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.1"
+    version: "6.2.2"
   path:
     dependency: transitive
     description:

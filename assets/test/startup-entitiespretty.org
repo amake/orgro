@@ -1,3 +1,15 @@
 \smiley
 
+a^2 + b_3 + c^{abc} + d_{xyz} + e^foo * a^* - a^あ
+
+A^a..a
+
+a^{foo {bar}a} a^(foo(bar))
+
+a^1_2 a_1^2
+
+Max^Max
+
+H_{2}O
+
 #+STARTUP: entitiespretty
