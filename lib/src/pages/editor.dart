@@ -7,11 +7,13 @@ class EditorPage extends StatefulWidget {
   const EditorPage({
     required this.text,
     required this.title,
+    required this.requestFocus,
     super.key,
   });
 
   final String text;
   final String title;
+  final bool requestFocus;
 
   @override
   State<EditorPage> createState() => _EditorPageState();
@@ -33,6 +35,9 @@ class _EditorPageState extends State<EditorPage> {
           setState(() => _after = _controller.text);
         }
       });
+    if (widget.requestFocus) {
+      _focusNode.requestFocus();
+    }
   }
 
   @override

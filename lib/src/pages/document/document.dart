@@ -28,9 +28,14 @@ import 'package:orgro/src/util.dart';
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 
+enum InitialMode { view, edit }
+
+const _kDefaultInitialMode = InitialMode.view;
+
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
     required this.title,
+    this.initialMode,
     this.initialTarget,
     this.initialQuery,
     this.initialFilter,
@@ -41,6 +46,7 @@ class DocumentPage extends StatefulWidget {
   final String title;
   final String? initialTarget;
   final String? initialQuery;
+  final InitialMode? initialMode;
   final FilterData? initialFilter;
   final bool root;
 
@@ -85,6 +91,16 @@ class DocumentPageState extends State<DocumentPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       openInitialTarget();
       ensureOpenOnNarrow();
+      if (widget.initialTarget == null) {
+        switch (widget.initialMode ?? _kDefaultInitialMode) {
+          case InitialMode.view:
+            // do nothing
+            break;
+          case InitialMode.edit:
+            _doEdit(requestFocus: true);
+            break;
+        }
+      }
     });
   }
 
@@ -403,9 +419,14 @@ class DocumentPageState extends State<DocumentPage> {
               ],
             );
 
-  Future<void> _doEdit() async {
+  Future<void> _doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
-    final newDoc = await showTextEditor(context, _dataSource.name, _doc);
+    final newDoc = await showTextEditor(
+      context,
+      _dataSource.name,
+      _doc,
+      requestFocus: requestFocus,
+    );
     if (newDoc != null) {
       controller.adaptVisibility(newDoc,
           defaultState: OrgVisibilityState.children);

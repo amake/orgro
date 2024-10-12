@@ -24,6 +24,7 @@ Future<bool> loadDocument(
   FutureOr<DataSource?> dataSource, {
   FutureOr<dynamic> Function()? onClose,
   String? target,
+  InitialMode? mode,
 }) {
   // Create the future here so that it is not recreated on every build; this way
   // the result won't be recomputed e.g. on hot reload
@@ -40,7 +41,7 @@ Future<bool> loadDocument(
   });
   final push = Navigator.push<void>(
     context,
-    _buildDocumentRoute(context, parsed, target),
+    _buildDocumentRoute(context, parsed, target, mode),
   );
   if (onClose != null) {
     push.whenComplete(onClose);
@@ -52,6 +53,7 @@ PageRoute<void> _buildDocumentRoute(
   BuildContext context,
   Future<ParsedOrgFileInfo?> parsed,
   String? target,
+  InitialMode? mode,
 ) {
   return MaterialPageRoute<void>(
     builder: (context) => FutureBuilder<ParsedOrgFileInfo?>(
@@ -63,6 +65,7 @@ PageRoute<void> _buildDocumentRoute(
             doc: snapshot.data!.doc,
             child: _DocumentPageWrapper(
               target: target,
+              initialMode: mode,
             ),
           );
         } else if (snapshot.hasError) {
@@ -79,9 +82,11 @@ PageRoute<void> _buildDocumentRoute(
 class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
     required this.target,
+    this.initialMode,
   });
 
   final String? target;
+  final InitialMode? initialMode;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +116,7 @@ class _DocumentPageWrapper extends StatelessWidget {
               child: DocumentPage(
                 title: dataSource.name,
                 initialTarget: target,
+                initialMode: initialMode,
                 root: true,
               ),
             );
@@ -202,8 +208,9 @@ Future<void> showInteractive(
 Future<OrgTree?> showTextEditor(
   BuildContext context,
   String name,
-  OrgTree tree,
-) async {
+  OrgTree tree, {
+  required bool requestFocus,
+}) async {
   final viewSettings = ViewSettings.of(context).data;
   final text = tree.toMarkup(serializer: OrgroPlaintextSerializer());
   final result = await Navigator.push<String?>(
@@ -216,6 +223,7 @@ Future<OrgTree?> showTextEditor(
           child: EditorPage(
             text: text,
             title: AppLocalizations.of(context)!.pageTitleEditing(name),
+            requestFocus: requestFocus,
           ),
         ),
       ),

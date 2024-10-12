@@ -15,6 +15,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
@@ -377,8 +378,9 @@ class _SwipeDeleteBackground extends StatelessWidget {
 
 Future<RecentFile?> _loadFile(
   BuildContext context,
-  FutureOr<NativeDataSource?> dataSource,
-) async {
+  FutureOr<NativeDataSource?> dataSource, {
+  InitialMode? mode,
+}) async {
   final restorationScope = RestorationScope.of(context);
   final loaded = await loadDocument(
     context,
@@ -387,6 +389,7 @@ Future<RecentFile?> _loadFile(
       debugPrint('Clearing saved state');
       restorationScope.remove<String>(_kRestoreOpenFileIdKey);
     },
+    mode: mode,
   );
   RecentFile? result;
   if (loaded) {
@@ -411,11 +414,12 @@ Future<RecentFile?> _loadFile(
 
 Future<void> _loadAndRememberFile(
   BuildContext context,
-  FutureOr<NativeDataSource?> fileInfoFuture,
-) async {
+  FutureOr<NativeDataSource?> fileInfoFuture, {
+  InitialMode? mode,
+}) async {
   final recentFiles = RecentFiles.of(context);
   final restorationScope = RestorationScope.of(context);
-  final recentFile = await _loadFile(context, fileInfoFuture);
+  final recentFile = await _loadFile(context, fileInfoFuture, mode: mode);
   if (recentFile != null) {
     recentFiles.add(recentFile);
     debugPrint('Saving file ID to state');
@@ -434,7 +438,11 @@ Future<void> _createAndOpenFile(BuildContext context) async {
   if (fileName == null || !context.mounted) return;
   final orgFileName =
       fileName.toLowerCase().endsWith('.org') ? fileName : '$fileName.org';
-  return await _loadAndRememberFile(context, createAndLoadFile(orgFileName));
+  return await _loadAndRememberFile(
+    context,
+    createAndLoadFile(orgFileName),
+    mode: InitialMode.edit,
+  );
 }
 
 class _PickFileButton extends StatelessWidget {
