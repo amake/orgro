@@ -55,6 +55,8 @@ sub-baz-2 content
 *** sub-sub-baz-2
 sub-sub-baz-2 content
 
+**** sub-sub-sub-baz-1                                                   :あ:
+
 ** [#C] sub-baz-3                                                       :baz:
 sub-baz-3 content
 
