@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/actions/cache.dart';
 import 'package:orgro/src/components/about.dart';
+import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
@@ -81,10 +82,23 @@ class _StartPageState extends State<StartPage>
     if (!hasRecentFiles) {
       return null;
     }
-    return FloatingActionButton(
-      onPressed: () => _loadAndRememberFile(context, pickFile()),
-      foregroundColor: Theme.of(context).colorScheme.onSecondary,
-      child: const Icon(Icons.add),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          onPressed: () => _createAndOpenFile(context),
+          heroTag: 'NewFileFAB',
+          mini: true,
+          child: const Icon(Icons.create),
+        ),
+        const SizedBox(height: 16),
+        FloatingActionButton(
+          onPressed: () => _loadAndRememberFile(context, pickFile()),
+          heroTag: 'OpenFileFAB',
+          foregroundColor: Theme.of(context).colorScheme.onSecondary,
+          child: const Icon(Icons.folder_open),
+        ),
+      ],
     );
   }
 
@@ -164,6 +178,8 @@ class _EmptyBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const _PickFileButton(),
+              const SizedBox(height: 16),
+              const _CreateFileButton(),
               const SizedBox(height: 16),
               const _OrgroManualButton(),
               if (!kReleaseMode && !kScreenshotMode) ...[
@@ -410,6 +426,17 @@ Future<void> _loadAndRememberFile(
   }
 }
 
+Future<void> _createAndOpenFile(BuildContext context) async {
+  final fileName = await showDialog<String>(
+    context: context,
+    builder: (context) => InputFileNameDialog(),
+  );
+  if (fileName == null || !context.mounted) return;
+  final orgFileName =
+      fileName.toLowerCase().endsWith('.org') ? fileName : '$fileName.org';
+  return await _loadAndRememberFile(context, createAndLoadFile(orgFileName));
+}
+
 class _PickFileButton extends StatelessWidget {
   const _PickFileButton();
 
@@ -422,6 +449,22 @@ class _PickFileButton extends StatelessWidget {
       ),
       onPressed: () => _loadAndRememberFile(context, pickFile()),
       child: Text(AppLocalizations.of(context)!.buttonOpenFile),
+    );
+  }
+}
+
+class _CreateFileButton extends StatelessWidget {
+  const _CreateFileButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+      ),
+      onPressed: () => _createAndOpenFile(context),
+      child: Text(AppLocalizations.of(context)!.buttonCreateFile),
     );
   }
 }

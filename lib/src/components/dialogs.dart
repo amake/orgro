@@ -167,6 +167,50 @@ class InputPasswordDialog extends StatelessWidget {
   }
 }
 
+class InputFileNameDialog extends StatefulWidget {
+  const InputFileNameDialog({super.key});
+
+  @override
+  State<InputFileNameDialog> createState() => _InputFileNameDialogState();
+}
+
+class _InputFileNameDialogState extends State<InputFileNameDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_controller.text.isEmpty) {
+      _controller.text = AppLocalizations.of(context)!.createFileDefaultName;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.create),
+      title: Text(AppLocalizations.of(context)!.createFileDialogTitle),
+      content: TextField(
+        autofocus: true,
+        controller: _controller,
+        onSubmitted: (value) => Navigator.pop(context, value),
+      ),
+    );
+  }
+}
+
 Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
   BuildContext context, {
   required Future<T> task,

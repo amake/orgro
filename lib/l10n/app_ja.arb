@@ -17,6 +17,7 @@
   "aboutLinkChangelog": "変更履歴",
 
   "buttonOpenFile": "ファイルを開く",
+  "buttonCreateFile": "ファイルを作成",
   "buttonOpenOrgroManual": "Orgroマニュアルを開く",
   "buttonOpenOrgManual": "Orgマニュアルを開く",
 
@@ -106,6 +107,9 @@
   "savingProgressDialogTitle": "保存中…",
   "searchingProgressDialogTitle": "検索中…",
   "citationsDialogTitle": "参考文献",
+
+  "createFileDialogTitle": "ファイルを作成",
+  "createFileDefaultName": "名称未設定.org",
 
   "snackbarMessageBibliographiesNotFound": "参考文献ファイルの指定がありませんでした",
   "snackbarMessageCitationKeysNotFound": "文献キーが見つかりませんでした",

@@ -17,6 +17,7 @@
   "aboutLinkChangelog": "Список змін",
 
   "buttonOpenFile": "Відкрити файл",
+  "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Відкрити Посібник Orgro",
   "buttonOpenOrgManual": "Відкрити Посібник Org",
 
@@ -106,6 +107,9 @@
   "savingProgressDialogTitle": "Saving…",
   "searchingProgressDialogTitle": "Searching…",
   "citationsDialogTitle": "Citations",
+
+  "createFileDialogTitle": "Create new file",
+  "createFileDefaultName": "untitled.org",
 
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",

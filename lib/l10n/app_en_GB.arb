@@ -17,6 +17,7 @@
   "aboutLinkChangelog": "Changelog",
 
   "buttonOpenFile": "Open File",
+  "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Open Orgro Manual",
   "buttonOpenOrgManual": "Open Org Manual",
 
@@ -107,6 +108,9 @@
   "savingProgressDialogTitle": "Saving…",
   "searchingProgressDialogTitle": "Searching…",
   "citationsDialogTitle": "Citations",
+
+  "createFileDialogTitle": "Create new file",
+  "createFileDefaultName": "untitled.org",
 
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",
