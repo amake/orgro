@@ -12,4 +12,10 @@ Max^Max
 
 H_{2}O
 
+foo^\alpha bar_\beta
+
+foo_{a_1}
+
+foo^\alpha + foo^{1 + \alpha}
+
 #+STARTUP: entitiespretty

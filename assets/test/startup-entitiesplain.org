@@ -1,5 +1,5 @@
 \smiley
 
-a^2 + b_3 + c^{abc} + d_{xyz}
+a^2 + b_3 + c^{abc} + d_{xyz} - e_\alpha
 
 #+STARTUP: entitiesplain

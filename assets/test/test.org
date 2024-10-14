@@ -1,5 +1,9 @@
 #+STARTUP: showall
 
+* Layout
+
+- [[file:layout-headlines.org][Headlines]]
+
 * Links
 
 - [[file:links-local.org][Local]]
