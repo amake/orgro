@@ -4,6 +4,16 @@
 
 - [[file:layout-headlines.org][Headlines]]
 
+* Locale
+
+- [[file:locale-zh_Hant.org][zh-Hant]]
+- [[file:locale-zh_Hans.org][zh-Hans]]
+- [[file:locale-zh_Hant_HK.org][zh-Hant-HK]]
+- [[file:locale-zh_TW.org][zh-TW]]
+- [[file:locale-zh_CN.org][zh-CN]]
+- [[file:locale-ja.org][ja]]
+- [[file:local-ko.org][ko]]
+
 * Links
 
 - [[file:links-local.org][Local]]
