@@ -247,6 +247,12 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'Roboto Slab',
   'Merriweather',
   'PT Serif',
+
+  // https://github.com/amake/orgro/issues/113
+  'M PLUS 1 Code',
+  'Noto Sans SC',
+  'Noto Sans TC',
+  // Korean represented by Nanum Gothic Coding
 };
 
 TextStyle loadFontWithVariants(String family) {
