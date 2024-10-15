@@ -209,7 +209,7 @@
    #+end_src
 
    #+RESULTS:
-   : v31.5.0
+   : v31.9.1
 
    Configuration: Tangle the following
 
@@ -341,8 +341,11 @@
      # Specify character ranges in the section below to exclude certain characters from the font being
      # built. Remove this section when this feature is not needed.
 
-     # [buildPlans.IosevkaOrgro.excludeChars]
+     [buildPlans.IosevkaOrgro.excludeChars]
      # ranges = [[10003, 10008]]
+
+     # Exclude Regional Indicators because they prevent fallback to platform emoji fonts
+     ranges = [[127462, 127487]]
 
      # End character exclusion
      ###################################################################################################
@@ -398,10 +401,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | IosevkaOrgro-Bold.ttf       | 8393592 | b3875616cca4a6ad7784685a6a284cf0a9711a833e0485035da663c2fc8420d4 |
-   | IosevkaOrgro-BoldItalic.ttf | 8739692 | c948c2dc106628ce3a74628c9328797709fd195cd9a39d3e56ff4a86adee34af |
-   | IosevkaOrgro-Italic.ttf     | 8701724 | b805e649821d1c17602d6c569a4d643f61ea423133a528e05cd401d3d8527385 |
-   | IosevkaOrgro-Regular.ttf    | 8383428 | 898c9a7de79004bb5c3e3fb04eca130687eac78b5df384f73085b432a8ef5545 |
+   | IosevkaOrgro-Bold.ttf       | 8414996 | c6cb4dccf208acd80250ec4bba0c2750edadbb7e08bf19931d1cd4c3fa32b2a3 |
+   | IosevkaOrgro-BoldItalic.ttf | 8785144 | af5a4a0e348ebfb88f4f0b31c52256ca9380eba1fcab14d63f4750507bc6409e |
+   | IosevkaOrgro-Italic.ttf     | 8745324 | 7d34e6c0e150382ca5e2e8a53adca18c8ff15109c38aaa3317369ef5565a1a3c |
+   | IosevkaOrgro-Regular.ttf    | 8417936 | 4a8ce78dff4983012d8f1ea76c80201c6a777c8c34feaf22a2caae27e3289442 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
