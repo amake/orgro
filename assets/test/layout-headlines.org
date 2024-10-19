@@ -1,15 +1,19 @@
-* multiple headline tags  :BAR:FOO:BAZ:タグ:QUX:Archive:
+* short                                                                 :tag:
+
+content
+
+* multiple headline tags                       :BAR:FOO:BAZ:タグ:QUX:Archive:
 
 content
 
 * Very long headline here foo bar bizz bazz buzz bazinga one two three four five
 
-  content
+content
 
 * Very long headline here foo bar bizz bazz buzz bazinga one two three four five :foo:bar:baz:buzz:bazinga:
 
-  content
+content
 
 * Short but long tags                              :foo:bar:baz:buzz:bazinga:
 
-  content
+content
