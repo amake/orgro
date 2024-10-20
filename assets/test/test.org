@@ -4,6 +4,11 @@
 
 - [[file:layout-headlines.org][Headlines]]
 
+Bidi
+- [[file:layout-bidi-rtl.org][RTL]]
+- [[file:layout-bidi-ltr.org][LTR]]
+- [[file:layout-bidi-auto.org][Auto]]
+
 * Locale
 
 - [[file:locale-zh_Hant.org][zh-Hant]]
