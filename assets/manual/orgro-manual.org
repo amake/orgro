@@ -380,6 +380,17 @@ will interpret the ~#+TODO:~, ~#+SEQ_TODO:~, and ~#+TYP_TODO:~ keywords to infor
 - What are valid keywords (invalid keywords are merely part of a section title)
 - What is the next state when [[*Editing][cycling the keyword]]
 
+* Right-to-left scripts and bidi texts
+
+Orgro supports right-to-left text layout:
+
+من النهر إلى البحر / فلسطين ستتحرر
+
+By default the direction for a paragraph is determined the same way as [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Bidirectional-Editing.html][in Emacs]]:
+from the first strong directional character. To override this, you can set
+~bidi-paragraph-direction~ to =right-to-left= or =left-to-right= in a [[*Local Variables][local
+variables list]].
+
 * Local Variables
 
 Emacs allows defining a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html][local variables list]] like below. Orgro can interpret the
@@ -410,6 +421,9 @@ following settings from the local variables list:
 - ~org-hide-emphasis-markers~ :: Whether to hide emphasis markers. Emphasis
   markers are hidden in [[*Reader Mode][Reader Mode]], but this allows hiding them outside of
   Reader Mode as well.
+
+- ~bidi-paragraph-direction~ :: Override per-paragraph detection of text
+  direction; see [[*Right-to-left scripts and bidi texts][Right-to-left scripts and bidi texts]].
 
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.
