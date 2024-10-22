@@ -1,0 +1,1 @@
+- Improved support for right-to-left scripts
