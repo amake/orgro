@@ -1,5 +1,7 @@
 #+LANGUAGE: zh-Hans
 
+Punctuation: あ、い，う。
+
 U+4ECA  今
 U+4EE4  令
 U+514D  免
