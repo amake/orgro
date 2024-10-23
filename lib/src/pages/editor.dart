@@ -81,89 +81,12 @@ class _EditorPageState extends State<EditorPage> {
               listenable: _focusNode,
               builder: (context, child) =>
                   _focusNode.hasFocus ? child! : const SizedBox.shrink(),
-              child: SizedBox(
-                width: double.infinity,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.format_bold),
-                        onPressed: () => _wrapSelection('*', '*'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.format_italic),
-                        onPressed: () => _wrapSelection('/', '/'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.format_underline),
-                        onPressed: () => _wrapSelection('_', '_'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.format_strikethrough),
-                        onPressed: () => _wrapSelection('+', '+'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.code),
-                        onPressed: () => _wrapSelection('~', '~'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.link),
-                        onPressed: _insertLink,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.subscript),
-                        onPressed: () => _wrapSelection('_{', '}'),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.superscript),
-                        onPressed: () => _wrapSelection('^{', '}'),
-                      ),
-                      // TODO(aaron): Offer more quick-insert actions?
-                      // - Lists
-                      // - Code blocks
-                      // - Sections
-                    ],
-                  ),
-                ),
-              ),
+              child: _EditorToolbar(controller: _controller),
             )
           ],
         ),
       ),
     );
-  }
-
-  void _wrapSelection(String prefix, String suffix) {
-    final value = _controller.value;
-    final selection = value.selection.textInside(value.text);
-    final replacement = '$prefix$selection$suffix';
-    _controller.value = value.replaced(value.selection, replacement).copyWith(
-          selection: TextSelection.collapsed(
-            offset:
-                value.selection.baseOffset + replacement.length - suffix.length,
-          ),
-        );
-    ContextMenuController.removeAny();
-  }
-
-  void _insertLink() async {
-    final value = _controller.value;
-    final selection = value.selection.textInside(value.text);
-    final url = _tryParseUrl(selection) ??
-        (await Clipboard.hasStrings()
-            ? _tryParseUrl(
-                (await Clipboard.getData(Clipboard.kTextPlain))?.text)
-            : null);
-    final description = url == null ? selection : null;
-    final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
-    _controller.value = value.replaced(value.selection, replacement).copyWith(
-          selection: TextSelection.collapsed(
-            offset: value.selection.baseOffset + replacement.length - 2,
-          ),
-        );
-    ContextMenuController.removeAny();
   }
 
   Future<void> _onPopInvoked(bool didPop, dynamic result) async {
@@ -176,6 +99,94 @@ class _EditorPageState extends State<EditorPage> {
       builder: (context) => const DiscardChangesDialog(),
     );
     if (result == true) navigator.pop();
+  }
+}
+
+class _EditorToolbar extends StatelessWidget {
+  const _EditorToolbar({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.format_bold),
+              onPressed: () => _wrapSelection('*', '*'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.format_italic),
+              onPressed: () => _wrapSelection('/', '/'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.format_underline),
+              onPressed: () => _wrapSelection('_', '_'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.format_strikethrough),
+              onPressed: () => _wrapSelection('+', '+'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.code),
+              onPressed: () => _wrapSelection('~', '~'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.link),
+              onPressed: _insertLink,
+            ),
+            IconButton(
+              icon: const Icon(Icons.subscript),
+              onPressed: () => _wrapSelection('_{', '}'),
+            ),
+            IconButton(
+              icon: const Icon(Icons.superscript),
+              onPressed: () => _wrapSelection('^{', '}'),
+            ),
+            // TODO(aaron): Offer more quick-insert actions?
+            // - Lists
+            // - Code blocks
+            // - Sections
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _wrapSelection(String prefix, String suffix) {
+    final value = controller.value;
+    final selection = value.selection.textInside(value.text);
+    final replacement = '$prefix$selection$suffix';
+    controller.value = value.replaced(value.selection, replacement).copyWith(
+          selection: TextSelection.collapsed(
+            offset:
+                value.selection.baseOffset + replacement.length - suffix.length,
+          ),
+        );
+    ContextMenuController.removeAny();
+  }
+
+  void _insertLink() async {
+    final value = controller.value;
+    final selection = value.selection.textInside(value.text);
+    final url = _tryParseUrl(selection) ??
+        (await Clipboard.hasStrings()
+            ? _tryParseUrl(
+                (await Clipboard.getData(Clipboard.kTextPlain))?.text)
+            : null);
+    final description = url == null ? selection : null;
+    final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
+    controller.value = value.replaced(value.selection, replacement).copyWith(
+          selection: TextSelection.collapsed(
+            offset: value.selection.baseOffset + replacement.length - 2,
+          ),
+        );
+    ContextMenuController.removeAny();
   }
 }
 
