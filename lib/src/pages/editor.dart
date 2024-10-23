@@ -24,6 +24,7 @@ class _EditorPageState extends State<EditorPage> {
   bool get _dirty => _after != null && _after != widget.text;
 
   late TextEditingController _controller;
+  late UndoHistoryController _undoController;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -35,6 +36,7 @@ class _EditorPageState extends State<EditorPage> {
           setState(() => _after = _controller.text);
         }
       });
+    _undoController = UndoHistoryController();
     if (widget.requestFocus) {
       _focusNode.requestFocus();
     }
@@ -45,6 +47,7 @@ class _EditorPageState extends State<EditorPage> {
     super.dispose();
     _controller.dispose();
     _focusNode.dispose();
+    _undoController.dispose();
   }
 
   @override
@@ -68,6 +71,7 @@ class _EditorPageState extends State<EditorPage> {
             Expanded(
               child: TextField(
                 controller: _controller,
+                undoController: _undoController,
                 focusNode: _focusNode,
                 maxLines: null,
                 expands: true,
@@ -80,6 +84,7 @@ class _EditorPageState extends State<EditorPage> {
             ),
             _EditorToolbar(
               controller: _controller,
+              undoController: _undoController,
               enabled: _controller.selection.isValid,
             ),
           ],
@@ -104,10 +109,12 @@ class _EditorPageState extends State<EditorPage> {
 class _EditorToolbar extends StatelessWidget {
   const _EditorToolbar({
     required this.controller,
+    required this.undoController,
     required this.enabled,
   });
 
   final TextEditingController controller;
+  final UndoHistoryController undoController;
   final bool enabled;
 
   @override
@@ -119,6 +126,22 @@ class _EditorToolbar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
+            ValueListenableBuilder(
+              valueListenable: undoController,
+              builder: (context, value, _) => IconButton(
+                icon: const Icon(Icons.undo),
+                onPressed:
+                    enabled && value.canUndo ? undoController.undo : null,
+              ),
+            ),
+            ValueListenableBuilder(
+              valueListenable: undoController,
+              builder: (context, value, _) => IconButton(
+                icon: const Icon(Icons.redo),
+                onPressed:
+                    enabled && value.canRedo ? undoController.redo : null,
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.format_bold),
               onPressed: enabled ? () => _wrapSelection('*', '*') : null,
