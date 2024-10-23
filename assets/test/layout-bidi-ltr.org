@@ -2,6 +2,14 @@
 
 Hello, world!
 
+The next paragraph starts with U+200F RIGHT-TO-LEFT MARK
+
+‏Hello, world!
+
+The next paragraph starts with U+200E LEFT-TO-RIGHT MARK
+
+‎שלום, עולם!
+
 #+FOO: שלום, עולם!
 
 #+begin_example
