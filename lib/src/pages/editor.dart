@@ -109,6 +109,10 @@ class _EditorPageState extends State<EditorPage> {
                         onPressed: () => _wrapSelection('~', '~'),
                       ),
                       IconButton(
+                        icon: const Icon(Icons.link),
+                        onPressed: _insertLink,
+                      ),
+                      IconButton(
                         icon: const Icon(Icons.subscript),
                         onPressed: () => _wrapSelection('_{', '}'),
                       ),
@@ -120,10 +124,6 @@ class _EditorPageState extends State<EditorPage> {
                       // - Lists
                       // - Code blocks
                       // - Sections
-                      IconButton(
-                        icon: const Icon(Icons.link),
-                        onPressed: _insertLink,
-                      ),
                     ],
                   ),
                 ),
