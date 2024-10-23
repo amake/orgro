@@ -56,7 +56,7 @@ class _EditorPageState extends State<EditorPage> {
           title: Text(widget.title),
           actions: [
             IconButton(
-              onPressed: () => Navigator.pop(context, _after),
+              onPressed: () => Navigator.pop(context, _dirty ? _after : null),
               icon: const Icon(Icons.check),
             )
           ],
