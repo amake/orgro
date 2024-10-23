@@ -77,12 +77,10 @@ class _EditorPageState extends State<EditorPage> {
                 style: ViewSettings.of(context).textStyle,
               ),
             ),
-            ListenableBuilder(
-              listenable: _focusNode,
-              builder: (context, child) =>
-                  _focusNode.hasFocus ? child! : const SizedBox.shrink(),
-              child: _EditorToolbar(controller: _controller),
-            )
+            _EditorToolbar(
+              controller: _controller,
+              enabled: _controller.selection.isValid,
+            ),
           ],
         ),
       ),
@@ -103,9 +101,13 @@ class _EditorPageState extends State<EditorPage> {
 }
 
 class _EditorToolbar extends StatelessWidget {
-  const _EditorToolbar({required this.controller});
+  const _EditorToolbar({
+    required this.controller,
+    required this.enabled,
+  });
 
   final TextEditingController controller;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -118,35 +120,35 @@ class _EditorToolbar extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.format_bold),
-              onPressed: () => _wrapSelection('*', '*'),
+              onPressed: enabled ? () => _wrapSelection('*', '*') : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_italic),
-              onPressed: () => _wrapSelection('/', '/'),
+              onPressed: enabled ? () => _wrapSelection('/', '/') : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_underline),
-              onPressed: () => _wrapSelection('_', '_'),
+              onPressed: enabled ? () => _wrapSelection('_', '_') : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_strikethrough),
-              onPressed: () => _wrapSelection('+', '+'),
+              onPressed: enabled ? () => _wrapSelection('+', '+') : null,
             ),
             IconButton(
               icon: const Icon(Icons.code),
-              onPressed: () => _wrapSelection('~', '~'),
+              onPressed: enabled ? () => _wrapSelection('~', '~') : null,
             ),
             IconButton(
               icon: const Icon(Icons.link),
-              onPressed: _insertLink,
+              onPressed: enabled ? _insertLink : null,
             ),
             IconButton(
               icon: const Icon(Icons.subscript),
-              onPressed: () => _wrapSelection('_{', '}'),
+              onPressed: enabled ? () => _wrapSelection('_{', '}') : null,
             ),
             IconButton(
               icon: const Icon(Icons.superscript),
-              onPressed: () => _wrapSelection('^{', '}'),
+              onPressed: enabled ? () => _wrapSelection('^{', '}') : null,
             ),
             // TODO(aaron): Offer more quick-insert actions?
             // - Lists
@@ -160,6 +162,7 @@ class _EditorToolbar extends StatelessWidget {
 
   void _wrapSelection(String prefix, String suffix) {
     final value = controller.value;
+    if (!value.selection.isValid) return;
     final selection = value.selection.textInside(value.text);
     final replacement = '$prefix$selection$suffix';
     controller.value = value.replaced(value.selection, replacement).copyWith(
@@ -173,6 +176,7 @@ class _EditorToolbar extends StatelessWidget {
 
   void _insertLink() async {
     final value = controller.value;
+    if (!value.selection.isValid) return;
     final selection = value.selection.textInside(value.text);
     final url = _tryParseUrl(selection) ??
         (await Clipboard.hasStrings()
