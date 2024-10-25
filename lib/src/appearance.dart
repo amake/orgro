@@ -21,12 +21,7 @@ class Appearance extends InheritedWidget {
 
 mixin AppearanceState<T extends StatefulWidget> on State<T> {
   Preferences get _prefs => Preferences.of(context);
-  late ThemeMode _mode;
-
-  void _load() {
-    _mode =
-        ThemeModePersistence.fromString(_prefs.themeMode) ?? _kDefaultThemeMode;
-  }
+  ThemeMode? _mode;
 
   void setMode(ThemeMode mode) {
     setState(() {
@@ -40,12 +35,13 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     super.didChangeDependencies();
     // Doing this here instead of [initState] because we need to pull in an
     // InheritedWidget
-    _load();
+    _mode ??=
+        ThemeModePersistence.fromString(_prefs.themeMode) ?? _kDefaultThemeMode;
   }
 
   Widget buildWithAppearance({required WidgetBuilder builder}) {
     return Appearance(
-      mode: _mode,
+      mode: _mode!,
       setMode: setMode,
       child: Builder(builder: builder),
     );

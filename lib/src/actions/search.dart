@@ -201,11 +201,16 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   List<SearchResultKey> _keys = [];
   late OrgControllerData _controller;
 
+  bool _inited = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _controller = OrgController.of(context);
-    _controller.searchResultKeys.addListener(_update);
+    if (!_inited) {
+      _controller.searchResultKeys.addListener(_update);
+      _inited = true;
+    }
   }
 
   @override

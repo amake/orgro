@@ -189,11 +189,14 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
     _controller.dispose();
   }
 
+  bool _inited = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_controller.text.isEmpty) {
+    if (!_inited) {
       _controller.text = AppLocalizations.of(context)!.createFileDefaultName;
+      _inited = true;
     }
   }
 
