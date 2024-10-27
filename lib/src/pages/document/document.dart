@@ -32,8 +32,11 @@ enum InitialMode { view, edit }
 
 const _kDefaultInitialMode = InitialMode.view;
 
+const kRestoreNarrowTargetKey = 'restore_narrow_target';
+
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
+    required this.layer,
     required this.title,
     this.initialMode,
     this.initialTarget,
@@ -43,6 +46,7 @@ class DocumentPage extends StatefulWidget {
     super.key,
   });
 
+  final int layer;
   final String title;
   final String? initialTarget;
   final String? initialQuery;
@@ -54,7 +58,10 @@ class DocumentPage extends StatefulWidget {
   State createState() => DocumentPageState();
 }
 
-class DocumentPageState extends State<DocumentPage> {
+class DocumentPageState extends State<DocumentPage> with RestorationMixin {
+  @override
+  String get restorationId => 'document_page_${widget.layer}';
+
   late MySearchDelegate _searchDelegate;
 
   OrgTree get _doc => DocumentProvider.of(context).doc;
@@ -89,7 +96,7 @@ class DocumentPageState extends State<DocumentPage> {
       (value) => setState(() => canResolveRelativeLinks = value),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      openInitialTarget();
+      openNarrowTarget(widget.initialTarget);
       ensureOpenOnNarrow();
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
@@ -113,6 +120,16 @@ class DocumentPageState extends State<DocumentPage> {
     _searchDelegate.priorities = analysis.priorities ?? [];
     _searchDelegate.todoSettings =
         OrgController.of(context).settings.todoSettings;
+  }
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    if (!initialRestore) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final target = bucket!.read<String>(kRestoreNarrowTargetKey);
+      debugPrint('AMK restoring in scope: $restorationId; target: $target');
+      openNarrowTarget(target);
+    });
   }
 
   void _onSectionLongPress(OrgSection section) async => doNarrow(section);
@@ -246,7 +263,7 @@ class DocumentPageState extends State<DocumentPage> {
                 // Scaffold makes it into the body's context
                 child: Builder(
                   builder: (context) => CustomScrollView(
-                    restorationId: 'document_scroll_view',
+                    restorationId: 'document_scroll_view_${widget.layer}',
                     slivers: [
                       _buildAppBar(context, searchMode: searchMode),
                       _buildDocument(context),

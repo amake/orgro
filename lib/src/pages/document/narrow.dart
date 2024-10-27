@@ -7,8 +7,7 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
 
 extension NarrowHandler on DocumentPageState {
-  void openInitialTarget() {
-    final target = widget.initialTarget;
+  void openNarrowTarget(String? target) {
     if (target == null || target.isEmpty) {
       return;
     }
@@ -42,7 +41,13 @@ extension NarrowHandler on DocumentPageState {
       debugPrint('Suppressing narrow to currently open document');
       return;
     }
-    final newSection = await narrow(context, docProvider.dataSource, section);
+    final target = _targetForSection(section);
+    if (target != null) {
+      bucket!.write(kRestoreNarrowTargetKey, target);
+    }
+    final newSection = await narrow(
+        context, docProvider.dataSource, section, widget.layer + 1);
+    bucket!.remove<String>(kRestoreNarrowTargetKey);
     if (newSection == null || identical(newSection, section)) {
       return;
     }
@@ -53,6 +58,22 @@ extension NarrowHandler on DocumentPageState {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
     }
+  }
+
+  String? _targetForSection(OrgTree section) {
+    final id = section.ids.firstOrNull;
+    if (id != null) {
+      return 'id:$id';
+    }
+    final customId = section.customIds.firstOrNull;
+    if (customId != null) {
+      return '#$customId';
+    }
+    final title = section is OrgSection ? section.headline.rawTitle : null;
+    if (title != null) {
+      return '*$title';
+    }
+    return null;
   }
 
   OrgNode? _applyNarrowResult({

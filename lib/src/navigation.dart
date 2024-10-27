@@ -63,6 +63,7 @@ PageRoute<void> _buildDocumentRoute(
             dataSource: snapshot.data!.dataSource,
             doc: snapshot.data!.doc,
             child: _DocumentPageWrapper(
+              layer: 0,
               target: target,
               initialMode: mode,
             ),
@@ -80,10 +81,12 @@ PageRoute<void> _buildDocumentRoute(
 
 class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
+    required this.layer,
     required this.target,
     this.initialMode,
   });
 
+  final int layer;
   final String? target;
   final InitialMode? initialMode;
 
@@ -113,6 +116,7 @@ class _DocumentPageWrapper extends StatelessWidget {
                   (_) => showErrorSnackBar(context, OrgroError.from(e))),
               restorationId: 'org_page:${dataSource.id}',
               child: DocumentPage(
+                layer: layer,
                 title: dataSource.name,
                 initialTarget: target,
                 initialMode: initialMode,
@@ -150,40 +154,50 @@ OrgQueryMatcher? _sparseQuery(FilterData filterData) {
 }
 
 Future<OrgTree?> narrow(
-    BuildContext context, DataSource dataSource, OrgTree section) async {
+  BuildContext context,
+  DataSource dataSource,
+  OrgTree section,
+  int layer,
+) async {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
+  final bucket = RestorationScope.of(context);
   OrgTree? result;
   await Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => DocumentProvider(
-        doc: section,
-        dataSource: dataSource,
-        onDocChanged: (doc) => result = doc,
-        child: ViewSettings(
-          data: viewSettings.data,
-          child: Builder(builder: (context) {
-            final viewSettings = ViewSettings.of(context);
-            return OrgController.defaults(
-              orgController,
-              // Continue to use the true document root so that links to sections
-              // outside the narrowed section can be resolved
-              root: orgController.root,
-              settings: viewSettings.readerMode
-                  ? OrgSettings.hideMarkup
-                  : const OrgSettings(),
-              searchQuery: _searchPattern(viewSettings.queryString),
-              sparseQuery: _sparseQuery(viewSettings.filterData),
-              child: DocumentPage(
-                title: AppLocalizations.of(context)!
-                    .pageTitleNarrow(dataSource.name),
-                initialQuery: viewSettings.queryString,
-                initialFilter: viewSettings.filterData,
-                root: false,
-              ),
-            );
-          }),
+      builder: (context) => UnmanagedRestorationScope(
+        bucket: bucket,
+        child: DocumentProvider(
+          doc: section,
+          dataSource: dataSource,
+          onDocChanged: (doc) => result = doc,
+          child: ViewSettings(
+            data: viewSettings.data,
+            child: Builder(builder: (context) {
+              final viewSettings = ViewSettings.of(context);
+              return OrgController.defaults(
+                orgController,
+                // Continue to use the true document root so that links to sections
+                // outside the narrowed section can be resolved
+                root: orgController.root,
+                settings: viewSettings.readerMode
+                    ? OrgSettings.hideMarkup
+                    : const OrgSettings(),
+                searchQuery: _searchPattern(viewSettings.queryString),
+                sparseQuery: _sparseQuery(viewSettings.filterData),
+                restorationId: 'org_narrow_$layer:${dataSource.id}',
+                child: DocumentPage(
+                  layer: layer,
+                  title: AppLocalizations.of(context)!
+                      .pageTitleNarrow(dataSource.name),
+                  initialQuery: viewSettings.queryString,
+                  initialFilter: viewSettings.filterData,
+                  root: false,
+                ),
+              );
+            }),
+          ),
         ),
       ),
     ),
