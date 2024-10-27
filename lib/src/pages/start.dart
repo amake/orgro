@@ -121,16 +121,16 @@ class _StartPageState extends State<StartPage>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    if (!initialRestore) return;
+
     final restoreId = bucket?.read<String>(_kRestoreOpenFileIdKey);
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
-      Future.delayed(const Duration(microseconds: 0), () async {
-        if (!mounted) return;
-        // We can't use _loadAndRememberFile because RecentFiles is not in this
-        // context
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         final recentFile = await _loadFile(
           context,
           readFileWithIdentifier(restoreId),
+          bucket: bucket,
         );
         _rememberFile(recentFile);
       });
@@ -379,15 +379,16 @@ class _SwipeDeleteBackground extends StatelessWidget {
 Future<RecentFile?> _loadFile(
   BuildContext context,
   FutureOr<NativeDataSource?> dataSource, {
+  RestorationBucket? bucket,
   InitialMode? mode,
 }) async {
-  final restorationScope = RestorationScope.of(context);
+  bucket ??= RestorationScope.of(context);
   final loaded = await loadDocument(
     context,
     dataSource,
     onClose: () {
-      debugPrint('Clearing saved state');
-      restorationScope.remove<String>(_kRestoreOpenFileIdKey);
+      debugPrint('Clearing saved state from bucket $bucket');
+      bucket!.remove<String>(_kRestoreOpenFileIdKey);
     },
     mode: mode,
   );
@@ -418,12 +419,12 @@ Future<void> _loadAndRememberFile(
   InitialMode? mode,
 }) async {
   final recentFiles = RecentFiles.of(context);
-  final restorationScope = RestorationScope.of(context);
+  final bucket = RestorationScope.of(context);
   final recentFile = await _loadFile(context, fileInfoFuture, mode: mode);
   if (recentFile != null) {
     recentFiles.add(recentFile);
-    debugPrint('Saving file ID to state');
-    restorationScope.write<String>(
+    debugPrint('Saving file ID to bucket $bucket');
+    bucket.write<String>(
       _kRestoreOpenFileIdKey,
       recentFile.identifier,
     );
