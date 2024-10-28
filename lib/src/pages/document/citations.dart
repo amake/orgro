@@ -12,8 +12,8 @@ import 'package:petit_bibtex/bibtex.dart';
 
 extension CitationHandler on DocumentPageState {
   Future<bool> openCitation(OrgCitation citation) async {
-    final doc = DocumentProvider.of(context).doc;
-    final bibFiles = extractBibliograpies(doc);
+    final root = OrgController.of(context).root;
+    final bibFiles = extractBibliograpies(root);
 
     if (bibFiles.isEmpty) {
       showErrorSnackBar(context,
