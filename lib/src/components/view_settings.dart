@@ -35,7 +35,8 @@ class _ViewSettingsState extends State<ViewSettings> {
     _data = widget.data;
   }
 
-  void _update(ViewSettingsData data) => setState(() => _data = data);
+  void _update(ViewSettingsData Function(ViewSettingsData) transform) =>
+      setState(() => _data = transform(_data));
 
   @override
   Widget build(BuildContext context) =>
@@ -54,7 +55,7 @@ class InheritedViewSettings extends InheritedWidget {
 
   final ViewSettingsData data;
   final Preferences _prefs;
-  final void Function(ViewSettingsData) _update;
+  final void Function(ViewSettingsData Function(ViewSettingsData)) _update;
 
   TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
         fontSize: TextScaler.linear(textScale).scale(18),
@@ -63,25 +64,27 @@ class InheritedViewSettings extends InheritedWidget {
   double get textScale => data.textScale;
   set textScale(double value) {
     _prefs.setTextScale(value);
-    _update(data.copyWith(textScale: value));
+    _update((data) => data.copyWith(textScale: value));
   }
 
   String get fontFamily => data.fontFamily;
   set fontFamily(String value) {
     _prefs.setFontFamily(value);
-    _update(data.copyWith(fontFamily: value));
+    _update((data) => data.copyWith(fontFamily: value));
   }
 
   String? get queryString => data.queryString;
-  set queryString(String? value) => _update(data.copyWith(queryString: value));
+  set queryString(String? value) =>
+      _update((data) => data.copyWith(queryString: value));
 
   FilterData get filterData => data.filterData;
-  set filterData(FilterData value) => _update(data.copyWith(filterData: value));
+  set filterData(FilterData value) =>
+      _update((data) => data.copyWith(filterData: value));
 
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
     _prefs.setReaderMode(value);
-    _update(data.copyWith(readerMode: value));
+    _update((data) => data.copyWith(readerMode: value));
   }
 
   RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
@@ -89,7 +92,7 @@ class InheritedViewSettings extends InheritedWidget {
     if (persist) {
       _prefs.setRemoteImagesPolicy(value);
     }
-    _update(data.copyWith(remoteImagesPolicy: value));
+    _update((data) => data.copyWith(remoteImagesPolicy: value));
   }
 
   LocalLinksPolicy get localLinksPolicy => data.localLinksPolicy;
@@ -97,7 +100,7 @@ class InheritedViewSettings extends InheritedWidget {
     if (persist) {
       _prefs.setLocalLinksPolicy(value);
     }
-    _update(data.copyWith(localLinksPolicy: value));
+    _update((data) => data.copyWith(localLinksPolicy: value));
   }
 
   SaveChangesPolicy get saveChangesPolicy => data.saveChangesPolicy;
@@ -105,7 +108,7 @@ class InheritedViewSettings extends InheritedWidget {
     if (persist) {
       _prefs.setSaveChangesPolicy(value);
     }
-    _update(data.copyWith(saveChangesPolicy: value));
+    _update((data) => data.copyWith(saveChangesPolicy: value));
   }
 
   DecryptPolicy get decryptPolicy => data.decryptPolicy;
@@ -113,11 +116,12 @@ class InheritedViewSettings extends InheritedWidget {
     if (persist) {
       _prefs.setDecryptPolicy(value);
     }
-    _update(data.copyWith(decryptPolicy: value));
+    _update((data) => data.copyWith(decryptPolicy: value));
   }
 
   bool get fullWidth => data.fullWidth;
-  set fullWidth(bool value) => _update(data.copyWith(fullWidth: value));
+  set fullWidth(bool value) =>
+      _update((data) => data.copyWith(fullWidth: value));
 
   @override
   bool updateShouldNotify(InheritedViewSettings oldWidget) =>
