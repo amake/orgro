@@ -30,9 +30,29 @@ const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 
 enum InitialMode { view, edit }
 
+extension InitialModePersistence on InitialMode? {
+  String? get persistableString => switch (this) {
+        InitialMode.view => 'view',
+        InitialMode.edit => 'edit',
+        null => null,
+      };
+
+  static InitialMode? fromString(String? value) {
+    switch (value) {
+      case 'view':
+        return InitialMode.view;
+      case 'edit':
+        return InitialMode.edit;
+      default:
+        return null;
+    }
+  }
+}
+
 const _kDefaultInitialMode = InitialMode.view;
 
 const kRestoreNarrowTargetKey = 'restore_narrow_target';
+const kRestoreModeKey = 'restore_mode';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
@@ -129,6 +149,18 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       final target = bucket!.read<String>(kRestoreNarrowTargetKey);
       debugPrint('AMK restoring in scope: $restorationId; target: $target');
       openNarrowTarget(target);
+      if (target == null) {
+        final mode = bucket!.read<String>(kRestoreModeKey);
+        switch (InitialModePersistence.fromString(mode)) {
+          case null:
+          case InitialMode.view:
+            // do nothing
+            break;
+          case InitialMode.edit:
+            _doEdit(requestFocus: true);
+            break;
+        }
+      }
     });
   }
 
@@ -438,12 +470,15 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   Future<void> _doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
+    bucket!.write(kRestoreModeKey, InitialMode.edit.persistableString);
     final newDoc = await showTextEditor(
       context,
-      _dataSource.name,
+      _dataSource,
       _doc,
       requestFocus: requestFocus,
+      layer: widget.layer,
     );
+    bucket!.remove<String>(kRestoreModeKey);
     if (newDoc != null) {
       controller.adaptVisibility(newDoc,
           defaultState: OrgVisibilityState.children);

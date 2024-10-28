@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/restoration.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -19,27 +20,35 @@ class EditorPage extends StatefulWidget {
   State<EditorPage> createState() => _EditorPageState();
 }
 
-class _EditorPageState extends State<EditorPage> {
+class _EditorPageState extends State<EditorPage> with RestorationMixin {
+  @override
+  String get restorationId => 'editor_page';
+
   String? _after;
   bool get _dirty => _after != null && _after != widget.text;
 
-  late TextEditingController _controller;
+  late FullyRestorableTextEditingController _controller;
   late UndoHistoryController _undoController;
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.text)
+    _controller = FullyRestorableTextEditingController(text: widget.text)
       ..addListener(() {
-        if (_controller.text != _after) {
-          setState(() => _after = _controller.text);
+        if (_controller.value.text != _after) {
+          setState(() => _after = _controller.value.text);
         }
       });
     _undoController = UndoHistoryController();
     if (widget.requestFocus) {
       _focusNode.requestFocus();
     }
+  }
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_controller, 'controller');
   }
 
   @override
@@ -70,7 +79,7 @@ class _EditorPageState extends State<EditorPage> {
           children: [
             Expanded(
               child: TextField(
-                controller: _controller,
+                controller: _controller.value,
                 undoController: _undoController,
                 focusNode: _focusNode,
                 maxLines: null,
@@ -83,9 +92,9 @@ class _EditorPageState extends State<EditorPage> {
               ),
             ),
             _EditorToolbar(
-              controller: _controller,
+              controller: _controller.value,
               undoController: _undoController,
-              enabled: _controller.selection.isValid,
+              enabled: _controller.value.selection.isValid,
             ),
           ],
         ),

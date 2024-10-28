@@ -220,8 +220,9 @@ Future<void> showInteractive(
 
 Future<OrgTree?> showTextEditor(
   BuildContext context,
-  String name,
+  DataSource dataSource,
   OrgTree tree, {
+  required int layer,
   required bool requestFocus,
 }) async {
   final viewSettings = ViewSettings.of(context).data;
@@ -230,12 +231,16 @@ Future<OrgTree?> showTextEditor(
     context,
     MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (builder) => ViewSettings(
-        data: viewSettings,
-        child: EditorPage(
-          text: text,
-          title: AppLocalizations.of(context)!.pageTitleEditing(name),
-          requestFocus: requestFocus,
+      builder: (builder) => RootRestorationScope(
+        restorationId: 'org_editor_$layer:${dataSource.id}',
+        child: ViewSettings(
+          data: viewSettings,
+          child: EditorPage(
+            text: text,
+            title:
+                AppLocalizations.of(context)!.pageTitleEditing(dataSource.name),
+            requestFocus: requestFocus,
+          ),
         ),
       ),
     ),
