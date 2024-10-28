@@ -228,6 +228,13 @@ class FilterData {
         customFilter: kDefaultCustomFilter,
       );
 
+  factory FilterData.fromJson(Map<String, dynamic> json) => FilterData(
+        keywords: (json['keywords'] as List).cast(),
+        tags: (json['tags'] as List).cast(),
+        priorities: (json['priorities'] as List).cast(),
+        customFilter: json['customFilter'] as String,
+      );
+
   const FilterData({
     required this.keywords,
     required this.tags,
@@ -260,6 +267,13 @@ class FilterData {
         priorities: priorities ?? this.priorities,
         customFilter: customFilter ?? this.customFilter,
       );
+
+  Map<String, dynamic> toJson() => {
+        'keywords': keywords,
+        'tags': tags,
+        'priorities': priorities,
+        'customFilter': customFilter,
+      };
 
   @override
   bool operator ==(Object other) =>

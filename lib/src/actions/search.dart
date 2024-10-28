@@ -17,7 +17,7 @@ class MySearchDelegate {
         _selectedFilter =
             ValueNotifier(initialFilter ?? FilterData.defaults()) {
     _searchController.addListener(debounce(
-      _searchQueryChanged,
+      () => onQueryChanged(_searchController.text),
       const Duration(milliseconds: 500),
     ));
     _selectedFilter.addListener(() => onFilterChanged(_selectedFilter.value));
@@ -34,6 +34,15 @@ class MySearchDelegate {
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();
+
+  set query(String value) {
+    _searchController.text = value;
+    // Apply immediately because we debounce in the listener, and short queries
+    // are swallowed, etc.
+    onQuerySubmitted(value);
+  }
+
+  set filter(FilterData value) => _selectedFilter.value = value;
 
   Widget buildSearchField() => SearchField(
         _searchController,
@@ -80,8 +89,6 @@ class MySearchDelegate {
     onQuerySubmitted(_searchController.text);
     // It's somehow surprising to clear the filter here as well, so don't
   }
-
-  void _searchQueryChanged() => onQueryChanged(_searchController.text);
 
   bool get hasQuery =>
       _searchController.value.text.isNotEmpty ||

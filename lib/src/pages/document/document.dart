@@ -53,6 +53,8 @@ const _kDefaultInitialMode = InitialMode.view;
 
 const kRestoreNarrowTargetKey = 'restore_narrow_target';
 const kRestoreModeKey = 'restore_mode';
+const _kRestoreSearchQueryKey = 'restore_search_query';
+const _kRestoreSearchFilterKey = 'restore_search_filter';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
@@ -110,7 +112,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       onQuerySubmitted: _doQuery,
       initialQuery: widget.initialQuery,
       initialFilter: widget.initialFilter,
-      onFilterChanged: (value) => _viewSettings.filterData = value,
+      onFilterChanged: _doSearchFilter,
     );
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => canResolveRelativeLinks = value),
@@ -144,23 +146,38 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    if (!initialRestore) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final target = bucket!.read<String>(kRestoreNarrowTargetKey);
-      debugPrint('AMK restoring in scope: $restorationId; target: $target');
-      openNarrowTarget(target);
-      if (target == null) {
-        final mode = bucket!.read<String>(kRestoreModeKey);
-        switch (InitialModePersistence.fromString(mode)) {
-          case null:
-          case InitialMode.view:
-            // do nothing
-            break;
-          case InitialMode.edit:
-            _doEdit(requestFocus: true);
-            break;
-        }
+      final searchQuery = bucket!.read<String>(_kRestoreSearchQueryKey);
+      if (searchQuery != null && searchQuery.isNotEmpty) {
+        _searchDelegate.query = searchQuery;
       }
+      final searchFilterJson =
+          bucket!.read<Map<Object?, Object?>>(_kRestoreSearchFilterKey);
+      final searchFilter = searchFilterJson == null
+          ? null
+          : FilterData.fromJson(searchFilterJson.cast<String, dynamic>());
+      if (searchFilter != null && searchFilter.isNotEmpty) {
+        _searchDelegate.filter = searchFilter;
+      }
+
+      if (!initialRestore) return;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final target = bucket!.read<String>(kRestoreNarrowTargetKey);
+        openNarrowTarget(target);
+        if (target == null) {
+          final mode = bucket!.read<String>(kRestoreModeKey);
+          switch (InitialModePersistence.fromString(mode)) {
+            case null:
+            case InitialMode.view:
+              // do nothing
+              break;
+            case InitialMode.edit:
+              _doEdit(requestFocus: true);
+              break;
+          }
+        }
+      });
     });
   }
 
@@ -189,7 +206,23 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     ];
   }
 
-  void _doQuery(String query) => _viewSettings.queryString = query;
+  void _doQuery(String query) {
+    if (query.isEmpty) {
+      bucket!.remove<String>(_kRestoreSearchQueryKey);
+    } else {
+      bucket!.write(_kRestoreSearchQueryKey, query);
+    }
+    _viewSettings.queryString = query;
+  }
+
+  void _doSearchFilter(FilterData filterData) {
+    if (filterData.isEmpty) {
+      bucket!.remove<String>(_kRestoreSearchFilterKey);
+    } else {
+      bucket!.write(_kRestoreSearchFilterKey, filterData.toJson());
+    }
+    _viewSettings.filterData = filterData;
+  }
 
   @override
   void dispose() {
