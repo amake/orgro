@@ -44,7 +44,8 @@ extension CitationHandler on DocumentPageState {
       ),
     );
 
-    final entries = await _findBibTeXEntries(bibFiles, keys, dataSource);
+    final entries =
+        await _findBibTeXEntries(bibFiles.reversed, keys, dataSource);
 
     if (!mounted) return false;
 
@@ -81,14 +82,22 @@ extension CitationHandler on DocumentPageState {
     DataSource dataSource,
   ) async {
     final results = <BibTeXEntry>[];
+    final remainingKeys = keys.unique().toList();
 
+    outer:
     for (final bibFile in bibFiles) {
       try {
         final resolved = await dataSource.resolveRelative(bibFile);
         final content = await resolved.content;
         final entries = BibTeXDefinition().build().parse(content).value
             as List<BibTeXEntry>;
-        results.addAll(entries.where((e) => keys.contains(e.key)));
+        for (final entry in entries) {
+          if (remainingKeys.contains(entry.key)) {
+            results.add(entry);
+            remainingKeys.remove(entry.key);
+            if (remainingKeys.isEmpty) break outer;
+          }
+        }
       } catch (e, s) {
         logError(e, s);
         if (mounted) showErrorSnackBar(context, e);

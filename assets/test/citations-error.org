@@ -1,8 +1,11 @@
-#+bibliography: test.bib
+#+bibliography: broken.bib
 #+bibliography: non-existent.bib
+#+bibliography: test.bib
 
 Multiple keys; some missing[cite:@abramowitz+stegun;@knuth:1984;@foo;@bar]
 
 Only missing keys[cite:@foo]
 
 Invalid[cite:foo]
+
+Valid; search stops before looking at non-existent.bib and broken.bib[cite:@knuth:1984]
