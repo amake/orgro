@@ -22,6 +22,7 @@ import 'package:orgro/src/pages/document/images.dart';
 import 'package:orgro/src/pages/document/keyboard.dart';
 import 'package:orgro/src/pages/document/links.dart';
 import 'package:orgro/src/pages/document/narrow.dart';
+import 'package:orgro/src/pages/document/restoration.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/util.dart';
@@ -53,9 +54,9 @@ const _kDefaultInitialMode = InitialMode.view;
 
 const kRestoreNarrowTargetKey = 'restore_narrow_target';
 const kRestoreModeKey = 'restore_mode';
-const _kRestoreSearchQueryKey = 'restore_search_query';
-const _kRestoreSearchFilterKey = 'restore_search_filter';
-const _kRestoreDirtyDocumentKey = 'restore_dirty_document';
+const kRestoreSearchQueryKey = 'restore_search_query';
+const kRestoreSearchFilterKey = 'restore_search_filter';
+const kRestoreDirtyDocumentKey = 'restore_dirty_document';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
@@ -85,7 +86,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
   String get restorationId => 'document_page_${widget.layer}';
 
-  late MySearchDelegate _searchDelegate;
+  late MySearchDelegate searchDelegate;
 
   OrgTree get _doc => DocumentProvider.of(context).doc;
   DataSource get _dataSource => DocumentProvider.of(context).dataSource;
@@ -104,7 +105,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
   void initState() {
     super.initState();
-    _searchDelegate = MySearchDelegate(
+    searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
         if (query.isEmpty || query.length > 3) {
           _doQuery(query);
@@ -127,7 +128,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             // do nothing
             break;
           case InitialMode.edit:
-            _doEdit(requestFocus: true);
+            doEdit(requestFocus: true);
             break;
         }
       }
@@ -138,62 +139,29 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final analysis = DocumentProvider.of(context).analysis;
-    _searchDelegate.keywords = analysis.keywords ?? [];
-    _searchDelegate.tags = analysis.tags ?? [];
-    _searchDelegate.priorities = analysis.priorities ?? [];
-    _searchDelegate.todoSettings =
+    searchDelegate.keywords = analysis.keywords ?? [];
+    searchDelegate.tags = analysis.tags ?? [];
+    searchDelegate.priorities = analysis.priorities ?? [];
+    searchDelegate.todoSettings =
         OrgController.of(context).settings.todoSettings;
   }
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final dirtyDocMarkup = bucket!.read<String>(_kRestoreDirtyDocumentKey);
-      Future<Object>? restoreDirtyDoc;
-      if (dirtyDocMarkup != null) {
-        restoreDirtyDoc = parse(dirtyDocMarkup).then((newDoc) {
-          if (!mounted) return false;
-          OrgController.of(context).adaptVisibility(newDoc);
-          return updateDocument(newDoc);
-        }).onError((e, s) {
-          logError(e, s);
-          if (mounted) showErrorSnackBar(context, e);
-          return false;
-        });
-      }
-
-      final searchQuery = bucket!.read<String>(_kRestoreSearchQueryKey);
-      if (searchQuery != null && searchQuery.isNotEmpty) {
-        _searchDelegate.query = searchQuery;
-      }
-      final searchFilterJson =
-          bucket!.read<Map<Object?, Object?>>(_kRestoreSearchFilterKey);
-      final searchFilter = searchFilterJson == null
-          ? null
-          : FilterData.fromJson(searchFilterJson.cast<String, dynamic>());
-      if (searchFilter != null && searchFilter.isNotEmpty) {
-        _searchDelegate.filter = searchFilter;
-      }
+      final restoreDoc = restoreDocument();
+      restoreSearchState();
 
       if (!initialRestore) return;
 
-      // Wait for dirty doc to finish restoring before opening narrow target
-      await restoreDirtyDoc;
+      // Wait for doc to finish restoring before opening narrow target
+      await restoreDoc;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final target = bucket!.read<String>(kRestoreNarrowTargetKey);
         openNarrowTarget(target);
         if (target == null) {
-          final mode = bucket!.read<String>(kRestoreModeKey);
-          switch (InitialModePersistence.fromString(mode)) {
-            case null:
-            case InitialMode.view:
-              // do nothing
-              break;
-            case InitialMode.edit:
-              _doEdit(requestFocus: true);
-              break;
-          }
+          restoreMode();
         }
       });
     });
@@ -226,32 +194,32 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   void _doQuery(String query) {
     if (query.isEmpty) {
-      bucket!.remove<String>(_kRestoreSearchQueryKey);
+      bucket!.remove<String>(kRestoreSearchQueryKey);
     } else {
-      bucket!.write(_kRestoreSearchQueryKey, query);
+      bucket!.write(kRestoreSearchQueryKey, query);
     }
     _viewSettings.queryString = query;
   }
 
   void _doSearchFilter(FilterData filterData) {
     if (filterData.isEmpty) {
-      bucket!.remove<String>(_kRestoreSearchFilterKey);
+      bucket!.remove<String>(kRestoreSearchFilterKey);
     } else {
-      bucket!.write(_kRestoreSearchFilterKey, filterData.toJson());
+      bucket!.write(kRestoreSearchFilterKey, filterData.toJson());
     }
     _viewSettings.filterData = filterData;
   }
 
   @override
   void dispose() {
-    _searchDelegate.dispose();
+    searchDelegate.dispose();
     _dirty.dispose();
     super.dispose();
   }
 
   Widget _title(bool searchMode) {
     if (searchMode) {
-      return _searchDelegate.buildSearchField();
+      return searchDelegate.buildSearchField();
     } else {
       return Text(
         widget.title,
@@ -332,7 +300,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: _searchDelegate.searchMode,
+      valueListenable: searchDelegate.searchMode,
       builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
         valueListenable: _dirty,
         builder: (context, dirty, _) {
@@ -363,7 +331,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 ),
               ),
               bottomSheet:
-                  searchMode ? _searchDelegate.buildBottomSheet(context) : null,
+                  searchMode ? searchDelegate.buildBottomSheet(context) : null,
             ),
           );
         },
@@ -504,22 +472,22 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FloatingActionButton(
-                  onPressed: _doEdit,
+                  onPressed: doEdit,
                   heroTag: '${widget.title}EditFAB',
                   mini: true,
                   child: const Icon(Icons.edit),
                 ),
                 const SizedBox(height: 16),
                 BadgableFloatingActionButton(
-                  badgeVisible: _searchDelegate.hasQuery,
-                  onPressed: () => _searchDelegate.start(context),
+                  badgeVisible: searchDelegate.hasQuery,
+                  onPressed: () => searchDelegate.start(context),
                   heroTag: '${widget.title}FAB',
                   child: const Icon(Icons.search),
                 ),
               ],
             );
 
-  Future<void> _doEdit({bool requestFocus = false}) async {
+  Future<void> doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
     bucket!.write(kRestoreModeKey, InitialMode.edit.persistableString);
     final newDoc = await showTextEditor(
@@ -659,7 +627,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             // "Some platforms restrict the size of the restoration data", and
             // the markup is potentially large, thus the try-catch. See:
             // https://api.flutter.dev/flutter/services/RestorationManager-class.html
-            bucket?.write(_kRestoreDirtyDocumentKey, markup);
+            bucket?.write(kRestoreDirtyDocumentKey, markup);
           } catch (e, s) {
             logError(e, s);
           }
@@ -671,7 +639,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 AppLocalizations.of(context)!.savedMessage,
               );
             }
-            bucket?.remove<String>(_kRestoreDirtyDocumentKey);
+            bucket?.remove<String>(kRestoreDirtyDocumentKey);
             _dirty.value = false;
           }
         } on Exception catch (e, s) {
