@@ -55,6 +55,7 @@ const kRestoreNarrowTargetKey = 'restore_narrow_target';
 const kRestoreModeKey = 'restore_mode';
 const _kRestoreSearchQueryKey = 'restore_search_query';
 const _kRestoreSearchFilterKey = 'restore_search_filter';
+const _kRestoreDirtyDocumentKey = 'restore_dirty_document';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({
@@ -146,7 +147,21 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final dirtyDocMarkup = bucket!.read<String>(_kRestoreDirtyDocumentKey);
+      Future<Object>? restoreDirtyDoc;
+      if (dirtyDocMarkup != null) {
+        restoreDirtyDoc = parse(dirtyDocMarkup).then((newDoc) {
+          if (!mounted) return false;
+          OrgController.of(context).adaptVisibility(newDoc);
+          return updateDocument(newDoc);
+        }).onError((e, s) {
+          logError(e, s);
+          if (mounted) showErrorSnackBar(context, e);
+          return false;
+        });
+      }
+
       final searchQuery = bucket!.read<String>(_kRestoreSearchQueryKey);
       if (searchQuery != null && searchQuery.isNotEmpty) {
         _searchDelegate.query = searchQuery;
@@ -161,6 +176,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       }
 
       if (!initialRestore) return;
+
+      // Wait for dirty doc to finish restoring before opening narrow target
+      await restoreDirtyDoc;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final target = bucket!.read<String>(kRestoreNarrowTargetKey);
@@ -617,37 +635,51 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     final docProvider = DocumentProvider.of(context);
     final source = docProvider.dataSource;
     passwords ??= docProvider.passwords;
-    if (_viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
-        _canSaveChanges &&
-        source is NativeDataSource &&
-        doc is OrgDocument) {
-      if (analysis.needsEncryption == true &&
-          doc.missingEncryptionKey(passwords)) {
-        _showMissingEncryptionKeySnackBar(context);
-        return;
-      }
-      _writeTimer?.cancel();
-      _writeTimer = Timer(const Duration(seconds: 3), () {
-        _writeFuture = time('save', () async {
+    if (analysis.needsEncryption == true &&
+        doc.missingEncryptionKey(passwords)) {
+      _showMissingEncryptionKeySnackBar(context);
+      return;
+    }
+    final doWrite =
+        _viewSettings.saveChangesPolicy == SaveChangesPolicy.allow &&
+            _canSaveChanges &&
+            source is NativeDataSource &&
+            doc is OrgDocument;
+    _writeTimer?.cancel();
+    _writeTimer = Timer(const Duration(seconds: 3), () {
+      _writeFuture = time('save', () async {
+        try {
+          debugPrint('starting auto save');
+          final serializer = OrgroSerializer.get(analysis, passwords!);
+          final markup = await serialize(doc, serializer);
           try {
-            debugPrint('starting auto save');
-            final serializer = OrgroSerializer.get(analysis, passwords!);
-            final markup = await serialize(doc, serializer);
+            // Because of the timer delay this can be called when the bucket is
+            // not available, so we conditionally access the bucket.
+            //
+            // "Some platforms restrict the size of the restoration data", and
+            // the markup is potentially large, thus the try-catch. See:
+            // https://api.flutter.dev/flutter/services/RestorationManager-class.html
+            bucket?.write(_kRestoreDirtyDocumentKey, markup);
+          } catch (e, s) {
+            logError(e, s);
+          }
+          if (doWrite) {
             await time('write', () => source.write(markup));
-            _dirty.value = false;
             if (mounted) {
               showErrorSnackBar(
                 context,
                 AppLocalizations.of(context)!.savedMessage,
               );
             }
-          } on Exception catch (e, s) {
-            logError(e, s);
-            if (mounted) showErrorSnackBar(context, e);
+            bucket?.remove<String>(_kRestoreDirtyDocumentKey);
+            _dirty.value = false;
           }
-        }).whenComplete(() => _writeFuture = null);
-      });
-    }
+        } on Exception catch (e, s) {
+          logError(e, s);
+          if (mounted) showErrorSnackBar(context, e);
+        }
+      }).whenComplete(() => _writeFuture = null);
+    });
   }
 
   Future<void> _onPopInvoked(bool didPop, dynamic result) async {
