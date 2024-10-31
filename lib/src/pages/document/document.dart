@@ -159,7 +159,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final target = bucket!.read<String>(kRestoreNarrowTargetKey);
-        openNarrowTarget(target);
+        if (widget.initialTarget == null) {
+          openNarrowTarget(target);
+        }
         if (target == null) {
           restoreMode();
         }
