@@ -1,0 +1,27 @@
+#+STARTUP: showall
+
+Top-level [/] and [%]
+
+- [ ] Item with no children [%] and [/]
+
+Another top-level [/] and [%]
+
+- Unordered list [/] and [%]
+  - [ ] bar
+  - [ ] baz
+  - [ ] bazinga
+    - [ ] bazonga
+    - [ ] bazoonga
+
+
+1. Ordered list [%] and [/]
+   1. [ ] bar
+   2. [X] baz
+   3. [ ] bazinga
+      1. [ ] bazonga
+      2. [ ] bazoonga
+
+* Headline with [%] and [/]
+
+- [ ] foo
+- [ ] bar

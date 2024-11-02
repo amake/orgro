@@ -25,6 +25,7 @@ import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/document/restoration.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
+import 'package:orgro/src/statistics.dart';
 import 'package:orgro/src/util.dart';
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
@@ -550,9 +551,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       );
 
   void _onListItemTap(OrgListItem item) {
-    final newTree =
-        _doc.editNode(item)!.replace(item.toggleCheckbox()).commit();
-    updateDocument(newTree as OrgTree);
+    var newTree =
+        _doc.editNode(item)!.replace(item.toggleCheckbox()).commit() as OrgTree;
+    newTree = recalculateListStats(newTree);
+    updateDocument(newTree);
   }
 
   bool? get _hasRemoteImages =>
