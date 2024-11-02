@@ -460,10 +460,10 @@ packages:
     dependency: transitive
     description:
       name: path_parsing
-      sha256: caa17e8f0b386eb190dd5b6a3b71211c76375aa8b6ffb4465b5863d019bdb334
+      sha256: "883402936929eac138ee0a45da5b0f2c80f89913e6dc3bf77eb65b84b409c6ca"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.1.0"
   path_provider:
     dependency: "direct main"
     description:
@@ -857,26 +857,26 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "32c3c684e02f9bc0afb0ae0aa653337a2fe022e8ab064bcd7ffda27a74e288e3"
+      sha256: "0b9149c6ddb013818075b072b9ddc1b89a5122fff1275d4648d297086b46c4f0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.11+1"
+    version: "1.1.12"
   vector_graphics_codec:
     dependency: transitive
     description:
       name: vector_graphics_codec
-      sha256: c86987475f162fadff579e7320c7ddda04cd2fdeffbe1129227a85d9ac9e03da
+      sha256: "2430b973a4ca3c4dbc9999b62b8c719a160100dcbae5c819bae0cacce32c9cdb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.11+1"
+    version: "1.1.12"
   vector_graphics_compiler:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: "12faff3f73b1741a36ca7e31b292ddeb629af819ca9efe9953b70bd63fc8cd81"
+      sha256: f3b9b6e4591c11394d4be4806c63e72d3a41778547b2c1e2a8a04fadcfd7d173
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.11+1"
+    version: "1.1.12"
   vector_math:
     dependency: transitive
     description:
@@ -905,10 +905,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "10169d3934549017f0ae278ccb07f828f9d6ea21573bab0fb77b0e1ef0fce454"
+      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
       url: "https://pub.dev"
     source: hosted
-    version: "5.7.2"
+    version: "5.8.0"
   xdg_directories:
     dependency: transitive
     description:
