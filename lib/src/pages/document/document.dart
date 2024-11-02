@@ -180,10 +180,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         onPressed: () {
           final todoSettings = OrgController.of(context).settings.todoSettings;
           try {
-            final newDoc = _doc
+            var newDoc = _doc
                 .editNode(section.headline)!
                 .replace(section.headline.cycleTodo(todoSettings))
                 .commit() as OrgTree;
+            newDoc = recalculateHeadlineStats(newDoc);
             updateDocument(newDoc);
           } catch (e, s) {
             logError(e, s);

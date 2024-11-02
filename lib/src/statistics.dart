@@ -37,16 +37,7 @@ OrgTree recalculateListStats(OrgTree tree) {
   var recalculate = false;
   for (final scope in finished) {
     for (final cookie in scope.cookies) {
-      final newCookie = cookie is OrgStatisticsFractionCookie
-          ? cookie.copyWith(
-              numerator: scope.done.toString(),
-              denominator: scope.total.toString())
-          : cookie is OrgStatisticsPercentageCookie
-              ? cookie.copyWith(
-                  percentage: scope.done == 0
-                      ? '0'
-                      : (scope.done / scope.total * 100).round().toString())
-              : throw Error();
+      final newCookie = scope.updatedCookie(cookie);
       result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
     }
     final parent = scope.parent;
@@ -81,4 +72,58 @@ class _ProgressScope {
   int total = 0;
   int done = 0;
   final List<OrgNode> cookies = [];
+
+  OrgNode updatedCookie(OrgNode cookie) {
+    if (cookie is OrgStatisticsFractionCookie) {
+      return cookie.copyWith(
+          numerator: done.toString(), denominator: total.toString());
+    } else if (cookie is OrgStatisticsPercentageCookie) {
+      return cookie.copyWith(
+          percentage:
+              done == 0 ? '0' : (done / total * 100).round().toString());
+    } else {
+      throw Error();
+    }
+  }
+}
+
+OrgTree recalculateHeadlineStats(OrgTree tree) {
+  final stack = <_ProgressScope>[];
+  final finished = <_ProgressScope>[];
+
+  void visit(OrgTree tree) {
+    var pushedScope = false;
+    if (tree is OrgSection) {
+      pushedScope = true;
+      if (stack.isNotEmpty && tree.headline.keyword != null) {
+        if (tree.headline.keyword!.done) stack.last.done++;
+        stack.last.total++;
+      }
+
+      stack.add(_ProgressScope(tree));
+
+      tree.headline.visit<OrgNode>((node) {
+        if (node is OrgStatisticsFractionCookie ||
+            node is OrgStatisticsPercentageCookie) {
+          stack.last.cookies.add(node);
+        }
+        return true;
+      });
+    }
+    for (final child in tree.sections) {
+      visit(child);
+    }
+    if (pushedScope) finished.add(stack.removeLast());
+  }
+
+  visit(tree);
+
+  var result = tree;
+  for (final scope in finished) {
+    for (final cookie in scope.cookies) {
+      final newCookie = scope.updatedCookie(cookie);
+      result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
+    }
+  }
+  return result;
 }

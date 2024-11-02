@@ -1,0 +1,13 @@
+#+STARTUP: showall
+
+* Top-level [/] and [%]
+
+** TODO Child [/]  and [%]
+
+*** TODO Grandchild 1 [/] and [%]
+
+*** TODO Grandchild 2
+
+** TODO Child 2
+
+** DONE Child 3
