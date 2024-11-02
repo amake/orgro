@@ -162,7 +162,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         if (widget.initialTarget == null) {
           openNarrowTarget(target);
         }
-        if (target == null) {
+        if (widget.initialMode == null && target == null) {
           restoreMode();
         }
       });
