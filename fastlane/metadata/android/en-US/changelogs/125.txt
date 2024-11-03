@@ -1,0 +1,2 @@
+- Update statistics cookies on checkbox toggle and TODO cycle
+- Add Cascadia Code font
