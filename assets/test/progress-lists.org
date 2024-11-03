@@ -25,3 +25,15 @@ Another top-level [/] and [%]
 
 - [ ] foo
 - [ ] bar
+
+* Not affected by TODO keywords [/] and [%]
+  :PROPERTIES:
+  :COOKIE_DATA: checkbox
+  :END:
+
+  But is affected by checkboxes [/] and [%]
+
+  - [ ] foo
+  - [ ] bar
+
+** TODO cycling this has no effect

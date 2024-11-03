@@ -36,11 +36,16 @@ OrgTree recalculateListStats(OrgTree tree) {
   var result = tree;
   var recalculate = false;
   for (final scope in finished) {
-    for (final cookie in scope.cookies) {
-      final newCookie = scope.updatedCookie(cookie);
-      result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
-    }
     final parent = scope.parent;
+    final skip = parent is OrgSection &&
+        parent.getProperties(':COOKIE_DATA:').firstOrNull == 'todo';
+    if (!skip) {
+      for (final cookie in scope.cookies) {
+        final newCookie = scope.updatedCookie(cookie);
+        result =
+            result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
+      }
+    }
     if (parent is OrgListItem && parent.checkbox != null && scope.total > 0) {
       final newCheckbox = scope.done == 0
           ? '[ ]'
@@ -120,6 +125,10 @@ OrgTree recalculateHeadlineStats(OrgTree tree) {
 
   var result = tree;
   for (final scope in finished) {
+    final parent = scope.parent;
+    final skip = parent is OrgSection &&
+        parent.getProperties(':COOKIE_DATA:').firstOrNull == 'checkbox';
+    if (skip) continue;
     for (final cookie in scope.cookies) {
       final newCookie = scope.updatedCookie(cookie);
       result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;

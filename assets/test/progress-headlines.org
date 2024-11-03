@@ -11,3 +11,13 @@
 ** TODO Child 2
 
 ** DONE Child 3
+
+* Not affected by checkboxes [/] and [%]
+  :PROPERTIES:
+  :COOKIE_DATA: todo
+  :END:
+
+  - [ ] foo
+  - [ ] bar
+
+** TODO but is affected by TODO keywords
