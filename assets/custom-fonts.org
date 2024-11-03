@@ -13,6 +13,7 @@
     - [[https://rubjo.github.io/victor-mono/][Victor Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
     - [[https://files.ax86.net/terminus-ttf/][Terminus]]
+    - [[https://github.com/microsoft/cascadia-code][Cascadia Code]]
 
   This file documents how the last category is prepared in literate-programming
   style.
