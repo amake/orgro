@@ -182,6 +182,50 @@
      aws s3 $dryrun sync --no-progress --exclude '*' --include 'Terminus/*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
    #+end_src
 
+** Cascadia Code
+
+   Download
+
+   #+begin_src bash :dir ../tmp :mkdirp t :var version="2404.23"
+     curl -LO https://github.com/microsoft/cascadia-code/releases/download/v$version/CascadiaCode-$version.zip
+     rm -rf CascadiaCode
+     mkdir CascadiaCode
+     unzip CascadiaCode-$version.zip -d CascadiaCode/$version
+   #+end_src
+
+   Checksum
+
+   #+name: cascadiacode-csums
+   #+begin_src bash :dir ../tmp/CascadiaCode :results table drawer replace
+     for ttf in */ttf/static/CascadiaCode-*.ttf; do
+         echo $(basename $ttf) $(stat -f '%z' $ttf) $(openssl sha256 $ttf | cut -d '=' -f 2)
+     done
+   #+end_src
+
+   #+RESULTS: cascadiacode-csums
+   :results:
+   | CascadiaCode-Bold.ttf             | 606984 | 7ab1792ff3173242b08f903bf4183155af47f87d91352d7bb4f9b8dd477e632d |
+   | CascadiaCode-BoldItalic.ttf       | 458624 | f76f1376ceab64953019645bde803879a800f928c7aace8d14827555808b4dc1 |
+   | CascadiaCode-ExtraLight.ttf       | 598044 | d2b0eaff776c8448ebf1fa360fb0a061071210ff57fbf6275a09f9d25f612e38 |
+   | CascadiaCode-ExtraLightItalic.ttf | 449880 | 809c06030ed5895370c15229546e56708ec8a7b59edc9a54db81acddc62aa066 |
+   | CascadiaCode-Italic.ttf           | 453188 | 006e3251e8047c14e21bca50ef7265e3501aedacc28a6c8a3690b9ce03dbd422 |
+   | CascadiaCode-Light.ttf            | 599948 | 57286f45146cc5558e3f1d1ca47f87b34551fa955c685a2f4e49ac5615c20f27 |
+   | CascadiaCode-LightItalic.ttf      | 456172 | 1dac8e4f7324cd4bd4dd4079114142455a190755a6f9a1da1c532863d81ae7cd |
+   | CascadiaCode-Regular.ttf          | 600344 | 0ae311a93c046a346150b828f70075a2ef7d45f70f7d39708cc930c2a514255b |
+   | CascadiaCode-SemiBold.ttf         | 603912 | 2a7bad7ce1fe18fe4da41424bab3c0348c1a0eb9e6d321deb939a26c41edb8ed |
+   | CascadiaCode-SemiBoldItalic.ttf   | 454632 | 74b034a65a6ea0a6536f58ce078e5fa84d0bcc1d2fd151754dcc20bf94c15825 |
+   | CascadiaCode-SemiLight.ttf        | 600664 | 02e61a4a0d839603a1f6a3d4e97021b8a5f5dfc725010318e00fe8c734f2dd1c |
+   | CascadiaCode-SemiLightItalic.ttf  | 455104 | 18fd2dcff3e126d88463add1e24f6f0168ef1e3d0eeb3b9737a29aa142d7e30e |
+   :end:
+
+   #+call: update-checksums(replacements=cascadiacode-csums)
+
+   Deploy to S3
+
+   #+begin_src bash :dir ../tmp :var dryrun="--dryrun"
+     aws s3 $dryrun sync --no-progress --exclude '*' --include 'CascadiaCode/*/ttf/static/CascadiaCode-*.ttf' --acl public-read . 's3://orgro/assets/fonts/'
+   #+end_src
+
 ** Custom Iosevka
 
    Download

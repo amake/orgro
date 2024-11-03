@@ -21,6 +21,7 @@ const _kCustomFonts = [
   _IosevkaFile.name,
   _VictorMonoFile.name,
   _TerminusFile.name,
+  _CascadiaCodeFile.name,
 ];
 
 void _initCustomFonts() {
@@ -184,6 +185,47 @@ void _initCustomFonts() {
         ),
         '115392036be665973d8dae3038708ce173f14af6b1888bdf3817961c23535be6',
         546696,
+      ),
+    ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
+      {},
+      (acc, file) => acc..[file.variant] = file,
+    ),
+    eager: true,
+  );
+  DynamicFonts.register(
+    _CascadiaCodeFile.name,
+    [
+      _CascadiaCodeFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        ),
+        '0ae311a93c046a346150b828f70075a2ef7d45f70f7d39708cc930c2a514255b',
+        600344,
+      ),
+      _CascadiaCodeFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+        ),
+        '7ab1792ff3173242b08f903bf4183155af47f87d91352d7bb4f9b8dd477e632d',
+        606984,
+      ),
+      _CascadiaCodeFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.italic,
+        ),
+        '006e3251e8047c14e21bca50ef7265e3501aedacc28a6c8a3690b9ce03dbd422',
+        453188,
+      ),
+      _CascadiaCodeFile(
+        const DynamicFontsVariant(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.italic,
+        ),
+        'f76f1376ceab64953019645bde803879a800f928c7aace8d14827555808b4dc1',
+        458624,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -389,4 +431,34 @@ class _TerminusFile extends DynamicFontsFile {
   @override
   String get url =>
       'https://cdn.orgro.org/assets/fonts/Terminus/terminus-ttf-$version/TerminusTTF-$_variantSlug$version.ttf';
+}
+
+class _CascadiaCodeFile extends DynamicFontsFile {
+  _CascadiaCodeFile(this.variant, String expectedFileHash, int expectedLength)
+      : super(expectedFileHash, expectedLength);
+
+  static const name = 'Cascadia Code';
+  static const version = '2404.23';
+
+  final DynamicFontsVariant variant;
+
+  bool get _italic => variant.fontStyle == FontStyle.italic;
+
+  bool get _bold => variant.fontWeight == FontWeight.bold;
+
+  String get _variantSlug {
+    if (_bold && _italic) {
+      return 'BoldItalic';
+    } else if (_bold) {
+      return 'Bold';
+    } else if (_italic) {
+      return 'Italic';
+    } else {
+      return 'Regular';
+    }
+  }
+
+  @override
+  String get url =>
+      'https://cdn.orgro.org/assets/fonts/CascadiaCode/$version/ttf/static/CascadiaCode-$_variantSlug.ttf';
 }
