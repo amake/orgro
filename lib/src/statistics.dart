@@ -1,6 +1,13 @@
 import 'package:org_flutter/org_flutter.dart';
 
-OrgTree recalculateListStats(OrgTree tree) {
+OrgTree recalculateListStats(OrgTree root, OrgListItem target) {
+  final (node: _, :path) = root.find((node) => identical(node, target))!;
+  final tree = path.reversed.whereType<OrgTree>().first;
+  final replacement = _recalculateListStats(tree);
+  return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
+}
+
+OrgTree _recalculateListStats(OrgTree tree) {
   final stack = <_ProgressScope>[];
   final finished = <_ProgressScope>[];
 
@@ -65,7 +72,7 @@ OrgTree recalculateListStats(OrgTree tree) {
     }
   }
   if (recalculate) {
-    result = recalculateListStats(result);
+    result = _recalculateListStats(result);
   }
   return result;
 }
@@ -92,7 +99,18 @@ class _ProgressScope {
   }
 }
 
-OrgTree recalculateHeadlineStats(OrgTree tree) {
+OrgTree recalculateHeadlineStats(OrgTree root, OrgHeadline target) {
+  final (node: _, :path) = root.find((node) => identical(node, target))!;
+  final tree = path.reversed
+      .whereType<OrgTree>()
+      // Skip the section that the headline belongs to
+      .skip(1)
+      .first;
+  final replacement = _recalculateHeadlineStats(tree);
+  return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
+}
+
+OrgTree _recalculateHeadlineStats(OrgTree tree) {
   final stack = <_ProgressScope>[];
   final finished = <_ProgressScope>[];
 

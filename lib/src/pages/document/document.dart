@@ -180,11 +180,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         onPressed: () {
           final todoSettings = OrgController.of(context).settings.todoSettings;
           try {
+            final replacement = section.headline.cycleTodo(todoSettings);
             var newDoc = _doc
                 .editNode(section.headline)!
-                .replace(section.headline.cycleTodo(todoSettings))
+                .replace(replacement)
                 .commit() as OrgTree;
-            newDoc = recalculateHeadlineStats(newDoc);
+            newDoc = recalculateHeadlineStats(newDoc, replacement);
             updateDocument(newDoc);
           } catch (e, s) {
             logError(e, s);
@@ -552,9 +553,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       );
 
   void _onListItemTap(OrgListItem item) {
-    var newTree =
-        _doc.editNode(item)!.replace(item.toggleCheckbox()).commit() as OrgTree;
-    newTree = recalculateListStats(newTree);
+    final replacement = item.toggleCheckbox();
+    var newTree = _doc.editNode(item)!.replace(replacement).commit() as OrgTree;
+    newTree = recalculateListStats(newTree, replacement);
     updateDocument(newTree);
   }
 
