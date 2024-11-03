@@ -12,9 +12,14 @@ Orgro can understand the following Org Mode features:
 
 ** Sections
 
-Sections can be opened and closed by touching the section headline.
-
 TODO keywords, priority markers, and tags are highlighted and laid out nicely.
+
+You can perform these actions on a section:
+
+- Open and close by touching the section headline
+- Long tap the headline to [[#narrowing-section][narrow]] to that section
+- Slide a section from right to left to cycle the TODO keyword
+  - Statistics cookies are updated automatically
 
 ** Blocks
 
@@ -127,8 +132,13 @@ H_{2}O, A^*, e_(\alpha + 1)
 When [[*Reader Mode][Reader Mode]] is enabled, list content is shown with content reflowed for
 easy reading on narrow screens.
 
-- foo
-  - [X] bar
+Tap on list items with checkboxes to toggle them. Statistics cookies are updated
+automatically.
+
+- foo (complete: [%] / [/])
+  - [ ] bar
+    - [ ] car
+    - [ ] dar
   - [ ] baz
     1. buzz
     2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ipsum
@@ -260,9 +270,13 @@ way:
 
 Some limited “structured” editing features are available:
 
-- Tap a list item with a checkbox to toggle the checkbox
+- Tap a list item with a checkbox to toggle the checkbox [/]
   - [ ] Try me!
+  - [ ] And me!
 - Slide a section from right to left to cycle its TODO keyword
+
+Statistics cookies are updated automatically when toggling checkboxes or cycling
+TODOs.
 
 In addition, plain text editing is available from the floating edit button in
 the bottom right corner.
