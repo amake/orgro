@@ -238,7 +238,7 @@
    System prerequisites: Install with MacPorts
 
    #+begin_src bash :dir /sudo::
-     port install npm8 ttfautohint
+     port install npm10 ttfautohint
    #+end_src
 
    Additional preparation and updating
@@ -254,7 +254,7 @@
    #+end_src
 
    #+RESULTS:
-   : v31.9.1
+   : v32.0.1
 
    Configuration: Tangle the following
 
@@ -446,10 +446,10 @@
    #+end_src
 
    #+RESULTS: iosevka-csums
-   | IosevkaOrgro-Bold.ttf       | 8414996 | c6cb4dccf208acd80250ec4bba0c2750edadbb7e08bf19931d1cd4c3fa32b2a3 |
-   | IosevkaOrgro-BoldItalic.ttf | 8785144 | af5a4a0e348ebfb88f4f0b31c52256ca9380eba1fcab14d63f4750507bc6409e |
-   | IosevkaOrgro-Italic.ttf     | 8745324 | 7d34e6c0e150382ca5e2e8a53adca18c8ff15109c38aaa3317369ef5565a1a3c |
-   | IosevkaOrgro-Regular.ttf    | 8417936 | 4a8ce78dff4983012d8f1ea76c80201c6a777c8c34feaf22a2caae27e3289442 |
+   | IosevkaOrgro-Bold.ttf       | 8441664 | 8342d357f5bafbbfcf36c3c98e20f7e0d23750f52fbec349c25277c6363136e8 |
+   | IosevkaOrgro-BoldItalic.ttf | 8813652 | 3179b8580f95c2b85ae44267e1cc5f2c68b6d8556736a17cefdc338bd06a444a |
+   | IosevkaOrgro-Italic.ttf     | 8773896 | 4b36c97d79bf9196f158e3e1bc56d8335d35674395cc7e11ccd900ba19451bd4 |
+   | IosevkaOrgro-Regular.ttf    | 8444936 | ecf52062dd2d0795168caf00196fb93db5841cc04448f9336e3ab77dd6bd12f1 |
 
    #+call: update-checksums(replacements=iosevka-csums)
 
