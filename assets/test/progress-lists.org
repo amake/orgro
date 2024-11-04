@@ -14,7 +14,7 @@ Another top-level [/] and [%]
     - [ ] bazoonga
 
 
-1. Ordered list [%] and [/]
+1. [ ] Ordered list [%] and [/]
    1. [ ] bar
    2. [X] baz
    3. [ ] bazinga
@@ -26,6 +26,8 @@ Another top-level [/] and [%]
 - [ ] foo
 - [ ] bar
 
+** TODO cycling this will affect its parent
+
 * Not affected by TODO keywords [/] and [%]
   :PROPERTIES:
   :COOKIE_DATA: checkbox
@@ -35,5 +37,7 @@ Another top-level [/] and [%]
 
   - [ ] foo
   - [ ] bar
+    - [ ] baz
+    - [X] bazinga
 
-** TODO cycling this has no effect
+** TODO cycling this has no effect [/] and [%]
