@@ -54,6 +54,11 @@ Error cases
 - [[file:startup-entitiespretty.org][entitiespretty]]
 - [[file:startup-hidestars.org][hidestars]]
 
+* Meta keywords
+
+- [[file:meta-keywords-layout.org][Layout]]
+- [[file:meta-keywords-doc-info.org][Doc info]]
+
 * =TODO= keywords
 
 - [[file:todo-complex.org][Complex]]

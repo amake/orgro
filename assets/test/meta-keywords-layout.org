@@ -1,0 +1,8 @@
+#+STARTUP: showall
+
+#+FOO: a very very very very very very very very very very very very very very very very long line
+
+#+TITLE: a very very very very very very very very very very very very very very very very long title
+
+* foo
+  #+BAR: a very very very very very very very very very very very very very very very very long, indented line
