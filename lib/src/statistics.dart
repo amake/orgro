@@ -6,16 +6,7 @@ class _ProgressScope {
   final OrgNode parent;
   int total = 0;
   int done = 0;
-  final List<OrgNode> cookies = [];
-
-  OrgNode updatedCookie(OrgNode cookie) => switch (cookie) {
-        OrgStatisticsFractionCookie() => cookie.copyWith(
-            numerator: done.toString(), denominator: total.toString()),
-        OrgStatisticsPercentageCookie() => cookie.copyWith(
-            percentage:
-                done == 0 ? '0' : (done / total * 100).round().toString()),
-        _ => throw Error(),
-      };
+  final List<OrgStatisticsCookie> cookies = [];
 }
 
 OrgTree recalculateListStats(OrgTree root, OrgListItem target) {
@@ -76,7 +67,7 @@ OrgTree _recalculateListStats(OrgTree tree) {
     if (parent is OrgSection &&
         parent.getProperties(':COOKIE_DATA:').firstOrNull == 'todo') continue;
     for (final cookie in scope.cookies) {
-      final newCookie = scope.updatedCookie(cookie);
+      final newCookie = cookie.update(done: scope.done, total: scope.total);
       result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
     }
   }
@@ -98,8 +89,7 @@ List<_ProgressScope> _visitListScopes(
   if (node is OrgListItem) {
     if (node.checkbox == '[X]') stack.last.done++;
     if (node.checkbox != null) stack.last.total++;
-  } else if (node is OrgStatisticsFractionCookie ||
-      node is OrgStatisticsPercentageCookie) {
+  } else if (node is OrgStatisticsCookie) {
     stack.last.cookies.add(node);
   }
 
@@ -145,7 +135,7 @@ OrgTree _recalculateHeadlineStats(OrgTree tree) {
       continue;
     }
     for (final cookie in scope.cookies) {
-      final newCookie = scope.updatedCookie(cookie);
+      final newCookie = cookie.update(done: scope.done, total: scope.total);
       result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
     }
   }
@@ -171,8 +161,7 @@ List<_ProgressScope> _visitHeadlineScopes(
     stack.add(scope);
 
     tree.headline.visit<OrgNode>((node) {
-      if (node is OrgStatisticsFractionCookie ||
-          node is OrgStatisticsPercentageCookie) {
+      if (node is OrgStatisticsCookie) {
         scope.cookies.add(node);
       }
       return true;
