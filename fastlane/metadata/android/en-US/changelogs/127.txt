@@ -1,0 +1,3 @@
+- Update statistics cookies on checkbox toggle and TODO cycle
+- Improve rendering of meta keyword lines
+- Add Cascadia Code font
