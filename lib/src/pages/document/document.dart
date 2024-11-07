@@ -23,6 +23,7 @@ import 'package:orgro/src/pages/document/keyboard.dart';
 import 'package:orgro/src/pages/document/links.dart';
 import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/document/restoration.dart';
+import 'package:orgro/src/pages/document/timestamps.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/statistics.dart';
@@ -405,6 +406,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               onLocalSectionLinkTap: doNarrow,
               onListItemTap: _onListItemTap,
               onCitationTap: openCitation,
+              onTimestampTap: onTimestampTap,
               loadImage: loadImage,
               child: switch (doc) {
                 OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),

@@ -94,7 +94,6 @@
     }
   },
 
-
   "sectionActionNarrow": "Narrow",
   "sectionActionCycleTodo": "Cycle TODO",
 
@@ -145,6 +144,9 @@
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
+
+  "startTimePickerTitle": "Select start time",
+  "endTimePickerTitle": "Select end time",
 
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",

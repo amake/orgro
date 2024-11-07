@@ -111,6 +111,9 @@
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
 
+  "startTimePickerTitle": "Select start time",
+  "endTimePickerTitle": "Select end time",
+
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",
   "snackbarMessageCitationsNotFound": "Citations not found",

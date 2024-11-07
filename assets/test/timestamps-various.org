@@ -1,0 +1,9 @@
+- Simple <2024-11-07 Thu>
+
+- Time [2024-11-07 Thu 12:34]
+
+- Time range [2024-11-07 Thu 12:34-17:43]
+
+- Date range [2024-11-07 Thu 12:34]--[2024-11-08 Fri 12:34]
+
+- Diary <%%(diary-float t 4 2) 22:00-23:00>
