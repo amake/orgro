@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/restoration.dart';
+import 'package:orgro/src/timestamps.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -176,6 +178,10 @@ class _EditorToolbar extends StatelessWidget {
               onPressed: enabled ? _insertLink : null,
             ),
             IconButton(
+              icon: const Icon(Icons.calendar_today),
+              onPressed: enabled ? () => _insertDate(context) : null,
+            ),
+            IconButton(
               icon: const Icon(Icons.subscript),
               onPressed: enabled ? () => _wrapSelection('_{', '}') : null,
             ),
@@ -221,6 +227,30 @@ class _EditorToolbar extends StatelessWidget {
     controller.value = value.replaced(value.selection, replacement).copyWith(
           selection: TextSelection.collapsed(
             offset: value.selection.baseOffset + replacement.length - 2,
+          ),
+        );
+    ContextMenuController.removeAny();
+  }
+
+  void _insertDate(BuildContext context) async {
+    final value = controller.value;
+    if (!value.selection.isValid) return;
+    final date = await showDatePicker(
+      context: context,
+      firstDate: kDatePickerFirstDate,
+      lastDate: kDatePickerLastDate,
+    );
+    if (date == null || !context.mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    final replacement =
+        OrgSimpleTimestamp('[', date.toOrgDate(), time?.toOrgTime(), [], ']')
+            .toMarkup();
+    controller.value = value.replaced(value.selection, replacement).copyWith(
+          selection: TextSelection.collapsed(
+            offset: value.selection.baseOffset + replacement.length - 1,
           ),
         );
     ContextMenuController.removeAny();
