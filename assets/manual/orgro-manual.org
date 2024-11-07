@@ -274,6 +274,7 @@ Some limited “structured” editing features are available:
   - [ ] Try me!
   - [ ] And me!
 - Slide a section from right to left to cycle its TODO keyword
+- Tap a timestamp to edit with a date/time picker: [2024-11-07 Thu]
 
 Statistics cookies are updated automatically when toggling checkboxes or cycling
 TODOs.
