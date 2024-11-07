@@ -209,7 +209,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   void _doSearchFilter(FilterData filterData) {
     if (filterData.isEmpty) {
-      bucket!.remove<String>(kRestoreSearchFilterKey);
+      bucket!.remove<void>(kRestoreSearchFilterKey);
     } else {
       bucket!.write(kRestoreSearchFilterKey, filterData.toJson());
     }
