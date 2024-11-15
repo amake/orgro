@@ -102,10 +102,10 @@ packages:
     description:
       path: "."
       ref: sync
-      resolved-ref: a73bc7549439ff914b059a87040187d14012e670
+      resolved-ref: d48d9f0e587272f3a36c210d7609475802867aa1
       url: "https://github.com/amake/dart-pg.git"
     source: git
-    version: "1.5.1"
+    version: "1.5.2"
   dynamic_fonts:
     dependency: "direct main"
     description:
