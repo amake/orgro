@@ -53,6 +53,8 @@ dependencies:
   petit_bibtex: ^6.1.2
   # petit_bibtex:
     # path: ../petit_bibtex
+  open_file:
+    ^3.5.10
 
 dev_dependencies:
   flutter_lints: ^5.0.0

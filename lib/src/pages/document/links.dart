@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_file/open_file.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/attachments.dart';
+import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/data_source.dart';
@@ -94,9 +98,8 @@ extension LinkHandler on DocumentPageState {
   }
 
   Future<bool> _openFileLink(OrgFileLink link) async {
-    if (!link.isRelative || !link.body.endsWith('.org')) {
-      return false;
-    }
+    if (!link.isRelative) return false;
+
     final source = DocumentProvider.of(context).dataSource;
     if (source.needsToResolveParent) {
       showDirectoryPermissionsSnackBar(context);
@@ -111,20 +114,42 @@ extension LinkHandler on DocumentPageState {
       ),
     );
 
+    var popped = false;
+
     try {
       final resolved = await source.resolveRelative(link.body);
       if (mounted) {
         Navigator.pop(context);
-        return await loadDocument(context, resolved, target: link.extra);
+        popped = true;
+        if (link.body.endsWith('.org')) {
+          return await loadDocument(context, resolved, target: link.extra);
+        } else {
+          return await _openFileInExternalApp(resolved);
+        }
       }
     } catch (e, s) {
       logError(e, s);
       if (mounted) {
-        Navigator.pop(context);
+        if (!popped) Navigator.pop(context);
         showErrorSnackBar(context, e);
       }
     }
     return false;
+  }
+
+  Future<bool> _openFileInExternalApp(DataSource source) async {
+    final tmp = await getTemporaryAttachmentsDirectory();
+    final tmpFile =
+        tmp.uri.resolveUri(Uri(path: '${source.id.hashCode}/${source.name}'));
+    await File.fromUri(tmpFile).parent.create(recursive: true);
+    await source.copyTo(tmpFile);
+    final result = await OpenFile.open(tmpFile.toFilePath());
+    debugPrint('OpenFile result: ${result.message}; type: ${result.type}');
+    final context = this.context;
+    if (result.type != ResultType.done && context.mounted) {
+      showErrorSnackBar(context, result.message);
+    }
+    return result.type == ResultType.done;
   }
 
   void showDirectoryPermissionsSnackBar(BuildContext context) =>

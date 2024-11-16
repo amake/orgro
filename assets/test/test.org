@@ -68,6 +68,7 @@ Error cases
 * Attachments
 
 - [[file:attachments-dir.org][:DIR:]]
+- [[file:attachments-external-apps.org][External apps]]
 
 * Encryption
 

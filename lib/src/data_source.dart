@@ -24,6 +24,12 @@ abstract class DataSource {
   FutureOr<String> get content;
   FutureOr<Uint8List> get bytes;
 
+  Future<File> copyTo(Uri uri) async {
+    final file = File.fromUri(uri);
+    await file.writeAsBytes(await bytes);
+    return file;
+  }
+
   // ignore: avoid_returning_this
   DataSource get minimize => this;
 
@@ -207,6 +213,14 @@ class NativeDataSource extends DataSource {
     }
     return null;
   }
+
+  @override
+  Future<File> copyTo(Uri uri) => FilePickerWritable().readFile(
+      identifier: identifier,
+      reader: (_, file) async {
+        await file.copy(uri.toFilePath());
+        return File.fromUri(uri);
+      });
 }
 
 class LoadedNativeDataSource extends NativeDataSource {

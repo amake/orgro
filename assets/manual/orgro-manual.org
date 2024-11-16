@@ -242,6 +242,8 @@ so:
 
 [[attachment:orgro-manual-attachment.org]]
 
+[[attachment:hello-world.pdf]]
+
 Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
 section for details.
 

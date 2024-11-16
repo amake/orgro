@@ -6,3 +6,4 @@
 - [[id:nonexistent-id][External ID link to nonexistent ID]]
   - TODO(aaron): Make this work with ~AssetDataSource~
 - [[file:foo: bar/links-unusual-path.org][External file link to unusal path]]
+- [[file:../manual/data/C2/59CE94-D4C8-4C4F-9C9E-9ABE446E7DA3/hello-world.pdf][External PDF]]
