@@ -244,6 +244,8 @@ so:
 
 [[attachment:hello-world.pdf]]
 
+[[attachment:orgro-app-store-promotion.mp4]]
+
 Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
 section for details.
 

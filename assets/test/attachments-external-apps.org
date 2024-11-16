@@ -3,3 +3,13 @@
 :END:
 
 [[attachment:hello-world.pdf]]
+
+[[attachment:hello-world.docx]]
+
+[[attachment:orgro-app-store-promotion.mp4]]
+
+MP4 produced from App Store Connect promotion downscaled via:
+
+#+begin_src bash
+  ffmpeg -i in.mp4 -vf scale=360:-1 -vcodec libx264 -crf 28 -pix_fmt yuv420p -movflags +faststart out.mp4
+#+end_src
