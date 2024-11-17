@@ -3,6 +3,7 @@
 * Layout
 
 - [[file:layout-headlines.org][Headlines]]
+- [[file:layout-hr.org][Horizontal rule]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]
