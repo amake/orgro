@@ -37,6 +37,11 @@ Bidi
 
 * Local variables
 
+Entities
+- [[file:local-vars-entities-off.org][Entities disabled]]
+- [[file:local-vars-subsup-strict.org][Strict sub/superscripts]]
+- [[file:local-vars-subsup-off.org][Sub/superscripts disabled]]
+
 Normal cases
 - [[file:local-vars-set.org][Set]]
 - [[file:local-vars-eval.org][Evaluation]]

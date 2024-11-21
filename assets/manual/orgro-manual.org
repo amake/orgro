@@ -445,6 +445,16 @@ following settings from the local variables list:
 - ~org-pretty-entities~ :: Whether to prettify entities. Pretty entities are
   enabled by default; you can use this to disable them.
 
+- ~org-pretty-entities-include-sub-superscripts~ :: Whether to prettify
+  subscripts and superscripts. These are enabled by default; you can use this to
+  disable them. Note that turning off ~org-pretty-entities~ will also disable
+  subscripts and superscripts.
+
+- ~org-use-sub-superscripts~ :: When subscripts and superscripts are enabled,
+  setting this to the symbol ~{}~ requires brackets around subscripts and
+  superscripts. In other words foo_﻿bar will not render as a subscript but
+  foo_﻿{bar} will.
+
 - ~org-hide-emphasis-markers~ :: Whether to hide emphasis markers. Emphasis
   markers are hidden in [[*Reader Mode][Reader Mode]], but this allows hiding them outside of
   Reader Mode as well.

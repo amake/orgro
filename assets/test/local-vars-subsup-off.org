@@ -1,0 +1,11 @@
+\smiley
+
+foo_bar
+
+foo_{bar}
+
+# Local Variables:
+# org-pretty-entities: t
+# org-pretty-entities-include-sub-superscripts: nil
+# org-use-sub-superscripts: t
+# End:
