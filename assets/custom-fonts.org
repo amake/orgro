@@ -238,7 +238,7 @@
    System prerequisites: Install with MacPorts
 
    #+begin_src bash :dir /sudo::
-     port install npm10 ttfautohint
+     port install -N npm10 ttfautohint
    #+end_src
 
    Additional preparation and updating
