@@ -102,10 +102,10 @@ packages:
     description:
       path: "."
       ref: sync
-      resolved-ref: fe33f202840753e2d5561f05661c2c282bdc2608
+      resolved-ref: "9b7cb6977752d45203240daacc71ca5337c654e7"
       url: "https://github.com/amake/dart-pg.git"
     source: git
-    version: "1.5.3"
+    version: "1.5.4"
   dynamic_fonts:
     dependency: "direct main"
     description:
@@ -242,10 +242,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "936d9c1c010d3e234d1672574636f3352b4941ca3decaddd3cafaeb9ad49c471"
+      sha256: "54900a1a1243f3c4a5506d853a2b5c2dbc38d5f27e52a52618a8054401431123"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.15"
+    version: "2.0.16"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -500,18 +500,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "2795f3ecc6155568c14f1dd7a20c4aac9db6215ed424e212136809ed74e116c3"
+      sha256: "45a069dc864ebd81da7f6218ee67608b6b1d5dc12dbc09451c33866a9816a370"
       url: "https://pub.dev"
     source: hosted
-    version: "7.13.0"
+    version: "7.13.2"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: acb9b38dbde48ec6479a68fa1c82d6ed2371153656ba9ecd44afaf73880ff39a
+      sha256: efe5476eeac060a84d4182ebde3a0d2103a9afaaccd0746e0365909f0f0250d8
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.0"
+    version: "7.1.1"
   path:
     dependency: transitive
     description:
@@ -540,10 +540,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a
+      sha256: "8c4967f8b7cb46dc914e178daa29813d83ae502e0529d7b0478330616a691ef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.12"
+    version: "2.2.14"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -937,10 +937,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: ab9ff38fc771e9ee1139320adbe3d18a60327370c218c60752068ebee4b49ab1
+      sha256: "1b4b9e706a10294258727674a340ae0d6e64a7231980f9f9a3d12e4b42407aad"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.15"
+    version: "1.1.16"
   vector_math:
     dependency: transitive
     description:
