@@ -20,12 +20,9 @@ import 'package:url_launcher/url_launcher.dart';
 extension LinkHandler on DocumentPageState {
   Future<bool> openLink(OrgLink link) async {
     final doc = DocumentProvider.of(context).doc;
-    try {
-      final fileLink = convertLinkResolvingAttachments(doc, link);
-      return _openFileLink(fileLink);
-    } on Exception {
-      // Wasn't a file link
-    }
+
+    OrgFileLink? fileLink = _tryParseFileLink(doc, link);
+    if (fileLink != null) return await _openFileLink(fileLink);
 
     if (isOrgIdUrl(link.location)) {
       return await _openExternalIdLink(link.location);
@@ -33,7 +30,6 @@ extension LinkHandler on DocumentPageState {
 
     // Handle as a general URL
     try {
-      final doc = DocumentProvider.of(context).doc;
       final url = extractUrl(doc, link);
       debugPrint('Launching URL: $url');
       final handled =
@@ -47,6 +43,15 @@ extension LinkHandler on DocumentPageState {
       if (mounted) showErrorSnackBar(context, e);
     }
     return false;
+  }
+
+  OrgFileLink? _tryParseFileLink(OrgTree doc, OrgLink link) {
+    try {
+      return convertLinkResolvingAttachments(doc, link);
+    } on Exception {
+      // Wasn't a file link
+      return null;
+    }
   }
 
   Future<bool> _openExternalIdLink(String url) async {
