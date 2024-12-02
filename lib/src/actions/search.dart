@@ -293,7 +293,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
   void _scrollTo(SearchResultKey key) {
     debugPrint('Scrolling to $key');
     final keyContext = key.currentContext;
-    if (keyContext != null) {
+    if (keyContext != null && keyContext.mounted) {
       Scrollable.ensureVisible(
         keyContext,
         duration: const Duration(milliseconds: 100),
