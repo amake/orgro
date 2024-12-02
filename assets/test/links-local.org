@@ -9,6 +9,10 @@
 - [[*Hogehoge][Local section link to nonexistent section]]
 - [[id:nonexistent-id][Local ID link to nonexistent ID]]
 - [[#hogehoge_id][Local custom ID link to nonexistent ID]]
+- [[foo bar][Ambiguous link to dedicated target]]
+- [[FOO BAR][Ambiguous link to dedicated target (case insensitive)]]
+- [[named-block-here][Ambiguous link to named element]]
+- [[NAMED-BLOCK-HERE][Ambiguous link to named element (case insensitive)]]
 
 * Foobar
   :PROPERTIES:
@@ -17,9 +21,16 @@
 
   Foobar!
 
+  <<foo bar>>
+
 * Bizzbuzz
   :PROPERTIES:
   :CUSTOM_ID: bizzbuzz_id
   :END:
 
   Bizzbuzz!
+
+  #+NAME: named-block-here
+  #+begin_src sh
+    echo hello, world
+  #+end_src

@@ -28,6 +28,9 @@ extension LinkHandler on DocumentPageState {
       return await _openExternalIdLink(link.location);
     }
 
+    final handled = await _openLocalFallbackTargets(doc, link.location);
+    if (handled) return true;
+
     // Handle as a general URL
     try {
       final url = extractUrl(doc, link);
@@ -139,6 +142,13 @@ extension LinkHandler on DocumentPageState {
         showErrorSnackBar(context, e);
       }
     }
+    return false;
+  }
+
+  Future<bool> _openLocalFallbackTargets(OrgTree doc, String target) async {
+    final locator = OrgLocator.of(context)!;
+    if (await locator.jumpToLinkTarget(target)) return true;
+    if (await locator.jumpToName(target)) return true;
     return false;
   }
 

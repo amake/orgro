@@ -115,12 +115,14 @@ class _DocumentPageWrapper extends StatelessWidget {
               errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
                   (_) => showErrorSnackBar(context, OrgroError.from(e))),
               restorationId: 'org_page:${dataSource.id}',
-              child: DocumentPage(
-                layer: layer,
-                title: dataSource.name,
-                initialTarget: target,
-                initialMode: initialMode,
-                root: true,
+              child: OrgLocator(
+                child: DocumentPage(
+                  layer: layer,
+                  title: dataSource.name,
+                  initialTarget: target,
+                  initialMode: initialMode,
+                  root: true,
+                ),
               ),
             );
           },
@@ -187,13 +189,15 @@ Future<OrgTree?> narrow(
                 searchQuery: _searchPattern(viewSettings.queryString),
                 sparseQuery: _sparseQuery(viewSettings.filterData),
                 restorationId: 'org_narrow_$layer:${dataSource.id}',
-                child: DocumentPage(
-                  layer: layer,
-                  title: AppLocalizations.of(context)!
-                      .pageTitleNarrow(dataSource.name),
-                  initialQuery: viewSettings.queryString,
-                  initialFilter: viewSettings.filterData,
-                  root: false,
+                child: OrgLocator(
+                  child: DocumentPage(
+                    layer: layer,
+                    title: AppLocalizations.of(context)!
+                        .pageTitleNarrow(dataSource.name),
+                    initialQuery: viewSettings.queryString,
+                    initialFilter: viewSettings.filterData,
+                    root: false,
+                  ),
                 ),
               );
             }),
