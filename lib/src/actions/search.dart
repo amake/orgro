@@ -296,6 +296,7 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
     if (keyContext != null && keyContext.mounted) {
       Scrollable.ensureVisible(
         keyContext,
+        alignment: 0.5,
         duration: const Duration(milliseconds: 100),
       );
     }
