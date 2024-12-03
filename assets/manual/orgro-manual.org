@@ -184,6 +184,18 @@ Image links are also supported; see [[*Images][Images]].
 Link abbreviations are supported if they are defined via ~#+LINK:~ lines:
 [[OrgroIssue:105]]
 
+If a link matches a <<link target>> or a ~#+NAME:~ line then Orgro will jump to
+it. Try it out:
+
+- [[bizzbazz]]
+- [[bazinga]]
+
+** Radio targets
+
+A <<<radio target>>> linkifies all occurrences of the word or phrase inside its
+brackets. Elsewhere in this document there is a radio target for abc123; tap to
+find it.
+
 ** Emphasis
 
 The default emphasis markers are supported:
@@ -379,9 +391,17 @@ On large screens, optionally let the document take up the entire screen width.
 
 Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
 
-* Footnotes
+* Examples
 
-[fn:1] Tap the reference here to jump back.
+[fn:1] This is a footnote. Tap the reference here to jump back.
+
+<<bizzbazz>> is a link target. You can link to it.
+
+#+NAME: bazinga
+A ~#+NAME:~ line can also be linked to.
+
+<<<abc123>>> is a radio target. Instances of abc123 throughout the document are
+linked here.
 
 * STARTUP keywords
 
