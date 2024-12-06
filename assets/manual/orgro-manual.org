@@ -124,8 +124,9 @@ Math in LaTeX markup is supported as both inline ($$ a^2 + b^2 $$) and block:
 Special characters written with syntax like ~\﻿Omega~ or ~\﻿leftrightarrow~ are
 shown with their “pretty” replacement characters: \Omega \leftrightarrow
 
-Subscripts and superscripts are also prettified, and can contain entities:
-H_{2}O, A^*, e_(\alpha + 1)
+Subscripts and superscripts are also prettified, and can contain entities and
+markup:
+ H_{2}O, A^*, e_(_\alpha^2_ + 1)
 
 ** Lists
 
@@ -206,6 +207,7 @@ The default emphasis markers are supported:
 - +strikethrough+
 - ~code~
 - =verbatim=
+- _nested /styles/ like *this*!_
 
 Hide the emphasis markers with [[*Reader Mode][Reader Mode]].
 
