@@ -10,6 +10,10 @@ Bidi
 - [[file:layout-bidi-ltr.org][LTR]]
 - [[file:layout-bidi-auto.org][Auto]]
 
+* Markup
+
+- [[file:markup-nested.org][Nested objects]]
+
 * Locale
 
 - [[file:locale-zh_Hant.org][zh-Hant]]

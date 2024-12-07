@@ -209,7 +209,7 @@ class DocumentAnalysis {
     var hasRemoteImages = false;
     var hasRelativeLinks = false;
     var hasEncryptedContent = false;
-    doc.visit<OrgLeafNode>((node) {
+    doc.visit<OrgNode>((node) {
       if (node is OrgLink) {
         hasRemoteImages |=
             looksLikeImagePath(node.location) && looksLikeUrl(node.location);
