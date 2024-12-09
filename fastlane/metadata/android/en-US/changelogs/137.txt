@@ -1,0 +1,5 @@
+- Support <<link targets>> and <<<radio targets>>>
+- Jump to named elements
+- Highlighted jumped-to elements
+- Rendering improvements
+- Bug fixes
