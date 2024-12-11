@@ -65,7 +65,9 @@ OrgTree _recalculateListStats(OrgTree tree) {
   for (final scope in scopes) {
     final parent = scope.parent;
     if (parent is OrgSection &&
-        parent.getProperties(':COOKIE_DATA:').firstOrNull == 'todo') continue;
+        parent.getProperties(':COOKIE_DATA:').firstOrNull == 'todo') {
+      continue;
+    }
     for (final cookie in scope.cookies) {
       final newCookie = cookie.update(done: scope.done, total: scope.total);
       result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
