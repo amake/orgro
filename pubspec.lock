@@ -100,12 +100,11 @@ packages:
   dart_pg:
     dependency: "direct main"
     description:
-      path: "."
-      ref: sync
-      resolved-ref: "9b7cb6977752d45203240daacc71ca5337c654e7"
-      url: "https://github.com/amake/dart-pg.git"
-    source: git
-    version: "1.5.4"
+      name: dart_pg
+      sha256: "644741ad511448c1cb96c311108a944ae81060727fdf231a15fed6e0399cf25e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   dynamic_fonts:
     dependency: "direct main"
     description:
@@ -648,6 +647,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  sha3:
+    dependency: transitive
+    description:
+      name: sha3
+      sha256: efa0ad944b950965e7014ab02f407f0a62a64626259983af0e2f98cd39a73a8a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -720,6 +727,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
+  sign_dart:
+    dependency: transitive
+    description:
+      name: sign_dart
+      sha256: ac9303a03c7cca834568f6502b11031e2a5b92141d764c9314d7b4b455780721
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

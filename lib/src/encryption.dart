@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dart_pg/dart_pg.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
@@ -54,8 +56,8 @@ extension OrgSectionEncryption on OrgSection {
       buf.visit(child);
     }
     final (leading, text) = buf.toString().splitLeadingWhitespace();
-    final message = OpenPGPSync.encrypt(
-      OpenPGPSync.createTextMessage(text),
+    final message = OpenPGP.encryptCleartext(
+      text,
       passwords: [password],
     );
     return '${headline.toMarkup()}$leading${message.armor()}';
@@ -68,14 +70,14 @@ List<String?> decrypt((List<OrgPgpBlock> blocks, String password) args) {
 
   for (final block in blocks) {
     try {
-      final message = OpenPGPSync.readMessage(block.toRfc4880());
-      final decrypted = OpenPGPSync.decrypt(
-        message,
+      final decrypted = OpenPGP.decrypt(
+        block.toRfc4880(),
         passwords: [password],
       );
       // TODO(aaron): This introduces \r to every linebreak. What to do about
       // this?
-      result.add(decrypted.literalData!.text);
+      final text = utf8.decode(decrypted.literalData.binary);
+      result.add(text);
     } catch (e, s) {
       result.add(null);
       logError(e, s);
@@ -106,8 +108,8 @@ class OrgroDecryptedContentSerializer extends DecryptedContentSerializer {
   }
 
   String _encrypt(OrgDecryptedContent content, String password) {
-    final message = OpenPGPSync.encrypt(
-      OpenPGPSync.createTextMessage(content.toCleartextMarkup()),
+    final message = OpenPGP.encryptCleartext(
+      content.toCleartextMarkup(),
       passwords: [password],
     );
     return message.armor();

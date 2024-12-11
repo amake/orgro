@@ -94,6 +94,17 @@ bar
 -----BEGIN PGP MESSAGE-----
 '''), isTrue);
       });
+      test('Round-trip', () {
+        final password = (password: 'foobar', predicate: (_) => true);
+        final serializer = OrgroCyphertextSerializer([password]);
+        final output = doc.toMarkup(serializer: serializer);
+        expect(output.contains('-----BEGIN PGP MESSAGE-----'), isTrue);
+        expect(output.contains('bar'), isFalse);
+        final newDoc = OrgDocument.parse(output);
+        final (path: _, node: block) = newDoc.find<OrgPgpBlock>((_) => true)!;
+        final [plaintext] = decrypt(([block], password.password));
+        expect(plaintext, 'bar\n');
+      });
     });
   });
 }
