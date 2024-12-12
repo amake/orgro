@@ -6,9 +6,9 @@
   Orgro offers the following fonts:
 
   - [[https://github.com/tonsky/FiraCode][Fira Code]] (bundled with the app)
-  - All monospace fonts offered for dynamic download by the [[https://pub.dev/packages/google_fonts][google_fonts]] package
+  - All monospace fonts offered for dynamic download by the [[https://pub.dev/packages/google_fonts][google_​fonts]] package
   - Additional fonts manually made available for dynamic download via the
-    [[https://pub.dev/packages/dynamic_fonts][dynamic_fonts]] package
+    [[https://pub.dev/packages/dynamic_fonts][dynamic_​fonts]] package
     - [[https://pub.dev/packages/dynamic_fonts][FiraGO]]
     - [[https://rubjo.github.io/victor-mono/][Victor Mono]]
     - [[https://typeof.net/Iosevka/][Iosevka]]
