@@ -32,7 +32,7 @@ dependencies:
   flutter_charset_detector: ^4.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector/flutter_charset_detector
-  flutter_slidable: ^3.0.1
+  flutter_slidable: ^3.1.2
   google_fonts: ^6.0.0
   http: ^1.1.0
   intl: ^0.19.0
@@ -64,10 +64,3 @@ flutter:
     - assets/test/
     - "assets/test/foo: bar/"
     - assets/licenses/
-
-dependency_overrides:
-  # Work around https://github.com/letsar/flutter_slidable/issues/488
-  flutter_slidable:
-    git:
-      url: https://github.com/letsar/flutter_slidable.git
-      ref: master
