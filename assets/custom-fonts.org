@@ -25,9 +25,7 @@
    - regular
    - *bold*
    - /italic/
-   - /bold italic/ :: You can't /*just*/ */combine/* ~*~ and ~/~, you have to
-     italicize something that is naturally bold for some other reason,
-     apparently
+   - /not just bold or just italic, but *bold italic* (if you try hard enough)/
 
 ** FiraGO
 
