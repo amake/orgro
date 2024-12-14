@@ -34,6 +34,7 @@ Bidi
 * Media
 
 - [[file:media-svg.org][SVG image]]
+- [[file:media-avif.org][AVIF image]]
 - [[file:media-error.org][Error cases]]
 
 * Visibility
