@@ -1,0 +1,2 @@
+- Support inline AVIF images
+- Rendering fixes
