@@ -4,6 +4,8 @@
 
 - [[file:layout-headlines.org][Headlines]]
 - [[file:layout-hr.org][Horizontal rule]]
+- [[file:layout-spacing-0.org][Spacing (0)]]
+- [[file:layout-spacing-1.org][Spacing (1)]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]

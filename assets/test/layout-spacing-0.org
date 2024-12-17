@@ -1,0 +1,39 @@
+#+begin_src sh
+  foo
+#+end_src
+#+begin_quote
+abc
+#+end_quote
+\begin{equation*}
+\oint_{\partial \Sigma} \mathbf{B} \cdot \mathrm{d}\boldsymbol{l} = \mu_0 \left(\iint_{\Sigma} \mathbf{J} \cdot \mathrm{d}\mathbf{S} + \varepsilon_0 \frac{\mathrm{d}}{\mathrm{d}t} \iint_{\Sigma} \mathbf{E} \cdot \mathrm{d}\mathbf{S} \right)
+\end{equation*}
+#+foo: bar
+: a b c
+: d e f
+| hoge | fuga |
+|------+------|
+| あ   | ん   |
+-----
+1. who
+2. what
+3. when
+  SCHEDULED: <2024-12-17 Tue>
+:DRAWER:
+foo
+:END:
+[fn:1] this is a footnote
+
+still a footnote
+
+
+# Local Variables:
+# foo: 'bar
+# End:
+-----BEGIN PGP MESSAGE-----
+
+jA0ECQMIPXY/UVXjq9/w0kABGCBUJHQLrNyzC4OBgn6jKhU+KPUSs5Egf9o+a3yB
+r0SZNYouvk7tY6rDz0Z62WRwOtrBx0D/5T0E9kT3rpnB
+=0CZV
+-----END PGP MESSAGE-----
+# this is a comment
+This is a paragraph. Lorem ipsum, etc.
