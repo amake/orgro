@@ -33,7 +33,7 @@ extension LinkHandler on DocumentPageState {
 
     // Handle as a general URL
     try {
-      final url = extractUrl(doc, link);
+      final url = expandAbbreviatedUrl(doc, link) ?? Uri.parse(link.location);
       debugPrint('Launching URL: $url');
       final handled =
           await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -204,25 +204,25 @@ extension LinkHandler on DocumentPageState {
   }
 }
 
-Uri extractUrl(OrgTree doc, OrgLink link) {
+Uri? expandAbbreviatedUrl(OrgTree doc, OrgLink link) {
   // Uri.parse can fail on a link that might otherwise succeed after expanding
   // abbreviations, so don't unconditionally try to parse the raw link.location.
 
-  final abbreviations = extractLinkAbbreviations(doc);
-  if (abbreviations.isEmpty) return Uri.parse(link.location);
-
   final colonIdx = link.location.indexOf(':');
-  if (colonIdx == -1) return Uri.parse(link.location);
+  if (colonIdx == -1) return null;
 
   final linkword = link.location.substring(0, colonIdx);
   final tag = link.location.substring(colonIdx + 1);
+
+  final abbreviations = extractLinkAbbreviations(doc);
+  if (abbreviations.isEmpty) return null;
 
   final String format;
   try {
     (linkword: _, :format) =
         abbreviations.firstWhere((abbr) => abbr.linkword == linkword);
   } on StateError {
-    return Uri.parse(link.location);
+    return null;
   }
 
   final formatted = format.contains('%s')
@@ -230,7 +230,7 @@ Uri extractUrl(OrgTree doc, OrgLink link) {
       : format.contains('%h')
           ? format.replaceFirst('%h', Uri.encodeComponent(tag))
           : '$format$tag';
-  return Uri.tryParse(formatted) ?? Uri.parse(link.location);
+  return Uri.tryParse(formatted);
 }
 
 final _abbreviationPattern =
