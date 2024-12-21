@@ -7,6 +7,8 @@ import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/timestamps.dart';
 import 'package:orgro/src/util.dart';
 
+const _kRestoreAfterTextKey = 'restore_after_text';
+
 class EditorPage extends StatefulWidget {
   const EditorPage({
     required this.text,
@@ -40,7 +42,10 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     _controller = FullyRestorableTextEditingController(text: widget.text)
       ..addListener(() {
         if (_controller.value.text != _after) {
-          setState(() => _after = _controller.value.text);
+          setState(() {
+            _after = _controller.value.text;
+            bucket?.write(_kRestoreAfterTextKey, _after);
+          });
         }
       });
     _undoController = UndoHistoryController();
@@ -52,6 +57,9 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(_controller, 'controller');
+
+    if (!initialRestore) return;
+    _after = bucket?.read<String>(_kRestoreAfterTextKey);
   }
 
   @override
