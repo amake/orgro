@@ -5,6 +5,7 @@ import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/timestamps.dart';
+import 'package:orgro/src/util.dart';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -71,7 +72,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
           title: Text(widget.title),
           actions: [
             IconButton(
-              onPressed: () => Navigator.pop(context, _dirty ? _after : null),
+              onPressed: _save,
               icon: const Icon(Icons.check),
             )
           ],
@@ -114,6 +115,11 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
       builder: (context) => const DiscardChangesDialog(),
     );
     if (result == true) navigator.pop();
+  }
+
+  void _save() {
+    final result = _dirty ? _after?.withTrailingLineBreak() : null;
+    Navigator.pop(context, result);
   }
 }
 

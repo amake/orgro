@@ -113,4 +113,18 @@ extension StringExtension on String {
     }
     return this;
   }
+
+  String? detectLineBreak() {
+    final idx = indexOf('\n');
+    if (idx == -1) return null;
+    if (idx > 0 && this[idx - 1] == '\r') {
+      return '\r\n';
+    }
+    return '\n';
+  }
+
+  String withTrailingLineBreak() {
+    final lineBreak = detectLineBreak() ?? '\n';
+    return endsWith(lineBreak) ? this : '$this$lineBreak';
+  }
 }
