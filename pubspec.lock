@@ -498,18 +498,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "724191475028ca8251882b883886506dceb750fc78566615ca7074a285dc379d"
+      sha256: fdebe0eb577a11c5877d2890869f4cdb70211260ed21f2cbc7e49794c9b7d8da
       url: "https://pub.dev"
     source: hosted
-    version: "8.4.0"
+    version: "8.5.0"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: c01668a81998a565f70a107b45aebb8577903232af5fd77a6bd7f315132b0ff4
+      sha256: d016d566dc539aaccadf38a7bbc33aab3e6bac5127a66ed95b1b4a3780d06f87
       url: "https://pub.dev"
     source: hosted
-    version: "8.2.1"
+    version: "8.3.0"
   path:
     dependency: transitive
     description:

@@ -1,3 +1,7 @@
+:PROPERTIES:
+:foo:      *bar* /baz/
+:END:
+
 _Nested *emphasis /markups/ +here+ now*!_
 
 e^{_underline_ + 2_{sub}}
