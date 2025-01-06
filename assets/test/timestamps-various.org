@@ -7,3 +7,13 @@
 - Date range [2024-11-07 Thu 12:34]--[2024-11-08 Fri 12:34]
 
 - Diary <%%(diary-float t 4 2) 22:00-23:00>
+
+- Repeaters
+
+  - Repeater :: [2025-01-08 Wed .+1h]
+
+  - Delay :: [2025-01-08 Wed -1w]
+
+  - Repeater with delay :: [2025-01-08 Wed ++1w --2w]
+
+  - Habit :: [2025-01-08 Wed .+2d/4d]
