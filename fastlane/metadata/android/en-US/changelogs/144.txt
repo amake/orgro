@@ -1,0 +1,2 @@
+- Support rich content in drawer properties
+- Parsing fixes
