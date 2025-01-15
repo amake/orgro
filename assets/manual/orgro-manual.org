@@ -63,22 +63,6 @@ Syntax highlighting is applied for [[https://github.com/git-touch/highlight/tree
   echo '"quoted"' | tr -d \" > text.txt
 #+end_src
 
-#+begin_src ruby
-  # The Greeter class
-  class Greeter
-    def initialize(name)
-      @name = name.capitalize
-    end
-
-    def salute
-      puts "Hello #{@name}!"
-    end
-  end
-
-  g = Greeter.new("world")
-  g.salute
-#+end_src
-
 #+begin_src python
   @requires_authorization
   def somefunc(param1='', param2=0):
@@ -99,6 +83,9 @@ When the language is unknown or unspecified, ~code style~ is used:
 #+begin_src
 foo bar baz
 #+end_src
+
+Inline code blocks like src_bash[:var foo="​bar"]{echo $foo} {{{results(=​bar=)}}}
+are also supported.
 
 ** Tables
 
