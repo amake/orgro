@@ -487,7 +487,7 @@ class _OrgManualButton extends StatelessWidget {
       onPressed: () => loadHttpUrl(
         context,
         Uri.parse(
-          'https://git.savannah.gnu.org/cgit/emacs/org-mode.git/plain/doc/org-manual.org',
+          'https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org',
         ),
       ),
       child: Text(AppLocalizations.of(context)!.buttonOpenOrgManual),
