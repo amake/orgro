@@ -261,18 +261,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: dae264cd50be36edc055100474dfed0838bcde49447dd027e7895f589b04adca
+      sha256: "3088a9a7fda061b766cc7c5f8baa9876aba093696395391fd5b4ead3fb7305e3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.3"
+    version: "3.0.4"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: e2c01c59da7f052296b4d4878f666bf4543c76edb5e5dcfc241647288cf2e179
+      sha256: db571fc03bae678a78ad6c8c9ddc2bfc5c0a2f176698ac61ba64046341a9fd74
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.9"
+    version: "2.0.10"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
@@ -682,10 +682,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: bf808be89fe9dc467475e982c1db6c2faf3d2acf54d526cd5ec37d86c99dbd84
+      sha256: "138b7bbbc7f59c56236e426c37afb8f78cbc57b094ac64c440e0bb90e380a4f5"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.2"
   shared_preferences_foundation:
     dependency: transitive
     description:
