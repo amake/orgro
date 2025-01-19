@@ -28,19 +28,19 @@ const kDefaultFullWidth = false;
 
 const kMaxRecentFiles = 10;
 
-const _kFontFamilyKey = 'font_family';
-const _kTextScaleKey = 'text_scale';
-const _kReaderModeKey = 'reader_mode';
-const _kRemoteImagesPolicyKey = 'remote_images_policy';
-const _kLocalLinksPolicyKey = 'local_links_policy';
-const _kSaveChangesPolicyKey = 'save_changes_policy';
-const _kDecryptPolicyKey = 'decrypt_policy';
-const _kRecentFilesJsonKey = 'recent_files_json';
-const _kAccessibleDirectoriesKey = 'accessible_directories_json';
-const _kCustomFilterQueriesKey = 'custom_filter_queries_json';
-const _kFullWidthKey = 'full_width';
+const kFontFamilyKey = 'font_family';
+const kTextScaleKey = 'text_scale';
+const kReaderModeKey = 'reader_mode';
+const kRemoteImagesPolicyKey = 'remote_images_policy';
+const kLocalLinksPolicyKey = 'local_links_policy';
+const kSaveChangesPolicyKey = 'save_changes_policy';
+const kDecryptPolicyKey = 'decrypt_policy';
+const kRecentFilesJsonKey = 'recent_files_json';
+const kAccessibleDirectoriesKey = 'accessible_directories_json';
+const kCustomFilterQueriesKey = 'custom_filter_queries_json';
+const kFullWidthKey = 'full_width';
 
-const _kThemeModeKey = 'theme_mode';
+const kThemeModeKey = 'theme_mode';
 
 class Preferences extends InheritedWidget {
   static Preferences of(BuildContext context) =>
@@ -52,75 +52,75 @@ class Preferences extends InheritedWidget {
 
   Future<void> reload() => _prefs.reload();
 
-  String? get fontFamily => _prefs.getString(_kFontFamilyKey);
+  String? get fontFamily => _prefs.getString(kFontFamilyKey);
 
   Future<bool> setFontFamily(String? value) =>
-      _setOrRemove(_kFontFamilyKey, value);
+      _setOrRemove(kFontFamilyKey, value);
 
-  double? get textScale => _prefs.getDouble(_kTextScaleKey);
+  double? get textScale => _prefs.getDouble(kTextScaleKey);
 
   Future<bool> setTextScale(double? value) =>
-      _setOrRemove(_kTextScaleKey, value);
+      _setOrRemove(kTextScaleKey, value);
 
-  bool? get readerMode => _prefs.getBool(_kReaderModeKey);
+  bool? get readerMode => _prefs.getBool(kReaderModeKey);
 
   Future<bool> setReaderMode(bool? value) =>
-      _setOrRemove(_kReaderModeKey, value);
+      _setOrRemove(kReaderModeKey, value);
 
   List<String> get recentFilesJson =>
-      _prefs.getStringList(_kRecentFilesJsonKey) ?? [];
+      _prefs.getStringList(kRecentFilesJsonKey) ?? [];
 
   Future<bool> setRecentFilesJson(List<String> value) =>
-      _prefs.setStringList(_kRecentFilesJsonKey, value);
+      _prefs.setStringList(kRecentFilesJsonKey, value);
 
-  String? get themeMode => _prefs.getString(_kThemeModeKey);
+  String? get themeMode => _prefs.getString(kThemeModeKey);
 
   Future<bool> setThemeMode(String? value) =>
-      _setOrRemove(_kThemeModeKey, value);
+      _setOrRemove(kThemeModeKey, value);
 
   RemoteImagesPolicy? get remoteImagesPolicy =>
       RemoteImagesPolicyPersistence.fromString(
-          _prefs.getString(_kRemoteImagesPolicyKey));
+          _prefs.getString(kRemoteImagesPolicyKey));
 
   Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy? value) =>
-      _setOrRemove(_kRemoteImagesPolicyKey, value.persistableString);
+      _setOrRemove(kRemoteImagesPolicyKey, value.persistableString);
 
   LocalLinksPolicy? get localLinksPolicy =>
       LocalLinksPolicyPersistence.fromString(
-          _prefs.getString(_kLocalLinksPolicyKey));
+          _prefs.getString(kLocalLinksPolicyKey));
 
   Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
-      _setOrRemove(_kLocalLinksPolicyKey, value.persistableString);
+      _setOrRemove(kLocalLinksPolicyKey, value.persistableString);
 
   SaveChangesPolicy? get saveChangesPolicy =>
       SaveChangesPolicyPersistence.fromString(
-          _prefs.getString(_kSaveChangesPolicyKey));
+          _prefs.getString(kSaveChangesPolicyKey));
 
   Future<bool> setSaveChangesPolicy(SaveChangesPolicy? value) =>
-      _setOrRemove(_kSaveChangesPolicyKey, value.persistableString);
+      _setOrRemove(kSaveChangesPolicyKey, value.persistableString);
 
   DecryptPolicy? get decryptPolicy =>
-      DecryptPolicyPersistence.fromString(_prefs.getString(_kDecryptPolicyKey));
+      DecryptPolicyPersistence.fromString(_prefs.getString(kDecryptPolicyKey));
 
   Future<bool> setDecryptPolicy(DecryptPolicy? value) =>
-      _setOrRemove(_kDecryptPolicyKey, value.persistableString);
+      _setOrRemove(kDecryptPolicyKey, value.persistableString);
 
   /// List of identifiers
   List<String> get accessibleDirs =>
-      _prefs.getStringList(_kAccessibleDirectoriesKey) ?? [];
+      _prefs.getStringList(kAccessibleDirectoriesKey) ?? [];
 
   Future<bool> setAccessibleDirs(List<String> value) =>
-      _prefs.setStringList(_kAccessibleDirectoriesKey, value);
+      _prefs.setStringList(kAccessibleDirectoriesKey, value);
 
   List<String> get customFilterQueries =>
-      _prefs.getStringList(_kCustomFilterQueriesKey) ?? [];
+      _prefs.getStringList(kCustomFilterQueriesKey) ?? [];
 
   Future<bool> setCustomFilterQueries(List<String> value) =>
-      _prefs.setStringList(_kCustomFilterQueriesKey, value);
+      _prefs.setStringList(kCustomFilterQueriesKey, value);
 
-  bool? get fullWidth => _prefs.getBool(_kFullWidthKey);
+  bool? get fullWidth => _prefs.getBool(kFullWidthKey);
 
-  Future<bool> setFullWidth(bool? value) => _setOrRemove(_kFullWidthKey, value);
+  Future<bool> setFullWidth(bool? value) => _setOrRemove(kFullWidthKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
