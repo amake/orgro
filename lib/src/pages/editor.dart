@@ -11,12 +11,14 @@ const _kRestoreAfterTextKey = 'restore_after_text';
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
+    required this.docId,
     required this.text,
     required this.title,
     required this.requestFocus,
     super.key,
   });
 
+  final String docId;
   final String text;
   final String title;
   final bool requestFocus;
@@ -99,7 +101,8 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8),
                 ),
-                style: ViewSettings.of(context).textStyle,
+                style:
+                    ViewSettings.of(context).forScope(widget.docId).textStyle,
               ),
             ),
             _EditorToolbar(

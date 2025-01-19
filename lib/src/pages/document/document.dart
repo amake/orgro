@@ -236,6 +236,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   Iterable<Widget> _actions(bool searchMode) sync* {
     final viewSettings = _viewSettings;
+    final scopeKey = _dataSource.id;
+    final scopedViewSettings = viewSettings.forScope(scopeKey);
     if (!searchMode || _biggishScreen) {
       yield IconButton(
         icon: const Icon(Icons.repeat),
@@ -243,18 +245,20 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       );
       if (_bigScreen) {
         yield TextStyleButton(
-          textScale: viewSettings.textScale,
-          onTextScaleChanged: (value) => viewSettings.textScale = value,
-          fontFamily: viewSettings.fontFamily,
-          onFontFamilyChanged: (value) => viewSettings.fontFamily = value,
+          textScale: scopedViewSettings.textScale,
+          onTextScaleChanged: (value) =>
+              viewSettings.setTextScale(scopeKey, value),
+          fontFamily: scopedViewSettings.fontFamily,
+          onFontFamilyChanged: (value) =>
+              viewSettings.setFontFamily(scopeKey, value),
         );
         yield ReaderModeButton(
-          enabled: viewSettings.readerMode,
+          enabled: scopedViewSettings.readerMode,
           onChanged: (value) => viewSettings.readerMode = value,
         );
         if (_allowFullScreen(context)) {
           yield FullWidthButton(
-            enabled: viewSettings.fullWidth,
+            enabled: scopedViewSettings.fullWidth,
             onChanged: (value) => viewSettings.fullWidth = value,
           );
         }
@@ -269,24 +273,24 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             const PopupMenuDivider(),
             textScaleMenuItem(
               context,
-              textScale: viewSettings.textScale,
-              onChanged: (value) => viewSettings.textScale = value,
+              textScale: scopedViewSettings.textScale,
+              onChanged: (value) => viewSettings.setTextScale(scopeKey, value),
             ),
             fontFamilyMenuItem(
               context,
-              fontFamily: viewSettings.fontFamily,
-              onChanged: (value) => viewSettings.fontFamily = value,
+              fontFamily: scopedViewSettings.fontFamily,
+              onChanged: (value) => viewSettings.setFontFamily(scopeKey, value),
             ),
             const PopupMenuDivider(),
             readerModeMenuItem(
               context,
-              enabled: viewSettings.readerMode,
+              enabled: scopedViewSettings.readerMode,
               onChanged: (value) => viewSettings.readerMode = value,
             ),
             if (_allowFullScreen(context))
               fullWidthMenuItem(
                 context,
-                enabled: viewSettings.fullWidth,
+                enabled: scopedViewSettings.fullWidth,
                 onChanged: (value) => viewSettings.fullWidth = value,
               ),
             const PopupMenuDivider(),
@@ -399,7 +403,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           context,
           child: SelectionArea(
             child: OrgRootWidget(
-              style: viewSettings.textStyle,
+              style: viewSettings.forScope(_dataSource.id).textStyle,
               onLinkTap: openLink,
               onSectionLongPress: _onSectionLongPress,
               onSectionSlide: _onSectionSlide,

@@ -240,6 +240,7 @@ Future<OrgTree?> showTextEditor(
         child: ViewSettings(
           data: viewSettings,
           child: EditorPage(
+            docId: dataSource.id,
             text: text,
             title:
                 AppLocalizations.of(context)!.pageTitleEditing(dataSource.name),
