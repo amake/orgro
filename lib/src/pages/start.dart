@@ -9,6 +9,7 @@ import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/actions/cache.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
+import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
@@ -230,7 +231,7 @@ class _RecentFilesBody extends StatelessWidget {
       itemCount: recentFiles.length + 1,
       itemBuilder: (context, idx) {
         if (idx == 0) {
-          return _constrain(_ListHeader(
+          return _constrain(ListHeader(
             title: Text(
               AppLocalizations.of(context)!.sectionHeaderRecentFiles,
             ),
@@ -249,28 +250,6 @@ class _RecentFilesBody extends StatelessWidget {
           child: child,
         ),
       );
-}
-
-class _ListHeader extends StatelessWidget {
-  const _ListHeader({required this.title});
-
-  final Widget title;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: DefaultTextStyle.merge(
-        // Couldn't find actual specs for list subheader typography so this is
-        // my best guess
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        child: title,
-      ),
-      trailing: fontPreloader(context),
-    );
-  }
 }
 
 // Do not make format object a constant because it will break dynamic UI
