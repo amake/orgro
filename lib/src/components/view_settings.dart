@@ -120,8 +120,10 @@ class InheritedViewSettings extends InheritedWidget {
   }
 
   bool get fullWidth => data.fullWidth;
-  set fullWidth(bool value) =>
-      _update((data) => data.copyWith(fullWidth: value));
+  set fullWidth(bool value) {
+    _prefs.setFullWidth(value);
+    _update((data) => data.copyWith(fullWidth: value));
+  }
 
   @override
   bool updateShouldNotify(InheritedViewSettings oldWidget) =>
