@@ -2,6 +2,7 @@
   "appTitle": "Orgro",
 
   "menuItemAppearance": "外観…",
+  "menuItemSettings": "設定…",
   "menuItemClearCache": "キャッシュを削除",
   "menuItemOrgroManual": "Orgroマニュアル",
   "menuItemTestFile": "テストファイル",
@@ -11,7 +12,19 @@
   "appearanceModeLight": "ライト",
   "appearanceModeDark": "ダーク",
 
+  "settingsScreenTitle": "設定",
+  "settingsSectionDefaultText": "デフォルトの書式",
+  "settingsSectionDataManagement": "データ管理",
+
+  "settingsItemAppearance": "外観",
+  "settingsItemTextScale": "文字サイズ",
+  "settingsItemFontFamily": "書体",
+
+  "settingsActionClearCache": "キャッシュを削除",
+  "settingsActionResetPreferences": "設定を初期化",
+
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
+  "snackbarMessagePreferencesReset": "設定を初期化しました",
 
   "aboutLinkSupport": "サポート・お問い合わせ",
   "aboutLinkChangelog": "変更履歴",

@@ -2,6 +2,7 @@
   "appTitle": "Orgro",
 
   "menuItemAppearance": "Appearance…",
+  "menuItemSettings": "Settings…",
   "menuItemClearCache": "Clear cache",
   "menuItemOrgroManual": "Orgro Manual",
   "menuItemTestFile": "Test File",
@@ -11,7 +12,19 @@
   "appearanceModeLight": "Light",
   "appearanceModeDark": "Dark",
 
+  "settingsScreenTitle": "Settings",
+  "settingsSectionDefaultText": "Default text",
+  "settingsSectionDataManagement": "Data management",
+
+  "settingsItemAppearance": "Appearance",
+  "settingsItemTextScale": "Scale",
+  "settingsItemFontFamily": "Font",
+
+  "settingsActionClearCache": "Clear cache",
+  "settingsActionResetPreferences": "Restore defaults",
+
   "snackbarMessageCacheCleared": "Cache cleared",
+  "snackbarMessagePreferencesReset": "Preferences reset",
 
   "aboutLinkSupport": "Support · Feedback",
   "aboutLinkChangelog": "Changelog",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/appearance.dart';
@@ -16,13 +17,15 @@ class SettingsPage extends StatelessWidget {
     final viewSettings = ViewSettings.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'), // TODO(aaron): L10N
+        title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
       ),
       body: ListView(
         children: [
           appearanceListItem(context),
           Divider(),
-          ListHeader(title: Text('Default text')), // TODO(aaron): L10N
+          ListHeader(
+              title: Text(
+                  AppLocalizations.of(context)!.settingsSectionDefaultText)),
           fontFamilyListItem(
             context,
             fontFamily: viewSettings.fontFamily,
@@ -35,17 +38,22 @@ class SettingsPage extends StatelessWidget {
           ),
           _TextPreview(),
           Divider(),
-          ListHeader(title: Text('Data management')), // TODO(aaron): L10N
+          ListHeader(
+              title: Text(
+                  AppLocalizations.of(context)!.settingsSectionDataManagement)),
           ListTile(
-            title: Text('Clear cache'), // TODO(aaron): L10N
+            title: Text(AppLocalizations.of(context)!.settingsActionClearCache),
             onTap: () async {
               await clearCaches(context);
-              if (context.mounted)
-                _reportResult(context, 'Cache cleared'); // TODO(aaron): L10N
+              if (context.mounted) {
+                _reportResult(context,
+                    AppLocalizations.of(context)!.snackbarMessageCacheCleared);
+              }
             },
           ),
           ListTile(
-            title: Text('Restore defaults'), // TODO(aaron): L10N
+            title: Text(
+                AppLocalizations.of(context)!.settingsActionResetPreferences),
             onTap: () async {
               await resetPreferences(context);
               if (context.mounted) {
@@ -55,7 +63,9 @@ class SettingsPage extends StatelessWidget {
                 Appearance.of(context).reload();
                 RecentFiles.of(context).reload();
                 _reportResult(
-                    context, 'Preferences reset'); // TODO(aaron): L10N
+                    context,
+                    AppLocalizations.of(context)!
+                        .snackbarMessagePreferencesReset);
               }
             },
           ),

@@ -57,7 +57,7 @@ class _StartPageState extends State<StartPage>
       itemBuilder: (context) => [
         PopupMenuItem<VoidCallback>(
           value: () => _openSettingsScreen(context),
-          child: Text('Settings...'), // TODO(aaron): L10N
+          child: Text(AppLocalizations.of(context)!.menuItemSettings),
         ),
         if (hasRecentFiles) ...[
           const PopupMenuDivider(),

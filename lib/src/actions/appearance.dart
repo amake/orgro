@@ -18,7 +18,7 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
 Widget appearanceListItem(BuildContext context) {
   final appearance = Appearance.of(context);
   return ListTile(
-    title: Text('Appearance'), // TODO(aaron): L10N
+    title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
     subtitle: Text(appearance.mode.toDisplayString(context)),
     onTap: () async {
       final newMode = await _chooseThemeMode(context, appearance.mode);

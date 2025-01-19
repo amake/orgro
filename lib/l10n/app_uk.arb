@@ -2,6 +2,7 @@
   "appTitle": "Orgro",
 
   "menuItemAppearance": "Вигляд…",
+  "menuItemSettings": "Settings…",
   "menuItemClearCache": "Очистити кеш",
   "menuItemOrgroManual": "Посібник Orgro",
   "menuItemTestFile": "Test File",
@@ -11,7 +12,19 @@
   "appearanceModeLight": "Світлий",
   "appearanceModeDark": "Темний",
 
+  "settingsScreenTitle": "Settings",
+  "settingsSectionDefaultText": "Default text",
+  "settingsSectionDataManagement": "Data management",
+
+  "settingsItemAppearance": "Appearance",
+  "settingsItemTextScale": "Scale",
+  "settingsItemFontFamily": "Font",
+
+  "settingsActionClearCache": "Clear cache",
+  "settingsActionResetPreferences": "Restore defaults",
+
   "snackbarMessageCacheCleared": "Кеш очищено",
+  "snackbarMessagePreferencesReset": "Preferences reset",
 
   "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
   "aboutLinkChangelog": "Список змін",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/fonts.dart';
 
 PopupMenuEntry<VoidCallback> textScaleMenuItem(
@@ -22,7 +23,8 @@ Widget textScaleListItem(
   return ListTile(
     title: Row(
       children: [
-        Expanded(child: const Text('Scale')), // TODO(aaron): L10N
+        Expanded(
+            child: Text(AppLocalizations.of(context)!.settingsItemTextScale)),
         TextSizeAdjuster(value: textScale, onChanged: onChanged),
       ],
     ),
@@ -48,7 +50,7 @@ Widget fontFamilyListItem(
   required void Function(String) onChanged,
 }) {
   return ListTile(
-    title: const Text('Font'),
+    title: Text(AppLocalizations.of(context)!.settingsItemFontFamily),
     subtitle: Text(fontFamily),
     onTap: () async {
       final selection = await _chooseFont(context, fontFamily);
