@@ -171,32 +171,46 @@ class _EmptyBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // This Center ensures that its entire child is centered on screen when the
+    // screen is tall enough that no scrolling is requied.
     return Center(
       child: SingleChildScrollView(
-        child: IntrinsicWidth(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const _PickFileButton(),
-              const SizedBox(height: 16),
-              const _CreateFileButton(),
-              const SizedBox(height: 16),
-              const _OrgroManualButton(),
-              if (!kReleaseMode && !kScreenshotMode) ...[
-                const SizedBox(height: 16),
-                const _OrgManualButton(),
-              ],
-              const SizedBox(height: 80),
-              const _SupportLink(),
-              Row(
+        // This Center allows the child to fill the available space, so you can
+        // e.g. scroll the very edges of the view rather than just the Column.
+        child: Center(
+          // Padding ensures the child is not flush against the screen edges
+          // when the screen is short.
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            // IntrinsicWidth needed to get all elements the same width without
+            // having to specify a fixed width. This then requires a Column rather
+            // than e.g. a ListView.
+            child: IntrinsicWidth(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const _VersionInfoButton(),
-                  fontPreloader(context),
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const _PickFileButton(),
+                  const SizedBox(height: 16),
+                  const _CreateFileButton(),
+                  const SizedBox(height: 16),
+                  const _OrgroManualButton(),
+                  if (!kReleaseMode && !kScreenshotMode) ...[
+                    const SizedBox(height: 16),
+                    const _OrgManualButton(),
+                  ],
+                  const SizedBox(height: 80),
+                  const _SupportLink(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const _VersionInfoButton(),
+                      fontPreloader(context),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
