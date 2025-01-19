@@ -224,27 +224,31 @@ class _RecentFilesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final recentFiles = RecentFiles.of(context).list;
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
-        child: ListView.builder(
-          itemCount: recentFiles.length + 1,
-          itemBuilder: (context, idx) {
-            if (idx == 0) {
-              return _ListHeader(
-                title: Text(
-                  AppLocalizations.of(context)!.sectionHeaderRecentFiles,
-                ),
-              );
-            } else {
-              final recentFile = recentFiles[idx - 1];
-              return _RecentFileListTile(recentFile);
-            }
-          },
-        ),
-      ),
+    // We let ListView fill the viewport and constrain its children so that the
+    // list can be scrolled even by the edges of the view.
+    return ListView.builder(
+      itemCount: recentFiles.length + 1,
+      itemBuilder: (context, idx) {
+        if (idx == 0) {
+          return _constrain(_ListHeader(
+            title: Text(
+              AppLocalizations.of(context)!.sectionHeaderRecentFiles,
+            ),
+          ));
+        } else {
+          final recentFile = recentFiles[idx - 1];
+          return _constrain(_RecentFileListTile(recentFile));
+        }
+      },
     );
   }
+
+  Widget _constrain(Widget child) => Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: child,
+        ),
+      );
 }
 
 class _ListHeader extends StatelessWidget {
