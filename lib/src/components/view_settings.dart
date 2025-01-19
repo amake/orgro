@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 
@@ -57,9 +60,17 @@ class InheritedViewSettings extends InheritedWidget {
   final Preferences _prefs;
   final void Function(ViewSettingsData Function(ViewSettingsData)) _update;
 
-  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
-        fontSize: TextScaler.linear(textScale).scale(18),
-      );
+  void _setScopedValue(String scopeKey, String valueKey, dynamic value) {
+    final allDataJson = _prefs.scopedPreferencesJson;
+    final allData = allDataJson == null
+        ? <String, dynamic>{}
+        : json.decode(allDataJson) as Map<String, dynamic>;
+    allData[scopeKey] ??= {...kDefaultScopedPreferences};
+    allData[scopeKey][valueKey] = value;
+    _prefs.setScopedPreferencesJson(json.encode(allData));
+  }
+
+  TextStyle get textStyle => data.textStyle;
 
   double get textScale => data.textScale;
   set textScale(double value) {
@@ -67,10 +78,20 @@ class InheritedViewSettings extends InheritedWidget {
     _update((data) => data.copyWith(textScale: value));
   }
 
+  void setTextScale(String key, double value) {
+    _setScopedValue(key, kTextScaleKey, value);
+    textScale = value;
+  }
+
   String get fontFamily => data.fontFamily;
   set fontFamily(String value) {
     _prefs.setFontFamily(value);
     _update((data) => data.copyWith(fontFamily: value));
+  }
+
+  void setFontFamily(String key, String value) {
+    _setScopedValue(key, kFontFamilyKey, value);
+    fontFamily = value;
   }
 
   String? get queryString => data.queryString;
@@ -125,6 +146,15 @@ class InheritedViewSettings extends InheritedWidget {
     _update((data) => data.copyWith(fullWidth: value));
   }
 
+  ViewSettingsData forScope(String key) {
+    try {
+      return ViewSettingsData._scoped(_prefs, key, data);
+    } catch (e, s) {
+      logError(e, s);
+      return data;
+    }
+  }
+
   @override
   bool updateShouldNotify(InheritedViewSettings oldWidget) =>
       data != oldWidget.data;
@@ -145,6 +175,27 @@ class ViewSettingsData {
       saveChangesPolicy: prefs.saveChangesPolicy ?? kDefaultSaveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy ?? kDefaultDecryptPolicy,
       fullWidth: prefs.fullWidth ?? kDefaultFullWidth,
+    );
+  }
+
+  factory ViewSettingsData._scoped(
+    Preferences prefs,
+    String key,
+    ViewSettingsData defaults,
+  ) {
+    final allDataJson = prefs.scopedPreferencesJson;
+    final allData = allDataJson == null
+        ? <String, dynamic>{}
+        : json.decode(allDataJson) as Map<String, dynamic>;
+    final scopedData = allData[key] ?? kDefaultScopedPreferences;
+    return defaults.copyWith(
+      textScale: scopedData[kTextScaleKey] as double?,
+      fontFamily: scopedData[kFontFamilyKey] as String?,
+      // TODO(aaron): For now we only support textScale and fontFamily as scoped
+      // values, but we could add more as such:
+      //
+      // readerMode: scopedData[key]?[kReaderModeKey] as bool?,
+      // fullWidth: scopedData[key]?[kFullWidthKey] as bool?,
     );
   }
 
@@ -171,6 +222,10 @@ class ViewSettingsData {
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
   final bool fullWidth;
+
+  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
+        fontSize: TextScaler.linear(textScale).scale(18),
+      );
 
   ViewSettingsData copyWith({
     double? textScale,

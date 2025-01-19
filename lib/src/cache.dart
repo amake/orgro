@@ -17,6 +17,7 @@ Future<void> clearCaches(BuildContext context) async {
     await prefs.setLocalLinksPolicy(kDefaultLocalLinksPolicy);
     await prefs.setDecryptPolicy(kDefaultDecryptPolicy);
     await prefs.setCustomFilterQueries(const []);
+    await prefs.setScopedPreferencesJson(null);
     for (final dir in prefs.accessibleDirs) {
       try {
         await disposeNativeSourceIdentifier(dir);

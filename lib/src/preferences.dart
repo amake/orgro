@@ -25,6 +25,7 @@ const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
 const kDefaultSaveChangesPolicy = SaveChangesPolicy.ask;
 const kDefaultDecryptPolicy = DecryptPolicy.ask;
 const kDefaultFullWidth = false;
+const kDefaultScopedPreferences = <String, dynamic>{};
 
 const kMaxRecentFiles = 10;
 
@@ -39,6 +40,7 @@ const kRecentFilesJsonKey = 'recent_files_json';
 const kAccessibleDirectoriesKey = 'accessible_directories_json';
 const kCustomFilterQueriesKey = 'custom_filter_queries_json';
 const kFullWidthKey = 'full_width';
+const kScopedPreferencesJsonKey = 'scoped_preferences';
 
 const kThemeModeKey = 'theme_mode';
 
@@ -121,6 +123,12 @@ class Preferences extends InheritedWidget {
   bool? get fullWidth => _prefs.getBool(kFullWidthKey);
 
   Future<bool> setFullWidth(bool? value) => _setOrRemove(kFullWidthKey, value);
+
+  String? get scopedPreferencesJson =>
+      _prefs.getString(kScopedPreferencesJsonKey);
+
+  Future<bool> setScopedPreferencesJson(String? value) =>
+      _setOrRemove(kScopedPreferencesJsonKey, value);
 
   @override
   bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
