@@ -60,6 +60,9 @@ class InheritedViewSettings extends InheritedWidget {
   final Preferences _prefs;
   final void Function(ViewSettingsData Function(ViewSettingsData)) _update;
 
+  void reload(BuildContext context) =>
+      _update((data) => ViewSettingsData.defaults(context));
+
   void _setScopedValue(String scopeKey, String valueKey, dynamic value) {
     final allDataJson = _prefs.scopedPreferencesJson;
     final allData = allDataJson == null
@@ -80,7 +83,8 @@ class InheritedViewSettings extends InheritedWidget {
 
   void setTextScale(String key, double value) {
     _setScopedValue(key, kTextScaleKey, value);
-    textScale = value;
+    // Don't set preference
+    _update((data) => data.copyWith(textScale: value));
   }
 
   String get fontFamily => data.fontFamily;
@@ -91,7 +95,8 @@ class InheritedViewSettings extends InheritedWidget {
 
   void setFontFamily(String key, String value) {
     _setScopedValue(key, kFontFamilyKey, value);
-    fontFamily = value;
+    // Don't set preference
+    _update((data) => data.copyWith(fontFamily: value));
   }
 
   String? get queryString => data.queryString;

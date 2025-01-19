@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:orgro/src/actions/appearance.dart';
-import 'package:orgro/src/actions/cache.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/pages/settings.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
@@ -55,8 +55,10 @@ class _StartPageState extends State<StartPage>
     yield PopupMenuButton<VoidCallback>(
       onSelected: (callback) => callback(),
       itemBuilder: (context) => [
-        appearanceMenuItem(context),
-        clearCacheMenuItem(context),
+        PopupMenuItem<VoidCallback>(
+          value: () => _openSettingsScreen(context),
+          child: Text('Settings...'), // TODO(aaron): L10N
+        ),
         if (hasRecentFiles) ...[
           const PopupMenuDivider(),
           PopupMenuItem<VoidCallback>(
@@ -509,6 +511,20 @@ void _openOrgroManual(BuildContext context) =>
 
 void _openTestFile(BuildContext context) =>
     loadAsset(context, 'assets/test/test.org');
+
+void _openSettingsScreen(BuildContext context) {
+  final recentFiles = RecentFiles.of(context);
+  Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (context) => RecentFiles.from(
+        recentFiles,
+        child: ViewSettings.defaults(context, child: const SettingsPage()),
+      ),
+      fullscreenDialog: true,
+    ),
+  );
+}
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();

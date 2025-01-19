@@ -5,12 +5,14 @@ class Appearance extends InheritedWidget {
   const Appearance({
     required this.mode,
     required this.setMode,
+    required this.reload,
     required super.child,
     super.key,
   });
 
   final ThemeMode mode;
   final ValueChanged<ThemeMode> setMode;
+  final VoidCallback reload;
 
   @override
   bool updateShouldNotify(Appearance oldWidget) => mode != oldWidget.mode;
@@ -30,6 +32,8 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     _prefs.setThemeMode(mode.persistableString);
   }
 
+  void reset() => setMode(_kDefaultThemeMode);
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -43,6 +47,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     return Appearance(
       mode: _mode!,
       setMode: setMode,
+      reload: reset,
       child: Builder(builder: builder),
     );
   }

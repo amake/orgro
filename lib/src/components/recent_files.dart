@@ -67,10 +67,20 @@ class RecentFile {
 }
 
 class RecentFiles extends InheritedWidget {
+  factory RecentFiles.from(RecentFiles existing, {required Widget child}) =>
+      RecentFiles(
+        existing.list,
+        add: existing.add,
+        remove: existing.remove,
+        reload: existing.reload,
+        child: child,
+      );
+
   const RecentFiles(
     this.list, {
     required this.add,
     required this.remove,
+    required this.reload,
     required super.child,
     super.key,
   });
@@ -78,6 +88,7 @@ class RecentFiles extends InheritedWidget {
   final List<RecentFile> list;
   final ValueChanged<RecentFile> add;
   final ValueChanged<RecentFile> remove;
+  final VoidCallback reload;
 
   @override
   bool updateShouldNotify(RecentFiles oldWidget) =>
@@ -186,6 +197,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
       _recentFiles,
       add: addRecentFile,
       remove: removeRecentFile,
+      reload: _reload,
       // Builder required to get RecentFiles into context
       child: Builder(builder: builder),
     );

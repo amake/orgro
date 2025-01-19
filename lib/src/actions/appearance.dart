@@ -15,6 +15,20 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   );
 }
 
+Widget appearanceListItem(BuildContext context) {
+  final appearance = Appearance.of(context);
+  return ListTile(
+    title: Text('Appearance'), // TODO(aaron): L10N
+    subtitle: Text(appearance.mode.toDisplayString(context)),
+    onTap: () async {
+      final newMode = await _chooseThemeMode(context, appearance.mode);
+      if (newMode != null) {
+        appearance.setMode(newMode);
+      }
+    },
+  );
+}
+
 Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
     showDialog<ThemeMode>(
       context: context,

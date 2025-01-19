@@ -14,6 +14,21 @@ PopupMenuEntry<VoidCallback> textScaleMenuItem(
   );
 }
 
+Widget textScaleListItem(
+  BuildContext context, {
+  required double textScale,
+  required void Function(double) onChanged,
+}) {
+  return ListTile(
+    title: Row(
+      children: [
+        Expanded(child: const Text('Scale')), // TODO(aaron): L10N
+        TextSizeAdjuster(value: textScale, onChanged: onChanged),
+      ],
+    ),
+  );
+}
+
 PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   BuildContext context, {
   required String fontFamily,
@@ -24,6 +39,21 @@ PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
       onChanged: onChanged,
       value: fontFamily,
     ),
+  );
+}
+
+Widget fontFamilyListItem(
+  BuildContext context, {
+  required String fontFamily,
+  required void Function(String) onChanged,
+}) {
+  return ListTile(
+    title: const Text('Font'),
+    subtitle: Text(fontFamily),
+    onTap: () async {
+      final selection = await _chooseFont(context, fontFamily);
+      if (selection != null) onChanged(selection);
+    },
   );
 }
 
@@ -181,6 +211,15 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
   }
 
   @override
+  void didUpdateWidget(covariant TextSizeAdjuster oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.value != widget.value) {
+      _value = widget.value * _kTextSizeAdjustmentFactor;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return IconTheme.merge(
       data: IconThemeData(color: DefaultTextStyle.of(context).style.color),
@@ -249,7 +288,7 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
       label: Text(_value),
       onPressed: () async {
         widget.onOpen?.call();
-        final selection = await _choose(context);
+        final selection = await _chooseFont(context, _value);
         _setValue(selection);
       },
       style: TextButton.styleFrom(
@@ -257,22 +296,23 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
       ),
     );
   }
-
-  Future<String?> _choose(BuildContext context) async => showDialog<String>(
-        context: context,
-        builder: (context) => SimpleDialog(
-          children: [
-            for (final family
-                in availableFontFamilies.toList(growable: false)..sort())
-              CheckboxListTile(
-                value: _value == family,
-                title: Text(family),
-                onChanged: (_) => Navigator.pop(context, family),
-              ),
-          ],
-        ),
-      );
 }
+
+Future<String?> _chooseFont(BuildContext context, String currentValue) async =>
+    showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        children: [
+          for (final family
+              in availableFontFamilies.toList(growable: false)..sort())
+            CheckboxListTile(
+              value: currentValue == family,
+              title: Text(family),
+              onChanged: (_) => Navigator.pop(context, family),
+            ),
+        ],
+      ),
+    );
 
 /// A popup menu item that doesn't close when tapped and doesn't provide its own
 /// [InkWell], unlike [PopupMenuItem].

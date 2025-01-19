@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,6 +55,17 @@ class Preferences extends InheritedWidget {
   final SharedPreferences _prefs;
 
   Future<void> reload() => _prefs.reload();
+
+  Future<void> reset() async {
+    for (final dir in accessibleDirs) {
+      try {
+        await disposeNativeSourceIdentifier(dir);
+      } on Exception catch (e, s) {
+        logError(e, s);
+      }
+    }
+    await _prefs.clear();
+  }
 
   String? get fontFamily => _prefs.getString(kFontFamilyKey);
 
@@ -278,3 +291,8 @@ extension DecryptPolicyPersistence on DecryptPolicy? {
 
 const _kDecryptPolicyDeny = 'decrypt_policy_deny';
 const _kDecryptPolicyAsk = 'decrypt_policy_ask';
+
+Future<void> resetPreferences(BuildContext context) async {
+  final prefs = Preferences.of(context);
+  await prefs.reset();
+}
