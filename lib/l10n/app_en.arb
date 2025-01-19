@@ -1,8 +1,8 @@
 {
   "appTitle": "Orgro",
 
-  "menuItemAppearance": "Appearance…",
-  "menuItemSettings": "Settings…",
+  "menuItemAppearance": "Appearance",
+  "menuItemSettings": "Settings",
   "menuItemClearCache": "Clear cache",
   "menuItemOrgroManual": "Orgro Manual",
   "menuItemTestFile": "Test File",

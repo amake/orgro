@@ -1,8 +1,8 @@
 {
   "appTitle": "Orgro",
 
-  "menuItemAppearance": "Вигляд…",
-  "menuItemSettings": "Settings…",
+  "menuItemAppearance": "Вигляд",
+  "menuItemSettings": "Settings",
   "menuItemClearCache": "Очистити кеш",
   "menuItemOrgroManual": "Посібник Orgro",
   "menuItemTestFile": "Test File",
