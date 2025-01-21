@@ -435,17 +435,12 @@ class PreferencesData {
 }
 
 extension RemoteImagesPolicyPersistence on RemoteImagesPolicy? {
-  static RemoteImagesPolicy? fromString(String? value) {
-    switch (value) {
-      case _kRemoteImagesPolicyAllow:
-        return RemoteImagesPolicy.allow;
-      case _kRemoteImagesPolicyDeny:
-        return RemoteImagesPolicy.deny;
-      case _kRemoteImagesPolicyAsk:
-        return RemoteImagesPolicy.ask;
-    }
-    return null;
-  }
+  static RemoteImagesPolicy? fromString(String? value) => switch (value) {
+        _kRemoteImagesPolicyAllow => RemoteImagesPolicy.allow,
+        _kRemoteImagesPolicyDeny => RemoteImagesPolicy.deny,
+        _kRemoteImagesPolicyAsk => RemoteImagesPolicy.ask,
+        _ => null
+      };
 
   String? get persistableString => switch (this) {
         RemoteImagesPolicy.allow => _kRemoteImagesPolicyAllow,
@@ -460,15 +455,11 @@ const _kRemoteImagesPolicyDeny = 'remote_images_policy_deny';
 const _kRemoteImagesPolicyAsk = 'remote_images_policy_ask';
 
 extension LocalLinksPolicyPersistence on LocalLinksPolicy? {
-  static LocalLinksPolicy? fromString(String? value) {
-    switch (value) {
-      case _kLocalLinksPolicyDeny:
-        return LocalLinksPolicy.deny;
-      case _kLocalLinksPolicyAsk:
-        return LocalLinksPolicy.ask;
-    }
-    return null;
-  }
+  static LocalLinksPolicy? fromString(String? value) => switch (value) {
+        _kLocalLinksPolicyDeny => LocalLinksPolicy.deny,
+        _kLocalLinksPolicyAsk => LocalLinksPolicy.ask,
+        _ => null,
+      };
 
   String? get persistableString => switch (this) {
         LocalLinksPolicy.deny => _kLocalLinksPolicyDeny,
@@ -481,17 +472,12 @@ const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
 const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';
 
 extension SaveChangesPolicyPersistence on SaveChangesPolicy? {
-  static SaveChangesPolicy? fromString(String? value) {
-    switch (value) {
-      case _kSaveChangesPolicyAllow:
-        return SaveChangesPolicy.allow;
-      case _kSaveChangesPolicyDeny:
-        return SaveChangesPolicy.deny;
-      case _kSaveChangesPolicyAsk:
-        return SaveChangesPolicy.ask;
-    }
-    return null;
-  }
+  static SaveChangesPolicy? fromString(String? value) => switch (value) {
+        _kSaveChangesPolicyAllow => SaveChangesPolicy.allow,
+        _kSaveChangesPolicyDeny => SaveChangesPolicy.deny,
+        _kSaveChangesPolicyAsk => SaveChangesPolicy.ask,
+        _ => null,
+      };
 
   String? get persistableString => switch (this) {
         SaveChangesPolicy.allow => _kSaveChangesPolicyAllow,
@@ -506,15 +492,11 @@ const _kSaveChangesPolicyDeny = 'save_changes_policy_deny';
 const _kSaveChangesPolicyAsk = 'save_changes_policy_ask';
 
 extension DecryptPolicyPersistence on DecryptPolicy? {
-  static DecryptPolicy? fromString(String? value) {
-    switch (value) {
-      case _kDecryptPolicyDeny:
-        return DecryptPolicy.deny;
-      case _kDecryptPolicyAsk:
-        return DecryptPolicy.ask;
-    }
-    return null;
-  }
+  static DecryptPolicy? fromString(String? value) => switch (value) {
+        _kDecryptPolicyDeny => DecryptPolicy.deny,
+        _kDecryptPolicyAsk => DecryptPolicy.ask,
+        _ => null,
+      };
 
   String? get persistableString => switch (this) {
         DecryptPolicy.deny => _kDecryptPolicyDeny,
@@ -534,17 +516,12 @@ extension ThemeModePersistence on ThemeMode? {
         null => null
       };
 
-  static ThemeMode? fromString(String? value) {
-    switch (value) {
-      case _kThemeModeSystem:
-        return ThemeMode.system;
-      case _kThemeModeLight:
-        return ThemeMode.light;
-      case _kThemeModeDark:
-        return ThemeMode.dark;
-    }
-    return null;
-  }
+  static ThemeMode? fromString(String? value) => switch (value) {
+        _kThemeModeSystem => ThemeMode.system,
+        _kThemeModeLight => ThemeMode.light,
+        _kThemeModeDark => ThemeMode.dark,
+        _ => null,
+      };
 }
 
 const _kThemeModeSystem = 'theme_mode_system';
