@@ -367,7 +367,12 @@ will appear at the bottom of the screen above the keyboard with filter buttons:
 
 * Text Style
 
-Adjust the text size and font.
+Adjust the default text size and font on the Settings screen. Tap the preview
+text to customize it.
+
+You can also change the text size and font within a document. Orgro will
+remember your changes for just that document. The location of the controls
+depends on the size of your screen:
 
 - Narrow screens (phones) :: in the action menu
 - Wide screens (tablets) :: icon button in the top app bar
