@@ -34,6 +34,8 @@ const kDefaultSaveChangesPolicy = SaveChangesPolicy.ask;
 const kDefaultDecryptPolicy = DecryptPolicy.ask;
 const kDefaultFullWidth = false;
 const kDefaultScopedPreferences = <String, dynamic>{};
+const kDefaultTextPreviewString =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
 const kMaxRecentFiles = 10;
 
@@ -49,7 +51,7 @@ const kAccessibleDirectoriesKey = 'accessible_directories_json';
 const kCustomFilterQueriesKey = 'custom_filter_queries_json';
 const kFullWidthKey = 'full_width';
 const kScopedPreferencesJsonKey = 'scoped_preferences';
-
+const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
 
 class SharedPreferencesProvider extends StatefulWidget {
@@ -132,6 +134,7 @@ enum PrefsAspect {
   viewSettings,
   accessibleDirs,
   customFilterQueries,
+  customization,
   // For uses where a value is written but not read
   nil,
 }
@@ -335,6 +338,14 @@ extension CustomFilterQueriesExt on InheritedPreferences {
   }
 }
 
+extension CustomizationExt on InheritedPreferences {
+  String get textPreviewString => data.textPreviewString;
+  Future<bool> setTextPreviewString(String value) async {
+    _update((data) => data.copyWith(textPreviewString: value));
+    return _setOrRemove(kTextPreviewStringKey, value);
+  }
+}
+
 class PreferencesData {
   factory PreferencesData.defaults() => const PreferencesData(
         textScale: kDefaultTextScale,
@@ -350,6 +361,7 @@ class PreferencesData {
         customFilterQueries: [],
         fullWidth: kDefaultFullWidth,
         scopedPreferences: {},
+        textPreviewString: kDefaultTextPreviewString,
       );
 
   factory PreferencesData.fromSharedPreferences(SharedPreferences prefs) {
@@ -398,6 +410,7 @@ class PreferencesData {
     required this.customFilterQueries,
     required this.fullWidth,
     required this.scopedPreferences,
+    required this.textPreviewString,
   });
 
   final double textScale;
@@ -413,6 +426,7 @@ class PreferencesData {
   final List<String> customFilterQueries;
   final bool fullWidth;
   final Map<String, dynamic> scopedPreferences;
+  final String textPreviewString;
 
   PreferencesData copyWith({
     double? textScale,
@@ -428,6 +442,7 @@ class PreferencesData {
     List<String>? customFilterQueries,
     bool? fullWidth,
     Map<String, dynamic>? scopedPreferences,
+    String? textPreviewString,
   }) =>
       PreferencesData(
         textScale: textScale ?? this.textScale,
@@ -443,6 +458,7 @@ class PreferencesData {
         customFilterQueries: customFilterQueries ?? this.customFilterQueries,
         fullWidth: fullWidth ?? this.fullWidth,
         scopedPreferences: scopedPreferences ?? this.scopedPreferences,
+        textPreviewString: textPreviewString ?? this.textPreviewString,
       );
 
   @override
@@ -462,7 +478,8 @@ class PreferencesData {
       fullWidth == other.fullWidth &&
       scopedPreferences.unorderedEquals(other.scopedPreferences,
           valueEquals: (a, b) => mapEquals(
-              a as Map<String, dynamic>?, b as Map<String, dynamic>?));
+              a as Map<String, dynamic>?, b as Map<String, dynamic>?)) &&
+      textPreviewString == other.textPreviewString;
 
   @override
   int get hashCode => Object.hash(
@@ -480,6 +497,7 @@ class PreferencesData {
         fullWidth,
         Object.hashAll(scopedPreferences.keys),
         Object.hashAll(scopedPreferences.values),
+        textPreviewString,
       );
 }
 

@@ -52,8 +52,43 @@ class SettingsPage extends StatelessWidget {
       );
 }
 
-class _TextPreview extends StatelessWidget {
+class _TextPreview extends StatefulWidget {
   const _TextPreview();
+
+  @override
+  State<_TextPreview> createState() => _TextPreviewState();
+}
+
+class _TextPreviewState extends State<_TextPreview> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController()..addListener(_onTextChanged);
+  }
+
+  bool _inited = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _controller.text =
+          Preferences.of(context, PrefsAspect.customization).textPreviewString;
+      _inited = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onTextChanged() async =>
+      await Preferences.of(context, PrefsAspect.customization)
+          .setTextPreviewString(_controller.text);
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +96,20 @@ class _TextPreview extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              style: BorderStyle.solid,
-              color: Theme.of(context).dividerColor,
+        child: TextField(
+          controller: _controller,
+          style: viewSettings.textStyle,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                style: BorderStyle.solid,
+                color: Theme.of(context).dividerColor,
+              ),
             ),
           ),
-          padding: const EdgeInsets.all(16),
-          child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-              style: viewSettings.textStyle),
+          textInputAction: TextInputAction.done,
+          maxLines: null,
         ),
       ),
     );
