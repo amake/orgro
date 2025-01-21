@@ -50,7 +50,9 @@ class FilterChipsInput extends StatelessWidget {
                       }
                     },
                     onLongPress:
-                        Preferences.of(context).customFilterQueries.isNotEmpty
+                        Preferences.of(context, PrefsAspect.customFilterQueries)
+                                .customFilterQueries
+                                .isNotEmpty
                             ? () async {
                                 final newQuery = await showDialog<String>(
                                   context: context,

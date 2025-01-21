@@ -5,7 +5,7 @@ import 'package:orgro/src/preferences.dart';
 PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
     value: () async {
-      final prefs = Preferences.of(context);
+      final prefs = Preferences.of(context, PrefsAspect.appearance);
       final newMode = await _chooseThemeMode(context, prefs.themeMode);
       if (newMode != null) {
         prefs.setThemeMode(newMode);
@@ -16,7 +16,7 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
 }
 
 Widget appearanceListItem(BuildContext context) {
-  final prefs = Preferences.of(context);
+  final prefs = Preferences.of(context, PrefsAspect.appearance);
   return ListTile(
     title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
     subtitle: Text(prefs.themeMode.toDisplayString(context)),

@@ -357,7 +357,7 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
 
   Future<void> _confirm(String value) async {
     if (!_validate(value)) return;
-    Preferences.of(context).addCustomFilterQuery(value);
+    Preferences.of(context, PrefsAspect.nil).addCustomFilterQuery(value);
     Navigator.pop(context, value);
   }
 
@@ -374,7 +374,8 @@ class CustomFilterHistoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final history = Preferences.of(context).customFilterQueries;
+    final history = Preferences.of(context, PrefsAspect.customFilterQueries)
+        .customFilterQueries;
     return SimpleDialog(
       children: [
         for (final entry in history)

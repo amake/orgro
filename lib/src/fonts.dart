@@ -336,7 +336,9 @@ TextStyle _loadDynamicFont(String fontFamily) {
 // restoring the scroll position more accurate.
 Widget fontPreloader(BuildContext context) => Text(
       '',
-      style: loadFontWithVariants(Preferences.of(context).fontFamily),
+      style: loadFontWithVariants(
+        Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
+      ),
     );
 
 class _FiraGoFile extends DynamicFontsFile {

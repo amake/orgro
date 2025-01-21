@@ -66,7 +66,7 @@ class _MyAppState extends State<_MyApp> {
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: orgroLightTheme,
         darkTheme: orgroDarkTheme,
-        themeMode: Preferences.of(context).themeMode,
+        themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
         home: const StartPage(),
       );
 }

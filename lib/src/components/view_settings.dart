@@ -28,6 +28,9 @@ class ViewSettings extends StatefulWidget {
 }
 
 class _ViewSettingsState extends State<ViewSettings> {
+  InheritedPreferences get _prefs =>
+      Preferences.of(context, PrefsAspect.viewSettings);
+
   late ViewSettingsData _data;
 
   @override
@@ -39,7 +42,7 @@ class _ViewSettingsState extends State<ViewSettings> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final prefs = Preferences.of(context);
+    final prefs = _prefs;
     _update(
       (data) => data.copyWith(
         textScale: prefs.textScale,
@@ -59,8 +62,7 @@ class _ViewSettingsState extends State<ViewSettings> {
 
   @override
   Widget build(BuildContext context) =>
-      InheritedViewSettings(_data, _update, Preferences.of(context),
-          child: widget.child);
+      InheritedViewSettings(_data, _update, _prefs, child: widget.child);
 }
 
 class InheritedViewSettings extends InheritedWidget {
@@ -106,14 +108,6 @@ class InheritedViewSettings extends InheritedWidget {
     // Don't set preference
     _update((data) => data.copyWith(fontFamily: value));
   }
-
-  String? get queryString => data.queryString;
-  set queryString(String? value) =>
-      _update((data) => data.copyWith(queryString: value));
-
-  FilterData get filterData => data.filterData;
-  set filterData(FilterData value) =>
-      _update((data) => data.copyWith(filterData: value));
 
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
@@ -161,6 +155,14 @@ class InheritedViewSettings extends InheritedWidget {
     _prefs.setFullWidth(value);
   }
 
+  String? get queryString => data.queryString;
+  set queryString(String? value) =>
+      _update((data) => data.copyWith(queryString: value));
+
+  FilterData get filterData => data.filterData;
+  set filterData(FilterData value) =>
+      _update((data) => data.copyWith(filterData: value));
+
   ViewSettingsData forScope(String key) {
     try {
       return ViewSettingsData._scoped(_prefs, key, data);
@@ -177,18 +179,18 @@ class InheritedViewSettings extends InheritedWidget {
 
 class ViewSettingsData {
   factory ViewSettingsData.defaults(BuildContext context) {
-    final prefs = Preferences.of(context);
+    final prefs = Preferences.of(context, PrefsAspect.viewSettings);
     return ViewSettingsData(
       textScale: prefs.textScale,
       fontFamily: prefs.fontFamily,
-      queryString: kDefaultQueryString,
-      filterData: FilterData.defaults(),
       readerMode: prefs.readerMode,
       remoteImagesPolicy: prefs.remoteImagesPolicy,
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
       fullWidth: prefs.fullWidth,
+      queryString: kDefaultQueryString,
+      filterData: FilterData.defaults(),
     );
   }
 
@@ -213,26 +215,28 @@ class ViewSettingsData {
   const ViewSettingsData({
     required this.textScale,
     required this.fontFamily,
-    required this.queryString,
-    required this.filterData,
     required this.readerMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
     required this.decryptPolicy,
     required this.fullWidth,
+    required this.filterData,
+    required this.queryString,
   });
 
+  // From preferences
   final double textScale;
   final String fontFamily;
-  final String? queryString;
-  final FilterData filterData;
   final bool readerMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
   final bool fullWidth;
+  // Not persisted
+  final FilterData filterData;
+  final String? queryString;
 
   TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
         fontSize: TextScaler.linear(textScale).scale(18),
@@ -241,26 +245,26 @@ class ViewSettingsData {
   ViewSettingsData copyWith({
     double? textScale,
     String? fontFamily,
-    String? queryString,
-    FilterData? filterData,
     bool? readerMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
     bool? fullWidth,
+    String? queryString,
+    FilterData? filterData,
   }) =>
       ViewSettingsData(
         textScale: textScale ?? this.textScale,
         fontFamily: fontFamily ?? this.fontFamily,
-        queryString: queryString ?? this.queryString,
-        filterData: filterData ?? this.filterData,
         readerMode: readerMode ?? this.readerMode,
         remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
         localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
         saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
         decryptPolicy: decryptPolicy ?? this.decryptPolicy,
         fullWidth: fullWidth ?? this.fullWidth,
+        queryString: queryString ?? this.queryString,
+        filterData: filterData ?? this.filterData,
       );
 
   @override
@@ -268,27 +272,27 @@ class ViewSettingsData {
       other is ViewSettingsData &&
       textScale == other.textScale &&
       fontFamily == other.fontFamily &&
-      queryString == other.queryString &&
-      filterData == other.filterData &&
       readerMode == other.readerMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
       decryptPolicy == other.decryptPolicy &&
-      fullWidth == other.fullWidth;
+      fullWidth == other.fullWidth &&
+      queryString == other.queryString &&
+      filterData == other.filterData;
 
   @override
   int get hashCode => Object.hash(
         textScale,
         fontFamily,
-        queryString,
-        filterData,
         readerMode,
         remoteImagesPolicy,
         localLinksPolicy,
         saveChangesPolicy,
         decryptPolicy,
         fullWidth,
+        queryString,
+        filterData,
       );
 }
 

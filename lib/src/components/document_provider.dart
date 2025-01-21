@@ -36,7 +36,6 @@ class _DocumentProviderState extends State<DocumentProvider> {
   List<OrgTree> _docs = [];
   List<DocumentAnalysis> _analyses = [];
   late DataSource _dataSource;
-  List<String> _accessibleDirs = [];
   List<OrgroPassword> _passwords = [];
   int _cursor = 0;
 
@@ -54,8 +53,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _accessibleDirs = Preferences.of(context).accessibleDirs;
-    _resolveDataSourceParent(_accessibleDirs).then((dataSource) {
+    final accessibleDirs =
+        Preferences.of(context, PrefsAspect.accessibleDirs).accessibleDirs;
+    _resolveDataSourceParent(accessibleDirs).then((dataSource) {
       if (dataSource != null) {
         setState(() => _dataSource = dataSource);
       }

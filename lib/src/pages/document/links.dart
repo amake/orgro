@@ -197,7 +197,8 @@ extension LinkHandler on DocumentPageState {
       if (!mounted) return;
       debugPrint(
           'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-      await Preferences.of(context).addAccessibleDir(dirInfo.identifier);
+      await Preferences.of(context, PrefsAspect.nil)
+          .addAccessibleDir(dirInfo.identifier);
     } catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);

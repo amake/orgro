@@ -90,8 +90,9 @@ class _SharedPreferencesProviderState extends State<SharedPreferencesProvider> {
 }
 
 class Preferences extends StatefulWidget {
-  static InheritedPreferences of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<InheritedPreferences>()!;
+  static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
+      InheritedModel.inheritFrom<InheritedPreferences>(context,
+          aspect: aspect)!;
 
   const Preferences({required this.prefs, required this.child, super.key});
 
@@ -125,7 +126,17 @@ class _PreferencesState extends State<Preferences> {
   }
 }
 
-class InheritedPreferences extends InheritedWidget {
+enum PrefsAspect {
+  appearance,
+  recentFiles,
+  viewSettings,
+  accessibleDirs,
+  customFilterQueries,
+  // For uses where a value is written but not read
+  nil,
+}
+
+class InheritedPreferences extends InheritedModel<PrefsAspect> {
   const InheritedPreferences(this.data, this._update, this._prefs,
       {required super.child, super.key});
 
@@ -136,6 +147,32 @@ class InheritedPreferences extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedPreferences oldWidget) =>
       data != oldWidget.data;
+
+  @override
+  bool updateShouldNotifyDependent(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      (dependencies.contains(PrefsAspect.appearance) &&
+          data.themeMode != oldWidget.data.themeMode) ||
+      (dependencies.contains(PrefsAspect.recentFiles) &&
+          !listEquals(data.recentFiles, oldWidget.data.recentFiles)) ||
+      (dependencies.contains(PrefsAspect.viewSettings) &&
+              data.textScale != oldWidget.data.textScale ||
+          data.fontFamily != oldWidget.data.fontFamily ||
+          data.readerMode != oldWidget.data.readerMode ||
+          data.remoteImagesPolicy != oldWidget.data.remoteImagesPolicy ||
+          data.localLinksPolicy != oldWidget.data.localLinksPolicy ||
+          data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
+          data.decryptPolicy != oldWidget.data.decryptPolicy ||
+          data.fullWidth != oldWidget.data.fullWidth ||
+          !data.scopedPreferences
+              .unorderedEquals(oldWidget.data.scopedPreferences)) ||
+      (dependencies.contains(PrefsAspect.accessibleDirs) &&
+          !listEquals(data.accessibleDirs, oldWidget.data.accessibleDirs)) ||
+      (dependencies.contains(PrefsAspect.customFilterQueries) &&
+          !listEquals(
+              data.customFilterQueries, oldWidget.data.customFilterQueries));
 
   Future<void> reload() async {
     await _prefs.reload();
@@ -154,24 +191,36 @@ class InheritedPreferences extends InheritedWidget {
     _update((_) => PreferencesData.fromSharedPreferences(_prefs));
   }
 
-  double get textScale => data.textScale;
-  Future<bool> setTextScale(double value) async {
-    _update((data) => data.copyWith(textScale: value));
-    return await _setOrRemove(kTextScaleKey, value);
+  Future<bool> _setOrRemove<T>(String key, T? value) {
+    if (value == null) {
+      return _prefs.remove(key);
+    } else if (value is String) {
+      return _prefs.setString(key, value);
+    } else if (value is bool) {
+      return _prefs.setBool(key, value);
+    } else if (value is double) {
+      return _prefs.setDouble(key, value);
+    } else if (value is List<String>) {
+      return _prefs.setStringList(key, value);
+    } else {
+      throw OrgroError(
+        'Unknown type: $T',
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorUnknownType(T),
+      );
+    }
   }
+}
 
-  String get fontFamily => data.fontFamily;
-  Future<bool> setFontFamily(String value) async {
-    _update((data) => data.copyWith(fontFamily: value));
-    return _setOrRemove(kFontFamilyKey, value);
+extension AppearanceExt on InheritedPreferences {
+  ThemeMode get themeMode => data.themeMode;
+  Future<bool> setThemeMode(ThemeMode value) async {
+    _update((data) => data.copyWith(themeMode: value));
+    return _setOrRemove(kThemeModeKey, value.persistableString);
   }
+}
 
-  bool get readerMode => data.readerMode;
-  Future<bool> setReaderMode(bool value) async {
-    _update((data) => data.copyWith(readerMode: value));
-    return _setOrRemove(kReaderModeKey, value);
-  }
-
+extension RecentFilesExt on InheritedPreferences {
   List<RecentFile> get recentFiles => data.recentFiles;
   Future<bool> _setRecentFiles(List<RecentFile> value) async {
     _update((data) => data.copyWith(recentFiles: value));
@@ -198,11 +247,25 @@ class InheritedPreferences extends InheritedWidget {
     final files = List.of(recentFiles)..remove(file);
     return await _setRecentFiles(files);
   }
+}
 
-  ThemeMode get themeMode => data.themeMode;
-  Future<bool> setThemeMode(ThemeMode value) async {
-    _update((data) => data.copyWith(themeMode: value));
-    return _setOrRemove(kThemeModeKey, value.persistableString);
+extension ViewSettingsExt on InheritedPreferences {
+  double get textScale => data.textScale;
+  Future<bool> setTextScale(double value) async {
+    _update((data) => data.copyWith(textScale: value));
+    return await _setOrRemove(kTextScaleKey, value);
+  }
+
+  String get fontFamily => data.fontFamily;
+  Future<bool> setFontFamily(String value) async {
+    _update((data) => data.copyWith(fontFamily: value));
+    return _setOrRemove(kFontFamilyKey, value);
+  }
+
+  bool get readerMode => data.readerMode;
+  Future<bool> setReaderMode(bool value) async {
+    _update((data) => data.copyWith(readerMode: value));
+    return _setOrRemove(kReaderModeKey, value);
   }
 
   RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
@@ -229,6 +292,20 @@ class InheritedPreferences extends InheritedWidget {
     return _setOrRemove(kDecryptPolicyKey, value.persistableString);
   }
 
+  bool get fullWidth => data.fullWidth;
+  Future<bool> setFullWidth(bool value) async {
+    _update((data) => data.copyWith(fullWidth: value));
+    return _setOrRemove(kFullWidthKey, value);
+  }
+
+  Map<String, dynamic> get scopedPreferences => data.scopedPreferences;
+  Future<bool> setScopedPreferences(Map<String, dynamic> value) async {
+    _update((data) => data.copyWith(scopedPreferences: value));
+    return _setOrRemove(kScopedPreferencesJsonKey, json.encode(value));
+  }
+}
+
+extension AccessibleDirectoriesExt on InheritedPreferences {
   List<String> get accessibleDirs => data.accessibleDirs;
   Future<bool> _setAccessibleDirs(List<String> value) async {
     _update((data) => data.copyWith(accessibleDirs: value));
@@ -239,7 +316,9 @@ class InheritedPreferences extends InheritedWidget {
     final dirs = [...accessibleDirs, dir].unique().toList(growable: false);
     return await _setAccessibleDirs(dirs);
   }
+}
 
+extension CustomFilterQueriesExt on InheritedPreferences {
   List<String> get customFilterQueries => data.customFilterQueries;
   Future<bool> _setCustomFilterQueries(List<String> value) async {
     _update((data) => data.copyWith(customFilterQueries: value));
@@ -253,38 +332,6 @@ class InheritedPreferences extends InheritedWidget {
           [value, ...customFilterQueries.take(9)]);
     }
     return true;
-  }
-
-  bool get fullWidth => data.fullWidth;
-  Future<bool> setFullWidth(bool value) async {
-    _update((data) => data.copyWith(fullWidth: value));
-    return _setOrRemove(kFullWidthKey, value);
-  }
-
-  Map<String, dynamic> get scopedPreferences => data.scopedPreferences;
-  Future<bool> setScopedPreferences(Map<String, dynamic> value) async {
-    _update((data) => data.copyWith(scopedPreferences: value));
-    return _setOrRemove(kScopedPreferencesJsonKey, json.encode(value));
-  }
-
-  Future<bool> _setOrRemove<T>(String key, T? value) {
-    if (value == null) {
-      return _prefs.remove(key);
-    } else if (value is String) {
-      return _prefs.setString(key, value);
-    } else if (value is bool) {
-      return _prefs.setBool(key, value);
-    } else if (value is double) {
-      return _prefs.setDouble(key, value);
-    } else if (value is List<String>) {
-      return _prefs.setStringList(key, value);
-    } else {
-      throw OrgroError(
-        'Unknown type: $T',
-        localizedMessage: (context) =>
-            AppLocalizations.of(context)!.errorUnknownType(T),
-      );
-    }
   }
 }
 
@@ -533,6 +580,6 @@ const _kThemeModeDark = 'theme_mode_dark';
 const _kDefaultThemeMode = ThemeMode.system;
 
 Future<void> resetPreferences(BuildContext context) async {
-  final prefs = Preferences.of(context);
+  final prefs = Preferences.of(context, PrefsAspect.nil);
   await prefs.reset();
 }

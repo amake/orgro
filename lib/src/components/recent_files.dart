@@ -85,7 +85,8 @@ class RecentFiles extends InheritedWidget {
 }
 
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
-  InheritedPreferences get _prefs => Preferences.of(context);
+  InheritedPreferences get _prefs =>
+      Preferences.of(context, PrefsAspect.recentFiles);
   List<RecentFile> get _recentFiles => _prefs.recentFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
 
