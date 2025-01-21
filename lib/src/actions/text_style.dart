@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/fonts.dart';
 
 PopupMenuEntry<VoidCallback> textScaleMenuItem(
@@ -15,17 +16,17 @@ PopupMenuEntry<VoidCallback> textScaleMenuItem(
   );
 }
 
-Widget textScaleListItem(
-  BuildContext context, {
-  required double textScale,
-  required void Function(double) onChanged,
-}) {
+Widget textScaleListItem(BuildContext context) {
+  final viewSettings = ViewSettings.of(context);
   return ListTile(
     title: Row(
       children: [
         Expanded(
             child: Text(AppLocalizations.of(context)!.settingsItemTextScale)),
-        TextSizeAdjuster(value: textScale, onChanged: onChanged),
+        TextSizeAdjuster(
+          value: viewSettings.textScale,
+          onChanged: (value) => viewSettings.textScale = value,
+        ),
       ],
     ),
   );
@@ -44,17 +45,16 @@ PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   );
 }
 
-Widget fontFamilyListItem(
-  BuildContext context, {
-  required String fontFamily,
-  required void Function(String) onChanged,
-}) {
+Widget fontFamilyListItem(BuildContext context) {
+  final viewSettings = ViewSettings.of(context);
   return ListTile(
     title: Text(AppLocalizations.of(context)!.settingsItemFontFamily),
-    subtitle: Text(fontFamily),
+    subtitle: Text(viewSettings.fontFamily),
     onTap: () async {
-      final selection = await _chooseFont(context, fontFamily);
-      if (selection != null) onChanged(selection);
+      final selection = await _chooseFont(context, viewSettings.fontFamily);
+      if (selection != null) {
+        viewSettings.fontFamily = selection;
+      }
     },
   );
 }

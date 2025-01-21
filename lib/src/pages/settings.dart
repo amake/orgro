@@ -12,7 +12,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewSettings = ViewSettings.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
@@ -24,44 +23,15 @@ class SettingsPage extends StatelessWidget {
           ListHeader(
               title: Text(
                   AppLocalizations.of(context)!.settingsSectionDefaultText)),
-          fontFamilyListItem(
-            context,
-            fontFamily: viewSettings.fontFamily,
-            onChanged: (value) => viewSettings.fontFamily = value,
-          ),
-          textScaleListItem(
-            context,
-            textScale: viewSettings.textScale,
-            onChanged: (value) => viewSettings.textScale = value,
-          ),
+          fontFamilyListItem(context),
+          textScaleListItem(context),
           _TextPreview(),
           Divider(),
           ListHeader(
               title: Text(
                   AppLocalizations.of(context)!.settingsSectionDataManagement)),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.settingsActionClearCache),
-            onTap: () async {
-              await clearCaches(context);
-              if (context.mounted) {
-                _reportResult(context,
-                    AppLocalizations.of(context)!.snackbarMessageCacheCleared);
-              }
-            },
-          ),
-          ListTile(
-            title: Text(
-                AppLocalizations.of(context)!.settingsActionResetPreferences),
-            onTap: () async {
-              await resetPreferences(context);
-              if (context.mounted) {
-                _reportResult(
-                    context,
-                    AppLocalizations.of(context)!
-                        .snackbarMessagePreferencesReset);
-              }
-            },
-          ),
+          clearCachesListItem(context),
+          resetPreferencesListItem(context),
         ]
             .map(
               (child) => switch (child) {
@@ -71,12 +41,6 @@ class SettingsPage extends StatelessWidget {
             )
             .toList(growable: false),
       ),
-    );
-  }
-
-  void _reportResult(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
     );
   }
 

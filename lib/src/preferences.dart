@@ -579,7 +579,16 @@ const _kThemeModeDark = 'theme_mode_dark';
 
 const _kDefaultThemeMode = ThemeMode.system;
 
-Future<void> resetPreferences(BuildContext context) async {
-  final prefs = Preferences.of(context, PrefsAspect.nil);
-  await prefs.reset();
-}
+Widget resetPreferencesListItem(BuildContext context) => ListTile(
+      title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
+      onTap: () async {
+        await Preferences.of(context, PrefsAspect.nil).reset();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(AppLocalizations.of(context)!
+                    .snackbarMessagePreferencesReset)),
+          );
+        }
+      },
+    );
