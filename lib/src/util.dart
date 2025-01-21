@@ -26,6 +26,20 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension MapUtils<T, U> on Map<T, U> {
+  bool unorderedEquals(Map<T, U> other, {bool Function(U?, U?)? valueEquals}) {
+    valueEquals ??= (a, b) => a == b;
+    if (identical(this, other)) return true;
+    if (length != other.length) return false;
+    for (final key in keys) {
+      if (!other.containsKey(key) || !valueEquals(this[key], other[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
 extension ChildrenIterUtils on Iterable<Widget> {
   Iterable<Widget> separatedBy(Widget separator) sync* {
     final iter = iterator;

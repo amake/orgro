@@ -413,7 +413,9 @@ class PreferencesData {
       listEquals(accessibleDirs, other.accessibleDirs) &&
       listEquals(customFilterQueries, other.customFilterQueries) &&
       fullWidth == other.fullWidth &&
-      mapEquals(scopedPreferences, other.scopedPreferences);
+      scopedPreferences.unorderedEquals(other.scopedPreferences,
+          valueEquals: (a, b) => mapEquals(
+              a as Map<String, dynamic>?, b as Map<String, dynamic>?));
 
   @override
   int get hashCode => Object.hash(
