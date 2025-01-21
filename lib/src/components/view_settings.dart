@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/debug.dart';
@@ -38,6 +36,24 @@ class _ViewSettingsState extends State<ViewSettings> {
     _data = widget.data;
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final prefs = Preferences.of(context);
+    _update(
+      (data) => data.copyWith(
+        textScale: prefs.textScale,
+        fontFamily: prefs.fontFamily,
+        readerMode: prefs.readerMode,
+        remoteImagesPolicy: prefs.remoteImagesPolicy,
+        localLinksPolicy: prefs.localLinksPolicy,
+        saveChangesPolicy: prefs.saveChangesPolicy,
+        decryptPolicy: prefs.decryptPolicy,
+        fullWidth: prefs.fullWidth,
+      ),
+    );
+  }
+
   void _update(ViewSettingsData Function(ViewSettingsData) transform) =>
       setState(() => _data = transform(_data));
 
@@ -57,20 +73,14 @@ class InheritedViewSettings extends InheritedWidget {
   });
 
   final ViewSettingsData data;
-  final Preferences _prefs;
+  final InheritedPreferences _prefs;
   final void Function(ViewSettingsData Function(ViewSettingsData)) _update;
 
-  void reload(BuildContext context) =>
-      _update((data) => ViewSettingsData.defaults(context));
-
   void _setScopedValue(String scopeKey, String valueKey, dynamic value) {
-    final allDataJson = _prefs.scopedPreferencesJson;
-    final allData = allDataJson == null
-        ? <String, dynamic>{}
-        : json.decode(allDataJson) as Map<String, dynamic>;
+    final allData = {..._prefs.scopedPreferences};
     allData[scopeKey] ??= {...kDefaultScopedPreferences};
     allData[scopeKey][valueKey] = value;
-    _prefs.setScopedPreferencesJson(json.encode(allData));
+    _prefs.setScopedPreferences(allData);
   }
 
   TextStyle get textStyle => data.textStyle;
@@ -78,7 +88,6 @@ class InheritedViewSettings extends InheritedWidget {
   double get textScale => data.textScale;
   set textScale(double value) {
     _prefs.setTextScale(value);
-    _update((data) => data.copyWith(textScale: value));
   }
 
   void setTextScale(String key, double value) {
@@ -90,7 +99,6 @@ class InheritedViewSettings extends InheritedWidget {
   String get fontFamily => data.fontFamily;
   set fontFamily(String value) {
     _prefs.setFontFamily(value);
-    _update((data) => data.copyWith(fontFamily: value));
   }
 
   void setFontFamily(String key, String value) {
@@ -110,45 +118,47 @@ class InheritedViewSettings extends InheritedWidget {
   bool get readerMode => data.readerMode;
   set readerMode(bool value) {
     _prefs.setReaderMode(value);
-    _update((data) => data.copyWith(readerMode: value));
   }
 
   RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
   void setRemoteImagesPolicy(RemoteImagesPolicy value, {bool persist = false}) {
     if (persist) {
       _prefs.setRemoteImagesPolicy(value);
+    } else {
+      _update((data) => data.copyWith(remoteImagesPolicy: value));
     }
-    _update((data) => data.copyWith(remoteImagesPolicy: value));
   }
 
   LocalLinksPolicy get localLinksPolicy => data.localLinksPolicy;
   void setLocalLinksPolicy(LocalLinksPolicy value, {bool persist = false}) {
     if (persist) {
       _prefs.setLocalLinksPolicy(value);
+    } else {
+      _update((data) => data.copyWith(localLinksPolicy: value));
     }
-    _update((data) => data.copyWith(localLinksPolicy: value));
   }
 
   SaveChangesPolicy get saveChangesPolicy => data.saveChangesPolicy;
   void setSaveChangesPolicy(SaveChangesPolicy value, {bool persist = false}) {
     if (persist) {
       _prefs.setSaveChangesPolicy(value);
+    } else {
+      _update((data) => data.copyWith(saveChangesPolicy: value));
     }
-    _update((data) => data.copyWith(saveChangesPolicy: value));
   }
 
   DecryptPolicy get decryptPolicy => data.decryptPolicy;
   void setDecryptPolicy(DecryptPolicy value, {bool persist = false}) {
     if (persist) {
       _prefs.setDecryptPolicy(value);
+    } else {
+      _update((data) => data.copyWith(decryptPolicy: value));
     }
-    _update((data) => data.copyWith(decryptPolicy: value));
   }
 
   bool get fullWidth => data.fullWidth;
   set fullWidth(bool value) {
     _prefs.setFullWidth(value);
-    _update((data) => data.copyWith(fullWidth: value));
   }
 
   ViewSettingsData forScope(String key) {
@@ -169,29 +179,25 @@ class ViewSettingsData {
   factory ViewSettingsData.defaults(BuildContext context) {
     final prefs = Preferences.of(context);
     return ViewSettingsData(
-      textScale: prefs.textScale ?? kDefaultTextScale,
-      fontFamily: prefs.fontFamily ?? kDefaultFontFamily,
+      textScale: prefs.textScale,
+      fontFamily: prefs.fontFamily,
       queryString: kDefaultQueryString,
       filterData: FilterData.defaults(),
-      readerMode: prefs.readerMode ?? kDefaultReaderMode,
-      remoteImagesPolicy:
-          prefs.remoteImagesPolicy ?? kDefaultRemoteImagesPolicy,
-      localLinksPolicy: prefs.localLinksPolicy ?? kDefaultLocalLinksPolicy,
-      saveChangesPolicy: prefs.saveChangesPolicy ?? kDefaultSaveChangesPolicy,
-      decryptPolicy: prefs.decryptPolicy ?? kDefaultDecryptPolicy,
-      fullWidth: prefs.fullWidth ?? kDefaultFullWidth,
+      readerMode: prefs.readerMode,
+      remoteImagesPolicy: prefs.remoteImagesPolicy,
+      localLinksPolicy: prefs.localLinksPolicy,
+      saveChangesPolicy: prefs.saveChangesPolicy,
+      decryptPolicy: prefs.decryptPolicy,
+      fullWidth: prefs.fullWidth,
     );
   }
 
   factory ViewSettingsData._scoped(
-    Preferences prefs,
+    InheritedPreferences prefs,
     String key,
     ViewSettingsData defaults,
   ) {
-    final allDataJson = prefs.scopedPreferencesJson;
-    final allData = allDataJson == null
-        ? <String, dynamic>{}
-        : json.decode(allDataJson) as Map<String, dynamic>;
+    final allData = prefs.scopedPreferences;
     final scopedData = allData[key] ?? kDefaultScopedPreferences;
     return defaults.copyWith(
       textScale: scopedData[kTextScaleKey] as double?,

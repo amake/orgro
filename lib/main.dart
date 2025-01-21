@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
@@ -31,7 +30,7 @@ void main() {
   clearTemporaryAttachments();
 }
 
-Widget buildApp() => const PreferencesProvider(
+Widget buildApp() => const SharedPreferencesProvider(
       waiting: _Splash(),
       child: _MyApp(),
     );
@@ -57,11 +56,9 @@ class _MyApp extends StatefulWidget {
   State createState() => _MyAppState();
 }
 
-class _MyAppState extends State<_MyApp> with AppearanceState {
+class _MyAppState extends State<_MyApp> {
   @override
-  Widget build(BuildContext context) {
-    return buildWithAppearance(builder: (context) {
-      return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
         restorationScopeId: 'orgro_root',
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -69,9 +66,7 @@ class _MyAppState extends State<_MyApp> with AppearanceState {
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         theme: orgroLightTheme,
         darkTheme: orgroDarkTheme,
-        themeMode: Appearance.of(context).mode,
+        themeMode: Preferences.of(context).themeMode,
         home: const StartPage(),
       );
-    });
-  }
 }

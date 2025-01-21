@@ -14,6 +14,7 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -196,8 +197,8 @@ extension LinkHandler on DocumentPageState {
       if (!mounted) return;
       debugPrint(
           'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-      await DocumentProvider.of(context).addAccessibleDir(dirInfo.identifier);
-    } on Exception catch (e, s) {
+      await Preferences.of(context).addAccessibleDir(dirInfo.identifier);
+    } catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
     }

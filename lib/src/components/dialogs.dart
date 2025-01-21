@@ -357,16 +357,8 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
 
   Future<void> _confirm(String value) async {
     if (!_validate(value)) return;
-    _updateHistory(value);
+    Preferences.of(context).addCustomFilterQuery(value);
     Navigator.pop(context, value);
-  }
-
-  void _updateHistory(String value) {
-    final prefs = Preferences.of(context);
-    if (!prefs.customFilterQueries.contains(value)) {
-      prefs.setCustomFilterQueries(
-          [value, ...prefs.customFilterQueries.take(9)]);
-    }
   }
 
   Future<String?> _pickFromHistory(

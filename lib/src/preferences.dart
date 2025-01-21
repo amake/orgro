@@ -1,9 +1,15 @@
-import 'package:flutter/widgets.dart';
+import 'dart:collection';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum RemoteImagesPolicy { allow, deny, ask }
@@ -46,135 +52,18 @@ const kScopedPreferencesJsonKey = 'scoped_preferences';
 
 const kThemeModeKey = 'theme_mode';
 
-class Preferences extends InheritedWidget {
-  static Preferences of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<Preferences>()!;
-
-  const Preferences(this._prefs, {required super.child, super.key});
-
-  final SharedPreferences _prefs;
-
-  Future<void> reload() => _prefs.reload();
-
-  Future<void> reset() async {
-    for (final dir in accessibleDirs) {
-      try {
-        await disposeNativeSourceIdentifier(dir);
-      } on Exception catch (e, s) {
-        logError(e, s);
-      }
-    }
-    await _prefs.clear();
-  }
-
-  String? get fontFamily => _prefs.getString(kFontFamilyKey);
-
-  Future<bool> setFontFamily(String? value) =>
-      _setOrRemove(kFontFamilyKey, value);
-
-  double? get textScale => _prefs.getDouble(kTextScaleKey);
-
-  Future<bool> setTextScale(double? value) =>
-      _setOrRemove(kTextScaleKey, value);
-
-  bool? get readerMode => _prefs.getBool(kReaderModeKey);
-
-  Future<bool> setReaderMode(bool? value) =>
-      _setOrRemove(kReaderModeKey, value);
-
-  List<String> get recentFilesJson =>
-      _prefs.getStringList(kRecentFilesJsonKey) ?? [];
-
-  Future<bool> setRecentFilesJson(List<String> value) =>
-      _prefs.setStringList(kRecentFilesJsonKey, value);
-
-  String? get themeMode => _prefs.getString(kThemeModeKey);
-
-  Future<bool> setThemeMode(String? value) =>
-      _setOrRemove(kThemeModeKey, value);
-
-  RemoteImagesPolicy? get remoteImagesPolicy =>
-      RemoteImagesPolicyPersistence.fromString(
-          _prefs.getString(kRemoteImagesPolicyKey));
-
-  Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy? value) =>
-      _setOrRemove(kRemoteImagesPolicyKey, value.persistableString);
-
-  LocalLinksPolicy? get localLinksPolicy =>
-      LocalLinksPolicyPersistence.fromString(
-          _prefs.getString(kLocalLinksPolicyKey));
-
-  Future<bool> setLocalLinksPolicy(LocalLinksPolicy? value) =>
-      _setOrRemove(kLocalLinksPolicyKey, value.persistableString);
-
-  SaveChangesPolicy? get saveChangesPolicy =>
-      SaveChangesPolicyPersistence.fromString(
-          _prefs.getString(kSaveChangesPolicyKey));
-
-  Future<bool> setSaveChangesPolicy(SaveChangesPolicy? value) =>
-      _setOrRemove(kSaveChangesPolicyKey, value.persistableString);
-
-  DecryptPolicy? get decryptPolicy =>
-      DecryptPolicyPersistence.fromString(_prefs.getString(kDecryptPolicyKey));
-
-  Future<bool> setDecryptPolicy(DecryptPolicy? value) =>
-      _setOrRemove(kDecryptPolicyKey, value.persistableString);
-
-  /// List of identifiers
-  List<String> get accessibleDirs =>
-      _prefs.getStringList(kAccessibleDirectoriesKey) ?? [];
-
-  Future<bool> setAccessibleDirs(List<String> value) =>
-      _prefs.setStringList(kAccessibleDirectoriesKey, value);
-
-  List<String> get customFilterQueries =>
-      _prefs.getStringList(kCustomFilterQueriesKey) ?? [];
-
-  Future<bool> setCustomFilterQueries(List<String> value) =>
-      _prefs.setStringList(kCustomFilterQueriesKey, value);
-
-  bool? get fullWidth => _prefs.getBool(kFullWidthKey);
-
-  Future<bool> setFullWidth(bool? value) => _setOrRemove(kFullWidthKey, value);
-
-  String? get scopedPreferencesJson =>
-      _prefs.getString(kScopedPreferencesJsonKey);
-
-  Future<bool> setScopedPreferencesJson(String? value) =>
-      _setOrRemove(kScopedPreferencesJsonKey, value);
-
-  @override
-  bool updateShouldNotify(Preferences oldWidget) => _prefs != oldWidget._prefs;
-
-  Future<bool> _setOrRemove<T>(String key, T? value) {
-    if (value == null) {
-      return _prefs.remove(key);
-    } else if (value is String) {
-      return _prefs.setString(key, value);
-    } else if (value is bool) {
-      return _prefs.setBool(key, value);
-    } else if (value is double) {
-      return _prefs.setDouble(key, value);
-    } else {
-      throw OrgroError(
-        'Unknown type: $T',
-        localizedMessage: (context) =>
-            AppLocalizations.of(context)!.errorUnknownType(T),
-      );
-    }
-  }
-}
-
-class PreferencesProvider extends StatefulWidget {
-  const PreferencesProvider({required this.child, this.waiting, super.key});
+class SharedPreferencesProvider extends StatefulWidget {
+  const SharedPreferencesProvider(
+      {required this.child, this.waiting, super.key});
   final Widget child;
   final Widget? waiting;
 
   @override
-  State<PreferencesProvider> createState() => _PreferencesProviderState();
+  State<SharedPreferencesProvider> createState() =>
+      _SharedPreferencesProviderState();
 }
 
-class _PreferencesProviderState extends State<PreferencesProvider> {
+class _SharedPreferencesProviderState extends State<SharedPreferencesProvider> {
   late final Future<SharedPreferences> _instance;
 
   @override
@@ -189,7 +78,7 @@ class _PreferencesProviderState extends State<PreferencesProvider> {
       future: _instance,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Preferences(snapshot.data!, child: widget.child);
+          return Preferences(prefs: snapshot.data!, child: widget.child);
         } else if (snapshot.hasError) {
           return ErrorPage(error: snapshot.error.toString());
         } else {
@@ -198,6 +87,351 @@ class _PreferencesProviderState extends State<PreferencesProvider> {
       },
     );
   }
+}
+
+class Preferences extends StatefulWidget {
+  static InheritedPreferences of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedPreferences>()!;
+
+  const Preferences({required this.prefs, required this.child, super.key});
+
+  final Widget child;
+  final SharedPreferences prefs;
+
+  @override
+  State<Preferences> createState() => _PreferencesState();
+}
+
+class _PreferencesState extends State<Preferences> {
+  late PreferencesData _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = PreferencesData.fromSharedPreferences(widget.prefs);
+  }
+
+  void _update(PreferencesData Function(PreferencesData) transform) =>
+      setState(() => _data = transform(_data));
+
+  @override
+  Widget build(BuildContext context) {
+    return InheritedPreferences(
+      _data,
+      _update,
+      widget.prefs,
+      child: widget.child,
+    );
+  }
+}
+
+class InheritedPreferences extends InheritedWidget {
+  const InheritedPreferences(this.data, this._update, this._prefs,
+      {required super.child, super.key});
+
+  final PreferencesData data;
+  final SharedPreferences _prefs;
+  final void Function(PreferencesData Function(PreferencesData)) _update;
+
+  @override
+  bool updateShouldNotify(InheritedPreferences oldWidget) =>
+      data != oldWidget.data;
+
+  Future<void> reload() async {
+    await _prefs.reload();
+    _update((_) => PreferencesData.fromSharedPreferences(_prefs));
+  }
+
+  Future<void> reset() async {
+    for (final dir in accessibleDirs) {
+      try {
+        await disposeNativeSourceIdentifier(dir);
+      } catch (e, s) {
+        logError(e, s);
+      }
+    }
+    await _prefs.clear();
+    _update((_) => PreferencesData.fromSharedPreferences(_prefs));
+  }
+
+  double get textScale => data.textScale;
+  Future<bool> setTextScale(double value) async {
+    _update((data) => data.copyWith(textScale: value));
+    return await _setOrRemove(kTextScaleKey, value);
+  }
+
+  String get fontFamily => data.fontFamily;
+  Future<bool> setFontFamily(String value) async {
+    _update((data) => data.copyWith(fontFamily: value));
+    return _setOrRemove(kFontFamilyKey, value);
+  }
+
+  bool get readerMode => data.readerMode;
+  Future<bool> setReaderMode(bool value) async {
+    _update((data) => data.copyWith(readerMode: value));
+    return _setOrRemove(kReaderModeKey, value);
+  }
+
+  List<RecentFile> get recentFiles => data.recentFiles;
+  Future<bool> _setRecentFiles(List<RecentFile> value) async {
+    _update((data) => data.copyWith(recentFiles: value));
+    return _setOrRemove(
+      kRecentFilesJsonKey,
+      value.map((file) => json.encode(file.toJson())).toList(),
+    );
+  }
+
+  Future<bool> addRecentFile(RecentFile file) async {
+    final files = [file, ...recentFiles]
+        .unique(
+          cache: LinkedHashSet(
+            equals: (a, b) => a.uri == b.uri,
+            hashCode: (o) => o.uri.hashCode,
+          ),
+        )
+        .take(kMaxRecentFiles)
+        .toList(growable: false);
+    return await _setRecentFiles(files);
+  }
+
+  Future<bool> removeRecentFile(RecentFile file) async {
+    final files = List.of(recentFiles)..remove(file);
+    return await _setRecentFiles(files);
+  }
+
+  ThemeMode get themeMode => data.themeMode;
+  Future<bool> setThemeMode(ThemeMode value) async {
+    _update((data) => data.copyWith(themeMode: value));
+    return _setOrRemove(kThemeModeKey, value.persistableString);
+  }
+
+  RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
+  Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy value) async {
+    _update((data) => data.copyWith(remoteImagesPolicy: value));
+    return _setOrRemove(kRemoteImagesPolicyKey, value.persistableString);
+  }
+
+  LocalLinksPolicy get localLinksPolicy => data.localLinksPolicy;
+  Future<bool> setLocalLinksPolicy(LocalLinksPolicy value) async {
+    _update((data) => data.copyWith(localLinksPolicy: value));
+    return _setOrRemove(kLocalLinksPolicyKey, value.persistableString);
+  }
+
+  SaveChangesPolicy get saveChangesPolicy => data.saveChangesPolicy;
+  Future<bool> setSaveChangesPolicy(SaveChangesPolicy value) async {
+    _update((data) => data.copyWith(saveChangesPolicy: value));
+    return _setOrRemove(kSaveChangesPolicyKey, value.persistableString);
+  }
+
+  DecryptPolicy get decryptPolicy => data.decryptPolicy;
+  Future<bool> setDecryptPolicy(DecryptPolicy value) async {
+    _update((data) => data.copyWith(decryptPolicy: value));
+    return _setOrRemove(kDecryptPolicyKey, value.persistableString);
+  }
+
+  List<String> get accessibleDirs => data.accessibleDirs;
+  Future<bool> _setAccessibleDirs(List<String> value) async {
+    _update((data) => data.copyWith(accessibleDirs: value));
+    return _setOrRemove(kAccessibleDirectoriesKey, value);
+  }
+
+  Future<bool> addAccessibleDir(String dir) async {
+    final dirs = [...accessibleDirs, dir].unique().toList(growable: false);
+    return await _setAccessibleDirs(dirs);
+  }
+
+  List<String> get customFilterQueries => data.customFilterQueries;
+  Future<bool> _setCustomFilterQueries(List<String> value) async {
+    _update((data) => data.copyWith(customFilterQueries: value));
+    return _setOrRemove(kCustomFilterQueriesKey, value);
+  }
+
+  Future<bool> addCustomFilterQuery(String value) async {
+    // Maintain order, so don't just prepend and uniquify
+    if (!customFilterQueries.contains(value)) {
+      return await _setCustomFilterQueries(
+          [value, ...customFilterQueries.take(9)]);
+    }
+    return true;
+  }
+
+  bool get fullWidth => data.fullWidth;
+  Future<bool> setFullWidth(bool value) async {
+    _update((data) => data.copyWith(fullWidth: value));
+    return _setOrRemove(kFullWidthKey, value);
+  }
+
+  Map<String, dynamic> get scopedPreferences => data.scopedPreferences;
+  Future<bool> setScopedPreferences(Map<String, dynamic> value) async {
+    _update((data) => data.copyWith(scopedPreferences: value));
+    return _setOrRemove(kScopedPreferencesJsonKey, json.encode(value));
+  }
+
+  Future<bool> _setOrRemove<T>(String key, T? value) {
+    if (value == null) {
+      return _prefs.remove(key);
+    } else if (value is String) {
+      return _prefs.setString(key, value);
+    } else if (value is bool) {
+      return _prefs.setBool(key, value);
+    } else if (value is double) {
+      return _prefs.setDouble(key, value);
+    } else if (value is List<String>) {
+      return _prefs.setStringList(key, value);
+    } else {
+      throw OrgroError(
+        'Unknown type: $T',
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorUnknownType(T),
+      );
+    }
+  }
+}
+
+class PreferencesData {
+  factory PreferencesData.defaults() => const PreferencesData(
+        textScale: kDefaultTextScale,
+        fontFamily: kDefaultFontFamily,
+        readerMode: kDefaultReaderMode,
+        recentFiles: [],
+        themeMode: _kDefaultThemeMode,
+        remoteImagesPolicy: kDefaultRemoteImagesPolicy,
+        localLinksPolicy: kDefaultLocalLinksPolicy,
+        saveChangesPolicy: kDefaultSaveChangesPolicy,
+        decryptPolicy: kDefaultDecryptPolicy,
+        accessibleDirs: [],
+        customFilterQueries: [],
+        fullWidth: kDefaultFullWidth,
+        scopedPreferences: {},
+      );
+
+  factory PreferencesData.fromSharedPreferences(SharedPreferences prefs) {
+    final scopedPreferencesJson = prefs.getString(kScopedPreferencesJsonKey);
+    final scopedPreferences = scopedPreferencesJson == null
+        ? null
+        : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
+    return PreferencesData.defaults().copyWith(
+      textScale: prefs.getDouble(kTextScaleKey),
+      fontFamily: prefs.getString(kFontFamilyKey),
+      readerMode: prefs.getBool(kReaderModeKey),
+      recentFiles: prefs
+          .getStringList(kRecentFilesJsonKey)
+          ?.map<dynamic>(json.decode)
+          .cast<Map<String, dynamic>>()
+          .map((json) => RecentFile.fromJson(json))
+          .toList(growable: false),
+      themeMode:
+          ThemeModePersistence.fromString(prefs.getString(kThemeModeKey)),
+      remoteImagesPolicy: RemoteImagesPolicyPersistence.fromString(
+          prefs.getString(kRemoteImagesPolicyKey)),
+      localLinksPolicy: LocalLinksPolicyPersistence.fromString(
+          prefs.getString(kLocalLinksPolicyKey)),
+      saveChangesPolicy: SaveChangesPolicyPersistence.fromString(
+          prefs.getString(kSaveChangesPolicyKey)),
+      decryptPolicy: DecryptPolicyPersistence.fromString(
+          prefs.getString(kDecryptPolicyKey)),
+      accessibleDirs: prefs.getStringList(kAccessibleDirectoriesKey),
+      customFilterQueries: prefs.getStringList(kCustomFilterQueriesKey),
+      fullWidth: prefs.getBool(kFullWidthKey),
+      scopedPreferences: scopedPreferences,
+    );
+  }
+
+  const PreferencesData({
+    required this.textScale,
+    required this.fontFamily,
+    required this.readerMode,
+    required this.recentFiles,
+    required this.themeMode,
+    required this.remoteImagesPolicy,
+    required this.localLinksPolicy,
+    required this.saveChangesPolicy,
+    required this.decryptPolicy,
+    required this.accessibleDirs,
+    required this.customFilterQueries,
+    required this.fullWidth,
+    required this.scopedPreferences,
+  });
+
+  final double textScale;
+  final String fontFamily;
+  final bool readerMode;
+  final List<RecentFile> recentFiles;
+  final ThemeMode themeMode;
+  final RemoteImagesPolicy remoteImagesPolicy;
+  final LocalLinksPolicy localLinksPolicy;
+  final SaveChangesPolicy saveChangesPolicy;
+  final DecryptPolicy decryptPolicy;
+  final List<String> accessibleDirs;
+  final List<String> customFilterQueries;
+  final bool fullWidth;
+  final Map<String, dynamic> scopedPreferences;
+
+  PreferencesData copyWith({
+    double? textScale,
+    String? fontFamily,
+    bool? readerMode,
+    List<RecentFile>? recentFiles,
+    ThemeMode? themeMode,
+    RemoteImagesPolicy? remoteImagesPolicy,
+    LocalLinksPolicy? localLinksPolicy,
+    SaveChangesPolicy? saveChangesPolicy,
+    DecryptPolicy? decryptPolicy,
+    List<String>? accessibleDirs,
+    List<String>? customFilterQueries,
+    bool? fullWidth,
+    Map<String, dynamic>? scopedPreferences,
+  }) =>
+      PreferencesData(
+        textScale: textScale ?? this.textScale,
+        fontFamily: fontFamily ?? this.fontFamily,
+        readerMode: readerMode ?? this.readerMode,
+        recentFiles: recentFiles ?? this.recentFiles,
+        themeMode: themeMode ?? this.themeMode,
+        remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
+        localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
+        saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
+        decryptPolicy: decryptPolicy ?? this.decryptPolicy,
+        accessibleDirs: accessibleDirs ?? this.accessibleDirs,
+        customFilterQueries: customFilterQueries ?? this.customFilterQueries,
+        fullWidth: fullWidth ?? this.fullWidth,
+        scopedPreferences: scopedPreferences ?? this.scopedPreferences,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      other is PreferencesData &&
+      textScale == other.textScale &&
+      fontFamily == other.fontFamily &&
+      readerMode == other.readerMode &&
+      listEquals(recentFiles, other.recentFiles) &&
+      themeMode == other.themeMode &&
+      remoteImagesPolicy == other.remoteImagesPolicy &&
+      localLinksPolicy == other.localLinksPolicy &&
+      saveChangesPolicy == other.saveChangesPolicy &&
+      decryptPolicy == other.decryptPolicy &&
+      listEquals(accessibleDirs, other.accessibleDirs) &&
+      listEquals(customFilterQueries, other.customFilterQueries) &&
+      fullWidth == other.fullWidth &&
+      mapEquals(scopedPreferences, other.scopedPreferences);
+
+  @override
+  int get hashCode => Object.hash(
+        textScale,
+        fontFamily,
+        readerMode,
+        Object.hashAll(recentFiles),
+        themeMode,
+        remoteImagesPolicy,
+        localLinksPolicy,
+        saveChangesPolicy,
+        decryptPolicy,
+        Object.hashAll(accessibleDirs),
+        Object.hashAll(customFilterQueries),
+        fullWidth,
+        Object.hashAll(scopedPreferences.keys),
+        Object.hashAll(scopedPreferences.values),
+      );
 }
 
 extension RemoteImagesPolicyPersistence on RemoteImagesPolicy? {
@@ -291,6 +525,33 @@ extension DecryptPolicyPersistence on DecryptPolicy? {
 
 const _kDecryptPolicyDeny = 'decrypt_policy_deny';
 const _kDecryptPolicyAsk = 'decrypt_policy_ask';
+
+extension ThemeModePersistence on ThemeMode? {
+  String? get persistableString => switch (this) {
+        ThemeMode.system => _kThemeModeSystem,
+        ThemeMode.light => _kThemeModeLight,
+        ThemeMode.dark => _kThemeModeDark,
+        null => null
+      };
+
+  static ThemeMode? fromString(String? value) {
+    switch (value) {
+      case _kThemeModeSystem:
+        return ThemeMode.system;
+      case _kThemeModeLight:
+        return ThemeMode.light;
+      case _kThemeModeDark:
+        return ThemeMode.dark;
+    }
+    return null;
+  }
+}
+
+const _kThemeModeSystem = 'theme_mode_system';
+const _kThemeModeLight = 'theme_mode_light';
+const _kThemeModeDark = 'theme_mode_dark';
+
+const _kDefaultThemeMode = ThemeMode.system;
 
 Future<void> resetPreferences(BuildContext context) async {
   final prefs = Preferences.of(context);

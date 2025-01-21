@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:orgro/src/appearance.dart';
+import 'package:orgro/src/preferences.dart';
 
 PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
     value: () async {
-      final appearance = Appearance.of(context);
-      final newMode = await _chooseThemeMode(context, appearance.mode);
+      final prefs = Preferences.of(context);
+      final newMode = await _chooseThemeMode(context, prefs.themeMode);
       if (newMode != null) {
-        appearance.setMode(newMode);
+        prefs.setThemeMode(newMode);
       }
     },
     child: Text(AppLocalizations.of(context)!.menuItemAppearance),
@@ -16,14 +16,14 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
 }
 
 Widget appearanceListItem(BuildContext context) {
-  final appearance = Appearance.of(context);
+  final prefs = Preferences.of(context);
   return ListTile(
     title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
-    subtitle: Text(appearance.mode.toDisplayString(context)),
+    subtitle: Text(prefs.themeMode.toDisplayString(context)),
     onTap: () async {
-      final newMode = await _chooseThemeMode(context, appearance.mode);
+      final newMode = await _chooseThemeMode(context, prefs.themeMode);
       if (newMode != null) {
-        appearance.setMode(newMode);
+        prefs.setThemeMode(newMode);
       }
     },
   );

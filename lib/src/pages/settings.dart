@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
-import 'package:orgro/src/appearance.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/list.dart';
-import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
 
@@ -57,11 +55,6 @@ class SettingsPage extends StatelessWidget {
             onTap: () async {
               await resetPreferences(context);
               if (context.mounted) {
-                // TODO(aaron): We shouldn't need to manuall reset these things.
-                // They should pick up changes to Preferences automatically.
-                viewSettings.reload(context);
-                Appearance.of(context).reload();
-                RecentFiles.of(context).reload();
                 _reportResult(
                     context,
                     AppLocalizations.of(context)!

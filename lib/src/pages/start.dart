@@ -512,19 +512,14 @@ void _openOrgroManual(BuildContext context) =>
 void _openTestFile(BuildContext context) =>
     loadAsset(context, 'assets/test/test.org');
 
-void _openSettingsScreen(BuildContext context) {
-  final recentFiles = RecentFiles.of(context);
-  Navigator.push(
-    context,
-    MaterialPageRoute<void>(
-      builder: (context) => RecentFiles.from(
-        recentFiles,
-        child: ViewSettings.defaults(context, child: const SettingsPage()),
+void _openSettingsScreen(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            ViewSettings.defaults(context, child: const SettingsPage()),
+        fullscreenDialog: true,
       ),
-      fullscreenDialog: true,
-    ),
-  );
-}
+    );
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();

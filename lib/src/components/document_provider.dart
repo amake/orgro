@@ -8,7 +8,6 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:orgro/src/util.dart';
 
 const _kMaxUndoStackSize = 10;
 
@@ -72,20 +71,6 @@ class _DocumentProviderState extends State<DocumentProvider> {
     return null;
   }
 
-  Future<void> _addAccessibleDir(String dir) async {
-    final accessibleDirs = _accessibleDirs
-      ..add(dir)
-      ..unique();
-    await Preferences.of(context).setAccessibleDirs(accessibleDirs);
-    final dataSource = await _resolveDataSourceParent(accessibleDirs);
-    setState(() {
-      if (dataSource != null) {
-        _dataSource = dataSource;
-      }
-      _accessibleDirs = accessibleDirs;
-    });
-  }
-
   Future<(bool, DocumentAnalysis)> _pushDoc(OrgTree doc) async {
     if (doc == _docs[_cursor]) return (false, _analyses[_cursor]);
 
@@ -146,7 +131,6 @@ class _DocumentProviderState extends State<DocumentProvider> {
       doc: _docs[_cursor],
       dataSource: _dataSource,
       analysis: _analyses[_cursor],
-      addAccessibleDir: _addAccessibleDir,
       pushDoc: _pushDoc,
       passwords: List.unmodifiable(_passwords),
       addPasswords: _addPasswords,
@@ -164,7 +148,6 @@ class InheritedDocumentProvider extends InheritedWidget {
     required this.doc,
     required this.dataSource,
     required this.analysis,
-    required this.addAccessibleDir,
     required this.pushDoc,
     required this.passwords,
     required this.addPasswords,
@@ -179,7 +162,6 @@ class InheritedDocumentProvider extends InheritedWidget {
   final OrgTree doc;
   final DataSource dataSource;
   final DocumentAnalysis analysis;
-  final Future<void> Function(String) addAccessibleDir;
   final Future<(bool, DocumentAnalysis)> Function(OrgTree) pushDoc;
   final List<OrgroPassword> passwords;
   final List<OrgroPassword> Function(Iterable<OrgroPassword>) addPasswords;
