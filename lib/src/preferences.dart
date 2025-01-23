@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
@@ -600,6 +601,11 @@ const _kDefaultThemeMode = ThemeMode.system;
 Widget resetPreferencesListItem(BuildContext context) => ListTile(
       title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
       onTap: () async {
+        final result = await showDialog<bool>(
+          context: context,
+          builder: (context) => const ConfirmResetDialog(),
+        );
+        if (result != true || !context.mounted) return;
         await Preferences.of(context, PrefsAspect.nil).reset();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

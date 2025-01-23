@@ -26,6 +26,11 @@
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
   "snackbarMessagePreferencesReset": "設定を初期化しました",
 
+  "confirmResetPreferencesDialogTitle": "設定を初期化しますか?",
+  "confirmResetPreferencesDialogMessage": "すべての設定が初期値に戻されます。この操作は元に戻せません。",
+  "confirmResetPreferencesActionReset": "初期化",
+  "confirmResetPreferencesActionCancel": "キャンセル",
+
   "aboutLinkSupport": "サポート・お問い合わせ",
   "aboutLinkChangelog": "変更履歴",
 

@@ -135,6 +135,33 @@ class DiscardChangesDialog extends StatelessWidget {
   }
 }
 
+class ConfirmResetDialog extends StatelessWidget {
+  const ConfirmResetDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.warning),
+      title: Text(
+          AppLocalizations.of(context)!.confirmResetPreferencesDialogTitle),
+      content: Text(
+          AppLocalizations.of(context)!.confirmResetPreferencesDialogMessage),
+      actions: [
+        ListTile(
+          title: Text(
+              AppLocalizations.of(context)!.confirmResetPreferencesActionReset),
+          onTap: () => Navigator.pop(context, true),
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!
+              .confirmResetPreferencesActionCancel),
+          onTap: () => Navigator.pop(context, false),
+        ),
+      ],
+    );
+  }
+}
+
 class InputPasswordDialog extends StatelessWidget {
   const InputPasswordDialog({required this.title, this.bodyText, super.key});
 

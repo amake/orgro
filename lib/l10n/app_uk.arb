@@ -26,6 +26,11 @@
   "snackbarMessageCacheCleared": "Кеш очищено",
   "snackbarMessagePreferencesReset": "Preferences reset",
 
+  "confirmResetPreferencesDialogTitle": "Restore defaults?",
+  "confirmResetPreferencesDialogMessage": "This will reset all preferences to their default values. This action can’t be undone.",
+  "confirmResetPreferencesActionReset": "Restore",
+  "confirmResetPreferencesActionCancel": "Cancel",
+
   "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
   "aboutLinkChangelog": "Список змін",
 
