@@ -162,7 +162,9 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
       _updateShouldNotifyDependentViewSettings(oldWidget, dependencies) ||
       _updateShouldNotifyDependentAccessibleDirectories(
           oldWidget, dependencies) ||
-      _updateShouldNotifyDependentCustomFilterQueries(oldWidget, dependencies);
+      _updateShouldNotifyDependentCustomFilterQueries(
+          oldWidget, dependencies) ||
+      _updateShouldNotifyDependentCustomization(oldWidget, dependencies);
 
   Future<void> reload() async {
     await _prefs.reload();
@@ -374,6 +376,13 @@ extension CustomizationExt on InheritedPreferences {
     _update((data) => data.copyWith(textPreviewString: value));
     return _setOrRemove(kTextPreviewStringKey, value);
   }
+
+  bool _updateShouldNotifyDependentCustomization(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.customization) &&
+      data.textPreviewString != oldWidget.data.textPreviewString;
 }
 
 class PreferencesData {
