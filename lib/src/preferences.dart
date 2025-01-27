@@ -157,26 +157,12 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
   ) =>
-      (dependencies.contains(PrefsAspect.appearance) &&
-          data.themeMode != oldWidget.data.themeMode) ||
-      (dependencies.contains(PrefsAspect.recentFiles) &&
-          !listEquals(data.recentFiles, oldWidget.data.recentFiles)) ||
-      (dependencies.contains(PrefsAspect.viewSettings) &&
-              data.textScale != oldWidget.data.textScale ||
-          data.fontFamily != oldWidget.data.fontFamily ||
-          data.readerMode != oldWidget.data.readerMode ||
-          data.remoteImagesPolicy != oldWidget.data.remoteImagesPolicy ||
-          data.localLinksPolicy != oldWidget.data.localLinksPolicy ||
-          data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
-          data.decryptPolicy != oldWidget.data.decryptPolicy ||
-          data.fullWidth != oldWidget.data.fullWidth ||
-          !data.scopedPreferences
-              .unorderedEquals(oldWidget.data.scopedPreferences)) ||
-      (dependencies.contains(PrefsAspect.accessibleDirs) &&
-          !listEquals(data.accessibleDirs, oldWidget.data.accessibleDirs)) ||
-      (dependencies.contains(PrefsAspect.customFilterQueries) &&
-          !listEquals(
-              data.customFilterQueries, oldWidget.data.customFilterQueries));
+      _updateShouldNotifyDependentAppearance(oldWidget, dependencies) ||
+      _updateShouldNotifyDependentRecentFiles(oldWidget, dependencies) ||
+      _updateShouldNotifyDependentViewSettings(oldWidget, dependencies) ||
+      _updateShouldNotifyDependentAccessibleDirectories(
+          oldWidget, dependencies) ||
+      _updateShouldNotifyDependentCustomFilterQueries(oldWidget, dependencies);
 
   Future<void> reload() async {
     await _prefs.reload();
@@ -222,6 +208,13 @@ extension AppearanceExt on InheritedPreferences {
     _update((data) => data.copyWith(themeMode: value));
     return _setOrRemove(kThemeModeKey, value.persistableString);
   }
+
+  bool _updateShouldNotifyDependentAppearance(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.appearance) &&
+      data.themeMode != oldWidget.data.themeMode;
 }
 
 extension RecentFilesExt on InheritedPreferences {
@@ -251,6 +244,13 @@ extension RecentFilesExt on InheritedPreferences {
     final files = List.of(recentFiles)..remove(file);
     return await _setRecentFiles(files);
   }
+
+  bool _updateShouldNotifyDependentRecentFiles(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.recentFiles) &&
+      !listEquals(data.recentFiles, oldWidget.data.recentFiles);
 }
 
 extension ViewSettingsExt on InheritedPreferences {
@@ -307,6 +307,21 @@ extension ViewSettingsExt on InheritedPreferences {
     _update((data) => data.copyWith(scopedPreferences: value));
     return _setOrRemove(kScopedPreferencesJsonKey, json.encode(value));
   }
+
+  bool _updateShouldNotifyDependentViewSettings(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.viewSettings) &&
+          data.textScale != oldWidget.data.textScale ||
+      data.fontFamily != oldWidget.data.fontFamily ||
+      data.readerMode != oldWidget.data.readerMode ||
+      data.remoteImagesPolicy != oldWidget.data.remoteImagesPolicy ||
+      data.localLinksPolicy != oldWidget.data.localLinksPolicy ||
+      data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
+      data.decryptPolicy != oldWidget.data.decryptPolicy ||
+      data.fullWidth != oldWidget.data.fullWidth ||
+      !data.scopedPreferences.unorderedEquals(oldWidget.data.scopedPreferences);
 }
 
 extension AccessibleDirectoriesExt on InheritedPreferences {
@@ -320,6 +335,13 @@ extension AccessibleDirectoriesExt on InheritedPreferences {
     final dirs = [...accessibleDirs, dir].unique().toList(growable: false);
     return await _setAccessibleDirs(dirs);
   }
+
+  bool _updateShouldNotifyDependentAccessibleDirectories(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.accessibleDirs) &&
+      !listEquals(data.accessibleDirs, oldWidget.data.accessibleDirs);
 }
 
 extension CustomFilterQueriesExt on InheritedPreferences {
@@ -337,6 +359,13 @@ extension CustomFilterQueriesExt on InheritedPreferences {
     }
     return true;
   }
+
+  bool _updateShouldNotifyDependentCustomFilterQueries(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.customFilterQueries) &&
+      !listEquals(data.customFilterQueries, oldWidget.data.customFilterQueries);
 }
 
 extension CustomizationExt on InheritedPreferences {
