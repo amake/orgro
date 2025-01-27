@@ -61,6 +61,8 @@ class _TextPreview extends StatefulWidget {
 
 class _TextPreviewState extends State<_TextPreview> {
   late final TextEditingController _controller;
+  InheritedPreferences get _prefs =>
+      Preferences.of(context, PrefsAspect.customization);
 
   @override
   void initState() {
@@ -74,8 +76,7 @@ class _TextPreviewState extends State<_TextPreview> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_inited) {
-      _controller.text =
-          Preferences.of(context, PrefsAspect.customization).textPreviewString;
+      _controller.text = _prefs.textPreviewString;
       _inited = true;
     }
   }
@@ -86,9 +87,12 @@ class _TextPreviewState extends State<_TextPreview> {
     super.dispose();
   }
 
-  Future<void> _onTextChanged() async =>
-      await Preferences.of(context, PrefsAspect.customization)
-          .setTextPreviewString(_controller.text);
+  Future<void> _onTextChanged() async {
+    final current = _prefs.textPreviewString;
+    if (_controller.text != current) {
+      _prefs.setTextPreviewString(_controller.text);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
