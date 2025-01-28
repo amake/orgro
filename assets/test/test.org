@@ -72,6 +72,7 @@ Error cases
 
 - [[file:meta-keywords-layout.org][Layout]]
 - [[file:meta-keywords-doc-info.org][Doc info]]
+- [[file:meta-keywords-edge-cases.org][Edge cases]]
 
 * =TODO= keywords
 

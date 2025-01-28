@@ -232,10 +232,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: a857de7ea701f276fd6a6c4c67ae885b60729a3449e42766bb0e655171042801
+      sha256: ab7dbb16f783307c9d7762ede2593ce32c220ba2ba0fd540a3db8e9a3acba71a
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.2"
+    version: "4.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -253,10 +253,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js
-      sha256: "8e7e4028ef3c670ea0c6abd5d458ca47d6a386bd0bdff15a873e79a8e30a280c"
+      sha256: "2d6e2d54d667f4375ab5e1439826aaf1d47bb0165e9e1630031f541a67e8bdb3"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "5.0.0"
   flutter_tex_js_android:
     dependency: transitive
     description:
@@ -498,18 +498,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "03b3eb5f9d77ff7b17dd4600e38f59c9c42806feef023add1f74445301e4ce67"
+      sha256: "037c99fbc8f21bf4e1865272725816afb963791d3b60a4b2b5b58e8ee9fb3268"
       url: "https://pub.dev"
     source: hosted
-    version: "8.7.1"
+    version: "9.0.1"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: fadbbc6bfdea0f4f0cdbb246d1b4d886cbfd660c04416ba18a3fea4bca0e5cdd
+      sha256: ee33c741d6ca3814faa9e31f1844fd0dd7f73171094929129eb19a3ee627dfc1
       url: "https://pub.dev"
     source: hosted
-    version: "8.4.0"
+    version: "9.0.0"
   path:
     dependency: transitive
     description:

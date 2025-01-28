@@ -244,8 +244,8 @@ List<LinkAbbreviation> extractLinkAbbreviations(
 ) {
   final results = <LinkAbbreviation>[];
   tree.visit<OrgMeta>((meta) {
-    if (meta.keyword.toLowerCase() == '#+link:') {
-      final trailing = meta.trailing.trim();
+    if (meta.key.toLowerCase() == '#+link:' && meta.value != null) {
+      final trailing = meta.value!.toMarkup().trim();
       final match = _abbreviationPattern.firstMatch(trailing);
       if (match == null) return true;
       final linkword = match.namedGroup('linkword')!.trimPrefSuff('"', '"');

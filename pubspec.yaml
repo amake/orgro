@@ -32,11 +32,11 @@ dependencies:
   flutter_charset_detector: ^4.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector/flutter_charset_detector
-  flutter_slidable: ^3.1.2
+  flutter_slidable: ^4.0.0
   google_fonts: ^6.0.0
   http: ^1.1.0
   intl: ^0.19.0
-  org_flutter: ^8.7.0
+  org_flutter: ^9.0.1
   # org_flutter:
     # path: ../org_flutter
   path_provider: ^2.0.9

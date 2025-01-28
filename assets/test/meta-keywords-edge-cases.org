@@ -1,0 +1,37 @@
+# Comment
+
+#+STARTUP: entitiespretty
+#+bibliography: test.bib
+
+#+TITLE: with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+AUTHOR: with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+COMMENT: with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+FOO: with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+CAPTION: with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+| foo  | bar  |
+| bizz | bazz |
+
+No space after colon:
+
+#+TITLE:with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+AUTHOR:with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+#+COMMENT:with _[[https://example.com][link]]_ and [cite:@knuth:1984]
+
+*Malformed* comment (subscript is rendered in Emacs):
+
+#foo_bar
+
+*Malformed* block delimiter:
+
+# +begin_src
+
+Orphaned block delimiter (subscript is not rendered in Emacs, but it is rendered
+on export):
+
+#+begin_src
+
+Comment following orphaned block delimiter is not correctly syntax-highlighted
+in Emacs on buffer reload, but it does parse as a comment per
+=org-element-at-point=:
+
+# Comment

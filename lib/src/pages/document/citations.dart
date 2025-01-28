@@ -113,8 +113,8 @@ List<String> extractBibliograpies(
 ) {
   final results = <String>[];
   tree.visit<OrgMeta>((meta) {
-    if (meta.keyword.toLowerCase() == '#+bibliography:') {
-      final trailing = meta.trailing.trim();
+    if (meta.key.toLowerCase() == '#+bibliography:' && meta.value != null) {
+      final trailing = meta.value!.toMarkup().trim();
       final bibFile = trailing.startsWith('"') && trailing.endsWith('"')
           ? trailing.substring(1, trailing.length - 1)
           : trailing;
