@@ -144,8 +144,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.keywords = analysis.keywords ?? [];
     searchDelegate.tags = analysis.tags ?? [];
     searchDelegate.priorities = analysis.priorities ?? [];
-    searchDelegate.todoSettings =
-        OrgController.of(context).settings.todoSettings;
+    searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
   }
 
   @override
@@ -179,7 +178,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         label: AppLocalizations.of(context)!.sectionActionCycleTodo,
         icon: Icons.repeat,
         onPressed: () {
-          final todoSettings = OrgController.of(context).settings.todoSettings;
+          final todoSettings = OrgSettings.of(context).settings.todoSettings;
           try {
             final replacement = section.headline.cycleTodo(todoSettings);
             var newDoc = _doc
