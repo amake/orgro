@@ -1,0 +1,2 @@
+- Rendering improvements
+- Bug fixes
