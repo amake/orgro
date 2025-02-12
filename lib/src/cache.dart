@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:path_provider/path_provider.dart';
 

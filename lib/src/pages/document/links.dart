@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:open_file/open_file.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/attachments.dart';

@@ -43,7 +43,9 @@
   "buttonVersion": "v{version}",
   "@buttonVersion": {
     "placeholders": {
-      "version": {}
+      "version": {
+        "type": "String"
+      }
     }
   },
 
@@ -102,13 +104,17 @@
   "pageTitleNarrow": "{name} › narrow",
   "@pageTitleNarrow": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "pageTitleEditing": "{name} › editing",
   "@pageTitleEditing": {
     "placeholders": {
-      "name": {}
+      "name": {
+        "type": "String"
+      }
     }
   },
 
@@ -172,7 +178,9 @@
   "snackbarMessageSomeCitationsNotFound": "Citations not found: {citations}",
   "@snackbarMessageSomeCitationsNotFound": {
     "placeholders": {
-      "citations": {}
+      "citations": {
+        "type": "String"
+      }
     }
   },
 
@@ -180,32 +188,47 @@
   "errorPathResolvedToNonFile": "{path} resolved to a non-file: {resolved}",
   "@errorPathResolvedToNonFile": {
     "placeholders": {
-      "path": {},
-      "resolved": {}
+      "path": {
+        "type": "String"
+      },
+      "resolved": {
+        "type": "String"
+      }
     }
   },
   "errorUnknownType": "Unknown type: {type}",
   "@errorUnknownType": {
     "placeholders": {
-      "type": {}
+      "type": {
+        "type": "Object"
+      }
     }
   },
   "errorUnexpectedHttpResponse": "Unexpected HTTP response: {response}",
   "@errorUnexpectedHttpResponse": {
     "placeholders": {
-      "response": {}
+      "response": {
+        "type": "Object"
+      }
     }
   },
   "errorOrgParser": "Parser error: {result}",
   "@errorOrgParser": {
     "placeholders": {
-      "result": {}
+      "result": {
+        "type": "Object"
+      }
     }
   },
   "errorOrgExecution": "Execution error in the below code: {message}\n\n{code}",
   "@errorOrgExecution": {
     "placeholders": {
-      "message": {}
+      "message": {
+        "type": "Object"
+      },
+      "code": {
+        "type": "String"
+      }
     }
   },
   "errorOrgTimeout": "Evaluation of the below code timed out after {timeout}ms.\n\n{code}",
@@ -215,26 +238,34 @@
         "type": "num",
         "format": "decimalPattern"
       },
-      "code": {}
+      "code": {
+        "type": "String"
+      }
     }
   },
   "errorOrgArgument": "Invalid argument: {item}",
   "@errorOrgArgument": {
     "placeholders": {
-      "item": {}
+      "item": {
+        "type": "Object"
+      }
     }
   },
   "errorDecryptionFailed": "Decryption failed",
   "errorLinkNotHandled": "Couldn’t open link “{link}”",
   "@errorLinkNotHandled": {
     "placeholders": {
-      "link": {}
+      "link": {
+        "type": "Object"
+      }
     }
   },
   "errorExternalIdNotFound": "File with ID “{id}” not found",
   "@errorExternalIdNotFound": {
     "placeholders": {
-      "id": {}
+      "id": {
+        "type": "String"
+      }
     }
   },
 

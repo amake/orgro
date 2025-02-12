@@ -5,7 +5,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';

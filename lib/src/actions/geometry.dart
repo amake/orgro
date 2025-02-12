@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 
 PopupMenuItem<VoidCallback> fullWidthMenuItem(
   BuildContext context, {

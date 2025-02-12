@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
 
 typedef MessageBuilder = String Function(BuildContext);
