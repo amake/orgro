@@ -29,6 +29,10 @@ test: ## Run tests
 dirty-check:
 	$(if $(shell git status --porcelain),$(error 'You have uncommitted changes. Aborting.'))
 
+.PHONY: format-check
+format-check:
+	dart format --set-exit-if-changed lib test
+
 .PHONY: l10n-check
 l10n-check: ## Check l10n data for issues
 	$(foreach _,$(wildcard lib/l10n/*.arb),\
@@ -44,7 +48,7 @@ build:
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: dirty-check l10n-check test build
+release: format-check dirty-check l10n-check test build
 	open -a Transporter build/ios/ipa/Orgro.ipa
 
 .PHONY: help
