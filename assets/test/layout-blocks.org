@@ -1,0 +1,66 @@
+Source
+
+   #+begin_src
+  a
+   /b/ [[foo]]
+    c
+   #+end_src
+
+   #+begin_src python
+  a
+   /b/ [[foo]]
+    c
+   #+end_src
+
+Arbitrary
+
+   #+begin_foo
+  a
+   /b/ [[foo]]
+    c
+   #+end_foo
+
+Named
+
+   #+begin_comment
+  a
+   /b/ [[foo]]
+    c
+   #+end_comment
+
+   #+begin_example
+  a
+   /b/ [[foo]]
+    c
+   #+end_example
+
+   #+begin_export
+  a
+   /b/ [[foo]]
+    c
+   #+end_export
+
+   #+begin_verse
+  a
+   /b/ [[foo]]
+    c
+   #+end_verse
+
+Greater
+
+   #+begin_quote
+  a
+   /b/ [[foo]]
+    c
+   #+end_quote
+
+   #+begin_center
+  a
+   /b/ [[foo]]
+    c
+   #+end_center
+
+
+# Local Variables:
+# org-hide-emphasis-markers: t
+# End:

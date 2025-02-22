@@ -6,6 +6,7 @@
 - [[file:layout-hr.org][Horizontal rule]]
 - [[file:layout-spacing-0.org][Spacing (0)]]
 - [[file:layout-spacing-1.org][Spacing (1)]]
+- [[file:layout-blocks.org][Blocks]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]
