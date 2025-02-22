@@ -38,10 +38,14 @@ class RemoteImage extends StatelessWidget {
     } else {
       return Image(
         image: CachedNetworkImageProvider(url),
-        errorBuilder: (context, error, stackTrace) =>
-            _ImageError(link: link, error: error.toString()),
-        loadingBuilder: (context, child, loadingProgress) =>
-            loadingProgress == null ? child : const CircularProgressIndicator(),
+        errorBuilder:
+            (context, error, stackTrace) =>
+                _ImageError(link: link, error: error.toString()),
+        loadingBuilder:
+            (context, child, loadingProgress) =>
+                loadingProgress == null
+                    ? child
+                    : const CircularProgressIndicator(),
       );
     }
   }
@@ -58,10 +62,14 @@ class RemoteImage extends StatelessWidget {
           url,
           scale: MediaQuery.of(context).devicePixelRatio,
         ),
-        errorBuilder: (context, error, stackTrace) =>
-            _ImageError(link: link, error: error.toString()),
-        loadingBuilder: (context, child, loadingProgress) =>
-            loadingProgress == null ? child : const CircularProgressIndicator(),
+        errorBuilder:
+            (context, error, stackTrace) =>
+                _ImageError(link: link, error: error.toString()),
+        loadingBuilder:
+            (context, child, loadingProgress) =>
+                loadingProgress == null
+                    ? child
+                    : const CircularProgressIndicator(),
       );
     }
   }
@@ -87,14 +95,15 @@ class LocalImage extends StatelessWidget {
     );
   }
 
-  Widget _image({bool minimizeSize = false}) => _isSvg(relativePath)
-      ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
-      : _LocalOtherImage(
-          link: link,
-          dataSource: dataSource,
-          relativePath: relativePath,
-          minimizeSize: minimizeSize,
-        );
+  Widget _image({bool minimizeSize = false}) =>
+      _isSvg(relativePath)
+          ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
+          : _LocalOtherImage(
+            link: link,
+            dataSource: dataSource,
+            relativePath: relativePath,
+            minimizeSize: minimizeSize,
+          );
 }
 
 class _LocalOtherImage extends StatelessWidget {
@@ -115,41 +124,46 @@ class _LocalOtherImage extends StatelessWidget {
     if (!minimizeSize) {
       return Image(
         image: _DataSourceImage(dataSource, relativePath),
-        errorBuilder: (context, error, stackTrace) =>
-            _ImageError(link: link, error: error.toString()),
-        loadingBuilder: (context, child, loadingProgress) =>
-            loadingProgress == null ? child : const CircularProgressIndicator(),
+        errorBuilder:
+            (context, error, stackTrace) =>
+                _ImageError(link: link, error: error.toString()),
+        loadingBuilder:
+            (context, child, loadingProgress) =>
+                loadingProgress == null
+                    ? child
+                    : const CircularProgressIndicator(),
       );
     }
-    return LayoutBuilder(builder: (context, constraints) {
-      final scale = MediaQuery.of(context).devicePixelRatio;
-      return Image(
-        image: ResizeImage.resizeIfNeeded(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final scale = MediaQuery.of(context).devicePixelRatio;
+        return Image(
+          image: ResizeImage.resizeIfNeeded(
             constraints.hasBoundedWidth
                 ? (constraints.maxWidth * scale).toInt()
                 : null,
             constraints.hasBoundedHeight
                 ? (constraints.maxHeight * scale).toInt()
                 : null,
-            _DataSourceImage(
-              dataSource,
-              relativePath,
-              scale: scale,
-            )),
-        errorBuilder: (context, error, stackTrace) =>
-            _ImageError(link: link, error: error.toString()),
-        loadingBuilder: (context, child, loadingProgress) =>
-            loadingProgress == null ? child : const CircularProgressIndicator(),
-      );
-    });
+            _DataSourceImage(dataSource, relativePath, scale: scale),
+          ),
+          errorBuilder:
+              (context, error, stackTrace) =>
+                  _ImageError(link: link, error: error.toString()),
+          loadingBuilder:
+              (context, child, loadingProgress) =>
+                  loadingProgress == null
+                      ? child
+                      : const CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }
 
 class _LocalSvgImage extends StatelessWidget {
-  _LocalSvgImage({
-    required this.dataSource,
-    required this.relativePath,
-  }) : assert(_isSvg(relativePath));
+  _LocalSvgImage({required this.dataSource, required this.relativePath})
+    : assert(_isSvg(relativePath));
 
   final DataSource dataSource;
   final String relativePath;
@@ -167,10 +181,8 @@ class _LocalSvgImage extends StatelessWidget {
 }
 
 class _DataSourceBytesLoader extends SvgLoader<Uint8List> {
-  _DataSourceBytesLoader({
-    required this.dataSource,
-    required this.relativePath,
-  }) : assert(_isSvg(relativePath));
+  _DataSourceBytesLoader({required this.dataSource, required this.relativePath})
+    : assert(_isSvg(relativePath));
 
   final DataSource dataSource;
   final String relativePath;
@@ -209,13 +221,15 @@ class _ImageError extends StatelessWidget {
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
           ),
-          onPressed: () => showDialog<void>(
-            context: context,
-            builder: (context) => AlertDialog(
-              icon: const Icon(Icons.error),
-              content: Text(error),
-            ),
-          ),
+          onPressed:
+              () => showDialog<void>(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      icon: const Icon(Icons.error),
+                      content: Text(error),
+                    ),
+              ),
           icon: const Icon(Icons.error),
         ),
         const SizedBox(width: 8),
@@ -241,7 +255,9 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
   @override
   @protected
   ImageStreamCompleter loadImage(
-      _DataSourceImage key, ImageDecoderCallback decode) {
+    _DataSourceImage key,
+    ImageDecoderCallback decode,
+  ) {
     final chunkEvents = StreamController<ImageChunkEvent>();
 
     return MultiFrameImageStreamCompleter(
@@ -249,9 +265,10 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
       chunkEvents: chunkEvents.stream,
       scale: key.scale,
       debugLabel: key.dataSource.id,
-      informationCollector: () => <DiagnosticsNode>[
-        ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
-      ],
+      informationCollector:
+          () => <DiagnosticsNode>[
+            ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
+          ],
     );
   }
 
@@ -263,23 +280,28 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
     try {
       assert(key == this);
 
-      chunkEvents.add(const ImageChunkEvent(
-        cumulativeBytesLoaded: 0,
-        expectedTotalBytes: null,
-      ));
+      chunkEvents.add(
+        const ImageChunkEvent(
+          cumulativeBytesLoaded: 0,
+          expectedTotalBytes: null,
+        ),
+      );
 
       final relative = await key.dataSource.resolveRelative(key.relativePath);
       final bytes = await relative.bytes;
 
-      chunkEvents.add(ImageChunkEvent(
-        cumulativeBytesLoaded: bytes.length,
-        expectedTotalBytes: bytes.length,
-      ));
+      chunkEvents.add(
+        ImageChunkEvent(
+          cumulativeBytesLoaded: bytes.length,
+          expectedTotalBytes: bytes.length,
+        ),
+      );
 
       if (bytes.isEmpty) {
         // The file may become available later. Throw to evict from cash.
         throw StateError(
-            '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.');
+          '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.',
+        );
       }
       return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
     } catch (e) {

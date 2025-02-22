@@ -10,26 +10,34 @@ class OrgroError implements Exception {
       case OrgError():
         return switch (obj) {
           OrgParserError(result: final result) => OrgroError(
-              'Parser error',
-              localizedMessage: (context) => AppLocalizations.of(context)!
-                  .errorOrgParser(result.toString()),
-            ),
+            'Parser error',
+            localizedMessage:
+                (context) => AppLocalizations.of(
+                  context,
+                )!.errorOrgParser(result.toString()),
+          ),
           OrgExecutionError(code: final code, cause: final cause) => OrgroError(
-              'Execution error',
-              localizedMessage: (context) => AppLocalizations.of(context)!
-                  .errorOrgExecution(cause.toString(), code),
-            ),
+            'Execution error',
+            localizedMessage:
+                (context) => AppLocalizations.of(
+                  context,
+                )!.errorOrgExecution(cause.toString(), code),
+          ),
           OrgTimeoutError(code: final code, timeLimit: final limit) =>
             OrgroError(
               'Timeout error',
-              localizedMessage: (context) => AppLocalizations.of(context)!
-                  .errorOrgTimeout(limit.inMilliseconds, code),
+              localizedMessage:
+                  (context) => AppLocalizations.of(
+                    context,
+                  )!.errorOrgTimeout(limit.inMilliseconds, code),
             ),
           OrgArgumentError(item: final item) => OrgroError(
-              'Argument error',
-              localizedMessage: (context) => AppLocalizations.of(context)!
-                  .errorOrgArgument(item.toString()),
-            ),
+            'Argument error',
+            localizedMessage:
+                (context) => AppLocalizations.of(
+                  context,
+                )!.errorOrgArgument(item.toString()),
+          ),
         };
       default:
         return OrgroError(obj.toString());
@@ -37,7 +45,7 @@ class OrgroError implements Exception {
   }
 
   OrgroError(this.message, {MessageBuilder? localizedMessage})
-      : localizedMessage = localizedMessage ?? ((_) => message.toString());
+    : localizedMessage = localizedMessage ?? ((_) => message.toString());
 
   final Object message;
   final MessageBuilder localizedMessage;

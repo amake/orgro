@@ -11,11 +11,7 @@ Future<NativeDataSource?> findFileForId({
 }) async {
   final result = await _channel.invokeMapMethod<String, String>(
     'findFileForId',
-    {
-      'requestId': requestId,
-      'orgId': orgId,
-      'dirIdentifier': dirIdentifier,
-    },
+    {'requestId': requestId, 'orgId': orgId, 'dirIdentifier': dirIdentifier},
   );
   if (result == null) {
     return null;
@@ -33,11 +29,8 @@ Future<NativeDataSource?> findFileForId({
 }
 
 Future<bool> cancelFindFileForId({required String requestId}) async {
-  final result = await _channel.invokeMethod<bool>(
-    'cancelFindFileForId',
-    {
-      'requestId': requestId,
-    },
-  );
+  final result = await _channel.invokeMethod<bool>('cancelFindFileForId', {
+    'requestId': requestId,
+  });
   return result ?? false;
 }

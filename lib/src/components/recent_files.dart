@@ -8,15 +8,16 @@ import 'package:orgro/src/preferences.dart';
 
 class RecentFile {
   RecentFile.fromJson(Map<String, dynamic> json)
-      : this(
-          identifier: json['identifier'] as String,
-          name: json['name'] as String,
-          // Older versions of Orgro did not store the URI, so fall back to the
-          // identifier
-          uri: (json['uri'] ?? json['identifier']) as String,
-          lastOpened:
-              DateTime.fromMillisecondsSinceEpoch(json['lastOpened'] as int),
-        );
+    : this(
+        identifier: json['identifier'] as String,
+        name: json['name'] as String,
+        // Older versions of Orgro did not store the URI, so fall back to the
+        // identifier
+        uri: (json['uri'] ?? json['identifier']) as String,
+        lastOpened: DateTime.fromMillisecondsSinceEpoch(
+          json['lastOpened'] as int,
+        ),
+      );
 
   RecentFile({
     required this.identifier,
@@ -42,11 +43,11 @@ class RecentFile {
   int get hashCode => Object.hash(identifier, name, uri, lastOpened);
 
   Map<String, Object> toJson() => {
-        'identifier': identifier,
-        'name': name,
-        'uri': uri,
-        'lastOpened': lastOpened.millisecondsSinceEpoch,
-      };
+    'identifier': identifier,
+    'name': name,
+    'uri': uri,
+    'lastOpened': lastOpened.millisecondsSinceEpoch,
+  };
 
   @override
   String toString() => 'RecentFile[$name:$_debugShortIdentifier]';

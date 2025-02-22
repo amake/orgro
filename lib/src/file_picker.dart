@@ -18,20 +18,23 @@ Future<NativeDataSource?> createAndLoadFile(String fileName) async {
 }
 
 Future<NativeDirectoryInfo?> pickDirectory({String? initialDirUri}) async {
-  final dirInfo =
-      await FilePickerWritable().openDirectory(initialDirUri: initialDirUri);
+  final dirInfo = await FilePickerWritable().openDirectory(
+    initialDirUri: initialDirUri,
+  );
   return dirInfo == null
       ? null
       : NativeDirectoryInfo(
-          dirInfo.fileName ?? 'unknown',
-          dirInfo.identifier,
-          dirInfo.uri,
-        );
+        dirInfo.fileName ?? 'unknown',
+        dirInfo.identifier,
+        dirInfo.uri,
+      );
 }
 
 Future<NativeDataSource> readFileWithIdentifier(String identifier) async =>
     FilePickerWritable().readFile(
-        identifier: identifier, reader: LoadedNativeDataSource.fromExternal);
+      identifier: identifier,
+      reader: LoadedNativeDataSource.fromExternal,
+    );
 
 Future<bool> canObtainNativeDirectoryPermissions() async =>
     FilePickerWritable().isDirectoryAccessSupported();
@@ -45,9 +48,10 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    _filePickerState = FilePickerWritable().init()
-      ..registerFileOpenHandler(_loadFile)
-      ..registerErrorEventHandler(_handleError);
+    _filePickerState =
+        FilePickerWritable().init()
+          ..registerFileOpenHandler(_loadFile)
+          ..registerErrorEventHandler(_handleError);
   }
 
   Future<bool> _loadFile(FileInfo fileInfo, File file) async {
@@ -69,12 +73,13 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _displayError(String message) async => showDialog<void>(
-        context: context,
-        builder: (context) => SimpleDialog(
+    context: context,
+    builder:
+        (context) => SimpleDialog(
           title: Text(AppLocalizations.of(context)!.dialogTitleError),
           children: [ListTile(title: Text(message))],
         ),
-      );
+  );
 
   @override
   void dispose() {

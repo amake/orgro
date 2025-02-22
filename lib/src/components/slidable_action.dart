@@ -32,37 +32,43 @@ class ResponsiveSlidableAction extends StatelessWidget {
           },
           style: OutlinedButton.styleFrom(
             backgroundColor: backgroundColor,
-            disabledForegroundColor:
-                backgroundColor.withAlpha((0.38 * 255).round()),
+            disabledForegroundColor: backgroundColor.withAlpha(
+              (0.38 * 255).round(),
+            ),
             foregroundColor: foregroundColor,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
             ),
             side: BorderSide.none,
           ),
-          child: LayoutBuilder(builder: (context, constraints) {
-            final short =
-                constraints.maxHeight < IconTheme.of(context).size! * 2;
-            final veryTall = !short &&
-                constraints.maxHeight > MediaQuery.of(context).size.height / 2;
-            final children = [
-              if (veryTall) const SizedBox(height: 32),
-              Icon(icon),
-              const SizedBox(height: 4, width: 4),
-              Text(label),
-            ];
-            return short
-                ? Row(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final short =
+                  constraints.maxHeight < IconTheme.of(context).size! * 2;
+              final veryTall =
+                  !short &&
+                  constraints.maxHeight >
+                      MediaQuery.of(context).size.height / 2;
+              final children = [
+                if (veryTall) const SizedBox(height: 32),
+                Icon(icon),
+                const SizedBox(height: 4, width: 4),
+                Text(label),
+              ];
+              return short
+                  ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: children,
                   )
-                : Column(
-                    mainAxisAlignment: veryTall
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.center,
+                  : Column(
+                    mainAxisAlignment:
+                        veryTall
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
                     children: children,
                   );
-          }),
+            },
+          ),
         ),
       ),
     );

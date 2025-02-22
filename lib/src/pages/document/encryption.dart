@@ -18,9 +18,13 @@ extension EncryptionHandler on DocumentPageState {
     });
     final password = await showDialog<String>(
       context: context,
-      builder: (context) => InputPasswordDialog(
-        title: AppLocalizations.of(context)!.inputDecryptionPasswordDialogTitle,
-      ),
+      builder:
+          (context) => InputPasswordDialog(
+            title:
+                AppLocalizations.of(
+                  context,
+                )!.inputDecryptionPasswordDialogTitle,
+          ),
     );
     if (password == null) return;
     if (!mounted) return;
@@ -37,7 +41,9 @@ extension EncryptionHandler on DocumentPageState {
     for (final (i, cleartext) in result.indexed) {
       if (cleartext == null) {
         showErrorSnackBar(
-            context, AppLocalizations.of(context)!.errorDecryptionFailed);
+          context,
+          AppLocalizations.of(context)!.errorDecryptionFailed,
+        );
         continue;
       }
       final block = blocks[i];
@@ -50,10 +56,11 @@ extension EncryptionHandler on DocumentPageState {
             password: password,
           ),
         );
-        final enclosingCryptSection = newDoc.findContainingTree(
+        final enclosingCryptSection =
+            newDoc.findContainingTree(
               block,
-              where: (tree) =>
-                  tree is OrgSection && tree.tags.contains('crypt'),
+              where:
+                  (tree) => tree is OrgSection && tree.tags.contains('crypt'),
             ) ??
             newDoc.findContainingTree(block)!;
         if (enclosingCryptSection is OrgSection) {

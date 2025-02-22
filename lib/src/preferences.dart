@@ -56,8 +56,11 @@ const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
 
 class SharedPreferencesProvider extends StatefulWidget {
-  const SharedPreferencesProvider(
-      {required this.child, this.waiting, super.key});
+  const SharedPreferencesProvider({
+    required this.child,
+    this.waiting,
+    super.key,
+  });
   final Widget child;
   final Widget? waiting;
 
@@ -94,8 +97,10 @@ class _SharedPreferencesProviderState extends State<SharedPreferencesProvider> {
 
 class Preferences extends StatefulWidget {
   static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
-      InheritedModel.inheritFrom<InheritedPreferences>(context,
-          aspect: aspect)!;
+      InheritedModel.inheritFrom<InheritedPreferences>(
+        context,
+        aspect: aspect,
+      )!;
 
   const Preferences({required this.prefs, required this.child, super.key});
 
@@ -141,8 +146,13 @@ enum PrefsAspect {
 }
 
 class InheritedPreferences extends InheritedModel<PrefsAspect> {
-  const InheritedPreferences(this.data, this._update, this._prefs,
-      {required super.child, super.key});
+  const InheritedPreferences(
+    this.data,
+    this._update,
+    this._prefs, {
+    required super.child,
+    super.key,
+  });
 
   final PreferencesData data;
   final SharedPreferences _prefs;
@@ -161,9 +171,13 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
       _updateShouldNotifyDependentRecentFiles(oldWidget, dependencies) ||
       _updateShouldNotifyDependentViewSettings(oldWidget, dependencies) ||
       _updateShouldNotifyDependentAccessibleDirectories(
-          oldWidget, dependencies) ||
+        oldWidget,
+        dependencies,
+      ) ||
       _updateShouldNotifyDependentCustomFilterQueries(
-          oldWidget, dependencies) ||
+        oldWidget,
+        dependencies,
+      ) ||
       _updateShouldNotifyDependentCustomization(oldWidget, dependencies);
 
   Future<void> reload() async {
@@ -197,8 +211,8 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
     } else {
       throw OrgroError(
         'Unknown type: $T',
-        localizedMessage: (context) =>
-            AppLocalizations.of(context)!.errorUnknownType(T),
+        localizedMessage:
+            (context) => AppLocalizations.of(context)!.errorUnknownType(T),
       );
     }
   }
@@ -356,8 +370,10 @@ extension CustomFilterQueriesExt on InheritedPreferences {
   Future<bool> addCustomFilterQuery(String value) async {
     // Maintain order, so don't just prepend and uniquify
     if (!customFilterQueries.contains(value)) {
-      return await _setCustomFilterQueries(
-          [value, ...customFilterQueries.take(9)]);
+      return await _setCustomFilterQueries([
+        value,
+        ...customFilterQueries.take(9),
+      ]);
     }
     return true;
   }
@@ -387,27 +403,28 @@ extension CustomizationExt on InheritedPreferences {
 
 class PreferencesData {
   factory PreferencesData.defaults() => const PreferencesData(
-        textScale: kDefaultTextScale,
-        fontFamily: kDefaultFontFamily,
-        readerMode: kDefaultReaderMode,
-        recentFiles: [],
-        themeMode: _kDefaultThemeMode,
-        remoteImagesPolicy: kDefaultRemoteImagesPolicy,
-        localLinksPolicy: kDefaultLocalLinksPolicy,
-        saveChangesPolicy: kDefaultSaveChangesPolicy,
-        decryptPolicy: kDefaultDecryptPolicy,
-        accessibleDirs: [],
-        customFilterQueries: [],
-        fullWidth: kDefaultFullWidth,
-        scopedPreferences: {},
-        textPreviewString: kDefaultTextPreviewString,
-      );
+    textScale: kDefaultTextScale,
+    fontFamily: kDefaultFontFamily,
+    readerMode: kDefaultReaderMode,
+    recentFiles: [],
+    themeMode: _kDefaultThemeMode,
+    remoteImagesPolicy: kDefaultRemoteImagesPolicy,
+    localLinksPolicy: kDefaultLocalLinksPolicy,
+    saveChangesPolicy: kDefaultSaveChangesPolicy,
+    decryptPolicy: kDefaultDecryptPolicy,
+    accessibleDirs: [],
+    customFilterQueries: [],
+    fullWidth: kDefaultFullWidth,
+    scopedPreferences: {},
+    textPreviewString: kDefaultTextPreviewString,
+  );
 
   factory PreferencesData.fromSharedPreferences(SharedPreferences prefs) {
     final scopedPreferencesJson = prefs.getString(kScopedPreferencesJsonKey);
-    final scopedPreferences = scopedPreferencesJson == null
-        ? null
-        : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
+    final scopedPreferences =
+        scopedPreferencesJson == null
+            ? null
+            : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
     return PreferencesData.defaults().copyWith(
       textScale: prefs.getDouble(kTextScaleKey),
       fontFamily: prefs.getString(kFontFamilyKey),
@@ -418,16 +435,21 @@ class PreferencesData {
           .cast<Map<String, dynamic>>()
           .map((json) => RecentFile.fromJson(json))
           .toList(growable: false),
-      themeMode:
-          ThemeModePersistence.fromString(prefs.getString(kThemeModeKey)),
+      themeMode: ThemeModePersistence.fromString(
+        prefs.getString(kThemeModeKey),
+      ),
       remoteImagesPolicy: RemoteImagesPolicyPersistence.fromString(
-          prefs.getString(kRemoteImagesPolicyKey)),
+        prefs.getString(kRemoteImagesPolicyKey),
+      ),
       localLinksPolicy: LocalLinksPolicyPersistence.fromString(
-          prefs.getString(kLocalLinksPolicyKey)),
+        prefs.getString(kLocalLinksPolicyKey),
+      ),
       saveChangesPolicy: SaveChangesPolicyPersistence.fromString(
-          prefs.getString(kSaveChangesPolicyKey)),
+        prefs.getString(kSaveChangesPolicyKey),
+      ),
       decryptPolicy: DecryptPolicyPersistence.fromString(
-          prefs.getString(kDecryptPolicyKey)),
+        prefs.getString(kDecryptPolicyKey),
+      ),
       accessibleDirs: prefs.getStringList(kAccessibleDirectoriesKey),
       customFilterQueries: prefs.getStringList(kCustomFilterQueriesKey),
       fullWidth: prefs.getBool(kFullWidthKey),
@@ -482,23 +504,22 @@ class PreferencesData {
     bool? fullWidth,
     Map<String, dynamic>? scopedPreferences,
     String? textPreviewString,
-  }) =>
-      PreferencesData(
-        textScale: textScale ?? this.textScale,
-        fontFamily: fontFamily ?? this.fontFamily,
-        readerMode: readerMode ?? this.readerMode,
-        recentFiles: recentFiles ?? this.recentFiles,
-        themeMode: themeMode ?? this.themeMode,
-        remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
-        localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
-        saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
-        decryptPolicy: decryptPolicy ?? this.decryptPolicy,
-        accessibleDirs: accessibleDirs ?? this.accessibleDirs,
-        customFilterQueries: customFilterQueries ?? this.customFilterQueries,
-        fullWidth: fullWidth ?? this.fullWidth,
-        scopedPreferences: scopedPreferences ?? this.scopedPreferences,
-        textPreviewString: textPreviewString ?? this.textPreviewString,
-      );
+  }) => PreferencesData(
+    textScale: textScale ?? this.textScale,
+    fontFamily: fontFamily ?? this.fontFamily,
+    readerMode: readerMode ?? this.readerMode,
+    recentFiles: recentFiles ?? this.recentFiles,
+    themeMode: themeMode ?? this.themeMode,
+    remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
+    localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
+    saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
+    decryptPolicy: decryptPolicy ?? this.decryptPolicy,
+    accessibleDirs: accessibleDirs ?? this.accessibleDirs,
+    customFilterQueries: customFilterQueries ?? this.customFilterQueries,
+    fullWidth: fullWidth ?? this.fullWidth,
+    scopedPreferences: scopedPreferences ?? this.scopedPreferences,
+    textPreviewString: textPreviewString ?? this.textPreviewString,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -515,45 +536,50 @@ class PreferencesData {
       listEquals(accessibleDirs, other.accessibleDirs) &&
       listEquals(customFilterQueries, other.customFilterQueries) &&
       fullWidth == other.fullWidth &&
-      scopedPreferences.unorderedEquals(other.scopedPreferences,
-          valueEquals: (a, b) => mapEquals(
-              a as Map<String, dynamic>?, b as Map<String, dynamic>?)) &&
+      scopedPreferences.unorderedEquals(
+        other.scopedPreferences,
+        valueEquals:
+            (a, b) => mapEquals(
+              a as Map<String, dynamic>?,
+              b as Map<String, dynamic>?,
+            ),
+      ) &&
       textPreviewString == other.textPreviewString;
 
   @override
   int get hashCode => Object.hash(
-        textScale,
-        fontFamily,
-        readerMode,
-        Object.hashAll(recentFiles),
-        themeMode,
-        remoteImagesPolicy,
-        localLinksPolicy,
-        saveChangesPolicy,
-        decryptPolicy,
-        Object.hashAll(accessibleDirs),
-        Object.hashAll(customFilterQueries),
-        fullWidth,
-        Object.hashAll(scopedPreferences.keys),
-        Object.hashAll(scopedPreferences.values),
-        textPreviewString,
-      );
+    textScale,
+    fontFamily,
+    readerMode,
+    Object.hashAll(recentFiles),
+    themeMode,
+    remoteImagesPolicy,
+    localLinksPolicy,
+    saveChangesPolicy,
+    decryptPolicy,
+    Object.hashAll(accessibleDirs),
+    Object.hashAll(customFilterQueries),
+    fullWidth,
+    Object.hashAll(scopedPreferences.keys),
+    Object.hashAll(scopedPreferences.values),
+    textPreviewString,
+  );
 }
 
 extension RemoteImagesPolicyPersistence on RemoteImagesPolicy? {
   static RemoteImagesPolicy? fromString(String? value) => switch (value) {
-        _kRemoteImagesPolicyAllow => RemoteImagesPolicy.allow,
-        _kRemoteImagesPolicyDeny => RemoteImagesPolicy.deny,
-        _kRemoteImagesPolicyAsk => RemoteImagesPolicy.ask,
-        _ => null
-      };
+    _kRemoteImagesPolicyAllow => RemoteImagesPolicy.allow,
+    _kRemoteImagesPolicyDeny => RemoteImagesPolicy.deny,
+    _kRemoteImagesPolicyAsk => RemoteImagesPolicy.ask,
+    _ => null,
+  };
 
   String? get persistableString => switch (this) {
-        RemoteImagesPolicy.allow => _kRemoteImagesPolicyAllow,
-        RemoteImagesPolicy.deny => _kRemoteImagesPolicyDeny,
-        RemoteImagesPolicy.ask => _kRemoteImagesPolicyAsk,
-        null => null,
-      };
+    RemoteImagesPolicy.allow => _kRemoteImagesPolicyAllow,
+    RemoteImagesPolicy.deny => _kRemoteImagesPolicyDeny,
+    RemoteImagesPolicy.ask => _kRemoteImagesPolicyAsk,
+    null => null,
+  };
 }
 
 const _kRemoteImagesPolicyAllow = 'remote_images_policy_allow';
@@ -562,16 +588,16 @@ const _kRemoteImagesPolicyAsk = 'remote_images_policy_ask';
 
 extension LocalLinksPolicyPersistence on LocalLinksPolicy? {
   static LocalLinksPolicy? fromString(String? value) => switch (value) {
-        _kLocalLinksPolicyDeny => LocalLinksPolicy.deny,
-        _kLocalLinksPolicyAsk => LocalLinksPolicy.ask,
-        _ => null,
-      };
+    _kLocalLinksPolicyDeny => LocalLinksPolicy.deny,
+    _kLocalLinksPolicyAsk => LocalLinksPolicy.ask,
+    _ => null,
+  };
 
   String? get persistableString => switch (this) {
-        LocalLinksPolicy.deny => _kLocalLinksPolicyDeny,
-        LocalLinksPolicy.ask => _kLocalLinksPolicyAsk,
-        null => null,
-      };
+    LocalLinksPolicy.deny => _kLocalLinksPolicyDeny,
+    LocalLinksPolicy.ask => _kLocalLinksPolicyAsk,
+    null => null,
+  };
 }
 
 const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
@@ -579,18 +605,18 @@ const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';
 
 extension SaveChangesPolicyPersistence on SaveChangesPolicy? {
   static SaveChangesPolicy? fromString(String? value) => switch (value) {
-        _kSaveChangesPolicyAllow => SaveChangesPolicy.allow,
-        _kSaveChangesPolicyDeny => SaveChangesPolicy.deny,
-        _kSaveChangesPolicyAsk => SaveChangesPolicy.ask,
-        _ => null,
-      };
+    _kSaveChangesPolicyAllow => SaveChangesPolicy.allow,
+    _kSaveChangesPolicyDeny => SaveChangesPolicy.deny,
+    _kSaveChangesPolicyAsk => SaveChangesPolicy.ask,
+    _ => null,
+  };
 
   String? get persistableString => switch (this) {
-        SaveChangesPolicy.allow => _kSaveChangesPolicyAllow,
-        SaveChangesPolicy.deny => _kSaveChangesPolicyDeny,
-        SaveChangesPolicy.ask => _kSaveChangesPolicyAsk,
-        null => null
-      };
+    SaveChangesPolicy.allow => _kSaveChangesPolicyAllow,
+    SaveChangesPolicy.deny => _kSaveChangesPolicyDeny,
+    SaveChangesPolicy.ask => _kSaveChangesPolicyAsk,
+    null => null,
+  };
 }
 
 const _kSaveChangesPolicyAllow = 'save_changes_policy_allow';
@@ -599,16 +625,16 @@ const _kSaveChangesPolicyAsk = 'save_changes_policy_ask';
 
 extension DecryptPolicyPersistence on DecryptPolicy? {
   static DecryptPolicy? fromString(String? value) => switch (value) {
-        _kDecryptPolicyDeny => DecryptPolicy.deny,
-        _kDecryptPolicyAsk => DecryptPolicy.ask,
-        _ => null,
-      };
+    _kDecryptPolicyDeny => DecryptPolicy.deny,
+    _kDecryptPolicyAsk => DecryptPolicy.ask,
+    _ => null,
+  };
 
   String? get persistableString => switch (this) {
-        DecryptPolicy.deny => _kDecryptPolicyDeny,
-        DecryptPolicy.ask => _kDecryptPolicyAsk,
-        null => null,
-      };
+    DecryptPolicy.deny => _kDecryptPolicyDeny,
+    DecryptPolicy.ask => _kDecryptPolicyAsk,
+    null => null,
+  };
 }
 
 const _kDecryptPolicyDeny = 'decrypt_policy_deny';
@@ -616,18 +642,18 @@ const _kDecryptPolicyAsk = 'decrypt_policy_ask';
 
 extension ThemeModePersistence on ThemeMode? {
   String? get persistableString => switch (this) {
-        ThemeMode.system => _kThemeModeSystem,
-        ThemeMode.light => _kThemeModeLight,
-        ThemeMode.dark => _kThemeModeDark,
-        null => null
-      };
+    ThemeMode.system => _kThemeModeSystem,
+    ThemeMode.light => _kThemeModeLight,
+    ThemeMode.dark => _kThemeModeDark,
+    null => null,
+  };
 
   static ThemeMode? fromString(String? value) => switch (value) {
-        _kThemeModeSystem => ThemeMode.system,
-        _kThemeModeLight => ThemeMode.light,
-        _kThemeModeDark => ThemeMode.dark,
-        _ => null,
-      };
+    _kThemeModeSystem => ThemeMode.system,
+    _kThemeModeLight => ThemeMode.light,
+    _kThemeModeDark => ThemeMode.dark,
+    _ => null,
+  };
 }
 
 const _kThemeModeSystem = 'theme_mode_system';
@@ -637,20 +663,22 @@ const _kThemeModeDark = 'theme_mode_dark';
 const _kDefaultThemeMode = ThemeMode.system;
 
 Widget resetPreferencesListItem(BuildContext context) => ListTile(
-      title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
-      onTap: () async {
-        final result = await showDialog<bool>(
-          context: context,
-          builder: (context) => const ConfirmResetDialog(),
-        );
-        if (result != true || !context.mounted) return;
-        await Preferences.of(context, PrefsAspect.nil).reset();
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(AppLocalizations.of(context)!
-                    .snackbarMessagePreferencesReset)),
-          );
-        }
-      },
+  title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
+  onTap: () async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => const ConfirmResetDialog(),
     );
+    if (result != true || !context.mounted) return;
+    await Preferences.of(context, PrefsAspect.nil).reset();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.snackbarMessagePreferencesReset,
+          ),
+        ),
+      );
+    }
+  },
+);

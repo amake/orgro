@@ -10,13 +10,10 @@ class KeyboardShortcuts extends StatelessWidget {
   Widget build(BuildContext context) {
     return CallbackShortcuts(
       bindings: {
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW): () =>
-            Navigator.maybePop(context),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
+            () => Navigator.maybePop(context),
       },
-      child: Focus(
-        autofocus: true,
-        child: child,
-      ),
+      child: Focus(autofocus: true, child: child),
     );
   }
 }

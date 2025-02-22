@@ -72,7 +72,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
 
   @override
-  String get confirmResetPreferencesDialogMessage => 'This will reset all preferences to their default values. This action can’t be undone.';
+  String get confirmResetPreferencesDialogMessage =>
+      'This will reset all preferences to their default values. This action can’t be undone.';
 
   @override
   String get confirmResetPreferencesActionReset => 'Restore';
@@ -141,7 +142,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String searchHits(num n) {
-    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
     final String nString = nNumberFormat.format(n);
 
     String _temp0 = intl.Intl.pluralLogic(
@@ -156,9 +159,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -168,13 +173,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get customFilterChipName => 'Custom';
 
   @override
-  String get snackbarMessageNeedsDirectoryPermissions => 'Orgro немає прав для розвʼязання відносних посилань';
+  String get snackbarMessageNeedsDirectoryPermissions =>
+      'Orgro немає прав для розвʼязання відносних посилань';
 
   @override
   String get snackbarActionGrantAccess => 'Надати дозвіл';
 
   @override
-  String get snackbarMessageNeedsEncryptionKey => 'Could not save. Missing encryption password.';
+  String get snackbarMessageNeedsEncryptionKey =>
+      'Could not save. Missing encryption password.';
 
   @override
   String get snackbarActionEnterEncryptionKey => 'Enter password';
@@ -214,7 +221,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get sectionActionCycleTodo => 'Cycle TODO';
 
   @override
-  String get bannerBodyRemoteImages => 'Цей документ містить віддалені зображення. Бажаєте завантажувати їх?';
+  String get bannerBodyRemoteImages =>
+      'Цей документ містить віддалені зображення. Бажаєте завантажувати їх?';
 
   @override
   String get bannerBodyActionShowAlways => 'Завжди';
@@ -226,7 +234,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionShowOnce => 'Лише раз';
 
   @override
-  String get bannerBodyRelativeLinks => 'Цей документ містить відносні посилання. Бажаєте надати дозвіл?';
+  String get bannerBodyRelativeLinks =>
+      'Цей документ містить відносні посилання. Бажаєте надати дозвіл?';
 
   @override
   String get bannerBodyActionGrantNotNow => 'Не зараз';
@@ -238,7 +247,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionGrantNow => 'Надати дозвіл';
 
   @override
-  String get bannerBodySaveDocumentOrg => 'Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]';
+  String get bannerBodySaveDocumentOrg =>
+      'Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]';
 
   @override
   String get bannerBodyActionSaveAlways => 'Always';
@@ -250,7 +260,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionSaveOnce => 'Just this time';
 
   @override
-  String get bannerBodyDecryptContent => 'This document contains encrypted content. Decrypt it now?';
+  String get bannerBodyDecryptContent =>
+      'This document contains encrypted content. Decrypt it now?';
 
   @override
   String get bannerBodyActionDecryptNow => 'Decrypt';
@@ -265,7 +276,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
-  String get saveChangesDialogMessage => 'Orgro can’t write your changes back to the original file.';
+  String get saveChangesDialogMessage =>
+      'Orgro can’t write your changes back to the original file.';
 
   @override
   String get saveActionShare => 'Share';
@@ -286,13 +298,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get savedMessage => 'Saved';
 
   @override
-  String get inputDecryptionPasswordDialogTitle => 'Enter password for decrypting';
+  String get inputDecryptionPasswordDialogTitle =>
+      'Enter password for decrypting';
 
   @override
-  String get inputEncryptionPasswordDialogTitle => 'Enter password for encrypting';
+  String get inputEncryptionPasswordDialogTitle =>
+      'Enter password for encrypting';
 
   @override
-  String get inputEncryptionPasswordDialogBody => 'This password will be used to encrypt Org Crypt sections for which no password has been specified.';
+  String get inputEncryptionPasswordDialogBody =>
+      'This password will be used to encrypt Org Crypt sections for which no password has been specified.';
 
   @override
   String get inputCustomFilterDialogTitle => 'Custom filter query';
@@ -345,7 +360,8 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get errorCannotResolveRelativePath => 'Не можливо розвʼязати шлях відносно цього документа';
+  String get errorCannotResolveRelativePath =>
+      'Не можливо розвʼязати шлях відносно цього документа';
 
   @override
   String errorPathResolvedToNonFile(String path, String resolved) {
@@ -374,7 +390,8 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return 'Evaluation of the below code timed out after ${timeoutString}ms.\n\n$code';

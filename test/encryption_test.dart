@@ -67,9 +67,12 @@ bar
       final doc = OrgDocument.parse(content);
       final section = doc.sections.first;
       final encrypted = section.encrypt('foobar');
-      expect(encrypted.startsWith('''* foo :crypt:
+      expect(
+        encrypted.startsWith('''* foo :crypt:
 
------BEGIN PGP MESSAGE-----'''), isTrue);
+-----BEGIN PGP MESSAGE-----'''),
+        isTrue,
+      );
     });
   });
 }

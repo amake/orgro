@@ -10,9 +10,7 @@ class ProgressPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.pageTitleLoading),
       ),
-      body: const Center(
-        child: CircularProgressIndicator(),
-      ),
+      body: const Center(child: CircularProgressIndicator()),
     );
   }
 }

@@ -61,14 +61,19 @@ TextBox renderedBounds(
   final renderObject = widget.createRenderObject(context);
   renderObject.layout(constraints);
   return renderObject
-      .getBoxesForSelection(TextSelection(
-          baseOffset: 0, extentOffset: widget.text.toPlainText().length))
+      .getBoxesForSelection(
+        TextSelection(
+          baseOffset: 0,
+          extentOffset: widget.text.toPlainText().length,
+        ),
+      )
       .first;
 }
 
-final platformShortcutKey = Platform.isIOS || Platform.isMacOS
-    ? LogicalKeyboardKey.meta
-    : LogicalKeyboardKey.control;
+final platformShortcutKey =
+    Platform.isIOS || Platform.isMacOS
+        ? LogicalKeyboardKey.meta
+        : LogicalKeyboardKey.control;
 
 extension GlobalPaintBounds on BuildContext {
   Rect? get _globalPaintBounds {
@@ -78,8 +83,9 @@ extension GlobalPaintBounds on BuildContext {
       if (renderObject == null) return null;
 
       final translation = renderObject.getTransformTo(null).getTranslation();
-      return renderObject.paintBounds
-          .shift(Offset(translation.x, translation.y));
+      return renderObject.paintBounds.shift(
+        Offset(translation.x, translation.y),
+      );
     } catch (_) {
       return null;
     }

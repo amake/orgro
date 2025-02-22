@@ -46,7 +46,11 @@ extension NarrowHandler on DocumentPageState {
       bucket!.write(kRestoreNarrowTargetKey, target);
     }
     final newSection = await narrow(
-        context, docProvider.dataSource, section, widget.layer + 1);
+      context,
+      docProvider.dataSource,
+      section,
+      widget.layer + 1,
+    );
     bucket!.remove<String>(kRestoreNarrowTargetKey);
     if (newSection == null || identical(newSection, section)) {
       return;
@@ -100,7 +104,8 @@ extension NarrowHandler on DocumentPageState {
           // it in a section just so it's not lost.
           toInsert = after.sections;
           final headline = AppLocalizations.of(context)!.editInsertedHeadline;
-          final stars = toInsert.firstOrNull?.headline.stars ??
+          final stars =
+              toInsert.firstOrNull?.headline.stars ??
               (before is OrgSection
                   ? before.headline.stars
                   : (value: '*', trailing: ' '));
@@ -131,8 +136,10 @@ extension NarrowHandler on DocumentPageState {
           zipper = zipper.insertRight(newSec);
         }
         final newDoc = zipper.commit();
-        OrgController.of(context).adaptVisibility(newDoc as OrgTree,
-            defaultState: OrgVisibilityState.children);
+        OrgController.of(context).adaptVisibility(
+          newDoc as OrgTree,
+          defaultState: OrgVisibilityState.children,
+        );
         return newDoc;
       default:
         throw Exception('Unexpected section type: $after');

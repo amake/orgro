@@ -8,15 +8,8 @@ class ViewSettings extends StatefulWidget {
   static InheritedViewSettings of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<InheritedViewSettings>()!;
 
-  ViewSettings.defaults(
-    BuildContext context, {
-    required Widget child,
-    Key? key,
-  }) : this(
-          data: ViewSettingsData.defaults(context),
-          child: child,
-          key: key,
-        );
+  ViewSettings.defaults(BuildContext context, {required Widget child, Key? key})
+    : this(data: ViewSettingsData.defaults(context), child: child, key: key);
 
   const ViewSettings({required this.data, required this.child, super.key});
 
@@ -238,9 +231,9 @@ class ViewSettingsData {
   final FilterData filterData;
   final String? queryString;
 
-  TextStyle get textStyle => loadFontWithVariants(fontFamily).copyWith(
-        fontSize: TextScaler.linear(textScale).scale(18),
-      );
+  TextStyle get textStyle => loadFontWithVariants(
+    fontFamily,
+  ).copyWith(fontSize: TextScaler.linear(textScale).scale(18));
 
   ViewSettingsData copyWith({
     double? textScale,
@@ -253,19 +246,18 @@ class ViewSettingsData {
     bool? fullWidth,
     String? queryString,
     FilterData? filterData,
-  }) =>
-      ViewSettingsData(
-        textScale: textScale ?? this.textScale,
-        fontFamily: fontFamily ?? this.fontFamily,
-        readerMode: readerMode ?? this.readerMode,
-        remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
-        localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
-        saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
-        decryptPolicy: decryptPolicy ?? this.decryptPolicy,
-        fullWidth: fullWidth ?? this.fullWidth,
-        queryString: queryString ?? this.queryString,
-        filterData: filterData ?? this.filterData,
-      );
+  }) => ViewSettingsData(
+    textScale: textScale ?? this.textScale,
+    fontFamily: fontFamily ?? this.fontFamily,
+    readerMode: readerMode ?? this.readerMode,
+    remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
+    localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
+    saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
+    decryptPolicy: decryptPolicy ?? this.decryptPolicy,
+    fullWidth: fullWidth ?? this.fullWidth,
+    queryString: queryString ?? this.queryString,
+    filterData: filterData ?? this.filterData,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -283,33 +275,33 @@ class ViewSettingsData {
 
   @override
   int get hashCode => Object.hash(
-        textScale,
-        fontFamily,
-        readerMode,
-        remoteImagesPolicy,
-        localLinksPolicy,
-        saveChangesPolicy,
-        decryptPolicy,
-        fullWidth,
-        queryString,
-        filterData,
-      );
+    textScale,
+    fontFamily,
+    readerMode,
+    remoteImagesPolicy,
+    localLinksPolicy,
+    saveChangesPolicy,
+    decryptPolicy,
+    fullWidth,
+    queryString,
+    filterData,
+  );
 }
 
 class FilterData {
   factory FilterData.defaults() => const FilterData(
-        keywords: kDefaultFilterKeywords,
-        tags: kDefaultFilterTags,
-        priorities: kDefaultFilterPriorities,
-        customFilter: kDefaultCustomFilter,
-      );
+    keywords: kDefaultFilterKeywords,
+    tags: kDefaultFilterTags,
+    priorities: kDefaultFilterPriorities,
+    customFilter: kDefaultCustomFilter,
+  );
 
   factory FilterData.fromJson(Map<String, dynamic> json) => FilterData(
-        keywords: (json['keywords'] as List).cast(),
-        tags: (json['tags'] as List).cast(),
-        priorities: (json['priorities'] as List).cast(),
-        customFilter: json['customFilter'] as String,
-      );
+    keywords: (json['keywords'] as List).cast(),
+    tags: (json['tags'] as List).cast(),
+    priorities: (json['priorities'] as List).cast(),
+    customFilter: json['customFilter'] as String,
+  );
 
   const FilterData({
     required this.keywords,
@@ -336,20 +328,19 @@ class FilterData {
     List<String>? tags,
     List<String>? priorities,
     String? customFilter,
-  }) =>
-      FilterData(
-        keywords: keywords ?? this.keywords,
-        tags: tags ?? this.tags,
-        priorities: priorities ?? this.priorities,
-        customFilter: customFilter ?? this.customFilter,
-      );
+  }) => FilterData(
+    keywords: keywords ?? this.keywords,
+    tags: tags ?? this.tags,
+    priorities: priorities ?? this.priorities,
+    customFilter: customFilter ?? this.customFilter,
+  );
 
   Map<String, dynamic> toJson() => {
-        'keywords': keywords,
-        'tags': tags,
-        'priorities': priorities,
-        'customFilter': customFilter,
-      };
+    'keywords': keywords,
+    'tags': tags,
+    'priorities': priorities,
+    'customFilter': customFilter,
+  };
 
   @override
   bool operator ==(Object other) =>
@@ -361,9 +352,9 @@ class FilterData {
 
   @override
   int get hashCode => Object.hash(
-        Object.hashAll(keywords),
-        Object.hashAll(tags),
-        Object.hashAll(priorities),
-        customFilter,
-      );
+    Object.hashAll(keywords),
+    Object.hashAll(tags),
+    Object.hashAll(priorities),
+    customFilter,
+  );
 }

@@ -100,8 +100,10 @@ void main() {
     - [X] bazinga
     - [X] bazoonga
 ''');
-        final (path: _, node: target) = doc.find<OrgListItem>(
-            (item) => item.body!.toMarkup() == 'bazoonga\n')!;
+        final (path: _, node: target) =
+            doc.find<OrgListItem>(
+              (item) => item.body!.toMarkup() == 'bazoonga\n',
+            )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [100%] and [1/1]
@@ -121,8 +123,10 @@ void main() {
     - [X] bazinga
     - [ ] bazoonga
 ''');
-        final (path: _, node: target) = doc.find<OrgListItem>(
-            (item) => item.body!.toMarkup() == 'bazoonga\n')!;
+        final (path: _, node: target) =
+            doc.find<OrgListItem>(
+              (item) => item.body!.toMarkup() == 'bazoonga\n',
+            )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [0%] and [0/1]

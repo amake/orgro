@@ -8,8 +8,11 @@ import 'package:orgro/src/serialization.dart';
 Iterable<File> get testFiles => Directory('assets/test')
     .listSync(recursive: true)
     .whereType<File>()
-    .where((file) =>
-        file.path.endsWith('.org') && !file.path.endsWith('encoding-sjis.org'));
+    .where(
+      (file) =>
+          file.path.endsWith('.org') &&
+          !file.path.endsWith('encoding-sjis.org'),
+    );
 
 void main() {
   group('Serialization', () {
@@ -41,10 +44,15 @@ jA0ECQMI05i+dd7lsRry0joBcGZQ4m+N9M/Z3I2Xw7SSn2uPMRpWbH9UIRkzPTXU
       final found = doc.find<OrgPgpBlock>((_) => true);
       final (path: _, node: block) = found!;
       // We don't need to actually decrypt here because it's slow
-      final serializer = OrgroDecryptedContentSerializer(block,
-          cleartext: 'bar\n', password: password);
-      final replacement =
-          OrgDecryptedContent.fromDecryptedResult('bar\n', serializer);
+      final serializer = OrgroDecryptedContentSerializer(
+        block,
+        cleartext: 'bar\n',
+        password: password,
+      );
+      final replacement = OrgDecryptedContent.fromDecryptedResult(
+        'bar\n',
+        serializer,
+      );
       final newDoc = doc.editNode(block)!.replace(replacement).commit();
 
       test('Default serializer returns cyphertext', () {
@@ -79,20 +87,20 @@ bar
       test('No matching password', () {
         final password = (password: 'foobar', predicate: (_) => false);
         final serializer = OrgroCyphertextSerializer([password]);
-        expect(
-          () => doc.toMarkup(serializer: serializer),
-          throwsStateError,
-        );
+        expect(() => doc.toMarkup(serializer: serializer), throwsStateError);
       });
       test('Password provided', () {
         final password = (password: 'foobar', predicate: (_) => true);
         final serializer = OrgroCyphertextSerializer([password]);
         final output = doc.toMarkup(serializer: serializer);
         // dart-pg cyphertext is apparently not stable, so we can't compare exactly
-        expect(output.startsWith('''* foo :crypt:
+        expect(
+          output.startsWith('''* foo :crypt:
 
 -----BEGIN PGP MESSAGE-----
-'''), isTrue);
+'''),
+          isTrue,
+        );
       });
       test('Round-trip', () {
         final password = (password: 'foobar', predicate: (_) => true);

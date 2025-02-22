@@ -81,10 +81,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
-            IconButton(
-              onPressed: _save,
-              icon: const Icon(Icons.check),
-            )
+            IconButton(onPressed: _save, icon: const Icon(Icons.check)),
           ],
         ),
         body: Column(
@@ -156,19 +153,21 @@ class _EditorToolbar extends StatelessWidget {
           children: [
             ValueListenableBuilder(
               valueListenable: undoController,
-              builder: (context, value, _) => IconButton(
-                icon: const Icon(Icons.undo),
-                onPressed:
-                    enabled && value.canUndo ? undoController.undo : null,
-              ),
+              builder:
+                  (context, value, _) => IconButton(
+                    icon: const Icon(Icons.undo),
+                    onPressed:
+                        enabled && value.canUndo ? undoController.undo : null,
+                  ),
             ),
             ValueListenableBuilder(
               valueListenable: undoController,
-              builder: (context, value, _) => IconButton(
-                icon: const Icon(Icons.redo),
-                onPressed:
-                    enabled && value.canRedo ? undoController.redo : null,
-              ),
+              builder:
+                  (context, value, _) => IconButton(
+                    icon: const Icon(Icons.redo),
+                    onPressed:
+                        enabled && value.canRedo ? undoController.redo : null,
+                  ),
             ),
             IconButton(
               icon: const Icon(Icons.format_bold),
@@ -221,7 +220,9 @@ class _EditorToolbar extends StatelessWidget {
     if (!value.selection.isValid) return;
     final selection = value.selection.textInside(value.text);
     final replacement = '$prefix$selection$suffix';
-    controller.value = value.replaced(value.selection, replacement).copyWith(
+    controller.value = value
+        .replaced(value.selection, replacement)
+        .copyWith(
           selection: TextSelection.collapsed(
             offset:
                 value.selection.baseOffset + replacement.length - suffix.length,
@@ -234,14 +235,18 @@ class _EditorToolbar extends StatelessWidget {
     final value = controller.value;
     if (!value.selection.isValid) return;
     final selection = value.selection.textInside(value.text);
-    final url = _tryParseUrl(selection) ??
+    final url =
+        _tryParseUrl(selection) ??
         (await Clipboard.hasStrings()
             ? _tryParseUrl(
-                (await Clipboard.getData(Clipboard.kTextPlain))?.text)
+              (await Clipboard.getData(Clipboard.kTextPlain))?.text,
+            )
             : null);
     final description = url == null ? selection : null;
     final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
-    controller.value = value.replaced(value.selection, replacement).copyWith(
+    controller.value = value
+        .replaced(value.selection, replacement)
+        .copyWith(
           selection: TextSelection.collapsed(
             offset: value.selection.baseOffset + replacement.length - 2,
           ),
@@ -263,9 +268,16 @@ class _EditorToolbar extends StatelessWidget {
       initialTime: TimeOfDay.now(),
     );
     final replacement =
-        OrgSimpleTimestamp('[', date.toOrgDate(), time?.toOrgTime(), [], ']')
-            .toMarkup();
-    controller.value = value.replaced(value.selection, replacement).copyWith(
+        OrgSimpleTimestamp(
+          '[',
+          date.toOrgDate(),
+          time?.toOrgTime(),
+          [],
+          ']',
+        ).toMarkup();
+    controller.value = value
+        .replaced(value.selection, replacement)
+        .copyWith(
           selection: TextSelection.collapsed(
             offset: value.selection.baseOffset + replacement.length - 1,
           ),

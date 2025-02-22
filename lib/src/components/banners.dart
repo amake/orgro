@@ -40,8 +40,9 @@ class _NicelyTimedBannerState extends State<_NicelyTimedBanner> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 100),
-      transitionBuilder: (child, animation) =>
-          SizeTransition(sizeFactor: animation, child: child),
+      transitionBuilder:
+          (child, animation) =>
+              SizeTransition(sizeFactor: animation, child: child),
       child: _ready && widget.visible ? widget.child : const SizedBox.shrink(),
     );
   }
@@ -62,9 +63,7 @@ class RemoteImagePermissionsBanner extends StatelessWidget {
     return _NicelyTimedBanner(
       visible: visible,
       child: MaterialBanner(
-        content: Text(
-          AppLocalizations.of(context)!.bannerBodyRemoteImages,
-        ),
+        content: Text(AppLocalizations.of(context)!.bannerBodyRemoteImages),
         leading: const Icon(Icons.photo),
         actions: [
           _BannerButton(
@@ -104,9 +103,7 @@ class DirectoryPermissionsBanner extends StatelessWidget {
     return _NicelyTimedBanner(
       visible: visible,
       child: MaterialBanner(
-        content: Text(
-          AppLocalizations.of(context)!.bannerBodyRelativeLinks,
-        ),
+        content: Text(AppLocalizations.of(context)!.bannerBodyRelativeLinks),
         leading: const Icon(Icons.photo),
         actions: [
           _BannerButton(
@@ -144,10 +141,11 @@ class SavePermissionsBanner extends StatelessWidget {
       child: MaterialBanner(
         content: OrgText(
           AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap: (link) => launchUrl(
-            Uri.parse(link.location),
-            mode: LaunchMode.externalApplication,
-          ),
+          onLinkTap:
+              (link) => launchUrl(
+                Uri.parse(link.location),
+                mode: LaunchMode.externalApplication,
+              ),
         ),
         leading: const Icon(Icons.save),
         actions: [
@@ -217,7 +215,8 @@ class _BannerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.secondary),
+        foregroundColor: Theme.of(context).colorScheme.secondary,
+      ),
       onPressed: onPressed,
       child: Text(text.toUpperCase()),
     );

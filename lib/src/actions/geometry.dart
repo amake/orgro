@@ -28,10 +28,7 @@ class FullWidthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Transform.rotate(
-        angle: pi / 2,
-        child: const Icon(Icons.expand),
-      ),
+      icon: Transform.rotate(angle: pi / 2, child: const Icon(Icons.expand)),
       color: enabled ? Theme.of(context).colorScheme.secondary : null,
       onPressed: () => onChanged(!enabled),
     );

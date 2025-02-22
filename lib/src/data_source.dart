@@ -68,8 +68,10 @@ class WebDataSource extends DataSource {
       } else {
         throw OrgroError(
           'Unexpected HTTP response: $response',
-          localizedMessage: (context) => AppLocalizations.of(context)!
-              .errorUnexpectedHttpResponse(response),
+          localizedMessage:
+              (context) => AppLocalizations.of(
+                context,
+              )!.errorUnexpectedHttpResponse(response),
         );
       }
     } on Exception catch (e, s) {
@@ -106,7 +108,8 @@ class AssetDataSource extends DataSource {
 
   @override
   AssetDataSource resolveRelative(String relativePath) => AssetDataSource(
-      Uri.parse(key).resolveUri(Uri(path: relativePath)).toFilePath());
+    Uri.parse(key).resolveUri(Uri(path: relativePath)).toFilePath(),
+  );
 }
 
 class NativeDataSource extends DataSource {
@@ -117,8 +120,10 @@ class NativeDataSource extends DataSource {
     required this.persistable,
     this.parentDirIdentifier,
     this.rootDirIdentifier,
-  }) : assert(parentDirIdentifier == null && rootDirIdentifier == null ||
-            parentDirIdentifier != null && rootDirIdentifier != null);
+  }) : assert(
+         parentDirIdentifier == null && rootDirIdentifier == null ||
+             parentDirIdentifier != null && rootDirIdentifier != null,
+       );
 
   /// The identifier used to read the file via native APIs
   final String identifier;
@@ -141,30 +146,39 @@ class NativeDataSource extends DataSource {
   String get id => uri;
 
   @override
-  FutureOr<String> get content => FilePickerWritable()
-      .readFile(identifier: identifier, reader: (_, file) => _readFile(file));
+  FutureOr<String> get content => FilePickerWritable().readFile(
+    identifier: identifier,
+    reader: (_, file) => _readFile(file),
+  );
 
   @override
   FutureOr<Uint8List> get bytes => FilePickerWritable().readFile(
-      identifier: identifier, reader: (_, file) => file.readAsBytes());
+    identifier: identifier,
+    reader: (_, file) => file.readAsBytes(),
+  );
 
   @override
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
     if (parentDirIdentifier == null) {
       throw OrgroError(
         'Can’t resolve path relative to this document',
-        localizedMessage: (context) =>
-            AppLocalizations.of(context)!.errorCannotResolveRelativePath,
+        localizedMessage:
+            (context) =>
+                AppLocalizations.of(context)!.errorCannotResolveRelativePath,
       );
     }
     // TODO(aaron): See if we can resolve to a non-existent file for writing
     final resolved = await FilePickerWritable().resolveRelativePath(
-        directoryIdentifier: parentDirIdentifier!, relativePath: relativePath);
+      directoryIdentifier: parentDirIdentifier!,
+      relativePath: relativePath,
+    );
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
-        localizedMessage: (context) => AppLocalizations.of(context)!
-            .errorPathResolvedToNonFile(relativePath, resolved.uri),
+        localizedMessage:
+            (context) => AppLocalizations.of(
+              context,
+            )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
       );
     }
     return NativeDataSource(
@@ -176,7 +190,9 @@ class NativeDataSource extends DataSource {
   }
 
   Future<FileInfo> write(String content) => FilePickerWritable().writeFile(
-      identifier: identifier, writer: (file) => file.writeAsString(content));
+    identifier: identifier,
+    writer: (file) => file.writeAsString(content),
+  );
 
   @override
   bool get needsToResolveParent => persistable && parentDirIdentifier == null;
@@ -203,8 +219,10 @@ class NativeDataSource extends DataSource {
     for (final rootId in accessibleDirs) {
       debugPrint('Resolving parent of $uri relative to $rootId');
       try {
-        final parent = await FilePickerWritable()
-            .getDirectory(rootIdentifier: rootId, fileIdentifier: identifier);
+        final parent = await FilePickerWritable().getDirectory(
+          rootIdentifier: rootId,
+          fileIdentifier: identifier,
+        );
         debugPrint('Found file $uri parent dir: ${parent.uri}');
         return (rootId, parent.identifier);
       } on Exception {
@@ -216,25 +234,25 @@ class NativeDataSource extends DataSource {
 
   @override
   Future<File> copyTo(Uri uri) => FilePickerWritable().readFile(
-      identifier: identifier,
-      reader: (_, file) async {
-        await file.copy(uri.toFilePath());
-        return File.fromUri(uri);
-      });
+    identifier: identifier,
+    reader: (_, file) async {
+      await file.copy(uri.toFilePath());
+      return File.fromUri(uri);
+    },
+  );
 }
 
 class LoadedNativeDataSource extends NativeDataSource {
   static Future<LoadedNativeDataSource> fromExternal(
     FileInfo externalFileInfo,
     File file,
-  ) async =>
-      LoadedNativeDataSource(
-        externalFileInfo.fileName ?? file.uri.pathSegments.last,
-        externalFileInfo.identifier,
-        externalFileInfo.uri,
-        await _readFile(file),
-        persistable: externalFileInfo.persistable,
-      );
+  ) async => LoadedNativeDataSource(
+    externalFileInfo.fileName ?? file.uri.pathSegments.last,
+    externalFileInfo.identifier,
+    externalFileInfo.uri,
+    await _readFile(file),
+    persistable: externalFileInfo.persistable,
+  );
 
   LoadedNativeDataSource(
     super.name,
@@ -248,12 +266,8 @@ class LoadedNativeDataSource extends NativeDataSource {
   final String content;
 
   @override
-  DataSource get minimize => NativeDataSource(
-        name,
-        identifier,
-        uri,
-        persistable: persistable,
-      );
+  DataSource get minimize =>
+      NativeDataSource(name, identifier, uri, persistable: persistable);
 
   @override
   Future<LoadedNativeDataSource> resolveParent(List<String> accessibleDirs) =>

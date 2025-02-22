@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 
 void _scrollTo(ScrollController controller, double position) =>
-    controller.animateTo(position,
-        duration: const Duration(milliseconds: 300), curve: Curves.ease);
+    controller.animateTo(
+      position,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
 
 void _scrollToTop(BuildContext context) {
   final controller = PrimaryScrollController.of(context);

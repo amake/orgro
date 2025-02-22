@@ -55,26 +55,27 @@ PageRoute<void> _buildDocumentRoute(
   InitialMode? mode,
 ) {
   return MaterialPageRoute<void>(
-    builder: (context) => FutureBuilder<ParsedOrgFileInfo?>(
-      future: parsed,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return DocumentProvider(
-            dataSource: snapshot.data!.dataSource,
-            doc: snapshot.data!.doc,
-            child: _DocumentPageWrapper(
-              layer: 0,
-              target: target,
-              initialMode: mode,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return ErrorPage(error: snapshot.error.toString());
-        } else {
-          return const ProgressPage();
-        }
-      },
-    ),
+    builder:
+        (context) => FutureBuilder<ParsedOrgFileInfo?>(
+          future: parsed,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return DocumentProvider(
+                dataSource: snapshot.data!.dataSource,
+                doc: snapshot.data!.doc,
+                child: _DocumentPageWrapper(
+                  layer: 0,
+                  target: target,
+                  initialMode: mode,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return ErrorPage(error: snapshot.error.toString());
+            } else {
+              return const ProgressPage();
+            }
+          },
+        ),
     fullscreenDialog: true,
   );
 }
@@ -104,16 +105,19 @@ class _DocumentPageWrapper extends StatelessWidget {
             final viewSettings = ViewSettings.of(context);
             return OrgController(
               root: docProvider.doc,
-              settings: viewSettings.readerMode
-                  ? OrgSettings.hideMarkup
-                  : const OrgSettings(),
+              settings:
+                  viewSettings.readerMode
+                      ? OrgSettings.hideMarkup
+                      : const OrgSettings(),
               interpretEmbeddedSettings: true,
               searchQuery: _searchPattern(viewSettings.queryString),
               sparseQuery: _sparseQuery(viewSettings.filterData),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame
-              errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => showErrorSnackBar(context, OrgroError.from(e))),
+              errorHandler:
+                  (e) => WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => showErrorSnackBar(context, OrgroError.from(e)),
+                  ),
               restorationId: 'org_page:${dataSource.id}',
               child: OrgLocator(
                 child: DocumentPage(
@@ -132,13 +136,14 @@ class _DocumentPageWrapper extends StatelessWidget {
   }
 }
 
-Pattern? _searchPattern(String? queryString) => queryString == null
-    ? null
-    : RegExp(
-        RegExp.escape(queryString),
-        unicode: true,
-        caseSensitive: false,
-      );
+Pattern? _searchPattern(String? queryString) =>
+    queryString == null
+        ? null
+        : RegExp(
+          RegExp.escape(queryString),
+          unicode: true,
+          caseSensitive: false,
+        );
 
 OrgQueryMatcher? _sparseQuery(FilterData filterData) {
   if (filterData.isEmpty) {
@@ -147,11 +152,21 @@ OrgQueryMatcher? _sparseQuery(FilterData filterData) {
   return OrgQueryAndMatcher([
     if (filterData.customFilter.isNotEmpty)
       OrgQueryMatcher.fromMarkup(filterData.customFilter),
-    ...filterData.keywords.map((value) =>
-        OrgQueryPropertyMatcher(property: 'TODO', operator: '=', value: value)),
+    ...filterData.keywords.map(
+      (value) => OrgQueryPropertyMatcher(
+        property: 'TODO',
+        operator: '=',
+        value: value,
+      ),
+    ),
     ...filterData.tags.map((value) => OrgQueryTagMatcher(value)),
-    ...filterData.priorities.map((value) => OrgQueryPropertyMatcher(
-        property: 'PRIORITY', operator: '=', value: value)),
+    ...filterData.priorities.map(
+      (value) => OrgQueryPropertyMatcher(
+        property: 'PRIORITY',
+        operator: '=',
+        value: value,
+      ),
+    ),
   ]);
 }
 
@@ -168,56 +183,65 @@ Future<OrgTree?> narrow(
   await Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (context) => UnmanagedRestorationScope(
-        bucket: bucket,
-        child: DocumentProvider(
-          doc: section,
-          dataSource: dataSource,
-          onDocChanged: (doc) => result = doc,
-          child: ViewSettings(
-            data: viewSettings.data,
-            child: Builder(builder: (context) {
-              final viewSettings = ViewSettings.of(context);
-              return OrgController.defaults(
-                orgController,
-                // Continue to use the true document root so that links to sections
-                // outside the narrowed section can be resolved
-                root: orgController.root,
-                settings: viewSettings.readerMode
-                    ? OrgSettings.hideMarkup
-                    : const OrgSettings(),
-                searchQuery: _searchPattern(viewSettings.queryString),
-                sparseQuery: _sparseQuery(viewSettings.filterData),
-                restorationId: 'org_narrow_$layer:${dataSource.id}',
-                child: OrgLocator(
-                  child: DocumentPage(
-                    layer: layer,
-                    title: AppLocalizations.of(context)!
-                        .pageTitleNarrow(dataSource.name),
-                    initialQuery: viewSettings.queryString,
-                    initialFilter: viewSettings.filterData,
-                    root: false,
-                  ),
+      builder:
+          (context) => UnmanagedRestorationScope(
+            bucket: bucket,
+            child: DocumentProvider(
+              doc: section,
+              dataSource: dataSource,
+              onDocChanged: (doc) => result = doc,
+              child: ViewSettings(
+                data: viewSettings.data,
+                child: Builder(
+                  builder: (context) {
+                    final viewSettings = ViewSettings.of(context);
+                    return OrgController.defaults(
+                      orgController,
+                      // Continue to use the true document root so that links to sections
+                      // outside the narrowed section can be resolved
+                      root: orgController.root,
+                      settings:
+                          viewSettings.readerMode
+                              ? OrgSettings.hideMarkup
+                              : const OrgSettings(),
+                      searchQuery: _searchPattern(viewSettings.queryString),
+                      sparseQuery: _sparseQuery(viewSettings.filterData),
+                      restorationId: 'org_narrow_$layer:${dataSource.id}',
+                      child: OrgLocator(
+                        child: DocumentPage(
+                          layer: layer,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.pageTitleNarrow(dataSource.name),
+                          initialQuery: viewSettings.queryString,
+                          initialFilter: viewSettings.filterData,
+                          root: false,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            }),
+              ),
+            ),
           ),
-        ),
-      ),
     ),
   );
   return result;
 }
 
 Future<void> showInteractive(
-    BuildContext context, String title, Widget child) async {
+  BuildContext context,
+  String title,
+  Widget child,
+) async {
   return await Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder: (builder) => Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: InteractiveViewer(child: Center(child: child)),
-      ),
+      builder:
+          (builder) => Scaffold(
+            appBar: AppBar(title: Text(title)),
+            body: InteractiveViewer(child: Center(child: child)),
+          ),
     ),
   );
 }
@@ -235,19 +259,21 @@ Future<OrgTree?> showTextEditor(
     context,
     MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (builder) => RootRestorationScope(
-        restorationId: 'org_editor_$layer:${dataSource.id}',
-        child: ViewSettings(
-          data: viewSettings,
-          child: EditorPage(
-            docId: dataSource.id,
-            text: text,
-            title:
-                AppLocalizations.of(context)!.pageTitleEditing(dataSource.name),
-            requestFocus: requestFocus,
+      builder:
+          (builder) => RootRestorationScope(
+            restorationId: 'org_editor_$layer:${dataSource.id}',
+            child: ViewSettings(
+              data: viewSettings,
+              child: EditorPage(
+                docId: dataSource.id,
+                text: text,
+                title: AppLocalizations.of(
+                  context,
+                )!.pageTitleEditing(dataSource.name),
+                requestFocus: requestFocus,
+              ),
+            ),
           ),
-        ),
-      ),
     ),
   );
 

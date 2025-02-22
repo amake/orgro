@@ -23,14 +23,16 @@ class SavePermissionDialog extends StatelessWidget {
       //
       // TODO(aaron): Should this be inside OrgText instead?
       content: SizedBox(
-          width: double.maxFinite,
-          child: OrgText(
-            AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-            onLinkTap: (link) => launchUrl(
-              Uri.parse(link.location),
-              mode: LaunchMode.externalApplication,
-            ),
-          )),
+        width: double.maxFinite,
+        child: OrgText(
+          AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
+          onLinkTap:
+              (link) => launchUrl(
+                Uri.parse(link.location),
+                mode: LaunchMode.externalApplication,
+              ),
+        ),
+      ),
       actions: [
         ListTile(
           title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveOnce),
@@ -66,35 +68,37 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
       content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
       actions: [
-        Builder(builder: (context) {
-          return ListTile(
-            title: Text(SaveAction.share.toDisplayString(context)),
-            onTap: () async {
-              final navigator = Navigator.of(context);
+        Builder(
+          builder: (context) {
+            return ListTile(
+              title: Text(SaveAction.share.toDisplayString(context)),
+              onTap: () async {
+                final navigator = Navigator.of(context);
 
-              // Compute origin of share sheet for tablets
-              final box = context.findRenderObject() as RenderBox?;
-              final origin = box!.localToGlobal(Offset.zero) & box.size;
+                // Compute origin of share sheet for tablets
+                final box = context.findRenderObject() as RenderBox?;
+                final origin = box!.localToGlobal(Offset.zero) & box.size;
 
-              final markup = await serializeWithProgressUI(
-                context,
-                doc,
-                serializer,
-              );
-              if (markup == null) return;
+                final markup = await serializeWithProgressUI(
+                  context,
+                  doc,
+                  serializer,
+                );
+                if (markup == null) return;
 
-              final result = await Share.share(
-                markup,
-                sharePositionOrigin: origin,
-              );
+                final result = await Share.share(
+                  markup,
+                  sharePositionOrigin: origin,
+                );
 
-              // Don't close popup unless user successfully shared
-              if (result.status == ShareResultStatus.success) {
-                navigator.pop(true);
-              }
-            },
-          );
-        }),
+                // Don't close popup unless user successfully shared
+                if (result.status == ShareResultStatus.success) {
+                  navigator.pop(true);
+                }
+              },
+            );
+          },
+        ),
         ListTile(
           title: Text(SaveAction.discard.toDisplayString(context)),
           onTap: () => Navigator.pop(context, true),
@@ -108,9 +112,9 @@ enum SaveAction { share, discard }
 
 extension SaveActionDisplayString on SaveAction {
   String toDisplayString(BuildContext context) => switch (this) {
-        SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
-        SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
-      };
+    SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
+    SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
+  };
 }
 
 class DiscardChangesDialog extends StatelessWidget {
@@ -143,18 +147,22 @@ class ConfirmResetDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.warning),
       title: Text(
-          AppLocalizations.of(context)!.confirmResetPreferencesDialogTitle),
+        AppLocalizations.of(context)!.confirmResetPreferencesDialogTitle,
+      ),
       content: Text(
-          AppLocalizations.of(context)!.confirmResetPreferencesDialogMessage),
+        AppLocalizations.of(context)!.confirmResetPreferencesDialogMessage,
+      ),
       actions: [
         ListTile(
           title: Text(
-              AppLocalizations.of(context)!.confirmResetPreferencesActionReset),
+            AppLocalizations.of(context)!.confirmResetPreferencesActionReset,
+          ),
           onTap: () => Navigator.pop(context, true),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!
-              .confirmResetPreferencesActionCancel),
+          title: Text(
+            AppLocalizations.of(context)!.confirmResetPreferencesActionCancel,
+          ),
           onTap: () => Navigator.pop(context, false),
         ),
       ],
@@ -179,11 +187,7 @@ class InputPasswordDialog extends StatelessWidget {
       content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(bodyText!),
-          const SizedBox(height: 8),
-          content,
-        ],
+        children: [Text(bodyText!), const SizedBox(height: 8), content],
       );
     }
     return AlertDialog(
@@ -250,19 +254,22 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
 
   final dialogFuture = showDialog<(T, Object?)>(
     context: context,
-    builder: (context) => ProgressIndicatorDialog(
-      title: dialogTitle,
-      dismissable: true,
-    ),
+    builder:
+        (context) =>
+            ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
   );
 
-  task.then((result) {
-    if (!canceled && context.mounted) Navigator.pop(context, (result, null));
-  }).onError((error, stackTrace) {
-    if (context.mounted) showErrorSnackBar(context, error);
-    logError(error, stackTrace);
-    if (!canceled && context.mounted) Navigator.pop(context, (null, error));
-  });
+  task
+      .then((result) {
+        if (!canceled && context.mounted) {
+          Navigator.pop(context, (result, null));
+        }
+      })
+      .onError((error, stackTrace) {
+        if (context.mounted) showErrorSnackBar(context, error);
+        logError(error, stackTrace);
+        if (!canceled && context.mounted) Navigator.pop(context, (null, error));
+      });
 
   // Popped will be one of:
   // - null if the user closed the dialog by tapping outside or using the back
@@ -340,16 +347,20 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
       actions: [
         _DialogButton(
           text: AppLocalizations.of(context)!.dialogActionHelp,
-          onPressed: () => launchUrl(
-            Uri.parse(
-                'https://orgmode.org/manual/Matching-tags-and-properties.html'),
-            mode: LaunchMode.externalApplication,
-          ),
+          onPressed:
+              () => launchUrl(
+                Uri.parse(
+                  'https://orgmode.org/manual/Matching-tags-and-properties.html',
+                ),
+                mode: LaunchMode.externalApplication,
+              ),
         ),
         if (history.isNotEmpty)
           _DialogButton(
-            text: AppLocalizations.of(context)!
-                .inputCustomFilterDialogHistoryButton,
+            text:
+                AppLocalizations.of(
+                  context,
+                )!.inputCustomFilterDialogHistoryButton,
             onPressed: () async {
               final entry = await _pickFromHistory(context, history);
               if (entry != null) _controller.text = entry;
@@ -361,11 +372,12 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         ),
         ValueListenableBuilder(
           valueListenable: _controller,
-          builder: (context, value, _) => _DialogButton(
-            text: AppLocalizations.of(context)!.dialogActionConfirm,
-            onPressed:
-                _validate(value.text) ? () => _confirm(value.text) : null,
-          ),
+          builder:
+              (context, value, _) => _DialogButton(
+                text: AppLocalizations.of(context)!.dialogActionConfirm,
+                onPressed:
+                    _validate(value.text) ? () => _confirm(value.text) : null,
+              ),
         ),
       ],
     );
@@ -389,11 +401,12 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
   }
 
   Future<String?> _pickFromHistory(
-          BuildContext context, List<String> history) =>
-      showDialog<String>(
-        context: context,
-        builder: (context) => const CustomFilterHistoryDialog(),
-      );
+    BuildContext context,
+    List<String> history,
+  ) => showDialog<String>(
+    context: context,
+    builder: (context) => const CustomFilterHistoryDialog(),
+  );
 }
 
 class CustomFilterHistoryDialog extends StatelessWidget {
@@ -401,15 +414,18 @@ class CustomFilterHistoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final history = Preferences.of(context, PrefsAspect.customFilterQueries)
-        .customFilterQueries;
+    final history =
+        Preferences.of(
+          context,
+          PrefsAspect.customFilterQueries,
+        ).customFilterQueries;
     return SimpleDialog(
       children: [
         for (final entry in history)
           ListTile(
             title: Text(entry),
             onTap: () => Navigator.pop(context, entry),
-          )
+          ),
       ],
     );
   }
@@ -427,49 +443,48 @@ class CitationsDialog extends StatelessWidget {
       content: SizedBox(
         width: double.maxFinite,
         child: ListView.builder(
-            shrinkWrap: true,
-            itemBuilder: (context, idx) {
-              final entry = entries[idx];
-              final url = entry.getUrl();
-              final details = entry.getDetails();
-              return ListTile(
-                  leading: switch (entry.type.toLowerCase()) {
-                    'book' ||
-                    'booklet' ||
-                    'inbook' ||
-                    'incollection' ||
-                    'manual' =>
-                      const Icon(Icons.book),
-                    'conference' ||
-                    'inproceedings' ||
-                    'proceedings' =>
-                      const Icon(Icons.mic),
-                    'article' ||
-                    'mastersthesis' ||
-                    'phdthesis' ||
-                    'techreport' =>
-                      const Icon(Icons.article),
-                    // 'misc' is often used for websites; the Language icon is
-                    // an abstract globe, which in my opinion is more suggestive
-                    // of a website than Web or Public
-                    'misc' => const Icon(Icons.language),
-                    _ => const Icon(Icons.question_mark)
-                  },
-                  title: Text(
-                    entry.getPrettyValue('title') ?? entry.key,
-                  ),
-                  subtitle: details.isEmpty ? null : Text(details),
-                  trailing: url == null
+          shrinkWrap: true,
+          itemBuilder: (context, idx) {
+            final entry = entries[idx];
+            final url = entry.getUrl();
+            final details = entry.getDetails();
+            return ListTile(
+              leading: switch (entry.type.toLowerCase()) {
+                'book' ||
+                'booklet' ||
+                'inbook' ||
+                'incollection' ||
+                'manual' => const Icon(Icons.book),
+                'conference' ||
+                'inproceedings' ||
+                'proceedings' => const Icon(Icons.mic),
+                'article' ||
+                'mastersthesis' ||
+                'phdthesis' ||
+                'techreport' => const Icon(Icons.article),
+                // 'misc' is often used for websites; the Language icon is
+                // an abstract globe, which in my opinion is more suggestive
+                // of a website than Web or Public
+                'misc' => const Icon(Icons.language),
+                _ => const Icon(Icons.question_mark),
+              },
+              title: Text(entry.getPrettyValue('title') ?? entry.key),
+              subtitle: details.isEmpty ? null : Text(details),
+              trailing:
+                  url == null
                       ? null
                       : IconButton(
-                          icon: const Icon(Icons.open_in_new),
-                          onPressed: () => launchUrl(
-                            url,
-                            mode: LaunchMode.externalApplication,
-                          ),
-                        ));
-            },
-            itemCount: entries.length),
+                        icon: const Icon(Icons.open_in_new),
+                        onPressed:
+                            () => launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            ),
+                      ),
+            );
+          },
+          itemCount: entries.length,
+        ),
       ),
     );
   }
@@ -485,10 +500,7 @@ class _DialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
-      child: Text(
-        text.toUpperCase(),
-        textAlign: TextAlign.end,
-      ),
+      child: Text(text.toUpperCase(), textAlign: TextAlign.end),
     );
   }
 }

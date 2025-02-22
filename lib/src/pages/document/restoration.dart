@@ -25,11 +25,13 @@ extension RestorationUtils on DocumentPageState {
     if (searchQuery != null && searchQuery.isNotEmpty) {
       searchDelegate.query = searchQuery;
     }
-    final searchFilterJson =
-        bucket!.read<Map<Object?, Object?>>(kRestoreSearchFilterKey);
-    final searchFilter = searchFilterJson == null
-        ? null
-        : FilterData.fromJson(searchFilterJson.cast<String, dynamic>());
+    final searchFilterJson = bucket!.read<Map<Object?, Object?>>(
+      kRestoreSearchFilterKey,
+    );
+    final searchFilter =
+        searchFilterJson == null
+            ? null
+            : FilterData.fromJson(searchFilterJson.cast<String, dynamic>());
     if (searchFilter != null && searchFilter.isNotEmpty) {
       searchDelegate.filter = searchFilter;
     }

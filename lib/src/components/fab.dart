@@ -20,19 +20,13 @@ class BadgableFloatingActionButton extends StatelessWidget {
       heroTag: heroTag,
       onPressed: onPressed,
       foregroundColor: Theme.of(context).colorScheme.onSecondary,
-      child: _Badge(
-        visible: badgeVisible,
-        child: child,
-      ),
+      child: _Badge(visible: badgeVisible, child: child),
     );
   }
 }
 
 class _Badge extends StatelessWidget {
-  const _Badge({
-    required this.child,
-    required this.visible,
-  });
+  const _Badge({required this.child, required this.visible});
 
   final Widget child;
   final bool visible;

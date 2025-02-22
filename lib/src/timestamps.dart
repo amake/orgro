@@ -18,16 +18,16 @@ final _weekdayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 extension DateTimeUtil on DateTime {
   OrgDate toOrgDate() => (
-        year: year.toString().padLeft(4, '0'),
-        month: month.toString().padLeft(2, '0'),
-        day: day.toString().padLeft(2, '0'),
-        dayName: _weekdayNames[weekday - 1],
-      );
+    year: year.toString().padLeft(4, '0'),
+    month: month.toString().padLeft(2, '0'),
+    day: day.toString().padLeft(2, '0'),
+    dayName: _weekdayNames[weekday - 1],
+  );
 }
 
 extension TimeOfDayUtil on TimeOfDay {
   OrgTime toOrgTime() => (
-        hour: hour.toString().padLeft(2, '0'),
-        minute: minute.toString().padLeft(2, '0'),
-      );
+    hour: hour.toString().padLeft(2, '0'),
+    minute: minute.toString().padLeft(2, '0'),
+  );
 }

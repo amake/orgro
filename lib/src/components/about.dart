@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const orgroVersion =
-    String.fromEnvironment('ORGRO_VERSION', defaultValue: 'dev');
+const orgroVersion = String.fromEnvironment(
+  'ORGRO_VERSION',
+  defaultValue: 'dev',
+);
 
 void openAboutDialog(BuildContext context) {
   showDialog<void>(
@@ -52,10 +54,7 @@ class _AppIcon extends StatelessWidget {
 }
 
 class _AboutItem extends StatelessWidget {
-  const _AboutItem({
-    required this.label,
-    required this.onPressed,
-  });
+  const _AboutItem({required this.label, required this.onPressed});
 
   final String label;
   final VoidCallback onPressed;
@@ -71,11 +70,11 @@ class _AboutItem extends StatelessWidget {
 }
 
 void visitSupportLink() => launchUrl(
-      Uri.parse('https://github.com/amake/orgro/issues'),
-      mode: LaunchMode.externalApplication,
-    );
+  Uri.parse('https://github.com/amake/orgro/issues'),
+  mode: LaunchMode.externalApplication,
+);
 
 void visitChangelogLink() => launchUrl(
-      Uri.parse('https://orgro.org/changelog/'),
-      mode: LaunchMode.externalApplication,
-    );
+  Uri.parse('https://orgro.org/changelog/'),
+  mode: LaunchMode.externalApplication,
+);

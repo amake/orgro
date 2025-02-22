@@ -16,8 +16,10 @@ extension CitationHandler on DocumentPageState {
     final bibFiles = extractBibliograpies(root);
 
     if (bibFiles.isEmpty) {
-      showErrorSnackBar(context,
-          AppLocalizations.of(context)!.snackbarMessageBibliographiesNotFound);
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.snackbarMessageBibliographiesNotFound,
+      );
       return false;
     }
 
@@ -25,8 +27,10 @@ extension CitationHandler on DocumentPageState {
     if (keys.isEmpty) {
       // This should never happen, as the parser should not recognize an
       // OrgCitation without at least one valid key
-      showErrorSnackBar(context,
-          AppLocalizations.of(context)!.snackbarMessageCitationKeysNotFound);
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.snackbarMessageCitationKeysNotFound,
+      );
       return false;
     }
 
@@ -39,21 +43,27 @@ extension CitationHandler on DocumentPageState {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
+      builder:
+          (context) => ProgressIndicatorDialog(
+            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+          ),
     );
 
-    final entries =
-        await _findBibTeXEntries(bibFiles.reversed, keys, dataSource);
+    final entries = await _findBibTeXEntries(
+      bibFiles.reversed,
+      keys,
+      dataSource,
+    );
 
     if (!mounted) return false;
 
     Navigator.pop(context);
 
     if (entries.isEmpty) {
-      showErrorSnackBar(context,
-          AppLocalizations.of(context)!.snackbarMessageCitationsNotFound);
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.snackbarMessageCitationsNotFound,
+      );
       return false;
     }
 
@@ -63,9 +73,11 @@ extension CitationHandler on DocumentPageState {
 
     if (notFound.isNotEmpty) {
       showErrorSnackBar(
+        context,
+        AppLocalizations.of(
           context,
-          AppLocalizations.of(context)!
-              .snackbarMessageSomeCitationsNotFound(notFound.join(', ')));
+        )!.snackbarMessageSomeCitationsNotFound(notFound.join(', ')),
+      );
     }
 
     await showDialog<void>(
@@ -89,8 +101,9 @@ extension CitationHandler on DocumentPageState {
       try {
         final resolved = await dataSource.resolveRelative(bibFile);
         final content = await resolved.content;
-        final entries = BibTeXDefinition().build().parse(content).value
-            as List<BibTeXEntry>;
+        final entries =
+            BibTeXDefinition().build().parse(content).value
+                as List<BibTeXEntry>;
         for (final entry in entries) {
           if (remainingKeys.contains(entry.key)) {
             results.add(entry);
@@ -108,16 +121,15 @@ extension CitationHandler on DocumentPageState {
   }
 }
 
-List<String> extractBibliograpies(
-  OrgTree tree,
-) {
+List<String> extractBibliograpies(OrgTree tree) {
   final results = <String>[];
   tree.visit<OrgMeta>((meta) {
     if (meta.key.toLowerCase() == '#+bibliography:' && meta.value != null) {
       final trailing = meta.value!.toMarkup().trim();
-      final bibFile = trailing.startsWith('"') && trailing.endsWith('"')
-          ? trailing.substring(1, trailing.length - 1)
-          : trailing;
+      final bibFile =
+          trailing.startsWith('"') && trailing.endsWith('"')
+              ? trailing.substring(1, trailing.length - 1)
+              : trailing;
       results.add(bibFile);
     }
     return true;
@@ -139,9 +151,10 @@ extension EntryPresentation on BibTeXEntry {
       result = trimmed;
     }
     if (key == 'pages') {
-      result = result.contains('-') || result.contains(',')
-          ? 'pp. ${result.replaceAll('--', '–')}'
-          : 'p. $result';
+      result =
+          result.contains('-') || result.contains(',')
+              ? 'pp. ${result.replaceAll('--', '–')}'
+              : 'p. $result';
     }
     if (key == 'volume') result = 'Vol. $result';
     if (key == 'number') result = 'No. $result';
@@ -150,12 +163,15 @@ extension EntryPresentation on BibTeXEntry {
       result = 'doi:$result';
     }
     result = result.replaceAllMapped(
-        RegExp(r'\{([^}]+)}'), (m) => m.group(1) ?? m.group(0)!);
+      RegExp(r'\{([^}]+)}'),
+      (m) => m.group(1) ?? m.group(0)!,
+    );
     return result;
   }
 
   Uri? getUrl() {
-    final rawUrl = getPrettyValue('url') ??
+    final rawUrl =
+        getPrettyValue('url') ??
         getPrettyValue('howpublished') ??
         getPrettyValue('doi');
     if (rawUrl == null) return null;
@@ -175,27 +191,27 @@ extension EntryPresentation on BibTeXEntry {
         .where((key) => key != 'title')
         .map(getPrettyValue)
         .where((value) {
-      if (value == null) return false;
-      final asUri = Uri.tryParse(value);
-      if (asUri == null) return true;
-      return asUri.scheme.isEmpty || asUri.scheme == 'doi';
-    });
+          if (value == null) return false;
+          final asUri = Uri.tryParse(value);
+          if (asUri == null) return true;
+          return asUri.scheme.isEmpty || asUri.scheme == 'doi';
+        });
     return detailValues.join(' • ');
   }
 }
 
 String _expandMonth(String m) => switch (m.toLowerCase()) {
-      'jan' => 'January',
-      'feb' => 'February',
-      'mar' => 'March',
-      'apr' => 'April',
-      'may' => 'May',
-      'jun' => 'June',
-      'jul' => 'July',
-      'aug' => 'August',
-      'sep' => 'September',
-      'oct' => 'October',
-      'nov' => 'November',
-      'dec' => 'December',
-      _ => m,
-    };
+  'jan' => 'January',
+  'feb' => 'February',
+  'mar' => 'March',
+  'apr' => 'April',
+  'may' => 'May',
+  'jun' => 'June',
+  'jul' => 'July',
+  'aug' => 'August',
+  'sep' => 'September',
+  'oct' => 'October',
+  'nov' => 'November',
+  'dec' => 'December',
+  _ => m,
+};

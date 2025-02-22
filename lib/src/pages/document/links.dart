@@ -36,11 +36,15 @@ extension LinkHandler on DocumentPageState {
     try {
       final url = expandAbbreviatedUrl(doc, link) ?? Uri.parse(link.location);
       debugPrint('Launching URL: $url');
-      final handled =
-          await launchUrl(url, mode: LaunchMode.externalApplication);
+      final handled = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
       if (!handled && mounted) {
         showErrorSnackBar(
-            context, AppLocalizations.of(context)!.errorLinkNotHandled(url));
+          context,
+          AppLocalizations.of(context)!.errorLinkNotHandled(url),
+        );
       }
     } catch (e, s) {
       logError(e, s);
@@ -65,7 +69,9 @@ extension LinkHandler on DocumentPageState {
     if (dataSource is! NativeDataSource) {
       debugPrint('Unsupported data source: ${dataSource.runtimeType}');
       showErrorSnackBar(
-          context, AppLocalizations.of(context)!.errorLinkNotHandled(url));
+        context,
+        AppLocalizations.of(context)!.errorLinkNotHandled(url),
+      );
       return false;
     }
 
@@ -98,8 +104,10 @@ extension LinkHandler on DocumentPageState {
     if (!mounted) return false;
 
     if (foundFile == null) {
-      showErrorSnackBar(context,
-          AppLocalizations.of(context)!.errorExternalIdNotFound(targetId));
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.errorExternalIdNotFound(targetId),
+      );
       return false;
     } else {
       return await loadDocument(context, foundFile, target: url);
@@ -118,9 +126,10 @@ extension LinkHandler on DocumentPageState {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
+      builder:
+          (context) => ProgressIndicatorDialog(
+            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+          ),
     );
 
     var popped = false;
@@ -155,8 +164,9 @@ extension LinkHandler on DocumentPageState {
 
   Future<bool> _openFileInExternalApp(DataSource source) async {
     final tmp = await getTemporaryAttachmentsDirectory();
-    final tmpFile =
-        tmp.uri.resolveUri(Uri(path: '${source.id.hashCode}/${source.name}'));
+    final tmpFile = tmp.uri.resolveUri(
+      Uri(path: '${source.id.hashCode}/${source.name}'),
+    );
     await File.fromUri(tmpFile).parent.create(recursive: true);
     await source.copyTo(tmpFile);
     final result = await OpenFile.open(tmpFile.toFilePath());
@@ -172,17 +182,20 @@ extension LinkHandler on DocumentPageState {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.of(context)!
-                .snackbarMessageNeedsDirectoryPermissions,
+            AppLocalizations.of(
+              context,
+            )!.snackbarMessageNeedsDirectoryPermissions,
           ),
-          action: canResolveRelativeLinks == true
-              ? SnackBarAction(
-                  label: AppLocalizations.of(context)!
-                      .snackbarActionGrantAccess
-                      .toUpperCase(),
-                  onPressed: doPickDirectory,
-                )
-              : null,
+          action:
+              canResolveRelativeLinks == true
+                  ? SnackBarAction(
+                    label:
+                        AppLocalizations.of(
+                          context,
+                        )!.snackbarActionGrantAccess.toUpperCase(),
+                    onPressed: doPickDirectory,
+                  )
+                  : null,
         ),
       );
 
@@ -196,9 +209,12 @@ extension LinkHandler on DocumentPageState {
       if (dirInfo == null) return;
       if (!mounted) return;
       debugPrint(
-          'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}');
-      await Preferences.of(context, PrefsAspect.nil)
-          .addAccessibleDir(dirInfo.identifier);
+        'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}',
+      );
+      await Preferences.of(
+        context,
+        PrefsAspect.nil,
+      ).addAccessibleDir(dirInfo.identifier);
     } catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
@@ -221,27 +237,28 @@ Uri? expandAbbreviatedUrl(OrgTree doc, OrgLink link) {
 
   final String format;
   try {
-    (linkword: _, :format) =
-        abbreviations.firstWhere((abbr) => abbr.linkword == linkword);
+    (linkword: _, :format) = abbreviations.firstWhere(
+      (abbr) => abbr.linkword == linkword,
+    );
   } on StateError {
     return null;
   }
 
-  final formatted = format.contains('%s')
-      ? format.replaceFirst('%s', tag)
-      : format.contains('%h')
+  final formatted =
+      format.contains('%s')
+          ? format.replaceFirst('%s', tag)
+          : format.contains('%h')
           ? format.replaceFirst('%h', Uri.encodeComponent(tag))
           : '$format$tag';
   return Uri.tryParse(formatted);
 }
 
-final _abbreviationPattern =
-    RegExp(r'^(?<linkword>"[^"]+"|\S+)\s+(?<format>\S+)$');
+final _abbreviationPattern = RegExp(
+  r'^(?<linkword>"[^"]+"|\S+)\s+(?<format>\S+)$',
+);
 typedef LinkAbbreviation = ({String linkword, String format});
 
-List<LinkAbbreviation> extractLinkAbbreviations(
-  OrgTree tree,
-) {
+List<LinkAbbreviation> extractLinkAbbreviations(OrgTree tree) {
   final results = <LinkAbbreviation>[];
   tree.visit<OrgMeta>((meta) {
     if (meta.key.toLowerCase() == '#+link:' && meta.value != null) {

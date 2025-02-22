@@ -10,9 +10,11 @@ typedef SectionPredicate = bool Function(OrgSection);
 
 extension OrgTreeEncryption on OrgTree {
   bool missingEncryptionKey(List<OrgroPassword> passwords) {
-    final missing = find<OrgSection>((section) =>
-        section.needsEncryption() &&
-        !passwords.any((p) => p.predicate(section)));
+    final missing = find<OrgSection>(
+      (section) =>
+          section.needsEncryption() &&
+          !passwords.any((p) => p.predicate(section)),
+    );
     return missing != null;
   }
 }
@@ -56,10 +58,7 @@ extension OrgSectionEncryption on OrgSection {
       buf.visit(child);
     }
     final (leading, text) = buf.toString().splitLeadingWhitespace();
-    final message = OpenPGP.encryptCleartext(
-      text,
-      passwords: [password],
-    );
+    final message = OpenPGP.encryptCleartext(text, passwords: [password]);
     return '${headline.toMarkup()}$leading${message.armor()}';
   }
 }

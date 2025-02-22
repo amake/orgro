@@ -9,9 +9,7 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.pageTitleError),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.pageTitleError)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16),

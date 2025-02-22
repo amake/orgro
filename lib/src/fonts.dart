@@ -335,15 +335,15 @@ TextStyle _loadDynamicFont(String fontFamily) {
 // needed. This helps prevent Flash of Unstyled Text, which in turn makes
 // restoring the scroll position more accurate.
 Widget fontPreloader(BuildContext context) => Text(
-      '',
-      style: loadFontWithVariants(
-        Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
-      ),
-    );
+  '',
+  style: loadFontWithVariants(
+    Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
+  ),
+);
 
 class _FiraGoFile extends DynamicFontsFile {
   _FiraGoFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
+    : super(expectedFileHash, expectedLength);
 
   static const name = 'FiraGO';
   static const version = '1001';
@@ -351,9 +351,9 @@ class _FiraGoFile extends DynamicFontsFile {
   final DynamicFontsVariant variant;
 
   String get _dir => switch (variant.fontStyle) {
-        FontStyle.normal => 'Roman',
-        FontStyle.italic => 'Italic',
-      };
+    FontStyle.normal => 'Roman',
+    FontStyle.italic => 'Italic',
+  };
 
   @override
   String get url =>
@@ -362,7 +362,7 @@ class _FiraGoFile extends DynamicFontsFile {
 
 class _IosevkaFile extends DynamicFontsFile {
   _IosevkaFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
+    : super(expectedFileHash, expectedLength);
 
   static const name = 'Iosevka';
   static const version = '32.3.1';
@@ -392,7 +392,7 @@ class _IosevkaFile extends DynamicFontsFile {
 
 class _VictorMonoFile extends DynamicFontsFile {
   _VictorMonoFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
+    : super(expectedFileHash, expectedLength);
 
   static const name = 'Victor Mono';
   static const version = '1.5.6';
@@ -406,7 +406,7 @@ class _VictorMonoFile extends DynamicFontsFile {
 
 class _TerminusFile extends DynamicFontsFile {
   _TerminusFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
+    : super(expectedFileHash, expectedLength);
 
   static const name = 'Terminus';
   static const version = '4.49.3';
@@ -436,7 +436,7 @@ class _TerminusFile extends DynamicFontsFile {
 
 class _CascadiaCodeFile extends DynamicFontsFile {
   _CascadiaCodeFile(this.variant, String expectedFileHash, int expectedLength)
-      : super(expectedFileHash, expectedLength);
+    : super(expectedFileHash, expectedLength);
 
   static const name = 'Cascadia Code';
   static const version = '2404.23';

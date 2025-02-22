@@ -18,21 +18,25 @@ class SettingsPage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          appearanceListItem(context),
-          Divider(),
-          ListHeader(
-              title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDefaultText)),
-          fontFamilyListItem(context),
-          textScaleListItem(context),
-          _TextPreview(),
-          Divider(),
-          ListHeader(
-              title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDataManagement)),
-          clearCachesListItem(context),
-          resetPreferencesListItem(context),
-        ]
+              appearanceListItem(context),
+              Divider(),
+              ListHeader(
+                title: Text(
+                  AppLocalizations.of(context)!.settingsSectionDefaultText,
+                ),
+              ),
+              fontFamilyListItem(context),
+              textScaleListItem(context),
+              _TextPreview(),
+              Divider(),
+              ListHeader(
+                title: Text(
+                  AppLocalizations.of(context)!.settingsSectionDataManagement,
+                ),
+              ),
+              clearCachesListItem(context),
+              resetPreferencesListItem(context),
+            ]
             .map(
               (child) => switch (child) {
                 Divider() => child,
@@ -45,11 +49,11 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget _constrain(Widget child) => Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: child,
-        ),
-      );
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 600),
+      child: child,
+    ),
+  );
 }
 
 class _TextPreview extends StatefulWidget {

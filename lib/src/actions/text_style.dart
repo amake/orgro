@@ -9,10 +9,7 @@ PopupMenuEntry<VoidCallback> textScaleMenuItem(
   required void Function(double) onChanged,
 }) {
   return _PersistentPopupMenuItem<VoidCallback>(
-    child: TextSizeAdjuster(
-      onChanged: onChanged,
-      value: textScale,
-    ),
+    child: TextSizeAdjuster(onChanged: onChanged, value: textScale),
   );
 }
 
@@ -22,7 +19,8 @@ Widget textScaleListItem(BuildContext context) {
     title: Row(
       children: [
         Expanded(
-            child: Text(AppLocalizations.of(context)!.settingsItemTextScale)),
+          child: Text(AppLocalizations.of(context)!.settingsItemTextScale),
+        ),
         TextSizeAdjuster(
           value: viewSettings.textScale,
           onChanged: (value) => viewSettings.textScale = value,
@@ -38,10 +36,7 @@ PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   required void Function(String) onChanged,
 }) {
   return _PersistentPopupMenuItem<VoidCallback>(
-    child: FontFamilySelector(
-      onChanged: onChanged,
-      value: fontFamily,
-    ),
+    child: FontFamilySelector(onChanged: onChanged, value: fontFamily),
   );
 }
 
@@ -83,8 +78,8 @@ class _TextStyleButtonState extends State<TextStyleButton>
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.format_size),
-      onPressed: () =>
-          Overlay.of(context).insertAll(_overlays(context).toList()),
+      onPressed:
+          () => Overlay.of(context).insertAll(_overlays(context).toList()),
     );
   }
 
@@ -103,35 +98,39 @@ class _TextStyleButtonState extends State<TextStyleButton>
       animationController.dispose();
     }
 
-    buttonsOverlay = OverlayEntry(builder: (context) {
-      return Positioned(
-        top: position.top,
-        right: position.right,
-        child: PopupPalette(
-          listenable: animationController,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextSizeAdjuster(
-                value: widget.textScale,
-                onChanged: widget.onTextScaleChanged,
-              ),
-              FontFamilySelector(
-                value: widget.fontFamily,
-                onChanged: widget.onFontFamilyChanged,
-                onOpen: closeOverlay,
-              )
-            ],
+    buttonsOverlay = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          top: position.top,
+          right: position.right,
+          child: PopupPalette(
+            listenable: animationController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextSizeAdjuster(
+                  value: widget.textScale,
+                  onChanged: widget.onTextScaleChanged,
+                ),
+                FontFamilySelector(
+                  value: widget.fontFamily,
+                  onChanged: widget.onFontFamilyChanged,
+                  onOpen: closeOverlay,
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    });
-    yield barrierOverlay = OverlayEntry(builder: (context) {
-      return GestureDetector(
-        onTapDown: (_) => closeOverlay(),
-        behavior: HitTestBehavior.opaque,
-      );
-    });
+        );
+      },
+    );
+    yield barrierOverlay = OverlayEntry(
+      builder: (context) {
+        return GestureDetector(
+          onTapDown: (_) => closeOverlay(),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
     yield buttonsOverlay;
     animationController.forward();
   }
@@ -143,8 +142,10 @@ class _TextStyleButtonState extends State<TextStyleButton>
     return RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero),
-            ancestor: overlay),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero),
+          ancestor: overlay,
+        ),
       ),
       Offset.zero & overlay.size,
     );
@@ -170,10 +171,7 @@ class PopupPalette extends AnimatedWidget {
         sizeFactor: animation,
         axis: Axis.horizontal,
         axisAlignment: 1,
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+        child: FadeTransition(opacity: animation, child: child),
       ),
     );
   }
@@ -242,7 +240,7 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => _setValue(_value + _kTextSizeAdjustmentIncrement),
-          )
+          ),
         ],
       ),
     );
@@ -303,17 +301,18 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
 Future<String?> _chooseFont(BuildContext context, String currentValue) async =>
     showDialog<String>(
       context: context,
-      builder: (context) => SimpleDialog(
-        children: [
-          for (final family
-              in availableFontFamilies.toList(growable: false)..sort())
-            CheckboxListTile(
-              value: currentValue == family,
-              title: Text(family),
-              onChanged: (_) => Navigator.pop(context, family),
-            ),
-        ],
-      ),
+      builder:
+          (context) => SimpleDialog(
+            children: [
+              for (final family in availableFontFamilies.toList(growable: false)
+                ..sort())
+                CheckboxListTile(
+                  value: currentValue == family,
+                  title: Text(family),
+                  onChanged: (_) => Navigator.pop(context, family),
+                ),
+            ],
+          ),
     );
 
 /// A popup menu item that doesn't close when tapped and doesn't provide its own

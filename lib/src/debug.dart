@@ -23,7 +23,9 @@ Object? logError(Object? e, StackTrace s) {
 }
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
-    BuildContext context, Object? msgObject) {
+  BuildContext context,
+  Object? msgObject,
+) {
   String message;
   if (msgObject is PlatformException) {
     message = msgObject.message ?? msgObject.code;
@@ -32,6 +34,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
   } else {
     message = msgObject.toString();
   }
-  return ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(message)));
+  return ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text(message)));
 }

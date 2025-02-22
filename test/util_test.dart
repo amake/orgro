@@ -34,41 +34,41 @@ void main() {
       expect(
         {
           1: {'a': 'b'},
-          2: {'c': 'd'}
+          2: {'c': 'd'},
         }.unorderedEquals({
           1: {'a': 'b'},
-          2: {'c': 'd'}
+          2: {'c': 'd'},
         }, valueEquals: (a, b) => mapEquals(a, b)),
         isTrue,
       );
       expect(
         {
           1: {'a': 'b'},
-          2: {'c': 'd'}
+          2: {'c': 'd'},
         }.unorderedEquals({
           2: {'c': 'd'},
-          1: {'a': 'b'}
+          1: {'a': 'b'},
         }, valueEquals: (a, b) => mapEquals(a, b)),
         isTrue,
       );
       expect(
         {
           1: {'a': 'b'},
-          2: {'c': 'd'}
+          2: {'c': 'd'},
         }.unorderedEquals({
           1: {'a': 'b'},
-          2: {'c': 'e'}
+          2: {'c': 'e'},
         }, valueEquals: (a, b) => mapEquals(a, b)),
         isFalse,
       );
       expect(
         {
           1: {'a': 'b'},
-          2: {'c': 'd'}
+          2: {'c': 'd'},
         }.unorderedEquals({
           1: {'a': 'b'},
           2: {'c': 'd'},
-          3: {'e': 'f'}
+          3: {'e': 'f'},
         }, valueEquals: (a, b) => mapEquals(a, b)),
         isFalse,
       );

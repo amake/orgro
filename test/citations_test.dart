@@ -39,7 +39,7 @@ void main() {
             'url': 'http://example.com',
             'url-quoted': '"http://example.com/2"',
             'url-braces': '{http://example.com/3}',
-            'url-markup': r'\url{http://example.com/4}'
+            'url-markup': r'\url{http://example.com/4}',
           },
         );
         expect(entry.getPrettyValue('url'), 'http://example.com');
@@ -51,9 +51,7 @@ void main() {
         const entry = BibTeXEntry(
           type: 'book',
           key: 'key',
-          fields: {
-            'doi': '10.1234/5678',
-          },
+          fields: {'doi': '10.1234/5678'},
         );
         expect(entry.getPrettyValue('doi'), 'doi:10.1234/5678');
       });
@@ -94,10 +92,7 @@ void main() {
           const entry = BibTeXEntry(
             type: 'book',
             key: 'key',
-            fields: {
-              'url': 'https://example.com',
-              'doi': '10.1234/5678',
-            },
+            fields: {'url': 'https://example.com', 'doi': '10.1234/5678'},
           );
           expect(entry.getUrl(), Uri.parse('https://example.com'));
         });

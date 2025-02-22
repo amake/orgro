@@ -13,13 +13,14 @@ class MySearchDelegate {
     required this.onFilterChanged,
     String? initialQuery,
     FilterData? initialFilter,
-  })  : _searchController = TextEditingController(text: initialQuery),
-        _selectedFilter =
-            ValueNotifier(initialFilter ?? FilterData.defaults()) {
-    _searchController.addListener(debounce(
-      () => onQueryChanged(_searchController.text),
-      const Duration(milliseconds: 500),
-    ));
+  }) : _searchController = TextEditingController(text: initialQuery),
+       _selectedFilter = ValueNotifier(initialFilter ?? FilterData.defaults()) {
+    _searchController.addListener(
+      debounce(
+        () => onQueryChanged(_searchController.text),
+        const Duration(milliseconds: 500),
+      ),
+    );
     _selectedFilter.addListener(() => onFilterChanged(_selectedFilter.value));
   }
 
@@ -45,13 +46,13 @@ class MySearchDelegate {
   set filter(FilterData value) => _selectedFilter.value = value;
 
   Widget buildSearchField() => SearchField(
-        _searchController,
-        filterData: _selectedFilter,
-        focusNode: _searchFocusNode,
-        todoSettings: todoSettings,
-        onClear: _clearSearchQuery,
-        onSubmitted: onQuerySubmitted,
-      );
+    _searchController,
+    filterData: _selectedFilter,
+    focusNode: _searchFocusNode,
+    todoSettings: todoSettings,
+    onClear: _clearSearchQuery,
+    onSubmitted: onQuerySubmitted,
+  );
 
   Widget buildBottomSheet(BuildContext context) {
     return BottomInputBar(
@@ -73,8 +74,9 @@ class MySearchDelegate {
   }
 
   void start(BuildContext context) {
-    ModalRoute.of(context)!
-        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
+    ModalRoute.of(
+      context,
+    )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
     searchMode.value = true;
     _searchFocusNode.requestFocus();
   }
@@ -128,59 +130,67 @@ class SearchField extends StatelessWidget {
         children: [
           Expanded(
             child: LayoutBuilder(
-              builder: (context, constraints) => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ValueListenableBuilder(
-                  valueListenable: filterData,
-                  builder: (context, filter, _) => Row(
-                    children: [
-                      ...[
-                        SelectedFilterChips(
-                          filter: filter,
-                          todoSettings: todoSettings,
-                          onChange: (value) => filterData.value = value,
-                        ),
-                        if (filter.isNotEmpty)
-                          IconTheme.merge(
-                            data: iconTheme,
-                            child: const Icon(Icons.drag_indicator),
+              builder:
+                  (context, constraints) => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ValueListenableBuilder(
+                      valueListenable: filterData,
+                      builder:
+                          (context, filter, _) => Row(
+                            children: [
+                              ...[
+                                SelectedFilterChips(
+                                  filter: filter,
+                                  todoSettings: todoSettings,
+                                  onChange: (value) => filterData.value = value,
+                                ),
+                                if (filter.isNotEmpty)
+                                  IconTheme.merge(
+                                    data: iconTheme,
+                                    child: const Icon(Icons.drag_indicator),
+                                  ),
+                              ].separatedBy(const SizedBox(width: 8)),
+                              ConstrainedBox(
+                                constraints:
+                                    filter.isNotEmpty
+                                        ? BoxConstraints.tightFor(
+                                          width:
+                                              constraints.maxWidth -
+                                              IconTheme.of(context).size!,
+                                        )
+                                        : constraints,
+                                child: TextField(
+                                  autofocus: true,
+                                  focusNode: focusNode,
+                                  style: style,
+                                  controller: _controller,
+                                  textInputAction: TextInputAction.search,
+                                  cursorColor: theme.colorScheme.secondary,
+                                  onSubmitted: onSubmitted,
+                                  decoration: InputDecoration(
+                                    hintText:
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.hintTextSearch,
+                                    border: InputBorder.none,
+                                    prefixIcon: IconTheme.merge(
+                                      data: iconTheme,
+                                      child: const Icon(Icons.search),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                      ].separatedBy(const SizedBox(width: 8)),
-                      ConstrainedBox(
-                        constraints: filter.isNotEmpty
-                            ? BoxConstraints.tightFor(
-                                width: constraints.maxWidth -
-                                    IconTheme.of(context).size!)
-                            : constraints,
-                        child: TextField(
-                          autofocus: true,
-                          focusNode: focusNode,
-                          style: style,
-                          controller: _controller,
-                          textInputAction: TextInputAction.search,
-                          cursorColor: theme.colorScheme.secondary,
-                          onSubmitted: onSubmitted,
-                          decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context)!.hintTextSearch,
-                            border: InputBorder.none,
-                            prefixIcon: IconTheme.merge(
-                              data: iconTheme,
-                              child: const Icon(Icons.search),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
             ),
           ),
           ValueListenableBuilder<TextEditingValue>(
             valueListenable: _controller,
-            builder: (context, value, child) =>
-                value.text.isNotEmpty ? child! : const SizedBox.shrink(),
+            builder:
+                (context, value, child) =>
+                    value.text.isNotEmpty ? child! : const SizedBox.shrink(),
             child: IconTheme.merge(
               data: iconTheme,
               child: IconButton(
@@ -188,7 +198,7 @@ class SearchField extends StatelessWidget {
                 onPressed: onClear,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -255,8 +265,9 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
               child: Text(
                 _i == -1
                     ? AppLocalizations.of(context)!.searchHits(_keys.length)
-                    : AppLocalizations.of(context)!
-                        .searchResultSelection(_i + 1, _keys.length),
+                    : AppLocalizations.of(
+                      context,
+                    )!.searchResultSelection(_i + 1, _keys.length),
                 textAlign: TextAlign.center,
                 style: DefaultTextStyle.of(context).style.copyWith(
                   fontFeatures: const [FontFeature.tabularFigures()],
@@ -328,7 +339,8 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
     );
   }
 
-  Color? _backgroundColor(BuildContext context) => _enabled
-      ? null // default
-      : Theme.of(context).disabledColor;
+  Color? _backgroundColor(BuildContext context) =>
+      _enabled
+          ? null // default
+          : Theme.of(context).disabledColor;
 }

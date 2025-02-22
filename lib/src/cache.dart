@@ -25,16 +25,17 @@ Future<void> clearTemporaryAttachments() async {
 }
 
 Widget clearCachesListItem(BuildContext context) => ListTile(
-      title: Text(AppLocalizations.of(context)!.settingsActionClearCache),
-      onTap: () async {
-        await clearCaches(context);
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  AppLocalizations.of(context)!.snackbarMessageCacheCleared),
-            ),
-          );
-        }
-      },
-    );
+  title: Text(AppLocalizations.of(context)!.settingsActionClearCache),
+  onTap: () async {
+    await clearCaches(context);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.snackbarMessageCacheCleared,
+          ),
+        ),
+      );
+    }
+  },
+);

@@ -63,7 +63,8 @@ class _DocumentProviderState extends State<DocumentProvider> {
   }
 
   Future<DataSource?> _resolveDataSourceParent(
-      List<String> accessibleDirs) async {
+    List<String> accessibleDirs,
+  ) async {
     final dataSource = _dataSource;
     if (dataSource is NativeDataSource && dataSource.needsToResolveParent) {
       return dataSource.resolveParent(accessibleDirs);
@@ -78,8 +79,12 @@ class _DocumentProviderState extends State<DocumentProvider> {
     final analysis = await _analyze(doc);
     setState(() {
       _docs = _pushAtIndexAndTrim(_docs, doc, _cursor, _kMaxUndoStackSize);
-      _analyses =
-          _pushAtIndexAndTrim(_analyses, analysis, _cursor, _kMaxUndoStackSize);
+      _analyses = _pushAtIndexAndTrim(
+        _analyses,
+        analysis,
+        _cursor,
+        _kMaxUndoStackSize,
+      );
       _cursor = _docs.length - 1;
     });
     return (true, analysis);
@@ -90,12 +95,11 @@ class _DocumentProviderState extends State<DocumentProvider> {
     T item,
     int idx,
     int maxLen,
-  ) =>
-      [
-        // +2 is because we keep the item at idx and the new item, so the total
-        // will be maxLen
-        ...list.sublist(max(0, idx - maxLen + 2), idx + 1), item,
-      ];
+  ) => [
+    // +2 is because we keep the item at idx and the new item, so the total
+    // will be maxLen
+    ...list.sublist(max(0, idx - maxLen + 2), idx + 1), item,
+  ];
 
   List<OrgroPassword> _addPasswords(Iterable<OrgroPassword> passwords) {
     final newPasswords = [..._passwords, ...passwords];
@@ -178,10 +182,12 @@ class InheritedDocumentProvider extends InheritedWidget {
 }
 
 Future<DocumentAnalysis> _analyze(OrgTree doc) => time(
-      'analyze',
-      () async => DocumentAnalysis.of(doc,
-          canResolveRelativeLinks: await canObtainNativeDirectoryPermissions()),
-    );
+  'analyze',
+  () async => DocumentAnalysis.of(
+    doc,
+    canResolveRelativeLinks: await canObtainNativeDirectoryPermissions(),
+  ),
+);
 
 class DocumentAnalysis {
   factory DocumentAnalysis.of(
@@ -271,12 +277,12 @@ class DocumentAnalysis {
 
   @override
   int get hashCode => Object.hash(
-        hasRemoteImages,
-        hasRelativeLinks,
-        hasEncryptedContent,
-        needsEncryption,
-        keywords == null ? null : Object.hashAll(keywords!),
-        tags == null ? null : Object.hashAll(tags!),
-        priorities == null ? null : Object.hashAll(priorities!),
-      );
+    hasRemoteImages,
+    hasRelativeLinks,
+    hasEncryptedContent,
+    needsEncryption,
+    keywords == null ? null : Object.hashAll(keywords!),
+    tags == null ? null : Object.hashAll(tags!),
+    priorities == null ? null : Object.hashAll(priorities!),
+  );
 }

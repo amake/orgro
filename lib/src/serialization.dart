@@ -43,8 +43,9 @@ class OrgroCyphertextSerializer extends OrgroSerializer {
     if (node is OrgSection && node.needsEncryption()) {
       // Re-encrypt. We want to blow up here if we can't find a password, hence
       // firstWhere.
-      final (:password, :predicate) =
-          passwords.firstWhere((p) => p.predicate(node));
+      final (:password, :predicate) = passwords.firstWhere(
+        (p) => p.predicate(node),
+      );
       final cyphertext = node.encrypt(password);
       write(cyphertext);
     } else {
@@ -65,21 +66,27 @@ Future<String?> serializeWithProgressUI(
   OrgroSerializer serializer,
 ) async {
   var canceled = false;
-  serialize(doc, serializer).then((value) {
-    if (!canceled && context.mounted) Navigator.pop(context, value);
-  }).onError((error, stackTrace) {
-    if (context.mounted) showErrorSnackBar(context, error);
-    logError(error, stackTrace);
-    if (!canceled && context.mounted) Navigator.pop(context);
-  });
+  serialize(doc, serializer)
+      .then((value) {
+        if (!canceled && context.mounted) Navigator.pop(context, value);
+      })
+      .onError((error, stackTrace) {
+        if (context.mounted) showErrorSnackBar(context, error);
+        logError(error, stackTrace);
+        if (!canceled && context.mounted) Navigator.pop(context);
+      });
   final result = await showDialog<String>(
     context: context,
-    builder: (context) => ProgressIndicatorDialog(
-      title: serializer.willEncrypt
-          ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
-          : AppLocalizations.of(context)!.serializingProgressDialogTitle,
-      dismissable: true,
-    ),
+    builder:
+        (context) => ProgressIndicatorDialog(
+          title:
+              serializer.willEncrypt
+                  ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
+                  : AppLocalizations.of(
+                    context,
+                  )!.serializingProgressDialogTitle,
+          dismissable: true,
+        ),
   );
   if (result == null) {
     canceled = true;

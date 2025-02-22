@@ -13,19 +13,20 @@ class FullyRestorableTextEditingController
         selectionBaseOffset == null || selectionExtentOffset == null
             ? null
             : TextSelection(
-                baseOffset: selectionBaseOffset,
-                extentOffset: selectionExtentOffset,
-              );
-    final value = text == null
-        ? TextEditingValue.empty
-        : selection == null
+              baseOffset: selectionBaseOffset,
+              extentOffset: selectionExtentOffset,
+            );
+    final value =
+        text == null
+            ? TextEditingValue.empty
+            : selection == null
             ? TextEditingValue(text: text)
             : TextEditingValue(text: text, selection: selection);
     return FullyRestorableTextEditingController.fromValue(value);
   }
 
   FullyRestorableTextEditingController.fromValue(TextEditingValue value)
-      : _initialValue = value;
+    : _initialValue = value;
 
   final TextEditingValue _initialValue;
 
@@ -39,7 +40,7 @@ class FullyRestorableTextEditingController
     final [
       text as String,
       selectionBaseOffset as int,
-      selectionExtentOffset as int
+      selectionExtentOffset as int,
     ] = data as List<Object?>;
     return TextEditingController.fromValue(
       TextEditingValue(
@@ -57,7 +58,7 @@ class FullyRestorableTextEditingController
     return [
       value.text,
       value.selection.baseOffset,
-      value.selection.extentOffset
+      value.selection.extentOffset,
     ];
   }
 }

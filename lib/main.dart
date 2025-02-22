@@ -10,14 +10,12 @@ import 'package:orgro/theme.dart';
 
 void main() {
   LicenseRegistry.addLicense(() async* {
-    yield LicenseEntryWithLineBreaks(
-      ['google_fonts'],
-      await rootBundle.loadString('assets/fonts/OFL.txt'),
-    );
-    yield LicenseEntryWithLineBreaks(
-      ['LineReader'],
-      await rootBundle.loadString('assets/licenses/LICENSE-LineReader.txt'),
-    );
+    yield LicenseEntryWithLineBreaks([
+      'google_fonts',
+    ], await rootBundle.loadString('assets/fonts/OFL.txt'));
+    yield LicenseEntryWithLineBreaks([
+      'LineReader',
+    ], await rootBundle.loadString('assets/licenses/LICENSE-LineReader.txt'));
   });
 
   if (kReleaseMode) {
@@ -30,10 +28,8 @@ void main() {
   clearTemporaryAttachments();
 }
 
-Widget buildApp() => const SharedPreferencesProvider(
-      waiting: _Splash(),
-      child: _MyApp(),
-    );
+Widget buildApp() =>
+    const SharedPreferencesProvider(waiting: _Splash(), child: _MyApp());
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load
@@ -59,14 +55,14 @@ class _MyApp extends StatefulWidget {
 class _MyAppState extends State<_MyApp> {
   @override
   Widget build(BuildContext context) => MaterialApp(
-        restorationScopeId: 'orgro_root',
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        debugShowCheckedModeBanner: !kScreenshotMode,
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-        theme: orgroLightTheme,
-        darkTheme: orgroDarkTheme,
-        themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
-        home: const StartPage(),
-      );
+    restorationScopeId: 'orgro_root',
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    debugShowCheckedModeBanner: !kScreenshotMode,
+    onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+    theme: orgroLightTheme,
+    darkTheme: orgroDarkTheme,
+    themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
+    home: const StartPage(),
+  );
 }

@@ -32,8 +32,9 @@ class _StartPageState extends State<StartPage>
     with RecentFilesState, PlatformOpenHandler, RestorationMixin {
   @override
   Widget build(BuildContext context) => UnmanagedRestorationScope(
-      bucket: bucket,
-      child: buildWithRecentFiles(builder: (context) {
+    bucket: bucket,
+    child: buildWithRecentFiles(
+      builder: (context) {
         return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.appTitle),
@@ -42,43 +43,47 @@ class _StartPageState extends State<StartPage>
           body: _KeyboardShortcuts(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
-              child: hasRecentFiles
-                  ? const _RecentFilesBody()
-                  : const _EmptyBody(),
+              child:
+                  hasRecentFiles
+                      ? const _RecentFilesBody()
+                      : const _EmptyBody(),
             ),
           ),
           floatingActionButton: _buildFloatingActionButton(context),
         );
-      }));
+      },
+    ),
+  );
 
   Iterable<Widget> _buildActions() sync* {
     yield PopupMenuButton<VoidCallback>(
       onSelected: (callback) => callback(),
-      itemBuilder: (context) => [
-        PopupMenuItem<VoidCallback>(
-          value: () => _openSettingsScreen(context),
-          child: Text(AppLocalizations.of(context)!.menuItemSettings),
-        ),
-        if (hasRecentFiles) ...[
-          const PopupMenuDivider(),
-          PopupMenuItem<VoidCallback>(
-            value: () => _openOrgroManual(context),
-            child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
-          ),
-        ],
-        if (!kReleaseMode && !kScreenshotMode) ...[
-          const PopupMenuDivider(),
-          PopupMenuItem<VoidCallback>(
-            value: () => _openTestFile(context),
-            child: Text(AppLocalizations.of(context)!.menuItemTestFile),
-          ),
-        ],
-        const PopupMenuDivider(),
-        PopupMenuItem<VoidCallback>(
-          value: () => openAboutDialog(context),
-          child: Text(AppLocalizations.of(context)!.menuItemAbout),
-        ),
-      ],
+      itemBuilder:
+          (context) => [
+            PopupMenuItem<VoidCallback>(
+              value: () => _openSettingsScreen(context),
+              child: Text(AppLocalizations.of(context)!.menuItemSettings),
+            ),
+            if (hasRecentFiles) ...[
+              const PopupMenuDivider(),
+              PopupMenuItem<VoidCallback>(
+                value: () => _openOrgroManual(context),
+                child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
+              ),
+            ],
+            if (!kReleaseMode && !kScreenshotMode) ...[
+              const PopupMenuDivider(),
+              PopupMenuItem<VoidCallback>(
+                value: () => _openTestFile(context),
+                child: Text(AppLocalizations.of(context)!.menuItemTestFile),
+              ),
+            ],
+            const PopupMenuDivider(),
+            PopupMenuItem<VoidCallback>(
+              value: () => openAboutDialog(context),
+              child: Text(AppLocalizations.of(context)!.menuItemAbout),
+            ),
+          ],
     );
   }
 
@@ -158,13 +163,10 @@ class _KeyboardShortcuts extends StatelessWidget {
   Widget build(BuildContext context) {
     return CallbackShortcuts(
       bindings: {
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO): () =>
-            _loadAndRememberFile(context, pickFile()),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO):
+            () => _loadAndRememberFile(context, pickFile()),
       },
-      child: Focus(
-        autofocus: true,
-        child: child,
-      ),
+      child: Focus(autofocus: true, child: child),
     );
   }
 }
@@ -233,11 +235,13 @@ class _RecentFilesBody extends StatelessWidget {
       itemCount: recentFiles.length + 1,
       itemBuilder: (context, idx) {
         if (idx == 0) {
-          return _constrain(ListHeader(
-            title: Text(
-              AppLocalizations.of(context)!.sectionHeaderRecentFiles,
+          return _constrain(
+            ListHeader(
+              title: Text(
+                AppLocalizations.of(context)!.sectionHeaderRecentFiles,
+              ),
             ),
-          ));
+          );
         } else {
           final recentFile = recentFiles[idx - 1];
           return _constrain(_RecentFileListTile(recentFile));
@@ -247,11 +251,11 @@ class _RecentFilesBody extends StatelessWidget {
   }
 
   Widget _constrain(Widget child) => Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: child,
-        ),
-      );
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 600),
+      child: child,
+    ),
+  );
 }
 
 // Do not make format object a constant because it will break dynamic UI
@@ -272,23 +276,25 @@ String? _appName(BuildContext context, String uriString) {
   // https://developer.android.com/training/package-visibility
   return switch (uri.scheme) {
     'content' => switch (uri.host) {
-        'org.nextcloud.documents' => 'Nextcloud',
-        'com.google.android.apps.docs.storage' =>
-          AppLocalizations.of(context)!.fileSourceGoogleDrive,
-        'com.seafile.seadroid2.documents' => 'Seafile',
-        'com.termux.documents' => 'Termux',
-        'com.android.externalstorage.documents' =>
-          AppLocalizations.of(context)!.fileSourceDocuments,
-        'com.android.providers.downloads.documents' =>
-          AppLocalizations.of(context)!.fileSourceDownloads,
-        'com.dropbox.product.android.dbapp.document_provider.documents' =>
-          'Dropbox',
-        _ => uri.host,
-      },
-    'file' => uri.path.startsWith(
-            '/private/var/mobile/Library/Mobile%20Documents/com~apple~CloudDocs/')
-        ? 'iCloud Drive'
-        : null,
+      'org.nextcloud.documents' => 'Nextcloud',
+      'com.google.android.apps.docs.storage' =>
+        AppLocalizations.of(context)!.fileSourceGoogleDrive,
+      'com.seafile.seadroid2.documents' => 'Seafile',
+      'com.termux.documents' => 'Termux',
+      'com.android.externalstorage.documents' =>
+        AppLocalizations.of(context)!.fileSourceDocuments,
+      'com.android.providers.downloads.documents' =>
+        AppLocalizations.of(context)!.fileSourceDownloads,
+      'com.dropbox.product.android.dbapp.document_provider.documents' =>
+        'Dropbox',
+      _ => uri.host,
+    },
+    'file' =>
+      uri.path.startsWith(
+            '/private/var/mobile/Library/Mobile%20Documents/com~apple~CloudDocs/',
+          )
+          ? 'iCloud Drive'
+          : null,
     _ => null,
   };
 }
@@ -304,8 +310,9 @@ class _RecentFileListTile extends StatelessWidget {
       key: ValueKey(recentFile),
       onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
       background: const _SwipeDeleteBackground(alignment: Alignment.centerLeft),
-      secondaryBackground:
-          const _SwipeDeleteBackground(alignment: Alignment.centerRight),
+      secondaryBackground: const _SwipeDeleteBackground(
+        alignment: Alignment.centerRight,
+      ),
       child: ListTile(
         leading: const Icon(Icons.insert_drive_file),
         title: Text(recentFile.name),
@@ -347,10 +354,11 @@ class _RecentFileListTile extends StatelessWidget {
             })(),
           ],
         ),
-        onTap: () async => _loadAndRememberFile(
-          context,
-          readFileWithIdentifier(recentFile.identifier),
-        ),
+        onTap:
+            () async => _loadAndRememberFile(
+              context,
+              readFileWithIdentifier(recentFile.identifier),
+            ),
       ),
     );
   }
@@ -423,10 +431,7 @@ Future<void> _loadAndRememberFile(
   if (recentFile != null) {
     recentFiles.add(recentFile);
     debugPrint('Saving file ID to bucket $bucket');
-    bucket.write<String>(
-      _kRestoreOpenFileIdKey,
-      recentFile.identifier,
-    );
+    bucket.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
   }
 }
 
@@ -483,12 +488,13 @@ class _OrgManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => loadHttpUrl(
-        context,
-        Uri.parse(
-          'https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org',
-        ),
-      ),
+      onPressed:
+          () => loadHttpUrl(
+            context,
+            Uri.parse(
+              'https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org',
+            ),
+          ),
       child: Text(AppLocalizations.of(context)!.buttonOpenOrgManual),
     );
   }
@@ -513,13 +519,14 @@ void _openTestFile(BuildContext context) =>
     loadAsset(context, 'assets/test/test.org');
 
 void _openSettingsScreen(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) =>
+  context,
+  MaterialPageRoute<void>(
+    builder:
+        (context) =>
             ViewSettings.defaults(context, child: const SettingsPage()),
-        fullscreenDialog: true,
-      ),
-    );
+    fullscreenDialog: true,
+  ),
+);
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();
@@ -531,7 +538,8 @@ class _SupportLink extends StatelessWidget {
       label: Text(AppLocalizations.of(context)!.buttonSupport),
       onPressed: visitSupportLink,
       style: TextButton.styleFrom(
-          foregroundColor: Theme.of(context).disabledColor),
+        foregroundColor: Theme.of(context).disabledColor,
+      ),
     );
   }
 }
@@ -543,7 +551,8 @@ class _VersionInfoButton extends StatelessWidget {
     return TextButton(
       onPressed: visitChangelogLink,
       style: TextButton.styleFrom(
-          foregroundColor: Theme.of(context).disabledColor),
+        foregroundColor: Theme.of(context).disabledColor,
+      ),
       child: Text(AppLocalizations.of(context)!.buttonVersion(orgroVersion)),
     );
   }

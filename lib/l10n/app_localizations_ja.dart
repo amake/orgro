@@ -72,7 +72,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get confirmResetPreferencesDialogTitle => '設定を初期化しますか?';
 
   @override
-  String get confirmResetPreferencesDialogMessage => 'すべての設定が初期値に戻されます。この操作は元に戻せません。';
+  String get confirmResetPreferencesDialogMessage =>
+      'すべての設定が初期値に戻されます。この操作は元に戻せません。';
 
   @override
   String get confirmResetPreferencesActionReset => '初期化';
@@ -141,7 +142,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String searchHits(num n) {
-    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
     final String nString = nNumberFormat.format(n);
 
     return '$nString件';
@@ -149,9 +152,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -231,7 +236,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionGrantNow => '許可';
 
   @override
-  String get bannerBodySaveDocumentOrg => '変更を保存しますか？ *これは実験的な機能です。* ファイルをバックアップしておいてください。[[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][詳細]]';
+  String get bannerBodySaveDocumentOrg =>
+      '変更を保存しますか？ *これは実験的な機能です。* ファイルをバックアップしておいてください。[[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][詳細]]';
 
   @override
   String get bannerBodyActionSaveAlways => '常に保存';
@@ -285,7 +291,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inputEncryptionPasswordDialogTitle => '暗号化のためのパスワードを入力';
 
   @override
-  String get inputEncryptionPasswordDialogBody => 'パスワードが未指定の Org Crypt セクションを暗号化するために使用されます。';
+  String get inputEncryptionPasswordDialogBody =>
+      'パスワードが未指定の Org Crypt セクションを暗号化するために使用されます。';
 
   @override
   String get inputCustomFilterDialogTitle => 'カスタムフィルタ';
@@ -367,7 +374,8 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl.NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat = intl
+        .NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return '以下のコードの実行が ${timeoutString}ms でタイムアウトしました\n\n$code';

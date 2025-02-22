@@ -32,23 +32,23 @@ Widget appearanceListItem(BuildContext context) {
 Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
     showDialog<ThemeMode>(
       context: context,
-      builder: (context) => SimpleDialog(
-        children: [
-          for (final mode in ThemeMode.values)
-            CheckboxListTile(
-              value: current == mode,
-              title: Text(mode.toDisplayString(context)),
-              onChanged: (_) => Navigator.pop(context, mode),
-            ),
-        ],
-      ),
+      builder:
+          (context) => SimpleDialog(
+            children: [
+              for (final mode in ThemeMode.values)
+                CheckboxListTile(
+                  value: current == mode,
+                  title: Text(mode.toDisplayString(context)),
+                  onChanged: (_) => Navigator.pop(context, mode),
+                ),
+            ],
+          ),
     );
 
 extension ThemeModeDisplayString on ThemeMode {
   String toDisplayString(BuildContext context) => switch (this) {
-        ThemeMode.system =>
-          AppLocalizations.of(context)!.appearanceModeAutomatic,
-        ThemeMode.light => AppLocalizations.of(context)!.appearanceModeLight,
-        ThemeMode.dark => AppLocalizations.of(context)!.appearanceModeDark,
-      };
+    ThemeMode.system => AppLocalizations.of(context)!.appearanceModeAutomatic,
+    ThemeMode.light => AppLocalizations.of(context)!.appearanceModeLight,
+    ThemeMode.dark => AppLocalizations.of(context)!.appearanceModeDark,
+  };
 }
