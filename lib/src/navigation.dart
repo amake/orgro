@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';

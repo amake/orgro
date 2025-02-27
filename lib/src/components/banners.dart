@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
