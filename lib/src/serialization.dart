@@ -65,17 +65,7 @@ Future<String?> serializeWithProgressUI(
   OrgTree doc,
   OrgroSerializer serializer,
 ) async {
-  var canceled = false;
-  serialize(doc, serializer)
-      .then((value) {
-        if (!canceled && context.mounted) Navigator.pop(context, value);
-      })
-      .onError((error, stackTrace) {
-        if (context.mounted) showErrorSnackBar(context, error);
-        logError(error, stackTrace);
-        if (!canceled && context.mounted) Navigator.pop(context);
-      });
-  final result = await showDialog<String>(
+  final dialogFuture = showDialog<String>(
     context: context,
     builder:
         (context) => ProgressIndicatorDialog(
@@ -88,6 +78,17 @@ Future<String?> serializeWithProgressUI(
           dismissable: true,
         ),
   );
+  var canceled = false;
+  serialize(doc, serializer)
+      .then((value) {
+        if (!canceled && context.mounted) Navigator.pop(context, value);
+      })
+      .onError((error, stackTrace) {
+        if (context.mounted) showErrorSnackBar(context, error);
+        logError(error, stackTrace);
+        if (!canceled && context.mounted) Navigator.pop(context);
+      });
+  final result = await dialogFuture;
   if (result == null) {
     canceled = true;
   }
