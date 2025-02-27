@@ -18,11 +18,27 @@ class OrgroSerializer extends OrgSerializer {
   }
 
   bool get willEncrypt => false;
+  bool _canceled = false;
+
+  void cancel() => _canceled = true;
+
+  @override
+  void visit(OrgNode node) {
+    if (_canceled) return;
+    super.visit(node);
+  }
+
+  @override
+  void write(String str) {
+    if (_canceled) return;
+    super.write(str);
+  }
 }
 
 class OrgroPlaintextSerializer extends OrgroSerializer {
   @override
   void visit(OrgNode node) {
+    if (_canceled) return;
     if (node is OrgDecryptedContent) {
       node.toCleartextMarkup(serializer: this);
     } else {
@@ -40,6 +56,7 @@ class OrgroCyphertextSerializer extends OrgroSerializer {
 
   @override
   void visit(OrgNode node) {
+    if (_canceled) return;
     if (node is OrgSection && node.needsEncryption()) {
       // Re-encrypt. We want to blow up here if we can't find a password, hence
       // firstWhere.
@@ -91,6 +108,7 @@ Future<String?> serializeWithProgressUI(
   final result = await dialogFuture;
   if (result == null) {
     canceled = true;
+    serializer.cancel();
   }
   return result;
 }
