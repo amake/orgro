@@ -97,14 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
-  dart_pg:
-    dependency: "direct main"
-    description:
-      name: dart_pg
-      sha256: "644741ad511448c1cb96c311108a944ae81060727fdf231a15fed6e0399cf25e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   dynamic_fonts:
     dependency: "direct main"
     description:
@@ -162,6 +154,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  flat_buffers:
+    dependency: transitive
+    description:
+      name: flat_buffers
+      sha256: "380bdcba5664a718bfd4ea20a45d39e13684f5318fcd8883066a55e21f37f4c3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.5.26"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -334,14 +334,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.0"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -494,6 +486,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
+  openpgp:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "feature/sync"
+      resolved-ref: f564e589fe32cb7eca4a3467cd10c74ece09b581
+      url: "https://github.com/amake/flutter-openpgp.git"
+    source: git
+    version: "3.9.1"
   org_flutter:
     dependency: "direct main"
     description:
@@ -598,14 +599,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
-  pinenacl:
-    dependency: transitive
-    description:
-      name: pinenacl
-      sha256: "57e907beaacbc3c024a098910b6240758e899674de07d6949a67b52fd984cbdf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   platform:
     dependency: transitive
     description:
@@ -622,14 +615,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  pointycastle:
-    dependency: transitive
-    description:
-      name: pointycastle
-      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.9.1"
   quiver:
     dependency: transitive
     description:
@@ -646,14 +631,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
-  sha3:
-    dependency: transitive
-    description:
-      name: sha3
-      sha256: efa0ad944b950965e7014ab02f407f0a62a64626259983af0e2f98cd39a73a8a
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -726,14 +703,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
-  sign_dart:
-    dependency: transitive
-    description:
-      name: sign_dart
-      sha256: ac9303a03c7cca834568f6502b11031e2a5b92141d764c9314d7b4b455780721
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

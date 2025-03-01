@@ -1,9 +1,43 @@
-import 'dart:convert';
-
-import 'package:dart_pg/dart_pg.dart';
+import 'package:flutter/foundation.dart';
+import 'package:openpgp/bridge/binding.dart';
+import 'package:openpgp/model/bridge_model_generated.dart' as model;
+import 'package:openpgp/openpgp.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/util.dart';
+
+String Function(String text, String password) opgpEncrypt =
+    _OpenPGPSync.encryptSymmetric;
+
+String Function(String text, String password) opgpDecrypt =
+    _OpenPGPSync.decryptSymmetric;
+
+class _OpenPGPSync {
+  static String _stringResponse(String name, Uint8List payload) {
+    final data = Binding().call(name, payload);
+    final response = model.StringResponse(data);
+    if (response.error != null && response.error != "") {
+      throw OpenPGPException(response.error!);
+    }
+    return response.output!;
+  }
+
+  static String encryptSymmetric(String message, String passphrase) {
+    final requestBuilder = model.EncryptSymmetricRequestObjectBuilder(
+      message: message,
+      passphrase: passphrase,
+    );
+    return _stringResponse('encryptSymmetric', requestBuilder.toBytes());
+  }
+
+  static String decryptSymmetric(String message, String passphrase) {
+    final requestBuilder = model.DecryptSymmetricRequestObjectBuilder(
+      message: message,
+      passphrase: passphrase,
+    );
+    return _stringResponse('decryptSymmetric', requestBuilder.toBytes());
+  }
+}
 
 typedef OrgroPassword = ({String password, SectionPredicate predicate});
 typedef SectionPredicate = bool Function(OrgSection);
@@ -58,8 +92,11 @@ extension OrgSectionEncryption on OrgSection {
       buf.visit(child);
     }
     final (leading, text) = buf.toString().splitLeadingWhitespace();
-    final message = OpenPGP.encryptCleartext(text, passwords: [password]);
-    return '${headline.toMarkup()}$leading${message.armor()}';
+    final message = opgpEncrypt(text, password);
+    // Result does not have trailing newline so we add it ourselves. Otherwise
+    // an encrypted section abutting another section will result in malformed
+    // markup.
+    return '${headline.toMarkup()}$leading$message\n';
   }
 }
 
@@ -69,14 +106,8 @@ List<String?> decrypt((List<OrgPgpBlock> blocks, String password) args) {
 
   for (final block in blocks) {
     try {
-      final decrypted = OpenPGP.decrypt(
-        block.toRfc4880(),
-        passwords: [password],
-      );
-      // TODO(aaron): This introduces \r to every linebreak. What to do about
-      // this?
-      final text = utf8.decode(decrypted.literalData.binary);
-      result.add(text);
+      final decrypted = opgpDecrypt(block.toRfc4880(), password);
+      result.add(decrypted);
     } catch (e, s) {
       result.add(null);
       logError(e, s);
@@ -103,14 +134,6 @@ class OrgroDecryptedContentSerializer extends DecryptedContentSerializer {
       return block.toMarkup();
     }
     // Reencrypt with the same password
-    return _encrypt(content, password);
-  }
-
-  String _encrypt(OrgDecryptedContent content, String password) {
-    final message = OpenPGP.encryptCleartext(
-      content.toCleartextMarkup(),
-      passwords: [password],
-    );
-    return message.armor();
+    return opgpEncrypt(content.toCleartextMarkup(), password);
   }
 }

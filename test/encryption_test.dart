@@ -2,7 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/encryption.dart';
 
+import 'utils/encryption.dart';
+
 void main() {
+  setUp(() {
+    mockOpenPGP();
+  });
+  tearDown(() {
+    restoreOpenPGP();
+  });
   group('Encryption', () {
     group('needsEncryption', () {
       test('Correctly encrypted section', () {
@@ -66,13 +74,13 @@ bar
 ''';
       final doc = OrgDocument.parse(content);
       final section = doc.sections.first;
-      final encrypted = section.encrypt('foobar');
-      expect(
-        encrypted.startsWith('''* foo :crypt:
+      expect(section.encrypt('foobar'), '''* foo :crypt:
 
------BEGIN PGP MESSAGE-----'''),
-        isTrue,
-      );
+-----BEGIN PGP MESSAGE-----
+
+YmFyCg==
+-----END PGP MESSAGE-----
+''');
     });
   });
 }

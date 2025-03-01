@@ -5,6 +5,8 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/serialization.dart';
 
+import 'utils/encryption.dart';
+
 Iterable<File> get testFiles => Directory('assets/test')
     .listSync(recursive: true)
     .whereType<File>()
@@ -15,6 +17,12 @@ Iterable<File> get testFiles => Directory('assets/test')
     );
 
 void main() {
+  setUp(() {
+    mockOpenPGP();
+  });
+  tearDown(() {
+    restoreOpenPGP();
+  });
   group('Serialization', () {
     test('OrgroSerializer', () {
       for (final file in testFiles) {
