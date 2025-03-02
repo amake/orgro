@@ -1,0 +1,2 @@
+- Support displaying remote images
+- Reset cache from action menu on start screen

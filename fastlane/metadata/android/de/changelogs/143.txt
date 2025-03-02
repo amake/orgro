@@ -1,0 +1,1 @@
+- Support rich content in drawer properties

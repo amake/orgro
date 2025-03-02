@@ -1,0 +1,2 @@
+- Documents can now be expanded to full-width on wide screens
+- Relative links can be resolved in more cases

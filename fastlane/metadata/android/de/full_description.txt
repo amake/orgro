@@ -1,0 +1,17 @@
+Orgro ist ein Org Datei Editor und Viewer mit vielen Funktionen für das komfortable Lesen Unterwegs:
+
+- Textumbrüche für leichtes Betrachten auf Handy-Bildschirmen
+
+- Syntax Highlighting dass das Aussehen von Emacs originalgetreu nachbildet, in hellen sowie dunklen Modus
+
+- Lesemodus für das Verstecken von unwesentlichen Markup und hervorhebung des Inhalts
+
+- Beschränke deine Sicht auf einen einzelnen Abschnitt, genau wie Emacs
+
+- Schöne Tabellen mit garantiert richtige Abstände, auch mit nicht-ASCII Charakteren
+
+- Öffene externe Links mit deinem Browser und Abschnittlinks in beschränkter Ansicht
+
+- Erweitere oder verkleinere Abschnitte und Blöcke genau wie in Emacs
+
+Hinweis: die INTERNET Berechtigung wird für das Laden von externen Bildern sowie Schriftarten von Onlinequellen wie Google Fonts & AWS S3 benötigt.

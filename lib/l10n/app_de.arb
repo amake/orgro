@@ -1,0 +1,274 @@
+{
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Aussehen",
+  "menuItemSettings": "Einstellungen",
+  "menuItemClearCache": "Cache löschen",
+  "menuItemOrgroManual": "Orgro Handbuch",
+  "menuItemTestFile": "Test Datei",
+  "menuItemAbout": "Über",
+
+  "appearanceModeAutomatic": "Automatisch",
+  "appearanceModeLight": "Hell",
+  "appearanceModeDark": "Dunkel",
+
+  "settingsScreenTitle": "Einstellungen",
+  "settingsSectionDefaultText": "Schrift",
+  "settingsSectionDataManagement": "Datenverwaltung",
+
+  "settingsItemAppearance": "Farbschema",
+  "settingsItemTextScale": "Größe",
+  "settingsItemFontFamily": "Schriftart",
+
+  "settingsActionClearCache": "Cache löschen",
+  "settingsActionResetPreferences": "Einstellungen Zurücksetzen",
+
+  "snackbarMessageCacheCleared": "Cache gelöscht",
+  "snackbarMessagePreferencesReset": "Einstellungen Zurückgesetzt",
+
+  "confirmResetPreferencesDialogTitle": "Einstellungen Zurücksetzen?",
+  "confirmResetPreferencesDialogMessage": "Es werden alle Einstellungen zurückgesetzt. Dies kann nicht rückgängig gemacht werden.",
+  "confirmResetPreferencesActionReset": "Zurücksetzen",
+  "confirmResetPreferencesActionCancel": "Abbrechen",
+
+  "aboutLinkSupport": "Support · Feedback",
+  "aboutLinkChangelog": "Changelog",
+
+  "buttonOpenFile": "Datei öffnen",
+  "buttonCreateFile": "Datei erstellen",
+  "buttonOpenOrgroManual": "Orgro Handbuch öffnen",
+  "buttonOpenOrgManual": "Org Handbuch öffnen",
+
+  "buttonSupport": "Hilfe · Feedback",
+  "buttonVersion": "v{version}",
+  "@buttonVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sectionHeaderRecentFiles": "Zuletzt geöffnet",
+
+  "fileSourceDocuments": "Dokumente",
+  "fileSourceDownloads": "Downloads",
+  "fileSourceGoogleDrive": "Google Drive",
+
+  "menuItemReaderMode": "Lesemodus",
+  "menuItemFullWidth": "Volle Breite",
+  "menuItemScrollTop": "Nach Oben Scrollen",
+  "menuItemScrollBottom": "Nach Unten Scrollen",
+
+  "menuItemUndo": "Rückgängig",
+  "menuItemRedo": "Wiederholen",
+
+  "hintTextSearch": "Suchen...",
+  "searchHits": "{n, plural, =0{0 Treffer} =1{1 Treffer} other{{n} Treffer}}",
+  "@searchHits": {
+    "placeholders": {
+      "n": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "searchResultSelection": "{current} / {total}",
+  "@searchResultSelection": {
+    "placeholders": {
+      "current": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "customFilterChipName": "Benutzerdefiniert",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro hat nicht die Berechtigung um relative Links aufzulösen",
+  "snackbarActionGrantAccess": "Zugriff erlauben",
+
+  "snackbarMessageNeedsEncryptionKey": "Konnte nicht Speichern. Verschlüsselung Passwort fehlt.",
+  "snackbarActionEnterEncryptionKey": "Passwort eingeben",
+
+  "dialogTitleError": "Fehler",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "Abbrechen",
+  "dialogActionHelp": "Hilfe",
+
+  "pageTitleError": "Fehler",
+  "pageTitleLoading": "Laden...",
+  "pageTitleNarrow": "{name} › Beschränkt",
+  "@pageTitleNarrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pageTitleEditing": "{name} › Bearbeiten",
+  "@pageTitleEditing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sectionActionNarrow": "Beschränkt",
+  "sectionActionCycleTodo": "TODO wechseln",
+
+  "bannerBodyRemoteImages": "Dieses Dokument beinhaltet Bilder aus externen Quellen. Sollen diese Bilder geladen werden?",
+  "bannerBodyActionShowAlways": "Immer",
+  "bannerBodyActionShowNever": "Nie",
+  "bannerBodyActionShowOnce": "Nur dieses Mal",
+
+  "bannerBodyRelativeLinks": "Dieses Dokument beinhaltet relative Links. Zugriff erlauben?",
+  "bannerBodyActionGrantNotNow": "Nicht jetzt",
+  "bannerBodyActionGrantNever": "Nie",
+  "bannerBodyActionGrantNow": "Zugriff erlauben",
+
+  "bannerBodySaveDocumentOrg": "Änderungen speichern? *Dies ist ein experimentales Feature.* Stelle sicher deine Dateien zu sichern. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Mehr lernen]]",
+  "bannerBodyActionSaveAlways": "Immer",
+  "bannerBodyActionSaveNever": "Nie",
+  "bannerBodyActionSaveOnce": "Nur dieses Mal",
+
+  "bannerBodyDecryptContent": "Dieses Dokument beinhaltet verschlüsselte Inhalte. Jetzt entschlüsseln?",
+  "bannerBodyActionDecryptNow": "Entschlüsseln",
+  "bannerBodyActionDecryptNotNow": "Nicht jetzt",
+  "bannerBodyActionDecryptNever": "Nie",
+  
+  "saveChangesDialogTitle": "Änderungen speichern?",
+  "saveChangesDialogMessage": "Orgro kann deine Änderungen nicht speichern.",
+  "saveActionShare": "Teilen",
+  "saveActionDiscard": "Wegwerfen",
+
+  "discardChangesDialogTitle": "Änderungen wegwerfen?",
+  "discardActionDiscard": "Wegwerfen",
+  "discardActionCancel": "Abbrechen",
+
+  "savedMessage": "Gespeichert",
+
+  "inputDecryptionPasswordDialogTitle": "Passwort für Entschlüsselung eingeben",
+  "inputEncryptionPasswordDialogTitle": "Passwort für Verschlüsselung eingeben",
+  "inputEncryptionPasswordDialogBody": "Dieses Password wird für die Verschlüsselung der Org Crypt Teile benutzt.",
+
+  "inputCustomFilterDialogTitle": "Benutzerdefinierter Filter",
+  "inputCustomFilterDialogHistoryButton": "Verlauf",
+
+  "decryptingProgressDialogTitle": "Entschlüsseln…",
+  "encryptingProgressDialogTitle": "Verschlüsseln…",
+  "serializingProgressDialogTitle": "Serialisieren…",
+  "savingProgressDialogTitle": "Speichern…",
+  "searchingProgressDialogTitle": "Suchen…",
+  "citationsDialogTitle": "Zitate",
+
+  "createFileDialogTitle": "Neue Datei erstellen",
+  "createFileDefaultName": "unbetitelt.org",
+
+  "startTimePickerTitle": "Wähle Startzeit",
+  "endTimePickerTitle": "Wähle Endzeit",
+
+  "snackbarMessageBibliographiesNotFound": "Keine Bibliografien gefunden",
+  "snackbarMessageCitationKeysNotFound": "Zitate nicht gefunden",
+  "snackbarMessageCitationsNotFound": "Zitate nicht gefunden",
+  "snackbarMessageSomeCitationsNotFound": "Folgende Zitate nicht gefunden: {citations}",
+  "@snackbarMessageSomeCitationsNotFound": {
+    "placeholders": {
+      "citations": {
+        "type": "String"
+      }
+    }
+  },
+
+  "errorCannotResolveRelativePath": "Kann nicht relativen Pfad zu diesem Dokument lösen",
+  "errorPathResolvedToNonFile": "{path} gelöst zu einer nicht vorhandenen Datei: {resolved}",
+  "@errorPathResolvedToNonFile": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      },
+      "resolved": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnknownType": "Unbekannter Typ: {type}",
+  "@errorUnknownType": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorUnexpectedHttpResponse": "Unerwartete HTTP-Antwort: {response}",
+  "@errorUnexpectedHttpResponse": {
+    "placeholders": {
+      "response": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorOrgParser": "Parser Fehler: {result}",
+  "@errorOrgParser": {
+    "placeholders": {
+      "result": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "errorOrgExecution": "Fehler beim Ausführen vom unteren Code: {message}\n\n{code}",
+  "@errorOrgExecution": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOrgTimeout": "Durchführung vom unteren Code nach {timeout}ms. unterbrochen\n\n{code}",
+  "@errorOrgTimeout": {
+    "placeholders": {
+      "timeout": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOrgArgument": "Ungültiges Argument: {item}",
+  "@errorOrgArgument": {
+    "placeholders": {
+      "item": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorDecryptionFailed": "Entschlüsseln fehlgeschlagen",
+  "errorLinkNotHandled": "Konnte nicht Link öffnen: “{link}”",
+  "@errorLinkNotHandled": {
+    "placeholders": {
+      "link": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorExternalIdNotFound": "Datei mit ID “{id}” nicht gefunden",
+  "@errorExternalIdNotFound": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+
+  "editInsertedHeadline": "[Von Bearbeitung eingefügt]"
+}

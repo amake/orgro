@@ -1,0 +1,3 @@
+- Support `id:` and `#custom-id` links to local sections
+- Support `#custom-id` links to sections in relative files
+- Check app version, support info in new About dialog
