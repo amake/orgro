@@ -1,0 +1,4 @@
+- Support relative links between Org Mode files
+- Support displaying relatively linked images
+- Better error reporting
+- Tags in LaTeX blocks no longer overlap the main content

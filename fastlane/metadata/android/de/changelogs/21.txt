@@ -1,0 +1,3 @@
+- New font: FiraGO
+- Improved appearance of bold, italic text
+- Bug fixes

@@ -1,0 +1,3 @@
+- Support relative links between Org Mode files
+- Support displaying relatively linked images
+- Better error reporting

@@ -1,0 +1,2 @@
+- Show source of documents in Recent Files when possible
+- Fix Org document rendering bugs

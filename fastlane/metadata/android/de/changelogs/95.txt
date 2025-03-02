@@ -1,0 +1,2 @@
+- Plain-text document editing
+- Bug fixes and minor improvements

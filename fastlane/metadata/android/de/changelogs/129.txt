@@ -1,0 +1,2 @@
+- Tap timestamps to edit with date/time picker
+- Bug fixes

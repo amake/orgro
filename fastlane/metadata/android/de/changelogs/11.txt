@@ -1,0 +1,2 @@
+- Fix possible crashes when opening files from other apps via intent
+- Fix broken headline layout when tags are too long

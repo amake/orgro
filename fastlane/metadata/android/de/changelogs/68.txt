@@ -1,0 +1,2 @@
+- Terminus font added by user request
+- Support Android 13 “themed” app icon

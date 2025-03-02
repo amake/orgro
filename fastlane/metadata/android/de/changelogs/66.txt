@@ -1,0 +1,3 @@
+- Text is now only reflowed in Reader Mode
+- SVG images are now supported
+- Fixed a bug parsing section titles

@@ -1,0 +1,3 @@
+- Open media links and attachments in external apps
+- Render horizontal rules nicely
+- Respect Org local variables for controlling sub/superscripts

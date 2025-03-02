@@ -1,0 +1,2 @@
+- Toggle light/dark mode within the app
+- Can now handle GB-18030 encoding

@@ -1,0 +1,1 @@
+- Remember text settings and recently opened files

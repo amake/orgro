@@ -1,0 +1,3 @@
+- Support inline src blocks
+- Rendering improvements
+- Bug fixes
