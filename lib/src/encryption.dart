@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:openpgp/openpgp_sync.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/util.dart';
 
+@visibleForTesting
 String Function(String text, String password) opgpEncrypt =
     OpenPGPSync.encryptSymmetric;
-
+@visibleForTesting
 String Function(String text, String password) opgpDecrypt =
     OpenPGPSync.decryptSymmetric;
 
