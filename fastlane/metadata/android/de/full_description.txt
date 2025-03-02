@@ -8,7 +8,7 @@ Orgro ist ein Org Datei Editor und Viewer mit vielen Funktionen für das komfort
 
 - Beschränke deine Sicht auf einen einzelnen Abschnitt, genau wie Emacs
 
-- Schöne Tabellen mit garantiert richtige Abstände, auch mit nicht-ASCII Charakteren
+- Schöne Tabellen mit garantiert richtigen Abstände, auch mit nicht-ASCII Charakteren
 
 - Öffene externe Links mit deinem Browser und Abschnittlinks in beschränkter Ansicht
 
