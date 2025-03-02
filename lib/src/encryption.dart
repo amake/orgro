@@ -1,43 +1,13 @@
-import 'package:flutter/foundation.dart';
-import 'package:openpgp/bridge/binding.dart';
-import 'package:openpgp/model/bridge_model_generated.dart' as model;
-import 'package:openpgp/openpgp.dart';
+import 'package:openpgp/openpgp_sync.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/util.dart';
 
 String Function(String text, String password) opgpEncrypt =
-    _OpenPGPSync.encryptSymmetric;
+    OpenPGPSync.encryptSymmetric;
 
 String Function(String text, String password) opgpDecrypt =
-    _OpenPGPSync.decryptSymmetric;
-
-class _OpenPGPSync {
-  static String _stringResponse(String name, Uint8List payload) {
-    final data = Binding().call(name, payload);
-    final response = model.StringResponse(data);
-    if (response.error != null && response.error != "") {
-      throw OpenPGPException(response.error!);
-    }
-    return response.output!;
-  }
-
-  static String encryptSymmetric(String message, String passphrase) {
-    final requestBuilder = model.EncryptSymmetricRequestObjectBuilder(
-      message: message,
-      passphrase: passphrase,
-    );
-    return _stringResponse('encryptSymmetric', requestBuilder.toBytes());
-  }
-
-  static String decryptSymmetric(String message, String passphrase) {
-    final requestBuilder = model.DecryptSymmetricRequestObjectBuilder(
-      message: message,
-      passphrase: passphrase,
-    );
-    return _stringResponse('decryptSymmetric', requestBuilder.toBytes());
-  }
-}
+    OpenPGPSync.decryptSymmetric;
 
 typedef OrgroPassword = ({String password, SectionPredicate predicate});
 typedef SectionPredicate = bool Function(OrgSection);

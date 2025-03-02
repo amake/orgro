@@ -489,12 +489,11 @@ packages:
   openpgp:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/sync"
-      resolved-ref: f564e589fe32cb7eca4a3467cd10c74ece09b581
-      url: "https://github.com/amake/flutter-openpgp.git"
-    source: git
-    version: "3.9.1"
+      name: openpgp
+      sha256: "03b4151e4e36aacb24d5bf34f380db82c0491ad98edf57af0fb9315f3c047c8a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.0"
   org_flutter:
     dependency: "direct main"
     description:
