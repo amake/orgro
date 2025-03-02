@@ -1,2 +1,0 @@
-- Fix handling of drawer content
-- Parse planning/clock lines as distinct elements

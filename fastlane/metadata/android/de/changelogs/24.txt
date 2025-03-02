@@ -1,2 +1,0 @@
-- Rearrange app bar controls to a) give more space to the document title, and b)
-  make frequently used controls more accessible

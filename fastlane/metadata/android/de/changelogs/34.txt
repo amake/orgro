@@ -1,2 +1,0 @@
-- Auto-detect encoding of opened files
-- New font: JetBrains Mono

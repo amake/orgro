@@ -1,5 +1,0 @@
-- Create new files from the start screen
-- Show source of documents in Recent Files when possible
-- Support subscripts and superscripts
-- Support non-ASCII characters in headline tags
-- Fix Org document rendering bugs

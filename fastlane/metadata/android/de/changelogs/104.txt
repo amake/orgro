@@ -1,2 +1,0 @@
-- Support customizing TODO states via #+TODO: and related keywords
-- Linkify Org Cite citations and display citation data when tapped

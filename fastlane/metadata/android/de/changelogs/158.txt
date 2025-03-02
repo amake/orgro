@@ -1,1 +1,0 @@
-- Much faster encryption/decryption

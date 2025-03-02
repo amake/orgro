@@ -1,4 +1,0 @@
-- Experimental support for editing: toggle list item checkboxes and cycle
-  headline TODOs. Changes are written back to the original file when permissions
-  allow. See FAQ for details.
-- Additional fonts by user request

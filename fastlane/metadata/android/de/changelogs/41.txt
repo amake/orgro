@@ -1,2 +1,0 @@
-- Update TeX rendering engine (KaTeX 0.13.0)
-- Migrate app to Dart 2.12 with sound null safety

@@ -1,2 +1,0 @@
-- New fonts available
-- Bug fixes

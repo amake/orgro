@@ -1,1 +1,0 @@
-- Support inline AVIF images

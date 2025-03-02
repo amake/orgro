@@ -1,2 +1,0 @@
-- Optimize image loading
-- Bug fixes and minor improvements
