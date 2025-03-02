@@ -12,6 +12,7 @@
 		<string>ja</string>
 		<string>uk</string>
 		<string>en_GB</string>
+        <string>de</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
