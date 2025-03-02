@@ -1,0 +1,2 @@
+- Much faster encryption/decryption
+- German localization
