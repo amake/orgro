@@ -113,13 +113,6 @@ VoidCallback debounce(VoidCallback func, Duration duration) {
   };
 }
 
-String joinPath(String base, String rest) {
-  if (rest.isEmpty) return base;
-  if (base.isEmpty) return rest;
-  if (base.endsWith('/')) return '$base$rest';
-  return '$base/$rest';
-}
-
 extension StringExtension on String {
   (String, String) splitLeadingWhitespace() {
     final idx = indexOf(RegExp(r'\S'));
@@ -146,5 +139,12 @@ extension StringExtension on String {
   String withTrailingLineBreak() {
     final lineBreak = detectLineBreak() ?? '\n';
     return endsWith(lineBreak) ? this : '$this$lineBreak';
+  }
+
+  String joinPath(String next) {
+    if (next.isEmpty) return this;
+    if (isEmpty) return next;
+    if (endsWith('/')) return '$this$next';
+    return '$this/$next';
   }
 }

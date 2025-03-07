@@ -476,6 +476,10 @@ following settings from the local variables list:
 - ~bidi-paragraph-direction~ :: Override per-paragraph detection of text
   direction; see [[*Right-to-left scripts and bidi texts][Right-to-left scripts and bidi texts]].
 
+- ~org-attach-id-dir~ :: Specify the directory in which ~:ID:~-based attachments
+  are located. By default this is ~"data"~, but popular Emacs distros may
+  customize it.
+
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.
 

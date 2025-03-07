@@ -84,6 +84,7 @@ Error cases
 * Attachments
 
 - [[file:attachments-dir.org][:DIR:]]
+- [[file:attachments-id-custom-dir.org][:ID: with custom dir]]
 - [[file:attachments-external-apps.org][External apps]]
 
 * Encryption

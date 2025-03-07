@@ -14,7 +14,7 @@ extension ImageHandler on DocumentPageState {
     }
     final doc = DocumentProvider.of(context).doc;
     try {
-      final fileLink = convertLinkResolvingAttachments(doc, link);
+      final fileLink = convertLinkResolvingAttachments(context, doc, link);
       if (fileLink.isRelative) {
         return _loadLocalImage(link, fileLink);
       }

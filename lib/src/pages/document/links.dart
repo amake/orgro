@@ -55,7 +55,7 @@ extension LinkHandler on DocumentPageState {
 
   OrgFileLink? _tryParseFileLink(OrgTree doc, OrgLink link) {
     try {
-      return convertLinkResolvingAttachments(doc, link);
+      return convertLinkResolvingAttachments(context, doc, link);
     } on Exception {
       // Wasn't a file link
       return null;
