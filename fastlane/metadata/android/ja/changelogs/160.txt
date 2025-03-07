@@ -1,0 +1,1 @@
+- ローカル変数の `org-attach-id-dir` 設定を順守
