@@ -7,6 +7,7 @@ ui_string_values = jq -r 'to_entries | .[] | select(.key | startswith("@") | not
 spellcheck = $(call ui_string_values,lib/l10n/app_$(1).arb) | \
 	aspell pipe --lang=$(1) --home-dir=. --personal=.aspell.$(1).pws | \
 	awk '/^&/ {w++; print} END {exit w}'
+keyStore = $(shell sed -nE 's/storeFile=(.+)/\1/p' android/key.properties)
 
 .PHONY: all
 all: release
@@ -48,8 +49,22 @@ build:
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: format-check dirty-check l10n-check test build
+release: dirty-check keystore-check format-check l10n-check test build
 	open -a Transporter build/ios/ipa/Orgro.ipa
+
+.PHONY: release-wait
+release-wait: keystore-wait release
+
+.PHONY: keystore-wait
+keystore-wait:
+	$(if $(wildcard android/key.properties),,$(error android/key.properties not found))
+	while [ ! -f $(keyStore) ]; do echo "Waiting for keyStore..."; ls -al $(keyStore); sleep 3; done
+
+.PHONY: keystore-check
+keystore-check:
+	$(if $(wildcard android/key.properties),,$(error android/key.properties not found))
+	$(if $(wildcard $(keyStore)),,$(error keyStore not found))
+	@exit 0
 
 .PHONY: help
 help: ## Show this help text
