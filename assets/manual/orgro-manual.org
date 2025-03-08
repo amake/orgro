@@ -342,6 +342,11 @@ Emacs:
 
 Activate with the button in the top app bar.
 
+** Archived sections                                                :ARCHIVE:
+
+Archived sections always start out collapsed, and do not participate in
+visibility cycling. However you can open them by tapping the headline.
+
 * Search
 
 Touch the floating search button in the lower right of the screen. A search

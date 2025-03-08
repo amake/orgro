@@ -43,6 +43,7 @@ Bidi
 * Visibility
 
 - [[file:visibility-sparse.org][Sparse trees]]
+- [[file:visibility-archive.org][Archive]]
 
 * Local variables
 
