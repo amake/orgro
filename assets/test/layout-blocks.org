@@ -60,6 +60,31 @@ Greater
     c
    #+end_center
 
+Dynamic
+
+   #+begin_src emacs-lisp
+     (defun org-dblock-write:myblock (_params)
+       (insert "*Hello*, \n/world/!"))
+   #+end_src
+
+   #+BEGIN: myblock :parameter1 value1 :parameter2 value2
+   *Hello*,
+   /world/!
+   #+END:
+
+Invalid
+
+   #+begin_
+  a
+   /b/ [[foo]]
+    c
+   #+end_
+
+   #+begin:
+  a
+   /b/ [[foo]]
+    c
+   #+end:
 
 # Local Variables:
 # org-hide-emphasis-markers: t
