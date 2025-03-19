@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 extension IterUtils<T> on Iterable<T> {
   Iterable<R> zipMap<R, U>(Iterable<U> b, R Function(T, U) visit) sync* {
@@ -147,4 +147,18 @@ extension StringExtension on String {
     if (endsWith('/')) return '$this$next';
     return '$this/$next';
   }
+}
+
+// Work around iOS paste permission dialog appearing on every paste. This should
+// be unnecessary pending https://github.com/flutter/flutter/issues/103163
+Widget nativeWhenPossibleContextMenuBuilder(
+  BuildContext context,
+  EditableTextState editableTextState,
+) {
+  if (SystemContextMenu.isSupported(context)) {
+    return SystemContextMenu.editableText(editableTextState: editableTextState);
+  }
+  return AdaptiveTextSelectionToolbar.editableText(
+    editableTextState: editableTextState,
+  );
 }

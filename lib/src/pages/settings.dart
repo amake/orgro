@@ -6,6 +6,7 @@ import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/util.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -118,6 +119,7 @@ class _TextPreviewState extends State<_TextPreview> {
           ),
           textInputAction: TextInputAction.done,
           maxLines: null,
+          contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
         ),
       ),
     );
