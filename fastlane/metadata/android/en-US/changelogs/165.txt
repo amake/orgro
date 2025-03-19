@@ -1,0 +1,2 @@
+- Improve planning entry rendering
+- Avoid confirmation dialog on paste (iOS)
