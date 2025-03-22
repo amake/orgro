@@ -38,6 +38,8 @@ Bidi
 * Media
 
 - [[file:media-svg.org][SVG image]]
+- [[file:media-alignment.org][Alignment]]
+- [[file:media-alignment-bidi.org][Bidi alignment]]
 - [[file:media-avif.org][AVIF image]]
 - [[file:media-error.org][Error cases]]
 

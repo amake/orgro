@@ -217,6 +217,11 @@ Further, HTTP(S) links to images can be optionally loaded and displayed inline:
 
 Long touch an image to open it in a view where you can zoom and pan.
 
+Image alignment via ~#+ATTR*~ keywords is supported:
+
+#+ATTR_ORG: :align center
+[[./orgro-icon.png]]
+
 Images are cached on your device. To clear the cache and reset your choice if
 you chose =Always= or =Never=, see the action menu on the top screen.
 

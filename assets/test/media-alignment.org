@@ -1,0 +1,8 @@
+#+ATTR_ORG: :align left
+[[file:unicorn-1.svg]]
+
+#+ATTR_ORG: :align center
+[[file:unicorn-1.svg]]
+
+#+ATTR_ORG: :align right
+[[file:unicorn-1.svg]]
