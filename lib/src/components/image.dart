@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
-import 'package:orgro/src/navigation.dart';
 
 bool _isSvg(String url) {
   final segments = Uri.parse(url).pathSegments;
@@ -17,17 +16,16 @@ bool _isSvg(String url) {
 }
 
 class RemoteImage extends StatelessWidget {
-  const RemoteImage(this.link, {super.key});
+  const RemoteImage(this.link, {this.scaled = false, super.key});
 
   final OrgLink link;
+  final bool scaled;
+
   String get url => link.location;
+
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(context, url, _image(context, url)),
-      child: _scaledImage(context, url),
-    );
-  }
+  Widget build(BuildContext context) =>
+      scaled ? _scaledImage(context, url) : _image(context, url);
 
   Widget _image(BuildContext context, String url) {
     if (_isSvg(url)) {
@@ -80,22 +78,17 @@ class LocalImage extends StatelessWidget {
     required this.link,
     required this.dataSource,
     required this.relativePath,
+    this.minimizeSize = false,
     super.key,
   });
 
   final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
+  final bool minimizeSize;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(context, relativePath, _image()),
-      child: _image(minimizeSize: true),
-    );
-  }
-
-  Widget _image({bool minimizeSize = false}) =>
+  Widget build(BuildContext context) =>
       _isSvg(relativePath)
           ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
           : _LocalOtherImage(
