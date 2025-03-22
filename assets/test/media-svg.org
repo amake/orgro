@@ -1,8 +1,12 @@
+#+STARTUP: inlineimages
+
 Orgro logo
 
+Link with description:
+[[file:unicorn-1.svg][unicorn]]
 
 Asset:
-[[file:unicorn-1.svg][unicorn]]
+[[file:unicorn-1.svg]]
 
 Network:
 https://raw.githubusercontent.com/amake/orgro/ef0eec7abef855487f3d30882bd4408018d03bf2/assets/unicorn-1.svg
