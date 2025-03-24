@@ -297,31 +297,31 @@ class _EditorToolbar extends StatelessWidget {
 
     // Handle single cursor position
     if (selection.isCollapsed) {
-      int pos = selection.baseOffset;
-      int start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
+      final pos = selection.baseOffset;
+      var start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
       if (start < 0) start = 0;
-      int end = text.indexOf('\n', pos);
+      var end = text.indexOf('\n', pos);
       if (end < 0) end = text.length;
 
-      List<String> lines = text.split('\n');
-      int lineIndex = text.substring(0, start).split('\n').length - 1;
-      String currentLine = lines[lineIndex];
-      ListItemInfo info = parseListItem(currentLine);
-      String indentation = info.indentation;
+      final lines = text.split('\n');
+      final lineIndex = text.substring(0, start).split('\n').length - 1;
+      final currentLine = lines[lineIndex];
+      final info = parseListItem(currentLine);
+      final indentation = info.indentation;
 
       String newText;
       int newOffset;
 
       if (currentLine.trim().isEmpty) {
         // Case 1: Empty line - potentially continue list from previous line
-        String newMarker = '-';
+        var newMarker = '-';
         if (lineIndex > 0) {
-          ListItemInfo prevInfo = parseListItem(lines[lineIndex - 1]);
+          final prevInfo = parseListItem(lines[lineIndex - 1]);
           if (indentation == prevInfo.indentation) {
             newMarker = getNextMarker(prevInfo.marker);
           }
         }
-        String newLine = '$indentation$newMarker [ ] ';
+        final newLine = '$indentation$newMarker [ ] ';
         newText = text.substring(0, start) + newLine + text.substring(end);
         newOffset = start + newLine.length;
       } else if (info.marker != null) {
@@ -329,19 +329,19 @@ class _EditorToolbar extends StatelessWidget {
             info.marker!; // Promote marker to String since it's not null
         if (info.checkbox != null) {
           // Case 2: List item with checkbox - insert new item below
-          String nextMarker = getNextMarker(marker);
-          String newLine = '$indentation$nextMarker [ ] ';
+          final nextMarker = getNextMarker(marker);
+          final newLine = '$indentation$nextMarker [ ] ';
           newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
           newOffset = end + 1 + newLine.length;
         } else {
           // Case 3: List item without checkbox - add checkbox inline
-          String newContent = '$indentation$marker [ ] ${info.content.trim()}';
+          final newContent = '$indentation$marker [ ] ${info.content.trim()}';
           newText = text.substring(0, start) + newContent + text.substring(end);
           newOffset = start + newContent.length;
         }
       } else {
         // Case 4: Non-list item - convert to list item with checkbox
-        String newContent = '$indentation- [ ] ${info.content.trim()}';
+        final newContent = '$indentation- [ ] ${info.content.trim()}';
         newText = text.substring(0, start) + newContent + text.substring(end);
         newOffset = start + newContent.length;
       }
@@ -353,23 +353,23 @@ class _EditorToolbar extends StatelessWidget {
       );
     } else {
       // Handle multi-line selection
-      int start = selection.start;
-      int end = selection.end;
-      String rangeText = text.substring(start, end);
-      List<String> lines = rangeText.split('\n');
-      List<String> transformedLines = [];
+      final start = selection.start;
+      final end = selection.end;
+      final rangeText = text.substring(start, end);
+      final lines = rangeText.split('\n');
+      final transformedLines = <String>[];
 
       for (String line in lines) {
-        ListItemInfo info = parseListItem(line);
-        String indentation = info.indentation;
+        final info = parseListItem(line);
+        final indentation = info.indentation;
         if (info.marker != null && info.checkbox == null) {
           final marker = info.marker!; // Promote marker to String
           // Add checkbox to list items without one
-          String newContent = '$indentation$marker [ ] ${info.content.trim()}';
+          final newContent = '$indentation$marker [ ] ${info.content.trim()}';
           transformedLines.add(newContent);
         } else if (info.marker == null) {
           // Convert non-list items to list items with checkbox
-          String newContent = '$indentation- [ ] ${info.content.trim()}';
+          final newContent = '$indentation- [ ] ${info.content.trim()}';
           transformedLines.add(newContent);
         } else {
           // Leave lines with existing checkboxes unchanged
@@ -378,9 +378,9 @@ class _EditorToolbar extends StatelessWidget {
       }
 
       // Join transformed lines and replace the selected range
-      String transformedText = transformedLines.join('\n');
-      String newText = text.replaceRange(start, end, transformedText);
-      int newOffset = start + transformedText.length;
+      final transformedText = transformedLines.join('\n');
+      final newText = text.replaceRange(start, end, transformedText);
+      final newOffset = start + transformedText.length;
       controller.value = TextEditingValue(
         text: newText,
         selection: TextSelection.collapsed(offset: newOffset),
@@ -409,10 +409,10 @@ ListItemInfo parseListItem(String line) {
   final pattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
   final match = pattern.firstMatch(line);
   if (match != null) {
-    String indentation = match.group(1)!;
-    String? marker = match.group(2);
-    String? checkbox = match.group(3);
-    String content = match.group(4)!;
+    final indentation = match.group(1)!;
+    final marker = match.group(2);
+    final checkbox = match.group(3);
+    final content = match.group(4)!;
     return ListItemInfo(indentation, marker, checkbox, content);
   }
   return ListItemInfo('', null, null, line);
@@ -424,8 +424,8 @@ String getNextMarker(String? marker) {
   final numPattern = RegExp(r'(\d+)([\.\)])');
   final match = numPattern.firstMatch(marker);
   if (match != null) {
-    int num = int.parse(match.group(1)!);
-    String suffix = match.group(2)!;
+    final num = int.parse(match.group(1)!);
+    final suffix = match.group(2)!;
     return '${num + 1}$suffix';
   }
   return marker; // Return same marker for unordered lists
