@@ -43,6 +43,12 @@
   "buttonVersion": "в{version}",
 
   "sectionHeaderRecentFiles": "Останні файли",
+  "recentFilesSortDialogTitle": "Sort by",
+  "sortKeyLastOpened": "Last opened",
+  "sortKeyName": "Name",
+  "sortKeyLocation": "Location",
+  "sortOrderAscending": "Ascending",
+  "sortOrderDescending": "Descending",
 
   "fileSourceDocuments": "Documents",
   "fileSourceDownloads": "Downloads",

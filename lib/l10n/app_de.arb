@@ -50,6 +50,12 @@
   },
 
   "sectionHeaderRecentFiles": "Zuletzt geöffnet",
+  "recentFilesSortDialogTitle": "Sort by",
+  "sortKeyLastOpened": "Last opened",
+  "sortKeyName": "Name",
+  "sortKeyLocation": "Location",
+  "sortOrderAscending": "Ascending",
+  "sortOrderDescending": "Descending",
 
   "fileSourceDocuments": "Dokumente",
   "fileSourceDownloads": "Downloads",
@@ -140,7 +146,7 @@
   "bannerBodyActionDecryptNow": "Entschlüsseln",
   "bannerBodyActionDecryptNotNow": "Nicht jetzt",
   "bannerBodyActionDecryptNever": "Nie",
-  
+
   "saveChangesDialogTitle": "Änderungen speichern?",
   "saveChangesDialogMessage": "Orgro kann deine Änderungen nicht speichern.",
   "saveActionShare": "Teilen",

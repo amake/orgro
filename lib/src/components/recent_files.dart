@@ -6,6 +6,28 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
 
+enum RecentFilesSortKey { lastOpened, name, location }
+
+extension RecentFileSortKeyPersistence on RecentFilesSortKey? {
+  static RecentFilesSortKey? fromString(String? key) => switch (key) {
+    _kRecentFilesSortKeyLastOpened => RecentFilesSortKey.lastOpened,
+    _kRecentFilesSortKeyName => RecentFilesSortKey.name,
+    _kRecentFilesSortKeyLocation => RecentFilesSortKey.location,
+    _ => null,
+  };
+
+  String? get persistableString => switch (this) {
+    RecentFilesSortKey.lastOpened => _kRecentFilesSortKeyLastOpened,
+    RecentFilesSortKey.name => _kRecentFilesSortKeyName,
+    RecentFilesSortKey.location => _kRecentFilesSortKeyLocation,
+    null => null,
+  };
+}
+
+const _kRecentFilesSortKeyLastOpened = 'last_opened';
+const _kRecentFilesSortKeyName = 'name';
+const _kRecentFilesSortKeyLocation = 'location';
+
 class RecentFile {
   RecentFile.fromJson(Map<String, dynamic> json)
     : this(
@@ -66,7 +88,9 @@ class RecentFile {
 
 class RecentFiles extends InheritedWidget {
   const RecentFiles(
-    this.list, {
+    this.list,
+    this.sortKey,
+    this.sortOrder, {
     required this.add,
     required this.remove,
     required super.child,
@@ -74,12 +98,26 @@ class RecentFiles extends InheritedWidget {
   });
 
   final List<RecentFile> list;
+  final RecentFilesSortKey sortKey;
+  final SortOrder sortOrder;
   final ValueChanged<RecentFile> add;
   final ValueChanged<RecentFile> remove;
 
+  List<RecentFile> get sortedList =>
+      list..sort((a, b) {
+        final result = switch (sortKey) {
+          RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(b.lastOpened),
+          RecentFilesSortKey.name => a.name.compareTo(b.name),
+          RecentFilesSortKey.location => a.uri.compareTo(b.uri),
+        };
+        return sortOrder == SortOrder.ascending ? result : -result;
+      });
+
   @override
   bool updateShouldNotify(RecentFiles oldWidget) =>
-      !listEquals(list, oldWidget.list);
+      !listEquals(list, oldWidget.list) ||
+      sortKey != oldWidget.sortKey ||
+      sortOrder != oldWidget.sortOrder;
 
   static RecentFiles of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<RecentFiles>()!;
@@ -141,6 +179,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   Widget buildWithRecentFiles({required WidgetBuilder builder}) {
     return RecentFiles(
       _recentFiles,
+      _prefs.recentFilesSortKey,
+      _prefs.recentFilesSortOrder,
       add: addRecentFile,
       remove: removeRecentFile,
       // Builder required to get RecentFiles into context
