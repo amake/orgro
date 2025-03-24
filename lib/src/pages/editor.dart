@@ -291,104 +291,116 @@ class _EditorToolbar extends StatelessWidget {
   }
 
   void _insertCheckbox() {
-    final value = controller.value;
-    final text = value.text;
-    final selection = value.selection;
-
-    // Handle single cursor position
-    if (selection.isCollapsed) {
-      final pos = selection.baseOffset;
-      var start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
-      if (start < 0) start = 0;
-      var end = text.indexOf('\n', pos);
-      if (end < 0) end = text.length;
-
-      final lines = text.split('\n');
-      final lineIndex = text.substring(0, start).split('\n').length - 1;
-      final currentLine = lines[lineIndex];
-      final info = _ListItemInfo.parse(currentLine);
-      final indentation = info.indentation;
-
-      String newText;
-      int newOffset;
-
-      if (currentLine.trim().isEmpty) {
-        // Case 1: Empty line - potentially continue list from previous line
-        var newMarker = '-';
-        if (lineIndex > 0) {
-          final prevInfo = _ListItemInfo.parse(lines[lineIndex - 1]);
-          if (indentation == prevInfo.indentation) {
-            newMarker = _getNextMarker(prevInfo.marker);
-          }
-        }
-        final newLine = '$indentation$newMarker [ ] ';
-        newText = text.substring(0, start) + newLine + text.substring(end);
-        newOffset = start + newLine.length;
-      } else if (info.marker != null) {
-        final marker =
-            info.marker!; // Promote marker to String since it's not null
-        if (info.checkbox != null) {
-          // Case 2: List item with checkbox - insert new item below
-          final nextMarker = _getNextMarker(marker);
-          final newLine = '$indentation$nextMarker [ ] ';
-          newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
-          newOffset = end + 1 + newLine.length;
-        } else {
-          // Case 3: List item without checkbox - add checkbox inline
-          final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-          newText = text.substring(0, start) + newContent + text.substring(end);
-          newOffset = start + newContent.length;
-        }
-      } else {
-        // Case 4: Non-list item - convert to list item with checkbox
-        final newContent = '$indentation- [ ] ${info.content.trim()}';
-        newText = text.substring(0, start) + newContent + text.substring(end);
-        newOffset = start + newContent.length;
-      }
-
-      // Update the controller with new text and cursor position
-      controller.value = TextEditingValue(
-        text: newText,
-        selection: TextSelection.collapsed(offset: newOffset),
-      );
+    if (controller.value.selection.isCollapsed) {
+      // Handle single cursor position
+      _insertCheckboxPoint();
     } else {
-      // Handle multi-line selection
-      final start = selection.start;
-      final end = selection.end;
-      final rangeText = text.substring(start, end);
-      final lines = rangeText.split('\n');
-      final transformedLines = <String>[];
-
-      for (String line in lines) {
-        final info = _ListItemInfo.parse(line);
-        final indentation = info.indentation;
-        if (info.marker != null && info.checkbox == null) {
-          final marker = info.marker!; // Promote marker to String
-          // Add checkbox to list items without one
-          final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-          transformedLines.add(newContent);
-        } else if (info.marker == null) {
-          // Convert non-list items to list items with checkbox
-          final newContent = '$indentation- [ ] ${info.content.trim()}';
-          transformedLines.add(newContent);
-        } else {
-          // Leave lines with existing checkboxes unchanged
-          transformedLines.add(line);
-        }
-      }
-
-      // Join transformed lines and replace the selected range
-      final transformedText = transformedLines.join('\n');
-      final newText = text.replaceRange(start, end, transformedText);
-      final newOffset = start + transformedText.length;
-      controller.value = TextEditingValue(
-        text: newText,
-        selection: TextSelection.collapsed(offset: newOffset),
-      );
+      _insertCheckboxRange();
     }
 
     // Remove any context menu
     ContextMenuController.removeAny();
+  }
+
+  void _insertCheckboxPoint() {
+    final value = controller.value;
+    final text = value.text;
+    final selection = value.selection;
+
+    final pos = selection.baseOffset;
+    var start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
+    if (start < 0) start = 0;
+    var end = text.indexOf('\n', pos);
+    if (end < 0) end = text.length;
+
+    final lines = text.split('\n');
+    final lineIndex = text.substring(0, start).split('\n').length - 1;
+    final currentLine = lines[lineIndex];
+    final info = _ListItemInfo.parse(currentLine);
+    final indentation = info.indentation;
+
+    String newText;
+    int newOffset;
+
+    if (currentLine.trim().isEmpty) {
+      // Case 1: Empty line - potentially continue list from previous line
+      var newMarker = '-';
+      if (lineIndex > 0) {
+        final prevInfo = _ListItemInfo.parse(lines[lineIndex - 1]);
+        if (indentation == prevInfo.indentation) {
+          newMarker = _getNextMarker(prevInfo.marker);
+        }
+      }
+      final newLine = '$indentation$newMarker [ ] ';
+      newText = text.substring(0, start) + newLine + text.substring(end);
+      newOffset = start + newLine.length;
+    } else if (info.marker != null) {
+      final marker =
+          info.marker!; // Promote marker to String since it's not null
+      if (info.checkbox != null) {
+        // Case 2: List item with checkbox - insert new item below
+        final nextMarker = _getNextMarker(marker);
+        final newLine = '$indentation$nextMarker [ ] ';
+        newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
+        newOffset = end + 1 + newLine.length;
+      } else {
+        // Case 3: List item without checkbox - add checkbox inline
+        final newContent = '$indentation$marker [ ] ${info.content.trim()}';
+        newText = text.substring(0, start) + newContent + text.substring(end);
+        newOffset = start + newContent.length;
+      }
+    } else {
+      // Case 4: Non-list item - convert to list item with checkbox
+      final newContent = '$indentation- [ ] ${info.content.trim()}';
+      newText = text.substring(0, start) + newContent + text.substring(end);
+      newOffset = start + newContent.length;
+    }
+
+    // Update the controller with new text and cursor position
+    controller.value = TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
+  }
+
+  void _insertCheckboxRange() {
+    final value = controller.value;
+    final text = value.text;
+    final selection = value.selection;
+
+    // Handle multi-line selection
+    final start = selection.start;
+    final end = selection.end;
+    final rangeText = text.substring(start, end);
+    final lines = rangeText.split('\n');
+    final transformedLines = <String>[];
+
+    for (String line in lines) {
+      final info = _ListItemInfo.parse(line);
+      final indentation = info.indentation;
+      if (info.marker != null && info.checkbox == null) {
+        final marker = info.marker!; // Promote marker to String
+        // Add checkbox to list items without one
+        final newContent = '$indentation$marker [ ] ${info.content.trim()}';
+        transformedLines.add(newContent);
+      } else if (info.marker == null) {
+        // Convert non-list items to list items with checkbox
+        final newContent = '$indentation- [ ] ${info.content.trim()}';
+        transformedLines.add(newContent);
+      } else {
+        // Leave lines with existing checkboxes unchanged
+        transformedLines.add(line);
+      }
+    }
+
+    // Join transformed lines and replace the selected range
+    final transformedText = transformedLines.join('\n');
+    final newText = text.replaceRange(start, end, transformedText);
+    final newOffset = start + transformedText.length;
+    controller.value = TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
   }
 }
 
