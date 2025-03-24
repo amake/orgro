@@ -404,10 +404,11 @@ class ListItemInfo {
   ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
 }
 
+final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
+
 // Parse a line into its list item components
 ListItemInfo parseListItem(String line) {
-  final pattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
-  final match = pattern.firstMatch(line);
+  final match = _listPattern.firstMatch(line);
   if (match != null) {
     final indentation = match.group(1)!;
     final marker = match.group(2);
@@ -418,11 +419,12 @@ ListItemInfo parseListItem(String line) {
   return ListItemInfo('', null, null, line);
 }
 
+final _numPattern = RegExp(r'(\d+)([\.\)])');
+
 // Generate the next marker for ordered lists
 String getNextMarker(String? marker) {
   if (marker == null) return '-';
-  final numPattern = RegExp(r'(\d+)([\.\)])');
-  final match = numPattern.firstMatch(marker);
+  final match = _numPattern.firstMatch(marker);
   if (match != null) {
     final num = int.parse(match.group(1)!);
     final suffix = match.group(2)!;
