@@ -195,6 +195,10 @@ class _EditorToolbar extends StatelessWidget {
               onPressed: enabled ? _insertLink : null,
             ),
             IconButton(
+              icon: const Icon(Icons.check_box),
+              onPressed: enabled ? _insertCheckbox : null,
+            ),
+            IconButton(
               icon: const Icon(Icons.calendar_today),
               onPressed: enabled ? () => _insertDate(context) : null,
             ),
@@ -285,6 +289,146 @@ class _EditorToolbar extends StatelessWidget {
         );
     ContextMenuController.removeAny();
   }
+
+  void _insertCheckbox() {
+    final value = controller.value;
+    final text = value.text;
+    final selection = value.selection;
+
+    // Handle single cursor position
+    if (selection.isCollapsed) {
+      int pos = selection.baseOffset;
+      int start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
+      if (start < 0) start = 0;
+      int end = text.indexOf('\n', pos);
+      if (end < 0) end = text.length;
+
+      List<String> lines = text.split('\n');
+      int lineIndex = text.substring(0, start).split('\n').length - 1;
+      String currentLine = lines[lineIndex];
+      ListItemInfo info = parseListItem(currentLine);
+      String indentation = info.indentation;
+
+      String newText;
+      int newOffset;
+
+      if (currentLine.trim().isEmpty) {
+        // Case 1: Empty line - potentially continue list from previous line
+        String newMarker = '-';
+        if (lineIndex > 0) {
+          ListItemInfo prevInfo = parseListItem(lines[lineIndex - 1]);
+          if (indentation == prevInfo.indentation) {
+            newMarker = getNextMarker(prevInfo.marker);
+          }
+        }
+        String newLine = '$indentation$newMarker [ ] ';
+        newText = text.substring(0, start) + newLine + text.substring(end);
+        newOffset = start + newLine.length;
+      } else if (info.marker != null) {
+        final marker = info.marker!; // Promote marker to String since it's not null
+        if (info.checkbox != null) {
+          // Case 2: List item with checkbox - insert new item below
+          String nextMarker = getNextMarker(marker);
+          String newLine = '$indentation$nextMarker [ ] ';
+          newText = text.substring(0, end) + '\n$newLine' + text.substring(end);
+          newOffset = end + 1 + newLine.length;
+        } else {
+          // Case 3: List item without checkbox - add checkbox inline
+          String newContent = '$indentation$marker [ ] ${info.content.trim()}';
+          newText = text.substring(0, start) + newContent + text.substring(end);
+          newOffset = start + newContent.length;
+        }
+      } else {
+        // Case 4: Non-list item - convert to list item with checkbox
+        String newContent = '$indentation- [ ] ${info.content.trim()}';
+        newText = text.substring(0, start) + newContent + text.substring(end);
+        newOffset = start + newContent.length;
+      }
+
+      // Update the controller with new text and cursor position
+      controller.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newOffset),
+      );
+    } else {
+      // Handle multi-line selection
+      int start = selection.start;
+      int end = selection.end;
+      String rangeText = text.substring(start, end);
+      List<String> lines = rangeText.split('\n');
+      List<String> transformedLines = [];
+
+      for (String line in lines) {
+        ListItemInfo info = parseListItem(line);
+        String indentation = info.indentation;
+        if (info.marker != null && info.checkbox == null) {
+          final marker = info.marker!; // Promote marker to String
+          // Add checkbox to list items without one
+          String newContent = '$indentation$marker [ ] ${info.content.trim()}';
+          transformedLines.add(newContent);
+        } else if (info.marker == null) {
+          // Convert non-list items to list items with checkbox
+          String newContent = '$indentation- [ ] ${info.content.trim()}';
+          transformedLines.add(newContent);
+        } else {
+          // Leave lines with existing checkboxes unchanged
+          transformedLines.add(line);
+        }
+      }
+
+      // Join transformed lines and replace the selected range
+      String transformedText = transformedLines.join('\n');
+      String newText = text.replaceRange(start, end, transformedText);
+      int newOffset = start + transformedText.length;
+      controller.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newOffset),
+      );
+    }
+
+    // Remove any context menu
+    ContextMenuController.removeAny();
+  }
+
+}
+
+// Helper class to hold list item information
+class ListItemInfo {
+  final String indentation;
+  final String? marker; // e.g., "-", "+", "*", "1.", "1)"
+  final String? checkbox; // "[ ]" or "[X]"
+  final String content;
+
+  String get markerOrDefault => marker ?? '-';
+
+  ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
+}
+
+// Parse a line into its list item components
+ListItemInfo parseListItem(String line) {
+  final pattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
+  final match = pattern.firstMatch(line);
+  if (match != null) {
+    String indentation = match.group(1)!;
+    String? marker = match.group(2);
+    String? checkbox = match.group(3);
+    String content = match.group(4)!;
+    return ListItemInfo(indentation, marker, checkbox, content);
+  }
+  return ListItemInfo('', null, null, line);
+}
+
+// Generate the next marker for ordered lists
+String getNextMarker(String? marker) {
+  if (marker == null) return '-';
+  final numPattern = RegExp(r'(\d+)([\.\)])');
+  final match = numPattern.firstMatch(marker);
+  if (match != null) {
+    int num = int.parse(match.group(1)!);
+    String suffix = match.group(2)!;
+    return '${num + 1}$suffix';
+  }
+  return marker; // Return same marker for unordered lists
 }
 
 String? _tryParseUrl(String? str) {
@@ -297,3 +441,4 @@ String? _tryParseUrl(String? str) {
   if (uri.scheme.isEmpty) return null;
   return str;
 }
+
