@@ -306,7 +306,7 @@ class _EditorToolbar extends StatelessWidget {
       final lines = text.split('\n');
       final lineIndex = text.substring(0, start).split('\n').length - 1;
       final currentLine = lines[lineIndex];
-      final info = ListItemInfo.parse(currentLine);
+      final info = _ListItemInfo.parse(currentLine);
       final indentation = info.indentation;
 
       String newText;
@@ -316,9 +316,9 @@ class _EditorToolbar extends StatelessWidget {
         // Case 1: Empty line - potentially continue list from previous line
         var newMarker = '-';
         if (lineIndex > 0) {
-          final prevInfo = ListItemInfo.parse(lines[lineIndex - 1]);
+          final prevInfo = _ListItemInfo.parse(lines[lineIndex - 1]);
           if (indentation == prevInfo.indentation) {
-            newMarker = getNextMarker(prevInfo.marker);
+            newMarker = _getNextMarker(prevInfo.marker);
           }
         }
         final newLine = '$indentation$newMarker [ ] ';
@@ -329,7 +329,7 @@ class _EditorToolbar extends StatelessWidget {
             info.marker!; // Promote marker to String since it's not null
         if (info.checkbox != null) {
           // Case 2: List item with checkbox - insert new item below
-          final nextMarker = getNextMarker(marker);
+          final nextMarker = _getNextMarker(marker);
           final newLine = '$indentation$nextMarker [ ] ';
           newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
           newOffset = end + 1 + newLine.length;
@@ -360,7 +360,7 @@ class _EditorToolbar extends StatelessWidget {
       final transformedLines = <String>[];
 
       for (String line in lines) {
-        final info = ListItemInfo.parse(line);
+        final info = _ListItemInfo.parse(line);
         final indentation = info.indentation;
         if (info.marker != null && info.checkbox == null) {
           final marker = info.marker!; // Promote marker to String
@@ -393,18 +393,18 @@ class _EditorToolbar extends StatelessWidget {
 }
 
 // Helper class to hold list item information
-class ListItemInfo {
+class _ListItemInfo {
   // Parse a line into its list item components
-  factory ListItemInfo.parse(String line) {
+  factory _ListItemInfo.parse(String line) {
     final match = _listPattern.firstMatch(line);
     if (match != null) {
       final indentation = match.group(1)!;
       final marker = match.group(2);
       final checkbox = match.group(3);
       final content = match.group(4)!;
-      return ListItemInfo(indentation, marker, checkbox, content);
+      return _ListItemInfo(indentation, marker, checkbox, content);
     }
-    return ListItemInfo('', null, null, line);
+    return _ListItemInfo('', null, null, line);
   }
 
   final String indentation;
@@ -414,7 +414,7 @@ class ListItemInfo {
 
   String get markerOrDefault => marker ?? '-';
 
-  ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
+  _ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
 }
 
 final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
@@ -422,7 +422,7 @@ final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
 final _numPattern = RegExp(r'(\d+)([\.\)])');
 
 // Generate the next marker for ordered lists
-String getNextMarker(String? marker) {
+String _getNextMarker(String? marker) {
   if (marker == null) return '-';
   final match = _numPattern.firstMatch(marker);
   if (match != null) {
