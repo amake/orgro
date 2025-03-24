@@ -37,8 +37,14 @@ class _StartPageState extends State<StartPage>
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.appTitle),
             actions: _buildActions().toList(growable: false),
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(AppLocalizations.of(context)!.appTitle),
+                fontPreloader(context),
+              ],
+            ),
           ),
           body: _KeyboardShortcuts(
             child: AnimatedSwitcher(
@@ -206,13 +212,7 @@ class _EmptyBody extends StatelessWidget {
                   ],
                   const SizedBox(height: 80),
                   const _SupportLink(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const _VersionInfoButton(),
-                      fontPreloader(context),
-                    ],
-                  ),
+                  const _VersionInfoButton(),
                 ],
               ),
             ),
