@@ -231,7 +231,7 @@ class _RecentFilesBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final recentFiles = RecentFiles.of(context);
     final sortedFiles =
-        RecentFiles.of(context).list..sort((a, b) {
+        recentFiles.list..sort((a, b) {
           final result = switch (recentFiles.sortKey) {
             RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(
               b.lastOpened,
