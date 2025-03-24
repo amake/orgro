@@ -325,12 +325,13 @@ class _EditorToolbar extends StatelessWidget {
         newText = text.substring(0, start) + newLine + text.substring(end);
         newOffset = start + newLine.length;
       } else if (info.marker != null) {
-        final marker = info.marker!; // Promote marker to String since it's not null
+        final marker =
+            info.marker!; // Promote marker to String since it's not null
         if (info.checkbox != null) {
           // Case 2: List item with checkbox - insert new item below
           String nextMarker = getNextMarker(marker);
           String newLine = '$indentation$nextMarker [ ] ';
-          newText = text.substring(0, end) + '\n$newLine' + text.substring(end);
+          newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
           newOffset = end + 1 + newLine.length;
         } else {
           // Case 3: List item without checkbox - add checkbox inline
@@ -389,7 +390,6 @@ class _EditorToolbar extends StatelessWidget {
     // Remove any context menu
     ContextMenuController.removeAny();
   }
-
 }
 
 // Helper class to hold list item information
@@ -441,4 +441,3 @@ String? _tryParseUrl(String? str) {
   if (uri.scheme.isEmpty) return null;
   return str;
 }
-
