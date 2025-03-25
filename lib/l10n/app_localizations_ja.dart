@@ -111,6 +111,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sectionHeaderRecentFiles => '最近のファイル';
 
   @override
+  String get recentFilesSortDialogTitle => '並び替え';
+
+  @override
+  String get sortKeyLastOpened => '最終アクセス';
+
+  @override
+  String get sortKeyName => '名前';
+
+  @override
+  String get sortKeyLocation => '保存場所';
+
+  @override
+  String get sortOrderAscending => '昇順';
+
+  @override
+  String get sortOrderDescending => '降順';
+
+  @override
   String get fileSourceDocuments => 'ドキュメント';
 
   @override

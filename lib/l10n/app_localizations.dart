@@ -302,6 +302,42 @@ abstract class AppLocalizations {
   /// **'Recent files'**
   String get sectionHeaderRecentFiles;
 
+  /// No description provided for @recentFilesSortDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get recentFilesSortDialogTitle;
+
+  /// No description provided for @sortKeyLastOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Last opened'**
+  String get sortKeyLastOpened;
+
+  /// No description provided for @sortKeyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get sortKeyName;
+
+  /// No description provided for @sortKeyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get sortKeyLocation;
+
+  /// No description provided for @sortOrderAscending.
+  ///
+  /// In en, this message translates to:
+  /// **'Ascending'**
+  String get sortOrderAscending;
+
+  /// No description provided for @sortOrderDescending.
+  ///
+  /// In en, this message translates to:
+  /// **'Descending'**
+  String get sortOrderDescending;
+
   /// No description provided for @fileSourceDocuments.
   ///
   /// In en, this message translates to:

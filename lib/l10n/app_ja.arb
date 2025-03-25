@@ -43,6 +43,12 @@
   "buttonVersion": "v{version}",
 
   "sectionHeaderRecentFiles": "最近のファイル",
+  "recentFilesSortDialogTitle": "並び替え",
+  "sortKeyLastOpened": "最終アクセス",
+  "sortKeyName": "名前",
+  "sortKeyLocation": "保存場所",
+  "sortOrderAscending": "昇順",
+  "sortOrderDescending": "降順",
 
   "fileSourceDocuments": "ドキュメント",
   "fileSourceDownloads": "ダウンロード",

@@ -17,6 +17,7 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/settings.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreOpenFileIdKey = 'restore_open_file_id';
@@ -37,8 +38,14 @@ class _StartPageState extends State<StartPage>
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.appTitle),
             actions: _buildActions().toList(growable: false),
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(AppLocalizations.of(context)!.appTitle),
+                fontPreloader(context),
+              ],
+            ),
           ),
           body: _KeyboardShortcuts(
             child: AnimatedSwitcher(
@@ -206,13 +213,7 @@ class _EmptyBody extends StatelessWidget {
                   ],
                   const SizedBox(height: 80),
                   const _SupportLink(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const _VersionInfoButton(),
-                      fontPreloader(context),
-                    ],
-                  ),
+                  const _VersionInfoButton(),
                 ],
               ),
             ),
@@ -228,11 +229,25 @@ class _RecentFilesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recentFiles = RecentFiles.of(context).list;
+    final recentFiles = RecentFiles.of(context);
+    final sortedFiles =
+        recentFiles.list..sort((a, b) {
+          final result = switch (recentFiles.sortKey) {
+            RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(
+              b.lastOpened,
+            ),
+            RecentFilesSortKey.name => a.name.compareTo(b.name),
+            RecentFilesSortKey.location => (_appName(context, a.uri) ?? a.uri)
+                .compareTo(_appName(context, b.uri) ?? b.uri),
+          };
+          return recentFiles.sortOrder == SortOrder.ascending
+              ? result
+              : -result;
+        });
     // We let ListView fill the viewport and constrain its children so that the
     // list can be scrolled even by the edges of the view.
     return ListView.builder(
-      itemCount: recentFiles.length + 1,
+      itemCount: sortedFiles.length + 1,
       itemBuilder: (context, idx) {
         if (idx == 0) {
           return _constrain(
@@ -240,10 +255,11 @@ class _RecentFilesBody extends StatelessWidget {
               title: Text(
                 AppLocalizations.of(context)!.sectionHeaderRecentFiles,
               ),
+              trailing: _RecentFilesListSortControl(),
             ),
           );
         } else {
-          final recentFile = recentFiles[idx - 1];
+          final recentFile = sortedFiles[idx - 1];
           return _constrain(_RecentFileListTile(recentFile));
         }
       },
@@ -256,6 +272,55 @@ class _RecentFilesBody extends StatelessWidget {
       child: child,
     ),
   );
+}
+
+class _RecentFilesListSortControl extends StatelessWidget {
+  const _RecentFilesListSortControl();
+
+  @override
+  Widget build(BuildContext context) {
+    final prefs = Preferences.of(context, PrefsAspect.recentFiles);
+    final sortKey = prefs.recentFilesSortKey;
+    final sortOrder = prefs.recentFilesSortOrder;
+    final iconSize = 16.0;
+    final iconColor = Theme.of(context).hintColor;
+    return TextButton(
+      onPressed: () async {
+        final result = await showDialog<(RecentFilesSortKey, SortOrder)>(
+          context: context,
+          builder:
+              (context) =>
+                  RecentFilesSortDialog(sortKey: sortKey, sortOrder: sortOrder),
+        );
+        if (result case (final key, final newOrder)) {
+          await prefs.setRecentFilesSortKey(key);
+          await prefs.setRecentFilesSortOrder(newOrder);
+        }
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            switch (sortKey) {
+              RecentFilesSortKey.lastOpened => Icons.access_time,
+              RecentFilesSortKey.name => Icons.sort_by_alpha,
+              RecentFilesSortKey.location => Icons.folder,
+            },
+            size: iconSize,
+            color: iconColor,
+          ),
+          Icon(
+            switch (sortOrder) {
+              SortOrder.ascending => Icons.arrow_upward,
+              SortOrder.descending => Icons.arrow_downward,
+            },
+            size: iconSize,
+            color: iconColor,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 // Do not make format object a constant because it will break dynamic UI

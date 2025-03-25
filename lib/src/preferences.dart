@@ -21,6 +21,8 @@ enum SaveChangesPolicy { allow, deny, ask }
 
 enum DecryptPolicy { deny, ask }
 
+enum SortOrder { ascending, descending }
+
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
@@ -37,6 +39,8 @@ const kDefaultFullWidth = false;
 const kDefaultScopedPreferences = <String, dynamic>{};
 const kDefaultTextPreviewString =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
+const kDefaultRecentFilesSortOrder = SortOrder.descending;
 
 const kMaxRecentFiles = 10;
 
@@ -54,6 +58,8 @@ const kFullWidthKey = 'full_width';
 const kScopedPreferencesJsonKey = 'scoped_preferences';
 const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
+const kRecentFilesSortKey = 'recent_files_sort_key';
+const kRecentFilesSortOrder = 'recent_files_sort_order';
 
 class SharedPreferencesProvider extends StatefulWidget {
   const SharedPreferencesProvider({
@@ -261,12 +267,26 @@ extension RecentFilesExt on InheritedPreferences {
     return await _setRecentFiles(files);
   }
 
+  RecentFilesSortKey get recentFilesSortKey => data.recentFilesSortKey;
+  Future<bool> setRecentFilesSortKey(RecentFilesSortKey value) async {
+    _update((data) => data.copyWith(recentFilesSortKey: value));
+    return _setOrRemove(kRecentFilesSortKey, value.persistableString);
+  }
+
+  SortOrder get recentFilesSortOrder => data.recentFilesSortOrder;
+  Future<bool> setRecentFilesSortOrder(SortOrder value) async {
+    _update((data) => data.copyWith(recentFilesSortOrder: value));
+    return _setOrRemove(kRecentFilesSortOrder, value.persistableString);
+  }
+
   bool _updateShouldNotifyDependentRecentFiles(
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.recentFiles) &&
-      !listEquals(data.recentFiles, oldWidget.data.recentFiles);
+          !listEquals(data.recentFiles, oldWidget.data.recentFiles) ||
+      data.recentFilesSortKey != oldWidget.data.recentFilesSortKey ||
+      data.recentFilesSortOrder != oldWidget.data.recentFilesSortOrder;
 }
 
 extension ViewSettingsExt on InheritedPreferences {
@@ -407,6 +427,8 @@ class PreferencesData {
     fontFamily: kDefaultFontFamily,
     readerMode: kDefaultReaderMode,
     recentFiles: [],
+    recentFilesSortKey: kDefaultRecentFilesSortKey,
+    recentFilesSortOrder: kDefaultRecentFilesSortOrder,
     themeMode: _kDefaultThemeMode,
     remoteImagesPolicy: kDefaultRemoteImagesPolicy,
     localLinksPolicy: kDefaultLocalLinksPolicy,
@@ -462,6 +484,8 @@ class PreferencesData {
     required this.fontFamily,
     required this.readerMode,
     required this.recentFiles,
+    required this.recentFilesSortKey,
+    required this.recentFilesSortOrder,
     required this.themeMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -478,6 +502,8 @@ class PreferencesData {
   final String fontFamily;
   final bool readerMode;
   final List<RecentFile> recentFiles;
+  final RecentFilesSortKey recentFilesSortKey;
+  final SortOrder recentFilesSortOrder;
   final ThemeMode themeMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -494,6 +520,8 @@ class PreferencesData {
     String? fontFamily,
     bool? readerMode,
     List<RecentFile>? recentFiles,
+    RecentFilesSortKey? recentFilesSortKey,
+    SortOrder? recentFilesSortOrder,
     ThemeMode? themeMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -509,6 +537,8 @@ class PreferencesData {
     fontFamily: fontFamily ?? this.fontFamily,
     readerMode: readerMode ?? this.readerMode,
     recentFiles: recentFiles ?? this.recentFiles,
+    recentFilesSortKey: recentFilesSortKey ?? this.recentFilesSortKey,
+    recentFilesSortOrder: recentFilesSortOrder ?? this.recentFilesSortOrder,
     themeMode: themeMode ?? this.themeMode,
     remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -528,6 +558,8 @@ class PreferencesData {
       fontFamily == other.fontFamily &&
       readerMode == other.readerMode &&
       listEquals(recentFiles, other.recentFiles) &&
+      recentFilesSortKey == other.recentFilesSortKey &&
+      recentFilesSortOrder == other.recentFilesSortOrder &&
       themeMode == other.themeMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -552,6 +584,8 @@ class PreferencesData {
     fontFamily,
     readerMode,
     Object.hashAll(recentFiles),
+    recentFilesSortKey,
+    recentFilesSortOrder,
     themeMode,
     remoteImagesPolicy,
     localLinksPolicy,
@@ -661,6 +695,23 @@ const _kThemeModeLight = 'theme_mode_light';
 const _kThemeModeDark = 'theme_mode_dark';
 
 const _kDefaultThemeMode = ThemeMode.system;
+
+extension SortOrderPersistence on SortOrder? {
+  static SortOrder? fromString(String? key) => switch (key) {
+    _kSortOrderAscending => SortOrder.ascending,
+    _kSortOrderDescending => SortOrder.descending,
+    _ => null,
+  };
+
+  String? get persistableString => switch (this) {
+    SortOrder.ascending => _kSortOrderAscending,
+    SortOrder.descending => _kSortOrderDescending,
+    null => null,
+  };
+}
+
+const _kSortOrderAscending = 'ascending';
+const _kSortOrderDescending = 'descending';
 
 Widget resetPreferencesListItem(BuildContext context) => ListTile(
   title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),

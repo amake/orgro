@@ -8,6 +8,7 @@ import 'package:orgro/src/attachments.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
+import 'package:orgro/src/components/image.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -23,10 +24,15 @@ extension LinkHandler on DocumentPageState {
     final doc = DocumentProvider.of(context).doc;
 
     OrgFileLink? fileLink = _tryParseFileLink(doc, link);
-    if (fileLink != null) return await _openFileLink(fileLink);
+    if (fileLink != null) return await _openFileLink(link, fileLink);
 
     if (isOrgIdUrl(link.location)) {
       return await _openExternalIdLink(link.location);
+    }
+
+    if (looksLikeImagePath(link.location)) {
+      await showInteractive(context, link.location, RemoteImage(link));
+      return true;
     }
 
     final handled = await _openLocalFallbackTargets(doc, link.location);
@@ -114,8 +120,8 @@ extension LinkHandler on DocumentPageState {
     }
   }
 
-  Future<bool> _openFileLink(OrgFileLink link) async {
-    if (!link.isRelative) return false;
+  Future<bool> _openFileLink(OrgLink link, OrgFileLink fileLink) async {
+    if (!fileLink.isRelative) return false;
 
     final source = DocumentProvider.of(context).dataSource;
     if (source.needsToResolveParent) {
@@ -135,12 +141,23 @@ extension LinkHandler on DocumentPageState {
     var popped = false;
 
     try {
-      final resolved = await source.resolveRelative(link.body);
+      final resolved = await source.resolveRelative(fileLink.body);
       if (mounted) {
         Navigator.pop(context);
         popped = true;
-        if (link.body.endsWith('.org')) {
-          return await loadDocument(context, resolved, target: link.extra);
+        if (fileLink.body.endsWith('.org')) {
+          return await loadDocument(context, resolved, target: fileLink.extra);
+        } else if (looksLikeImagePath(fileLink.body)) {
+          await showInteractive(
+            context,
+            fileLink.body,
+            LocalImage(
+              link: link,
+              dataSource: source,
+              relativePath: fileLink.body,
+            ),
+          );
+          return true;
         } else {
           return await _openFileInExternalApp(resolved);
         }

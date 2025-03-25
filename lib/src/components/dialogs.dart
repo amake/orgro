@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/components/recent_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
@@ -492,6 +493,93 @@ class CitationsDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+class RecentFilesSortDialog extends StatefulWidget {
+  const RecentFilesSortDialog({
+    required this.sortKey,
+    required this.sortOrder,
+    super.key,
+  });
+
+  final RecentFilesSortKey sortKey;
+  final SortOrder sortOrder;
+
+  @override
+  State<RecentFilesSortDialog> createState() => _RecentFilesSortDialogState();
+}
+
+class _RecentFilesSortDialogState extends State<RecentFilesSortDialog> {
+  late RecentFilesSortKey _sortKey;
+  late SortOrder _sortOrder;
+
+  @override
+  void initState() {
+    super.initState();
+    _sortKey = widget.sortKey;
+    _sortOrder = widget.sortOrder;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.recentFilesSortDialogTitle),
+      content: SizedBox(
+        width: 0,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            for (final key in RecentFilesSortKey.values)
+              RadioListTile<RecentFilesSortKey>(
+                value: key,
+                groupValue: _sortKey,
+                onChanged: (value) {
+                  if (value != null) setState(() => _sortKey = value);
+                },
+                title: Text(key.toDisplayString(context)),
+              ),
+            const Divider(),
+            for (final order in SortOrder.values)
+              RadioListTile<SortOrder>(
+                value: order,
+                groupValue: _sortOrder,
+                onChanged: (value) {
+                  if (value != null) setState(() => _sortOrder = value);
+                },
+                title: Text(order.toDisplayString(context)),
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionCancel,
+          onPressed: () => Navigator.pop(context),
+        ),
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionConfirm,
+          onPressed: () => Navigator.pop(context, (_sortKey, _sortOrder)),
+        ),
+      ],
+    );
+  }
+}
+
+extension RecentFilesSortKeyDisplayString on RecentFilesSortKey {
+  String toDisplayString(BuildContext context) => switch (this) {
+    RecentFilesSortKey.lastOpened =>
+      AppLocalizations.of(context)!.sortKeyLastOpened,
+    RecentFilesSortKey.name => AppLocalizations.of(context)!.sortKeyName,
+    RecentFilesSortKey.location =>
+      AppLocalizations.of(context)!.sortKeyLocation,
+  };
+}
+
+extension SortOrderDisplayString on SortOrder {
+  String toDisplayString(BuildContext context) => switch (this) {
+    SortOrder.ascending => AppLocalizations.of(context)!.sortOrderAscending,
+    SortOrder.descending => AppLocalizations.of(context)!.sortOrderDescending,
+  };
 }
 
 class _DialogButton extends StatelessWidget {

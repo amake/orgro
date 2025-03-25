@@ -112,6 +112,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get sectionHeaderRecentFiles => 'Zuletzt geöffnet';
 
   @override
+  String get recentFilesSortDialogTitle => 'Sort by';
+
+  @override
+  String get sortKeyLastOpened => 'Last opened';
+
+  @override
+  String get sortKeyName => 'Name';
+
+  @override
+  String get sortKeyLocation => 'Location';
+
+  @override
+  String get sortOrderAscending => 'Ascending';
+
+  @override
+  String get sortOrderDescending => 'Descending';
+
+  @override
   String get fileSourceDocuments => 'Dokumente';
 
   @override
