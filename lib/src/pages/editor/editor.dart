@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/pages/editor/checkbox.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/timestamps.dart';
 import 'package:orgro/src/util.dart';
@@ -291,158 +292,26 @@ class _EditorToolbar extends StatelessWidget {
   }
 
   void _insertCheckbox() {
-    if (controller.value.selection.isCollapsed) {
-      // Handle single cursor position
-      _insertCheckboxPoint();
-    } else {
-      _insertCheckboxRange();
+    final value = controller.value;
+    final result =
+        value.selection.isCollapsed
+            ? insertCheckboxAtPoint(value.text, value.selection.start)
+            : insertCheckboxOverRange(
+              value.text,
+              value.selection.start,
+              value.selection.end,
+            );
+
+    if (result case (final text, final offset)) {
+      controller.value = TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: offset),
+      );
     }
 
     // Remove any context menu
     ContextMenuController.removeAny();
   }
-
-  void _insertCheckboxPoint() {
-    final value = controller.value;
-    final text = value.text;
-    final selection = value.selection;
-
-    final pos = selection.baseOffset;
-    var start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
-    if (start < 0) start = 0;
-    var end = text.indexOf('\n', pos);
-    if (end < 0) end = text.length;
-
-    final lines = text.split('\n');
-    final lineIndex = text.substring(0, start).split('\n').length - 1;
-    final currentLine = lines[lineIndex];
-    final info = _ListItemInfo.parse(currentLine);
-    final indentation = info.indentation;
-
-    String newText;
-    int newOffset;
-
-    if (currentLine.trim().isEmpty) {
-      // Case 1: Empty line - potentially continue list from previous line
-      var newMarker = '-';
-      if (lineIndex > 0) {
-        final prevInfo = _ListItemInfo.parse(lines[lineIndex - 1]);
-        if (indentation == prevInfo.indentation) {
-          newMarker = _getNextMarker(prevInfo.marker);
-        }
-      }
-      final newLine = '$indentation$newMarker [ ] ';
-      newText = text.substring(0, start) + newLine + text.substring(end);
-      newOffset = start + newLine.length;
-    } else if (info.marker != null) {
-      final marker =
-          info.marker!; // Promote marker to String since it's not null
-      if (info.checkbox != null) {
-        // Case 2: List item with checkbox - insert new item below
-        final nextMarker = _getNextMarker(marker);
-        final newLine = '$indentation$nextMarker [ ] ';
-        newText = '${text.substring(0, end)}\n$newLine${text.substring(end)}';
-        newOffset = end + 1 + newLine.length;
-      } else {
-        // Case 3: List item without checkbox - add checkbox inline
-        final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-        newText = text.substring(0, start) + newContent + text.substring(end);
-        newOffset = start + newContent.length;
-      }
-    } else {
-      // Case 4: Non-list item - convert to list item with checkbox
-      final newContent = '$indentation- [ ] ${info.content.trim()}';
-      newText = text.substring(0, start) + newContent + text.substring(end);
-      newOffset = start + newContent.length;
-    }
-
-    // Update the controller with new text and cursor position
-    controller.value = TextEditingValue(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newOffset),
-    );
-  }
-
-  void _insertCheckboxRange() {
-    final value = controller.value;
-    final text = value.text;
-    final selection = value.selection;
-
-    // Handle multi-line selection
-    final start = selection.start;
-    final end = selection.end;
-    final rangeText = text.substring(start, end);
-    final lines = rangeText.split('\n');
-    final transformedLines = <String>[];
-
-    for (String line in lines) {
-      final info = _ListItemInfo.parse(line);
-      final indentation = info.indentation;
-      if (info.marker != null && info.checkbox == null) {
-        final marker = info.marker!; // Promote marker to String
-        // Add checkbox to list items without one
-        final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-        transformedLines.add(newContent);
-      } else if (info.marker == null) {
-        // Convert non-list items to list items with checkbox
-        final newContent = '$indentation- [ ] ${info.content.trim()}';
-        transformedLines.add(newContent);
-      } else {
-        // Leave lines with existing checkboxes unchanged
-        transformedLines.add(line);
-      }
-    }
-
-    // Join transformed lines and replace the selected range
-    final transformedText = transformedLines.join('\n');
-    final newText = text.replaceRange(start, end, transformedText);
-    final newOffset = start + transformedText.length;
-    controller.value = TextEditingValue(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newOffset),
-    );
-  }
-}
-
-// Helper class to hold list item information
-class _ListItemInfo {
-  // Parse a line into its list item components
-  factory _ListItemInfo.parse(String line) {
-    final match = _listPattern.firstMatch(line);
-    if (match != null) {
-      final indentation = match.group(1)!;
-      final marker = match.group(2);
-      final checkbox = match.group(3);
-      final content = match.group(4)!;
-      return _ListItemInfo(indentation, marker, checkbox, content);
-    }
-    return _ListItemInfo('', null, null, line);
-  }
-
-  final String indentation;
-  final String? marker; // e.g., "-", "+", "*", "1.", "1)"
-  final String? checkbox; // "[ ]" or "[X]"
-  final String content;
-
-  String get markerOrDefault => marker ?? '-';
-
-  _ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
-}
-
-final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
-
-final _numPattern = RegExp(r'(\d+)([\.\)])');
-
-// Generate the next marker for ordered lists
-String _getNextMarker(String? marker) {
-  if (marker == null) return '-';
-  final match = _numPattern.firstMatch(marker);
-  if (match != null) {
-    final num = int.parse(match.group(1)!);
-    final suffix = match.group(2)!;
-    return '${num + 1}$suffix';
-  }
-  return marker; // Return same marker for unordered lists
 }
 
 String? _tryParseUrl(String? str) {
