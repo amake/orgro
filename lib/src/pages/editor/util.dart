@@ -1,12 +1,6 @@
 import 'package:org_flutter/org_flutter.dart';
 
 extension OrgTreeEditing on OrgTree {
-  OrgNode? nodeAtOffset(int offset) {
-    final finder = _OffsetFinder(offset);
-    toMarkup(serializer: finder);
-    return finder.nodes.firstOrNull;
-  }
-
   List<OrgNode> nodesAtOffset(int offset) {
     final finder = _OffsetFinder(offset);
     toMarkup(serializer: finder);
