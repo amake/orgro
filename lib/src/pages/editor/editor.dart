@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/pages/editor/checkbox.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/timestamps.dart';
 import 'package:orgro/src/util.dart';
@@ -195,6 +196,10 @@ class _EditorToolbar extends StatelessWidget {
               onPressed: enabled ? _insertLink : null,
             ),
             IconButton(
+              icon: const Icon(Icons.check_box),
+              onPressed: enabled ? _insertCheckbox : null,
+            ),
+            IconButton(
               icon: const Icon(Icons.calendar_today),
               onPressed: enabled ? () => _insertDate(context) : null,
             ),
@@ -283,6 +288,28 @@ class _EditorToolbar extends StatelessWidget {
             offset: value.selection.baseOffset + replacement.length - 1,
           ),
         );
+    ContextMenuController.removeAny();
+  }
+
+  void _insertCheckbox() {
+    final value = controller.value;
+    final result =
+        value.selection.isCollapsed
+            ? insertCheckboxAtPoint(value.text, value.selection.start)
+            : insertCheckboxOverRange(
+              value.text,
+              value.selection.start,
+              value.selection.end,
+            );
+
+    if (result case (final text, final offset)) {
+      controller.value = TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: offset),
+      );
+    }
+
+    // Remove any context menu
     ContextMenuController.removeAny();
   }
 }
