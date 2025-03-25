@@ -77,7 +77,7 @@ void main() {
         isA<OrgSection>(),
         isA<OrgDocument>(),
       ]);
-      expect(doc.nodeAtOffset(10000), isNull);
+      expect(doc.nodesAtOffset(10000), isEmpty);
     });
   });
   group('checkbox', () {
