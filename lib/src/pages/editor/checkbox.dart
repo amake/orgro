@@ -1,53 +1,67 @@
-(String, int) insertCheckboxAtPoint(String text, int pos) {
-  var start = text.lastIndexOf('\n', pos > 0 ? pos - 1 : 0) + 1;
-  if (start < 0) start = 0;
-  var end = text.indexOf('\n', pos);
-  if (end < 0) end = text.length;
+import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/pages/editor/util.dart';
+import 'package:orgro/src/util.dart';
 
-  final lines = text.split('\n');
-  final lineIndex = text.substring(0, start).split('\n').length - 1;
-  final currentLine = lines[lineIndex];
-  final info = _ListItemInfo.parse(currentLine);
-  final indentation = info.indentation;
+(String, int)? insertCheckboxAtPoint(String text, int offset) {
+  final doc = OrgDocument.parse(text);
+  final found = doc.nodesAtOffset(offset);
+  final node =
+      found.whereType<OrgListItem>().firstOrNull ??
+      found.whereType<OrgList>().firstOrNull ??
+      found.whereType<OrgParagraph>().firstOrNull;
+  if (node == null) return null;
 
-  if (currentLine.trim().isEmpty) {
-    // Case 1: Empty line - potentially continue list from previous line
-    var newMarker = '-';
-    if (lineIndex > 0) {
-      final prevInfo = _ListItemInfo.parse(lines[lineIndex - 1]);
-      if (indentation == prevInfo.indentation) {
-        newMarker = _getNextMarker(prevInfo.marker);
-      }
-    }
-    final newLine = '$indentation$newMarker [ ] ';
-    final newText = text.substring(0, start) + newLine + text.substring(end);
-    final newOffset = start + newLine.length;
-    return (newText, newOffset);
-  } else if (info.marker != null) {
-    final marker = info.marker!; // Promote marker to String since it's not null
-    if (info.checkbox != null) {
-      // Case 2: List item with checkbox - insert new item below
-      final nextMarker = _getNextMarker(marker);
-      final newLine = '$indentation$nextMarker [ ] ';
-      final newText =
-          '${text.substring(0, end)}\n$newLine${text.substring(end)}';
-      final newOffset = end + 1 + newLine.length;
-      return (newText, newOffset);
+  var zipper = doc.editNode(node)!;
+
+  if (node is OrgListItem) {
+    if (node.checkbox == null) {
+      // Add checkbox if it doesn't exist
+      final replacement = node.toggleCheckbox(add: true);
+      final newDoc = zipper.replace(replacement).commit();
+      return (newDoc.toMarkup(), offset + 4);
     } else {
-      // Case 3: List item without checkbox - add checkbox inline
-      final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-      final newText =
-          text.substring(0, start) + newContent + text.substring(end);
-      final newOffset = start + newContent.length;
+      // Insert new checkbox item below
+      final sibling = _newEmptyCheckboxItem(from: node);
+      final newDoc = zipper.insertRight(sibling).commit();
+      final newText = newDoc.toMarkup();
+      final needle = sibling.toMarkup();
+      final newOffset = newText.indexOf(needle, offset) + needle.length - 1;
       return (newText, newOffset);
     }
-  } else {
-    // Case 4: Non-list item - convert to list item with checkbox
-    final newContent = '$indentation- [ ] ${info.content.trim()}';
-    final newText = text.substring(0, start) + newContent + text.substring(end);
-    final newOffset = start + newContent.length;
+  } else if (node is OrgList) {
+    // Insert new checkbox item at the end of the list
+
+    // Go to the end of the list
+    zipper = zipper.goDown();
+    while (zipper.canGoRight()) {
+      zipper = zipper.goRight();
+    }
+    final lastItem = zipper.node as OrgListItem;
+    final sibling = _newEmptyCheckboxItem(from: lastItem);
+    final newDoc = zipper.insertRight(sibling).commit();
+    final newText = newDoc.toMarkup();
+    final needle = sibling.toMarkup();
+    final newOffset = newText.indexOf(needle, offset) + needle.length - 1;
+    return (newText, newOffset);
+  } else if (node is OrgParagraph) {
+    // Convert paragraph to checkbox item
+    final (leading, body, trailing) =
+        node.toMarkup().splitSurroundingWhitespace();
+    final item = OrgListUnorderedItem(
+      leading,
+      '- ',
+      '[ ]',
+      null,
+      OrgContent([OrgPlainText(body)]),
+    );
+    final replacement = OrgList([item], trailing);
+    final newDoc = zipper.replace(replacement).commit();
+    final newText = newDoc.toMarkup();
+    final newOffset = newText.indexOf(body) + body.length;
     return (newText, newOffset);
   }
+
+  return null;
 }
 
 (String, int)? insertCheckboxOverRange(String text, int start, int end) {
@@ -80,6 +94,26 @@
   return (newText, newOffset);
 }
 
+OrgListItem _newEmptyCheckboxItem({required OrgListItem from}) {
+  final body = OrgContent([OrgPlainText('\n')]);
+  return switch (from) {
+    OrgListOrderedItem() => OrgListOrderedItem(
+      from.indent,
+      _getNextMarker(from.bullet),
+      null,
+      '[ ]',
+      body,
+    ),
+    OrgListUnorderedItem() => OrgListUnorderedItem(
+      from.indent,
+      from.bullet,
+      '[ ]',
+      null,
+      body,
+    ),
+  };
+}
+
 // Helper class to hold list item information
 class _ListItemInfo {
   // Parse a line into its list item components
@@ -107,7 +141,7 @@ class _ListItemInfo {
 
 final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
 
-final _numPattern = RegExp(r'(\d+)([\.\)])');
+final _numPattern = RegExp(r'(\d+)(.*)');
 
 // Generate the next marker for ordered lists
 String _getNextMarker(String? marker) {

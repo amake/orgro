@@ -22,6 +22,21 @@ void main() {
       expect('foo\nbar'.withTrailingLineBreak(), 'foo\nbar\n');
       expect('foo\r\nbar'.withTrailingLineBreak(), 'foo\r\nbar\r\n');
     });
+    test('Split whitespace', () {
+      expect(''.splitLeadingWhitespace(), ('', ''));
+      expect('foo'.splitLeadingWhitespace(), ('', 'foo'));
+      expect(' foo'.splitLeadingWhitespace(), (' ', 'foo'));
+      expect('  foo'.splitLeadingWhitespace(), ('  ', 'foo'));
+      expect('foo'.splitSurroundingWhitespace(), ('', 'foo', ''));
+      expect(' foo'.splitSurroundingWhitespace(), (' ', 'foo', ''));
+      expect('  foo'.splitSurroundingWhitespace(), ('  ', 'foo', ''));
+      expect('foo '.splitSurroundingWhitespace(), ('', 'foo', ' '));
+      expect('foo  '.splitSurroundingWhitespace(), ('', 'foo', '  '));
+      expect(' foo '.splitSurroundingWhitespace(), (' ', 'foo', ' '));
+      expect('  foo  '.splitSurroundingWhitespace(), ('  ', 'foo', '  '));
+      expect(' foo  '.splitSurroundingWhitespace(), (' ', 'foo', '  '));
+      expect('  foo '.splitSurroundingWhitespace(), ('  ', 'foo', ' '));
+    });
   });
   group('Map util', () {
     test('Unordered equals', () {
