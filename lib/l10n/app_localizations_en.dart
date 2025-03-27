@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemOrgroManual => 'Orgro Manual';
 
   @override
+  String get menuItemOrgManual => 'Org Manual';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override
@@ -457,6 +460,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get menuItemOrgroManual => 'Orgro Manual';
 
   @override
+  String get menuItemOrgManual => 'Org Manual';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override
@@ -888,6 +894,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get menuItemOrgroManual => 'Orgro Manual';
+
+  @override
+  String get menuItemOrgManual => 'Org Manual';
 
   @override
   String get menuItemTestFile => 'Test File';

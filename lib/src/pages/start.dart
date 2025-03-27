@@ -80,6 +80,11 @@ class _StartPageState extends State<StartPage>
             ],
             if (!kReleaseMode && !kScreenshotMode) ...[
               const PopupMenuDivider(),
+              if (hasRecentFiles)
+                PopupMenuItem<VoidCallback>(
+                  value: () => _openOrgManual(context),
+                  child: Text(AppLocalizations.of(context)!.menuItemOrgManual),
+                ),
               PopupMenuItem<VoidCallback>(
                 value: () => _openTestFile(context),
                 child: Text(AppLocalizations.of(context)!.menuItemTestFile),
@@ -553,13 +558,7 @@ class _OrgManualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed:
-          () => loadHttpUrl(
-            context,
-            Uri.parse(
-              'https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org',
-            ),
-          ),
+      onPressed: () => _openOrgManual(context),
       child: Text(AppLocalizations.of(context)!.buttonOpenOrgManual),
     );
   }
@@ -579,6 +578,11 @@ class _OrgroManualButton extends StatelessWidget {
 
 void _openOrgroManual(BuildContext context) =>
     loadAsset(context, 'assets/manual/orgro-manual.org');
+
+void _openOrgManual(BuildContext context) => loadHttpUrl(
+  context,
+  Uri.parse('https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org'),
+);
 
 void _openTestFile(BuildContext context) =>
     loadAsset(context, 'assets/test/test.org');
