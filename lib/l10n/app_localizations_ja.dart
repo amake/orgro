@@ -24,6 +24,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemOrgroManual => 'Orgroマニュアル';
 
   @override
+  String get menuItemOrgManual => 'Orgマニュアル';
+
+  @override
   String get menuItemTestFile => 'テストファイル';
 
   @override

@@ -24,6 +24,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemOrgroManual => 'Посібник Orgro';
 
   @override
+  String get menuItemOrgManual => 'Посібник Org';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override

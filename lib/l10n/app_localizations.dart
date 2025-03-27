@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Orgro Manual'**
   String get menuItemOrgroManual;
 
+  /// No description provided for @menuItemOrgManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Org Manual'**
+  String get menuItemOrgManual;
+
   /// No description provided for @menuItemTestFile.
   ///
   /// In en, this message translates to:

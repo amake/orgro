@@ -24,6 +24,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemOrgroManual => 'Orgro Handbuch';
 
   @override
+  String get menuItemOrgManual => 'Org Handbuch';
+
+  @override
   String get menuItemTestFile => 'Test Datei';
 
   @override
