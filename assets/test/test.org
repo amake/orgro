@@ -8,6 +8,7 @@
 - [[file:layout-spacing-1.org][Spacing (1)]]
 - [[file:layout-blocks.org][Blocks]]
 - [[file:layout-planning.org][Planning]]
+- [[file:layout-indent.org][Indent]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]
