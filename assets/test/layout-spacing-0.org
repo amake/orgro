@@ -17,7 +17,7 @@ abc
 1. who
 2. what
 3. when
-  SCHEDULED: <2024-12-17 Tue>
+SCHEDULED: <2024-12-17 Tue>
 :DRAWER:
 foo
 :END:
