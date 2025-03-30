@@ -270,13 +270,13 @@ extension RecentFilesExt on InheritedPreferences {
   RecentFilesSortKey get recentFilesSortKey => data.recentFilesSortKey;
   Future<bool> setRecentFilesSortKey(RecentFilesSortKey value) async {
     _update((data) => data.copyWith(recentFilesSortKey: value));
-    return _setOrRemove(kRecentFilesSortKey, value.persistableString);
+    return await _setOrRemove(kRecentFilesSortKey, value.persistableString);
   }
 
   SortOrder get recentFilesSortOrder => data.recentFilesSortOrder;
   Future<bool> setRecentFilesSortOrder(SortOrder value) async {
     _update((data) => data.copyWith(recentFilesSortOrder: value));
-    return _setOrRemove(kRecentFilesSortOrder, value.persistableString);
+    return await _setOrRemove(kRecentFilesSortOrder, value.persistableString);
   }
 
   bool _updateShouldNotifyDependentRecentFiles(
@@ -457,6 +457,12 @@ class PreferencesData {
           .cast<Map<String, dynamic>>()
           .map((json) => RecentFile.fromJson(json))
           .toList(growable: false),
+      recentFilesSortKey: RecentFilesSortKeyPersistence.fromString(
+        prefs.getString(kRecentFilesSortKey),
+      ),
+      recentFilesSortOrder: SortOrderPersistence.fromString(
+        prefs.getString(kRecentFilesSortOrder),
+      ),
       themeMode: ThemeModePersistence.fromString(
         prefs.getString(kThemeModeKey),
       ),

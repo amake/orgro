@@ -8,7 +8,7 @@ import 'package:orgro/src/preferences.dart';
 
 enum RecentFilesSortKey { lastOpened, name, location }
 
-extension RecentFileSortKeyPersistence on RecentFilesSortKey? {
+extension RecentFilesSortKeyPersistence on RecentFilesSortKey? {
   static RecentFilesSortKey? fromString(String? key) => switch (key) {
     _kRecentFilesSortKeyLastOpened => RecentFilesSortKey.lastOpened,
     _kRecentFilesSortKeyName => RecentFilesSortKey.name,
