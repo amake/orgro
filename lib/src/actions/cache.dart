@@ -9,7 +9,7 @@ PopupMenuItem<VoidCallback> clearCacheMenuItem(BuildContext context) {
   );
   return PopupMenuItem<VoidCallback>(
     value: () async {
-      await clearCaches(context);
+      await clearCaches();
       scaffoldMessenger.showSnackBar(snackBar);
     },
     child: Text(AppLocalizations.of(context)!.menuItemClearCache),
