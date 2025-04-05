@@ -11,57 +11,26 @@ import 'package:orgro/src/util.dart';
       found.whereType<OrgParagraph>().firstOrNull;
   if (node == null) return null;
 
-  var zipper = doc.editNode(node)!;
-
+  late OrgTree newDoc;
+  OrgNode? modifiedNode;
   if (node is OrgListItem) {
-    if (node.checkbox == null) {
-      // Add checkbox if it doesn't exist
-      final replacement = node.toggleCheckbox(add: true);
-      final newDoc = zipper.replace(replacement).commit();
-      return (newDoc.toMarkup(), offset + 4);
-    } else {
-      // Insert new checkbox item below
-      final sibling = _newEmptyCheckboxItem(from: node);
-      final newDoc = zipper.insertRight(sibling).commit();
-      final newText = newDoc.toMarkup();
-      final needle = sibling.toMarkup();
-      final newOffset = newText.indexOf(needle, offset) + needle.length - 1;
-      return (newText, newOffset);
-    }
+    (newDoc, modifiedNode) = _checkboxifyListItem(node, doc);
   } else if (node is OrgList) {
-    // Insert new checkbox item at the end of the list
-
-    // Go to the end of the list
-    zipper = zipper.goDown();
-    while (zipper.canGoRight()) {
-      zipper = zipper.goRight();
-    }
-    final lastItem = zipper.node as OrgListItem;
-    final sibling = _newEmptyCheckboxItem(from: lastItem);
-    final newDoc = zipper.insertRight(sibling).commit();
-    final newText = newDoc.toMarkup();
-    final needle = sibling.toMarkup();
-    final newOffset = newText.indexOf(needle, offset) + needle.length - 1;
-    return (newText, newOffset);
+    (newDoc, modifiedNode) = _checkboxifyList(node, doc);
   } else if (node is OrgParagraph) {
-    // Convert paragraph to checkbox item
-    final (leading, body, trailing) =
-        node.toMarkup().splitSurroundingWhitespace();
-    final item = OrgListUnorderedItem(
-      leading,
-      '- ',
-      '[ ]',
-      null,
-      OrgContent([OrgPlainText(body)]),
-    );
-    final replacement = OrgList([item], trailing);
-    final newDoc = zipper.replace(replacement).commit();
-    final newText = newDoc.toMarkup();
-    final newOffset = newText.indexOf(body) + body.length;
-    return (newText, newOffset);
+    (newDoc, modifiedNode) = _checkboxifyParagraph(node, doc);
   }
 
-  return null;
+  if (modifiedNode == null) throw Error();
+
+  final (newText, _, end) = newDoc.toMarkupLocating(modifiedNode);
+  if (end == -1) throw Error();
+
+  var newOffset = end;
+  while (newText.codeUnitAt(newOffset - 1) == 0x0A) {
+    newOffset--;
+  }
+  return (newText, newOffset);
 }
 
 (OrgTree, OrgNode?) _checkboxifyListItem(OrgListItem item, OrgTree doc) {
@@ -124,19 +93,23 @@ import 'package:orgro/src/util.dart';
     (node) => node is OrgListItem || node is OrgList || node is OrgParagraph,
   );
 
+  OrgNode? lastModifiedNode;
+
   for (final node in nodes) {
-    if (node is OrgListItem) {
-      (doc, _) = _checkboxifyListItem(node, doc);
-    } else if (node is OrgList) {
-      (doc, _) = _checkboxifyList(node, doc);
-    } else if (node is OrgParagraph) {
-      (doc, _) = _checkboxifyParagraph(node, doc);
-    }
+    final (newDoc, modifiedNode) = switch (node) {
+      OrgListItem() => _checkboxifyListItem(node, doc),
+      OrgList() => _checkboxifyList(node, doc),
+      OrgParagraph() => _checkboxifyParagraph(node, doc),
+      _ => (doc, null),
+    };
+    doc = newDoc;
+    lastModifiedNode = modifiedNode ?? lastModifiedNode;
   }
 
-  final newText = doc.toMarkup();
-  final newOffset = start + newText.length - text.length;
-  return (newText, newOffset);
+  if (lastModifiedNode == null) return null;
+
+  final (newText, _, modifiedEnd) = doc.toMarkupLocating(lastModifiedNode);
+  return (newText, modifiedEnd);
 }
 
 OrgListItem _newEmptyCheckboxItem({required OrgListItem from}) {

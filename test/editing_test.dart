@@ -109,8 +109,8 @@ void main() {
   group('checkbox', () {
     group('insert at point', () {
       test('add to list item', () {
-        expect(insertCheckboxAtPoint('- foo', 0), ('- [ ] foo', 4));
-        expect(insertCheckboxAtPoint('1. foo', 3), ('1. [ ] foo', 7));
+        expect(insertCheckboxAtPoint('- foo', 0), ('- [ ] foo', 9));
+        expect(insertCheckboxAtPoint('1. foo', 3), ('1. [ ] foo', 10));
       });
       test('insert below list item', () {
         // TODO: Make it work even without the trailing new line?

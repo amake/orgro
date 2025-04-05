@@ -13,6 +13,12 @@ extension OrgTreeEditing on OrgTree {
     toMarkup(serializer: finder);
     return finder.nodes;
   }
+
+  (String, int, int) toMarkupLocating(OrgNode node) {
+    final serializer = _NodeLocatingSeralizer(node);
+    final text = toMarkup(serializer: serializer);
+    return (text, serializer.start, serializer.end);
+  }
 }
 
 class _NodeFinder extends OrgSerializer {
@@ -35,5 +41,21 @@ class _NodeFinder extends OrgSerializer {
   @override
   void write(String str) {
     i += str.length;
+  }
+}
+
+class _NodeLocatingSeralizer extends OrgSerializer {
+  _NodeLocatingSeralizer(this.node);
+
+  final OrgNode node;
+  int start = -1;
+  int end = -1;
+
+  @override
+  void visit(OrgNode node) {
+    final isTarget = identical(node, this.node);
+    if (isTarget) start = length;
+    super.visit(node);
+    if (isTarget) end = length;
   }
 }
