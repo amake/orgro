@@ -64,33 +64,78 @@ import 'package:orgro/src/util.dart';
   return null;
 }
 
-(String, int)? insertCheckboxOverRange(String text, int start, int end) {
-  final rangeText = text.substring(start, end);
-  final lines = rangeText.split('\n');
-  final transformedLines = <String>[];
+(OrgTree, OrgNode?) _checkboxifyListItem(OrgListItem item, OrgTree doc) {
+  final zipper = doc.editNode(item);
+  if (zipper == null) return (doc, null);
 
-  for (final line in lines) {
-    final info = _ListItemInfo.parse(line);
-    final indentation = info.indentation;
-    if (info.marker != null && info.checkbox == null) {
-      final marker = info.marker!; // Promote marker to String
-      // Add checkbox to list items without one
-      final newContent = '$indentation$marker [ ] ${info.content.trim()}';
-      transformedLines.add(newContent);
-    } else if (info.marker == null) {
-      // Convert non-list items to list items with checkbox
-      final newContent = '$indentation- [ ] ${info.content.trim()}';
-      transformedLines.add(newContent);
-    } else {
-      // Leave lines with existing checkboxes unchanged
-      transformedLines.add(line);
+  if (item.checkbox == null) {
+    // Add checkbox if it doesn't exist
+    final replacement = item.toggleCheckbox(add: true);
+    final newDoc = zipper.replace(replacement).commit() as OrgTree;
+    return (newDoc, replacement);
+  }
+
+  // Insert new checkbox item below
+  final sibling = _newEmptyCheckboxItem(from: item);
+  final newDoc = zipper.insertRight(sibling).commit() as OrgTree;
+  return (newDoc, sibling);
+}
+
+(OrgTree, OrgNode?) _checkboxifyList(OrgList list, OrgTree doc) {
+  var zipper = doc.editNode(list);
+  if (zipper == null) return (doc, null);
+
+  // Insert new checkbox item at the end of the list
+
+  // Go to the end of the list
+  zipper = zipper.goDown();
+  while (zipper!.canGoRight()) {
+    zipper = zipper.goRight();
+  }
+  final lastItem = zipper.node as OrgListItem;
+  final sibling = _newEmptyCheckboxItem(from: lastItem);
+  final newDoc = zipper.insertRight(sibling).commit() as OrgTree;
+  return (newDoc, sibling);
+}
+
+(OrgTree, OrgNode?) _checkboxifyParagraph(OrgParagraph paragraph, OrgTree doc) {
+  final zipper = doc.editNode(paragraph);
+  if (zipper == null) return (doc, null);
+
+  // Convert paragraph to checkbox item
+  final (leading, body, trailing) =
+      paragraph.toMarkup().splitSurroundingWhitespace();
+  final item = OrgListUnorderedItem(
+    leading,
+    '- ',
+    '[ ]',
+    null,
+    OrgContent([OrgPlainText(body)]),
+  );
+  final replacement = OrgList([item], trailing);
+  final newDoc = zipper.replace(replacement).commit() as OrgTree;
+  return (newDoc, replacement);
+}
+
+(String, int)? insertCheckboxOverRange(String text, int start, int end) {
+  OrgTree doc = OrgDocument.parse(text);
+  final found = doc.nodesInRange(start, end);
+  final nodes = found.where(
+    (node) => node is OrgListItem || node is OrgList || node is OrgParagraph,
+  );
+
+  for (final node in nodes) {
+    if (node is OrgListItem) {
+      (doc, _) = _checkboxifyListItem(node, doc);
+    } else if (node is OrgList) {
+      (doc, _) = _checkboxifyList(node, doc);
+    } else if (node is OrgParagraph) {
+      (doc, _) = _checkboxifyParagraph(node, doc);
     }
   }
 
-  // Join transformed lines and replace the selected range
-  final transformedText = transformedLines.join('\n');
-  final newText = text.replaceRange(start, end, transformedText);
-  final newOffset = start + transformedText.length;
+  final newText = doc.toMarkup();
+  final newOffset = start + newText.length - text.length;
   return (newText, newOffset);
 }
 
@@ -113,33 +158,6 @@ OrgListItem _newEmptyCheckboxItem({required OrgListItem from}) {
     ),
   };
 }
-
-// Helper class to hold list item information
-class _ListItemInfo {
-  // Parse a line into its list item components
-  factory _ListItemInfo.parse(String line) {
-    final match = _listPattern.firstMatch(line);
-    if (match != null) {
-      final indentation = match.group(1)!;
-      final marker = match.group(2);
-      final checkbox = match.group(3);
-      final content = match.group(4)!;
-      return _ListItemInfo(indentation, marker, checkbox, content);
-    }
-    return _ListItemInfo('', null, null, line);
-  }
-
-  final String indentation;
-  final String? marker; // e.g., "-", "+", "*", "1.", "1)"
-  final String? checkbox; // "[ ]" or "[X]"
-  final String content;
-
-  String get markerOrDefault => marker ?? '-';
-
-  _ListItemInfo(this.indentation, this.marker, this.checkbox, this.content);
-}
-
-final _listPattern = RegExp(r'^(\s*)([-\+\*]|\d+[\.\)])?\s*(\[.\])?\s*(.*)$');
 
 final _numPattern = RegExp(r'(\d+)(.*)');
 

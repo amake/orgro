@@ -4,8 +4,8 @@ import 'package:orgro/src/pages/editor/checkbox.dart';
 import 'package:orgro/src/pages/editor/util.dart';
 
 void main() {
-  group('Offset', () {
-    test('Find node', () {
+  group('Find nodes', () {
+    test('Offset', () {
       final doc = OrgDocument.parse('''
 
 * foo
@@ -78,6 +78,32 @@ void main() {
         isA<OrgDocument>(),
       ]);
       expect(doc.nodesAtOffset(10000), isEmpty);
+    });
+    test('Range', () {
+      final doc = OrgDocument.parse('''
+
+* foo
+- bar
+1. baz ~bazinga~
+''');
+      expect(doc.nodesInRange(0, 0), [
+        isA<OrgPlainText>(),
+        isA<OrgContent>(),
+        isA<OrgParagraph>(),
+        isA<OrgContent>(),
+        isA<OrgDocument>(),
+      ]);
+      expect(doc.nodesInRange(1, 7), [
+        isA<OrgPlainText>(),
+        isA<OrgContent>(),
+        isA<OrgHeadline>(),
+        isA<OrgListUnorderedItem>(),
+        isA<OrgList>(),
+        isA<OrgContent>(),
+        isA<OrgSection>(),
+        isA<OrgDocument>(),
+      ]);
+      expect(doc.nodesInRange(10000, 10001), isEmpty);
     });
   });
   group('checkbox', () {
