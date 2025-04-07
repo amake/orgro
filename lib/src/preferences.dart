@@ -249,8 +249,8 @@ extension RecentFilesExt on InheritedPreferences {
     );
   }
 
-  Future<bool> addRecentFile(RememberedFile file) async {
-    final sortedFiles = [file, ...recentFiles]
+  Future<bool> addRecentFiles(List<RememberedFile> files) async {
+    final sortedFiles = [...files, ...recentFiles]
       ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     final uniqueFiles = sortedFiles
         .unique(

@@ -127,7 +127,7 @@ class RememberedFiles extends InheritedWidget {
   final List<RememberedFile> list;
   final RecentFilesSortKey sortKey;
   final SortOrder sortOrder;
-  final ValueChanged<RememberedFile> add;
+  final ValueChanged<List<RememberedFile>> add;
   final ValueChanged<RememberedFile> remove;
   final ValueChanged<RememberedFile> pin;
   final ValueChanged<RememberedFile> unpin;
@@ -154,9 +154,9 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
 
   bool get hasRecentFiles => _recentFiles.isNotEmpty;
 
-  void addRecentFile(RememberedFile newFile) {
-    debugPrint('Adding recent file: $newFile');
-    _prefs.addRecentFile(newFile);
+  void addRecentFiles(List<RememberedFile> newFiles) {
+    debugPrint('Adding recent files: $newFiles');
+    _prefs.addRecentFiles(newFiles);
   }
 
   Future<void> removeRecentFile(RememberedFile recentFile) async {
@@ -212,7 +212,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
       _recentFiles,
       _prefs.recentFilesSortKey,
       _prefs.recentFilesSortOrder,
-      add: addRecentFile,
+      add: addRecentFiles,
       remove: removeRecentFile,
       pin: pinFile,
       unpin: unpinFile,

@@ -162,7 +162,7 @@ class _StartPageState extends State<StartPage>
     if (recentFile == null) {
       return;
     }
-    addRecentFile(recentFile);
+    addRecentFiles([recentFile]);
     debugPrint('Saving file ID to state');
     bucket?.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
   }
@@ -254,12 +254,32 @@ class _RecentFilesBody extends StatelessWidget {
     // list can be scrolled even by the edges of the view.
     return ListView(
       children: [
-        if (sortedPins.isNotEmpty)
+        if (sortedPins.isNotEmpty) ...[
           _constrain(const ListHeader(title: Text('Pinned files'))),
-        ...sortedPins.map(
-          (pinnedFile) => _constrain(_RememberedFileListTile(pinnedFile)),
-        ),
-        if (sortedRecents.isNotEmpty)
+          ReorderableListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: sortedPins.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final pinnedFile = sortedPins[index];
+              return _constrain(
+                _RememberedFileListTile(pinnedFile),
+                key: ValueKey(pinnedFile),
+              );
+            },
+            onReorder: (oldIndex, newIndex) {
+              final pins = [...sortedPins];
+              final moved = pins.removeAt(oldIndex);
+              final insertAt = newIndex > oldIndex ? newIndex - 1 : newIndex;
+              pins.insert(insertAt, moved);
+              final reindexed = pins.indexed
+                  .map((e) => e.$2.copyWith(pinnedIdx: e.$1))
+                  .toList(growable: false);
+              RememberedFiles.of(context).add(reindexed);
+            },
+          ),
+        ],
+        if (sortedRecents.isNotEmpty) ...[
           _constrain(
             ListHeader(
               title: Text(
@@ -268,14 +288,25 @@ class _RecentFilesBody extends StatelessWidget {
               trailing: _RecentFilesListSortControl(),
             ),
           ),
-        ...sortedRecents.map(
-          (recentFile) => _constrain(_RememberedFileListTile(recentFile)),
-        ),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: sortedRecents.length,
+            itemBuilder: (context, index) {
+              final recentFile = sortedRecents[index];
+              return _constrain(
+                _RememberedFileListTile(recentFile),
+                key: ValueKey(recentFile),
+              );
+            },
+          ),
+        ],
       ],
     );
   }
 
-  Widget _constrain(Widget child) => Center(
+  Widget _constrain(Widget child, {Key? key}) => Center(
+    key: key,
     child: ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 600),
       child: child,
@@ -503,7 +534,7 @@ Future<void> _loadAndRememberFile(
   final bucket = RestorationScope.of(context);
   final recentFile = await _loadFile(context, fileInfoFuture, mode: mode);
   if (recentFile != null) {
-    recentFiles.add(recentFile);
+    recentFiles.add([recentFile]);
     debugPrint('Saving file ID to bucket $bucket');
     bucket.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
   }
