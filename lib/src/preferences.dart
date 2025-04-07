@@ -250,20 +250,42 @@ extension RecentFilesExt on InheritedPreferences {
   }
 
   Future<bool> addRecentFile(RememberedFile file) async {
-    final files = [file, ...recentFiles]
+    final sortedFiles = [file, ...recentFiles]
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    final uniqueFiles = sortedFiles
         .unique(
           cache: LinkedHashSet(
             equals: (a, b) => a.uri == b.uri,
             hashCode: (o) => o.uri.hashCode,
           ),
         )
-        .take(kMaxRecentFiles)
         .toList(growable: false);
-    return await _setRecentFiles(files);
+    final retained = [
+      ...uniqueFiles.where((f) => f.isPinned),
+      ...uniqueFiles.where((f) => f.isNotPinned).take(kMaxRecentFiles),
+    ];
+    return await _setRecentFiles(retained);
   }
 
   Future<bool> removeRecentFile(RememberedFile file) async {
     final files = List.of(recentFiles)..remove(file);
+    return await _setRecentFiles(files);
+  }
+
+  Future<bool> pinFile(RememberedFile file) async {
+    final pinnedIdx = recentFiles.where((f) => f.isPinned).length;
+    final files = recentFiles
+        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: pinnedIdx) : f)
+        .toList(growable: false)
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    return await _setRecentFiles(files);
+  }
+
+  Future<bool> unpinFile(RememberedFile file) async {
+    final files = recentFiles
+        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: -1) : f)
+        .toList(growable: false)
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     return await _setRecentFiles(files);
   }
 

@@ -162,3 +162,10 @@ Widget nativeWhenPossibleContextMenuBuilder(
     editableTextState: editableTextState,
   );
 }
+
+extension BoolUtil on bool {
+  int compareTo(bool other) {
+    if (this == other) return 0;
+    return this ? 1 : -1;
+  }
+}

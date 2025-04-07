@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/about.dart';
@@ -234,10 +235,12 @@ class _RecentFilesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recentFiles = RememberedFiles.of(context);
-    final sortedFiles =
-        recentFiles.list..sort((a, b) {
-          final result = switch (recentFiles.sortKey) {
+    final remembered = RememberedFiles.of(context);
+    final sortedPins =
+        remembered.pinned..sort((a, b) => a.pinnedIdx.compareTo(b.pinnedIdx));
+    final sortedRecents =
+        remembered.recents..sort((a, b) {
+          final result = switch (remembered.sortKey) {
             RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(
               b.lastOpened,
             ),
@@ -245,29 +248,30 @@ class _RecentFilesBody extends StatelessWidget {
             RecentFilesSortKey.location => (_appName(context, a.uri) ?? a.uri)
                 .compareTo(_appName(context, b.uri) ?? b.uri),
           };
-          return recentFiles.sortOrder == SortOrder.ascending
-              ? result
-              : -result;
+          return remembered.sortOrder == SortOrder.ascending ? result : -result;
         });
     // We let ListView fill the viewport and constrain its children so that the
     // list can be scrolled even by the edges of the view.
-    return ListView.builder(
-      itemCount: sortedFiles.length + 1,
-      itemBuilder: (context, idx) {
-        if (idx == 0) {
-          return _constrain(
+    return ListView(
+      children: [
+        if (sortedPins.isNotEmpty)
+          _constrain(const ListHeader(title: Text('Pinned files'))),
+        ...sortedPins.map(
+          (pinnedFile) => _constrain(_RememberedFileListTile(pinnedFile)),
+        ),
+        if (sortedRecents.isNotEmpty)
+          _constrain(
             ListHeader(
               title: Text(
                 AppLocalizations.of(context)!.sectionHeaderRecentFiles,
               ),
               trailing: _RecentFilesListSortControl(),
             ),
-          );
-        } else {
-          final recentFile = sortedFiles[idx - 1];
-          return _constrain(_RecentFileListTile(recentFile));
-        }
-      },
+          ),
+        ...sortedRecents.map(
+          (recentFile) => _constrain(_RememberedFileListTile(recentFile)),
+        ),
+      ],
     );
   }
 
@@ -369,19 +373,38 @@ String? _appName(BuildContext context, String uriString) {
   };
 }
 
-class _RecentFileListTile extends StatelessWidget {
-  const _RecentFileListTile(this.recentFile);
+class _RememberedFileListTile extends StatelessWidget {
+  const _RememberedFileListTile(this.recentFile);
 
   final RememberedFile recentFile;
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
+    return Slidable(
       key: ValueKey(recentFile),
-      onDismissed: (_) => RememberedFiles.of(context).remove(recentFile),
-      background: const _SwipeDeleteBackground(alignment: Alignment.centerLeft),
-      secondaryBackground: const _SwipeDeleteBackground(
-        alignment: Alignment.centerRight,
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            backgroundColor: recentFile.isPinned ? Colors.grey : Colors.blue,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            icon: Icons.push_pin,
+            onPressed: (context) {
+              if (recentFile.isPinned) {
+                RememberedFiles.of(context).unpin(recentFile);
+              } else {
+                RememberedFiles.of(context).pin(recentFile);
+              }
+            },
+          ),
+          SlidableAction(
+            backgroundColor: Colors.red,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            icon: Icons.delete,
+            onPressed:
+                (context) => RememberedFiles.of(context).remove(recentFile),
+          ),
+        ],
       ),
       child: ListTile(
         leading: const Icon(Icons.insert_drive_file),
@@ -429,25 +452,6 @@ class _RecentFileListTile extends StatelessWidget {
               context,
               readFileWithIdentifier(recentFile.identifier),
             ),
-      ),
-    );
-  }
-}
-
-class _SwipeDeleteBackground extends StatelessWidget {
-  const _SwipeDeleteBackground({required this.alignment});
-
-  final AlignmentGeometry alignment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: alignment,
-      padding: const EdgeInsets.all(24),
-      color: Colors.red,
-      child: Icon(
-        Icons.delete,
-        color: Theme.of(context).colorScheme.onSecondary,
       ),
     );
   }
