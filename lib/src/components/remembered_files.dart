@@ -149,10 +149,10 @@ class RememberedFiles extends InheritedWidget {
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.recentFiles);
-  List<RememberedFile> get _recentFiles => _prefs.recentFiles;
+  List<RememberedFile> get _rememberedFiles => _prefs.rememberedFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
 
-  bool get hasRecentFiles => _recentFiles.isNotEmpty;
+  bool get hasRememberedFiles => _rememberedFiles.isNotEmpty;
 
   void addRecentFiles(List<RememberedFile> newFiles) {
     debugPrint('Adding recent files: $newFiles');
@@ -209,7 +209,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
 
   Widget buildWithRememberedFiles({required WidgetBuilder builder}) {
     return RememberedFiles(
-      _recentFiles,
+      _rememberedFiles,
       _prefs.recentFilesSortKey,
       _prefs.recentFilesSortOrder,
       add: addRecentFiles,
