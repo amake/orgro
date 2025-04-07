@@ -26,6 +26,14 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension Iter2Utils<T, U> on Iterable<(T, U)> {
+  Iterable<V> map2<V>(V Function(T, U) visit) sync* {
+    for (final (a, b) in this) {
+      yield visit(a, b);
+    }
+  }
+}
+
 extension MapUtils<T, U> on Map<T, U> {
   bool unorderedEquals(Map<T, U> other, {bool Function(U?, U?)? valueEquals}) {
     valueEquals ??= (a, b) => a == b;

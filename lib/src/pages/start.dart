@@ -279,7 +279,7 @@ class _RecentFilesBody extends StatelessWidget {
               final insertAt = newIndex > oldIndex ? newIndex - 1 : newIndex;
               pins.insert(insertAt, moved);
               final reindexed = pins.indexed
-                  .map((e) => e.$2.copyWith(pinnedIdx: e.$1))
+                  .map2((i, file) => file.copyWith(pinnedIdx: i))
                   .toList(growable: false);
               RememberedFiles.of(context).add(reindexed);
             },
