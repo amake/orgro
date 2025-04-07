@@ -8,7 +8,7 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/list.dart';
-import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
@@ -34,7 +34,7 @@ class _StartPageState extends State<StartPage>
   @override
   Widget build(BuildContext context) => UnmanagedRestorationScope(
     bucket: bucket,
-    child: buildWithRecentFiles(
+    child: buildWithRememberedFiles(
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
@@ -157,7 +157,7 @@ class _StartPageState extends State<StartPage>
     }
   }
 
-  void _rememberFile(RecentFile? recentFile) {
+  void _rememberFile(RememberedFile? recentFile) {
     if (recentFile == null) {
       return;
     }
@@ -234,7 +234,7 @@ class _RecentFilesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recentFiles = RecentFiles.of(context);
+    final recentFiles = RememberedFiles.of(context);
     final sortedFiles =
         recentFiles.list..sort((a, b) {
           final result = switch (recentFiles.sortKey) {
@@ -372,13 +372,13 @@ String? _appName(BuildContext context, String uriString) {
 class _RecentFileListTile extends StatelessWidget {
   const _RecentFileListTile(this.recentFile);
 
-  final RecentFile recentFile;
+  final RememberedFile recentFile;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(recentFile),
-      onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
+      onDismissed: (_) => RememberedFiles.of(context).remove(recentFile),
       background: const _SwipeDeleteBackground(alignment: Alignment.centerLeft),
       secondaryBackground: const _SwipeDeleteBackground(
         alignment: Alignment.centerRight,
@@ -453,7 +453,7 @@ class _SwipeDeleteBackground extends StatelessWidget {
   }
 }
 
-Future<RecentFile?> _loadFile(
+Future<RememberedFile?> _loadFile(
   BuildContext context,
   FutureOr<NativeDataSource?> dataSource, {
   RestorationBucket? bucket,
@@ -469,14 +469,14 @@ Future<RecentFile?> _loadFile(
     },
     mode: mode,
   );
-  RecentFile? result;
+  RememberedFile? result;
   if (loaded) {
     final source = await dataSource;
     if (source == null) {
       // User canceled
     } else {
       if (source.persistable) {
-        result = RecentFile(
+        result = RememberedFile(
           identifier: source.identifier,
           name: source.name,
           uri: source.uri,
@@ -495,7 +495,7 @@ Future<void> _loadAndRememberFile(
   FutureOr<NativeDataSource?> fileInfoFuture, {
   InitialMode? mode,
 }) async {
-  final recentFiles = RecentFiles.of(context);
+  final recentFiles = RememberedFiles.of(context);
   final bucket = RestorationScope.of(context);
   final recentFile = await _loadFile(context, fileInfoFuture, mode: mode);
   if (recentFile != null) {

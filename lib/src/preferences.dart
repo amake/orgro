@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
-import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -240,8 +240,8 @@ extension AppearanceExt on InheritedPreferences {
 }
 
 extension RecentFilesExt on InheritedPreferences {
-  List<RecentFile> get recentFiles => data.recentFiles;
-  Future<bool> _setRecentFiles(List<RecentFile> value) async {
+  List<RememberedFile> get recentFiles => data.recentFiles;
+  Future<bool> _setRecentFiles(List<RememberedFile> value) async {
     _update((data) => data.copyWith(recentFiles: value));
     return _setOrRemove(
       kRecentFilesJsonKey,
@@ -249,7 +249,7 @@ extension RecentFilesExt on InheritedPreferences {
     );
   }
 
-  Future<bool> addRecentFile(RecentFile file) async {
+  Future<bool> addRecentFile(RememberedFile file) async {
     final files = [file, ...recentFiles]
         .unique(
           cache: LinkedHashSet(
@@ -262,7 +262,7 @@ extension RecentFilesExt on InheritedPreferences {
     return await _setRecentFiles(files);
   }
 
-  Future<bool> removeRecentFile(RecentFile file) async {
+  Future<bool> removeRecentFile(RememberedFile file) async {
     final files = List.of(recentFiles)..remove(file);
     return await _setRecentFiles(files);
   }
@@ -455,7 +455,7 @@ class PreferencesData {
           .getStringList(kRecentFilesJsonKey)
           ?.map<dynamic>(json.decode)
           .cast<Map<String, dynamic>>()
-          .map((json) => RecentFile.fromJson(json))
+          .map((json) => RememberedFile.fromJson(json))
           .toList(growable: false),
       recentFilesSortKey: RecentFilesSortKeyPersistence.fromString(
         prefs.getString(kRecentFilesSortKey),
@@ -507,7 +507,7 @@ class PreferencesData {
   final double textScale;
   final String fontFamily;
   final bool readerMode;
-  final List<RecentFile> recentFiles;
+  final List<RememberedFile> recentFiles;
   final RecentFilesSortKey recentFilesSortKey;
   final SortOrder recentFilesSortOrder;
   final ThemeMode themeMode;
@@ -525,7 +525,7 @@ class PreferencesData {
     double? textScale,
     String? fontFamily,
     bool? readerMode,
-    List<RecentFile>? recentFiles,
+    List<RememberedFile>? recentFiles,
     RecentFilesSortKey? recentFilesSortKey,
     SortOrder? recentFilesSortOrder,
     ThemeMode? themeMode,

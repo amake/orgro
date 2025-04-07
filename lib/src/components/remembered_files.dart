@@ -28,8 +28,8 @@ const _kRecentFilesSortKeyLastOpened = 'last_opened';
 const _kRecentFilesSortKeyName = 'name';
 const _kRecentFilesSortKeyLocation = 'location';
 
-class RecentFile {
-  RecentFile.fromJson(Map<String, dynamic> json)
+class RememberedFile {
+  RememberedFile.fromJson(Map<String, dynamic> json)
     : this(
         identifier: json['identifier'] as String,
         name: json['name'] as String,
@@ -41,7 +41,7 @@ class RecentFile {
         ),
       );
 
-  RecentFile({
+  RememberedFile({
     required this.identifier,
     required this.name,
     required this.uri,
@@ -55,7 +55,7 @@ class RecentFile {
 
   @override
   bool operator ==(Object other) =>
-      other is RecentFile &&
+      other is RememberedFile &&
       identifier == other.identifier &&
       name == other.name &&
       uri == other.uri &&
@@ -86,8 +86,8 @@ class RecentFile {
   }
 }
 
-class RecentFiles extends InheritedWidget {
-  const RecentFiles(
+class RememberedFiles extends InheritedWidget {
+  const RememberedFiles(
     this.list,
     this.sortKey,
     this.sortOrder, {
@@ -97,13 +97,13 @@ class RecentFiles extends InheritedWidget {
     super.key,
   });
 
-  final List<RecentFile> list;
+  final List<RememberedFile> list;
   final RecentFilesSortKey sortKey;
   final SortOrder sortOrder;
-  final ValueChanged<RecentFile> add;
-  final ValueChanged<RecentFile> remove;
+  final ValueChanged<RememberedFile> add;
+  final ValueChanged<RememberedFile> remove;
 
-  List<RecentFile> get sortedList =>
+  List<RememberedFile> get sortedList =>
       list..sort((a, b) {
         final result = switch (sortKey) {
           RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(b.lastOpened),
@@ -114,29 +114,29 @@ class RecentFiles extends InheritedWidget {
       });
 
   @override
-  bool updateShouldNotify(RecentFiles oldWidget) =>
+  bool updateShouldNotify(RememberedFiles oldWidget) =>
       !listEquals(list, oldWidget.list) ||
       sortKey != oldWidget.sortKey ||
       sortOrder != oldWidget.sortOrder;
 
-  static RecentFiles of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<RecentFiles>()!;
+  static RememberedFiles of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<RememberedFiles>()!;
 }
 
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.recentFiles);
-  List<RecentFile> get _recentFiles => _prefs.recentFiles;
+  List<RememberedFile> get _recentFiles => _prefs.recentFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
 
   bool get hasRecentFiles => _recentFiles.isNotEmpty;
 
-  void addRecentFile(RecentFile newFile) {
+  void addRecentFile(RememberedFile newFile) {
     debugPrint('Adding recent file: $newFile');
     _prefs.addRecentFile(newFile);
   }
 
-  Future<void> removeRecentFile(RecentFile recentFile) async {
+  Future<void> removeRecentFile(RememberedFile recentFile) async {
     debugPrint('Removing recent file: $recentFile');
     try {
       await disposeNativeSourceIdentifier(recentFile.identifier);
@@ -176,8 +176,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     }
   }
 
-  Widget buildWithRecentFiles({required WidgetBuilder builder}) {
-    return RecentFiles(
+  Widget buildWithRememberedFiles({required WidgetBuilder builder}) {
+    return RememberedFiles(
       _recentFiles,
       _prefs.recentFilesSortKey,
       _prefs.recentFilesSortOrder,
