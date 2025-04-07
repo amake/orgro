@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// **'v{version}'**
   String buttonVersion(String version);
 
+  /// No description provided for @sectionHeaderPinnedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned files'**
+  String get sectionHeaderPinnedFiles;
+
   /// No description provided for @sectionHeaderRecentFiles.
   ///
   /// In en, this message translates to:

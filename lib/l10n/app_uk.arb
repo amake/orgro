@@ -43,6 +43,7 @@
   "buttonSupport": "Підтримка · Зворотній звʼязок",
   "buttonVersion": "в{version}",
 
+  "sectionHeaderPinnedFiles": "Pinned files",
   "sectionHeaderRecentFiles": "Останні файли",
   "recentFilesSortDialogTitle": "Sort by",
   "sortKeyLastOpened": "Last opened",

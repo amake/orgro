@@ -112,6 +112,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Zuletzt geöffnet';
 
   @override

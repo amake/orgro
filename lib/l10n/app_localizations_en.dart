@@ -111,6 +111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Recent files';
 
   @override
@@ -547,6 +550,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Recent files';
 
   @override
@@ -981,6 +987,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String buttonVersion(String version) {
     return 'v$version';
   }
+
+  @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
 
   @override
   String get sectionHeaderRecentFiles => 'Recent files';

@@ -111,6 +111,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Останні файли';
 
   @override

@@ -43,6 +43,7 @@
   "buttonSupport": "サポート・お問い合わせ",
   "buttonVersion": "v{version}",
 
+  "sectionHeaderPinnedFiles": "ピン留めされたファイル",
   "sectionHeaderRecentFiles": "最近のファイル",
   "recentFilesSortDialogTitle": "並び替え",
   "sortKeyLastOpened": "最終アクセス",

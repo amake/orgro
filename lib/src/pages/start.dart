@@ -255,7 +255,13 @@ class _RecentFilesBody extends StatelessWidget {
     return ListView(
       children: [
         if (sortedPins.isNotEmpty) ...[
-          _constrain(const ListHeader(title: Text('Pinned files'))),
+          _constrain(
+            ListHeader(
+              title: Text(
+                AppLocalizations.of(context)!.sectionHeaderPinnedFiles,
+              ),
+            ),
+          ),
           ReorderableListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: sortedPins.length,

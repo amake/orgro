@@ -50,6 +50,7 @@
     }
   },
 
+  "sectionHeaderPinnedFiles": "Pinned files",
   "sectionHeaderRecentFiles": "Zuletzt geöffnet",
   "recentFilesSortDialogTitle": "Sort by",
   "sortKeyLastOpened": "Last opened",
