@@ -155,16 +155,15 @@ OrgListItem _newEmptyCheckboxItem({required OrgListItem from}) {
   };
 }
 
-final _numPattern = RegExp(r'(\d+)(.*)');
+// Dart regex classes are the same as JavaScript, so \d is [0-9] and doesn't
+// match "exotic" Unicode numbers.
+final _numPattern = RegExp(r'(?<n>\d+)(?<suffix>.*)');
 
 // Generate the next marker for ordered lists
-String _getNextMarker(String? marker) {
-  if (marker == null) return '-';
+String _getNextMarker(String marker) {
   final match = _numPattern.firstMatch(marker);
-  if (match != null) {
-    final num = int.parse(match.group(1)!);
-    final suffix = match.group(2)!;
-    return '${num + 1}$suffix';
-  }
-  return marker; // Return same marker for unordered lists
+  if (match == null) return marker;
+  final num = int.parse(match.namedGroup('n')!);
+  final suffix = match.namedGroup('suffix')!;
+  return '${num + 1}$suffix';
 }
