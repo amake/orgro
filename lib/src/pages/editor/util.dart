@@ -1,13 +1,17 @@
 import 'package:org_flutter/org_flutter.dart';
 
+// TODO(aaron): End is truncated by the end of the visited range, which seems
+// like it must be surprising for consumers. What to do?
+typedef NodeSpan = ({int start, int end});
+
 extension OrgTreeEditing on OrgTree {
-  List<OrgNode> nodesAtOffset(int offset) {
+  List<({OrgNode node, NodeSpan span})> nodesAtOffset(int offset) {
     final finder = _NodeFinder(offset, offset);
     toMarkup(serializer: finder);
     return finder.nodes;
   }
 
-  List<OrgNode> nodesInRange(int start, int end) {
+  List<({OrgNode node, NodeSpan span})> nodesInRange(int start, int end) {
     if (start > end) (start, end) = (end, start);
     final finder = _NodeFinder(start, end);
     toMarkup(serializer: finder);
@@ -27,14 +31,15 @@ class _NodeFinder extends OrgSerializer {
   final int start;
   final int end;
   int i = 0;
-  final nodes = <OrgNode>[];
+  final nodes = <({OrgNode node, NodeSpan span})>[];
 
   @override
   void visit(OrgNode node) {
     if (i > end) return;
+    final nodeStart = i;
     super.visit(node);
     if (i > start || i > end) {
-      nodes.add(node);
+      nodes.add((node: node, span: (start: nodeStart, end: i)));
     }
   }
 
@@ -57,5 +62,30 @@ class _NodeLocatingSeralizer extends OrgSerializer {
     if (isTarget) start = length;
     super.visit(node);
     if (isTarget) end = length;
+  }
+}
+
+class Region {
+  Region(int start, int end) {
+    spans.add((start, end));
+  }
+
+  final List<(int, int)> spans = [];
+
+  bool get isEmpty => spans.isEmpty;
+
+  void consume(int start, int end) {
+    if (isEmpty) return;
+    final newSpans = <(int, int)>[];
+    for (final (s, e) in spans) {
+      if (start > e || end < s) {
+        newSpans.add((s, e));
+      } else {
+        if (start > s) newSpans.add((s, start));
+        if (end < e) newSpans.add((end, e));
+      }
+    }
+    spans.clear();
+    spans.addAll(newSpans);
   }
 }

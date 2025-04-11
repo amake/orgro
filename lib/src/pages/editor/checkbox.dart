@@ -4,7 +4,10 @@ import 'package:orgro/src/util.dart';
 
 (String, int)? insertCheckboxAtPoint(String text, int offset) {
   final doc = OrgDocument.parse(text);
-  final found = doc.nodesAtOffset(offset);
+  final found = doc
+      .nodesAtOffset(offset)
+      .map((result) => result.node)
+      .toList(growable: false);
   final node =
       found.whereType<OrgListItem>().firstOrNull ??
       found.whereType<OrgList>().firstOrNull ??
@@ -34,8 +37,14 @@ import 'package:orgro/src/util.dart';
 }
 
 (OrgTree, OrgNode?) _checkboxifyListItem(OrgListItem item, OrgTree doc) {
-  final zipper = doc.editNode(item);
+  // In a multi-edit scenario, the original item might have been replaced (e.g.
+  // if a sub-item has been edited) so we also look up by ID.
+  final zipper = doc.edit().findWhere(
+    (n) => identical(n, item) || (n is OrgListItem && n.id == item.id),
+  );
   if (zipper == null) return (doc, null);
+  // If the original item was replaced, then we need to use the current item.
+  item = zipper.node as OrgListItem;
 
   if (item.checkbox == null) {
     // Add checkbox if it doesn't exist
@@ -90,20 +99,34 @@ import 'package:orgro/src/util.dart';
   OrgTree doc = OrgDocument.parse(text);
   final found = doc.nodesInRange(start, end);
   final nodes = found.where(
-    (node) => node is OrgListItem || node is OrgList || node is OrgParagraph,
+    (e) => e.node is OrgListItem || e.node is OrgList || e.node is OrgParagraph,
   );
 
+  final region = Region(start, end);
   OrgNode? lastModifiedNode;
 
-  for (final node in nodes) {
+  for (final (:node, :span) in nodes) {
     final (newDoc, modifiedNode) = switch (node) {
-      OrgListItem() => _checkboxifyListItem(node, doc),
-      OrgList() => _checkboxifyList(node, doc),
+      // Skip OrgListItem with checkbox because somehow in the case of a range,
+      // it feels like we should only be modifying existing objects, not adding
+      // new ones
+      OrgListItem(checkbox: null) => _checkboxifyListItem(node, doc),
+      // Skip OrgList because:
+      // - The boundaries of a list are a bit unintuitive due to trailing blank
+      //   lines
+      // - Same as the checkbox list item case, with a range it feels like we
+      //   should only be modifying existing objects.
+      //
+      // OrgList() => _checkboxifyList(node, doc),
       OrgParagraph() => _checkboxifyParagraph(node, doc),
       _ => (doc, null),
     };
     doc = newDoc;
-    lastModifiedNode = modifiedNode ?? lastModifiedNode;
+    if (modifiedNode != null) {
+      lastModifiedNode = modifiedNode;
+      region.consume(span.start, span.end);
+      if (region.isEmpty) break;
+    }
   }
 
   if (lastModifiedNode == null) return null;
