@@ -128,6 +128,21 @@ extension StringExtension on String {
     return (substring(0, idx), substring(idx));
   }
 
+  (String, String, String) splitSurroundingWhitespace() {
+    final leadingIdx = indexOf(RegExp(r'\S'));
+    final leading = (leadingIdx == -1) ? '' : (substring(0, leadingIdx));
+    final trailingIdx = lastIndexOf(RegExp(r'\S'));
+    final trailing = (trailingIdx == -1) ? '' : (substring(trailingIdx + 1));
+    return (
+      leading,
+      substring(
+        leadingIdx == -1 ? 0 : leadingIdx,
+        trailingIdx == -1 ? length : trailingIdx + 1,
+      ),
+      trailing,
+    );
+  }
+
   String trimPrefSuff(String prefix, String suffix) {
     if (startsWith(prefix) && endsWith(suffix)) {
       return substring(prefix.length, length - suffix.length);
