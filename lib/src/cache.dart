@@ -6,11 +6,11 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<void> clearCaches(BuildContext context) async {
-  await DefaultCacheManager().emptyCache();
-  await clearFontCache();
-  await clearTemporaryAttachments();
-}
+Future<void> clearCaches() async => await Future.wait([
+  DefaultCacheManager().emptyCache(),
+  clearFontCache(),
+  clearTemporaryAttachments(),
+]);
 
 Future<Directory> getTemporaryAttachmentsDirectory() async {
   final tmp = await getTemporaryDirectory();
@@ -27,7 +27,7 @@ Future<void> clearTemporaryAttachments() async {
 Widget clearCachesListItem(BuildContext context) => ListTile(
   title: Text(AppLocalizations.of(context)!.settingsActionClearCache),
   onTap: () async {
-    await clearCaches(context);
+    await clearCaches();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

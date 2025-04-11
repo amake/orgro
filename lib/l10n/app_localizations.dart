@@ -96,8 +96,8 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('de'),
     Locale('en'),
+    Locale('de'),
     Locale('en', 'GB'),
     Locale('en', 'US'),
     Locale('ja'),
@@ -301,6 +301,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'v{version}'**
   String buttonVersion(String version);
+
+  /// No description provided for @sectionHeaderPinnedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned files'**
+  String get sectionHeaderPinnedFiles;
 
   /// No description provided for @sectionHeaderRecentFiles.
   ///

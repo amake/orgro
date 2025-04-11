@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
-import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -240,8 +240,8 @@ extension AppearanceExt on InheritedPreferences {
 }
 
 extension RecentFilesExt on InheritedPreferences {
-  List<RecentFile> get recentFiles => data.recentFiles;
-  Future<bool> _setRecentFiles(List<RecentFile> value) async {
+  List<RememberedFile> get rememberedFiles => data.recentFiles;
+  Future<bool> _setRecentFiles(List<RememberedFile> value) async {
     _update((data) => data.copyWith(recentFiles: value));
     return _setOrRemove(
       kRecentFilesJsonKey,
@@ -249,34 +249,56 @@ extension RecentFilesExt on InheritedPreferences {
     );
   }
 
-  Future<bool> addRecentFile(RecentFile file) async {
-    final files = [file, ...recentFiles]
+  Future<bool> addRecentFiles(List<RememberedFile> files) async {
+    final sortedFiles = [...files, ...rememberedFiles]
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    final uniqueFiles = sortedFiles
         .unique(
           cache: LinkedHashSet(
             equals: (a, b) => a.uri == b.uri,
             hashCode: (o) => o.uri.hashCode,
           ),
         )
-        .take(kMaxRecentFiles)
         .toList(growable: false);
+    final retained = [
+      ...uniqueFiles.where((f) => f.isPinned),
+      ...uniqueFiles.where((f) => f.isNotPinned).take(kMaxRecentFiles),
+    ];
+    return await _setRecentFiles(retained);
+  }
+
+  Future<bool> removeRecentFile(RememberedFile file) async {
+    final files = List.of(rememberedFiles)..remove(file);
     return await _setRecentFiles(files);
   }
 
-  Future<bool> removeRecentFile(RecentFile file) async {
-    final files = List.of(recentFiles)..remove(file);
+  Future<bool> pinFile(RememberedFile file) async {
+    final pinnedIdx = rememberedFiles.where((f) => f.isPinned).length;
+    final files = rememberedFiles
+        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: pinnedIdx) : f)
+        .toList(growable: false)
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    return await _setRecentFiles(files);
+  }
+
+  Future<bool> unpinFile(RememberedFile file) async {
+    final files = rememberedFiles
+        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: -1) : f)
+        .toList(growable: false)
+      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     return await _setRecentFiles(files);
   }
 
   RecentFilesSortKey get recentFilesSortKey => data.recentFilesSortKey;
   Future<bool> setRecentFilesSortKey(RecentFilesSortKey value) async {
     _update((data) => data.copyWith(recentFilesSortKey: value));
-    return _setOrRemove(kRecentFilesSortKey, value.persistableString);
+    return await _setOrRemove(kRecentFilesSortKey, value.persistableString);
   }
 
   SortOrder get recentFilesSortOrder => data.recentFilesSortOrder;
   Future<bool> setRecentFilesSortOrder(SortOrder value) async {
     _update((data) => data.copyWith(recentFilesSortOrder: value));
-    return _setOrRemove(kRecentFilesSortOrder, value.persistableString);
+    return await _setOrRemove(kRecentFilesSortOrder, value.persistableString);
   }
 
   bool _updateShouldNotifyDependentRecentFiles(
@@ -455,8 +477,14 @@ class PreferencesData {
           .getStringList(kRecentFilesJsonKey)
           ?.map<dynamic>(json.decode)
           .cast<Map<String, dynamic>>()
-          .map((json) => RecentFile.fromJson(json))
+          .map((json) => RememberedFile.fromJson(json))
           .toList(growable: false),
+      recentFilesSortKey: RecentFilesSortKeyPersistence.fromString(
+        prefs.getString(kRecentFilesSortKey),
+      ),
+      recentFilesSortOrder: SortOrderPersistence.fromString(
+        prefs.getString(kRecentFilesSortOrder),
+      ),
       themeMode: ThemeModePersistence.fromString(
         prefs.getString(kThemeModeKey),
       ),
@@ -501,7 +529,7 @@ class PreferencesData {
   final double textScale;
   final String fontFamily;
   final bool readerMode;
-  final List<RecentFile> recentFiles;
+  final List<RememberedFile> recentFiles;
   final RecentFilesSortKey recentFilesSortKey;
   final SortOrder recentFilesSortOrder;
   final ThemeMode themeMode;
@@ -519,7 +547,7 @@ class PreferencesData {
     double? textScale,
     String? fontFamily,
     bool? readerMode,
-    List<RecentFile>? recentFiles,
+    List<RememberedFile>? recentFiles,
     RecentFilesSortKey? recentFilesSortKey,
     SortOrder? recentFilesSortOrder,
     ThemeMode? themeMode,

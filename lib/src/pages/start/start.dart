@@ -3,12 +3,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
-import 'package:orgro/src/components/list.dart';
-import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
@@ -17,10 +15,9 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/settings.dart';
-import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/pages/start/remembered_files.dart';
+import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/util.dart';
-
-const _kRestoreOpenFileIdKey = 'restore_open_file_id';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -34,7 +31,7 @@ class _StartPageState extends State<StartPage>
   @override
   Widget build(BuildContext context) => UnmanagedRestorationScope(
     bucket: bucket,
-    child: buildWithRecentFiles(
+    child: buildWithRememberedFiles(
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
@@ -51,8 +48,8 @@ class _StartPageState extends State<StartPage>
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child:
-                  hasRecentFiles
-                      ? const _RecentFilesBody()
+                  hasRememberedFiles
+                      ? const RememberedFilesBody()
                       : const _EmptyBody(),
             ),
           ),
@@ -71,7 +68,7 @@ class _StartPageState extends State<StartPage>
               value: () => _openSettingsScreen(context),
               child: Text(AppLocalizations.of(context)!.menuItemSettings),
             ),
-            if (hasRecentFiles) ...[
+            if (hasRememberedFiles) ...[
               const PopupMenuDivider(),
               PopupMenuItem<VoidCallback>(
                 value: () => _openOrgroManual(context),
@@ -80,7 +77,7 @@ class _StartPageState extends State<StartPage>
             ],
             if (!kReleaseMode && !kScreenshotMode) ...[
               const PopupMenuDivider(),
-              if (hasRecentFiles)
+              if (hasRememberedFiles)
                 PopupMenuItem<VoidCallback>(
                   value: () => _openOrgManual(context),
                   child: Text(AppLocalizations.of(context)!.menuItemOrgManual),
@@ -100,7 +97,7 @@ class _StartPageState extends State<StartPage>
   }
 
   Widget? _buildFloatingActionButton(BuildContext context) {
-    if (!hasRecentFiles) {
+    if (!hasRememberedFiles) {
       return null;
     }
     return Column(
@@ -114,7 +111,7 @@ class _StartPageState extends State<StartPage>
         ),
         const SizedBox(height: 16),
         FloatingActionButton(
-          onPressed: () => _loadAndRememberFile(context, pickFile()),
+          onPressed: () => loadAndRememberFile(context, pickFile()),
           heroTag: 'OpenFileFAB',
           foregroundColor: Theme.of(context).colorScheme.onSecondary,
           child: const Icon(Icons.folder_open),
@@ -127,7 +124,7 @@ class _StartPageState extends State<StartPage>
   Future<bool> loadFileFromPlatform(NativeDataSource info) async {
     // We can't use _loadAndRememberFile because RecentFiles is not in this
     // context
-    final recentFile = await _loadFile(context, info);
+    final recentFile = await loadFile(context, info);
     if (recentFile != null) {
       _rememberFile(recentFile);
       return true;
@@ -143,11 +140,11 @@ class _StartPageState extends State<StartPage>
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     if (!initialRestore) return;
 
-    final restoreId = bucket?.read<String>(_kRestoreOpenFileIdKey);
+    final restoreId = bucket?.read<String>(kRestoreOpenFileIdKey);
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final recentFile = await _loadFile(
+        final recentFile = await loadFile(
           context,
           readFileWithIdentifier(restoreId),
           bucket: bucket,
@@ -157,13 +154,13 @@ class _StartPageState extends State<StartPage>
     }
   }
 
-  void _rememberFile(RecentFile? recentFile) {
+  void _rememberFile(RememberedFile? recentFile) {
     if (recentFile == null) {
       return;
     }
-    addRecentFile(recentFile);
+    addRecentFiles([recentFile]);
     debugPrint('Saving file ID to state');
-    bucket?.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
+    bucket?.write<String>(kRestoreOpenFileIdKey, recentFile.identifier);
   }
 }
 
@@ -176,7 +173,7 @@ class _KeyboardShortcuts extends StatelessWidget {
     return CallbackShortcuts(
       bindings: {
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO):
-            () => _loadAndRememberFile(context, pickFile()),
+            () => loadAndRememberFile(context, pickFile()),
       },
       child: Focus(autofocus: true, child: child),
     );
@@ -229,282 +226,6 @@ class _EmptyBody extends StatelessWidget {
   }
 }
 
-class _RecentFilesBody extends StatelessWidget {
-  const _RecentFilesBody();
-
-  @override
-  Widget build(BuildContext context) {
-    final recentFiles = RecentFiles.of(context);
-    final sortedFiles =
-        recentFiles.list..sort((a, b) {
-          final result = switch (recentFiles.sortKey) {
-            RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(
-              b.lastOpened,
-            ),
-            RecentFilesSortKey.name => a.name.compareTo(b.name),
-            RecentFilesSortKey.location => (_appName(context, a.uri) ?? a.uri)
-                .compareTo(_appName(context, b.uri) ?? b.uri),
-          };
-          return recentFiles.sortOrder == SortOrder.ascending
-              ? result
-              : -result;
-        });
-    // We let ListView fill the viewport and constrain its children so that the
-    // list can be scrolled even by the edges of the view.
-    return ListView.builder(
-      itemCount: sortedFiles.length + 1,
-      itemBuilder: (context, idx) {
-        if (idx == 0) {
-          return _constrain(
-            ListHeader(
-              title: Text(
-                AppLocalizations.of(context)!.sectionHeaderRecentFiles,
-              ),
-              trailing: _RecentFilesListSortControl(),
-            ),
-          );
-        } else {
-          final recentFile = sortedFiles[idx - 1];
-          return _constrain(_RecentFileListTile(recentFile));
-        }
-      },
-    );
-  }
-
-  Widget _constrain(Widget child) => Center(
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 600),
-      child: child,
-    ),
-  );
-}
-
-class _RecentFilesListSortControl extends StatelessWidget {
-  const _RecentFilesListSortControl();
-
-  @override
-  Widget build(BuildContext context) {
-    final prefs = Preferences.of(context, PrefsAspect.recentFiles);
-    final sortKey = prefs.recentFilesSortKey;
-    final sortOrder = prefs.recentFilesSortOrder;
-    final iconSize = 16.0;
-    final iconColor = Theme.of(context).hintColor;
-    return TextButton(
-      onPressed: () async {
-        final result = await showDialog<(RecentFilesSortKey, SortOrder)>(
-          context: context,
-          builder:
-              (context) =>
-                  RecentFilesSortDialog(sortKey: sortKey, sortOrder: sortOrder),
-        );
-        if (result case (final key, final newOrder)) {
-          await prefs.setRecentFilesSortKey(key);
-          await prefs.setRecentFilesSortOrder(newOrder);
-        }
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            switch (sortKey) {
-              RecentFilesSortKey.lastOpened => Icons.access_time,
-              RecentFilesSortKey.name => Icons.sort_by_alpha,
-              RecentFilesSortKey.location => Icons.folder,
-            },
-            size: iconSize,
-            color: iconColor,
-          ),
-          Icon(
-            switch (sortOrder) {
-              SortOrder.ascending => Icons.arrow_upward,
-              SortOrder.descending => Icons.arrow_downward,
-            },
-            size: iconSize,
-            color: iconColor,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Do not make format object a constant because it will break dynamic UI
-// language switching
-String _formatLastOpenedDate(DateTime date, String locale) =>
-    DateFormat.yMd(locale).add_jm().format(date);
-
-String? _appName(BuildContext context, String uriString) {
-  final uri = Uri.tryParse(uriString);
-  if (uri == null) return null;
-  // On Android we can reliably get the package name from the URI. On iOS,
-  // iCloud Drive has a distinguishable path, but all apps are in
-  // /private/var/mobile/Containers/Shared/AppGroup/GUID where the GUID is
-  // device-specific so we have no chance.
-  //
-  // Supposedly we can get the human-readable app names on Android, but it
-  // requires an invasive permission:
-  // https://developer.android.com/training/package-visibility
-  return switch (uri.scheme) {
-    'content' => switch (uri.host) {
-      'org.nextcloud.documents' => 'Nextcloud',
-      'com.google.android.apps.docs.storage' =>
-        AppLocalizations.of(context)!.fileSourceGoogleDrive,
-      'com.seafile.seadroid2.documents' => 'Seafile',
-      'com.termux.documents' => 'Termux',
-      'com.android.externalstorage.documents' =>
-        AppLocalizations.of(context)!.fileSourceDocuments,
-      'com.android.providers.downloads.documents' =>
-        AppLocalizations.of(context)!.fileSourceDownloads,
-      'com.dropbox.product.android.dbapp.document_provider.documents' =>
-        'Dropbox',
-      _ => uri.host,
-    },
-    'file' =>
-      uri.path.startsWith(
-            '/private/var/mobile/Library/Mobile%20Documents/com~apple~CloudDocs/',
-          )
-          ? 'iCloud Drive'
-          : null,
-    _ => null,
-  };
-}
-
-class _RecentFileListTile extends StatelessWidget {
-  const _RecentFileListTile(this.recentFile);
-
-  final RecentFile recentFile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(recentFile),
-      onDismissed: (_) => RecentFiles.of(context).remove(recentFile),
-      background: const _SwipeDeleteBackground(alignment: Alignment.centerLeft),
-      secondaryBackground: const _SwipeDeleteBackground(
-        alignment: Alignment.centerRight,
-      ),
-      child: ListTile(
-        leading: const Icon(Icons.insert_drive_file),
-        title: Text(recentFile.name),
-        subtitle: Row(
-          children: [
-            Icon(
-              Icons.access_time,
-              size: Theme.of(context).textTheme.bodyMedium?.fontSize,
-              applyTextScaling: true,
-            ),
-            const SizedBox(width: 2),
-            Text(
-              _formatLastOpenedDate(
-                recentFile.lastOpened,
-                AppLocalizations.of(context)!.localeName,
-              ),
-              style: const TextStyle(
-                fontFeatures: [FontFeature.tabularFigures()],
-              ),
-            ),
-            ...(() sync* {
-              final appName = _appName(context, recentFile.uri);
-              if (appName != null) {
-                yield const SizedBox(width: 8);
-                yield Icon(
-                  Icons.folder_outlined,
-                  size: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  applyTextScaling: true,
-                );
-                yield const SizedBox(width: 2);
-                yield Expanded(
-                  child: Text(
-                    appName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }
-            })(),
-          ],
-        ),
-        onTap:
-            () async => _loadAndRememberFile(
-              context,
-              readFileWithIdentifier(recentFile.identifier),
-            ),
-      ),
-    );
-  }
-}
-
-class _SwipeDeleteBackground extends StatelessWidget {
-  const _SwipeDeleteBackground({required this.alignment});
-
-  final AlignmentGeometry alignment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: alignment,
-      padding: const EdgeInsets.all(24),
-      color: Colors.red,
-      child: Icon(
-        Icons.delete,
-        color: Theme.of(context).colorScheme.onSecondary,
-      ),
-    );
-  }
-}
-
-Future<RecentFile?> _loadFile(
-  BuildContext context,
-  FutureOr<NativeDataSource?> dataSource, {
-  RestorationBucket? bucket,
-  InitialMode? mode,
-}) async {
-  bucket ??= RestorationScope.of(context);
-  final loaded = await loadDocument(
-    context,
-    dataSource,
-    onClose: () {
-      debugPrint('Clearing saved state from bucket $bucket');
-      bucket!.remove<String>(_kRestoreOpenFileIdKey);
-    },
-    mode: mode,
-  );
-  RecentFile? result;
-  if (loaded) {
-    final source = await dataSource;
-    if (source == null) {
-      // User canceled
-    } else {
-      if (source.persistable) {
-        result = RecentFile(
-          identifier: source.identifier,
-          name: source.name,
-          uri: source.uri,
-          lastOpened: DateTime.now(),
-        );
-      } else {
-        debugPrint('Couldn’t obtain persistent access to ${source.name}');
-      }
-    }
-  }
-  return result;
-}
-
-Future<void> _loadAndRememberFile(
-  BuildContext context,
-  FutureOr<NativeDataSource?> fileInfoFuture, {
-  InitialMode? mode,
-}) async {
-  final recentFiles = RecentFiles.of(context);
-  final bucket = RestorationScope.of(context);
-  final recentFile = await _loadFile(context, fileInfoFuture, mode: mode);
-  if (recentFile != null) {
-    recentFiles.add(recentFile);
-    debugPrint('Saving file ID to bucket $bucket');
-    bucket.write<String>(_kRestoreOpenFileIdKey, recentFile.identifier);
-  }
-}
-
 Future<void> _createAndOpenFile(BuildContext context) async {
   final fileName = await showDialog<String>(
     context: context,
@@ -513,7 +234,7 @@ Future<void> _createAndOpenFile(BuildContext context) async {
   if (fileName == null || !context.mounted) return;
   final orgFileName =
       fileName.toLowerCase().endsWith('.org') ? fileName : '$fileName.org';
-  return await _loadAndRememberFile(
+  return await loadAndRememberFile(
     context,
     createAndLoadFile(orgFileName),
     mode: InitialMode.edit,
@@ -530,7 +251,7 @@ class _PickFileButton extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
       ),
-      onPressed: () => _loadAndRememberFile(context, pickFile()),
+      onPressed: () => loadAndRememberFile(context, pickFile()),
       child: Text(AppLocalizations.of(context)!.buttonOpenFile),
     );
   }

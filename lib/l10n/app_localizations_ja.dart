@@ -111,6 +111,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'ピン留めされたファイル';
+
+  @override
   String get sectionHeaderRecentFiles => '最近のファイル';
 
   @override

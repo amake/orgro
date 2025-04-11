@@ -8,7 +8,7 @@ import 'package:orgro/src/preferences.dart';
 
 enum RecentFilesSortKey { lastOpened, name, location }
 
-extension RecentFileSortKeyPersistence on RecentFilesSortKey? {
+extension RecentFilesSortKeyPersistence on RecentFilesSortKey? {
   static RecentFilesSortKey? fromString(String? key) => switch (key) {
     _kRecentFilesSortKeyLastOpened => RecentFilesSortKey.lastOpened,
     _kRecentFilesSortKeyName => RecentFilesSortKey.name,
@@ -28,8 +28,8 @@ const _kRecentFilesSortKeyLastOpened = 'last_opened';
 const _kRecentFilesSortKeyName = 'name';
 const _kRecentFilesSortKeyLocation = 'location';
 
-class RecentFile {
-  RecentFile.fromJson(Map<String, dynamic> json)
+class RememberedFile {
+  RememberedFile.fromJson(Map<String, dynamic> json)
     : this(
         identifier: json['identifier'] as String,
         name: json['name'] as String,
@@ -39,27 +39,37 @@ class RecentFile {
         lastOpened: DateTime.fromMillisecondsSinceEpoch(
           json['lastOpened'] as int,
         ),
+        pinnedIdx: json['pinnedIdx'] as int? ?? -1,
       );
 
-  RecentFile({
+  const RememberedFile({
     required this.identifier,
     required this.name,
     required this.uri,
     required this.lastOpened,
-  });
+    this.pinnedIdx = -1,
+  }) : assert(
+         pinnedIdx == -1 || pinnedIdx >= 0,
+         'Pinned index must be -1 or >= 0',
+       );
 
   final String identifier;
   final String name;
   final String uri;
   final DateTime lastOpened;
+  final int pinnedIdx;
+
+  bool get isPinned => pinnedIdx != -1;
+  bool get isNotPinned => !isPinned;
 
   @override
   bool operator ==(Object other) =>
-      other is RecentFile &&
+      other is RememberedFile &&
       identifier == other.identifier &&
       name == other.name &&
       uri == other.uri &&
-      lastOpened == other.lastOpened;
+      lastOpened == other.lastOpened &&
+      pinnedIdx == other.pinnedIdx;
 
   @override
   int get hashCode => Object.hash(identifier, name, uri, lastOpened);
@@ -69,7 +79,22 @@ class RecentFile {
     'name': name,
     'uri': uri,
     'lastOpened': lastOpened.millisecondsSinceEpoch,
+    'pinnedIdx': pinnedIdx,
   };
+
+  RememberedFile copyWith({
+    String? identifier,
+    String? name,
+    String? uri,
+    DateTime? lastOpened,
+    int? pinnedIdx,
+  }) => RememberedFile(
+    identifier: identifier ?? this.identifier,
+    name: name ?? this.name,
+    uri: uri ?? this.uri,
+    lastOpened: lastOpened ?? this.lastOpened,
+    pinnedIdx: pinnedIdx ?? this.pinnedIdx,
+  );
 
   @override
   String toString() => 'RecentFile[$name:$_debugShortIdentifier]';
@@ -86,57 +111,55 @@ class RecentFile {
   }
 }
 
-class RecentFiles extends InheritedWidget {
-  const RecentFiles(
+class RememberedFiles extends InheritedWidget {
+  const RememberedFiles(
     this.list,
     this.sortKey,
     this.sortOrder, {
     required this.add,
     required this.remove,
+    required this.pin,
+    required this.unpin,
     required super.child,
     super.key,
   });
 
-  final List<RecentFile> list;
+  final List<RememberedFile> list;
   final RecentFilesSortKey sortKey;
   final SortOrder sortOrder;
-  final ValueChanged<RecentFile> add;
-  final ValueChanged<RecentFile> remove;
+  final ValueChanged<List<RememberedFile>> add;
+  final ValueChanged<RememberedFile> remove;
+  final ValueChanged<RememberedFile> pin;
+  final ValueChanged<RememberedFile> unpin;
 
-  List<RecentFile> get sortedList =>
-      list..sort((a, b) {
-        final result = switch (sortKey) {
-          RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(b.lastOpened),
-          RecentFilesSortKey.name => a.name.compareTo(b.name),
-          RecentFilesSortKey.location => a.uri.compareTo(b.uri),
-        };
-        return sortOrder == SortOrder.ascending ? result : -result;
-      });
+  List<RememberedFile> get pinned => list.where((f) => f.isPinned).toList();
+
+  List<RememberedFile> get recents => list.where((f) => f.isNotPinned).toList();
 
   @override
-  bool updateShouldNotify(RecentFiles oldWidget) =>
+  bool updateShouldNotify(RememberedFiles oldWidget) =>
       !listEquals(list, oldWidget.list) ||
       sortKey != oldWidget.sortKey ||
       sortOrder != oldWidget.sortOrder;
 
-  static RecentFiles of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<RecentFiles>()!;
+  static RememberedFiles of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<RememberedFiles>()!;
 }
 
 mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.recentFiles);
-  List<RecentFile> get _recentFiles => _prefs.recentFiles;
+  List<RememberedFile> get _rememberedFiles => _prefs.rememberedFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
 
-  bool get hasRecentFiles => _recentFiles.isNotEmpty;
+  bool get hasRememberedFiles => _rememberedFiles.isNotEmpty;
 
-  void addRecentFile(RecentFile newFile) {
-    debugPrint('Adding recent file: $newFile');
-    _prefs.addRecentFile(newFile);
+  void addRecentFiles(List<RememberedFile> newFiles) {
+    debugPrint('Adding recent files: $newFiles');
+    _prefs.addRecentFiles(newFiles);
   }
 
-  Future<void> removeRecentFile(RecentFile recentFile) async {
+  Future<void> removeRecentFile(RememberedFile recentFile) async {
     debugPrint('Removing recent file: $recentFile');
     try {
       await disposeNativeSourceIdentifier(recentFile.identifier);
@@ -144,6 +167,14 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
       logError(e, s);
     }
     _prefs.removeRecentFile(recentFile);
+  }
+
+  void pinFile(RememberedFile recentFile) {
+    _prefs.pinFile(recentFile);
+  }
+
+  void unpinFile(RememberedFile recentFile) {
+    _prefs.unpinFile(recentFile);
   }
 
   @override
@@ -176,13 +207,15 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     }
   }
 
-  Widget buildWithRecentFiles({required WidgetBuilder builder}) {
-    return RecentFiles(
-      _recentFiles,
+  Widget buildWithRememberedFiles({required WidgetBuilder builder}) {
+    return RememberedFiles(
+      _rememberedFiles,
       _prefs.recentFilesSortKey,
       _prefs.recentFilesSortOrder,
-      add: addRecentFile,
+      add: addRecentFiles,
       remove: removeRecentFile,
+      pin: pinFile,
+      unpin: unpinFile,
       // Builder required to get RecentFiles into context
       child: Builder(builder: builder),
     );

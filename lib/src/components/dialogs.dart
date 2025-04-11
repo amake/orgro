@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
-import 'package:orgro/src/components/recent_files.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
