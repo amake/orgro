@@ -67,6 +67,9 @@
 		97C147021CF9000F007C117D /* Info-Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Debug.plist"; sourceTree = "<group>"; };
 		C42757302C8490AE00E74B62 /* LineReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineReader.swift; sourceTree = "<group>"; };
 		C42757312C8490AE00E74B62 /* NativeSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeSearch.swift; sourceTree = "<group>"; };
+		C47453672DB1297E0065AA13 /* Runner-release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-release.entitlements"; sourceTree = "<group>"; };
+		C47453682DB136A00065AA13 /* Runner-debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-debug.entitlements"; sourceTree = "<group>"; };
+		C47453692DB136A00065AA13 /* Runner-profile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-profile.entitlements"; sourceTree = "<group>"; };
 		C4C13FA82761C6B000C59B99 /* Info-Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Release.plist"; sourceTree = "<group>"; };
 		C4C13FA92761C74200C59B99 /* Info-Profile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Profile.plist"; sourceTree = "<group>"; };
 		C4E0B88E2B3C4E840058873A /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +153,9 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				C47453682DB136A00065AA13 /* Runner-debug.entitlements */,
+				C47453692DB136A00065AA13 /* Runner-profile.entitlements */,
+				C47453672DB1297E0065AA13 /* Runner-release.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -238,7 +244,6 @@
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 72MM6F63T6;
 						LastSwiftMigration = 1100;
 					};
 					C4E0B88D2B3C4E840058873A = {
@@ -510,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Runner/Runner-profile.entitlements";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 72MM6F63T6;
 				DISPLAY_NAME = "Orgro🚀";
@@ -528,7 +534,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.profile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.profile1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -650,6 +656,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Runner/Runner-debug.entitlements";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 72MM6F63T6;
 				DISPLAY_NAME = "Orgro🐞";
@@ -668,7 +675,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.debug1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -683,6 +690,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Runner/Runner-release.entitlements";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 72MM6F63T6;
 				DISPLAY_NAME = Orgro;

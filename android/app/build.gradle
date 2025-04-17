@@ -36,7 +36,10 @@ android {
         versionName flutter.versionName
         // No need to list base locale (en)
         resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de']
-        manifestPlaceholders += [displayName: '@string/app_name']
+        manifestPlaceholders += [
+            displayName: '@string/app_name',
+            appLinkHost: '@string/app_link_host'
+        ]
     }
 
     signingConfigs {
@@ -51,11 +54,17 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            manifestPlaceholders += [displayName: '@string/app_name_debug']
+            manifestPlaceholders += [
+                displayName: '@string/app_name_debug',
+                appLinkHost: '@string/app_link_host_debug'
+            ]
         }
         profile {
             applicationIdSuffix '.profile'
-            manifestPlaceholders += [displayName: '@string/app_name_profile']
+            manifestPlaceholders += [
+                displayName: '@string/app_name_profile',
+                appLinkHost: '@string/app_link_host_profile'
+            ]
         }
         release {
             signingConfig signingConfigs.release

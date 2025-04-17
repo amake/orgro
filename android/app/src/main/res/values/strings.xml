@@ -3,4 +3,7 @@
     <string name="app_name">Orgro</string>
     <string name="app_name_debug">Orgro🐞</string>
     <string name="app_name_profile">Orgro🚀</string>
+    <string name="app_link_host">orgro.org</string>
+    <string name="app_link_host_debug">debug.orgro.org</string>
+    <string name="app_link_host_profile">profile.orgro.org</string>
 </resources>
