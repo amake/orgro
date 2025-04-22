@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
@@ -357,4 +358,27 @@ class FilterData {
     Object.hashAll(priorities),
     customFilter,
   );
+
+  OrgQueryMatcher? asSparseQuery() {
+    if (isEmpty) return null;
+
+    return OrgQueryAndMatcher([
+      if (customFilter.isNotEmpty) OrgQueryMatcher.fromMarkup(customFilter),
+      ...keywords.map(
+        (value) => OrgQueryPropertyMatcher(
+          property: 'TODO',
+          operator: '=',
+          value: value,
+        ),
+      ),
+      ...tags.map((value) => OrgQueryTagMatcher(value)),
+      ...priorities.map(
+        (value) => OrgQueryPropertyMatcher(
+          property: 'PRIORITY',
+          operator: '=',
+          value: value,
+        ),
+      ),
+    ]);
+  }
 }

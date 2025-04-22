@@ -155,6 +155,11 @@ extension StringExtension on String {
     if (endsWith('/')) return '$this$next';
     return '$this/$next';
   }
+
+  RegExp asRegex() {
+    final escaped = RegExp.escape(this);
+    return RegExp(escaped, unicode: true, caseSensitive: false);
+  }
 }
 
 // Work around iOS paste permission dialog appearing on every paste. This should

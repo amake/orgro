@@ -11,6 +11,7 @@ import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/editor.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/serialization.dart';
+import 'package:orgro/src/util.dart';
 
 Future<bool> loadHttpUrl(BuildContext context, Uri uri) =>
     loadDocument(context, WebDataSource(uri));
@@ -110,8 +111,8 @@ class _DocumentPageWrapper extends StatelessWidget {
                       ? OrgSettings.hideMarkup
                       : const OrgSettings(),
               interpretEmbeddedSettings: true,
-              searchQuery: _searchPattern(viewSettings.queryString),
-              sparseQuery: _sparseQuery(viewSettings.filterData),
+              searchQuery: viewSettings.queryString?.asRegex(),
+              sparseQuery: viewSettings.filterData.asSparseQuery(),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame
               errorHandler:
@@ -134,40 +135,6 @@ class _DocumentPageWrapper extends StatelessWidget {
       ),
     );
   }
-}
-
-Pattern? _searchPattern(String? queryString) =>
-    queryString == null
-        ? null
-        : RegExp(
-          RegExp.escape(queryString),
-          unicode: true,
-          caseSensitive: false,
-        );
-
-OrgQueryMatcher? _sparseQuery(FilterData filterData) {
-  if (filterData.isEmpty) {
-    return null;
-  }
-  return OrgQueryAndMatcher([
-    if (filterData.customFilter.isNotEmpty)
-      OrgQueryMatcher.fromMarkup(filterData.customFilter),
-    ...filterData.keywords.map(
-      (value) => OrgQueryPropertyMatcher(
-        property: 'TODO',
-        operator: '=',
-        value: value,
-      ),
-    ),
-    ...filterData.tags.map((value) => OrgQueryTagMatcher(value)),
-    ...filterData.priorities.map(
-      (value) => OrgQueryPropertyMatcher(
-        property: 'PRIORITY',
-        operator: '=',
-        value: value,
-      ),
-    ),
-  ]);
 }
 
 Future<OrgTree?> narrow(
@@ -204,8 +171,8 @@ Future<OrgTree?> narrow(
                           viewSettings.readerMode
                               ? OrgSettings.hideMarkup
                               : const OrgSettings(),
-                      searchQuery: _searchPattern(viewSettings.queryString),
-                      sparseQuery: _sparseQuery(viewSettings.filterData),
+                      searchQuery: viewSettings.queryString?.asRegex(),
+                      sparseQuery: viewSettings.filterData.asSparseQuery(),
                       restorationId: 'org_narrow_$layer:${dataSource.id}',
                       child: OrgLocator(
                         child: DocumentPage(
