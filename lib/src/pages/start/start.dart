@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
@@ -298,15 +299,13 @@ class _OrgroManualButton extends StatelessWidget {
 }
 
 void _openOrgroManual(BuildContext context) =>
-    loadAsset(context, 'assets/manual/orgro-manual.org');
+    loadAsset(context, LocalAssets.manual);
 
-void _openOrgManual(BuildContext context) => loadHttpUrl(
-  context,
-  Uri.parse('https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org'),
-);
+void _openOrgManual(BuildContext context) =>
+    loadHttpUrl(context, Uri.parse(RemoteAssets.orgManual));
 
 void _openTestFile(BuildContext context) =>
-    loadAsset(context, 'assets/test/test.org');
+    loadAsset(context, LocalAssets.testFile);
 
 void _openSettingsScreen(BuildContext context) => Navigator.push(
   context,
