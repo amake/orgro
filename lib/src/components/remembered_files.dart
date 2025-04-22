@@ -154,9 +154,17 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
 
   bool get hasRememberedFiles => _rememberedFiles.isNotEmpty;
 
-  void addRecentFiles(List<RememberedFile> newFiles) {
+  Future<void> addRecentFiles(List<RememberedFile> newFiles) async {
+    newFiles = newFiles
+        .map((newFile) {
+          final existingFile =
+              _rememberedFiles.where((f) => f.uri == newFile.uri).firstOrNull;
+          if (existingFile == null) return newFile;
+          return newFile.copyWith(pinnedIdx: existingFile.pinnedIdx);
+        })
+        .toList(growable: false);
     debugPrint('Adding recent files: $newFiles');
-    _prefs.addRecentFiles(newFiles);
+    await _prefs.addRecentFiles(newFiles);
   }
 
   Future<void> removeRecentFile(RememberedFile recentFile) async {

@@ -15,13 +15,8 @@ Future<void> loadAndRememberFile(
 }) async {
   final rememberedFiles = RememberedFiles.of(context);
   final bucket = RestorationScope.of(context);
-  var loadedFile = await loadFile(context, fileInfoFuture, mode: mode);
+  final loadedFile = await loadFile(context, fileInfoFuture, mode: mode);
   if (loadedFile != null) {
-    final existingFile =
-        rememberedFiles.list.where((f) => f.uri == loadedFile!.uri).firstOrNull;
-    if (existingFile != null) {
-      loadedFile = loadedFile.copyWith(pinnedIdx: existingFile.pinnedIdx);
-    }
     rememberedFiles.add([loadedFile]);
     debugPrint('Saving file ID to bucket $bucket');
     bucket.write<String>(kRestoreOpenFileIdKey, loadedFile.identifier);
