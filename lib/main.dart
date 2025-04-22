@@ -6,6 +6,7 @@ import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/theme.dart';
 
 void main() {
@@ -63,6 +64,9 @@ class _MyAppState extends State<_MyApp> {
     theme: orgroLightTheme,
     darkTheme: orgroDarkTheme,
     themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
+    // We don't make the home a named route because then for some reason it
+    // doesn't get set up with RestorationScope
     home: const StartPage(),
+    onGenerateRoute: onGenerateRoute,
   );
 }

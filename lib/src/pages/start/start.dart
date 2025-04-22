@@ -8,16 +8,15 @@ import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
-import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
-import 'package:orgro/src/pages/settings.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
 class StartPage extends StatefulWidget {
@@ -125,13 +124,11 @@ class _StartPageState extends State<StartPage>
   Future<bool> loadFileFromPlatform(NativeDataSource info) async {
     // We can't use _loadAndRememberFile because RecentFiles is not in this
     // context
-    final recentFile = await loadFile(context, info);
-    if (recentFile != null) {
-      _rememberFile(recentFile);
-      return true;
-    } else {
-      return false;
-    }
+    await _rememberFile(info);
+    final context = this.context;
+    if (!context.mounted) return false;
+    await loadFile(context, info);
+    return true;
   }
 
   @override
@@ -145,21 +142,24 @@ class _StartPageState extends State<StartPage>
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final recentFile = await loadFile(
-          context,
-          readFileWithIdentifier(restoreId),
-          bucket: bucket,
-        );
-        _rememberFile(recentFile);
+        final dataSource = await readFileWithIdentifier(restoreId);
+        final context = this.context;
+        await _rememberFile(dataSource);
+        if (!context.mounted) return;
+        await loadFile(context, dataSource, bucket: bucket);
       });
     }
   }
 
-  void _rememberFile(RememberedFile? recentFile) {
-    if (recentFile == null) {
-      return;
-    }
-    addRecentFiles([recentFile]);
+  Future<void> _rememberFile(NativeDataSource dataSource) async {
+    final recentFile = RememberedFile(
+      identifier: dataSource.identifier,
+      name: dataSource.name,
+      uri: dataSource.uri,
+      lastOpened: DateTime.now(),
+    );
+
+    await addRecentFiles([recentFile]);
     debugPrint('Saving file ID to state');
     bucket?.write<String>(kRestoreOpenFileIdKey, recentFile.identifier);
   }
@@ -307,15 +307,8 @@ void _openOrgManual(BuildContext context) =>
 void _openTestFile(BuildContext context) =>
     loadAsset(context, LocalAssets.testFile);
 
-void _openSettingsScreen(BuildContext context) => Navigator.push(
-  context,
-  MaterialPageRoute<void>(
-    builder:
-        (context) =>
-            ViewSettings.defaults(context, child: const SettingsPage()),
-    fullscreenDialog: true,
-  ),
-);
+void _openSettingsScreen(BuildContext context) =>
+    Navigator.pushNamed(context, Routes.settings);
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();

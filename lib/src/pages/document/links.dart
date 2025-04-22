@@ -116,7 +116,8 @@ extension LinkHandler on DocumentPageState {
       );
       return false;
     } else {
-      return await loadDocument(context, foundFile, target: url);
+      await loadDocument(context, foundFile, target: url);
+      return true;
     }
   }
 
@@ -146,7 +147,8 @@ extension LinkHandler on DocumentPageState {
         Navigator.pop(context);
         popped = true;
         if (fileLink.body.endsWith('.org')) {
-          return await loadDocument(context, resolved, target: fileLink.extra);
+          await loadDocument(context, resolved, target: fileLink.extra);
+          return true;
         } else if (looksLikeImagePath(fileLink.body)) {
           await showInteractive(
             context,

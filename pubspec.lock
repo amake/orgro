@@ -140,11 +140,9 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: directory-picker
-      resolved-ref: "641fad56c557e0f5fc1c61d847a1a266b2e44c34"
-      url: "https://github.com/amake/file_picker_writable.git"
-    source: git
+      path: "../file_picker_writable"
+      relative: true
+    source: path
     version: "2.1.0+1"
   fixnum:
     dependency: transitive
@@ -240,10 +238,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: c200fd79c918a40c5cd50ea0877fa13f81bdaf6f0a5d3dbcc2a13e3285d6aa1b
+      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.17"
+    version: "2.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -490,10 +488,10 @@ packages:
     dependency: "direct main"
     description:
       name: openpgp
-      sha256: "9a3f60021446e315477180bdf0f20cd53ca94a3aa898bddd5c48319ad1391e27"
+      sha256: c7ee63baa9c3d5e10245a3b040203338a96be0429da087ef1b2a75f68fcc0b08
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.1"
+    version: "3.10.3"
   org_flutter:
     dependency: "direct main"
     description:
@@ -506,10 +504,10 @@ packages:
     dependency: transitive
     description:
       name: org_parser
-      sha256: c2748dc07be1eb84b71031a623c57ef38a5de537145115f39b108f76f43be973
+      sha256: "2eb8ba9021423dca9ae021282cdb86df366dee6b099eeca07a3d7291189142b4"
       url: "https://pub.dev"
     source: hosted
-    version: "9.7.1"
+    version: "9.7.2"
   path:
     dependency: transitive
     description:
@@ -538,10 +536,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "0ca7359dad67fd7063cb2892ab0c0737b2daafd807cf1acecd62374c8fae6c12"
+      sha256: d0d310befe2c8ab9e7f393288ccbb11b60c019c6b5afc21973eeee4dda2b35e9
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.16"
+    version: "2.2.17"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -658,10 +656,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: c2c8c46297b5d6a80bed7741ec1f2759742c77d272f1a1698176ae828f8e1a18
+      sha256: "20cbd561f743a342c76c151d6ddb93a9ce6005751e7aa458baad3858bfbfb6ac"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.9"
+    version: "2.4.10"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -839,10 +837,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "1d0eae19bd7606ef60fe69ef3b312a437a16549476c42321d5dc1506c9ca3bf4"
+      sha256: "8582d7f6fe14d2652b4c45c9b6c14c0b678c2af2d083a11b604caeba51930d79"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.15"
+    version: "6.3.16"
   url_launcher_ios:
     dependency: transitive
     description:
