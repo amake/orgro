@@ -66,6 +66,14 @@ keystore-check:
 	$(if $(wildcard $(keyStore)),,$(error keyStore not found))
 	@exit 0
 
+dryrun := --dryrun
+config_get = awk -F ' = ' '/^$(1) *=/ {print $$2}' config.ini
+
+.PHONY: deploy-web-assets
+deploy-web-assets:
+	deploy_path=s3://$$($(call config_get,deploy_bucket)) && \
+	aws s3 cp $(dryrun) --recursive --exclude '*~' --exclude .DS_Store assets/web $$deploy_path
+
 .PHONY: help
 help: ## Show this help text
 	$(info usage: make [target])
