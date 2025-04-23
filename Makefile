@@ -74,6 +74,15 @@ deploy-web-assets:
 	deploy_path=s3://$$($(call config_get,deploy_bucket)) && \
 	aws s3 cp $(dryrun) --recursive --exclude '*~' --exclude .DS_Store assets/web $$deploy_path
 
+app_site_cdn := https://app-site-association.cdn-apple.com/a/v1
+check_app_site = diff <(curl -s $(app_site_cdn)/$(2)) ./assets/web/$(1)/.well-known/apple-app-site-association
+
+.PHONY: web-assets-check
+web-assets-check:
+	$(call check_app_site,debug,debug.orgro.org)
+	$(call check_app_site,profile,profile.orgro.org)
+	$(call check_app_site,release,orgro.org)
+
 .PHONY: help
 help: ## Show this help text
 	$(info usage: make [target])
