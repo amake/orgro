@@ -29,8 +29,7 @@ void main() {
   clearTemporaryAttachments();
 }
 
-Widget buildApp() =>
-    const SharedPreferencesProvider(waiting: _Splash(), child: _MyApp());
+Widget buildApp() => const Preferences(child: _MyApp());
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load
@@ -50,18 +49,27 @@ class _MyApp extends StatelessWidget {
   const _MyApp();
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    restorationScopeId: 'orgro_root',
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    debugShowCheckedModeBanner: !kScreenshotMode,
-    onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-    theme: orgroLightTheme,
-    darkTheme: orgroDarkTheme,
-    themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
-    // We don't make the home a named route because then for some reason it
-    // doesn't get set up with RestorationScope
-    home: const StartPage(),
-    onGenerateRoute: onGenerateRoute,
-  );
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      restorationScopeId: 'orgro_root',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      debugShowCheckedModeBanner: !kScreenshotMode,
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+      theme: orgroLightTheme,
+      darkTheme: orgroDarkTheme,
+      themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
+      home: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child:
+            Preferences.of(context, PrefsAspect.init).isInitialized
+                ? const StartPage()
+                : const _Splash(),
+        transitionBuilder:
+            (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+      ),
+      onGenerateRoute: onGenerateRoute,
+    );
+  }
 }
