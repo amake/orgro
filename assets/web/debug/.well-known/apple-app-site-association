@@ -6,12 +6,12 @@
         "appIDs": [
           "72MM6F63T6.com.madlonkay.orgro.debug1"
         ],
-        "paths": [
-          "*"
-        ],
         "components": [
           {
-            "/": "/*"
+            "/": "/manual"
+          },
+          {
+            "/": "/web"
           }
         ]
       }
