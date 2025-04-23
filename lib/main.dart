@@ -46,14 +46,9 @@ class _Splash extends StatelessWidget {
   }
 }
 
-class _MyApp extends StatefulWidget {
+class _MyApp extends StatelessWidget {
   const _MyApp();
 
-  @override
-  State createState() => _MyAppState();
-}
-
-class _MyAppState extends State<_MyApp> {
   @override
   Widget build(BuildContext context) => MaterialApp(
     restorationScopeId: 'orgro_root',
