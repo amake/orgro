@@ -49,7 +49,7 @@ build:
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: dirty-check keystore-check format-check l10n-check test build
+release: dirty-check keystore-check format-check l10n-check web-assets-deploy-check test build
 	open -a Transporter build/ios/ipa/Orgro.ipa
 
 .PHONY: release-wait
@@ -74,14 +74,22 @@ deploy-web-assets:
 	deploy_path=s3://$$($(call config_get,deploy_bucket)) && \
 	aws s3 cp $(dryrun) --recursive --exclude '*~' --exclude .DS_Store assets/web $$deploy_path
 
-app_site_cdn := https://app-site-association.cdn-apple.com/a/v1
-check_app_site = diff <(curl -s $(app_site_cdn)/$(2)) ./assets/web/$(1)/.well-known/apple-app-site-association
+check_web_asset_deploy = cd ./assets/web/$(1)/ && find . -type f ! -name '*~' -print0 | xargs -0 -I % $(SHELL) -c 'diff <(curl -s https://$(2)/%) %'
 
-.PHONY: web-assets-check
-web-assets-check:
-	$(call check_app_site,debug,debug.orgro.org)
-	$(call check_app_site,profile,profile.orgro.org)
-	$(call check_app_site,release,orgro.org)
+.PHONY: web-assets-deploy-check
+web-assets-deploy-check:
+	$(call check_web_asset_deploy,debug,debug.orgro.org)
+	$(call check_web_asset_deploy,profile,profile.orgro.org)
+	$(call check_web_asset_deploy,release,orgro.org)
+
+app_site_cdn := https://app-site-association.cdn-apple.com/a/v1
+check_app_site_cdn = diff <(curl -s $(app_site_cdn)/$(2)) ./assets/web/$(1)/.well-known/apple-app-site-association
+
+.PHONY: web-assets-cdn-check
+web-assets-cdn-check:
+	$(call check_app_site_cdn,debug,debug.orgro.org)
+	$(call check_app_site_cdn,profile,profile.orgro.org)
+	$(call check_app_site_cdn,release,orgro.org)
 
 .PHONY: help
 help: ## Show this help text
