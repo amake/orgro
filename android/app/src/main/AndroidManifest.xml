@@ -37,7 +37,6 @@
                 <data android:scheme="https" />
                 <data android:host="${appLinkHost}" />
                 <data android:pathPrefix="/manual" />
-                <data android:pathPrefix="/web" />
             </intent-filter>
 
             <!-- See https://stackoverflow.com/a/31028507/448068 -->

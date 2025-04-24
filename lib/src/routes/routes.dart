@@ -13,7 +13,6 @@ class Routes {
   static const settings = '/settings';
   static const manual = '/manual';
   static const narrow = '/narrow';
-  static const web = '/web';
 }
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -32,15 +31,6 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return DocumentRoute(dataSource: AssetDataSource(LocalAssets.manual));
     case Routes.settings:
       return SettingsRoute();
-    case Routes.web:
-      final target = uri.queryParameters['url'];
-      if (target != null) {
-        try {
-          return DocumentRoute(dataSource: WebDataSource(Uri.parse(target)));
-        } catch (e) {
-          debugPrint('Failed to parse "$target" as URI');
-        }
-      }
   }
 
   // We shouldn't be receiving any unknown paths here, but if the deep link
