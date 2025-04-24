@@ -64,17 +64,21 @@ class _StartPageState extends State<StartPage>
       onSelected: (callback) => callback(),
       itemBuilder:
           (context) => [
-            PopupMenuItem<VoidCallback>(
-              value: () => _openSettingsScreen(context),
-              child: Text(AppLocalizations.of(context)!.menuItemSettings),
-            ),
             if (hasRememberedFiles) ...[
-              const PopupMenuDivider(),
+              PopupMenuItem<VoidCallback>(
+                value: () => _promptAndOpenUrl(context),
+                child: Text(AppLocalizations.of(context)!.menuItemOpenUrl),
+              ),
               PopupMenuItem<VoidCallback>(
                 value: () => _openOrgroManual(context),
                 child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
               ),
+              const PopupMenuDivider(),
             ],
+            PopupMenuItem<VoidCallback>(
+              value: () => _openSettingsScreen(context),
+              child: Text(AppLocalizations.of(context)!.menuItemSettings),
+            ),
             if (!kReleaseMode && !kScreenshotMode) ...[
               const PopupMenuDivider(),
               if (hasRememberedFiles)
@@ -209,6 +213,8 @@ class _EmptyBody extends StatelessWidget {
                   const SizedBox(height: 16),
                   const _CreateFileButton(),
                   const SizedBox(height: 16),
+                  const _OpenUrlButton(),
+                  const SizedBox(height: 16),
                   const _OrgroManualButton(),
                   if (!kReleaseMode && !kScreenshotMode) ...[
                     const SizedBox(height: 16),
@@ -258,6 +264,15 @@ class _PickFileButton extends StatelessWidget {
   }
 }
 
+Future<void> _promptAndOpenUrl(BuildContext context) async {
+  final url = await showDialog<Uri>(
+    context: context,
+    builder: (context) => const InputUrlDialog(),
+  );
+  if (url == null || !context.mounted) return;
+  return await loadHttpUrl(context, url);
+}
+
 class _CreateFileButton extends StatelessWidget {
   const _CreateFileButton();
 
@@ -270,6 +285,22 @@ class _CreateFileButton extends StatelessWidget {
       ),
       onPressed: () => _createAndOpenFile(context),
       child: Text(AppLocalizations.of(context)!.buttonCreateFile),
+    );
+  }
+}
+
+class _OpenUrlButton extends StatelessWidget {
+  const _OpenUrlButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+      ),
+      onPressed: () => _promptAndOpenUrl(context),
+      child: Text(AppLocalizations.of(context)!.buttonOpenUrl),
     );
   }
 }

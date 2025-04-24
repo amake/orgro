@@ -33,6 +33,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemAbout => 'Über';
 
   @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
   String get appearanceModeAutomatic => 'Automatisch';
 
   @override
@@ -102,6 +105,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get buttonOpenOrgManual => 'Org Handbuch öffnen';
+
+  @override
+  String get buttonOpenUrl => 'Open URL';
 
   @override
   String get buttonSupport => 'Hilfe · Feedback';
@@ -363,6 +369,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get createFileDefaultName => 'unbetitelt.org';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
 
   @override
   String get startTimePickerTitle => 'Wähle Startzeit';

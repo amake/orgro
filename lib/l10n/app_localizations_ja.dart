@@ -33,6 +33,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemAbout => 'アプリについて';
 
   @override
+  String get menuItemOpenUrl => 'URLを開く';
+
+  @override
   String get appearanceModeAutomatic => '自動';
 
   @override
@@ -101,6 +104,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get buttonOpenOrgManual => 'Orgマニュアルを開く';
+
+  @override
+  String get buttonOpenUrl => 'URLを開く';
 
   @override
   String get buttonSupport => 'サポート・お問い合わせ';
@@ -347,6 +353,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get createFileDefaultName => '名称未設定.org';
+
+  @override
+  String get inputUrlDialogTitle => 'URLを入力';
 
   @override
   String get startTimePickerTitle => '開始時間の選択';

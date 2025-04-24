@@ -33,6 +33,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemAbout => 'Про застосунок';
 
   @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
   String get appearanceModeAutomatic => 'Автоматичний';
 
   @override
@@ -101,6 +104,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get buttonOpenOrgManual => 'Відкрити Посібник Org';
+
+  @override
+  String get buttonOpenUrl => 'Open URL';
 
   @override
   String get buttonSupport => 'Підтримка · Зворотній звʼязок';
@@ -362,6 +368,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
 
   @override
   String get startTimePickerTitle => 'Select start time';

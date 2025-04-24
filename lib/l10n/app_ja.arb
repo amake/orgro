@@ -8,6 +8,7 @@
   "menuItemOrgManual": "Orgマニュアル",
   "menuItemTestFile": "テストファイル",
   "menuItemAbout": "アプリについて",
+  "menuItemOpenUrl": "URLを開く",
 
   "appearanceModeAutomatic": "自動",
   "appearanceModeLight": "ライト",
@@ -39,6 +40,7 @@
   "buttonCreateFile": "ファイルを作成",
   "buttonOpenOrgroManual": "Orgroマニュアルを開く",
   "buttonOpenOrgManual": "Orgマニュアルを開く",
+  "buttonOpenUrl": "URLを開く",
 
   "buttonSupport": "サポート・お問い合わせ",
   "buttonVersion": "v{version}",
@@ -136,6 +138,8 @@
 
   "createFileDialogTitle": "ファイルを作成",
   "createFileDefaultName": "名称未設定.org",
+
+  "inputUrlDialogTitle": "URLを入力",
 
   "startTimePickerTitle": "開始時間の選択",
   "endTimePickerTitle": "終了時間の選択",
