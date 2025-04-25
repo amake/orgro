@@ -607,10 +607,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
     _controller.text = text;
   }
 
-  bool _isUrl(String text) {
-    final uri = Uri.tryParse(text);
-    return uri?.scheme.isNotEmpty == true;
-  }
+  bool _isUrl(String text) => Uri.tryParse(text)?.hasScheme == true;
 
   @override
   Widget build(BuildContext context) {
