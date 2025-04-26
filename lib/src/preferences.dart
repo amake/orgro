@@ -63,15 +63,23 @@ const kRecentFilesSortOrder = 'recent_files_sort_order';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
 
+bool _isTest = false;
+
 class Preferences extends StatefulWidget {
   static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
-      InheritedModel.inheritFrom<InheritedPreferences>(
-        context,
-        aspect: aspect,
-      )!;
+      _isTest
+          ? InheritedModel.inheritFrom<_MockPreferences>(
+            context,
+            aspect: aspect,
+          )!
+          : InheritedModel.inheritFrom<_AppPreferences>(
+            context,
+            aspect: aspect,
+          )!;
 
-  const Preferences({required this.child, super.key});
+  const Preferences({this.isTest = false, required this.child, super.key});
 
+  final bool isTest;
   final Widget child;
 
   @override
@@ -79,17 +87,30 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
-  final _prefs = SharedPreferencesAsync();
+  late SharedPreferencesAsync _prefs;
   var _inited = false;
   var _data = PreferencesData.defaults();
 
   @override
   void initState() {
     super.initState();
+    if (widget.isTest) {
+      _isTest = true;
+    } else {
+      _prefs = SharedPreferencesAsync();
+    }
     _loadFromPrefs();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    if (widget.isTest) _isTest = false;
+  }
+
   Future<void> _loadFromPrefs() async {
+    if (widget.isTest) return;
+
     await time('prefs migration', _doMigration);
     final data = await time(
       'prefs load',
@@ -122,13 +143,9 @@ class _PreferencesState extends State<Preferences> {
 
   @override
   Widget build(BuildContext context) {
-    return InheritedPreferences(
-      _data,
-      _inited,
-      _update,
-      _prefs,
-      child: widget.child,
-    );
+    return widget.isTest
+        ? _MockPreferences(_data, _update, child: widget.child)
+        : _AppPreferences(_data, _inited, _update, _prefs, child: widget.child);
   }
 }
 
@@ -144,20 +161,17 @@ enum PrefsAspect {
   nil,
 }
 
-class InheritedPreferences extends InheritedModel<PrefsAspect> {
-  const InheritedPreferences(
-    this.data,
-    this.isInitialized,
-    this._update,
-    this._prefs, {
-    required super.child,
-    super.key,
-  });
+abstract class InheritedPreferences extends InheritedModel<PrefsAspect> {
+  const InheritedPreferences({required super.child, super.key});
 
-  final PreferencesData data;
-  final bool isInitialized;
-  final SharedPreferencesAsync _prefs;
-  final void Function(PreferencesData Function(PreferencesData)) _update;
+  PreferencesData get data;
+  bool get isInitialized;
+  void Function(PreferencesData Function(PreferencesData)) get _update;
+
+  Future<void> reload();
+  Future<void> reset();
+
+  Future<void> _setOrRemove<T>(String key, T? value);
 
   @override
   bool updateShouldNotify(InheritedPreferences oldWidget) =>
@@ -181,12 +195,57 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
         dependencies,
       ) ||
       _updateShouldNotifyDependentCustomization(oldWidget, dependencies);
+}
 
+class _MockPreferences extends InheritedPreferences {
+  const _MockPreferences(this.data, this._update, {required super.child});
+
+  @override
+  final PreferencesData data;
+
+  @override
+  final isInitialized = true;
+
+  @override
+  final void Function(PreferencesData Function(PreferencesData)) _update;
+
+  @override
+  Future<void> reload() async => reset();
+
+  @override
+  Future<void> reset() async => _update((_) => PreferencesData.defaults());
+
+  @override
+  Future<void> _setOrRemove<T>(String key, T? value) async {}
+}
+
+class _AppPreferences extends InheritedPreferences {
+  const _AppPreferences(
+    this.data,
+    this.isInitialized,
+    this._update,
+    this._prefs, {
+    required super.child,
+  });
+
+  @override
+  final PreferencesData data;
+
+  @override
+  final bool isInitialized;
+
+  final SharedPreferencesAsync _prefs;
+
+  @override
+  final void Function(PreferencesData Function(PreferencesData)) _update;
+
+  @override
   Future<void> reload() async {
     final reloaded = await PreferencesData.fromSharedPreferences(_prefs);
     _update((_) => reloaded);
   }
 
+  @override
   Future<void> reset() async {
     for (final dir in accessibleDirs) {
       try {
@@ -200,6 +259,7 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
     _update((_) => cleared);
   }
 
+  @override
   Future<void> _setOrRemove<T>(String key, T? value) {
     if (value == null) {
       return _prefs.remove(key);
@@ -449,24 +509,23 @@ extension CustomizationExt on InheritedPreferences {
 }
 
 class PreferencesData {
-  factory PreferencesData.defaults() => const PreferencesData(
-    textScale: kDefaultTextScale,
-    fontFamily: kDefaultFontFamily,
-    readerMode: kDefaultReaderMode,
-    recentFiles: [],
-    recentFilesSortKey: kDefaultRecentFilesSortKey,
-    recentFilesSortOrder: kDefaultRecentFilesSortOrder,
-    themeMode: _kDefaultThemeMode,
-    remoteImagesPolicy: kDefaultRemoteImagesPolicy,
-    localLinksPolicy: kDefaultLocalLinksPolicy,
-    saveChangesPolicy: kDefaultSaveChangesPolicy,
-    decryptPolicy: kDefaultDecryptPolicy,
-    accessibleDirs: [],
-    customFilterQueries: [],
-    fullWidth: kDefaultFullWidth,
-    scopedPreferences: {},
-    textPreviewString: kDefaultTextPreviewString,
-  );
+  const PreferencesData.defaults()
+    : textScale = kDefaultTextScale,
+      fontFamily = kDefaultFontFamily,
+      readerMode = kDefaultReaderMode,
+      recentFiles = const [],
+      recentFilesSortKey = kDefaultRecentFilesSortKey,
+      recentFilesSortOrder = kDefaultRecentFilesSortOrder,
+      themeMode = _kDefaultThemeMode,
+      remoteImagesPolicy = kDefaultRemoteImagesPolicy,
+      localLinksPolicy = kDefaultLocalLinksPolicy,
+      saveChangesPolicy = kDefaultSaveChangesPolicy,
+      decryptPolicy = kDefaultDecryptPolicy,
+      accessibleDirs = const [],
+      customFilterQueries = const [],
+      fullWidth = kDefaultFullWidth,
+      scopedPreferences = const {},
+      textPreviewString = kDefaultTextPreviewString;
 
   static Future<PreferencesData> fromSharedPreferences(
     SharedPreferencesAsync prefs,

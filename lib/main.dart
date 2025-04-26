@@ -29,7 +29,8 @@ void main() {
   clearTemporaryAttachments();
 }
 
-Widget buildApp() => const Preferences(child: _MyApp());
+Widget buildApp({bool isTest = false}) =>
+    Preferences(isTest: isTest, child: const _MyApp());
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load
