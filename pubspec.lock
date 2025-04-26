@@ -490,10 +490,10 @@ packages:
     dependency: "direct main"
     description:
       name: openpgp
-      sha256: c7ee63baa9c3d5e10245a3b040203338a96be0429da087ef1b2a75f68fcc0b08
+      sha256: "549b3d04d2d5d95d5bb043de534f46b06b2fe759230f40951fcb98f2692a5669"
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.3"
+    version: "3.10.4"
   org_flutter:
     dependency: "direct main"
     description:
@@ -879,10 +879,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_web
-      sha256: "3ba963161bd0fe395917ba881d320b9c4f6dd3c4a233da62ab18a5025c85f1e9"
+      sha256: "4bd2b7b4dc4d4d0b94e5babfffbca8eac1a126c7f3d6ecbc1a11013faa3abba2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.1"
   url_launcher_windows:
     dependency: transitive
     description:
