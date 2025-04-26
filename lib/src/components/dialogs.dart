@@ -89,9 +89,8 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
                 );
                 if (markup == null) return;
 
-                final result = await Share.share(
-                  markup,
-                  sharePositionOrigin: origin,
+                final result = await SharePlus.instance.share(
+                  ShareParams(text: markup, sharePositionOrigin: origin),
                 );
 
                 // Don't close popup unless user successfully shared
