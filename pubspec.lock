@@ -140,9 +140,11 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      path: "../file_picker_writable"
-      relative: true
-    source: path
+      path: "."
+      ref: directory-picker
+      resolved-ref: c83adbbd610cdfab4511f7227529caf30029f37e
+      url: "https://github.com/amake/file_picker_writable.git"
+    source: git
     version: "2.1.0+1"
   fixnum:
     dependency: transitive
