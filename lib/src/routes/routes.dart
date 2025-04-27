@@ -4,6 +4,7 @@ import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/narrow.dart';
 import 'package:orgro/src/routes/settings.dart';
+import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Routes {
@@ -22,7 +23,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   final uri = Uri.tryParse(settings.name!);
   if (uri == null) return null;
 
-  switch (uri.path) {
+  switch (uri.path.trimSuff('/')) {
     case Routes.document:
       return DocumentRoute.fromSettings(settings);
     case Routes.narrow:

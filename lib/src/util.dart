@@ -128,6 +128,13 @@ extension StringExtension on String {
     return (substring(0, idx), substring(idx));
   }
 
+  String trimSuff(String suffix) {
+    if (endsWith(suffix)) {
+      return substring(0, length - suffix.length);
+    }
+    return this;
+  }
+
   String trimPrefSuff(String prefix, String suffix) {
     if (startsWith(prefix) && endsWith(suffix)) {
       return substring(prefix.length, length - suffix.length);
