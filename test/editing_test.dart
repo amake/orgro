@@ -16,19 +16,16 @@ void main() {
         );
       });
       test('insert below list item', () {
-        // TODO: Make it work even without the trailing new line?
-        expect(insertCheckboxAtPoint('- [ ] foo\n', 4), (
+        expect(insertCheckboxAtPoint('- [ ] foo', 4), (
           '''
 - [ ] foo
-- [ ]${' '}
-''',
+- [ ]${' '}''',
           16,
         ));
-        expect(insertCheckboxAtPoint('1. [ ] foo\n', 7), (
+        expect(insertCheckboxAtPoint('1. [ ] foo', 7), (
           '''
 1. [ ] foo
-2. [ ]${' '}
-''',
+2. [ ]${' '}''',
           18,
         ));
       });
