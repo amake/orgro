@@ -8,6 +8,7 @@
   "menuItemOrgManual": "Посібник Org",
   "menuItemTestFile": "Test File",
   "menuItemAbout": "Про застосунок",
+  "menuItemOpenUrl": "Open URL",
 
   "appearanceModeAutomatic": "Автоматичний",
   "appearanceModeLight": "Світлий",
@@ -39,6 +40,7 @@
   "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Відкрити Посібник Orgro",
   "buttonOpenOrgManual": "Відкрити Посібник Org",
+  "buttonOpenUrl": "Open URL",
 
   "buttonSupport": "Підтримка · Зворотній звʼязок",
   "buttonVersion": "в{version}",
@@ -136,6 +138,8 @@
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
+
+  "inputUrlDialogTitle": "Enter URL",
 
   "startTimePickerTitle": "Select start time",
   "endTimePickerTitle": "Select end time",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/remembered_files.dart';
@@ -88,9 +89,8 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
                 );
                 if (markup == null) return;
 
-                final result = await Share.share(
-                  markup,
-                  sharePositionOrigin: origin,
+                final result = await SharePlus.instance.share(
+                  ShareParams(text: markup, sharePositionOrigin: origin),
                 );
 
                 // Don't close popup unless user successfully shared
@@ -562,6 +562,74 @@ class _RecentFilesSortDialogState extends State<RecentFilesSortDialog> {
         ),
       ],
     );
+  }
+}
+
+class InputUrlDialog extends StatefulWidget {
+  const InputUrlDialog({super.key});
+
+  @override
+  State<InputUrlDialog> createState() => _InputUrlDialogState();
+}
+
+class _InputUrlDialogState extends State<InputUrlDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  bool _inited = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _maybeFillFromClipboard();
+      _inited = true;
+    }
+  }
+
+  void _maybeFillFromClipboard() async {
+    if (!await Clipboard.hasStrings()) return;
+    final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
+    final text = clipboard?.text;
+    if (text == null || !_isUrl(text)) return;
+    _controller.text = text;
+  }
+
+  bool _isUrl(String text) => Uri.tryParse(text)?.hasScheme == true;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.insert_link),
+      title: Text(AppLocalizations.of(context)!.inputUrlDialogTitle),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        onSubmitted: _confirm,
+        contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
+      ),
+    );
+  }
+
+  bool _validate(String value) {
+    if (value.isEmpty) return false;
+    return _isUrl(value);
+  }
+
+  Future<void> _confirm(String value) async {
+    if (!_validate(value)) return;
+    Navigator.pop(context, Uri.parse(value));
   }
 }
 

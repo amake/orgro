@@ -9,9 +9,9 @@ import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/file_picker.dart';
-import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/util/legacy_to_async_migration_util.dart';
 
 enum RemoteImagesPolicy { allow, deny, ask }
 
@@ -61,69 +61,81 @@ const kThemeModeKey = 'theme_mode';
 const kRecentFilesSortKey = 'recent_files_sort_key';
 const kRecentFilesSortOrder = 'recent_files_sort_order';
 
-class SharedPreferencesProvider extends StatefulWidget {
-  const SharedPreferencesProvider({
-    required this.child,
-    this.waiting,
-    super.key,
-  });
-  final Widget child;
-  final Widget? waiting;
+const _kMigrationCompletedKey = 'migration_completed_key';
 
-  @override
-  State<SharedPreferencesProvider> createState() =>
-      _SharedPreferencesProviderState();
-}
-
-class _SharedPreferencesProviderState extends State<SharedPreferencesProvider> {
-  late final Future<SharedPreferences> _instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _instance = SharedPreferences.getInstance();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<SharedPreferences>(
-      future: _instance,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Preferences(prefs: snapshot.data!, child: widget.child);
-        } else if (snapshot.hasError) {
-          return ErrorPage(error: snapshot.error.toString());
-        } else {
-          return widget.waiting ?? const SizedBox.shrink();
-        }
-      },
-    );
-  }
-}
+bool _isTest = false;
 
 class Preferences extends StatefulWidget {
   static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
-      InheritedModel.inheritFrom<InheritedPreferences>(
-        context,
-        aspect: aspect,
-      )!;
+      _isTest
+          ? InheritedModel.inheritFrom<_MockPreferences>(
+            context,
+            aspect: aspect,
+          )!
+          : InheritedModel.inheritFrom<_AppPreferences>(
+            context,
+            aspect: aspect,
+          )!;
 
-  const Preferences({required this.prefs, required this.child, super.key});
+  const Preferences({this.isTest = false, required this.child, super.key});
 
+  final bool isTest;
   final Widget child;
-  final SharedPreferences prefs;
 
   @override
   State<Preferences> createState() => _PreferencesState();
 }
 
 class _PreferencesState extends State<Preferences> {
-  late PreferencesData _data;
+  late SharedPreferencesAsync _prefs;
+  var _inited = false;
+  var _data = PreferencesData.defaults();
 
   @override
   void initState() {
     super.initState();
-    _data = PreferencesData.fromSharedPreferences(widget.prefs);
+    if (widget.isTest) {
+      _isTest = true;
+    } else {
+      _prefs = SharedPreferencesAsync();
+    }
+    _loadFromPrefs();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (widget.isTest) _isTest = false;
+  }
+
+  Future<void> _loadFromPrefs() async {
+    if (widget.isTest) return;
+
+    await time('prefs migration', _doMigration);
+    final data = await time(
+      'prefs load',
+      () => PreferencesData.fromSharedPreferences(_prefs),
+    );
+    setState(() {
+      _data = data;
+      _inited = true;
+    });
+  }
+
+  Future<void> _doMigration() async {
+    if (await _prefs.containsKey(_kMigrationCompletedKey)) {
+      // Simply instantiating the legacy instance forces a read of all data, so
+      // we avoid by doing the same check as the migration function does
+      // internally.
+      return;
+    }
+    final legacyInstance = await SharedPreferences.getInstance();
+    await migrateLegacySharedPreferencesToSharedPreferencesAsyncIfNecessary(
+      legacySharedPreferencesInstance: legacyInstance,
+      sharedPreferencesAsyncOptions: SharedPreferencesOptions(),
+      migrationCompletedKey: _kMigrationCompletedKey,
+    );
+    debugPrint('Migration completed successfully');
   }
 
   void _update(PreferencesData Function(PreferencesData) transform) =>
@@ -131,16 +143,14 @@ class _PreferencesState extends State<Preferences> {
 
   @override
   Widget build(BuildContext context) {
-    return InheritedPreferences(
-      _data,
-      _update,
-      widget.prefs,
-      child: widget.child,
-    );
+    return widget.isTest
+        ? _MockPreferences(_data, _update, child: widget.child)
+        : _AppPreferences(_data, _inited, _update, _prefs, child: widget.child);
   }
 }
 
 enum PrefsAspect {
+  init,
   appearance,
   recentFiles,
   viewSettings,
@@ -151,28 +161,28 @@ enum PrefsAspect {
   nil,
 }
 
-class InheritedPreferences extends InheritedModel<PrefsAspect> {
-  const InheritedPreferences(
-    this.data,
-    this._update,
-    this._prefs, {
-    required super.child,
-    super.key,
-  });
+abstract class InheritedPreferences extends InheritedModel<PrefsAspect> {
+  const InheritedPreferences({required super.child, super.key});
 
-  final PreferencesData data;
-  final SharedPreferences _prefs;
-  final void Function(PreferencesData Function(PreferencesData)) _update;
+  PreferencesData get data;
+  bool get isInitialized;
+  void Function(PreferencesData Function(PreferencesData)) get _update;
+
+  Future<void> reload();
+  Future<void> reset();
+
+  Future<void> _setOrRemove<T>(String key, T? value);
 
   @override
   bool updateShouldNotify(InheritedPreferences oldWidget) =>
-      data != oldWidget.data;
+      isInitialized != oldWidget.isInitialized || data != oldWidget.data;
 
   @override
   bool updateShouldNotifyDependent(
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
   ) =>
+      _updateShouldNotifyDependentInit(oldWidget, dependencies) ||
       _updateShouldNotifyDependentAppearance(oldWidget, dependencies) ||
       _updateShouldNotifyDependentRecentFiles(oldWidget, dependencies) ||
       _updateShouldNotifyDependentViewSettings(oldWidget, dependencies) ||
@@ -185,12 +195,57 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
         dependencies,
       ) ||
       _updateShouldNotifyDependentCustomization(oldWidget, dependencies);
+}
 
+class _MockPreferences extends InheritedPreferences {
+  const _MockPreferences(this.data, this._update, {required super.child});
+
+  @override
+  final PreferencesData data;
+
+  @override
+  final isInitialized = true;
+
+  @override
+  final void Function(PreferencesData Function(PreferencesData)) _update;
+
+  @override
+  Future<void> reload() async => reset();
+
+  @override
+  Future<void> reset() async => _update((_) => PreferencesData.defaults());
+
+  @override
+  Future<void> _setOrRemove<T>(String key, T? value) async {}
+}
+
+class _AppPreferences extends InheritedPreferences {
+  const _AppPreferences(
+    this.data,
+    this.isInitialized,
+    this._update,
+    this._prefs, {
+    required super.child,
+  });
+
+  @override
+  final PreferencesData data;
+
+  @override
+  final bool isInitialized;
+
+  final SharedPreferencesAsync _prefs;
+
+  @override
+  final void Function(PreferencesData Function(PreferencesData)) _update;
+
+  @override
   Future<void> reload() async {
-    await _prefs.reload();
-    _update((_) => PreferencesData.fromSharedPreferences(_prefs));
+    final reloaded = await PreferencesData.fromSharedPreferences(_prefs);
+    _update((_) => reloaded);
   }
 
+  @override
   Future<void> reset() async {
     for (final dir in accessibleDirs) {
       try {
@@ -200,10 +255,12 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
       }
     }
     await _prefs.clear();
-    _update((_) => PreferencesData.fromSharedPreferences(_prefs));
+    final cleared = await PreferencesData.fromSharedPreferences(_prefs);
+    _update((_) => cleared);
   }
 
-  Future<bool> _setOrRemove<T>(String key, T? value) {
+  @override
+  Future<void> _setOrRemove<T>(String key, T? value) {
     if (value == null) {
       return _prefs.remove(key);
     } else if (value is String) {
@@ -224,9 +281,18 @@ class InheritedPreferences extends InheritedModel<PrefsAspect> {
   }
 }
 
+extension InitExt on InheritedPreferences {
+  bool _updateShouldNotifyDependentInit(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.init) &&
+      isInitialized != oldWidget.isInitialized;
+}
+
 extension AppearanceExt on InheritedPreferences {
   ThemeMode get themeMode => data.themeMode;
-  Future<bool> setThemeMode(ThemeMode value) async {
+  Future<void> setThemeMode(ThemeMode value) async {
     _update((data) => data.copyWith(themeMode: value));
     return _setOrRemove(kThemeModeKey, value.persistableString);
   }
@@ -241,7 +307,7 @@ extension AppearanceExt on InheritedPreferences {
 
 extension RecentFilesExt on InheritedPreferences {
   List<RememberedFile> get rememberedFiles => data.recentFiles;
-  Future<bool> _setRecentFiles(List<RememberedFile> value) async {
+  Future<void> _setRecentFiles(List<RememberedFile> value) async {
     _update((data) => data.copyWith(recentFiles: value));
     return _setOrRemove(
       kRecentFilesJsonKey,
@@ -249,7 +315,7 @@ extension RecentFilesExt on InheritedPreferences {
     );
   }
 
-  Future<bool> addRecentFiles(List<RememberedFile> files) async {
+  Future<void> addRecentFiles(List<RememberedFile> files) async {
     final sortedFiles = [...files, ...rememberedFiles]
       ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     final uniqueFiles = sortedFiles
@@ -267,12 +333,12 @@ extension RecentFilesExt on InheritedPreferences {
     return await _setRecentFiles(retained);
   }
 
-  Future<bool> removeRecentFile(RememberedFile file) async {
+  Future<void> removeRecentFile(RememberedFile file) async {
     final files = List.of(rememberedFiles)..remove(file);
     return await _setRecentFiles(files);
   }
 
-  Future<bool> pinFile(RememberedFile file) async {
+  Future<void> pinFile(RememberedFile file) async {
     final pinnedIdx = rememberedFiles.where((f) => f.isPinned).length;
     final files = rememberedFiles
         .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: pinnedIdx) : f)
@@ -281,7 +347,7 @@ extension RecentFilesExt on InheritedPreferences {
     return await _setRecentFiles(files);
   }
 
-  Future<bool> unpinFile(RememberedFile file) async {
+  Future<void> unpinFile(RememberedFile file) async {
     final files = rememberedFiles
         .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: -1) : f)
         .toList(growable: false)
@@ -290,13 +356,13 @@ extension RecentFilesExt on InheritedPreferences {
   }
 
   RecentFilesSortKey get recentFilesSortKey => data.recentFilesSortKey;
-  Future<bool> setRecentFilesSortKey(RecentFilesSortKey value) async {
+  Future<void> setRecentFilesSortKey(RecentFilesSortKey value) async {
     _update((data) => data.copyWith(recentFilesSortKey: value));
     return await _setOrRemove(kRecentFilesSortKey, value.persistableString);
   }
 
   SortOrder get recentFilesSortOrder => data.recentFilesSortOrder;
-  Future<bool> setRecentFilesSortOrder(SortOrder value) async {
+  Future<void> setRecentFilesSortOrder(SortOrder value) async {
     _update((data) => data.copyWith(recentFilesSortOrder: value));
     return await _setOrRemove(kRecentFilesSortOrder, value.persistableString);
   }
@@ -313,55 +379,55 @@ extension RecentFilesExt on InheritedPreferences {
 
 extension ViewSettingsExt on InheritedPreferences {
   double get textScale => data.textScale;
-  Future<bool> setTextScale(double value) async {
+  Future<void> setTextScale(double value) async {
     _update((data) => data.copyWith(textScale: value));
     return await _setOrRemove(kTextScaleKey, value);
   }
 
   String get fontFamily => data.fontFamily;
-  Future<bool> setFontFamily(String value) async {
+  Future<void> setFontFamily(String value) async {
     _update((data) => data.copyWith(fontFamily: value));
     return _setOrRemove(kFontFamilyKey, value);
   }
 
   bool get readerMode => data.readerMode;
-  Future<bool> setReaderMode(bool value) async {
+  Future<void> setReaderMode(bool value) async {
     _update((data) => data.copyWith(readerMode: value));
     return _setOrRemove(kReaderModeKey, value);
   }
 
   RemoteImagesPolicy get remoteImagesPolicy => data.remoteImagesPolicy;
-  Future<bool> setRemoteImagesPolicy(RemoteImagesPolicy value) async {
+  Future<void> setRemoteImagesPolicy(RemoteImagesPolicy value) async {
     _update((data) => data.copyWith(remoteImagesPolicy: value));
     return _setOrRemove(kRemoteImagesPolicyKey, value.persistableString);
   }
 
   LocalLinksPolicy get localLinksPolicy => data.localLinksPolicy;
-  Future<bool> setLocalLinksPolicy(LocalLinksPolicy value) async {
+  Future<void> setLocalLinksPolicy(LocalLinksPolicy value) async {
     _update((data) => data.copyWith(localLinksPolicy: value));
     return _setOrRemove(kLocalLinksPolicyKey, value.persistableString);
   }
 
   SaveChangesPolicy get saveChangesPolicy => data.saveChangesPolicy;
-  Future<bool> setSaveChangesPolicy(SaveChangesPolicy value) async {
+  Future<void> setSaveChangesPolicy(SaveChangesPolicy value) async {
     _update((data) => data.copyWith(saveChangesPolicy: value));
     return _setOrRemove(kSaveChangesPolicyKey, value.persistableString);
   }
 
   DecryptPolicy get decryptPolicy => data.decryptPolicy;
-  Future<bool> setDecryptPolicy(DecryptPolicy value) async {
+  Future<void> setDecryptPolicy(DecryptPolicy value) async {
     _update((data) => data.copyWith(decryptPolicy: value));
     return _setOrRemove(kDecryptPolicyKey, value.persistableString);
   }
 
   bool get fullWidth => data.fullWidth;
-  Future<bool> setFullWidth(bool value) async {
+  Future<void> setFullWidth(bool value) async {
     _update((data) => data.copyWith(fullWidth: value));
     return _setOrRemove(kFullWidthKey, value);
   }
 
   Map<String, dynamic> get scopedPreferences => data.scopedPreferences;
-  Future<bool> setScopedPreferences(Map<String, dynamic> value) async {
+  Future<void> setScopedPreferences(Map<String, dynamic> value) async {
     _update((data) => data.copyWith(scopedPreferences: value));
     return _setOrRemove(kScopedPreferencesJsonKey, json.encode(value));
   }
@@ -384,12 +450,12 @@ extension ViewSettingsExt on InheritedPreferences {
 
 extension AccessibleDirectoriesExt on InheritedPreferences {
   List<String> get accessibleDirs => data.accessibleDirs;
-  Future<bool> _setAccessibleDirs(List<String> value) async {
+  Future<void> _setAccessibleDirs(List<String> value) async {
     _update((data) => data.copyWith(accessibleDirs: value));
     return _setOrRemove(kAccessibleDirectoriesKey, value);
   }
 
-  Future<bool> addAccessibleDir(String dir) async {
+  Future<void> addAccessibleDir(String dir) async {
     final dirs = [...accessibleDirs, dir].unique().toList(growable: false);
     return await _setAccessibleDirs(dirs);
   }
@@ -404,12 +470,12 @@ extension AccessibleDirectoriesExt on InheritedPreferences {
 
 extension CustomFilterQueriesExt on InheritedPreferences {
   List<String> get customFilterQueries => data.customFilterQueries;
-  Future<bool> _setCustomFilterQueries(List<String> value) async {
+  Future<void> _setCustomFilterQueries(List<String> value) async {
     _update((data) => data.copyWith(customFilterQueries: value));
     return _setOrRemove(kCustomFilterQueriesKey, value);
   }
 
-  Future<bool> addCustomFilterQuery(String value) async {
+  Future<void> addCustomFilterQuery(String value) async {
     // Maintain order, so don't just prepend and uniquify
     if (!customFilterQueries.contains(value)) {
       return await _setCustomFilterQueries([
@@ -417,7 +483,6 @@ extension CustomFilterQueriesExt on InheritedPreferences {
         ...customFilterQueries.take(9),
       ]);
     }
-    return true;
   }
 
   bool _updateShouldNotifyDependentCustomFilterQueries(
@@ -430,7 +495,7 @@ extension CustomFilterQueriesExt on InheritedPreferences {
 
 extension CustomizationExt on InheritedPreferences {
   String get textPreviewString => data.textPreviewString;
-  Future<bool> setTextPreviewString(String value) async {
+  Future<void> setTextPreviewString(String value) async {
     _update((data) => data.copyWith(textPreviewString: value));
     return _setOrRemove(kTextPreviewStringKey, value);
   }
@@ -444,65 +509,68 @@ extension CustomizationExt on InheritedPreferences {
 }
 
 class PreferencesData {
-  factory PreferencesData.defaults() => const PreferencesData(
-    textScale: kDefaultTextScale,
-    fontFamily: kDefaultFontFamily,
-    readerMode: kDefaultReaderMode,
-    recentFiles: [],
-    recentFilesSortKey: kDefaultRecentFilesSortKey,
-    recentFilesSortOrder: kDefaultRecentFilesSortOrder,
-    themeMode: _kDefaultThemeMode,
-    remoteImagesPolicy: kDefaultRemoteImagesPolicy,
-    localLinksPolicy: kDefaultLocalLinksPolicy,
-    saveChangesPolicy: kDefaultSaveChangesPolicy,
-    decryptPolicy: kDefaultDecryptPolicy,
-    accessibleDirs: [],
-    customFilterQueries: [],
-    fullWidth: kDefaultFullWidth,
-    scopedPreferences: {},
-    textPreviewString: kDefaultTextPreviewString,
-  );
+  const PreferencesData.defaults()
+    : textScale = kDefaultTextScale,
+      fontFamily = kDefaultFontFamily,
+      readerMode = kDefaultReaderMode,
+      recentFiles = const [],
+      recentFilesSortKey = kDefaultRecentFilesSortKey,
+      recentFilesSortOrder = kDefaultRecentFilesSortOrder,
+      themeMode = _kDefaultThemeMode,
+      remoteImagesPolicy = kDefaultRemoteImagesPolicy,
+      localLinksPolicy = kDefaultLocalLinksPolicy,
+      saveChangesPolicy = kDefaultSaveChangesPolicy,
+      decryptPolicy = kDefaultDecryptPolicy,
+      accessibleDirs = const [],
+      customFilterQueries = const [],
+      fullWidth = kDefaultFullWidth,
+      scopedPreferences = const {},
+      textPreviewString = kDefaultTextPreviewString;
 
-  factory PreferencesData.fromSharedPreferences(SharedPreferences prefs) {
-    final scopedPreferencesJson = prefs.getString(kScopedPreferencesJsonKey);
+  static Future<PreferencesData> fromSharedPreferences(
+    SharedPreferencesAsync prefs,
+  ) async {
+    // TODO(aaron): Parallelize these gets if necessary
+    final scopedPreferencesJson = await prefs.getString(
+      kScopedPreferencesJsonKey,
+    );
     final scopedPreferences =
         scopedPreferencesJson == null
             ? null
             : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
     return PreferencesData.defaults().copyWith(
-      textScale: prefs.getDouble(kTextScaleKey),
-      fontFamily: prefs.getString(kFontFamilyKey),
-      readerMode: prefs.getBool(kReaderModeKey),
-      recentFiles: prefs
-          .getStringList(kRecentFilesJsonKey)
+      textScale: await prefs.getDouble(kTextScaleKey),
+      fontFamily: await prefs.getString(kFontFamilyKey),
+      readerMode: await prefs.getBool(kReaderModeKey),
+      recentFiles: (await prefs.getStringList(kRecentFilesJsonKey))
           ?.map<dynamic>(json.decode)
           .cast<Map<String, dynamic>>()
           .map((json) => RememberedFile.fromJson(json))
           .toList(growable: false),
       recentFilesSortKey: RecentFilesSortKeyPersistence.fromString(
-        prefs.getString(kRecentFilesSortKey),
+        await prefs.getString(kRecentFilesSortKey),
       ),
       recentFilesSortOrder: SortOrderPersistence.fromString(
-        prefs.getString(kRecentFilesSortOrder),
+        await prefs.getString(kRecentFilesSortOrder),
       ),
       themeMode: ThemeModePersistence.fromString(
-        prefs.getString(kThemeModeKey),
+        await prefs.getString(kThemeModeKey),
       ),
       remoteImagesPolicy: RemoteImagesPolicyPersistence.fromString(
-        prefs.getString(kRemoteImagesPolicyKey),
+        await prefs.getString(kRemoteImagesPolicyKey),
       ),
       localLinksPolicy: LocalLinksPolicyPersistence.fromString(
-        prefs.getString(kLocalLinksPolicyKey),
+        await prefs.getString(kLocalLinksPolicyKey),
       ),
       saveChangesPolicy: SaveChangesPolicyPersistence.fromString(
-        prefs.getString(kSaveChangesPolicyKey),
+        await prefs.getString(kSaveChangesPolicyKey),
       ),
       decryptPolicy: DecryptPolicyPersistence.fromString(
-        prefs.getString(kDecryptPolicyKey),
+        await prefs.getString(kDecryptPolicyKey),
       ),
-      accessibleDirs: prefs.getStringList(kAccessibleDirectoriesKey),
-      customFilterQueries: prefs.getStringList(kCustomFilterQueriesKey),
-      fullWidth: prefs.getBool(kFullWidthKey),
+      accessibleDirs: await prefs.getStringList(kAccessibleDirectoriesKey),
+      customFilterQueries: await prefs.getStringList(kCustomFilterQueriesKey),
+      fullWidth: await prefs.getBool(kFullWidthKey),
       scopedPreferences: scopedPreferences,
     );
   }

@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "72MM6F63T6.com.madlonkay.orgro.profile1"
+        ],
+        "components": [
+          {
+            "/": "/manual"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "72MM6F63T6.com.madlonkay.orgro.profile1"
+    ]
+  }
+}

@@ -143,6 +143,13 @@ extension StringExtension on String {
     );
   }
 
+  String trimSuff(String suffix) {
+    if (endsWith(suffix)) {
+      return substring(0, length - suffix.length);
+    }
+    return this;
+  }
+
   String trimPrefSuff(String prefix, String suffix) {
     if (startsWith(prefix) && endsWith(suffix)) {
       return substring(prefix.length, length - suffix.length);
@@ -169,6 +176,11 @@ extension StringExtension on String {
     if (isEmpty) return next;
     if (endsWith('/')) return '$this$next';
     return '$this/$next';
+  }
+
+  RegExp asRegex() {
+    final escaped = RegExp.escape(this);
+    return RegExp(escaped, unicode: true, caseSensitive: false);
   }
 }
 

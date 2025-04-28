@@ -81,7 +81,10 @@ class _TextPreviewState extends State<_TextPreview> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_inited) {
-      _controller.text = _prefs.textPreviewString;
+      _controller.text =
+          _prefs.textPreviewString.isEmpty
+              ? kDefaultTextPreviewString
+              : _prefs.textPreviewString;
       _inited = true;
     }
   }

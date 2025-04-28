@@ -40,16 +40,11 @@ extension InitialModePersistence on InitialMode? {
     null => null,
   };
 
-  static InitialMode? fromString(String? value) {
-    switch (value) {
-      case 'view':
-        return InitialMode.view;
-      case 'edit':
-        return InitialMode.edit;
-      default:
-        return null;
-    }
-  }
+  static InitialMode? fromString(String? value) => switch (value) {
+    'view' => InitialMode.view,
+    'edit' => InitialMode.edit,
+    _ => null,
+  };
 }
 
 const _kDefaultInitialMode = InitialMode.view;

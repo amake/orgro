@@ -33,6 +33,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemAbout => 'About';
 
   @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -101,6 +104,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get buttonOpenOrgManual => 'Open Org Manual';
+
+  @override
+  String get buttonOpenUrl => 'Open URL';
 
   @override
   String get buttonSupport => 'Support · Feedback';
@@ -364,6 +370,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createFileDefaultName => 'untitled.org';
 
   @override
+  String get inputUrlDialogTitle => 'Enter URL';
+
+  @override
   String get startTimePickerTitle => 'Select start time';
 
   @override
@@ -472,6 +481,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get menuItemAbout => 'About';
 
   @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -540,6 +552,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get buttonOpenOrgManual => 'Open Org Manual';
+
+  @override
+  String get buttonOpenUrl => 'Open URL';
 
   @override
   String get buttonSupport => 'Support · Feedback';
@@ -803,6 +818,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get createFileDefaultName => 'untitled.org';
 
   @override
+  String get inputUrlDialogTitle => 'Enter URL';
+
+  @override
   String get startTimePickerTitle => 'Select start time';
 
   @override
@@ -911,6 +929,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get menuItemAbout => 'About';
 
   @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -979,6 +1000,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get buttonOpenOrgManual => 'Open Org Manual';
+
+  @override
+  String get buttonOpenUrl => 'Open URL';
 
   @override
   String get buttonSupport => 'Support · Feedback';
@@ -1240,6 +1264,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
 
   @override
   String get startTimePickerTitle => 'Select start time';

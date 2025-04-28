@@ -123,7 +123,10 @@ OrgTree recalculateHeadlineStats(OrgTree root, OrgHeadline target) {
           .whereType<OrgTree>()
           // Skip the section that the headline belongs to
           .skip(1)
-          .first;
+          .firstOrNull;
+  // If cycling the root of a narrowed view, this will be nulll and we can't
+  // recalculate until we're back at the wide view
+  if (tree == null) return root;
   final replacement = _recalculateHeadlineStats(tree);
   return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
 }

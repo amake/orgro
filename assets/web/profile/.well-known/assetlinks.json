@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.madlonkay.orgro.profile",
+      "sha256_cert_fingerprints": [
+        "70:81:43:52:C4:F5:F8:D5:5B:50:AE:C0:36:30:10:18:15:07:45:8B:53:0F:56:97:44:7A:A7:3F:54:F3:30:89"
+      ]
+    }
+  }
+]

@@ -1,0 +1,3 @@
+- Org ModeファイルをURLから開けるようになった
+- https://orgro.org/manual を開くとOrgroアプリでマニュアルが直接開かれる
+- バグ修正

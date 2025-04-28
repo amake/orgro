@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'About'**
   String get menuItemAbout;
 
+  /// No description provided for @menuItemOpenUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open URL'**
+  String get menuItemOpenUrl;
+
   /// No description provided for @appearanceModeAutomatic.
   ///
   /// In en, this message translates to:
@@ -289,6 +295,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open Org Manual'**
   String get buttonOpenOrgManual;
+
+  /// No description provided for @buttonOpenUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open URL'**
+  String get buttonOpenUrl;
 
   /// No description provided for @buttonSupport.
   ///
@@ -733,6 +745,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'untitled.org'**
   String get createFileDefaultName;
+
+  /// No description provided for @inputUrlDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter URL'**
+  String get inputUrlDialogTitle;
 
   /// No description provided for @startTimePickerTitle.
   ///

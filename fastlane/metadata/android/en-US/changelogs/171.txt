@@ -1,0 +1,2 @@
+- You can now pin files to the top of the Recent Files list
+- Bug fixes

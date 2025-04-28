@@ -317,10 +317,8 @@ class _EditorToolbar extends StatelessWidget {
 String? _tryParseUrl(String? str) {
   if (str == null) return null;
   final uri = Uri.tryParse(str);
-  if (uri == null) return null;
   // Uri.tryParse is very lenient and will accept lots of things other than what
   // people usually think of as URLs so we filter out anything that doesn't have
   // a scheme.
-  if (uri.scheme.isEmpty) return null;
-  return str;
+  return uri?.hasScheme == true ? str : null;
 }

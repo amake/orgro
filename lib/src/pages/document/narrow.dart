@@ -5,6 +5,7 @@ import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
+import 'package:orgro/src/statistics.dart';
 
 extension NarrowHandler on DocumentPageState {
   void openNarrowTarget(String? target) {
@@ -87,7 +88,9 @@ extension NarrowHandler on DocumentPageState {
     final doc = DocumentProvider.of(context).doc;
     switch (after) {
       case OrgSection():
-        return doc.editNode(before)!.replace(after).commit();
+        var newDoc = doc.editNode(before)!.replace(after).commit() as OrgTree;
+        newDoc = recalculateHeadlineStats(newDoc, after.headline);
+        return newDoc;
       case OrgDocument():
         // If the narrowed section was edited, an OrgDocument will come back.
         //

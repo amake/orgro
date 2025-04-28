@@ -4,19 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
-import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
-import 'package:orgro/src/pages/settings.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
 class StartPage extends StatefulWidget {
@@ -64,17 +64,21 @@ class _StartPageState extends State<StartPage>
       onSelected: (callback) => callback(),
       itemBuilder:
           (context) => [
-            PopupMenuItem<VoidCallback>(
-              value: () => _openSettingsScreen(context),
-              child: Text(AppLocalizations.of(context)!.menuItemSettings),
-            ),
             if (hasRememberedFiles) ...[
-              const PopupMenuDivider(),
+              PopupMenuItem<VoidCallback>(
+                value: () => _promptAndOpenUrl(context),
+                child: Text(AppLocalizations.of(context)!.menuItemOpenUrl),
+              ),
               PopupMenuItem<VoidCallback>(
                 value: () => _openOrgroManual(context),
                 child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
               ),
+              const PopupMenuDivider(),
             ],
+            PopupMenuItem<VoidCallback>(
+              value: () => _openSettingsScreen(context),
+              child: Text(AppLocalizations.of(context)!.menuItemSettings),
+            ),
             if (!kReleaseMode && !kScreenshotMode) ...[
               const PopupMenuDivider(),
               if (hasRememberedFiles)
@@ -124,13 +128,11 @@ class _StartPageState extends State<StartPage>
   Future<bool> loadFileFromPlatform(NativeDataSource info) async {
     // We can't use _loadAndRememberFile because RecentFiles is not in this
     // context
-    final recentFile = await loadFile(context, info);
-    if (recentFile != null) {
-      _rememberFile(recentFile);
-      return true;
-    } else {
-      return false;
-    }
+    await _rememberFile(info);
+    final context = this.context;
+    if (!context.mounted) return false;
+    await loadFile(context, info);
+    return true;
   }
 
   @override
@@ -144,21 +146,24 @@ class _StartPageState extends State<StartPage>
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final recentFile = await loadFile(
-          context,
-          readFileWithIdentifier(restoreId),
-          bucket: bucket,
-        );
-        _rememberFile(recentFile);
+        final dataSource = await readFileWithIdentifier(restoreId);
+        final context = this.context;
+        await _rememberFile(dataSource);
+        if (!context.mounted) return;
+        await loadFile(context, dataSource, bucket: bucket);
       });
     }
   }
 
-  void _rememberFile(RememberedFile? recentFile) {
-    if (recentFile == null) {
-      return;
-    }
-    addRecentFiles([recentFile]);
+  Future<void> _rememberFile(NativeDataSource dataSource) async {
+    final recentFile = RememberedFile(
+      identifier: dataSource.identifier,
+      name: dataSource.name,
+      uri: dataSource.uri,
+      lastOpened: DateTime.now(),
+    );
+
+    await addRecentFiles([recentFile]);
     debugPrint('Saving file ID to state');
     bucket?.write<String>(kRestoreOpenFileIdKey, recentFile.identifier);
   }
@@ -207,6 +212,8 @@ class _EmptyBody extends StatelessWidget {
                   const _PickFileButton(),
                   const SizedBox(height: 16),
                   const _CreateFileButton(),
+                  const SizedBox(height: 16),
+                  const _OpenUrlButton(),
                   const SizedBox(height: 16),
                   const _OrgroManualButton(),
                   if (!kReleaseMode && !kScreenshotMode) ...[
@@ -257,6 +264,15 @@ class _PickFileButton extends StatelessWidget {
   }
 }
 
+Future<void> _promptAndOpenUrl(BuildContext context) async {
+  final url = await showDialog<Uri>(
+    context: context,
+    builder: (context) => const InputUrlDialog(),
+  );
+  if (url == null || !context.mounted) return;
+  return await loadHttpUrl(context, url);
+}
+
 class _CreateFileButton extends StatelessWidget {
   const _CreateFileButton();
 
@@ -269,6 +285,22 @@ class _CreateFileButton extends StatelessWidget {
       ),
       onPressed: () => _createAndOpenFile(context),
       child: Text(AppLocalizations.of(context)!.buttonCreateFile),
+    );
+  }
+}
+
+class _OpenUrlButton extends StatelessWidget {
+  const _OpenUrlButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+      ),
+      onPressed: () => _promptAndOpenUrl(context),
+      child: Text(AppLocalizations.of(context)!.buttonOpenUrl),
     );
   }
 }
@@ -298,25 +330,16 @@ class _OrgroManualButton extends StatelessWidget {
 }
 
 void _openOrgroManual(BuildContext context) =>
-    loadAsset(context, 'assets/manual/orgro-manual.org');
+    loadAsset(context, LocalAssets.manual);
 
-void _openOrgManual(BuildContext context) => loadHttpUrl(
-  context,
-  Uri.parse('https://git.sr.ht/~bzg/org-mode/blob/main/doc/org-manual.org'),
-);
+void _openOrgManual(BuildContext context) =>
+    loadHttpUrl(context, Uri.parse(RemoteAssets.orgManual));
 
 void _openTestFile(BuildContext context) =>
-    loadAsset(context, 'assets/test/test.org');
+    loadAsset(context, LocalAssets.testFile);
 
-void _openSettingsScreen(BuildContext context) => Navigator.push(
-  context,
-  MaterialPageRoute<void>(
-    builder:
-        (context) =>
-            ViewSettings.defaults(context, child: const SettingsPage()),
-    fullscreenDialog: true,
-  ),
-);
+void _openSettingsScreen(BuildContext context) =>
+    Navigator.pushNamed(context, Routes.settings);
 
 class _SupportLink extends StatelessWidget {
   const _SupportLink();

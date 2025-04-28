@@ -8,6 +8,7 @@
   "menuItemOrgManual": "Org Manual",
   "menuItemTestFile": "Test File",
   "menuItemAbout": "About",
+  "menuItemOpenUrl": "Open URL",
 
   "appearanceModeAutomatic": "Automatic",
   "appearanceModeLight": "Light",
@@ -39,6 +40,7 @@
   "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Open Orgro Manual",
   "buttonOpenOrgManual": "Open Org Manual",
+  "buttonOpenUrl": "Open URL",
 
   "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
@@ -176,6 +178,8 @@
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
+
+  "inputUrlDialogTitle": "Enter URL",
 
   "startTimePickerTitle": "Select start time",
   "endTimePickerTitle": "Select end time",

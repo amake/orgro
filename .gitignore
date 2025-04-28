@@ -49,3 +49,4 @@ app.*.map.json
 /tmp
 /ios/build
 .aider*
+config.ini
