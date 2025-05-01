@@ -7,7 +7,8 @@
       "namespace": "android_app",
       "package_name": "com.madlonkay.orgro",
       "sha256_cert_fingerprints": [
-        "2F:9A:C2:55:52:EF:5F:70:E6:10:0A:33:DB:3C:3E:B3:13:E3:8A:9D:8E:97:56:E8:E8:61:B0:4B:93:79:7F:DD"
+        "2F:9A:C2:55:52:EF:5F:70:E6:10:0A:33:DB:3C:3E:B3:13:E3:8A:9D:8E:97:56:E8:E8:61:B0:4B:93:79:7F:DD",
+        "43:23:8D:51:2C:1E:5E:B2:D6:56:9F:4A:3A:FB:F5:52:34:18:B8:2E:0A:3E:D1:55:27:70:AB:B9:A9:C9:CC:AB"
       ]
     }
   }
