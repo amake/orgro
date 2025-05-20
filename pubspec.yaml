@@ -7,7 +7,7 @@ publish_to: none
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
-  flutter: ^3.29.3
+  flutter: ^3.32.2
 
 dependencies:
   cached_network_image: ^3.0.0
@@ -34,7 +34,7 @@ dependencies:
   flutter_slidable: ^4.0.0
   google_fonts: ^6.0.0
   http: ^1.1.0
-  intl: ^0.19.0
+  intl: ^0.20.2
   org_flutter: ^9.7.0
   # org_flutter:
     # path: ../org_flutter

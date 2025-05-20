@@ -731,6 +731,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       }
     }
 
+    if (!mounted) return;
+
     final docProvider = DocumentProvider.of(context);
     var passwords = docProvider.passwords;
     if (docProvider.analysis.needsEncryption == true &&
