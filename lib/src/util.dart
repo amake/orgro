@@ -169,20 +169,6 @@ extension StringExtension on String {
   }
 }
 
-// Work around iOS paste permission dialog appearing on every paste. This should
-// be unnecessary pending https://github.com/flutter/flutter/issues/103163
-Widget nativeWhenPossibleContextMenuBuilder(
-  BuildContext context,
-  EditableTextState editableTextState,
-) {
-  if (SystemContextMenu.isSupported(context)) {
-    return SystemContextMenu.editableText(editableTextState: editableTextState);
-  }
-  return AdaptiveTextSelectionToolbar.editableText(
-    editableTextState: editableTextState,
-  );
-}
-
 extension BoolUtil on bool {
   int compareTo(bool other) {
     if (this == other) return 0;

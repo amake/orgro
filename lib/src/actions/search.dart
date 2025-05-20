@@ -178,8 +178,6 @@ class SearchField extends StatelessWidget {
                                       child: const Icon(Icons.search),
                                     ),
                                   ),
-                                  contextMenuBuilder:
-                                      nativeWhenPossibleContextMenuBuilder,
                                 ),
                               ),
                             ],

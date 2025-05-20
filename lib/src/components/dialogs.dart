@@ -7,7 +7,6 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
-import 'package:orgro/src/util.dart';
 import 'package:petit_bibtex/bibtex.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -184,7 +183,6 @@ class InputPasswordDialog extends StatelessWidget {
       autofocus: true,
       obscureText: true,
       onSubmitted: (value) => Navigator.pop(context, value),
-      contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
     );
     if (bodyText != null) {
       content = Column(
@@ -243,7 +241,6 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
         autofocus: true,
         controller: _controller,
         onSubmitted: (value) => Navigator.pop(context, value),
-        contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
       ),
     );
   }
@@ -347,7 +344,6 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         controller: _controller,
         autofocus: true,
         onSubmitted: _confirm,
-        contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
       ),
       actions: [
         _DialogButton(
@@ -617,7 +613,6 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
         controller: _controller,
         autofocus: true,
         onSubmitted: _confirm,
-        contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
       ),
     );
   }

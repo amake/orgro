@@ -100,7 +100,6 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 ),
                 style:
                     ViewSettings.of(context).forScope(widget.docId).textStyle,
-                contextMenuBuilder: nativeWhenPossibleContextMenuBuilder,
               ),
             ),
             _EditorToolbar(
