@@ -62,13 +62,11 @@ class _MyApp extends StatelessWidget {
       themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
       home: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child:
-            Preferences.of(context, PrefsAspect.init).isInitialized
-                ? const StartPage()
-                : const _Splash(),
-        transitionBuilder:
-            (child, animation) =>
-                FadeTransition(opacity: animation, child: child),
+        child: Preferences.of(context, PrefsAspect.init).isInitialized
+            ? const StartPage()
+            : const _Splash(),
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
       ),
       onGenerateRoute: onGenerateRoute,
     );

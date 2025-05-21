@@ -16,20 +16,20 @@ class RememberedFilesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remembered = RememberedFiles.of(context);
-    final sortedPins =
-        remembered.pinned..sort((a, b) => a.pinnedIdx.compareTo(b.pinnedIdx));
-    final sortedRecents =
-        remembered.recents..sort((a, b) {
-          final result = switch (remembered.sortKey) {
-            RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(
-              b.lastOpened,
+    final sortedPins = remembered.pinned
+      ..sort((a, b) => a.pinnedIdx.compareTo(b.pinnedIdx));
+    final sortedRecents = remembered.recents
+      ..sort((a, b) {
+        final result = switch (remembered.sortKey) {
+          RecentFilesSortKey.lastOpened => a.lastOpened.compareTo(b.lastOpened),
+          RecentFilesSortKey.name => a.name.compareTo(b.name),
+          RecentFilesSortKey.location =>
+            (_appName(context, a.uri) ?? a.uri).compareTo(
+              _appName(context, b.uri) ?? b.uri,
             ),
-            RecentFilesSortKey.name => a.name.compareTo(b.name),
-            RecentFilesSortKey.location => (_appName(context, a.uri) ?? a.uri)
-                .compareTo(_appName(context, b.uri) ?? b.uri),
-          };
-          return remembered.sortOrder == SortOrder.ascending ? result : -result;
-        });
+        };
+        return remembered.sortOrder == SortOrder.ascending ? result : -result;
+      });
     // We let ListView fill the viewport and constrain its children so that the
     // list can be scrolled even by the edges of the view.
     return ListView(
@@ -114,9 +114,8 @@ class _RecentFilesListSortControl extends StatelessWidget {
       onPressed: () async {
         final result = await showDialog<(RecentFilesSortKey, SortOrder)>(
           context: context,
-          builder:
-              (context) =>
-                  RecentFilesSortDialog(sortKey: sortKey, sortOrder: sortOrder),
+          builder: (context) =>
+              RecentFilesSortDialog(sortKey: sortKey, sortOrder: sortOrder),
         );
         if (result case (final key, final newOrder)) {
           await prefs.setRecentFilesSortKey(key);
@@ -168,14 +167,17 @@ String? _appName(BuildContext context, String uriString) {
   return switch (uri.scheme) {
     'content' => switch (uri.host) {
       'org.nextcloud.documents' => 'Nextcloud',
-      'com.google.android.apps.docs.storage' =>
-        AppLocalizations.of(context)!.fileSourceGoogleDrive,
+      'com.google.android.apps.docs.storage' => AppLocalizations.of(
+        context,
+      )!.fileSourceGoogleDrive,
       'com.seafile.seadroid2.documents' => 'Seafile',
       'com.termux.documents' => 'Termux',
-      'com.android.externalstorage.documents' =>
-        AppLocalizations.of(context)!.fileSourceDocuments,
-      'com.android.providers.downloads.documents' =>
-        AppLocalizations.of(context)!.fileSourceDownloads,
+      'com.android.externalstorage.documents' => AppLocalizations.of(
+        context,
+      )!.fileSourceDocuments,
+      'com.android.providers.downloads.documents' => AppLocalizations.of(
+        context,
+      )!.fileSourceDownloads,
       'com.dropbox.product.android.dbapp.document_provider.documents' =>
         'Dropbox',
       _ => uri.host,
@@ -218,8 +220,8 @@ class _RememberedFileListTile extends StatelessWidget {
             backgroundColor: Colors.red,
             foregroundColor: Theme.of(context).colorScheme.onSecondary,
             icon: Icons.delete,
-            onPressed:
-                (context) => RememberedFiles.of(context).remove(recentFile),
+            onPressed: (context) =>
+                RememberedFiles.of(context).remove(recentFile),
           ),
         ],
       ),
@@ -264,11 +266,10 @@ class _RememberedFileListTile extends StatelessWidget {
             })(),
           ],
         ),
-        onTap:
-            () async => loadAndRememberFile(
-              context,
-              readFileWithIdentifier(recentFile.identifier),
-            ),
+        onTap: () async => loadAndRememberFile(
+          context,
+          readFileWithIdentifier(recentFile.identifier),
+        ),
       ),
     );
   }

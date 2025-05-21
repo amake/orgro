@@ -36,14 +36,10 @@ class RemoteImage extends StatelessWidget {
     } else {
       return Image(
         image: CachedNetworkImageProvider(url),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
   }
@@ -60,14 +56,10 @@ class RemoteImage extends StatelessWidget {
           url,
           scale: MediaQuery.devicePixelRatioOf(context),
         ),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
   }
@@ -88,15 +80,14 @@ class LocalImage extends StatelessWidget {
   final bool minimizeSize;
 
   @override
-  Widget build(BuildContext context) =>
-      _isSvg(relativePath)
-          ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
-          : _LocalOtherImage(
-            link: link,
-            dataSource: dataSource,
-            relativePath: relativePath,
-            minimizeSize: minimizeSize,
-          );
+  Widget build(BuildContext context) => _isSvg(relativePath)
+      ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
+      : _LocalOtherImage(
+          link: link,
+          dataSource: dataSource,
+          relativePath: relativePath,
+          minimizeSize: minimizeSize,
+        );
 }
 
 class _LocalOtherImage extends StatelessWidget {
@@ -117,14 +108,10 @@ class _LocalOtherImage extends StatelessWidget {
     if (!minimizeSize) {
       return Image(
         image: _DataSourceImage(dataSource, relativePath),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
     return LayoutBuilder(
@@ -140,14 +127,12 @@ class _LocalOtherImage extends StatelessWidget {
                 : null,
             _DataSourceImage(dataSource, relativePath, scale: scale),
           ),
-          errorBuilder:
-              (context, error, stackTrace) =>
-                  _ImageError(link: link, error: error.toString()),
-          loadingBuilder:
-              (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : const CircularProgressIndicator(),
+          errorBuilder: (context, error, stackTrace) =>
+              _ImageError(link: link, error: error.toString()),
+          loadingBuilder: (context, child, loadingProgress) =>
+              loadingProgress == null
+              ? child
+              : const CircularProgressIndicator(),
         );
       },
     );
@@ -214,15 +199,13 @@ class _ImageError extends StatelessWidget {
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
           ),
-          onPressed:
-              () => showDialog<void>(
-                context: context,
-                builder:
-                    (context) => AlertDialog(
-                      icon: const Icon(Icons.error),
-                      content: Text(error),
-                    ),
-              ),
+          onPressed: () => showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              icon: const Icon(Icons.error),
+              content: Text(error),
+            ),
+          ),
           icon: const Icon(Icons.error),
         ),
         const SizedBox(width: 8),
@@ -258,10 +241,9 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
       chunkEvents: chunkEvents.stream,
       scale: key.scale,
       debugLabel: key.dataSource.id,
-      informationCollector:
-          () => <DiagnosticsNode>[
-            ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
-          ],
+      informationCollector: () => <DiagnosticsNode>[
+        ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
+      ],
     );
   }
 

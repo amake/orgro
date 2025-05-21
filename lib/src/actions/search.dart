@@ -130,67 +130,62 @@ class SearchField extends StatelessWidget {
         children: [
           Expanded(
             child: LayoutBuilder(
-              builder:
-                  (context, constraints) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ValueListenableBuilder(
-                      valueListenable: filterData,
-                      builder:
-                          (context, filter, _) => Row(
-                            children: [
-                              ...[
-                                SelectedFilterChips(
-                                  filter: filter,
-                                  todoSettings: todoSettings,
-                                  onChange: (value) => filterData.value = value,
-                                ),
-                                if (filter.isNotEmpty)
-                                  IconTheme.merge(
-                                    data: iconTheme,
-                                    child: const Icon(Icons.drag_indicator),
-                                  ),
-                              ].separatedBy(const SizedBox(width: 8)),
-                              ConstrainedBox(
-                                constraints:
-                                    filter.isNotEmpty
-                                        ? BoxConstraints.tightFor(
-                                          width:
-                                              constraints.maxWidth -
-                                              IconTheme.of(context).size!,
-                                        )
-                                        : constraints,
-                                child: TextField(
-                                  autofocus: true,
-                                  focusNode: focusNode,
-                                  style: style,
-                                  controller: _controller,
-                                  textInputAction: TextInputAction.search,
-                                  cursorColor: theme.colorScheme.secondary,
-                                  onSubmitted: onSubmitted,
-                                  decoration: InputDecoration(
-                                    hintText:
-                                        AppLocalizations.of(
-                                          context,
-                                        )!.hintTextSearch,
-                                    border: InputBorder.none,
-                                    prefixIcon: IconTheme.merge(
-                                      data: iconTheme,
-                                      child: const Icon(Icons.search),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+              builder: (context, constraints) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ValueListenableBuilder(
+                  valueListenable: filterData,
+                  builder: (context, filter, _) => Row(
+                    children: [
+                      ...[
+                        SelectedFilterChips(
+                          filter: filter,
+                          todoSettings: todoSettings,
+                          onChange: (value) => filterData.value = value,
+                        ),
+                        if (filter.isNotEmpty)
+                          IconTheme.merge(
+                            data: iconTheme,
+                            child: const Icon(Icons.drag_indicator),
                           ),
-                    ),
+                      ].separatedBy(const SizedBox(width: 8)),
+                      ConstrainedBox(
+                        constraints: filter.isNotEmpty
+                            ? BoxConstraints.tightFor(
+                                width:
+                                    constraints.maxWidth -
+                                    IconTheme.of(context).size!,
+                              )
+                            : constraints,
+                        child: TextField(
+                          autofocus: true,
+                          focusNode: focusNode,
+                          style: style,
+                          controller: _controller,
+                          textInputAction: TextInputAction.search,
+                          cursorColor: theme.colorScheme.secondary,
+                          onSubmitted: onSubmitted,
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(
+                              context,
+                            )!.hintTextSearch,
+                            border: InputBorder.none,
+                            prefixIcon: IconTheme.merge(
+                              data: iconTheme,
+                              child: const Icon(Icons.search),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+              ),
             ),
           ),
           ValueListenableBuilder<TextEditingValue>(
             valueListenable: _controller,
-            builder:
-                (context, value, child) =>
-                    value.text.isNotEmpty ? child! : const SizedBox.shrink(),
+            builder: (context, value, child) =>
+                value.text.isNotEmpty ? child! : const SizedBox.shrink(),
             child: IconTheme.merge(
               data: iconTheme,
               child: IconButton(
@@ -266,8 +261,8 @@ class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
                 _i == -1
                     ? AppLocalizations.of(context)!.searchHits(_keys.length)
                     : AppLocalizations.of(
-                      context,
-                    )!.searchResultSelection(_i + 1, _keys.length),
+                        context,
+                      )!.searchResultSelection(_i + 1, _keys.length),
                 textAlign: TextAlign.center,
                 style: DefaultTextStyle.of(context).style.copyWith(
                   fontFeatures: const [FontFeature.tabularFigures()],
@@ -339,8 +334,7 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
     );
   }
 
-  Color? _backgroundColor(BuildContext context) =>
-      _enabled
-          ? null // default
-          : Theme.of(context).disabledColor;
+  Color? _backgroundColor(BuildContext context) => _enabled
+      ? null // default
+      : Theme.of(context).disabledColor;
 }

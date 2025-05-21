@@ -236,11 +236,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       if (_bigScreen) {
         yield TextStyleButton(
           textScale: scopedViewSettings.textScale,
-          onTextScaleChanged:
-              (value) => viewSettings.setTextScale(scopeKey, value),
+          onTextScaleChanged: (value) =>
+              viewSettings.setTextScale(scopeKey, value),
           fontFamily: scopedViewSettings.fontFamily,
-          onFontFamilyChanged:
-              (value) => viewSettings.setFontFamily(scopeKey, value),
+          onFontFamilyChanged: (value) =>
+              viewSettings.setFontFamily(scopeKey, value),
         );
         yield ReaderModeButton(
           enabled: scopedViewSettings.readerMode,
@@ -257,44 +257,41 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       } else {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
-          itemBuilder:
-              (context) => [
-                undoMenuItem(context, onChanged: _undo),
-                redoMenuItem(context, onChanged: _redo),
-                const PopupMenuDivider(),
-                textScaleMenuItem(
-                  context,
-                  textScale: scopedViewSettings.textScale,
-                  onChanged:
-                      (value) => viewSettings.setTextScale(scopeKey, value),
-                ),
-                fontFamilyMenuItem(
-                  context,
-                  fontFamily: scopedViewSettings.fontFamily,
-                  onChanged:
-                      (value) => viewSettings.setFontFamily(scopeKey, value),
-                ),
-                const PopupMenuDivider(),
-                readerModeMenuItem(
-                  context,
-                  enabled: scopedViewSettings.readerMode,
-                  onChanged: (value) => viewSettings.readerMode = value,
-                ),
-                if (_allowFullScreen(context))
-                  fullWidthMenuItem(
-                    context,
-                    enabled: scopedViewSettings.fullWidth,
-                    onChanged: (value) => viewSettings.fullWidth = value,
-                  ),
-                const PopupMenuDivider(),
-                // Disused because icon button is always visible now
-                // PopupMenuItem<VoidCallback>(
-                //   child: const Text('Cycle visibility'),
-                //   value: OrgController.of(context).cycleVisibility,
-                // ),
-                scrollTopMenuItem(context),
-                scrollBottomMenuItem(context),
-              ],
+          itemBuilder: (context) => [
+            undoMenuItem(context, onChanged: _undo),
+            redoMenuItem(context, onChanged: _redo),
+            const PopupMenuDivider(),
+            textScaleMenuItem(
+              context,
+              textScale: scopedViewSettings.textScale,
+              onChanged: (value) => viewSettings.setTextScale(scopeKey, value),
+            ),
+            fontFamilyMenuItem(
+              context,
+              fontFamily: scopedViewSettings.fontFamily,
+              onChanged: (value) => viewSettings.setFontFamily(scopeKey, value),
+            ),
+            const PopupMenuDivider(),
+            readerModeMenuItem(
+              context,
+              enabled: scopedViewSettings.readerMode,
+              onChanged: (value) => viewSettings.readerMode = value,
+            ),
+            if (_allowFullScreen(context))
+              fullWidthMenuItem(
+                context,
+                enabled: scopedViewSettings.fullWidth,
+                onChanged: (value) => viewSettings.fullWidth = value,
+              ),
+            const PopupMenuDivider(),
+            // Disused because icon button is always visible now
+            // PopupMenuItem<VoidCallback>(
+            //   child: const Text('Cycle visibility'),
+            //   value: OrgController.of(context).cycleVisibility,
+            // ),
+            scrollTopMenuItem(context),
+            scrollBottomMenuItem(context),
+          ],
         );
       }
     }
@@ -304,50 +301,40 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: searchDelegate.searchMode,
-      builder:
-          (context, searchMode, _) => ValueListenableBuilder<bool>(
-            valueListenable: _dirty,
-            builder: (context, dirty, _) {
-              return PopScope(
-                canPop:
-                    searchMode ||
-                    !dirty ||
-                    _doc is! OrgDocument ||
-                    !widget.root,
-                onPopInvokedWithResult: _onPopInvoked,
-                child: Scaffold(
-                  body: KeyboardShortcuts(
-                    // Builder is here to ensure that the primary scroll controller set by the
-                    // Scaffold makes it into the body's context
-                    child: Builder(
-                      builder:
-                          (context) => CustomScrollView(
-                            restorationId:
-                                'document_scroll_view_${widget.layer}',
-                            slivers: [
-                              _buildAppBar(context, searchMode: searchMode),
-                              _buildDocument(context),
-                            ],
-                          ),
-                    ),
+      builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
+        valueListenable: _dirty,
+        builder: (context, dirty, _) {
+          return PopScope(
+            canPop:
+                searchMode || !dirty || _doc is! OrgDocument || !widget.root,
+            onPopInvokedWithResult: _onPopInvoked,
+            child: Scaffold(
+              body: KeyboardShortcuts(
+                // Builder is here to ensure that the primary scroll controller set by the
+                // Scaffold makes it into the body's context
+                child: Builder(
+                  builder: (context) => CustomScrollView(
+                    restorationId: 'document_scroll_view_${widget.layer}',
+                    slivers: [
+                      _buildAppBar(context, searchMode: searchMode),
+                      _buildDocument(context),
+                    ],
                   ),
-                  // Builder is here to ensure that the Scaffold makes it into the
-                  // body's context
-                  floatingActionButton: Builder(
-                    builder:
-                        (context) => _buildFloatingActionButton(
-                          context,
-                          searchMode: searchMode,
-                        ),
-                  ),
-                  bottomSheet:
-                      searchMode
-                          ? searchDelegate.buildBottomSheet(context)
-                          : null,
                 ),
-              );
-            },
-          ),
+              ),
+              // Builder is here to ensure that the Scaffold makes it into the
+              // body's context
+              floatingActionButton: Builder(
+                builder: (context) =>
+                    _buildFloatingActionButton(context, searchMode: searchMode),
+              ),
+              bottomSheet: searchMode
+                  ? searchDelegate.buildBottomSheet(context)
+                  : null,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -376,16 +363,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       delegate: SliverChildListDelegate([
         DirectoryPermissionsBanner(
           visible: _askForDirectoryPermissions,
-          onDismiss:
-              () => viewSettings.setLocalLinksPolicy(
-                LocalLinksPolicy.deny,
-                persist: false,
-              ),
-          onForbid:
-              () => viewSettings.setLocalLinksPolicy(
-                LocalLinksPolicy.deny,
-                persist: true,
-              ),
+          onDismiss: () => viewSettings.setLocalLinksPolicy(
+            LocalLinksPolicy.deny,
+            persist: false,
+          ),
+          onForbid: () => viewSettings.setLocalLinksPolicy(
+            LocalLinksPolicy.deny,
+            persist: true,
+          ),
           onAllow: doPickDirectory,
         ),
         RemoteImagePermissionsBanner(
@@ -443,10 +428,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   // Add some extra padding on big screens to make things not feel so
   // tight. We can do this instead of adjusting the [OrgTheme.rootPadding]
   // because we are shrinkwapping the document
-  Widget _maybePadForBigScreen(Widget child) =>
-      _bigScreen
-          ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
-          : child;
+  Widget _maybePadForBigScreen(Widget child) => _bigScreen
+      ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
+      : child;
 
   Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) {
     if (_viewSettings.fullWidth || !_bigScreen || !_allowFullScreen(context)) {
@@ -486,27 +470,26 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
-  }) =>
-      searchMode
-          ? const SearchResultsNavigation()
-          : Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
-                onPressed: doEdit,
-                heroTag: '${widget.title}EditFAB',
-                mini: true,
-                child: const Icon(Icons.edit),
-              ),
-              const SizedBox(height: 16),
-              BadgableFloatingActionButton(
-                badgeVisible: searchDelegate.hasQuery,
-                onPressed: () => searchDelegate.start(context),
-                heroTag: '${widget.title}FAB',
-                child: const Icon(Icons.search),
-              ),
-            ],
-          );
+  }) => searchMode
+      ? const SearchResultsNavigation()
+      : Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: doEdit,
+              heroTag: '${widget.title}EditFAB',
+              mini: true,
+              child: const Icon(Icons.edit),
+            ),
+            const SizedBox(height: 16),
+            BadgableFloatingActionButton(
+              badgeVisible: searchDelegate.hasQuery,
+              onPressed: () => searchDelegate.start(context),
+              heroTag: '${widget.title}FAB',
+              child: const Icon(Icons.search),
+            ),
+          ],
+        );
 
   Future<void> doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
@@ -547,20 +530,17 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             AppLocalizations.of(context)!.snackbarMessageNeedsEncryptionKey,
           ),
           action: SnackBarAction(
-            label:
-                AppLocalizations.of(
-                  context,
-                )!.snackbarActionEnterEncryptionKey.toUpperCase(),
+            label: AppLocalizations.of(
+              context,
+            )!.snackbarActionEnterEncryptionKey.toUpperCase(),
             onPressed: () async {
               final password = await showDialog<String>(
                 context: context,
-                builder:
-                    (context) => InputPasswordDialog(
-                      title:
-                          AppLocalizations.of(
-                            context,
-                          )!.inputEncryptionPasswordDialogTitle,
-                    ),
+                builder: (context) => InputPasswordDialog(
+                  title: AppLocalizations.of(
+                    context,
+                  )!.inputEncryptionPasswordDialogTitle,
+                ),
               );
               if (password == null || !context.mounted) return;
               final docProvider = DocumentProvider.of(context);
@@ -698,10 +678,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       showDialog<String>(
         context: context,
         barrierDismissible: false,
-        builder:
-            (context) => ProgressIndicatorDialog(
-              title: AppLocalizations.of(context)!.savingProgressDialogTitle,
-            ),
+        builder: (context) => ProgressIndicatorDialog(
+          title: AppLocalizations.of(context)!.savingProgressDialogTitle,
+        ),
       );
       await writeFuture.whenComplete(() => navigator.pop());
       if (!_dirty.value) {
@@ -739,17 +718,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         doc.missingEncryptionKey(passwords)) {
       final password = await showDialog<String>(
         context: context,
-        builder:
-            (context) => InputPasswordDialog(
-              title:
-                  AppLocalizations.of(
-                    context,
-                  )!.inputEncryptionPasswordDialogTitle,
-              bodyText:
-                  AppLocalizations.of(
-                    context,
-                  )!.inputEncryptionPasswordDialogBody,
-            ),
+        builder: (context) => InputPasswordDialog(
+          title: AppLocalizations.of(
+            context,
+          )!.inputEncryptionPasswordDialogTitle,
+          bodyText: AppLocalizations.of(
+            context,
+          )!.inputEncryptionPasswordDialogBody,
+        ),
       );
       if (!mounted) return;
       if (password == null) {
@@ -787,9 +763,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     // Prompt to share
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (context) =>
-              ShareUnsaveableChangesDialog(doc: doc, serializer: serializer),
+      builder: (context) =>
+          ShareUnsaveableChangesDialog(doc: doc, serializer: serializer),
     );
 
     if (result == true) navigator.pop();

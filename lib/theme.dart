@@ -22,20 +22,21 @@ final orgroLightTheme = ThemeData.from(
   useMaterial3: _kUseMaterial3,
 );
 
-final orgroDarkTheme = ThemeData.from(
-  colorScheme: ColorScheme.dark(
-    primary: orgroPrimaryColor,
-    primaryContainer: _kPrimaryColorVariant,
-    onPrimary: Colors.white,
-    secondary: _kSecondaryColor,
-    secondaryContainer: _kSecondaryColorVariant,
-    onSecondary: Colors.white,
-  ),
-  useMaterial3: _kUseMaterial3,
-).copyWith(
-  // Very dumb workaround for our primary color (the default label
-  // color for TextButton) being too dark in dark mode
-  textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(foregroundColor: Colors.white),
-  ),
-);
+final orgroDarkTheme =
+    ThemeData.from(
+      colorScheme: ColorScheme.dark(
+        primary: orgroPrimaryColor,
+        primaryContainer: _kPrimaryColorVariant,
+        onPrimary: Colors.white,
+        secondary: _kSecondaryColor,
+        secondaryContainer: _kSecondaryColorVariant,
+        onSecondary: Colors.white,
+      ),
+      useMaterial3: _kUseMaterial3,
+    ).copyWith(
+      // Very dumb workaround for our primary color (the default label
+      // color for TextButton) being too dark in dark mode
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: Colors.white),
+      ),
+    );

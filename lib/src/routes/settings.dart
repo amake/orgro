@@ -6,9 +6,8 @@ import 'package:orgro/src/routes/routes.dart';
 class SettingsRoute extends MaterialPageRoute<void> {
   SettingsRoute()
     : super(
-        builder:
-            (context) =>
-                ViewSettings.defaults(context, child: const SettingsPage()),
+        builder: (context) =>
+            ViewSettings.defaults(context, child: const SettingsPage()),
         settings: const RouteSettings(name: Routes.settings),
         fullscreenDialog: true,
       );

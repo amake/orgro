@@ -40,9 +40,8 @@ class _NicelyTimedBannerState extends State<_NicelyTimedBanner> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 100),
-      transitionBuilder:
-          (child, animation) =>
-              SizeTransition(sizeFactor: animation, child: child),
+      transitionBuilder: (child, animation) =>
+          SizeTransition(sizeFactor: animation, child: child),
       child: _ready && widget.visible ? widget.child : const SizedBox.shrink(),
     );
   }
@@ -141,11 +140,10 @@ class SavePermissionsBanner extends StatelessWidget {
       child: MaterialBanner(
         content: OrgText(
           AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap:
-              (link) => launchUrl(
-                Uri.parse(link.location),
-                mode: LaunchMode.externalApplication,
-              ),
+          onLinkTap: (link) => launchUrl(
+            Uri.parse(link.location),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
         leading: const Icon(Icons.save),
         actions: [

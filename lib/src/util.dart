@@ -78,10 +78,9 @@ TextBox renderedBounds(
       .first;
 }
 
-final platformShortcutKey =
-    Platform.isIOS || Platform.isMacOS
-        ? LogicalKeyboardKey.meta
-        : LogicalKeyboardKey.control;
+final platformShortcutKey = Platform.isIOS || Platform.isMacOS
+    ? LogicalKeyboardKey.meta
+    : LogicalKeyboardKey.control;
 
 extension GlobalPaintBounds on BuildContext {
   Rect? get _globalPaintBounds {

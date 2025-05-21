@@ -47,10 +47,9 @@ class _StartPageState extends State<StartPage>
           body: _KeyboardShortcuts(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
-              child:
-                  hasRememberedFiles
-                      ? const RememberedFilesBody()
-                      : const _EmptyBody(),
+              child: hasRememberedFiles
+                  ? const RememberedFilesBody()
+                  : const _EmptyBody(),
             ),
           ),
           floatingActionButton: _buildFloatingActionButton(context),
@@ -62,41 +61,40 @@ class _StartPageState extends State<StartPage>
   Iterable<Widget> _buildActions() sync* {
     yield PopupMenuButton<VoidCallback>(
       onSelected: (callback) => callback(),
-      itemBuilder:
-          (context) => [
-            if (hasRememberedFiles) ...[
-              PopupMenuItem<VoidCallback>(
-                value: () => _promptAndOpenUrl(context),
-                child: Text(AppLocalizations.of(context)!.menuItemOpenUrl),
-              ),
-              PopupMenuItem<VoidCallback>(
-                value: () => _openOrgroManual(context),
-                child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
-              ),
-              const PopupMenuDivider(),
-            ],
+      itemBuilder: (context) => [
+        if (hasRememberedFiles) ...[
+          PopupMenuItem<VoidCallback>(
+            value: () => _promptAndOpenUrl(context),
+            child: Text(AppLocalizations.of(context)!.menuItemOpenUrl),
+          ),
+          PopupMenuItem<VoidCallback>(
+            value: () => _openOrgroManual(context),
+            child: Text(AppLocalizations.of(context)!.menuItemOrgroManual),
+          ),
+          const PopupMenuDivider(),
+        ],
+        PopupMenuItem<VoidCallback>(
+          value: () => _openSettingsScreen(context),
+          child: Text(AppLocalizations.of(context)!.menuItemSettings),
+        ),
+        if (!kReleaseMode && !kScreenshotMode) ...[
+          const PopupMenuDivider(),
+          if (hasRememberedFiles)
             PopupMenuItem<VoidCallback>(
-              value: () => _openSettingsScreen(context),
-              child: Text(AppLocalizations.of(context)!.menuItemSettings),
+              value: () => _openOrgManual(context),
+              child: Text(AppLocalizations.of(context)!.menuItemOrgManual),
             ),
-            if (!kReleaseMode && !kScreenshotMode) ...[
-              const PopupMenuDivider(),
-              if (hasRememberedFiles)
-                PopupMenuItem<VoidCallback>(
-                  value: () => _openOrgManual(context),
-                  child: Text(AppLocalizations.of(context)!.menuItemOrgManual),
-                ),
-              PopupMenuItem<VoidCallback>(
-                value: () => _openTestFile(context),
-                child: Text(AppLocalizations.of(context)!.menuItemTestFile),
-              ),
-            ],
-            const PopupMenuDivider(),
-            PopupMenuItem<VoidCallback>(
-              value: () => openAboutDialog(context),
-              child: Text(AppLocalizations.of(context)!.menuItemAbout),
-            ),
-          ],
+          PopupMenuItem<VoidCallback>(
+            value: () => _openTestFile(context),
+            child: Text(AppLocalizations.of(context)!.menuItemTestFile),
+          ),
+        ],
+        const PopupMenuDivider(),
+        PopupMenuItem<VoidCallback>(
+          value: () => openAboutDialog(context),
+          child: Text(AppLocalizations.of(context)!.menuItemAbout),
+        ),
+      ],
     );
   }
 
@@ -178,8 +176,8 @@ class _KeyboardShortcuts extends StatelessWidget {
   Widget build(BuildContext context) {
     return CallbackShortcuts(
       bindings: {
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO):
-            () => loadAndRememberFile(context, pickFile()),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO): () =>
+            loadAndRememberFile(context, pickFile()),
       },
       child: Focus(autofocus: true, child: child),
     );
@@ -240,8 +238,9 @@ Future<void> _createAndOpenFile(BuildContext context) async {
     builder: (context) => InputFileNameDialog(),
   );
   if (fileName == null || !context.mounted) return;
-  final orgFileName =
-      fileName.toLowerCase().endsWith('.org') ? fileName : '$fileName.org';
+  final orgFileName = fileName.toLowerCase().endsWith('.org')
+      ? fileName
+      : '$fileName.org';
   return await loadAndRememberFile(
     context,
     createAndLoadFile(orgFileName),

@@ -53,8 +53,10 @@ class _DocumentProviderState extends State<DocumentProvider> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final accessibleDirs =
-        Preferences.of(context, PrefsAspect.accessibleDirs).accessibleDirs;
+    final accessibleDirs = Preferences.of(
+      context,
+      PrefsAspect.accessibleDirs,
+    ).accessibleDirs;
     _resolveDataSourceParent(accessibleDirs).then((dataSource) {
       if (dataSource != null) {
         setState(() => _dataSource = dataSource);

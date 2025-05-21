@@ -98,8 +98,9 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8),
                 ),
-                style:
-                    ViewSettings.of(context).forScope(widget.docId).textStyle,
+                style: ViewSettings.of(
+                  context,
+                ).forScope(widget.docId).textStyle,
               ),
             ),
             _EditorToolbar(
@@ -153,21 +154,21 @@ class _EditorToolbar extends StatelessWidget {
           children: [
             ValueListenableBuilder(
               valueListenable: undoController,
-              builder:
-                  (context, value, _) => IconButton(
-                    icon: const Icon(Icons.undo),
-                    onPressed:
-                        enabled && value.canUndo ? undoController.undo : null,
-                  ),
+              builder: (context, value, _) => IconButton(
+                icon: const Icon(Icons.undo),
+                onPressed: enabled && value.canUndo
+                    ? undoController.undo
+                    : null,
+              ),
             ),
             ValueListenableBuilder(
               valueListenable: undoController,
-              builder:
-                  (context, value, _) => IconButton(
-                    icon: const Icon(Icons.redo),
-                    onPressed:
-                        enabled && value.canRedo ? undoController.redo : null,
-                  ),
+              builder: (context, value, _) => IconButton(
+                icon: const Icon(Icons.redo),
+                onPressed: enabled && value.canRedo
+                    ? undoController.redo
+                    : null,
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.format_bold),
@@ -239,8 +240,8 @@ class _EditorToolbar extends StatelessWidget {
         _tryParseUrl(selection) ??
         (await Clipboard.hasStrings()
             ? _tryParseUrl(
-              (await Clipboard.getData(Clipboard.kTextPlain))?.text,
-            )
+                (await Clipboard.getData(Clipboard.kTextPlain))?.text,
+              )
             : null);
     final description = url == null ? selection : null;
     final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
@@ -267,14 +268,13 @@ class _EditorToolbar extends StatelessWidget {
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    final replacement =
-        OrgSimpleTimestamp(
-          '[',
-          date.toOrgDate(),
-          time?.toOrgTime(),
-          [],
-          ']',
-        ).toMarkup();
+    final replacement = OrgSimpleTimestamp(
+      '[',
+      date.toOrgDate(),
+      time?.toOrgTime(),
+      [],
+      ']',
+    ).toMarkup();
     controller.value = value
         .replaced(value.selection, replacement)
         .copyWith(

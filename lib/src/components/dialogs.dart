@@ -28,11 +28,10 @@ class SavePermissionDialog extends StatelessWidget {
         width: double.maxFinite,
         child: OrgText(
           AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap:
-              (link) => launchUrl(
-                Uri.parse(link.location),
-                mode: LaunchMode.externalApplication,
-              ),
+          onLinkTap: (link) => launchUrl(
+            Uri.parse(link.location),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
       ),
       actions: [
@@ -255,9 +254,8 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
 
   final dialogFuture = showDialog<(T, Object?)>(
     context: context,
-    builder:
-        (context) =>
-            ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
+    builder: (context) =>
+        ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
   );
 
   task
@@ -348,20 +346,18 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
       actions: [
         _DialogButton(
           text: AppLocalizations.of(context)!.dialogActionHelp,
-          onPressed:
-              () => launchUrl(
-                Uri.parse(
-                  'https://orgmode.org/manual/Matching-tags-and-properties.html',
-                ),
-                mode: LaunchMode.externalApplication,
-              ),
+          onPressed: () => launchUrl(
+            Uri.parse(
+              'https://orgmode.org/manual/Matching-tags-and-properties.html',
+            ),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
         if (history.isNotEmpty)
           _DialogButton(
-            text:
-                AppLocalizations.of(
-                  context,
-                )!.inputCustomFilterDialogHistoryButton,
+            text: AppLocalizations.of(
+              context,
+            )!.inputCustomFilterDialogHistoryButton,
             onPressed: () async {
               final entry = await _pickFromHistory(context, history);
               if (entry != null) _controller.text = entry;
@@ -373,12 +369,12 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         ),
         ValueListenableBuilder(
           valueListenable: _controller,
-          builder:
-              (context, value, _) => _DialogButton(
-                text: AppLocalizations.of(context)!.dialogActionConfirm,
-                onPressed:
-                    _validate(value.text) ? () => _confirm(value.text) : null,
-              ),
+          builder: (context, value, _) => _DialogButton(
+            text: AppLocalizations.of(context)!.dialogActionConfirm,
+            onPressed: _validate(value.text)
+                ? () => _confirm(value.text)
+                : null,
+          ),
         ),
       ],
     );
@@ -415,11 +411,10 @@ class CustomFilterHistoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final history =
-        Preferences.of(
-          context,
-          PrefsAspect.customFilterQueries,
-        ).customFilterQueries;
+    final history = Preferences.of(
+      context,
+      PrefsAspect.customFilterQueries,
+    ).customFilterQueries;
     return SimpleDialog(
       children: [
         for (final entry in history)
@@ -471,17 +466,13 @@ class CitationsDialog extends StatelessWidget {
               },
               title: Text(entry.getPrettyValue('title') ?? entry.key),
               subtitle: details.isEmpty ? null : Text(details),
-              trailing:
-                  url == null
-                      ? null
-                      : IconButton(
-                        icon: const Icon(Icons.open_in_new),
-                        onPressed:
-                            () => launchUrl(
-                              url,
-                              mode: LaunchMode.externalApplication,
-                            ),
-                      ),
+              trailing: url == null
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.open_in_new),
+                      onPressed: () =>
+                          launchUrl(url, mode: LaunchMode.externalApplication),
+                    ),
             );
           },
           itemCount: entries.length,
@@ -630,11 +621,13 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
 
 extension RecentFilesSortKeyDisplayString on RecentFilesSortKey {
   String toDisplayString(BuildContext context) => switch (this) {
-    RecentFilesSortKey.lastOpened =>
-      AppLocalizations.of(context)!.sortKeyLastOpened,
+    RecentFilesSortKey.lastOpened => AppLocalizations.of(
+      context,
+    )!.sortKeyLastOpened,
     RecentFilesSortKey.name => AppLocalizations.of(context)!.sortKeyName,
-    RecentFilesSortKey.location =>
-      AppLocalizations.of(context)!.sortKeyLocation,
+    RecentFilesSortKey.location => AppLocalizations.of(
+      context,
+    )!.sortKeyLocation,
   };
 }
 

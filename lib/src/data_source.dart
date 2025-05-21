@@ -68,10 +68,9 @@ class WebDataSource extends DataSource {
       } else {
         throw OrgroError(
           'Unexpected HTTP response: $response',
-          localizedMessage:
-              (context) => AppLocalizations.of(
-                context,
-              )!.errorUnexpectedHttpResponse(response),
+          localizedMessage: (context) => AppLocalizations.of(
+            context,
+          )!.errorUnexpectedHttpResponse(response),
         );
       }
     } on Exception catch (e, s) {
@@ -162,9 +161,8 @@ class NativeDataSource extends DataSource {
     if (parentDirIdentifier == null) {
       throw OrgroError(
         'Can’t resolve path relative to this document',
-        localizedMessage:
-            (context) =>
-                AppLocalizations.of(context)!.errorCannotResolveRelativePath,
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorCannotResolveRelativePath,
       );
     }
     // TODO(aaron): See if we can resolve to a non-existent file for writing
@@ -175,10 +173,9 @@ class NativeDataSource extends DataSource {
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
-        localizedMessage:
-            (context) => AppLocalizations.of(
-              context,
-            )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
+        localizedMessage: (context) => AppLocalizations.of(
+          context,
+        )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
       );
     }
     return NativeDataSource(

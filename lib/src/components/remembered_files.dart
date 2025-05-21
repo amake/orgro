@@ -156,8 +156,9 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
         .map((newFile) {
           // If the new file is pinned, we don't need to absorb an existing pin
           if (newFile.isPinned) return newFile;
-          final existingFile =
-              _rememberedFiles.where((f) => f.uri == newFile.uri).firstOrNull;
+          final existingFile = _rememberedFiles
+              .where((f) => f.uri == newFile.uri)
+              .firstOrNull;
           if (existingFile == null) return newFile;
           return newFile.copyWith(pinnedIdx: existingFile.pinnedIdx);
         })

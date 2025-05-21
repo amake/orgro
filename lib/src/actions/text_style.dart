@@ -78,8 +78,8 @@ class _TextStyleButtonState extends State<TextStyleButton>
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.format_size),
-      onPressed:
-          () => Overlay.of(context).insertAll(_overlays(context).toList()),
+      onPressed: () =>
+          Overlay.of(context).insertAll(_overlays(context).toList()),
     );
   }
 
@@ -301,18 +301,18 @@ class _FontFamilySelectorState extends State<FontFamilySelector> {
 Future<String?> _chooseFont(BuildContext context, String currentValue) async =>
     showDialog<String>(
       context: context,
-      builder:
-          (context) => SimpleDialog(
-            children: [
-              for (final family in availableFontFamilies.toList(growable: false)
-                ..sort())
-                CheckboxListTile(
-                  value: currentValue == family,
-                  title: Text(family),
-                  onChanged: (_) => Navigator.pop(context, family),
-                ),
-            ],
-          ),
+      builder: (context) => SimpleDialog(
+        children: [
+          for (final family in availableFontFamilies.toList(
+            growable: false,
+          )..sort())
+            CheckboxListTile(
+              value: currentValue == family,
+              title: Text(family),
+              onChanged: (_) => Navigator.pop(context, family),
+            ),
+        ],
+      ),
     );
 
 /// A popup menu item that doesn't close when tapped and doesn't provide its own

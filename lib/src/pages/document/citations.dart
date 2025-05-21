@@ -43,10 +43,9 @@ extension CitationHandler on DocumentPageState {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => ProgressIndicatorDialog(
-            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-          ),
+      builder: (context) => ProgressIndicatorDialog(
+        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      ),
     );
 
     final entries = await _findBibTeXEntries(
@@ -126,10 +125,9 @@ List<String> extractBibliograpies(OrgTree tree) {
   tree.visit<OrgMeta>((meta) {
     if (meta.key.toLowerCase() == '#+bibliography:' && meta.value != null) {
       final trailing = meta.value!.toMarkup().trim();
-      final bibFile =
-          trailing.startsWith('"') && trailing.endsWith('"')
-              ? trailing.substring(1, trailing.length - 1)
-              : trailing;
+      final bibFile = trailing.startsWith('"') && trailing.endsWith('"')
+          ? trailing.substring(1, trailing.length - 1)
+          : trailing;
       results.add(bibFile);
     }
     return true;
@@ -151,10 +149,9 @@ extension EntryPresentation on BibTeXEntry {
       result = trimmed;
     }
     if (key == 'pages') {
-      result =
-          result.contains('-') || result.contains(',')
-              ? 'pp. ${result.replaceAll('--', '–')}'
-              : 'p. $result';
+      result = result.contains('-') || result.contains(',')
+          ? 'pp. ${result.replaceAll('--', '–')}'
+          : 'p. $result';
     }
     if (key == 'volume') result = 'Vol. $result';
     if (key == 'number') result = 'No. $result';

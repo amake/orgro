@@ -61,8 +61,9 @@ extension TimestampsExtension on DocumentPageState {
     final startResult = await showTimePicker(
       context: context,
       initialTime: timestamp.timeStart.toTimeOfDay(),
-      helpText:
-          AppLocalizations.of(context)!.startTimePickerTitle.toUpperCase(),
+      helpText: AppLocalizations.of(
+        context,
+      )!.startTimePickerTitle.toUpperCase(),
     );
     if (startResult != null) {
       newTimestamp = newTimestamp.copyWith(timeStart: startResult.toOrgTime());

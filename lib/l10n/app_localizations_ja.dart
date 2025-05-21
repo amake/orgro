@@ -182,11 +182,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -407,8 +407,8 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return '以下のコードの実行が ${timeoutString}ms でタイムアウトしました\n\n$code';

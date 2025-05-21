@@ -73,11 +73,10 @@ Future<void> showInteractive(
   return await Navigator.push<void>(
     context,
     MaterialPageRoute(
-      builder:
-          (builder) => Scaffold(
-            appBar: AppBar(title: Text(title)),
-            body: InteractiveViewer(child: Center(child: child)),
-          ),
+      builder: (builder) => Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: InteractiveViewer(child: Center(child: child)),
+      ),
     ),
   );
 }
@@ -95,21 +94,20 @@ Future<OrgTree?> showTextEditor(
     context,
     MaterialPageRoute(
       fullscreenDialog: true,
-      builder:
-          (builder) => RootRestorationScope(
-            restorationId: 'org_editor_$layer:${dataSource.id}',
-            child: ViewSettings(
-              data: viewSettings,
-              child: EditorPage(
-                docId: dataSource.id,
-                text: text,
-                title: AppLocalizations.of(
-                  context,
-                )!.pageTitleEditing(dataSource.name),
-                requestFocus: requestFocus,
-              ),
-            ),
+      builder: (builder) => RootRestorationScope(
+        restorationId: 'org_editor_$layer:${dataSource.id}',
+        child: ViewSettings(
+          data: viewSettings,
+          child: EditorPage(
+            docId: dataSource.id,
+            text: text,
+            title: AppLocalizations.of(
+              context,
+            )!.pageTitleEditing(dataSource.name),
+            requestFocus: requestFocus,
           ),
+        ),
+      ),
     ),
   );
 

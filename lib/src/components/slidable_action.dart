@@ -56,16 +56,15 @@ class ResponsiveSlidableAction extends StatelessWidget {
               ];
               return short
                   ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children,
-                  )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: children,
+                    )
                   : Column(
-                    mainAxisAlignment:
-                        veryTall
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.center,
-                    children: children,
-                  );
+                      mainAxisAlignment: veryTall
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.center,
+                      children: children,
+                    );
             },
           ),
         ),

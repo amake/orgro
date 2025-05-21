@@ -115,19 +115,17 @@ class _DocumentPageWrapper extends StatelessWidget {
             final viewSettings = ViewSettings.of(context);
             return OrgController(
               root: docProvider.doc,
-              settings:
-                  viewSettings.readerMode
-                      ? OrgSettings.hideMarkup
-                      : const OrgSettings(),
+              settings: viewSettings.readerMode
+                  ? OrgSettings.hideMarkup
+                  : const OrgSettings(),
               interpretEmbeddedSettings: true,
               searchQuery: viewSettings.queryString?.asRegex(),
               sparseQuery: viewSettings.filterData.asSparseQuery(),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame
-              errorHandler:
-                  (e) => WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => showErrorSnackBar(context, OrgroError.from(e)),
-                  ),
+              errorHandler: (e) => WidgetsBinding.instance.addPostFrameCallback(
+                (_) => showErrorSnackBar(context, OrgroError.from(e)),
+              ),
               restorationId: 'org_page:${dataSource.id}',
               child: OrgLocator(
                 child: DocumentPage(

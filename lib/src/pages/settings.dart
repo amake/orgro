@@ -17,33 +17,36 @@ class SettingsPage extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
       ),
       body: ListView(
-        children: [
-              appearanceListItem(context),
-              Divider(),
-              ListHeader(
-                title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDefaultText,
-                ),
-              ),
-              fontFamilyListItem(context),
-              textScaleListItem(context),
-              _TextPreview(),
-              Divider(),
-              ListHeader(
-                title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDataManagement,
-                ),
-              ),
-              clearCachesListItem(context),
-              resetPreferencesListItem(context),
-            ]
-            .map(
-              (child) => switch (child) {
-                Divider() => child,
-                _ => _constrain(child),
-              },
-            )
-            .toList(growable: false),
+        children:
+            [
+                  appearanceListItem(context),
+                  Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(context)!.settingsSectionDefaultText,
+                    ),
+                  ),
+                  fontFamilyListItem(context),
+                  textScaleListItem(context),
+                  _TextPreview(),
+                  Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.settingsSectionDataManagement,
+                    ),
+                  ),
+                  clearCachesListItem(context),
+                  resetPreferencesListItem(context),
+                ]
+                .map(
+                  (child) => switch (child) {
+                    Divider() => child,
+                    _ => _constrain(child),
+                  },
+                )
+                .toList(growable: false),
       ),
     );
   }
@@ -80,10 +83,9 @@ class _TextPreviewState extends State<_TextPreview> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_inited) {
-      _controller.text =
-          _prefs.textPreviewString.isEmpty
-              ? kDefaultTextPreviewString
-              : _prefs.textPreviewString;
+      _controller.text = _prefs.textPreviewString.isEmpty
+          ? kDefaultTextPreviewString
+          : _prefs.textPreviewString;
       _inited = true;
     }
   }

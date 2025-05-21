@@ -67,10 +67,9 @@ class _NarrowRouteTop extends StatelessWidget {
                 // Continue to use the true document root so that links to sections
                 // outside the narrowed section can be resolved
                 root: orgController.root,
-                settings:
-                    viewSettings.readerMode
-                        ? OrgSettings.hideMarkup
-                        : const OrgSettings(),
+                settings: viewSettings.readerMode
+                    ? OrgSettings.hideMarkup
+                    : const OrgSettings(),
                 searchQuery: viewSettings.queryString?.asRegex(),
                 sparseQuery: viewSettings.filterData.asSparseQuery(),
                 restorationId: 'org_narrow_$layer:${dataSource.id}',

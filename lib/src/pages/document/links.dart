@@ -133,10 +133,9 @@ extension LinkHandler on DocumentPageState {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => ProgressIndicatorDialog(
-            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-          ),
+      builder: (context) => ProgressIndicatorDialog(
+        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      ),
     );
 
     var popped = false;
@@ -205,16 +204,14 @@ extension LinkHandler on DocumentPageState {
               context,
             )!.snackbarMessageNeedsDirectoryPermissions,
           ),
-          action:
-              canResolveRelativeLinks == true
-                  ? SnackBarAction(
-                    label:
-                        AppLocalizations.of(
-                          context,
-                        )!.snackbarActionGrantAccess.toUpperCase(),
-                    onPressed: doPickDirectory,
-                  )
-                  : null,
+          action: canResolveRelativeLinks == true
+              ? SnackBarAction(
+                  label: AppLocalizations.of(
+                    context,
+                  )!.snackbarActionGrantAccess.toUpperCase(),
+                  onPressed: doPickDirectory,
+                )
+              : null,
         ),
       );
 
@@ -263,12 +260,11 @@ Uri? expandAbbreviatedUrl(OrgTree doc, OrgLink link) {
     return null;
   }
 
-  final formatted =
-      format.contains('%s')
-          ? format.replaceFirst('%s', tag)
-          : format.contains('%h')
-          ? format.replaceFirst('%h', Uri.encodeComponent(tag))
-          : '$format$tag';
+  final formatted = format.contains('%s')
+      ? format.replaceFirst('%s', tag)
+      : format.contains('%h')
+      ? format.replaceFirst('%h', Uri.encodeComponent(tag))
+      : '$format$tag';
   return Uri.tryParse(formatted);
 }
 

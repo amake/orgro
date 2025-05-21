@@ -68,14 +68,8 @@ bool _isTest = false;
 class Preferences extends StatefulWidget {
   static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
       _isTest
-          ? InheritedModel.inheritFrom<_MockPreferences>(
-            context,
-            aspect: aspect,
-          )!
-          : InheritedModel.inheritFrom<_AppPreferences>(
-            context,
-            aspect: aspect,
-          )!;
+      ? InheritedModel.inheritFrom<_MockPreferences>(context, aspect: aspect)!
+      : InheritedModel.inheritFrom<_AppPreferences>(context, aspect: aspect)!;
 
   const Preferences({this.isTest = false, required this.child, super.key});
 
@@ -274,8 +268,8 @@ class _AppPreferences extends InheritedPreferences {
     } else {
       throw OrgroError(
         'Unknown type: $T',
-        localizedMessage:
-            (context) => AppLocalizations.of(context)!.errorUnknownType(T),
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorUnknownType(T),
       );
     }
   }
@@ -340,18 +334,23 @@ extension RecentFilesExt on InheritedPreferences {
 
   Future<void> pinFile(RememberedFile file) async {
     final pinnedIdx = rememberedFiles.where((f) => f.isPinned).length;
-    final files = rememberedFiles
-        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: pinnedIdx) : f)
-        .toList(growable: false)
-      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    final files =
+        rememberedFiles
+            .map(
+              (f) =>
+                  f.uri == file.uri ? file.copyWith(pinnedIdx: pinnedIdx) : f,
+            )
+            .toList(growable: false)
+          ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     return await _setRecentFiles(files);
   }
 
   Future<void> unpinFile(RememberedFile file) async {
-    final files = rememberedFiles
-        .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: -1) : f)
-        .toList(growable: false)
-      ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
+    final files =
+        rememberedFiles
+            .map((f) => f.uri == file.uri ? file.copyWith(pinnedIdx: -1) : f)
+            .toList(growable: false)
+          ..sort((a, b) => -a.isPinned.compareTo(b.isPinned));
     return await _setRecentFiles(files);
   }
 
@@ -534,10 +533,9 @@ class PreferencesData {
     final scopedPreferencesJson = await prefs.getString(
       kScopedPreferencesJsonKey,
     );
-    final scopedPreferences =
-        scopedPreferencesJson == null
-            ? null
-            : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
+    final scopedPreferences = scopedPreferencesJson == null
+        ? null
+        : json.decode(scopedPreferencesJson) as Map<String, dynamic>;
     return PreferencesData.defaults().copyWith(
       textScale: await prefs.getDouble(kTextScaleKey),
       fontFamily: await prefs.getString(kFontFamilyKey),
@@ -666,11 +664,8 @@ class PreferencesData {
       fullWidth == other.fullWidth &&
       scopedPreferences.unorderedEquals(
         other.scopedPreferences,
-        valueEquals:
-            (a, b) => mapEquals(
-              a as Map<String, dynamic>?,
-              b as Map<String, dynamic>?,
-            ),
+        valueEquals: (a, b) =>
+            mapEquals(a as Map<String, dynamic>?, b as Map<String, dynamic>?),
       ) &&
       textPreviewString == other.textPreviewString;
 

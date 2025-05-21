@@ -33,8 +33,8 @@ extension ImageHandler on DocumentPageState {
       return null;
     }
     return GestureDetector(
-      onLongPress:
-          () => showInteractive(context, link.location, RemoteImage(link)),
+      onLongPress: () =>
+          showInteractive(context, link.location, RemoteImage(link)),
       child: RemoteImage(link, scaled: true),
     );
   }
@@ -45,16 +45,11 @@ extension ImageHandler on DocumentPageState {
       return null;
     }
     return GestureDetector(
-      onLongPress:
-          () => showInteractive(
-            context,
-            fileLink.body,
-            LocalImage(
-              link: link,
-              dataSource: source,
-              relativePath: fileLink.body,
-            ),
-          ),
+      onLongPress: () => showInteractive(
+        context,
+        fileLink.body,
+        LocalImage(link: link, dataSource: source, relativePath: fileLink.body),
+      ),
       child: LocalImage(
         link: link,
         dataSource: source,

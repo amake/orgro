@@ -84,16 +84,12 @@ Future<String?> serializeWithProgressUI(
 ) async {
   final dialogFuture = showDialog<String>(
     context: context,
-    builder:
-        (context) => ProgressIndicatorDialog(
-          title:
-              serializer.willEncrypt
-                  ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
-                  : AppLocalizations.of(
-                    context,
-                  )!.serializingProgressDialogTitle,
-          dismissable: true,
-        ),
+    builder: (context) => ProgressIndicatorDialog(
+      title: serializer.willEncrypt
+          ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
+          : AppLocalizations.of(context)!.serializingProgressDialogTitle,
+      dismissable: true,
+    ),
   );
   var canceled = false;
   serialize(doc, serializer)
