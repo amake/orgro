@@ -108,8 +108,8 @@ class RememberedFile {
   }
 }
 
-class RememberedFiles extends InheritedWidget {
-  const RememberedFiles(
+class InheritedRememberedFiles extends InheritedWidget {
+  const InheritedRememberedFiles(
     this.list,
     this.sortKey,
     this.sortOrder, {
@@ -124,8 +124,8 @@ class RememberedFiles extends InheritedWidget {
   final List<RememberedFile> list;
   final RecentFilesSortKey sortKey;
   final SortOrder sortOrder;
-  final ValueChanged<List<RememberedFile>> add;
-  final ValueChanged<RememberedFile> remove;
+  final AsyncValueSetter<List<RememberedFile>> add;
+  final AsyncValueSetter<RememberedFile> remove;
   final ValueChanged<RememberedFile> pin;
   final ValueChanged<RememberedFile> unpin;
 
@@ -133,23 +133,32 @@ class RememberedFiles extends InheritedWidget {
 
   List<RememberedFile> get recents => list.where((f) => f.isNotPinned).toList();
 
+  bool get hasRememberedFiles => list.isNotEmpty;
+
   @override
-  bool updateShouldNotify(RememberedFiles oldWidget) =>
+  bool updateShouldNotify(InheritedRememberedFiles oldWidget) =>
       !listEquals(list, oldWidget.list) ||
       sortKey != oldWidget.sortKey ||
       sortOrder != oldWidget.sortOrder;
-
-  static RememberedFiles of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<RememberedFiles>()!;
 }
 
-mixin RecentFilesState<T extends StatefulWidget> on State<T> {
+class RememberedFiles extends StatefulWidget {
+  static InheritedRememberedFiles of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedRememberedFiles>()!;
+
+  const RememberedFiles({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<RememberedFiles> createState() => _RememberedFilesState();
+}
+
+class _RememberedFilesState extends State<RememberedFiles> {
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.recentFiles);
   List<RememberedFile> get _rememberedFiles => _prefs.rememberedFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
-
-  bool get hasRememberedFiles => _rememberedFiles.isNotEmpty;
 
   Future<void> addRecentFiles(List<RememberedFile> newFiles) async {
     newFiles = newFiles
@@ -215,8 +224,9 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
     }
   }
 
-  Widget buildWithRememberedFiles({required WidgetBuilder builder}) {
-    return RememberedFiles(
+  @override
+  Widget build(BuildContext context) {
+    return InheritedRememberedFiles(
       _rememberedFiles,
       _prefs.recentFilesSortKey,
       _prefs.recentFilesSortOrder,
@@ -224,8 +234,7 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
       remove: removeRecentFile,
       pin: pinFile,
       unpin: unpinFile,
-      // Builder required to get RecentFiles into context
-      child: Builder(builder: builder),
+      child: widget.child,
     );
   }
 }

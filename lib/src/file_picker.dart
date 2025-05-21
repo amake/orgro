@@ -5,6 +5,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/pages/start/util.dart';
 
 Future<NativeDataSource?> pickFile() async =>
     FilePickerWritable().openFile(LoadedNativeDataSource.fromExternal);
@@ -61,10 +62,10 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
       await _displayError(e.toString());
       return false;
     }
-    return loadFileFromPlatform(openFileInfo);
+    if (!mounted) return false;
+    await loadAndRememberFile(context, openFileInfo);
+    return true;
   }
-
-  Future<bool> loadFileFromPlatform(NativeDataSource info);
 
   Future<bool> _handleError(ErrorEvent event) async {
     await _displayError(event.message);

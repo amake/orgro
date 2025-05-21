@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,50 +20,62 @@ import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
-class StartPage extends StatefulWidget {
+class StartPage extends StatelessWidget {
   const StartPage({super.key});
 
   @override
-  State createState() => _StartPageState();
+  Widget build(BuildContext context) {
+    return RememberedFiles(child: const _StartPageInner());
+  }
 }
 
-class _StartPageState extends State<StartPage>
-    with RecentFilesState, PlatformOpenHandler, RestorationMixin {
-  @override
-  Widget build(BuildContext context) => UnmanagedRestorationScope(
-    bucket: bucket,
-    child: buildWithRememberedFiles(
-      builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            actions: _buildActions().toList(growable: false),
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(AppLocalizations.of(context)!.appTitle),
-                const FontPreloader(),
-              ],
-            ),
-          ),
-          body: _KeyboardShortcuts(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: hasRememberedFiles
-                  ? const RememberedFilesBody()
-                  : const _EmptyBody(),
-            ),
-          ),
-          floatingActionButton: _buildFloatingActionButton(context),
-        );
-      },
-    ),
-  );
+class _StartPageInner extends StatefulWidget {
+  const _StartPageInner();
 
-  Iterable<Widget> _buildActions() sync* {
+  @override
+  State createState() => _StartPageInnerState();
+}
+
+class _StartPageInnerState extends State<_StartPageInner>
+    with PlatformOpenHandler, RestorationMixin {
+  @override
+  Widget build(BuildContext context) {
+    final hasRememberedFiles = RememberedFiles.of(context).hasRememberedFiles;
+    return UnmanagedRestorationScope(
+      bucket: bucket,
+      child: Scaffold(
+        appBar: AppBar(
+          actions: _buildActions(
+            hasRememberedFiles: hasRememberedFiles,
+          ).toList(growable: false),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(AppLocalizations.of(context)!.appTitle),
+              const FontPreloader(),
+            ],
+          ),
+        ),
+        body: _KeyboardShortcuts(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: hasRememberedFiles
+                ? const RememberedFilesBody()
+                : const _EmptyBody(),
+          ),
+        ),
+        floatingActionButton: hasRememberedFiles
+            ? _buildFloatingActionButton(context)
+            : null,
+      ),
+    );
+  }
+
+  Iterable<Widget> _buildActions({required bool hasRememberedFiles}) sync* {
     yield PopupMenuButton<VoidCallback>(
       onSelected: (callback) => callback(),
       itemBuilder: (context) => [
-        if (hasRememberedFiles) ...[
+        if (RememberedFiles.of(context).hasRememberedFiles) ...[
           PopupMenuItem<VoidCallback>(
             value: () => _promptAndOpenUrl(context),
             child: Text(AppLocalizations.of(context)!.menuItemOpenUrl),
@@ -98,10 +111,7 @@ class _StartPageState extends State<StartPage>
     );
   }
 
-  Widget? _buildFloatingActionButton(BuildContext context) {
-    if (!hasRememberedFiles) {
-      return null;
-    }
+  Widget _buildFloatingActionButton(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -123,23 +133,13 @@ class _StartPageState extends State<StartPage>
   }
 
   @override
-  Future<bool> loadFileFromPlatform(NativeDataSource info) async {
-    // We can't use _loadAndRememberFile because RecentFiles is not in this
-    // context
-    await _rememberFile(info);
-    final context = this.context;
-    if (!context.mounted) return false;
-    await loadFile(context, info);
-    return true;
-  }
-
-  @override
   String get restorationId => 'start_page';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     if (!initialRestore) return;
 
+    // TODO(aaron): This is legacy; delete eventually
     final restoreId = bucket?.read<String>(kRestoreOpenFileIdKey);
     debugPrint('restoreState; restoreId=$restoreId');
     if (restoreId != null) {
@@ -149,6 +149,30 @@ class _StartPageState extends State<StartPage>
         await _rememberFile(dataSource);
         if (!context.mounted) return;
         await loadFile(context, dataSource, bucket: bucket);
+      });
+      return;
+    }
+
+    final restoreRoute = bucket?.read<String>(kRestoreRouteKey);
+    debugPrint('restoreState; restoreRoute=$restoreRoute');
+    if (restoreRoute != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final restoreData = json.decode(restoreRoute);
+        final context = this.context;
+        switch (restoreData) {
+          case {'route': Routes.document, 'fileId': String fileId}:
+            await loadAndRememberFile(context, readFileWithIdentifier(fileId));
+            return;
+          case {'route': Routes.document, 'url': String url}:
+            await loadAndRememberUrl(context, Uri.parse(url));
+            return;
+          case {'route': Routes.document, 'assetKey': String key}:
+            await loadAndRememberAsset(context, key);
+            return;
+          default:
+            debugPrint('Unknown route: ${restoreData['route']}');
+            return;
+        }
       });
     }
   }
@@ -162,9 +186,12 @@ class _StartPageState extends State<StartPage>
       lastOpened: DateTime.now(),
     );
 
-    await addRecentFiles([recentFile]);
+    await RememberedFiles.of(context).add([recentFile]);
     debugPrint('Saving file ID to state');
-    bucket?.write<String>(kRestoreOpenFileIdKey, recentFile.identifier);
+    bucket?.write<String>(
+      kRestoreRouteKey,
+      json.encode({'route': Routes.document, 'fileId': recentFile.identifier}),
+    );
   }
 }
 
@@ -329,14 +356,14 @@ class _OrgroManualButton extends StatelessWidget {
   }
 }
 
-void _openOrgroManual(BuildContext context) =>
-    loadAsset(context, LocalAssets.manual);
+Future<void> _openOrgroManual(BuildContext context) =>
+    loadAndRememberAsset(context, LocalAssets.manual);
 
-void _openOrgManual(BuildContext context) =>
-    loadHttpUrl(context, Uri.parse(RemoteAssets.orgManual));
+Future<void> _openOrgManual(BuildContext context) =>
+    loadAndRememberUrl(context, Uri.parse(RemoteAssets.orgManual));
 
-void _openTestFile(BuildContext context) =>
-    loadAsset(context, LocalAssets.testFile);
+Future<void> _openTestFile(BuildContext context) =>
+    loadAndRememberAsset(context, LocalAssets.testFile);
 
 void _openSettingsScreen(BuildContext context) =>
     Navigator.pushNamed(context, Routes.settings);

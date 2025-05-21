@@ -7,6 +7,8 @@ import 'package:orgro/src/routes/settings.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const kRestoreRouteKey = 'restore_route_key';
+
 class Routes {
   const Routes._();
 
