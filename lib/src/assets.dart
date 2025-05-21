@@ -3,6 +3,7 @@ class LocalAssets {
 
   static const manual = 'assets/manual/orgro-manual.org';
   static const testFile = 'assets/test/test.org';
+  static const scratch = 'assets/test/scratch.org';
 }
 
 class RemoteAssets {

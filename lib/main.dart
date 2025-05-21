@@ -6,6 +6,7 @@ import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/quick_actions.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/theme.dart';
 

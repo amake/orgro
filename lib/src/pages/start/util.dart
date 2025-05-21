@@ -53,11 +53,7 @@ Future<void> loadFile(
   bucket.remove<String>(kRestoreRouteKey);
 }
 
-Future<void> loadAndRememberUrl(
-  BuildContext context,
-  Uri uri, {
-  RestorationBucket? bucket,
-}) async {
+Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
   final bucket = RestorationScope.of(context);
   bucket.write<String>(
     kRestoreRouteKey,
@@ -72,14 +68,14 @@ Future<void> loadAndRememberUrl(
 Future<void> loadAndRememberAsset(
   BuildContext context,
   String key, {
-  RestorationBucket? bucket,
+  InitialMode? mode,
 }) async {
   final bucket = RestorationScope.of(context);
   bucket.write<String>(
     kRestoreRouteKey,
     json.encode({'route': Routes.document, 'assetKey': key}),
   );
-  await loadAsset(context, key);
+  await loadAsset(context, key, mode: mode);
   debugPrint('Clearing saved state from bucket $bucket');
   bucket.remove<String>(kRestoreOpenFileIdKey);
   bucket.remove<String>(kRestoreRouteKey);

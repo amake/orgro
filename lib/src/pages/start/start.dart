@@ -17,6 +17,7 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/quick_actions.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
@@ -25,7 +26,7 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RememberedFiles(child: const _StartPageInner());
+    return RememberedFiles(child: QuickActions(child: const _StartPageInner()));
   }
 }
 

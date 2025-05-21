@@ -18,11 +18,15 @@ Future<void> loadHttpUrl(BuildContext context, Uri uri) => Navigator.pushNamed(
   arguments: DocumentRouteArgs(dataSource: WebDataSource(uri)),
 );
 
-Future<void> loadAsset(BuildContext context, String key) => Navigator.pushNamed(
-  context,
-  Routes.document,
-  arguments: DocumentRouteArgs(dataSource: AssetDataSource(key)),
-);
+Future<void> loadAsset(BuildContext context, String key, {InitialMode? mode}) =>
+    Navigator.pushNamed(
+      context,
+      Routes.document,
+      arguments: DocumentRouteArgs(
+        dataSource: AssetDataSource(key),
+        mode: mode,
+      ),
+    );
 
 Future<void> loadDocument(
   BuildContext context,
