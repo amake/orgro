@@ -10,6 +10,8 @@
   "menuItemAbout": "アプリについて",
   "menuItemOpenUrl": "URLを開く",
 
+  "quickActionNewDocument": "新規ドキュメント",
+
   "appearanceModeAutomatic": "自動",
   "appearanceModeLight": "ライト",
   "appearanceModeDark": "ダーク",
@@ -115,6 +117,7 @@
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
   "saveActionShare": "共有する",
   "saveActionDiscard": "破棄する",
+  "saveActionSaveAs": "名前をつけて保存する",
 
   "discardChangesDialogTitle": "変更を破棄しますか？",
   "discardActionDiscard": "破棄する",
@@ -138,6 +141,8 @@
 
   "createFileDialogTitle": "ファイルを作成",
   "createFileDefaultName": "名称未設定.org",
+
+  "saveAsDialogTitle": "名前をつけて保存",
 
   "inputUrlDialogTitle": "URLを入力",
 

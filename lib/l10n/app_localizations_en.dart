@@ -36,6 +36,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemOpenUrl => 'Open URL';
 
   @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveActionDiscard => 'Discard';
 
   @override
+  String get saveActionSaveAs => 'Save as';
+
+  @override
   String get discardChangesDialogTitle => 'Discard changes?';
 
   @override
@@ -368,6 +374,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
 
   @override
   String get inputUrlDialogTitle => 'Enter URL';
@@ -484,6 +493,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get menuItemOpenUrl => 'Open URL';
 
   @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -764,6 +776,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get saveActionDiscard => 'Discard';
 
   @override
+  String get saveActionSaveAs => 'Save as';
+
+  @override
   String get discardChangesDialogTitle => 'Discard changes?';
 
   @override
@@ -816,6 +831,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
 
   @override
   String get inputUrlDialogTitle => 'Enter URL';
@@ -932,6 +950,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get menuItemOpenUrl => 'Open URL';
 
   @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
   String get appearanceModeAutomatic => 'Automatic';
 
   @override
@@ -1212,6 +1233,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get saveActionDiscard => 'Discard';
 
   @override
+  String get saveActionSaveAs => 'Save as';
+
+  @override
   String get discardChangesDialogTitle => 'Discard changes?';
 
   @override
@@ -1264,6 +1288,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
 
   @override
   String get inputUrlDialogTitle => 'Enter URL';

@@ -36,6 +36,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemOpenUrl => 'Open URL';
 
   @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
   String get appearanceModeAutomatic => 'Автоматичний';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get saveActionDiscard => 'Discard';
 
   @override
+  String get saveActionSaveAs => 'Save as';
+
+  @override
   String get discardChangesDialogTitle => 'Discard changes?';
 
   @override
@@ -368,6 +374,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
 
   @override
   String get inputUrlDialogTitle => 'Enter URL';

@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'Open URL'**
   String get menuItemOpenUrl;
 
+  /// No description provided for @quickActionNewDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'New Document'**
+  String get quickActionNewDocument;
+
   /// No description provided for @appearanceModeAutomatic.
   ///
   /// In en, this message translates to:
@@ -644,6 +650,12 @@ abstract class AppLocalizations {
   /// **'Discard'**
   String get saveActionDiscard;
 
+  /// No description provided for @saveActionSaveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as'**
+  String get saveActionSaveAs;
+
   /// No description provided for @discardChangesDialogTitle.
   ///
   /// In en, this message translates to:
@@ -745,6 +757,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'untitled.org'**
   String get createFileDefaultName;
+
+  /// No description provided for @saveAsDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as'**
+  String get saveAsDialogTitle;
 
   /// No description provided for @inputUrlDialogTitle.
   ///

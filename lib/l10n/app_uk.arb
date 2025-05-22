@@ -10,6 +10,8 @@
   "menuItemAbout": "Про застосунок",
   "menuItemOpenUrl": "Open URL",
 
+  "quickActionNewDocument": "New Document",
+
   "appearanceModeAutomatic": "Автоматичний",
   "appearanceModeLight": "Світлий",
   "appearanceModeDark": "Темний",
@@ -115,6 +117,7 @@
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
   "saveActionShare": "Share",
   "saveActionDiscard": "Discard",
+  "saveActionSaveAs": "Save as",
 
   "discardChangesDialogTitle": "Discard changes?",
   "discardActionDiscard": "Discard",
@@ -138,6 +141,8 @@
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
+
+  "saveAsDialogTitle": "Save as",
 
   "inputUrlDialogTitle": "Enter URL",
 

@@ -17,27 +17,17 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
-import 'package:orgro/src/quick_actions.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
-class StartPage extends StatelessWidget {
+class StartPage extends StatefulWidget {
   const StartPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return RememberedFiles(child: QuickActions(child: const _StartPageInner()));
-  }
+  State createState() => StartPageState();
 }
 
-class _StartPageInner extends StatefulWidget {
-  const _StartPageInner();
-
-  @override
-  State createState() => _StartPageInnerState();
-}
-
-class _StartPageInnerState extends State<_StartPageInner>
+class StartPageState extends State<StartPage>
     with PlatformOpenHandler, RestorationMixin {
   @override
   Widget build(BuildContext context) {
@@ -263,7 +253,9 @@ class _EmptyBody extends StatelessWidget {
 Future<void> _createAndOpenFile(BuildContext context) async {
   final fileName = await showDialog<String>(
     context: context,
-    builder: (context) => InputFileNameDialog(),
+    builder: (context) => InputFileNameDialog(
+      title: AppLocalizations.of(context)!.createFileDialogTitle,
+    ),
   );
   if (fileName == null || !context.mounted) return;
   final orgFileName = fileName.toLowerCase().endsWith('.org')

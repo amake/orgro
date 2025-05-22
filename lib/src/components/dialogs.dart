@@ -4,6 +4,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
@@ -52,8 +53,8 @@ class SavePermissionDialog extends StatelessWidget {
   }
 }
 
-class ShareUnsaveableChangesDialog extends StatelessWidget {
-  const ShareUnsaveableChangesDialog({
+class SaveChangesDialog extends StatelessWidget {
+  const SaveChangesDialog({
     required this.doc,
     required this.serializer,
     super.key,
@@ -69,6 +70,36 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
       content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
       actions: [
+        ListTile(
+          title: Text(SaveAction.saveAs.toDisplayString(context)),
+          onTap: () async {
+            final fileName = await showDialog<String>(
+              context: context,
+              builder: (context) => InputFileNameDialog(
+                title: AppLocalizations.of(context)!.saveAsDialogTitle,
+              ),
+            );
+            if (fileName == null || !context.mounted) return;
+            final markup = await serializeWithProgressUI(
+              context,
+              doc,
+              serializer,
+            );
+            if (markup == null) return;
+            final savedFile = await createAndSaveFile(fileName, markup);
+            if (savedFile == null || !context.mounted) return;
+            final rememberedFiles = RememberedFiles.of(context);
+            final rememberedFile = RememberedFile(
+              name: fileName,
+              uri: savedFile.uri,
+              identifier: savedFile.identifier,
+              lastOpened: DateTime.now(),
+            );
+            await rememberedFiles.add([rememberedFile]);
+            if (!context.mounted) return;
+            Navigator.pop(context, true);
+          },
+        ),
         Builder(
           builder: (context) {
             return ListTile(
@@ -108,10 +139,11 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
   }
 }
 
-enum SaveAction { share, discard }
+enum SaveAction { saveAs, share, discard }
 
 extension SaveActionDisplayString on SaveAction {
   String toDisplayString(BuildContext context) => switch (this) {
+    SaveAction.saveAs => AppLocalizations.of(context)!.saveActionSaveAs,
     SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
     SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
   };
@@ -199,7 +231,9 @@ class InputPasswordDialog extends StatelessWidget {
 }
 
 class InputFileNameDialog extends StatefulWidget {
-  const InputFileNameDialog({super.key});
+  const InputFileNameDialog({required this.title, super.key});
+
+  final String title;
 
   @override
   State<InputFileNameDialog> createState() => _InputFileNameDialogState();
@@ -235,7 +269,7 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.create),
-      title: Text(AppLocalizations.of(context)!.createFileDialogTitle),
+      title: Text(widget.title),
       content: TextField(
         autofocus: true,
         controller: _controller,

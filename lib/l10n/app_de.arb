@@ -10,6 +10,8 @@
   "menuItemAbout": "Über",
   "menuItemOpenUrl": "Open URL",
 
+  "quickActionNewDocument": "New Document",
+
   "appearanceModeAutomatic": "Automatisch",
   "appearanceModeLight": "Hell",
   "appearanceModeDark": "Dunkel",
@@ -155,6 +157,7 @@
   "saveChangesDialogMessage": "Orgro kann deine Änderungen nicht speichern.",
   "saveActionShare": "Teilen",
   "saveActionDiscard": "Wegwerfen",
+  "saveActionSaveAs": "Save as",
 
   "discardChangesDialogTitle": "Änderungen wegwerfen?",
   "discardActionDiscard": "Wegwerfen",
@@ -178,6 +181,8 @@
 
   "createFileDialogTitle": "Neue Datei erstellen",
   "createFileDefaultName": "unbetitelt.org",
+
+  "saveAsDialogTitle": "Save as",
 
   "inputUrlDialogTitle": "Enter URL",
 

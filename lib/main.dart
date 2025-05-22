@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/cache.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
@@ -30,8 +31,10 @@ void main() {
   clearTemporaryAttachments();
 }
 
-Widget buildApp({bool isTest = false}) =>
-    Preferences(isTest: isTest, child: const _MyApp());
+Widget buildApp({bool isTest = false}) => Preferences(
+  isTest: isTest,
+  child: RememberedFiles(child: const _MyApp()),
+);
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load
@@ -61,13 +64,15 @@ class _MyApp extends StatelessWidget {
       theme: orgroLightTheme,
       darkTheme: orgroDarkTheme,
       themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
-      home: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: Preferences.of(context, PrefsAspect.init).isInitialized
-            ? const StartPage()
-            : const _Splash(),
-        transitionBuilder: (child, animation) =>
-            FadeTransition(opacity: animation, child: child),
+      home: QuickActions(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: Preferences.of(context, PrefsAspect.init).isInitialized
+              ? const StartPage()
+              : const _Splash(),
+          transitionBuilder: (child, animation) =>
+              FadeTransition(opacity: animation, child: child),
+        ),
       ),
       onGenerateRoute: onGenerateRoute,
     );

@@ -18,6 +18,12 @@ Future<NativeDataSource?> createAndLoadFile(String fileName) async {
   return fileInfo == null ? null : readFileWithIdentifier(fileInfo.identifier);
 }
 
+Future<FileInfo?> createAndSaveFile(String fileName, String content) async =>
+    await FilePickerWritable().openFileForCreate(
+      fileName: fileName,
+      writer: (file) => file.writeAsString(content),
+    );
+
 Future<NativeDirectoryInfo?> pickDirectory({String? initialDirUri}) async {
   final dirInfo = await FilePickerWritable().openDirectory(
     initialDirUri: initialDirUri,

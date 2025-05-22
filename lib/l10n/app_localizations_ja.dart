@@ -36,6 +36,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemOpenUrl => 'URLを開く';
 
   @override
+  String get quickActionNewDocument => '新規ドキュメント';
+
+  @override
   String get appearanceModeAutomatic => '自動';
 
   @override
@@ -303,6 +306,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get saveActionDiscard => '破棄する';
 
   @override
+  String get saveActionSaveAs => '名前をつけて保存する';
+
+  @override
   String get discardChangesDialogTitle => '変更を破棄しますか？';
 
   @override
@@ -353,6 +359,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get createFileDefaultName => '名称未設定.org';
+
+  @override
+  String get saveAsDialogTitle => '名前をつけて保存';
 
   @override
   String get inputUrlDialogTitle => 'URLを入力';

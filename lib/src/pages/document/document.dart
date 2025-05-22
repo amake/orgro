@@ -763,8 +763,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     // Prompt to share
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) =>
-          ShareUnsaveableChangesDialog(doc: doc, serializer: serializer),
+      builder: (context) => SaveChangesDialog(doc: doc, serializer: serializer),
     );
 
     if (result == true) navigator.pop();
