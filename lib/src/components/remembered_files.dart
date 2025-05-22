@@ -160,7 +160,10 @@ class _RememberedFilesState extends State<RememberedFiles> {
   List<RememberedFile> get _rememberedFiles => _prefs.rememberedFiles;
   _LifecycleEventHandler? _lifecycleEventHandler;
 
+  Future<void> _reloadFuture = Future.value();
+
   Future<void> addRecentFiles(List<RememberedFile> newFiles) async {
+    await _reloadFuture;
     newFiles = newFiles
         .map((newFile) {
           // If the new file is pinned, we don't need to absorb an existing pin
@@ -220,7 +223,7 @@ class _RememberedFilesState extends State<RememberedFiles> {
       //   prefs. Shared prefs are committed asynchronously on iOS (`commit` is
       //   a noop) so reloading at this point will clear what we just stored.
       debugPrint('Reloading recent files');
-      await _prefs.reload();
+      await (_reloadFuture = _prefs.reload());
     }
   }
 
