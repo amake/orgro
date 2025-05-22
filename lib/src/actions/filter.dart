@@ -252,7 +252,7 @@ class _CustomChip extends StatelessWidget {
                 ? Text(label!)
                 : ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width / 4,
+                    maxWidth: MediaQuery.sizeOf(context).width / 4,
                   ),
                   child: Text(query!),
                 ),

@@ -47,8 +47,7 @@ class ResponsiveSlidableAction extends StatelessWidget {
                   constraints.maxHeight < IconTheme.of(context).size! * 2;
               final veryTall =
                   !short &&
-                  constraints.maxHeight >
-                      MediaQuery.of(context).size.height / 2;
+                  constraints.maxHeight > MediaQuery.sizeOf(context).height / 2;
               final children = [
                 if (veryTall) const SizedBox(height: 32),
                 Icon(icon),

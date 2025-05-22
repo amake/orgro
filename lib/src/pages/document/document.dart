@@ -90,7 +90,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
-  double get _screenWidth => MediaQuery.of(context).size.width;
+  double get _screenWidth => MediaQuery.sizeOf(context).width;
 
   // Not sure why this size
   bool get _biggishScreen => _screenWidth > 500;

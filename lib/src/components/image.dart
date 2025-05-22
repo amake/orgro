@@ -58,7 +58,7 @@ class RemoteImage extends StatelessWidget {
       return Image(
         image: CachedNetworkImageProvider(
           url,
-          scale: MediaQuery.of(context).devicePixelRatio,
+          scale: MediaQuery.devicePixelRatioOf(context),
         ),
         errorBuilder:
             (context, error, stackTrace) =>
@@ -129,7 +129,7 @@ class _LocalOtherImage extends StatelessWidget {
     }
     return LayoutBuilder(
       builder: (context, constraints) {
-        final scale = MediaQuery.of(context).devicePixelRatio;
+        final scale = MediaQuery.devicePixelRatioOf(context);
         return Image(
           image: ResizeImage.resizeIfNeeded(
             constraints.hasBoundedWidth
