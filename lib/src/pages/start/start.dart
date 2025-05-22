@@ -40,7 +40,7 @@ class _StartPageState extends State<StartPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(AppLocalizations.of(context)!.appTitle),
-                fontPreloader(context),
+                const FontPreloader(),
               ],
             ),
           ),

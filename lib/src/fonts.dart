@@ -334,12 +334,19 @@ TextStyle _loadDynamicFont(String fontFamily) {
 // Hack: Load the preferred content font in a dummy widget before it's actually
 // needed. This helps prevent Flash of Unstyled Text, which in turn makes
 // restoring the scroll position more accurate.
-Widget fontPreloader(BuildContext context) => Text(
-  '',
-  style: loadFontWithVariants(
-    Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
-  ),
-);
+class FontPreloader extends StatelessWidget {
+  const FontPreloader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '',
+      style: loadFontWithVariants(
+        Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
+      ),
+    );
+  }
+}
 
 class _FiraGoFile extends DynamicFontsFile {
   _FiraGoFile(this.variant, String expectedFileHash, int expectedLength)
