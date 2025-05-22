@@ -21,11 +21,24 @@ class QuickActions extends StatefulWidget {
 class _QuickActionsState extends State<QuickActions> {
   late final qa.QuickActions _quickActions;
 
+  DateTime? _lastInvoked;
+
+  // TODO(aaron): Remove this workaround pending fix of
+  // https://github.com/flutter/flutter/issues/131121
+  bool get _shouldThrottle {
+    if (_lastInvoked == null) return false;
+    final now = DateTime.now();
+    final diff = now.difference(_lastInvoked!);
+    return diff < const Duration(seconds: 1);
+  }
+
   @override
   void initState() {
     super.initState();
     _quickActions = qa.QuickActions();
     _quickActions.initialize((shortcutType) async {
+      if (_shouldThrottle) return;
+      _lastInvoked = DateTime.now();
       debugPrint('Received shortcut: $shortcutType');
       switch (shortcutType) {
         case QuickAction.newDocument:
