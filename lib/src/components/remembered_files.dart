@@ -48,10 +48,7 @@ class RememberedFile {
     required this.uri,
     required this.lastOpened,
     this.pinnedIdx = -1,
-  }) : assert(
-         pinnedIdx == -1 || pinnedIdx >= 0,
-         'Pinned index must be -1 or >= 0',
-       );
+  }) : assert(pinnedIdx >= -1, 'Pinned index must be -1 or >= 0');
 
   final String identifier;
   final String name;
@@ -97,7 +94,7 @@ class RememberedFile {
   );
 
   @override
-  String toString() => 'RecentFile[$name:$_debugShortIdentifier]';
+  String toString() => 'RecentFile[$name:$_debugShortIdentifier]($pinnedIdx)';
 
   String get _debugShortIdentifier {
     final length = identifier.length;
@@ -157,6 +154,8 @@ mixin RecentFilesState<T extends StatefulWidget> on State<T> {
   Future<void> addRecentFiles(List<RememberedFile> newFiles) async {
     newFiles = newFiles
         .map((newFile) {
+          // If the new file is pinned, we don't need to absorb an existing pin
+          if (newFile.isPinned) return newFile;
           final existingFile =
               _rememberedFiles.where((f) => f.uri == newFile.uri).firstOrNull;
           if (existingFile == null) return newFile;
