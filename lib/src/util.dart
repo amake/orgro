@@ -166,6 +166,21 @@ extension StringExtension on String {
     final escaped = RegExp.escape(this);
     return RegExp(escaped, unicode: true, caseSensitive: false);
   }
+
+  String toSnakeCase() {
+    final buffer = StringBuffer();
+    for (final char in codeUnits) {
+      if (char >= 65 && char <= 90) {
+        if (buffer.isNotEmpty) {
+          buffer.write('_');
+        }
+        buffer.writeCharCode(char + 32);
+      } else {
+        buffer.writeCharCode(char);
+      }
+    }
+    return buffer.toString();
+  }
 }
 
 extension BoolUtil on bool {
