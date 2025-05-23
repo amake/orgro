@@ -39,6 +39,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get quickActionNewDocument => 'New Document';
 
   @override
+  String quickActionTopPin(String name) {
+    return 'Open $name';
+  }
+
+  @override
   String get appearanceModeAutomatic => 'Автоматичний';
 
   @override

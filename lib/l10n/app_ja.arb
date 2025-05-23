@@ -11,6 +11,7 @@
   "menuItemOpenUrl": "URLを開く",
 
   "quickActionNewDocument": "新規ドキュメント",
+  "quickActionTopPin": "{name}を開く",
 
   "appearanceModeAutomatic": "自動",
   "appearanceModeLight": "ライト",

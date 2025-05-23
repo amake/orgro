@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// **'New Document'**
   String get quickActionNewDocument;
 
+  /// No description provided for @quickActionTopPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {name}'**
+  String quickActionTopPin(String name);
+
   /// No description provided for @appearanceModeAutomatic.
   ///
   /// In en, this message translates to:

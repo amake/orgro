@@ -11,6 +11,7 @@
   "menuItemOpenUrl": "Open URL",
 
   "quickActionNewDocument": "New Document",
+  "quickActionTopPin": "Open {name}",
 
   "appearanceModeAutomatic": "Автоматичний",
   "appearanceModeLight": "Світлий",

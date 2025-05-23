@@ -1,12 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/assets.dart';
+import 'package:orgro/src/components/remembered_files.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/util.dart';
 import 'package:quick_actions/quick_actions.dart' as qa;
 
-enum QuickAction { newDocument }
+enum QuickAction { newDocument, topPin }
 
 class QuickActions extends StatefulWidget {
   const QuickActions({required this.child, super.key});
@@ -52,18 +54,36 @@ class _QuickActionsState extends State<QuickActions> {
           mode: InitialMode.edit,
         );
         break;
+      case QuickAction.topPin:
+        final pin = RememberedFiles.of(context).pinned.firstOrNull;
+        if (pin != null) {
+          await loadAndRememberFile(
+            context,
+            readFileWithIdentifier(pin.identifier),
+          );
+        }
+        break;
     }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final pin = RememberedFiles.of(context).pinned.firstOrNull;
     _quickActions.setShortcutItems(<qa.ShortcutItem>[
       qa.ShortcutItem(
         type: QuickAction.newDocument.name,
         localizedTitle: AppLocalizations.of(context)!.quickActionNewDocument,
         icon: QuickAction.newDocument.name.toSnakeCase(),
       ),
+      if (pin != null)
+        qa.ShortcutItem(
+          type: QuickAction.topPin.name,
+          localizedTitle: AppLocalizations.of(
+            context,
+          )!.quickActionTopPin(pin.name),
+          icon: QuickAction.topPin.name.toSnakeCase(),
+        ),
     ]);
   }
 

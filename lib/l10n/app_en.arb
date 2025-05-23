@@ -11,6 +11,14 @@
   "menuItemOpenUrl": "Open URL",
 
   "quickActionNewDocument": "New Document",
+  "quickActionTopPin": "Open {name}",
+  "@quickActionTopPin": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
 
   "appearanceModeAutomatic": "Automatic",
   "appearanceModeLight": "Light",

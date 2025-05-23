@@ -39,6 +39,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get quickActionNewDocument => '新規ドキュメント';
 
   @override
+  String quickActionTopPin(String name) {
+    return '$nameを開く';
+  }
+
+  @override
   String get appearanceModeAutomatic => '自動';
 
   @override
