@@ -47,7 +47,9 @@ dependencies:
     # path: ../petit_bibtex
   open_file:
     ^3.5.10
-  openpgp: ^3.10.0
+  # TODO(aaron): Unpeg pending resolution to
+  # https://github.com/jerson/flutter-openpgp/issues/83
+  openpgp: 3.10.3
 
 dev_dependencies:
   flutter_lints: ^5.0.0

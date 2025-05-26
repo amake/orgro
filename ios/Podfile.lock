@@ -10,7 +10,7 @@ PODS:
     - Flutter
   - open_file_ios (0.0.1):
     - Flutter
-  - openpgp (0.7.0):
+  - openpgp (0.6.0):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -74,7 +74,7 @@ SPEC CHECKSUMS:
   flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3
   flutter_tex_js_ios: 5d44702447dc77d1ee6e234375d346e2b8c55924
   open_file_ios: 5ff7526df64e4394b4fe207636b67a95e83078bb
-  openpgp: 3dc5989c69b89a28b642b343dada348c8ed79ef1
+  openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
