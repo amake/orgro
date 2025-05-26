@@ -1,6 +1,7 @@
 SHELL := /usr/bin/env bash
 
 flutter := ./flutter/bin/flutter
+dart := ./flutter/bin/dart
 version_define = --dart-define=ORGRO_VERSION=$(shell sed -nE 's/version: *(([0-9.])+)\+.*/\1/p' pubspec.yaml)
 ui_string_keys = jq -r 'keys | .[] | select(startswith("@") | not)' $(1)
 ui_string_values = jq -r 'to_entries | .[] | select(.key | startswith("@") | not) | .value' $(1)
@@ -32,7 +33,7 @@ dirty-check:
 
 .PHONY: format-check
 format-check:
-	dart format --set-exit-if-changed lib test
+	$(dart) format --set-exit-if-changed lib test
 
 .PHONY: l10n-check
 l10n-check: ## Check l10n data for issues
