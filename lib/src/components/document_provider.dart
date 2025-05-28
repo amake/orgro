@@ -226,10 +226,8 @@ class DocumentAnalysis {
       if (keyword != null) {
         keywords.add(keyword);
       }
-      final sectionTags = section.headline.tags;
-      if (sectionTags != null) {
-        tags.addAll(sectionTags.values);
-      }
+      final sectionTags = section.tags;
+      tags.addAll(sectionTags);
       final priority = section.headline.priority?.value;
       if (priority != null) {
         priorities.add(priority);
