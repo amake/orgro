@@ -13,7 +13,9 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace 'com.madlonkay.orgro'
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    // We set this to match what is expected by binaries we compile at build time in F-Droid:
+    // https://github.com/jerson/openpgp-mobile/blob/0e5e05ca4b7863fb82c2c5932e802ed9c1ab929d/Makefile.android#L2
+    ndkVersion '28.0.13004108'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
