@@ -1,0 +1,3 @@
+- Open Org Mode files from URLs
+- https://orgro.org/manual opens directly in Orgro
+- Bug fixes
