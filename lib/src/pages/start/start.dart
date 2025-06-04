@@ -156,6 +156,7 @@ class _StartPageState extends State<StartPage>
   }
 
   Future<void> _rememberFile(NativeDataSource dataSource) async {
+    if (!dataSource.persistable) return;
     final recentFile = RememberedFile(
       identifier: dataSource.identifier,
       name: dataSource.name,
