@@ -16,12 +16,17 @@ class Routes {
   static const narrow = '/narrow';
 }
 
+const _allowedHosts = {'', 'debug.orgro.org', 'profile.orgro.org', 'orgro.org'};
+
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   debugPrint('onGenerateRoute: ${settings.name}; ${settings.arguments}');
   if (settings.name == null) return null;
 
   final uri = Uri.tryParse(settings.name!);
   if (uri == null) return null;
+  // Opening a file via "Open with..." on Android will traverse this code path
+  // with a content: URL
+  if (!_allowedHosts.contains(uri.host)) return null;
 
   switch (uri.path.trimSuff('/')) {
     case Routes.document:
