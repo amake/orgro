@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:dart_pg/dart_pg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:openpgp/openpgp_sync.dart';
 import 'package:org_flutter/org_flutter.dart';
@@ -8,27 +5,11 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/util.dart';
 
 @visibleForTesting
-String Function(String text, String password) opgpEncrypt = (text, password) {
-  try {
-    return OpenPGPSync.encryptSymmetric(text, password);
-  } on ArgumentError catch (e, s) {
-    logError(e, s);
-    // Fall back to (slow) pure Dart implementation
-    final message = OpenPGP.encryptCleartext(text, passwords: [password]);
-    return message.armor();
-  }
-};
+String Function(String text, String password) opgpEncrypt =
+    OpenPGPSync.encryptSymmetric;
 @visibleForTesting
-String Function(String text, String password) opgpDecrypt = (text, password) {
-  try {
-    return OpenPGPSync.decryptSymmetric(text, password);
-  } on ArgumentError catch (e, s) {
-    logError(e, s);
-    // Fall back to (slow) pure Dart implementation
-    final decrypted = OpenPGP.decrypt(text, passwords: [password]);
-    return utf8.decode(decrypted.literalData.binary);
-  }
-};
+String Function(String text, String password) opgpDecrypt =
+    OpenPGPSync.decryptSymmetric;
 
 typedef OrgroPassword = ({String password, SectionPredicate predicate});
 typedef SectionPredicate = bool Function(OrgSection);
@@ -84,11 +65,10 @@ extension OrgSectionEncryption on OrgSection {
     }
     final (leading, text) = buf.toString().splitLeadingWhitespace();
     final message = opgpEncrypt(text, password);
-    // Result may not have trailing newline so we add it if necessary. Otherwise
+    // Result does not have trailing newline so we add it ourselves. Otherwise
     // an encrypted section abutting another section will result in malformed
     // markup.
-    final trailing = message.endsWith('\n') ? '' : '\n';
-    return '${headline.toMarkup()}$leading$message$trailing';
+    return '${headline.toMarkup()}$leading$message\n';
   }
 }
 

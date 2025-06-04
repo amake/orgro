@@ -50,9 +50,6 @@ dependencies:
   # TODO(aaron): Unpeg pending resolution to
   # https://github.com/jerson/flutter-openpgp/issues/83
   openpgp: 3.10.3
-  # TODO(aaron): Remove this pending resolution to
-  # https://github.com/jerson/flutter-openpgp/issues/84
-  dart_pg: ^2.1.0
   quick_actions: ^1.1.0
 
 dev_dependencies:
