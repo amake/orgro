@@ -57,18 +57,20 @@ class SaveChangesDialog extends StatelessWidget {
   const SaveChangesDialog({
     required this.doc,
     required this.serializer,
+    required this.message,
     super.key,
   });
 
   final OrgDocument doc;
   final OrgroSerializer serializer;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.save),
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
-      content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
+      content: message == null ? null : Text(message!),
       actions: [
         ListTile(
           title: Text(SaveAction.saveAs.toDisplayString(context)),

@@ -5,6 +5,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
+import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
@@ -760,10 +761,19 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       return;
     }
 
-    // Prompt to share
+    final isScratchDocument =
+        source is AssetDataSource && source.key == LocalAssets.scratch;
+
+    // Prompt to save or share
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => SaveChangesDialog(doc: doc, serializer: serializer),
+      builder: (context) => SaveChangesDialog(
+        doc: doc,
+        serializer: serializer,
+        message: isScratchDocument
+            ? null
+            : AppLocalizations.of(context)!.saveChangesDialogMessage,
+      ),
     );
 
     if (result == true) navigator.pop();
