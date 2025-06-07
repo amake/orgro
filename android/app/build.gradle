@@ -62,7 +62,10 @@ android {
             ]
         }
         profile {
-            applicationIdSuffix '.profile'
+            // TODO(aaron): Remove temporary workaround for
+            // https://github.com/flutter/flutter/issues/169215
+            //
+            // applicationIdSuffix '.profile'
             manifestPlaceholders += [
                 displayName: '@string/app_name_profile',
                 appLinkHost: '@string/app_link_host_profile'
