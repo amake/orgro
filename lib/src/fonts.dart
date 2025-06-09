@@ -284,6 +284,13 @@ const _kGoogleFontFamilies = <String>{
   'Roboto Slab',
   'Merriweather',
   'PT Serif',
+  // https://github.com/amake/orgro/issues/154
+  'Source Sans 3',
+  'Roboto',
+  'Inter',
+  'Atkinson Hyperlegible',
+  'Noto Serif',
+  'Source Serif 4',
 
   // https://github.com/amake/orgro/issues/113
   'M PLUS 1 Code',
