@@ -238,18 +238,13 @@ void _initCustomFonts() {
 Iterable<String> get availableFontFamilies sync* {
   yield* _kCustomFonts;
   for (final family in GoogleFonts.asMap().keys) {
-    if (_kMonospaceGoogleFontFamilies.contains(family)) {
+    if (_kGoogleFontFamilies.contains(family)) {
       yield family;
     }
   }
 }
 
-// There is currently no way to filter by category. This list manually compiled from
-// https://fonts.google.com/?category=Monospace
-//
-// TODO(aaron): Remove this pending solution to
-// https://github.com/material-foundation/google-fonts-flutter/issues/112
-const _kMonospaceGoogleFontFamilies = <String>{
+const _kGoogleFontFamilies = <String>{
   'Roboto Mono',
   'DM Mono',
   'Inconsolata',
