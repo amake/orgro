@@ -73,6 +73,7 @@ Error cases
 - [[file:startup-entitiesplain.org][entitiesplain]]
 - [[file:startup-entitiespretty.org][entitiespretty]]
 - [[file:startup-hidestars.org][hidestars]]
+- [[file:startup-num.org][num]]
 
 * Meta keywords
 

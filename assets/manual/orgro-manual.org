@@ -422,6 +422,7 @@ Options recognized by Orgro:
 - entitiespretty / entitiesplain
 - [no]inlineimages
 - [no]fold / overview / content / show[2..5]levels / showall / showeverything
+- [no]num
 
 * =TODO= keywords
 

@@ -1,0 +1,15 @@
+#+STARTUP: num showall
+
+* foo
+
+** ffoo
+
+* bar
+
+** bbar
+
+* baz
+
+*** bbbaz
+
+* TODO bazinga                                                      :ARCHIVE:
