@@ -6,7 +6,7 @@
    bozz
 ** burz                                                             :ARCHIVE:
    borz
-* bazinga https://example.com                                       :ARCHIVE:
+* TODO [#A] bazinga https://example.com                             :ARCHIVE:
   bozo
 * bazonga https://example.com                                       :archive:
   bozo
