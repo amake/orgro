@@ -63,13 +63,20 @@ const kRecentFilesSortOrder = 'recent_files_sort_order';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
 
-bool _isTest = false;
+InheritedPreferences _prefsOf<T extends InheritedPreferences>(
+  BuildContext context, [
+  PrefsAspect? aspect,
+]) => InheritedModel.inheritFrom<T>(context, aspect: aspect)!;
 
 class Preferences extends StatefulWidget {
   static InheritedPreferences of(BuildContext context, [PrefsAspect? aspect]) =>
-      _isTest
-      ? InheritedModel.inheritFrom<_MockPreferences>(context, aspect: aspect)!
-      : InheritedModel.inheritFrom<_AppPreferences>(context, aspect: aspect)!;
+      _of(context, aspect);
+
+  static InheritedPreferences Function(
+    BuildContext context, [
+    PrefsAspect? aspect,
+  ])
+  _of = _prefsOf<_AppPreferences>;
 
   const Preferences({this.isTest = false, required this.child, super.key});
 
@@ -89,7 +96,7 @@ class _PreferencesState extends State<Preferences> {
   void initState() {
     super.initState();
     if (widget.isTest) {
-      _isTest = true;
+      Preferences._of = _prefsOf<_MockPreferences>;
     } else {
       _prefs = SharedPreferencesAsync();
     }
@@ -99,7 +106,7 @@ class _PreferencesState extends State<Preferences> {
   @override
   void dispose() {
     super.dispose();
-    if (widget.isTest) _isTest = false;
+    if (widget.isTest) Preferences._of = _prefsOf<_AppPreferences>;
   }
 
   Future<void> _loadFromPrefs() async {
