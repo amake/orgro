@@ -8,10 +8,6 @@
   "menuItemOrgManual": "Org Handbuch",
   "menuItemTestFile": "Test Datei",
   "menuItemAbout": "Über",
-  "menuItemOpenUrl": "Open URL",
-
-  "quickActionNewDocument": "New Document",
-  "quickActionTopPin": "Open {name}",
 
   "appearanceModeAutomatic": "Automatisch",
   "appearanceModeLight": "Hell",
@@ -43,7 +39,6 @@
   "buttonCreateFile": "Datei erstellen",
   "buttonOpenOrgroManual": "Orgro Handbuch öffnen",
   "buttonOpenOrgManual": "Org Handbuch öffnen",
-  "buttonOpenUrl": "Open URL",
 
   "buttonSupport": "Hilfe · Feedback",
   "buttonVersion": "v{version}",
@@ -55,14 +50,7 @@
     }
   },
 
-  "sectionHeaderPinnedFiles": "Pinned files",
   "sectionHeaderRecentFiles": "Zuletzt geöffnet",
-  "recentFilesSortDialogTitle": "Sort by",
-  "sortKeyLastOpened": "Last opened",
-  "sortKeyName": "Name",
-  "sortKeyLocation": "Location",
-  "sortOrderAscending": "Ascending",
-  "sortOrderDescending": "Descending",
 
   "fileSourceDocuments": "Dokumente",
   "fileSourceDownloads": "Downloads",
@@ -158,7 +146,6 @@
   "saveChangesDialogMessage": "Orgro kann deine Änderungen nicht speichern.",
   "saveActionShare": "Teilen",
   "saveActionDiscard": "Wegwerfen",
-  "saveActionSaveAs": "Save as",
 
   "discardChangesDialogTitle": "Änderungen wegwerfen?",
   "discardActionDiscard": "Wegwerfen",
@@ -182,10 +169,6 @@
 
   "createFileDialogTitle": "Neue Datei erstellen",
   "createFileDefaultName": "unbetitelt.org",
-
-  "saveAsDialogTitle": "Save as",
-
-  "inputUrlDialogTitle": "Enter URL",
 
   "startTimePickerTitle": "Wähle Startzeit",
   "endTimePickerTitle": "Wähle Endzeit",
