@@ -8,7 +8,7 @@ ui_string_values = jq -r 'to_entries | .[] | select(.key | startswith("@") | not
 spellcheck = $(call ui_string_values,lib/l10n/app_$(1).arb) | \
 	aspell pipe --lang=$(1) --home-dir=. --personal=.aspell.$(1).pws | \
 	awk '/^&/ {w++; print} END {exit w}'
-keyStore = $(shell sed -nE 's/storeFile=(.+)/\1/p' android/key.properties)
+key_store = $(shell sed -nE 's/storeFile=(.+)/\1/p' android/key.properties)
 
 .PHONY: all
 all: release
@@ -59,12 +59,12 @@ release-wait: keystore-wait release
 .PHONY: keystore-wait
 keystore-wait:
 	$(if $(wildcard android/key.properties),,$(error android/key.properties not found))
-	while [ ! -f $(keyStore) ]; do echo "Waiting for keyStore..."; ls -al $(keyStore); sleep 3; done
+	while [ ! -f $(key_store) ]; do echo "Waiting for key store..."; ls -al $(key_store); sleep 3; done
 
 .PHONY: keystore-check
 keystore-check:
 	$(if $(wildcard android/key.properties),,$(error android/key.properties not found))
-	$(if $(wildcard $(keyStore)),,$(error keyStore not found))
+	$(if $(wildcard $(key_store)),,$(error key_store not found))
 	@exit 0
 
 dryrun := --dryrun
