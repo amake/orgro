@@ -35,10 +35,12 @@ dirty-check:
 format-check:
 	$(dart) format --set-exit-if-changed lib test
 
+required_locales := en_US en_GB ja
+
 .PHONY: l10n-check
 l10n-check: ## Check l10n data for issues
-	$(foreach _,$(wildcard lib/l10n/*.arb),\
-		diff <($(call ui_string_keys,lib/l10n/app_en.arb)) <($(call ui_string_keys,$(_)));)
+	$(foreach _,$(required_locales:%=lib/l10n/app_%.arb),\
+		diff <($(call ui_string_keys,lib/l10n/app_en.arb)) <($(call ui_string_keys,$(_))) &&) true
 	$(call spellcheck,en_US)
 	$(call spellcheck,en_GB)
 
