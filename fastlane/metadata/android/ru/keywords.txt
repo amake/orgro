@@ -1,0 +1,1 @@
+org,mode,org-mode,emacs,markup,viewer,editor,notes,todo,memo,organize,latex,заметки,документация,просмотрщик,разметка,редактор,блокнот,список дел

@@ -1,0 +1,298 @@
+{
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Внешний вид",
+  "menuItemSettings": "Настройки",
+  "menuItemClearCache": "Очистить кэш",
+  "menuItemOrgroManual": "Руководство к Orgro",
+  "menuItemOrgManual": "Руководство по Org",
+  "menuItemTestFile": "Тестовый файл",
+  "menuItemAbout": "О приложении",
+  "menuItemOpenUrl": "Открыть URL-адрес",
+
+  "quickActionNewDocument": "Новый документ",
+  "quickActionTopPin": "Открытый {name}",
+  "@quickActionTopPin": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "appearanceModeAutomatic": "Автоматически",
+  "appearanceModeLight": "Светлая",
+  "appearanceModeDark": "Тёмная",
+
+  "settingsScreenTitle": "Настройки",
+  "settingsSectionDefaultText": "Текст по умолчанию",
+  "settingsSectionDataManagement": "Управление данных",
+
+  "settingsItemAppearance": "Внешний вид",
+  "settingsItemTextScale": "Размер",
+  "settingsItemFontFamily": "Шрифт",
+
+  "settingsActionClearCache": "Очистить кэш",
+  "settingsActionResetPreferences": "Восстановить изначальные настройки",
+
+  "snackbarMessageCacheCleared": "Кэш очищен",
+  "snackbarMessagePreferencesReset": "Сбросить настройки",
+
+  "confirmResetPreferencesDialogTitle": "Восстановить изначальные настройки?",
+  "confirmResetPreferencesDialogMessage": "Это сбросит все настройки к изначальным значения. Это действие необратимо.",
+  "confirmResetPreferencesActionReset": "Восстановить",
+  "confirmResetPreferencesActionCancel": "Отмена",
+
+  "aboutLinkSupport": "Поддержка · Обратная связь",
+  "aboutLinkChangelog": "Список изменений",
+
+  "buttonOpenFile": "Открыть файл",
+  "buttonCreateFile": "Создать файл",
+  "buttonOpenOrgroManual": "Открыть пособие по Orgro",
+  "buttonOpenOrgManual": "Открыть руководство по Org",
+  "buttonOpenUrl": "Открыть URL-адрес",
+
+  "buttonSupport": "Поддержка · Обратная связь",
+  "buttonVersion": "v{version}",
+  "@buttonVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sectionHeaderPinnedFiles": "Прикреплённые файлы",
+  "sectionHeaderRecentFiles": "Последние файлы",
+  "recentFilesSortDialogTitle": "Сортировать по",
+  "sortKeyLastOpened": "Последнее открытие",
+  "sortKeyName": "Название",
+  "sortKeyLocation": "Место",
+  "sortOrderAscending": "Восходящий",
+  "sortOrderDescending": "Нисходящий",
+
+  "fileSourceDocuments": "Документы",
+  "fileSourceDownloads": "Скачанное",
+  "fileSourceGoogleDrive": "Google Drive",
+
+  "menuItemReaderMode": "Режим чтения",
+  "menuItemFullWidth": "Полноширинный",
+  "menuItemScrollTop": "Прокрутить наверх",
+  "menuItemScrollBottom": "Прокрутить вниз",
+
+  "menuItemUndo": "Откатить",
+  "menuItemRedo": "Повторить",
+
+  "hintTextSearch": "Поиск...",
+  "searchHits": "{n, plural, =0{0 совпадений} =1{1 совпадение} other{{n} совпадений}}",
+  "@searchHits": {
+    "placeholders": {
+      "n": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "searchResultSelection": "{current} / {total}",
+  "@searchResultSelection": {
+    "placeholders": {
+      "current": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "total": {
+        "type": "num",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "customFilterChipName": "Свой",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro не имеет разрешения определять относительные пути",
+  "snackbarActionGrantAccess": "Дать разрешение",
+
+  "snackbarMessageNeedsEncryptionKey": "Не могу сохранить. Отсутствует пароль шифрования.",
+  "snackbarActionEnterEncryptionKey": "Введите пароль",
+
+  "dialogTitleError": "Ошибка",
+  "dialogActionConfirm": "Ладно",
+  "dialogActionCancel": "Отмена",
+  "dialogActionHelp": "Справка",
+
+  "pageTitleError": "Ошибка",
+  "pageTitleLoading": "Загрузка...",
+  "pageTitleNarrow": "{name} › ветка",
+  "@pageTitleNarrow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pageTitleEditing": "{name} › правка",
+  "@pageTitleEditing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sectionActionNarrow": "Ветка",
+  "sectionActionCycleTodo": "Цикл TODO",
+
+  "bannerBodyRemoteImages": "Этот документ содержит внешние изображения. Вы хотите скачать их?",
+  "bannerBodyActionShowAlways": "Всегда",
+  "bannerBodyActionShowNever": "Никогда",
+  "bannerBodyActionShowOnce": "Только в этот раз",
+
+  "bannerBodyRelativeLinks": "Этот документ содержит относительные ссылки. Вы хотите дать доступ?",
+  "bannerBodyActionGrantNotNow": "Не сейчас",
+  "bannerBodyActionGrantNever": "Никогда",
+  "bannerBodyActionGrantNow": "Дать доступ",
+
+  "bannerBodySaveDocumentOrg": "Вы хотите сохранить изменения в этом документе? *Экспериментальная возможность.* Убедитесь что вы зарезервировали файлы. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Подробнее]]",
+  "bannerBodyActionSaveAlways": "Всегда",
+  "bannerBodyActionSaveNever": "Никогда",
+  "bannerBodyActionSaveOnce": "Только в этот раз",
+
+  "bannerBodyDecryptContent": "Этот документ содержит зашифрованный текст. Расшифровать его?",
+  "bannerBodyActionDecryptNow": "Расшифровать",
+  "bannerBodyActionDecryptNotNow": "Не сейчас",
+  "bannerBodyActionDecryptNever": "Никогда",
+
+  "saveChangesDialogTitle": "Сохранить изменения?",
+  "saveChangesDialogMessage": "Orgro не может записать изменения в изначальный файл.",
+  "saveActionShare": "Поделиться",
+  "saveActionDiscard": "Отбросить изменения",
+  "saveActionSaveAs": "Сохранить как",
+
+  "discardChangesDialogTitle": "Отбросить изменения?",
+  "discardActionDiscard": "Отбросить",
+  "discardActionCancel": "Отмена",
+
+  "savedMessage": "Сохранено",
+
+  "inputDecryptionPasswordDialogTitle": "Введите пароль для расшифрования",
+  "inputEncryptionPasswordDialogTitle": "Введите пароль для шифрования",
+  "inputEncryptionPasswordDialogBody": "Этот пароль будет использоваться для шифрования разделов Org Crypt, для которых не указан пароль.",
+
+  "inputCustomFilterDialogTitle": "Свой запрос фильтра",
+  "inputCustomFilterDialogHistoryButton": "История",
+
+  "decryptingProgressDialogTitle": "Расшифрование…",
+  "encryptingProgressDialogTitle": "Шифрование…",
+  "serializingProgressDialogTitle": "Сериализация…",
+  "savingProgressDialogTitle": "Сохранение…",
+  "searchingProgressDialogTitle": "Поиск…",
+  "citationsDialogTitle": "Цитаты",
+
+  "createFileDialogTitle": "Создать новый файл",
+  "createFileDefaultName": "untitled.org",
+
+  "saveAsDialogTitle": "Сохранить как",
+
+  "inputUrlDialogTitle": "Введите URL-адрес",
+
+  "startTimePickerTitle": "Выбрать время начала",
+  "endTimePickerTitle": "Выбрать время конца",
+
+  "snackbarMessageBibliographiesNotFound": "Не найдены библиографии",
+  "snackbarMessageCitationKeysNotFound": "Слова цитат найдены",
+  "snackbarMessageCitationsNotFound": "Цитаты не найдены",
+  "snackbarMessageSomeCitationsNotFound": "Цитаты не найдены: {citations}",
+  "@snackbarMessageSomeCitationsNotFound": {
+    "placeholders": {
+      "citations": {
+        "type": "String"
+      }
+    }
+  },
+
+  "errorCannotResolveRelativePath": "Невозможно определить относительный путь к этому документу",
+  "errorPathResolvedToNonFile": "{path} определён как не файл: {resolved}",
+  "@errorPathResolvedToNonFile": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      },
+      "resolved": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnknownType": "Неизвестный тип: {type}",
+  "@errorUnknownType": {
+    "placeholders": {
+      "type": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorUnexpectedHttpResponse": "Неожиданный ответ HTTP: {response}",
+  "@errorUnexpectedHttpResponse": {
+    "placeholders": {
+      "response": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorOrgParser": "Ошибка разбора ответа: {result}",
+  "@errorOrgParser": {
+    "placeholders": {
+      "result": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorOrgExecution": "Ошибка при выполнении кода ниже: {message}\n\n{code}",
+  "@errorOrgExecution": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOrgTimeout": "Выполнение кода ниже заняло больше чем {timeout}мс.\n\n{code}",
+  "@errorOrgTimeout": {
+    "placeholders": {
+      "timeout": {
+        "type": "num",
+        "format": "decimalPattern"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOrgArgument": "Неправильный аргумент: {item}",
+  "@errorOrgArgument": {
+    "placeholders": {
+      "item": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorDecryptionFailed": "Не удалось расшифровать",
+  "errorLinkNotHandled": "Не могу открыть ссылку “{link}”",
+  "@errorLinkNotHandled": {
+    "placeholders": {
+      "link": {
+        "type": "Object"
+      }
+    }
+  },
+  "errorExternalIdNotFound": "Файл с ID “{id}” не найден",
+  "@errorExternalIdNotFound": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+
+  "editInsertedHeadline": "[Вставлено при изменении]"
+}

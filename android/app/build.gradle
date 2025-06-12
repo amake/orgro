@@ -37,7 +37,7 @@ android {
         versionCode flutter.versionCode
         versionName flutter.versionName
         // No need to list base locale (en)
-        resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de']
+        resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de', 'ru']
         manifestPlaceholders += [
             displayName: '@string/app_name',
             appLinkHost: '@string/app_link_host'

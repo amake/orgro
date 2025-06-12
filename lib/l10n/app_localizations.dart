@@ -102,6 +102,7 @@ abstract class AppLocalizations {
     Locale('en', 'US'),
     Locale('ja'),
     Locale('uk'),
+    Locale('ru'),
   ];
 
   /// No description provided for @appTitle.
@@ -896,7 +897,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'ja', 'uk'].contains(locale.languageCode);
+      <String>['de', 'en', 'ja', 'uk', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
