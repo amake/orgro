@@ -12,13 +12,6 @@
 
   "quickActionNewDocument": "Новый документ",
   "quickActionTopPin": "Открытый {name}",
-  "@quickActionTopPin": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
 
   "appearanceModeAutomatic": "Автоматически",
   "appearanceModeLight": "Светлая",
@@ -54,13 +47,6 @@
 
   "buttonSupport": "Поддержка · Обратная связь",
   "buttonVersion": "v{version}",
-  "@buttonVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
 
   "sectionHeaderPinnedFiles": "Прикреплённые файлы",
   "sectionHeaderRecentFiles": "Последние файлы",
@@ -85,27 +71,7 @@
 
   "hintTextSearch": "Поиск...",
   "searchHits": "{n, plural, =0{0 совпадений} =1{1 совпадение} other{{n} совпадений}}",
-  "@searchHits": {
-    "placeholders": {
-      "n": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "searchResultSelection": "{current} / {total}",
-  "@searchResultSelection": {
-    "placeholders": {
-      "current": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "total": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "customFilterChipName": "Свой",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro не имеет разрешения определять относительные пути",
@@ -122,21 +88,7 @@
   "pageTitleError": "Ошибка",
   "pageTitleLoading": "Загрузка...",
   "pageTitleNarrow": "{name} › ветка",
-  "@pageTitleNarrow": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "pageTitleEditing": "{name} › правка",
-  "@pageTitleEditing": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
 
   "sectionActionNarrow": "Ветка",
   "sectionActionCycleTodo": "Цикл TODO",
@@ -201,98 +153,18 @@
   "snackbarMessageCitationKeysNotFound": "Слова цитат найдены",
   "snackbarMessageCitationsNotFound": "Цитаты не найдены",
   "snackbarMessageSomeCitationsNotFound": "Цитаты не найдены: {citations}",
-  "@snackbarMessageSomeCitationsNotFound": {
-    "placeholders": {
-      "citations": {
-        "type": "String"
-      }
-    }
-  },
 
   "errorCannotResolveRelativePath": "Невозможно определить относительный путь к этому документу",
   "errorPathResolvedToNonFile": "{path} определён как не файл: {resolved}",
-  "@errorPathResolvedToNonFile": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      },
-      "resolved": {
-        "type": "String"
-      }
-    }
-  },
   "errorUnknownType": "Неизвестный тип: {type}",
-  "@errorUnknownType": {
-    "placeholders": {
-      "type": {
-        "type": "Object"
-      }
-    }
-  },
   "errorUnexpectedHttpResponse": "Неожиданный ответ HTTP: {response}",
-  "@errorUnexpectedHttpResponse": {
-    "placeholders": {
-      "response": {
-        "type": "Object"
-      }
-    }
-  },
   "errorOrgParser": "Ошибка разбора ответа: {result}",
-  "@errorOrgParser": {
-    "placeholders": {
-      "result": {
-        "type": "Object"
-      }
-    }
-  },
   "errorOrgExecution": "Ошибка при выполнении кода ниже: {message}\n\n{code}",
-  "@errorOrgExecution": {
-    "placeholders": {
-      "message": {
-        "type": "Object"
-      },
-      "code": {
-        "type": "String"
-      }
-    }
-  },
   "errorOrgTimeout": "Выполнение кода ниже заняло больше чем {timeout}мс.\n\n{code}",
-  "@errorOrgTimeout": {
-    "placeholders": {
-      "timeout": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "code": {
-        "type": "String"
-      }
-    }
-  },
   "errorOrgArgument": "Неправильный аргумент: {item}",
-  "@errorOrgArgument": {
-    "placeholders": {
-      "item": {
-        "type": "Object"
-      }
-    }
-  },
   "errorDecryptionFailed": "Не удалось расшифровать",
   "errorLinkNotHandled": "Не могу открыть ссылку “{link}”",
-  "@errorLinkNotHandled": {
-    "placeholders": {
-      "link": {
-        "type": "Object"
-      }
-    }
-  },
   "errorExternalIdNotFound": "Файл с ID “{id}” не найден",
-  "@errorExternalIdNotFound": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
 
   "editInsertedHeadline": "[Вставлено при изменении]"
 }
