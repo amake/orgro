@@ -27,8 +27,13 @@ test: ## Run tests
 	$(flutter) analyze
 	$(flutter) test
 
+.PHONY: generate
+generate:
+	$(flutter) pub get
+	$(flutter) gen-l10n
+
 .PHONY: dirty-check
-dirty-check:
+dirty-check: generate
 	$(if $(shell git status --porcelain),$(error 'You have uncommitted changes. Aborting.'))
 
 .PHONY: format-check
