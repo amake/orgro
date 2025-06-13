@@ -389,7 +389,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inputUrlDialogTitle => 'Введите URL-адрес';
 
   @override
-  String get startTimePickerTitle => 'Выбрать время  начала';
+  String get startTimePickerTitle => 'Выбрать время начала';
 
   @override
   String get endTimePickerTitle => 'Выбрать время конца';
@@ -410,7 +410,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get errorCannotResolveRelativePath =>
-      'Невозможно определить относительный путь  к этому документу';
+      'Невозможно определить относительный путь к этому документу';
 
   @override
   String errorPathResolvedToNonFile(String path, String resolved) {
