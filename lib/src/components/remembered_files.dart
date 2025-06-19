@@ -129,7 +129,9 @@ class InheritedRememberedFiles extends InheritedWidget {
   final ValueChanged<RememberedFile> pin;
   final ValueChanged<RememberedFile> unpin;
 
-  List<RememberedFile> get pinned => list.where((f) => f.isPinned).toList();
+  List<RememberedFile> get pinned =>
+      list.where((f) => f.isPinned).toList()
+        ..sort((a, b) => a.pinnedIdx.compareTo(b.pinnedIdx));
 
   List<RememberedFile> get recents => list.where((f) => f.isNotPinned).toList();
 

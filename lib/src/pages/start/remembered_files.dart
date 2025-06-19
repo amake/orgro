@@ -16,8 +16,7 @@ class RememberedFilesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remembered = RememberedFiles.of(context);
-    final sortedPins = remembered.pinned
-      ..sort((a, b) => a.pinnedIdx.compareTo(b.pinnedIdx));
+    final sortedPins = remembered.pinned;
     final sortedRecents = remembered.recents
       ..sort((a, b) {
         final result = switch (remembered.sortKey) {
