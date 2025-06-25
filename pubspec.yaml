@@ -7,7 +7,7 @@ publish_to: none
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
-  flutter: ^3.32.4
+  flutter: ^3.32.8
 
 dependencies:
   cached_network_image: ^3.0.0
