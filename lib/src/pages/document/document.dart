@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -300,6 +301,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
+    var showFab = true;
     return ValueListenableBuilder<bool>(
       valueListenable: searchDelegate.searchMode,
       builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
@@ -326,8 +328,32 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               // Builder is here to ensure that the Scaffold makes it into the
               // body's context
               floatingActionButton: Builder(
-                builder: (context) =>
-                    _buildFloatingActionButton(context, searchMode: searchMode),
+                builder: (context) => AnimatedBuilder(
+                  animation: PrimaryScrollController.of(context),
+                  builder: (context, child) {
+                    final controller = PrimaryScrollController.of(context);
+                    if (controller.hasClients &&
+                        controller.position.userScrollDirection !=
+                            ScrollDirection.idle &&
+                        !searchMode) {
+                      showFab =
+                          controller.position.userScrollDirection ==
+                          ScrollDirection.forward;
+                    }
+                    return AnimatedSlide(
+                      duration: const Duration(milliseconds: 100),
+                      offset: showFab ? Offset.zero : const Offset(0, 1),
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 100),
+                        opacity: showFab ? 1.0 : 0.0,
+                        child: _buildFloatingActionButton(
+                          context,
+                          searchMode: searchMode,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               bottomSheet: searchMode
                   ? searchDelegate.buildBottomSheet(context)
