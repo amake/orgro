@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -11,6 +10,7 @@ import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
+import 'package:orgro/src/components/scroll.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
@@ -301,7 +301,6 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
-    var showFab = true;
     return ValueListenableBuilder<bool>(
       valueListenable: searchDelegate.searchMode,
       builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
@@ -328,32 +327,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               // Builder is here to ensure that the Scaffold makes it into the
               // body's context
               floatingActionButton: Builder(
-                builder: (context) => AnimatedBuilder(
-                  animation: PrimaryScrollController.of(context),
-                  builder: (context, child) {
-                    final controller = PrimaryScrollController.of(context);
-                    if (controller.hasClients &&
-                        controller.position.userScrollDirection !=
-                            ScrollDirection.idle &&
-                        !searchMode) {
-                      showFab =
-                          controller.position.userScrollDirection ==
-                          ScrollDirection.forward;
-                    }
-                    return AnimatedSlide(
-                      duration: const Duration(milliseconds: 100),
-                      offset: showFab ? Offset.zero : const Offset(0, 1),
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 100),
-                        opacity: showFab ? 1.0 : 0.0,
-                        child: _buildFloatingActionButton(
-                          context,
-                          searchMode: searchMode,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                builder: (context) =>
+                    _buildFloatingActionButton(context, searchMode: searchMode),
               ),
               bottomSheet: searchMode
                   ? searchDelegate.buildBottomSheet(context)
@@ -499,23 +474,25 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     required bool searchMode,
   }) => searchMode
       ? const SearchResultsNavigation()
-      : Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              onPressed: doEdit,
-              heroTag: '${widget.title}EditFAB',
-              mini: true,
-              child: const Icon(Icons.edit),
-            ),
-            const SizedBox(height: 16),
-            BadgableFloatingActionButton(
-              badgeVisible: searchDelegate.hasQuery,
-              onPressed: () => searchDelegate.start(context),
-              heroTag: '${widget.title}FAB',
-              child: const Icon(Icons.search),
-            ),
-          ],
+      : HideOnScroll(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: doEdit,
+                heroTag: '${widget.title}EditFAB',
+                mini: true,
+                child: const Icon(Icons.edit),
+              ),
+              const SizedBox(height: 16),
+              BadgableFloatingActionButton(
+                badgeVisible: searchDelegate.hasQuery,
+                onPressed: () => searchDelegate.start(context),
+                heroTag: '${widget.title}FAB',
+                child: const Icon(Icons.search),
+              ),
+            ],
+          ),
         );
 
   Future<void> doEdit({bool requestFocus = false}) async {
