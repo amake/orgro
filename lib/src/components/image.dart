@@ -206,6 +206,7 @@ class _ImageError extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: 8,
       children: [
         IconButton(
           padding: EdgeInsets.zero,
@@ -222,7 +223,6 @@ class _ImageError extends StatelessWidget {
           ),
           icon: const Icon(Icons.error),
         ),
-        const SizedBox(width: 8),
         Expanded(child: OrgLinkWidget(link)),
       ],
     );

@@ -4,7 +4,6 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:orgro/src/util.dart';
 
 class FilterChipsInput extends StatelessWidget {
   const FilterChipsInput({
@@ -33,6 +32,7 @@ class FilterChipsInput extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
+              spacing: 8,
               children: [
                 if (filter.customFilter.isEmpty)
                   _CustomChip(
@@ -94,7 +94,7 @@ class FilterChipsInput extends StatelessWidget {
                         tags: [...filter.tags, tag],
                       ),
                     ),
-              ].separatedBy(const SizedBox(width: 8)).toList(growable: false),
+              ],
             ),
           ),
         );
@@ -118,6 +118,7 @@ class SelectedFilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 8,
       children: [
         if (filter.customFilter.isNotEmpty)
           _CustomChip(
@@ -150,7 +151,7 @@ class SelectedFilterChips extends StatelessWidget {
               filter.copyWith(tags: List.of(filter.tags)..remove(tag)),
             ),
           ),
-      ].separatedBy(const SizedBox(width: 8)).toList(growable: false),
+      ],
     );
   }
 }

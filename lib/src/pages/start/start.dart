@@ -100,6 +100,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
   Widget _buildFloatingActionButton(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
+      spacing: 16,
       children: [
         FloatingActionButton(
           onPressed: () => _createAndOpenFile(context),
@@ -107,7 +108,6 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
           mini: true,
           child: const Icon(Icons.create),
         ),
-        const SizedBox(height: 16),
         FloatingActionButton(
           onPressed: () => loadAndRememberFile(context, pickFile()),
           heroTag: 'OpenFileFAB',
@@ -202,17 +202,14 @@ class _EmptyBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const _PickFileButton(),
-                  const SizedBox(height: 16),
-                  const _CreateFileButton(),
-                  const SizedBox(height: 16),
-                  const _OpenUrlButton(),
-                  const SizedBox(height: 16),
-                  const _OrgroManualButton(),
-                  if (!kReleaseMode && !kScreenshotMode) ...[
-                    const SizedBox(height: 16),
-                    const _OrgManualButton(),
-                  ],
+                  ...[
+                    const _PickFileButton(),
+                    const _CreateFileButton(),
+                    const _OpenUrlButton(),
+                    const _OrgroManualButton(),
+                    if (!kReleaseMode && !kScreenshotMode)
+                      const _OrgManualButton(),
+                  ].separatedBy(const SizedBox(height: 16)),
                   const SizedBox(height: 80),
                   const _SupportLink(),
                   const _VersionInfoButton(),

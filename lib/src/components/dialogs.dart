@@ -221,7 +221,8 @@ class InputPasswordDialog extends StatelessWidget {
       content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [Text(bodyText!), const SizedBox(height: 8), content],
+        spacing: 8,
+        children: [Text(bodyText!), content],
       );
     }
     return AlertDialog(
