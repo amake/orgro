@@ -1,13 +1,13 @@
 name: orgro
 description: An Org Mode file viewer
-version: 1.61.4+183
+version: 1.61.5+184
 homepage: https://orgro.org
 
 publish_to: none
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
-  flutter: ^3.32.4
+  flutter: ^3.32.8
 
 dependencies:
   cached_network_image: ^3.0.0
@@ -26,7 +26,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^2.0.5
+  flutter_svg: ^2.2.0
   flutter_cache_manager: ^3.3.0
   flutter_charset_detector: ^5.0.0
   # flutter_charset_detector:

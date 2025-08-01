@@ -36,6 +36,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
 
   late FullyRestorableTextEditingController _controller;
   late UndoHistoryController _undoController;
+  late TextStyle _textStyle;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -54,6 +55,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     if (widget.requestFocus) {
       _focusNode.requestFocus();
     }
+    _textStyle = ViewSettings.of(context).forScope(widget.docId).textStyle;
   }
 
   @override
@@ -98,9 +100,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.all(8),
                 ),
-                style: ViewSettings.of(
-                  context,
-                ).forScope(widget.docId).textStyle,
+                style: _textStyle,
               ),
             ),
             _EditorToolbar(

@@ -32,6 +32,8 @@ class RemoteImage extends StatelessWidget {
       return SvgPicture.network(
         url,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
       );
     } else {
       return Image(
@@ -49,6 +51,8 @@ class RemoteImage extends StatelessWidget {
       return SvgPicture.network(
         url,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
       );
     } else {
       return Image(
@@ -81,7 +85,11 @@ class LocalImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => _isSvg(relativePath)
-      ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
+      ? _LocalSvgImage(
+          link: link,
+          dataSource: dataSource,
+          relativePath: relativePath,
+        )
       : _LocalOtherImage(
           link: link,
           dataSource: dataSource,
@@ -140,9 +148,13 @@ class _LocalOtherImage extends StatelessWidget {
 }
 
 class _LocalSvgImage extends StatelessWidget {
-  _LocalSvgImage({required this.dataSource, required this.relativePath})
-    : assert(_isSvg(relativePath));
+  _LocalSvgImage({
+    required this.link,
+    required this.dataSource,
+    required this.relativePath,
+  }) : assert(_isSvg(relativePath));
 
+  final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
 
@@ -154,6 +166,8 @@ class _LocalSvgImage extends StatelessWidget {
         relativePath: relativePath,
       ),
       placeholderBuilder: (context) => const CircularProgressIndicator(),
+      errorBuilder: (context, error, stackTrace) =>
+          _ImageError(link: link, error: error.toString()),
     );
   }
 }

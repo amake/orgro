@@ -9,7 +9,6 @@ import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
-import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -27,38 +26,34 @@ class StartPage extends StatefulWidget {
   State createState() => StartPageState();
 }
 
-class StartPageState extends State<StartPage>
-    with PlatformOpenHandler, RestorationMixin {
+class StartPageState extends State<StartPage> with PlatformOpenHandler {
   @override
   Widget build(BuildContext context) {
     final hasRememberedFiles = RememberedFiles.of(context).hasRememberedFiles;
-    return UnmanagedRestorationScope(
-      bucket: bucket,
-      child: Scaffold(
-        appBar: AppBar(
-          actions: _buildActions(
-            hasRememberedFiles: hasRememberedFiles,
-          ).toList(growable: false),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(AppLocalizations.of(context)!.appTitle),
-              const FontPreloader(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        actions: _buildActions(
+          hasRememberedFiles: hasRememberedFiles,
+        ).toList(growable: false),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(AppLocalizations.of(context)!.appTitle),
+            const FontPreloader(),
+          ],
         ),
-        body: _KeyboardShortcuts(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: hasRememberedFiles
-                ? const RememberedFilesBody()
-                : const _EmptyBody(),
-          ),
-        ),
-        floatingActionButton: hasRememberedFiles
-            ? _buildFloatingActionButton(context)
-            : null,
       ),
+      body: _KeyboardShortcuts(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: hasRememberedFiles
+              ? const RememberedFilesBody()
+              : const _EmptyBody(),
+        ),
+      ),
+      floatingActionButton: hasRememberedFiles
+          ? _buildFloatingActionButton(context)
+          : null,
     );
   }
 
@@ -123,28 +118,26 @@ class StartPageState extends State<StartPage>
     );
   }
 
-  @override
-  String get restorationId => 'start_page';
+  bool _inited = false;
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    if (!initialRestore) return;
-
-    // TODO(aaron): This is legacy; delete eventually
-    final restoreId = bucket?.read<String>(kRestoreOpenFileIdKey);
-    debugPrint('restoreState; restoreId=$restoreId');
-    if (restoreId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final dataSource = await readFileWithIdentifier(restoreId);
-        final context = this.context;
-        await _rememberFile(dataSource);
-        if (!context.mounted) return;
-        await loadFile(context, dataSource, bucket: bucket);
-      });
-      return;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _inited = true;
+      // RestorationMixin.restoreRoute is ultimately called during
+      // didChangeDependencies, so we do the same here.
+      //
+      // We don't use RestorationMixin here because we don't want StartPage to
+      // have its own bucket; we want it and QuickActions to use the root bucket
+      // so that routes remembered by either can be restored here.
+      _restoreRoute();
     }
+  }
 
-    final restoreRoute = bucket?.read<String>(kRestoreRouteKey);
+  void _restoreRoute() {
+    final bucket = RestorationScope.of(context);
+    final restoreRoute = bucket.read<String>(kRestoreRouteKey);
     debugPrint('restoreState; restoreRoute=$restoreRoute');
     if (restoreRoute != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -166,23 +159,6 @@ class StartPageState extends State<StartPage>
         }
       });
     }
-  }
-
-  Future<void> _rememberFile(NativeDataSource dataSource) async {
-    if (!dataSource.persistable) return;
-    final recentFile = RememberedFile(
-      identifier: dataSource.identifier,
-      name: dataSource.name,
-      uri: dataSource.uri,
-      lastOpened: DateTime.now(),
-    );
-
-    await RememberedFiles.of(context).add([recentFile]);
-    debugPrint('Saving file ID to state');
-    bucket?.write<String>(
-      kRestoreRouteKey,
-      json.encode({'route': Routes.document, 'fileId': recentFile.identifier}),
-    );
   }
 }
 

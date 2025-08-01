@@ -16,7 +16,6 @@ class Routes {
   static const settings = '/settings';
   static const manual = '/manual';
   static const narrow = '/narrow';
-  static const scratch = '/scratch';
 }
 
 const _allowedHosts = {'', 'debug.orgro.org', 'profile.orgro.org', 'orgro.org'};
