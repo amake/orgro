@@ -474,25 +474,27 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     required bool searchMode,
   }) => searchMode
       ? const SearchResultsNavigation()
-      : HideOnScroll(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
+      : Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            HideOnScroll(
+              child: FloatingActionButton(
                 onPressed: doEdit,
                 heroTag: '${widget.title}EditFAB',
                 mini: true,
                 child: const Icon(Icons.edit),
               ),
-              const SizedBox(height: 16),
-              BadgableFloatingActionButton(
+            ),
+            const SizedBox(height: 16),
+            HideOnScroll(
+              child: BadgableFloatingActionButton(
                 badgeVisible: searchDelegate.hasQuery,
                 onPressed: () => searchDelegate.start(context),
                 heroTag: '${widget.title}FAB',
                 child: const Icon(Icons.search),
               ),
-            ],
-          ),
+            ),
+          ],
         );
 
   Future<void> doEdit({bool requestFocus = false}) async {
