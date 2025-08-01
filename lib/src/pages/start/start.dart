@@ -26,38 +26,34 @@ class StartPage extends StatefulWidget {
   State createState() => StartPageState();
 }
 
-class StartPageState extends State<StartPage>
-    with PlatformOpenHandler, RestorationMixin {
+class StartPageState extends State<StartPage> with PlatformOpenHandler {
   @override
   Widget build(BuildContext context) {
     final hasRememberedFiles = RememberedFiles.of(context).hasRememberedFiles;
-    return UnmanagedRestorationScope(
-      bucket: bucket,
-      child: Scaffold(
-        appBar: AppBar(
-          actions: _buildActions(
-            hasRememberedFiles: hasRememberedFiles,
-          ).toList(growable: false),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(AppLocalizations.of(context)!.appTitle),
-              const FontPreloader(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        actions: _buildActions(
+          hasRememberedFiles: hasRememberedFiles,
+        ).toList(growable: false),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(AppLocalizations.of(context)!.appTitle),
+            const FontPreloader(),
+          ],
         ),
-        body: _KeyboardShortcuts(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: hasRememberedFiles
-                ? const RememberedFilesBody()
-                : const _EmptyBody(),
-          ),
-        ),
-        floatingActionButton: hasRememberedFiles
-            ? _buildFloatingActionButton(context)
-            : null,
       ),
+      body: _KeyboardShortcuts(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: hasRememberedFiles
+              ? const RememberedFilesBody()
+              : const _EmptyBody(),
+        ),
+      ),
+      floatingActionButton: hasRememberedFiles
+          ? _buildFloatingActionButton(context)
+          : null,
     );
   }
 
@@ -122,14 +118,26 @@ class StartPageState extends State<StartPage>
     );
   }
 
-  @override
-  String get restorationId => 'start_page';
+  bool _inited = false;
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    if (!initialRestore) return;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _inited = true;
+      // RestorationMixin.restoreRoute is ultimately called during
+      // didChangeDependencies, so we do the same here.
+      //
+      // We don't use RestorationMixin here because we don't want StartPage to
+      // have its own bucket; we want it and QuickActions to use the root bucket
+      // so that routes remembered by either can be restored here.
+      _restoreRoute();
+    }
+  }
 
-    final restoreRoute = bucket?.read<String>(kRestoreRouteKey);
+  void _restoreRoute() {
+    final bucket = RestorationScope.of(context);
+    final restoreRoute = bucket.read<String>(kRestoreRouteKey);
     debugPrint('restoreState; restoreRoute=$restoreRoute');
     if (restoreRoute != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
