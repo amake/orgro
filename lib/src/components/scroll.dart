@@ -20,10 +20,10 @@ class HideOnScroll extends StatelessWidget {
               ScrollDirection.forward;
         }
         return AnimatedSlide(
-          duration: const Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 300),
           offset: showFab ? Offset.zero : const Offset(0, 1),
           child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 100),
+            duration: const Duration(milliseconds: 300),
             opacity: showFab ? 1.0 : 0.0,
             child: child,
           ),
