@@ -9,7 +9,6 @@ import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
-import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
@@ -130,20 +129,6 @@ class StartPageState extends State<StartPage>
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     if (!initialRestore) return;
 
-    // TODO(aaron): This is legacy; delete eventually
-    final restoreId = bucket?.read<String>(kRestoreOpenFileIdKey);
-    debugPrint('restoreState; restoreId=$restoreId');
-    if (restoreId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final dataSource = await readFileWithIdentifier(restoreId);
-        final context = this.context;
-        await _rememberFile(dataSource);
-        if (!context.mounted) return;
-        await loadFile(context, dataSource, bucket: bucket);
-      });
-      return;
-    }
-
     final restoreRoute = bucket?.read<String>(kRestoreRouteKey);
     debugPrint('restoreState; restoreRoute=$restoreRoute');
     if (restoreRoute != null) {
@@ -166,23 +151,6 @@ class StartPageState extends State<StartPage>
         }
       });
     }
-  }
-
-  Future<void> _rememberFile(NativeDataSource dataSource) async {
-    if (!dataSource.persistable) return;
-    final recentFile = RememberedFile(
-      identifier: dataSource.identifier,
-      name: dataSource.name,
-      uri: dataSource.uri,
-      lastOpened: DateTime.now(),
-    );
-
-    await RememberedFiles.of(context).add([recentFile]);
-    debugPrint('Saving file ID to state');
-    bucket?.write<String>(
-      kRestoreRouteKey,
-      json.encode({'route': Routes.document, 'fileId': recentFile.identifier}),
-    );
   }
 }
 

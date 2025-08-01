@@ -8,8 +8,6 @@ import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/routes.dart';
 
-const kRestoreOpenFileIdKey = 'restore_open_file_id';
-
 Future<void> loadAndRememberFile(
   BuildContext context,
   FutureOr<NativeDataSource?> fileInfoFuture, {
@@ -49,7 +47,6 @@ Future<void> loadFile(
   bucket ??= RestorationScope.of(context);
   await loadDocument(context, dataSource, mode: mode);
   debugPrint('Clearing saved state from bucket $bucket');
-  bucket.remove<String>(kRestoreOpenFileIdKey);
   bucket.remove<String>(kRestoreRouteKey);
 }
 
@@ -61,7 +58,6 @@ Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
   );
   await loadHttpUrl(context, uri);
   debugPrint('Clearing saved state from bucket $bucket');
-  bucket.remove<String>(kRestoreOpenFileIdKey);
   bucket.remove<String>(kRestoreRouteKey);
 }
 
@@ -77,6 +73,5 @@ Future<void> loadAndRememberAsset(
   );
   await loadAsset(context, key, mode: mode);
   debugPrint('Clearing saved state from bucket $bucket');
-  bucket.remove<String>(kRestoreOpenFileIdKey);
   bucket.remove<String>(kRestoreRouteKey);
 }
