@@ -8,11 +8,11 @@ class HideOnScroll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var showFab = true;
     return AnimatedBuilder(
       animation: PrimaryScrollController.of(context),
       builder: (context, child) {
         final controller = PrimaryScrollController.of(context);
-        var showFab = true;
         if (controller.hasClients &&
             controller.position.userScrollDirection != ScrollDirection.idle) {
           showFab =
