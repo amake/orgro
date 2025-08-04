@@ -10,6 +10,7 @@ import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
+import 'package:orgro/src/components/scroll.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
@@ -471,26 +472,33 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
-  }) => searchMode
-      ? const SearchResultsNavigation()
-      : Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              onPressed: doEdit,
-              heroTag: '${widget.title}EditFAB',
-              mini: true,
-              child: const Icon(Icons.edit),
-            ),
-            const SizedBox(height: 16),
-            BadgableFloatingActionButton(
-              badgeVisible: searchDelegate.hasQuery,
-              onPressed: () => searchDelegate.start(context),
-              heroTag: '${widget.title}FAB',
-              child: const Icon(Icons.search),
-            ),
-          ],
-        );
+  }) {
+    if (searchMode) return const SearchResultsNavigation();
+    final scopedViewSettings = _viewSettings.forScope(_dataSource.id);
+    final doHideOnScroll =
+        !_allowFullScreen(context) || scopedViewSettings.fullWidth;
+
+    final editFab = FloatingActionButton(
+      onPressed: doEdit,
+      heroTag: '${widget.title}EditFAB',
+      mini: true,
+      child: const Icon(Icons.edit),
+    );
+    final searchFab = BadgableFloatingActionButton(
+      badgeVisible: searchDelegate.hasQuery,
+      onPressed: () => searchDelegate.start(context),
+      heroTag: '${widget.title}FAB',
+      child: const Icon(Icons.search),
+    );
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      spacing: 16,
+      children: [
+        if (doHideOnScroll) HideOnScroll(child: editFab) else editFab,
+        if (doHideOnScroll) HideOnScroll(child: searchFab) else searchFab,
+      ],
+    );
+  }
 
   Future<void> doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
