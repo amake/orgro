@@ -1,0 +1,1 @@
+- Hide floating action buttons when scrolling document
