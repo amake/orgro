@@ -55,6 +55,11 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     if (widget.requestFocus) {
       _focusNode.requestFocus();
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _textStyle = ViewSettings.of(context).forScope(widget.docId).textStyle;
   }
 
