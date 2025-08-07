@@ -103,7 +103,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 expands: true,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 8),
                 ),
                 style: _textStyle,
               ),
@@ -150,7 +150,13 @@ class _EditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).highlightColor,
+        border: Border(
+          top: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+        ),
+      ),
       width: double.infinity,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
