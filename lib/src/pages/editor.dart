@@ -98,6 +98,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
               child: TextField(
                 controller: _controller.value,
                 undoController: _undoController,
+                scrollController: PrimaryScrollController.of(context),
                 focusNode: _focusNode,
                 maxLines: null,
                 expands: true,
