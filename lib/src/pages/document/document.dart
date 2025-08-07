@@ -472,33 +472,34 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
-  }) {
-    if (searchMode) return const SearchResultsNavigation();
-    final scopedViewSettings = _viewSettings.forScope(_dataSource.id);
-    final doHideOnScroll =
-        !_allowFullScreen(context) || scopedViewSettings.fullWidth;
-
-    final editFab = FloatingActionButton(
-      onPressed: doEdit,
-      heroTag: '${widget.title}EditFAB',
-      mini: true,
-      child: const Icon(Icons.edit),
-    );
-    final searchFab = BadgableFloatingActionButton(
-      badgeVisible: searchDelegate.hasQuery,
-      onPressed: () => searchDelegate.start(context),
-      heroTag: '${widget.title}FAB',
-      child: const Icon(Icons.search),
-    );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      spacing: 16,
-      children: [
-        if (doHideOnScroll) HideOnScroll(child: editFab) else editFab,
-        if (doHideOnScroll) HideOnScroll(child: searchFab) else searchFab,
-      ],
-    );
-  }
+  }) => searchMode
+      ? const SearchResultsNavigation()
+      : ScrollingBuilder(
+          builder: (context, scrolling) => Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            spacing: 16,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  if (scrolling) return;
+                  doEdit();
+                },
+                heroTag: '${widget.title}EditFAB',
+                mini: true,
+                child: const Icon(Icons.edit),
+              ),
+              BadgableFloatingActionButton(
+                badgeVisible: searchDelegate.hasQuery,
+                onPressed: () {
+                  if (scrolling) return;
+                  searchDelegate.start(context);
+                },
+                heroTag: '${widget.title}FAB',
+                child: const Icon(Icons.search),
+              ),
+            ],
+          ),
+        );
 
   Future<void> doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
