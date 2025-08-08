@@ -1,18 +1,18 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-class HideOnScroll extends StatefulWidget {
-  const HideOnScroll({required this.child, super.key});
+class ScrollingBuilder extends StatefulWidget {
+  const ScrollingBuilder({required this.builder, super.key});
 
-  final Widget child;
+  final Widget Function(BuildContext, bool) builder;
 
   @override
-  State<HideOnScroll> createState() => _HideOnScrollState();
+  State<ScrollingBuilder> createState() => _ScrollingBuilderState();
 }
 
-class _HideOnScrollState extends State<HideOnScroll> {
-  late ScrollController _controller;
-  bool _showFab = true;
+class _ScrollingBuilderState extends State<ScrollingBuilder> {
+  late final ScrollController _controller;
+  bool _isScrolling = false;
 
   @override
   void didChangeDependencies() {
@@ -21,28 +21,26 @@ class _HideOnScrollState extends State<HideOnScroll> {
     _controller.addListener(_onScroll);
   }
 
+  void _onScroll() {
+    if (!mounted) return;
+    // If we check the scroll direction immediately, we will never find the idle
+    // state. Thus we schedule the check for the next frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isScrolling =
+          _controller.hasClients &&
+          _controller.position.userScrollDirection != ScrollDirection.idle;
+      if (isScrolling != _isScrolling) {
+        setState(() => _isScrolling = isScrolling);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _controller.removeListener(_onScroll);
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_controller.hasClients &&
-        _controller.position.userScrollDirection != ScrollDirection.idle) {
-      setState(() {
-        _showFab =
-            _controller.position.userScrollDirection == ScrollDirection.forward;
-      });
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return AnimatedScale(
-      duration: const Duration(milliseconds: 100),
-      scale: _showFab ? 1 : 0,
-      child: widget.child,
-    );
-  }
+  Widget build(BuildContext context) => widget.builder(context, _isScrolling);
 }
