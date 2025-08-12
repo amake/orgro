@@ -1,0 +1,3 @@
+- Prevent accidental activation of floating action buttons when scrolling document
+- Improve editor styling
+- Bug fixes
