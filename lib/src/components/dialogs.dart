@@ -550,29 +550,33 @@ class _RecentFilesSortDialogState extends State<RecentFilesSortDialog> {
       title: Text(AppLocalizations.of(context)!.recentFilesSortDialogTitle),
       content: SizedBox(
         width: 0,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            for (final key in RecentFilesSortKey.values)
-              RadioListTile<RecentFilesSortKey>(
-                value: key,
-                groupValue: _sortKey,
-                onChanged: (value) {
-                  if (value != null) setState(() => _sortKey = value);
-                },
-                title: Text(key.toDisplayString(context)),
-              ),
-            const Divider(),
-            for (final order in SortOrder.values)
-              RadioListTile<SortOrder>(
-                value: order,
-                groupValue: _sortOrder,
-                onChanged: (value) {
-                  if (value != null) setState(() => _sortOrder = value);
-                },
-                title: Text(order.toDisplayString(context)),
-              ),
-          ],
+        child: RadioGroup<RecentFilesSortKey>(
+          groupValue: _sortKey,
+          onChanged: (value) {
+            if (value != null) setState(() => _sortKey = value);
+          },
+          child: RadioGroup<SortOrder>(
+            groupValue: _sortOrder,
+            onChanged: (value) {
+              if (value != null) setState(() => _sortOrder = value);
+            },
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final key in RecentFilesSortKey.values)
+                  RadioListTile<RecentFilesSortKey>(
+                    value: key,
+                    title: Text(key.toDisplayString(context)),
+                  ),
+                const Divider(),
+                for (final order in SortOrder.values)
+                  RadioListTile<SortOrder>(
+                    value: order,
+                    title: Text(order.toDisplayString(context)),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
       actions: [
