@@ -142,7 +142,7 @@ packages:
     description:
       path: "."
       ref: directory-picker
-      resolved-ref: c83adbbd610cdfab4511f7227529caf30029f37e
+      resolved-ref: eb8cdb82daa75695f1b9bd647a2f50de7312e934
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "2.1.0+1"

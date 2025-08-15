@@ -2,17 +2,22 @@ import UIKit
 import Flutter
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterPluginRegistrant {
     override func application(
       _ application: UIApplication,
       didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-        let channel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: controller.binaryMessenger)
+        pluginRegistrant = self
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+
+    func register(with registry: any FlutterPluginRegistry) {
+        let registrar = registry.registrar(forPlugin: "native_search")!
+
+        let channel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: registrar.messenger())
 
         channel.setMethodCallHandler(handleNativeSearchMethod)
 
-        GeneratedPluginRegistrant.register(with: self)
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        GeneratedPluginRegistrant.register(with: registry)
     }
 }
