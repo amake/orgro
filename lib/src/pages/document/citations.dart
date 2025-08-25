@@ -100,9 +100,7 @@ extension CitationHandler on DocumentPageState {
       try {
         final resolved = await dataSource.resolveRelative(bibFile);
         final content = await resolved.content;
-        final entries =
-            BibTeXDefinition().build().parse(content).value
-                as List<BibTeXEntry>;
+        final entries = BibTeXDefinition().build().parse(content).value;
         for (final entry in entries) {
           if (remainingKeys.contains(entry.key)) {
             results.add(entry);
