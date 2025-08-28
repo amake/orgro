@@ -9,12 +9,16 @@ class KeyboardShortcuts extends StatelessWidget {
     required this.child,
     required this.onEdit,
     required this.onSearch,
+    required this.onUndo,
+    required this.onRedo,
     super.key,
   });
 
   final Widget child;
   final VoidCallback onEdit;
   final VoidCallback onSearch;
+  final VoidCallback onUndo;
+  final VoidCallback onRedo;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,15 @@ class KeyboardShortcuts extends StatelessWidget {
             const SearchIntent(),
         SingleActivator(LogicalKeyboardKey.home): const ScrollToTopIntent(),
         SingleActivator(LogicalKeyboardKey.end): const ScrollToBottomIntent(),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyZ):
+            const UndoTextIntent(SelectionChangedCause.keyboard),
+        LogicalKeySet(
+          platformShortcutKey,
+          LogicalKeyboardKey.shift,
+          LogicalKeyboardKey.keyZ,
+        ): const RedoTextIntent(
+          SelectionChangedCause.keyboard,
+        ),
       },
       child: Actions(
         actions: {
@@ -36,6 +49,8 @@ class KeyboardShortcuts extends StatelessWidget {
           SearchIntent: CallbackAction(onInvoke: (_) => onSearch()),
           ScrollToTopIntent: ScrollToTopAction(),
           ScrollToBottomIntent: ScrollToBottomAction(),
+          UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo()),
+          RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo()),
         },
         child: Focus(autofocus: true, child: child),
       ),

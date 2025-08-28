@@ -317,6 +317,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 builder: (context) => KeyboardShortcuts(
                   onEdit: doEdit,
                   onSearch: () => searchDelegate.start(context),
+                  onUndo: _undo,
+                  onRedo: _redo,
                   child: CustomScrollView(
                     restorationId: 'document_scroll_view_${widget.layer}',
                     slivers: [
