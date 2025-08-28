@@ -315,6 +315,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               // Scaffold makes it into the body's context
               body: Builder(
                 builder: (context) => KeyboardShortcuts(
+                  onEdit: doEdit,
+                  onSearch: () => searchDelegate.start(context),
                   child: CustomScrollView(
                     restorationId: 'document_scroll_view_${widget.layer}',
                     slivers: [
