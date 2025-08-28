@@ -30,8 +30,10 @@ class KeyboardShortcuts extends StatelessWidget {
             const EditIntent(),
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyF):
             const SearchIntent(),
-        SingleActivator(LogicalKeyboardKey.home): const ScrollToTopIntent(),
-        SingleActivator(LogicalKeyboardKey.end): const ScrollToBottomIntent(),
+        SingleActivator(LogicalKeyboardKey.home):
+            const ScrollToDocumentBoundaryIntent(forward: false),
+        SingleActivator(LogicalKeyboardKey.end):
+            const ScrollToDocumentBoundaryIntent(forward: true),
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyZ):
             const UndoTextIntent(SelectionChangedCause.keyboard),
         LogicalKeySet(
@@ -47,8 +49,7 @@ class KeyboardShortcuts extends StatelessWidget {
           CloseViewIntent: CloseViewAction(),
           EditIntent: CallbackAction(onInvoke: (_) => onEdit()),
           SearchIntent: CallbackAction(onInvoke: (_) => onSearch()),
-          ScrollToTopIntent: ScrollToTopAction(),
-          ScrollToBottomIntent: ScrollToBottomAction(),
+          ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo()),
           RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo()),
         },

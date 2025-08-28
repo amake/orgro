@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 
+class ScrollToDocumentBoundaryAction
+    extends ContextAction<ScrollToDocumentBoundaryIntent> {
+  @override
+  void invoke(
+    covariant ScrollToDocumentBoundaryIntent intent, [
+    BuildContext? context,
+  ]) {
+    if (context != null) {
+      if (intent.forward) {
+        _scrollToBottom(context);
+      } else {
+        _scrollToTop(context);
+      }
+    }
+  }
+}
+
 void _scrollTo(ScrollController controller, double position) =>
     controller.animateTo(
       position,
@@ -8,35 +25,9 @@ void _scrollTo(ScrollController controller, double position) =>
       curve: Curves.ease,
     );
 
-class ScrollToTopIntent extends Intent {
-  const ScrollToTopIntent();
-}
-
-class ScrollToTopAction extends ContextAction<ScrollToTopIntent> {
-  @override
-  void invoke(covariant ScrollToTopIntent intent, [BuildContext? context]) {
-    if (context != null) {
-      _scrollToTop(context);
-    }
-  }
-}
-
 void _scrollToTop(BuildContext context) {
   final controller = PrimaryScrollController.of(context);
   _scrollTo(controller, controller.position.minScrollExtent);
-}
-
-class ScrollToBottomIntent extends Intent {
-  const ScrollToBottomIntent();
-}
-
-class ScrollToBottomAction extends ContextAction<ScrollToBottomIntent> {
-  @override
-  void invoke(covariant ScrollToBottomIntent intent, [BuildContext? context]) {
-    if (context != null) {
-      _scrollToBottom(context);
-    }
-  }
 }
 
 void _scrollToBottom(BuildContext context) {
@@ -51,14 +42,20 @@ class ScrollTopButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.keyboard_arrow_up),
-      onPressed: Actions.handler(context, const ScrollToTopIntent()),
+      onPressed: Actions.handler(
+        context,
+        const ScrollToDocumentBoundaryIntent(forward: false),
+      ),
     );
   }
 }
 
 PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: Actions.handler(context, ScrollToTopIntent()),
+    value: Actions.handler(
+      context,
+      ScrollToDocumentBoundaryIntent(forward: false),
+    ),
     child: Text(AppLocalizations.of(context)!.menuItemScrollTop),
   );
 }
@@ -70,14 +67,20 @@ class ScrollBottomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.keyboard_arrow_down),
-      onPressed: Actions.handler(context, const ScrollToBottomIntent()),
+      onPressed: Actions.handler(
+        context,
+        const ScrollToDocumentBoundaryIntent(forward: true),
+      ),
     );
   }
 }
 
 PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: Actions.handler(context, ScrollToBottomIntent()),
+    value: Actions.handler(
+      context,
+      ScrollToDocumentBoundaryIntent(forward: true),
+    ),
     child: Text(AppLocalizations.of(context)!.menuItemScrollBottom),
   );
 }

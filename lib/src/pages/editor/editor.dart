@@ -105,9 +105,13 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 const MakeItalicIntent(),
             LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
                 const MakeUnderlineIntent(),
-            SingleActivator(LogicalKeyboardKey.end):
-                const ScrollToBottomIntent(),
-            SingleActivator(LogicalKeyboardKey.home): const ScrollToTopIntent(),
+            // TODO(aaron): These are already set by default in
+            // DefaultTextEditingShortcuts so it seems like we shouldn't need
+            // them here, but they didn't seem to work otherwise.
+            const SingleActivator(LogicalKeyboardKey.end):
+                const ScrollToDocumentBoundaryIntent(forward: true),
+            SingleActivator(LogicalKeyboardKey.home):
+                const ScrollToDocumentBoundaryIntent(forward: false),
           },
           child: Actions(
             actions: {
@@ -124,8 +128,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
               InsertDateIntent: InsertDateAction(_controller.value),
               MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
               MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
-              ScrollToTopIntent: ScrollToTopAction(),
-              ScrollToBottomIntent: ScrollToBottomAction(),
+              ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
             },
             child: Column(
               // mainAxisSize: MainAxisSize.min,
