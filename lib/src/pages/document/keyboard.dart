@@ -30,9 +30,9 @@ class KeyboardShortcuts extends StatelessWidget {
             const EditIntent(),
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyF):
             const SearchIntent(),
-        SingleActivator(LogicalKeyboardKey.home):
+        const SingleActivator(LogicalKeyboardKey.home):
             const ScrollToDocumentBoundaryIntent(forward: false),
-        SingleActivator(LogicalKeyboardKey.end):
+        const SingleActivator(LogicalKeyboardKey.end):
             const ScrollToDocumentBoundaryIntent(forward: true),
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyZ):
             const UndoTextIntent(SelectionChangedCause.keyboard),

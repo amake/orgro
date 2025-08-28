@@ -98,7 +98,8 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 const SaveChangesIntent(),
             LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
                 const CloseViewIntent(),
-            LogicalKeySet(LogicalKeyboardKey.escape): const CloseViewIntent(),
+            const SingleActivator(LogicalKeyboardKey.escape):
+                const CloseViewIntent(),
             LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
                 const MakeBoldIntent(),
             LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
@@ -110,7 +111,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             // them here, but they didn't seem to work otherwise.
             const SingleActivator(LogicalKeyboardKey.end):
                 const ScrollToDocumentBoundaryIntent(forward: true),
-            SingleActivator(LogicalKeyboardKey.home):
+            const SingleActivator(LogicalKeyboardKey.home):
                 const ScrollToDocumentBoundaryIntent(forward: false),
           },
           child: Actions(
