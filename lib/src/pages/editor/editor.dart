@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/actions/common.dart';
+import 'package:orgro/src/actions/scroll.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/pages/editor/actions.dart';
 import 'package:orgro/src/restoration.dart';
-import 'package:orgro/src/timestamps.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreAfterTextKey = 'restore_after_text';
@@ -91,30 +92,67 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             IconButton(onPressed: _save, icon: const Icon(Icons.check)),
           ],
         ),
-        body: Column(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _controller.value,
-                undoController: _undoController,
-                scrollController: PrimaryScrollController.of(context),
-                focusNode: _focusNode,
-                maxLines: null,
-                expands: true,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                ),
-                style: _textStyle,
+        body: Shortcuts(
+          shortcuts: {
+            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyS):
+                const SaveChangesIntent(),
+            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
+                const CloseViewIntent(),
+            LogicalKeySet(LogicalKeyboardKey.escape): const CloseViewIntent(),
+            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
+                const MakeBoldIntent(),
+            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
+                const MakeItalicIntent(),
+            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
+                const MakeUnderlineIntent(),
+            SingleActivator(LogicalKeyboardKey.end):
+                const ScrollToBottomIntent(),
+            SingleActivator(LogicalKeyboardKey.home): const ScrollToTopIntent(),
+          },
+          child: Actions(
+            actions: {
+              SaveChangesIntent: CallbackAction(onInvoke: (_) => _save()),
+              CloseViewIntent: CloseViewAction(),
+              MakeBoldIntent: MakeBoldAction(_controller.value),
+              MakeItalicIntent: MakeItalicAction(_controller.value),
+              MakeUnderlineIntent: MakeUnderlineAction(_controller.value),
+              MakeStrikethroughIntent: MakeStrikethroughAction(
+                _controller.value,
               ),
+              MakeCodeIntent: MakeCodeAction(_controller.value),
+              InsertLinkIntent: InsertLinkAction(_controller.value),
+              InsertDateIntent: InsertDateAction(_controller.value),
+              MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
+              MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
+              ScrollToTopIntent: ScrollToTopAction(),
+              ScrollToBottomIntent: ScrollToBottomAction(),
+            },
+            child: Column(
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller.value,
+                    undoController: _undoController,
+                    scrollController: PrimaryScrollController.of(context),
+                    focusNode: _focusNode,
+                    maxLines: null,
+                    expands: true,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                    ),
+                    style: _textStyle,
+                  ),
+                ),
+                _EditorToolbar(
+                  controller: _controller.value,
+                  undoController: _undoController,
+                  enabled: _controller.value.selection.isValid,
+                ),
+              ],
             ),
-            _EditorToolbar(
-              controller: _controller.value,
-              undoController: _undoController,
-              enabled: _controller.value.selection.isValid,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -184,39 +222,57 @@ class _EditorToolbar extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.format_bold),
-              onPressed: enabled ? () => _wrapSelection('*', '*') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeBoldIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_italic),
-              onPressed: enabled ? () => _wrapSelection('/', '/') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeItalicIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_underline),
-              onPressed: enabled ? () => _wrapSelection('_', '_') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeUnderlineIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.format_strikethrough),
-              onPressed: enabled ? () => _wrapSelection('+', '+') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeStrikethroughIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.code),
-              onPressed: enabled ? () => _wrapSelection('~', '~') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeCodeIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.link),
-              onPressed: enabled ? _insertLink : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const InsertLinkIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.calendar_today),
-              onPressed: enabled ? () => _insertDate(context) : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const InsertDateIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.subscript),
-              onPressed: enabled ? () => _wrapSelection('_{', '}') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeSubscriptIntent())
+                  : null,
             ),
             IconButton(
               icon: const Icon(Icons.superscript),
-              onPressed: enabled ? () => _wrapSelection('^{', '}') : null,
+              onPressed: enabled
+                  ? Actions.handler(context, const MakeSuperscriptIntent())
+                  : null,
             ),
             // TODO(aaron): Offer more quick-insert actions?
             // - Lists
@@ -227,82 +283,4 @@ class _EditorToolbar extends StatelessWidget {
       ),
     );
   }
-
-  void _wrapSelection(String prefix, String suffix) {
-    final value = controller.value;
-    if (!value.selection.isValid) return;
-    final selection = value.selection.textInside(value.text);
-    final replacement = '$prefix$selection$suffix';
-    controller.value = value
-        .replaced(value.selection, replacement)
-        .copyWith(
-          selection: TextSelection.collapsed(
-            offset:
-                value.selection.baseOffset + replacement.length - suffix.length,
-          ),
-        );
-    ContextMenuController.removeAny();
-  }
-
-  void _insertLink() async {
-    final value = controller.value;
-    if (!value.selection.isValid) return;
-    final selection = value.selection.textInside(value.text);
-    final url =
-        _tryParseUrl(selection) ??
-        (await Clipboard.hasStrings()
-            ? _tryParseUrl(
-                (await Clipboard.getData(Clipboard.kTextPlain))?.text,
-              )
-            : null);
-    final description = url == null ? selection : null;
-    final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
-    controller.value = value
-        .replaced(value.selection, replacement)
-        .copyWith(
-          selection: TextSelection.collapsed(
-            offset: value.selection.baseOffset + replacement.length - 2,
-          ),
-        );
-    ContextMenuController.removeAny();
-  }
-
-  void _insertDate(BuildContext context) async {
-    final value = controller.value;
-    if (!value.selection.isValid) return;
-    final date = await showDatePicker(
-      context: context,
-      firstDate: kDatePickerFirstDate,
-      lastDate: kDatePickerLastDate,
-    );
-    if (date == null || !context.mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    final replacement = OrgSimpleTimestamp(
-      '[',
-      date.toOrgDate(),
-      time?.toOrgTime(),
-      [],
-      ']',
-    ).toMarkup();
-    controller.value = value
-        .replaced(value.selection, replacement)
-        .copyWith(
-          selection: TextSelection.collapsed(
-            offset: value.selection.baseOffset + replacement.length - 1,
-          ),
-        );
-    ContextMenuController.removeAny();
-  }
-}
-
-String? _tryParseUrl(String? str) {
-  if (str == null) return null;
-  final uri = Uri.tryParse(str);
-  // Uri.tryParse is very lenient and will accept lots of things other than what
-  // people usually think of as URLs so we filter out anything that doesn't have
-  // a scheme.
-  return uri?.hasScheme == true ? str : null;
 }
