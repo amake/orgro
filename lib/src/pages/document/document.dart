@@ -311,11 +311,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 searchMode || !dirty || _doc is! OrgDocument || !widget.root,
             onPopInvokedWithResult: _onPopInvoked,
             child: Scaffold(
-              body: KeyboardShortcuts(
-                // Builder is here to ensure that the primary scroll controller set by the
-                // Scaffold makes it into the body's context
-                child: Builder(
-                  builder: (context) => CustomScrollView(
+              // Builder is here to ensure that the primary scroll controller set by the
+              // Scaffold makes it into the body's context
+              body: Builder(
+                builder: (context) => KeyboardShortcuts(
+                  child: CustomScrollView(
                     restorationId: 'document_scroll_view_${widget.layer}',
                     slivers: [
                       _buildAppBar(context, searchMode: searchMode),

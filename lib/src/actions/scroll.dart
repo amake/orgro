@@ -8,9 +8,35 @@ void _scrollTo(ScrollController controller, double position) =>
       curve: Curves.ease,
     );
 
+class ScrollToTopIntent extends Intent {
+  const ScrollToTopIntent();
+}
+
+class ScrollToTopAction extends ContextAction<ScrollToTopIntent> {
+  @override
+  void invoke(covariant ScrollToTopIntent intent, [BuildContext? context]) {
+    if (context != null) {
+      _scrollToTop(context);
+    }
+  }
+}
+
 void _scrollToTop(BuildContext context) {
   final controller = PrimaryScrollController.of(context);
   _scrollTo(controller, controller.position.minScrollExtent);
+}
+
+class ScrollToBottomIntent extends Intent {
+  const ScrollToBottomIntent();
+}
+
+class ScrollToBottomAction extends ContextAction<ScrollToBottomIntent> {
+  @override
+  void invoke(covariant ScrollToBottomIntent intent, [BuildContext? context]) {
+    if (context != null) {
+      _scrollToBottom(context);
+    }
+  }
 }
 
 void _scrollToBottom(BuildContext context) {
@@ -25,14 +51,14 @@ class ScrollTopButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.keyboard_arrow_up),
-      onPressed: () => _scrollToTop(context),
+      onPressed: Actions.handler(context, const ScrollToTopIntent()),
     );
   }
 }
 
 PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: () => _scrollToTop(context),
+    value: Actions.handler(context, ScrollToTopIntent()),
     child: Text(AppLocalizations.of(context)!.menuItemScrollTop),
   );
 }
@@ -44,14 +70,14 @@ class ScrollBottomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.keyboard_arrow_down),
-      onPressed: () => _scrollToBottom(context),
+      onPressed: Actions.handler(context, const ScrollToBottomIntent()),
     );
   }
 }
 
 PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: () => _scrollToBottom(context),
+    value: Actions.handler(context, ScrollToBottomIntent()),
     child: Text(AppLocalizations.of(context)!.menuItemScrollBottom),
   );
 }
