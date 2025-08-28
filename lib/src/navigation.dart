@@ -5,7 +5,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
-import 'package:orgro/src/pages/editor.dart';
+import 'package:orgro/src/pages/editor/editor.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/narrow.dart';
