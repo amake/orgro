@@ -113,6 +113,14 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 const ScrollToDocumentBoundaryIntent(forward: true),
             const SingleActivator(LogicalKeyboardKey.home):
                 const ScrollToDocumentBoundaryIntent(forward: false),
+            // TODO(aaron): Test these. I don't have a keyboard with these keys.
+            const SingleActivator(LogicalKeyboardKey.copy):
+                CopySelectionTextIntent.copy,
+            const SingleActivator(LogicalKeyboardKey.cut):
+                CopySelectionTextIntent.cut(SelectionChangedCause.keyboard),
+            const SingleActivator(LogicalKeyboardKey.paste): PasteTextIntent(
+              SelectionChangedCause.keyboard,
+            ),
           },
           child: Actions(
             actions: {
