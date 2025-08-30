@@ -310,33 +310,31 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             canPop:
                 searchMode || !dirty || _doc is! OrgDocument || !widget.root,
             onPopInvokedWithResult: _onPopInvoked,
-            child: Scaffold(
-              // Builder is here to ensure that the primary scroll controller set by the
-              // Scaffold makes it into the body's context
-              body: Builder(
-                builder: (context) => KeyboardShortcuts(
-                  onEdit: doEdit,
-                  onUndo: _undo,
-                  onRedo: _redo,
-                  searchDelegate: searchDelegate,
-                  child: CustomScrollView(
-                    restorationId: 'document_scroll_view_${widget.layer}',
-                    slivers: [
-                      _buildAppBar(context, searchMode: searchMode),
-                      _buildDocument(context),
-                    ],
+            child: KeyboardShortcuts(
+              onEdit: doEdit,
+              onUndo: _undo,
+              onRedo: _redo,
+              searchDelegate: searchDelegate,
+              child: Scaffold(
+                body: CustomScrollView(
+                  restorationId: 'document_scroll_view_${widget.layer}',
+                  slivers: [
+                    _buildAppBar(context, searchMode: searchMode),
+                    _buildDocument(context),
+                  ],
+                ),
+                // Builder is here to ensure that the Scaffold makes it into the
+                // body's context
+                floatingActionButton: Builder(
+                  builder: (context) => _buildFloatingActionButton(
+                    context,
+                    searchMode: searchMode,
                   ),
                 ),
+                bottomSheet: searchMode
+                    ? searchDelegate.buildBottomSheet(context)
+                    : null,
               ),
-              // Builder is here to ensure that the Scaffold makes it into the
-              // body's context
-              floatingActionButton: Builder(
-                builder: (context) =>
-                    _buildFloatingActionButton(context, searchMode: searchMode),
-              ),
-              bottomSheet: searchMode
-                  ? searchDelegate.buildBottomSheet(context)
-                  : null,
             ),
           );
         },
