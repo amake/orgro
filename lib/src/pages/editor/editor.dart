@@ -85,84 +85,83 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     return PopScope(
       canPop: !_dirty,
       onPopInvokedWithResult: _onPopInvoked,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          actions: [
-            IconButton(onPressed: _save, icon: const Icon(Icons.check)),
-          ],
-        ),
-        body: Shortcuts(
-          shortcuts: {
-            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyS):
-                const SaveChangesIntent(),
-            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
-                const CloseViewIntent(),
-            const SingleActivator(LogicalKeyboardKey.escape):
-                const CloseViewIntent(),
-            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
-                const MakeBoldIntent(),
-            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
-                const MakeItalicIntent(),
-            LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
-                const MakeUnderlineIntent(),
-            // TODO(aaron): These are already set by default in
-            // DefaultTextEditingShortcuts so it seems like we shouldn't need
-            // them here, but they didn't seem to work otherwise.
-            const SingleActivator(LogicalKeyboardKey.end):
-                const ScrollToDocumentBoundaryIntent(forward: true),
-            const SingleActivator(LogicalKeyboardKey.home):
-                const ScrollToDocumentBoundaryIntent(forward: false),
-            // TODO(aaron): Test these. I don't have a keyboard with these keys.
-            const SingleActivator(LogicalKeyboardKey.copy):
-                CopySelectionTextIntent.copy,
-            const SingleActivator(LogicalKeyboardKey.cut):
-                CopySelectionTextIntent.cut(SelectionChangedCause.keyboard),
-            const SingleActivator(LogicalKeyboardKey.paste): PasteTextIntent(
-              SelectionChangedCause.keyboard,
-            ),
+      child: Shortcuts(
+        shortcuts: {
+          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
+              const CloseViewIntent(),
+          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyS):
+              const SaveChangesIntent(),
+          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
+              const MakeBoldIntent(),
+          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
+              const MakeItalicIntent(),
+          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
+              const MakeUnderlineIntent(),
+          // TODO(aaron): These are already set by default in
+          // DefaultTextEditingShortcuts so it seems like we shouldn't need
+          // them here, but they didn't seem to work otherwise.
+          const SingleActivator(LogicalKeyboardKey.end):
+              const ScrollToDocumentBoundaryIntent(forward: true),
+          const SingleActivator(LogicalKeyboardKey.home):
+              const ScrollToDocumentBoundaryIntent(forward: false),
+          // TODO(aaron): Test these. I don't have a keyboard with these keys.
+          const SingleActivator(LogicalKeyboardKey.copy):
+              CopySelectionTextIntent.copy,
+          const SingleActivator(LogicalKeyboardKey.cut):
+              CopySelectionTextIntent.cut(SelectionChangedCause.keyboard),
+          const SingleActivator(LogicalKeyboardKey.paste): PasteTextIntent(
+            SelectionChangedCause.keyboard,
+          ),
+        },
+        child: Actions(
+          actions: {
+            SaveChangesIntent: CallbackAction(onInvoke: (_) => _save()),
+            CloseViewIntent: CloseViewAction(),
+            MakeBoldIntent: MakeBoldAction(_controller.value),
+            MakeItalicIntent: MakeItalicAction(_controller.value),
+            MakeUnderlineIntent: MakeUnderlineAction(_controller.value),
+            MakeStrikethroughIntent: MakeStrikethroughAction(_controller.value),
+            MakeCodeIntent: MakeCodeAction(_controller.value),
+            InsertLinkIntent: InsertLinkAction(_controller.value),
+            InsertDateIntent: InsertDateAction(_controller.value),
+            MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
+            MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
+            ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           },
-          child: Actions(
-            actions: {
-              SaveChangesIntent: CallbackAction(onInvoke: (_) => _save()),
-              CloseViewIntent: CloseViewAction(),
-              MakeBoldIntent: MakeBoldAction(_controller.value),
-              MakeItalicIntent: MakeItalicAction(_controller.value),
-              MakeUnderlineIntent: MakeUnderlineAction(_controller.value),
-              MakeStrikethroughIntent: MakeStrikethroughAction(
-                _controller.value,
+          child: FocusScope(
+            autofocus: true,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                actions: [
+                  IconButton(onPressed: _save, icon: const Icon(Icons.check)),
+                ],
               ),
-              MakeCodeIntent: MakeCodeAction(_controller.value),
-              InsertLinkIntent: InsertLinkAction(_controller.value),
-              InsertDateIntent: InsertDateAction(_controller.value),
-              MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
-              MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
-              ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
-            },
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: TextField(
+              body: Column(
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller.value,
+                      undoController: _undoController,
+                      scrollController: PrimaryScrollController.of(context),
+                      focusNode: _focusNode,
+                      maxLines: null,
+                      expands: true,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                      ),
+                      style: _textStyle,
+                    ),
+                  ),
+                  _EditorToolbar(
                     controller: _controller.value,
                     undoController: _undoController,
-                    scrollController: PrimaryScrollController.of(context),
-                    focusNode: _focusNode,
-                    maxLines: null,
-                    expands: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                    ),
-                    style: _textStyle,
+                    enabled: _controller.value.selection.isValid,
                   ),
-                ),
-                _EditorToolbar(
-                  controller: _controller.value,
-                  undoController: _undoController,
-                  enabled: _controller.value.selection.isValid,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
