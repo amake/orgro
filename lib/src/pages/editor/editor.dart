@@ -155,11 +155,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                       style: _textStyle,
                     ),
                   ),
-                  _EditorToolbar(
-                    controller: _controller.value,
-                    undoController: _undoController,
-                    enabled: _controller.value.selection.isValid,
-                  ),
+                  _EditorToolbar(undoController: _undoController),
                 ],
               ),
             ),
@@ -188,15 +184,9 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
 }
 
 class _EditorToolbar extends StatelessWidget {
-  const _EditorToolbar({
-    required this.controller,
-    required this.undoController,
-    required this.enabled,
-  });
+  const _EditorToolbar({required this.undoController});
 
-  final TextEditingController controller;
   final UndoHistoryController undoController;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -217,73 +207,57 @@ class _EditorToolbar extends StatelessWidget {
               valueListenable: undoController,
               builder: (context, value, _) => IconButton(
                 icon: const Icon(Icons.undo),
-                onPressed: enabled && value.canUndo
-                    ? undoController.undo
-                    : null,
+                onPressed: value.canUndo ? undoController.undo : null,
               ),
             ),
             ValueListenableBuilder(
               valueListenable: undoController,
               builder: (context, value, _) => IconButton(
                 icon: const Icon(Icons.redo),
-                onPressed: enabled && value.canRedo
-                    ? undoController.redo
-                    : null,
+                onPressed: value.canRedo ? undoController.redo : null,
               ),
             ),
             IconButton(
               icon: const Icon(Icons.format_bold),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeBoldIntent())
-                  : null,
+              onPressed: Actions.handler(context, const MakeBoldIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.format_italic),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeItalicIntent())
-                  : null,
+              onPressed: Actions.handler(context, const MakeItalicIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.format_underline),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeUnderlineIntent())
-                  : null,
+              onPressed: Actions.handler(context, const MakeUnderlineIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.format_strikethrough),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeStrikethroughIntent())
-                  : null,
+              onPressed: Actions.handler(
+                context,
+                const MakeStrikethroughIntent(),
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.code),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeCodeIntent())
-                  : null,
+              onPressed: Actions.handler(context, const MakeCodeIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.link),
-              onPressed: enabled
-                  ? Actions.handler(context, const InsertLinkIntent())
-                  : null,
+              onPressed: Actions.handler(context, const InsertLinkIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.calendar_today),
-              onPressed: enabled
-                  ? Actions.handler(context, const InsertDateIntent())
-                  : null,
+              onPressed: Actions.handler(context, const InsertDateIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.subscript),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeSubscriptIntent())
-                  : null,
+              onPressed: Actions.handler(context, const MakeSubscriptIntent()),
             ),
             IconButton(
               icon: const Icon(Icons.superscript),
-              onPressed: enabled
-                  ? Actions.handler(context, const MakeSuperscriptIntent())
-                  : null,
+              onPressed: Actions.handler(
+                context,
+                const MakeSuperscriptIntent(),
+              ),
             ),
             // TODO(aaron): Offer more quick-insert actions?
             // - Lists

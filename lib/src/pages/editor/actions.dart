@@ -10,6 +10,12 @@ class SaveChangesIntent extends Intent {
 abstract class _TextEditingAction<T extends Intent> extends ContextAction<T> {
   _TextEditingAction(this.controller);
   final TextEditingController controller;
+
+  @override
+  bool isEnabled(T intent, [BuildContext? context]) {
+    return super.isEnabled(intent, context) &&
+        controller.value.selection.isValid;
+  }
 }
 
 class MakeBoldIntent extends Intent {
