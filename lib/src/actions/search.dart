@@ -35,6 +35,8 @@ class MySearchDelegate {
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();
+  final _searchResultsNavigationKey =
+      GlobalKey<_SearchResultsNavigationState>();
 
   set query(String value) {
     _searchController.text = value;
@@ -65,6 +67,9 @@ class MySearchDelegate {
       ),
     );
   }
+
+  Widget buildSearchResultsNavigation() =>
+      _SearchResultsNavigation(key: _searchResultsNavigationKey);
 
   void dispose() {
     _searchController.dispose();
@@ -97,6 +102,16 @@ class MySearchDelegate {
       _selectedFilter.value.isNotEmpty;
 
   String get queryString => _searchController.value.text;
+
+  void navigateSearchHits({required bool forward}) {
+    // TODO(aaron): I don't like having to use a global key to do this. It seems
+    // like it should be doable with just actions and intents. But I couldn't
+    // find a way to get Shortcuts in DocumentPage to see the Actions in
+    // SearchResultsNavigation so I hacked this up.
+    _searchResultsNavigationKey.currentState?._scrollToRelativeIndex(
+      forward ? 1 : -1,
+    );
+  }
 }
 
 class SearchField extends StatelessWidget {
@@ -200,15 +215,15 @@ class SearchField extends StatelessWidget {
   }
 }
 
-class SearchResultsNavigation extends StatefulWidget {
-  const SearchResultsNavigation({super.key});
+class _SearchResultsNavigation extends StatefulWidget {
+  const _SearchResultsNavigation({super.key});
 
   @override
-  State<SearchResultsNavigation> createState() =>
+  State<_SearchResultsNavigation> createState() =>
       _SearchResultsNavigationState();
 }
 
-class _SearchResultsNavigationState extends State<SearchResultsNavigation> {
+class _SearchResultsNavigationState extends State<_SearchResultsNavigation> {
   int _i = -1;
   List<SearchResultKey> _keys = [];
   late OrgControllerData _controller;

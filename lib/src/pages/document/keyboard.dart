@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/src/actions/common.dart';
 import 'package:orgro/src/actions/scroll.dart';
+import 'package:orgro/src/actions/search.dart';
 import 'package:orgro/src/util.dart';
 
 class KeyboardShortcuts extends StatelessWidget {
   const KeyboardShortcuts({
     required this.child,
     required this.onEdit,
-    required this.onSearch,
     required this.onUndo,
     required this.onRedo,
+    required this.searchDelegate,
     super.key,
   });
 
   final Widget child;
   final VoidCallback onEdit;
-  final VoidCallback onSearch;
   final VoidCallback onUndo;
   final VoidCallback onRedo;
+
+  final MySearchDelegate searchDelegate;
+
+  bool get searchMode => searchDelegate.searchMode.value;
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +47,36 @@ class KeyboardShortcuts extends StatelessWidget {
         ): const RedoTextIntent(
           SelectionChangedCause.keyboard,
         ),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyG):
+            const NavigateSearchHitsIntent(forward: true),
+        LogicalKeySet(
+          platformShortcutKey,
+          LogicalKeyboardKey.shift,
+          LogicalKeyboardKey.keyG,
+        ): const NavigateSearchHitsIntent(
+          forward: false,
+        ),
       },
       child: Actions(
         actions: {
           CloseViewIntent: CloseViewAction(),
           EditIntent: CallbackAction(onInvoke: (_) => onEdit()),
-          SearchIntent: CallbackAction(onInvoke: (_) => onSearch()),
           ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo()),
           RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo()),
+          SearchIntent: CallbackAction(
+            onInvoke: (_) => searchDelegate.start(context),
+          ),
+          NavigateSearchHitsIntent: CallbackAction<NavigateSearchHitsIntent>(
+            onInvoke: (intent) {
+              if (searchMode) {
+                searchDelegate.navigateSearchHits(forward: intent.forward);
+              }
+              return null;
+            },
+          ),
         },
-        child: Focus(autofocus: true, child: child),
+        child: FocusScope(autofocus: true, child: child),
       ),
     );
   }
@@ -65,4 +88,9 @@ class EditIntent extends Intent {
 
 class SearchIntent extends Intent {
   const SearchIntent();
+}
+
+class NavigateSearchHitsIntent extends Intent {
+  const NavigateSearchHitsIntent({required this.forward});
+  final bool forward;
 }

@@ -316,9 +316,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               body: Builder(
                 builder: (context) => KeyboardShortcuts(
                   onEdit: doEdit,
-                  onSearch: () => searchDelegate.start(context),
                   onUndo: _undo,
                   onRedo: _redo,
+                  searchDelegate: searchDelegate,
                   child: CustomScrollView(
                     restorationId: 'document_scroll_view_${widget.layer}',
                     slivers: [
@@ -477,7 +477,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     BuildContext context, {
     required bool searchMode,
   }) => searchMode
-      ? const SearchResultsNavigation()
+      ? searchDelegate.buildSearchResultsNavigation()
       : ScrollingBuilder(
           builder: (context, scrolling) => Column(
             mainAxisAlignment: MainAxisAlignment.end,
