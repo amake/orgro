@@ -223,7 +223,7 @@ Image alignment via ~#+ATTR*~ keywords is supported:
 [[./orgro-icon.png]]
 
 Images are cached on your device. To clear the cache and reset your choice if
-you chose =Always= or =Never=, see the action menu on the top screen.
+you chose =Always= or =Never=, see the Settings screen.
 
 ** Footnotes
 
