@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/pages/editor/edits.dart';
 import 'package:orgro/src/timestamps.dart';
 
 class SaveChangesIntent extends Intent {
@@ -16,6 +18,15 @@ abstract class _TextEditingAction<T extends Intent> extends ContextAction<T> {
     return super.isEnabled(intent, context) &&
         controller.value.selection.isValid;
   }
+
+  void _applyEdit(
+    FutureOr<TextEditingValue?> Function(TextEditingValue) edit,
+  ) async {
+    final value = await edit(controller.value);
+    if (value == null) return;
+    controller.value = value;
+    ContextMenuController.removeAny();
+  }
 }
 
 class MakeBoldIntent extends Intent {
@@ -27,7 +38,7 @@ class MakeBoldAction extends _TextEditingAction<MakeBoldIntent> {
 
   @override
   void invoke(covariant MakeBoldIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '*', '*');
+    _applyEdit(makeBold);
   }
 }
 
@@ -40,7 +51,7 @@ class MakeItalicAction extends _TextEditingAction<MakeItalicIntent> {
 
   @override
   void invoke(covariant MakeItalicIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '/', '/');
+    _applyEdit(makeItalic);
   }
 }
 
@@ -53,7 +64,7 @@ class MakeUnderlineAction extends _TextEditingAction<MakeUnderlineIntent> {
 
   @override
   void invoke(covariant MakeUnderlineIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '_', '_');
+    _applyEdit(makeUnderline);
   }
 }
 
@@ -70,7 +81,7 @@ class MakeStrikethroughAction
     covariant MakeStrikethroughIntent intent, [
     BuildContext? context,
   ]) {
-    _wrapSelection(controller, '+', '+');
+    _applyEdit(makeStrikethrough);
   }
 }
 
@@ -83,7 +94,7 @@ class MakeCodeAction extends _TextEditingAction<MakeCodeIntent> {
 
   @override
   void invoke(covariant MakeCodeIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '~', '~');
+    _applyEdit(makeCode);
   }
 }
 
@@ -96,7 +107,7 @@ class MakeSubscriptAction extends _TextEditingAction<MakeSubscriptIntent> {
 
   @override
   void invoke(covariant MakeSubscriptIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '_{', '}');
+    _applyEdit(makeSubscript);
   }
 }
 
@@ -109,28 +120,8 @@ class MakeSuperscriptAction extends _TextEditingAction<MakeSuperscriptIntent> {
 
   @override
   void invoke(covariant MakeSuperscriptIntent intent, [BuildContext? context]) {
-    _wrapSelection(controller, '^{', '}');
+    _applyEdit(makeSuperscript);
   }
-}
-
-void _wrapSelection(
-  TextEditingController controller,
-  String prefix,
-  String suffix,
-) {
-  final value = controller.value;
-  if (!value.selection.isValid) return;
-  final selection = value.selection.textInside(value.text);
-  final replacement = '$prefix$selection$suffix';
-  controller.value = value
-      .replaced(value.selection, replacement)
-      .copyWith(
-        selection: TextSelection.collapsed(
-          offset:
-              value.selection.baseOffset + replacement.length - suffix.length,
-        ),
-      );
-  ContextMenuController.removeAny();
 }
 
 class InsertLinkIntent extends Intent {
@@ -141,30 +132,15 @@ class InsertLinkAction extends _TextEditingAction<InsertLinkIntent> {
   InsertLinkAction(super.controller);
 
   @override
-  void invoke(covariant InsertLinkIntent intent, [BuildContext? context]) {
-    _insertLink(controller);
+  void invoke(
+    covariant InsertLinkIntent intent, [
+    BuildContext? context,
+  ]) async {
+    final clipboardText = await Clipboard.hasStrings()
+        ? (await Clipboard.getData(Clipboard.kTextPlain))?.text
+        : null;
+    _applyEdit(((value) => insertLink(value, clipboardText)));
   }
-}
-
-void _insertLink(TextEditingController controller) async {
-  final value = controller.value;
-  if (!value.selection.isValid) return;
-  final selection = value.selection.textInside(value.text);
-  final url =
-      _tryParseUrl(selection) ??
-      (await Clipboard.hasStrings()
-          ? _tryParseUrl((await Clipboard.getData(Clipboard.kTextPlain))?.text)
-          : null);
-  final description = url == null ? selection : null;
-  final replacement = '[[${url ?? 'URL'}][${description ?? 'description'}]]';
-  controller.value = value
-      .replaced(value.selection, replacement)
-      .copyWith(
-        selection: TextSelection.collapsed(
-          offset: value.selection.baseOffset + replacement.length - 2,
-        ),
-      );
-  ContextMenuController.removeAny();
 }
 
 class InsertDateIntent extends Intent {
@@ -175,48 +151,22 @@ class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
   InsertDateAction(super.controller);
 
   @override
-  void invoke(covariant InsertDateIntent intent, [BuildContext? context]) {
+  void invoke(
+    covariant InsertDateIntent intent, [
+    BuildContext? context,
+  ]) async {
     if (context != null) {
-      _insertDate(context, controller);
+      final date = await showDatePicker(
+        context: context,
+        firstDate: kDatePickerFirstDate,
+        lastDate: kDatePickerLastDate,
+      );
+      if (date == null || !context.mounted) return null;
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      _applyEdit((value) => insertDate(value, date, time));
     }
   }
-}
-
-void _insertDate(BuildContext context, TextEditingController controller) async {
-  final value = controller.value;
-  if (!value.selection.isValid) return;
-  final date = await showDatePicker(
-    context: context,
-    firstDate: kDatePickerFirstDate,
-    lastDate: kDatePickerLastDate,
-  );
-  if (date == null || !context.mounted) return;
-  final time = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.now(),
-  );
-  final replacement = OrgSimpleTimestamp(
-    '[',
-    date.toOrgDate(),
-    time?.toOrgTime(),
-    [],
-    ']',
-  ).toMarkup();
-  controller.value = value
-      .replaced(value.selection, replacement)
-      .copyWith(
-        selection: TextSelection.collapsed(
-          offset: value.selection.baseOffset + replacement.length - 1,
-        ),
-      );
-  ContextMenuController.removeAny();
-}
-
-String? _tryParseUrl(String? str) {
-  if (str == null) return null;
-  final uri = Uri.tryParse(str);
-  // Uri.tryParse is very lenient and will accept lots of things other than what
-  // people usually think of as URLs so we filter out anything that doesn't have
-  // a scheme.
-  return uri?.hasScheme == true ? str : null;
 }
