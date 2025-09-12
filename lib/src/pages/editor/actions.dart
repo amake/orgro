@@ -170,3 +170,18 @@ class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
     }
   }
 }
+
+class ToggleListItemIntent extends Intent {
+  const ToggleListItemIntent({required this.ordered});
+  final bool ordered;
+}
+
+class ToggleListItemAction extends _TextEditingAction<ToggleListItemIntent> {
+  ToggleListItemAction(super.controller);
+
+  @override
+  void invoke(covariant ToggleListItemIntent intent, [BuildContext? context]) {
+    _applyEdit((value) => toggleListItem(value, intent.ordered));
+  }
+}
+

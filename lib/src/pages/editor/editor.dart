@@ -126,6 +126,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             InsertDateIntent: InsertDateAction(_controller.value),
             MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
             MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
+            ToggleListItemIntent: ToggleListItemAction(_controller.value),
             ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           },
           child: FocusScope(
@@ -215,6 +216,20 @@ class _EditorToolbar extends StatelessWidget {
               builder: (context, value, _) => IconButton(
                 icon: const Icon(Icons.redo),
                 onPressed: value.canRedo ? undoController.redo : null,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.format_list_bulleted),
+              onPressed: Actions.handler(
+                context,
+                const ToggleListItemIntent(ordered: false),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.format_list_numbered),
+              onPressed: Actions.handler(
+                context,
+                const ToggleListItemIntent(ordered: true),
               ),
             ),
             IconButton(

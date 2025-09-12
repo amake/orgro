@@ -218,5 +218,88 @@ void main() {
         expect(result, testValue('foo [2024-06-15 Sat 14:30|]'));
       });
     });
+    group('List', () {
+      test('Toggle unordered list item', () {
+        final result = toggleListItem(testValue('foo |bar'), false);
+        expect(result, testValue('- foo |bar'));
+      });
+      test('Toggle ordered list item', () {
+        final result = toggleListItem(testValue('foo |bar'), true);
+        expect(result, testValue('1. foo |bar'));
+      });
+      test('Toggle unordered list item on existing item', () {
+        final result = toggleListItem(testValue('- foo |bar'), false);
+        expect(result, testValue('foo |bar'));
+      });
+      test('Toggle ordered list item on existing item', () {
+        final result = toggleListItem(testValue('1. foo |bar'), true);
+        expect(result, testValue('foo |bar'));
+      });
+      test('Toggle unordered list to ordered list', () {
+        final result = toggleListItem(testValue('- foo |bar'), true);
+        expect(result, testValue('1. foo |bar'));
+      });
+      test('Toggle ordered list to unordered list', () {
+        final result = toggleListItem(testValue('1. foo |bar'), false);
+        expect(result, testValue('- foo |bar'));
+      });
+      test('Toggle unordered list item with previous list item', () {
+        final result = toggleListItem(
+          testValue('''
+- item 1
+item 2|'''),
+          false,
+        );
+        expect(
+          result,
+          testValue('''
+- item 1
+- item 2|'''),
+        );
+      });
+      test('Toggle ordered list item with previous list item', () {
+        final result = toggleListItem(
+          testValue('''
+1. item 1
+item 2|'''),
+          true,
+        );
+        expect(
+          result,
+          testValue('''
+1. item 1
+2. item 2|'''),
+        );
+      });
+      // TODO(aaron): Are these what we want?
+      test('Toggle unordered list item with previous ordered list item', () {
+        final result = toggleListItem(
+          testValue('''
+1. item 1
+item 2|'''),
+          false,
+        );
+        expect(
+          result,
+          testValue('''
+1. item 1
+2. item 2|'''),
+        );
+      });
+      test('Toggle ordered list item with previous unordered list item', () {
+        final result = toggleListItem(
+          testValue('''
+- item 1
+item 2|'''),
+          true,
+        );
+        expect(
+          result,
+          testValue('''
+- item 1
+- item 2|'''),
+        );
+      });
+    });
   });
 }
