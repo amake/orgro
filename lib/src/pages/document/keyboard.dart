@@ -6,7 +6,7 @@ import 'package:orgro/src/actions/search.dart';
 import 'package:orgro/src/util.dart';
 
 class KeyboardShortcuts extends StatelessWidget {
-  const KeyboardShortcuts({
+  KeyboardShortcuts({
     required this.child,
     required this.onEdit,
     required this.onUndo,
@@ -24,41 +24,44 @@ class KeyboardShortcuts extends StatelessWidget {
 
   bool get searchMode => searchDelegate.searchMode.value;
 
+  final _shortcuts = <ShortcutActivator, Intent>{
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
+        const CloseViewIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyE):
+        const EditIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyF):
+        const SearchIntent(),
+    const SingleActivator(LogicalKeyboardKey.home):
+        const ScrollToDocumentBoundaryIntent(forward: false),
+    const SingleActivator(LogicalKeyboardKey.end):
+        const ScrollToDocumentBoundaryIntent(forward: true),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyZ):
+        const UndoTextIntent(SelectionChangedCause.keyboard),
+    LogicalKeySet(
+      platformShortcutKey,
+      LogicalKeyboardKey.shift,
+      LogicalKeyboardKey.keyZ,
+    ): const RedoTextIntent(
+      SelectionChangedCause.keyboard,
+    ),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyG):
+        const NavigateSearchHitsIntent(forward: true),
+    LogicalKeySet(
+      platformShortcutKey,
+      LogicalKeyboardKey.shift,
+      LogicalKeyboardKey.keyG,
+    ): const NavigateSearchHitsIntent(
+      forward: false,
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
     return Shortcuts(
-      shortcuts: {
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
-            const CloseViewIntent(),
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyE):
-            const EditIntent(),
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyF):
-            const SearchIntent(),
-        const SingleActivator(LogicalKeyboardKey.home):
-            const ScrollToDocumentBoundaryIntent(forward: false),
-        const SingleActivator(LogicalKeyboardKey.end):
-            const ScrollToDocumentBoundaryIntent(forward: true),
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyZ):
-            const UndoTextIntent(SelectionChangedCause.keyboard),
-        LogicalKeySet(
-          platformShortcutKey,
-          LogicalKeyboardKey.shift,
-          LogicalKeyboardKey.keyZ,
-        ): const RedoTextIntent(
-          SelectionChangedCause.keyboard,
-        ),
-        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyG):
-            const NavigateSearchHitsIntent(forward: true),
-        LogicalKeySet(
-          platformShortcutKey,
-          LogicalKeyboardKey.shift,
-          LogicalKeyboardKey.keyG,
-        ): const NavigateSearchHitsIntent(
-          forward: false,
-        ),
-      },
+      shortcuts: _shortcuts,
       child: Actions(
         actions: {
+          // TODO(aaron): Init outside of build
           CloseViewIntent: CloseViewAction(),
           EditIntent: CallbackAction(onInvoke: (_) => onEdit()),
           ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),

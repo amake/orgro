@@ -80,41 +80,45 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     _undoController.dispose();
   }
 
+  final _shortcuts = <ShortcutActivator, Intent>{
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
+        const CloseViewIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyS):
+        const SaveChangesIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
+        const MakeBoldIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
+        const MakeItalicIntent(),
+    LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
+        const MakeUnderlineIntent(),
+    // TODO(aaron): These are already set by default in
+    // DefaultTextEditingShortcuts so it seems like we shouldn't need
+    // them here, but they didn't seem to work otherwise.
+    const SingleActivator(LogicalKeyboardKey.end):
+        const ScrollToDocumentBoundaryIntent(forward: true),
+    const SingleActivator(LogicalKeyboardKey.home):
+        const ScrollToDocumentBoundaryIntent(forward: false),
+    // TODO(aaron): Test these. I don't have a keyboard with these keys.
+    const SingleActivator(LogicalKeyboardKey.copy):
+        CopySelectionTextIntent.copy,
+    const SingleActivator(LogicalKeyboardKey.cut): CopySelectionTextIntent.cut(
+      SelectionChangedCause.keyboard,
+    ),
+    const SingleActivator(LogicalKeyboardKey.paste): PasteTextIntent(
+      SelectionChangedCause.keyboard,
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !_dirty,
       onPopInvokedWithResult: _onPopInvoked,
       child: Shortcuts(
-        shortcuts: {
-          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyW):
-              const CloseViewIntent(),
-          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyS):
-              const SaveChangesIntent(),
-          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyB):
-              const MakeBoldIntent(),
-          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyI):
-              const MakeItalicIntent(),
-          LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
-              const MakeUnderlineIntent(),
-          // TODO(aaron): These are already set by default in
-          // DefaultTextEditingShortcuts so it seems like we shouldn't need
-          // them here, but they didn't seem to work otherwise.
-          const SingleActivator(LogicalKeyboardKey.end):
-              const ScrollToDocumentBoundaryIntent(forward: true),
-          const SingleActivator(LogicalKeyboardKey.home):
-              const ScrollToDocumentBoundaryIntent(forward: false),
-          // TODO(aaron): Test these. I don't have a keyboard with these keys.
-          const SingleActivator(LogicalKeyboardKey.copy):
-              CopySelectionTextIntent.copy,
-          const SingleActivator(LogicalKeyboardKey.cut):
-              CopySelectionTextIntent.cut(SelectionChangedCause.keyboard),
-          const SingleActivator(LogicalKeyboardKey.paste): PasteTextIntent(
-            SelectionChangedCause.keyboard,
-          ),
-        },
+        shortcuts: _shortcuts,
         child: Actions(
           actions: {
+            // TODO(aaron): Init these outside of build
             SaveChangesIntent: CallbackAction(onInvoke: (_) => _save()),
             CloseViewIntent: CloseViewAction(),
             MakeBoldIntent: MakeBoldAction(_controller.value),
