@@ -27,6 +27,11 @@ test: ## Run tests
 	$(flutter) analyze
 	$(flutter) test
 
+.PHONY: test-watch
+test-watch:
+	fswatch -0 -e '*~$$' -e '/\.#' -e '#$$' lib test \
+		| xargs -0 -I {} bash -c '$(flutter) test $$([[ {} =~ test/.* ]] && echo {})'
+
 .PHONY: generate
 generate:
 	$(flutter) pub get
