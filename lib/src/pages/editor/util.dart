@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:org_flutter/org_flutter.dart';
 
 // TODO(aaron): End is truncated by the end of the visited range, which seems
@@ -35,16 +36,17 @@ class _NodeFinder extends OrgSerializer {
 
   @override
   void visit(OrgNode node) {
-    if (i > end) return;
+    if (i >= end) return;
     final nodeStart = i;
     super.visit(node);
-    if (i > start || i > end) {
+    if (i >= start) {
       nodes.add((node: node, span: (start: nodeStart, end: i)));
     }
   }
 
   @override
   void write(String str) {
+    if (i >= end) return;
     i += str.length;
   }
 }
@@ -88,4 +90,14 @@ class Region {
     spans.clear();
     spans.addAll(newSpans);
   }
+}
+
+bool lineBreakInserted(String? before, TextEditingValue after) {
+  if (before == null) return false;
+  if (before.length + 1 != after.text.length) return false;
+  if (!after.selection.isValid) return false;
+  if (!after.selection.isCollapsed) return false;
+  if (after.selection.start < 1) return false;
+  if (after.text.codeUnitAt(after.selection.start - 1) != 0x0a) return false;
+  return true;
 }

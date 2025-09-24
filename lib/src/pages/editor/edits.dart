@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/pages/editor/util.dart';
 import 'package:orgro/src/timestamps.dart';
-import 'package:petitparser/petitparser.dart';
 
 TextEditingValue? _wrapSelection(
   TextEditingValue value,
@@ -106,39 +103,75 @@ final listParser = (() {
 
 TextEditingValue? toggleListItem(TextEditingValue value, bool ordered) {
   if (!value.selection.isValid) return null;
-  final lineStart = max(
-    0,
-    value.text.lastIndexOf('\n', value.selection.start) + 1,
-  );
-  final result = listParser.parse(value.text, start: lineStart);
-  if (result is Failure) {
-    // Turn into list item
-    final previous = listItemAtOffset(value.text, lineStart - 1);
-    final replacement = switch (previous) {
-      OrgListItem() => nextListItem(previous).toMarkup(),
-      null => ordered ? '1. ' : '- ',
-    };
-    return value
-        .replaced(TextRange.collapsed(lineStart), replacement)
-        .copyWith(
-          selection: TextSelection.collapsed(
-            offset: value.selection.baseOffset + replacement.length,
-          ),
-        );
+
+  final doc = OrgDocument.parse(value.text);
+  final atOffset = doc.nodesAtOffset(value.selection.start);
+
+  final foundListItem =
+      atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
+          as OrgListItem?;
+
+  final lastEOLIdx = value.selection.start == 0
+      ? -1
+      : value.text.lastIndexOf('\n', value.selection.start - 1);
+  final lineStart = lastEOLIdx + 1;
+
+  if (foundListItem == null) {
+    if (lastEOLIdx == -1) {
+      // No preceding line, so just insert a list item at the start
+      final replacement = ordered ? '1. ' : '- ';
+      return value
+          .replaced(TextRange.collapsed(0), replacement)
+          .copyWith(
+            selection: TextSelection.collapsed(
+              offset: value.selection.baseOffset + replacement.length,
+            ),
+          );
+    } else {
+      // No list item at the cursor, but there is a preceding line.
+      // If that line is a list item, insert a new one after it.
+      final previous =
+          doc
+                  .nodesAtOffset(lastEOLIdx)
+                  .where((e) => e.node is OrgListItem)
+                  .firstOrNull
+                  ?.node
+              as OrgListItem?;
+      if (previous != null) {
+        final replacement = nextListItem(previous).toMarkup();
+        return value
+            .replaced(TextRange.collapsed(lineStart), replacement)
+            .copyWith(
+              selection: TextSelection.collapsed(
+                offset: value.selection.baseOffset + replacement.length,
+              ),
+            );
+      } else {
+        // No list item found, so just insert a new list item at line start
+        final replacement = ordered ? '1. ' : '- ';
+        return value
+            .replaced(TextRange.collapsed(lineStart), replacement)
+            .copyWith(
+              selection: TextSelection.collapsed(
+                offset: value.selection.baseOffset + replacement.length,
+              ),
+            );
+      }
+    }
   } else {
-    final existing = result.value as OrgListItem;
-    final existingLength = existing.toMarkup().length;
-    switch ((existing, ordered)) {
+    final foundListItemLength = foundListItem.toMarkup().length;
+
+    switch ((foundListItem, ordered)) {
       // Turn into normal text
       case (OrgListUnorderedItem(), false): // Fallthrough
       case (OrgListOrderedItem(), true):
-        final firstBodyNode = switch (existing) {
+        final firstBodyNode = switch (foundListItem) {
           OrgListUnorderedItem(tag: final tag?) => tag.value,
-          _ => existing.body,
+          _ => foundListItem.body,
         };
         final preambleLength = firstBodyNode == null
-            ? existingLength
-            : existing.toMarkupLocating(firstBodyNode).$2;
+            ? foundListItemLength
+            : foundListItem.toMarkupLocating(firstBodyNode).$2;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -151,30 +184,36 @@ TextEditingValue? toggleListItem(TextEditingValue value, bool ordered) {
             );
       default:
         // Switch type of list
-        // TODO(aaron): Should act on entire list, not just this item
-        final previous = listItemAtOffset(value.text, lineStart - 1);
-        final replacement = switch ((existing, ordered)) {
+        // TODO(aaron): Should this act on entire list, not just this item?
+        final previous =
+            doc
+                    .nodesAtOffset(lastEOLIdx)
+                    .where((e) => e.node is OrgListItem)
+                    .firstOrNull
+                    ?.node
+                as OrgListItem?;
+        final replacement = switch ((foundListItem, ordered)) {
           (OrgListUnorderedItem(tag: null), true) => OrgListOrderedItem(
-            existing.indent,
+            foundListItem.indent,
             previous is OrgListOrderedItem ? nextBullet(previous) : '1. ',
             null,
-            existing.checkbox,
-            existing.body,
+            foundListItem.checkbox,
+            foundListItem.body,
           ),
           // Ordered list items can't have tags, so avoid destructive change
-          (OrgListUnorderedItem(), true) => existing,
+          (OrgListUnorderedItem(), true) => foundListItem,
           (OrgListOrderedItem(), false) => OrgListUnorderedItem(
-            existing.indent,
+            foundListItem.indent,
             previous is OrgListUnorderedItem ? previous.bullet : '- ',
-            existing.checkbox,
+            foundListItem.checkbox,
             null,
-            existing.body,
+            foundListItem.body,
           ),
           _ => throw Exception('Unreachable'),
         }.toMarkup();
         return value
             .replaced(
-              TextRange(start: lineStart, end: lineStart + existingLength),
+              TextRange(start: lineStart, end: lineStart + foundListItemLength),
               replacement,
             )
             .copyWith(
@@ -182,20 +221,11 @@ TextEditingValue? toggleListItem(TextEditingValue value, bool ordered) {
                 offset:
                     value.selection.baseOffset +
                     replacement.length -
-                    existingLength,
+                    foundListItemLength,
               ),
             );
     }
   }
-}
-
-OrgListItem? listItemAtOffset(String text, int offset) {
-  final doc = OrgDocument.parse(text);
-  final found = doc.nodesAtOffset(offset);
-  if (found.isEmpty) return null;
-  final (:node, :span) = found.firstWhere((e) => e.node is OrgListItem);
-  if (span.end != offset + 1) return null;
-  return node as OrgListItem;
 }
 
 String nextBullet(OrgListItem item) => switch (item) {
@@ -226,3 +256,31 @@ OrgListItem nextListItem(OrgListItem previous) => switch (previous) {
   ),
 };
 
+bool atEOL(String text, int offset) {
+  if (offset == text.length) return true;
+  return text.codeUnitAt(offset) == 0x0a;
+}
+
+TextEditingValue? afterNewLineFixup(TextEditingValue value) {
+  if (!value.selection.isValid) return null;
+  if (value.selection.start < 2) return null;
+  if (!atEOL(value.text, value.selection.start)) return null;
+  final lastEOLIdx = value.text.lastIndexOf('\n', value.selection.start - 1);
+
+  final doc = OrgDocument.parse(value.text);
+  final atOffset = doc.nodesAtOffset(lastEOLIdx);
+  final foundListItem =
+      atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
+          as OrgListItem?;
+  if (foundListItem == null) return value;
+
+  // Insert a new list item
+  final replacement = nextListItem(foundListItem).toMarkup();
+  return value
+      .replaced(value.selection, replacement)
+      .copyWith(
+        selection: TextSelection.collapsed(
+          offset: value.selection.baseOffset + replacement.length,
+        ),
+      );
+}

@@ -87,6 +87,29 @@ void main() {
       ]);
       expect(doc.nodesAtOffset(10000), isEmpty);
     });
+    test('Offset on boundaries', () {
+      final doc = OrgDocument.parse('- foo\n\n');
+      expect(doc.nodesAtOffset(0), [
+        nodeAt(OrgListUnorderedItem, start: 0, end: 2),
+        nodeAt(OrgList, start: 0, end: 3),
+        nodeAt(OrgContent, start: 0, end: 3),
+        nodeAt(OrgDocument, start: 0, end: 3),
+      ]);
+      expect(doc.nodesAtOffset(5), [
+        nodeAt(OrgPlainText, start: 2, end: 6),
+        nodeAt(OrgContent, start: 2, end: 6),
+        nodeAt(OrgListUnorderedItem, start: 0, end: 6),
+        nodeAt(OrgList, start: 0, end: 7),
+        nodeAt(OrgContent, start: 0, end: 7),
+        nodeAt(OrgDocument, start: 0, end: 7),
+      ]);
+      expect(doc.nodesAtOffset(6), [
+        nodeAt(OrgList, start: 0, end: 7),
+        nodeAt(OrgContent, start: 0, end: 7),
+        nodeAt(OrgDocument, start: 0, end: 7),
+      ]);
+      expect(doc.nodesAtOffset(7), isEmpty);
+    });
     test('Range', () {
       final doc = OrgDocument.parse('''
 

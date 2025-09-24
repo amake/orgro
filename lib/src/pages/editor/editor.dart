@@ -5,6 +5,7 @@ import 'package:orgro/src/actions/scroll.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/pages/editor/actions.dart';
+import 'package:orgro/src/pages/editor/util.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/util.dart';
 
@@ -46,6 +47,13 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     _controller = FullyRestorableTextEditingController(text: widget.text)
       ..addListener(() {
         if (_controller.value.text != _after) {
+          if (lineBreakInserted(_after, _controller.value.value)) {
+            // TODO(aaron): It would be nice to handle this via normal intent
+            // dispatch, but the context here doesn't include the Actions below
+            AfterNewLineAction(
+              _controller.value,
+            ).invoke(const AfterNewLineIntent());
+          }
           setState(() {
             _after = _controller.value.text;
             bucket?.write(_kRestoreAfterTextKey, _after);
@@ -131,6 +139,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
             MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
             ToggleListItemIntent: ToggleListItemAction(_controller.value),
+            AfterNewLineIntent: AfterNewLineAction(_controller.value),
             ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           },
           child: FocusScope(

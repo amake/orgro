@@ -185,3 +185,15 @@ class ToggleListItemAction extends _TextEditingAction<ToggleListItemIntent> {
   }
 }
 
+class AfterNewLineIntent extends Intent {
+  const AfterNewLineIntent();
+}
+
+class AfterNewLineAction extends _TextEditingAction<AfterNewLineIntent> {
+  AfterNewLineAction(super.controller);
+
+  @override
+  void invoke(covariant AfterNewLineIntent intent, [BuildContext? context]) {
+    _applyEdit(afterNewLineFixup);
+  }
+}
