@@ -181,7 +181,11 @@ class ToggleListItemAction extends _TextEditingAction<ToggleListItemIntent> {
 
   @override
   void invoke(covariant ToggleListItemIntent intent, [BuildContext? context]) {
-    _applyEdit((value) => toggleListItem(value, intent.ordered));
+    _applyEdit(
+      (value) => intent.ordered
+          ? toggleOrderedListItem(value)
+          : toggleUnorderedListItem(value),
+    );
   }
 }
 
