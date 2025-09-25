@@ -2,49 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:orgro/src/pages/editor/edits.dart';
 
-TextEditingValue testValue(String text) {
-  final cleaned = text.replaceAll('|', '');
-  final baseOffset = text.indexOf('|');
-  final cursorCount = text.length - cleaned.length;
-  assert(cursorCount == 1 || cursorCount == 2);
-  final extentOffset = cursorCount == 2
-      ? text.lastIndexOf('|') - 1
-      : baseOffset;
-  return TextEditingValue(
-    text: cleaned,
-    selection: TextSelection(
-      baseOffset: baseOffset,
-      extentOffset: extentOffset,
-    ),
-  );
-}
+import '../utils/editing.dart';
 
 void main() {
   group('Editing', () {
-    group('Test helper', () {
-      test('No selection', () {
-        final value = testValue('foo bar|');
-        expect(value.text, 'foo bar');
-        expect(value.selection.baseOffset, 7);
-        expect(value.selection.extentOffset, 7);
-      });
-      test('Selection', () {
-        final value = testValue('foo |bar|');
-        expect(value.text, 'foo bar');
-        expect(value.selection.baseOffset, 4);
-        expect(value.selection.extentOffset, 7);
-      });
-      test('Empty', () {
-        final value = testValue('|');
-        expect(value.text, '');
-        expect(value.selection.baseOffset, 0);
-        expect(value.selection.extentOffset, 0);
-      });
-      test('Invalid', () {
-        expect(() => testValue(''), throwsA(isA<AssertionError>()));
-        expect(() => testValue('|||'), throwsA(isA<AssertionError>()));
-      });
-    });
     group('Bold', () {
       test('Bold selection', () {
         final result = makeBold(testValue('foo |bar|'));

@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_flutter/org_flutter.dart';
-import 'package:orgro/src/pages/editor/util.dart~';
+import 'package:orgro/src/pages/editor/util.dart';
+
+import '../utils/editing.dart';
 
 Matcher nodeAt(Type type, {required int start, required int end}) =>
     predicate<({OrgNode node, NodeSpan span})>(
@@ -147,6 +149,30 @@ void main() {
         nodeAt(OrgDocument, start: 0, end: 29),
       ]);
       expect(doc.nodesInRange(10000, 10001), isEmpty);
+    });
+  });
+  group('Test helper', () {
+    test('No selection', () {
+      final value = testValue('foo bar|');
+      expect(value.text, 'foo bar');
+      expect(value.selection.baseOffset, 7);
+      expect(value.selection.extentOffset, 7);
+    });
+    test('Selection', () {
+      final value = testValue('foo |bar|');
+      expect(value.text, 'foo bar');
+      expect(value.selection.baseOffset, 4);
+      expect(value.selection.extentOffset, 7);
+    });
+    test('Empty', () {
+      final value = testValue('|');
+      expect(value.text, '');
+      expect(value.selection.baseOffset, 0);
+      expect(value.selection.extentOffset, 0);
+    });
+    test('Invalid', () {
+      expect(() => testValue(''), throwsA(isA<AssertionError>()));
+      expect(() => testValue('|||'), throwsA(isA<AssertionError>()));
     });
   });
 }
