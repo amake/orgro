@@ -99,13 +99,6 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
         const MakeItalicIntent(),
     LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyU):
         const MakeUnderlineIntent(),
-    // TODO(aaron): These are already set by default in
-    // DefaultTextEditingShortcuts so it seems like we shouldn't need
-    // them here, but they didn't seem to work otherwise.
-    const SingleActivator(LogicalKeyboardKey.end):
-        const ScrollToDocumentBoundaryIntent(forward: true),
-    const SingleActivator(LogicalKeyboardKey.home):
-        const ScrollToDocumentBoundaryIntent(forward: false),
     // TODO(aaron): Test these. I don't have a keyboard with these keys.
     const SingleActivator(LogicalKeyboardKey.copy):
         CopySelectionTextIntent.copy,
