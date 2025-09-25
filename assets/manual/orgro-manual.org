@@ -39,6 +39,12 @@ scroll to ensure proper display.
 
 Diminish meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
 
+Touch a code reference like [[(foo)]] to jump to the corresponding line.
+
+#+begin_src elisp
+  (calculate-the-thing) ;;(ref:foo)
+#+end_src
+
 ** Syntax highlighting
 
 Syntax highlighting is applied for [[https://github.com/git-touch/highlight/tree/master/highlight/lib/languages][many languages]] in =src= blocks.
@@ -166,6 +172,8 @@ at the top of a document prompting you to grant access.
 For more details, including supported apps and OS restrictions, see the [[https://orgro.org/faq/#how-can-i-use-relative-links-between-org-mode-files][FAQ]].
 
 Image links are also supported; see [[*Images][Images]].
+
+Code reference links are supported as well: see [[(foo)]].
 
 #+LINK: OrgroIssue https://github.com/amake/orgro/issues/
 
