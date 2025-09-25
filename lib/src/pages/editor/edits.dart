@@ -102,14 +102,19 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
   final doc = OrgDocument.parse(value.text);
   final atOffset = doc.nodesAtOffset(value.selection.start);
 
-  final foundListItem =
-      atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-          as OrgListItem?;
-
   final lastEOLIdx = value.selection.start == 0
       ? -1
       : value.text.lastIndexOf('\n', value.selection.start - 1);
   final lineStart = lastEOLIdx + 1;
+
+  // Org syntax lets list items contain line breaks, so the cursor sitting on
+  // the line "after" a list item is still technically in the list item. This is
+  // unintuitive when editing raw markup, so we ignore any found item if the
+  // cursor is at BOL.
+  final foundListItem = value.selection.start == lineStart
+      ? null
+      : atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
+            as OrgListItem?;
 
   switch (foundListItem) {
     case null:
@@ -135,8 +140,9 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
 
-        // No list item found, so just insert a new list item at line start
-        if (previous == null) return replaceBOL('1. ');
+        // List item not found or not ordered, so just insert a new list item at
+        // line start
+        if (previous is! OrgListOrderedItem) return replaceBOL('1. ');
 
         final replacement = nextListItem(previous).toMarkup();
         return replaceBOL(replacement);
@@ -209,14 +215,19 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   final doc = OrgDocument.parse(value.text);
   final atOffset = doc.nodesAtOffset(value.selection.start);
 
-  final foundListItem =
-      atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-          as OrgListItem?;
-
   final lastEOLIdx = value.selection.start == 0
       ? -1
       : value.text.lastIndexOf('\n', value.selection.start - 1);
   final lineStart = lastEOLIdx + 1;
+
+  // Org syntax lets list items contain line breaks, so the cursor sitting on
+  // the line "after" a list item is still technically in the list item. This is
+  // unintuitive when editing raw markup, so we ignore any found item if the
+  // cursor is at BOL.
+  final foundListItem = value.selection.start == lineStart
+      ? null
+      : atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
+            as OrgListItem?;
 
   switch (foundListItem) {
     case null:
@@ -242,11 +253,44 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
 
-        // No list item found, so just insert a new list item at line start
-        if (previous == null) return replaceBOL('- ');
+        // List item not found or not unordered, so just insert a new list item
+        // at line start
+        if (previous is! OrgListUnorderedItem) return replaceBOL('- ');
 
         final replacement = nextListItem(previous).toMarkup();
         return replaceBOL(replacement);
+      }
+    case OrgListUnorderedItem(tag: _?):
+      {
+        // Unordered list items with tags can't be toggled, to avoid destructive
+        // change
+        return null;
+      }
+    case OrgListUnorderedItem(checkbox: null):
+      {
+        final foundListItemLength = foundListItem.toMarkup().length;
+
+        // Add empty checkbox
+        final replacement = OrgListUnorderedItem(
+          foundListItem.indent,
+          foundListItem.bullet,
+          '[ ]',
+          null,
+          foundListItem.body,
+        ).toMarkup();
+        return value
+            .replaced(
+              TextRange(start: lineStart, end: lineStart + foundListItemLength),
+              replacement,
+            )
+            .copyWith(
+              selection: TextSelection.collapsed(
+                offset:
+                    value.selection.baseOffset +
+                    replacement.length -
+                    foundListItemLength,
+              ),
+            );
       }
     case OrgListUnorderedItem():
       {

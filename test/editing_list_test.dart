@@ -43,13 +43,17 @@ void main() {
       });
       test('Toggle list item on existing item', () {
         final result = toggleUnorderedListItem(testValue('- foo |bar'));
+        expect(result, testValue('- [ ] foo |bar'));
+      });
+      test('Toggle list item on existing checkbox item', () {
+        final result = toggleUnorderedListItem(testValue('- [ ] foo |bar'));
         expect(result, testValue('foo |bar'));
       });
       test('Toggle ordered list to unordered list', () {
         final result = toggleUnorderedListItem(testValue('1. foo |bar'));
         expect(result, testValue('- foo |bar'));
       });
-      test('Toggle list item with previous list item', () {
+      test('Toggle list item with previous unordered list item', () {
         final result = toggleUnorderedListItem(
           testValue('''
 - item 1
@@ -72,7 +76,7 @@ item 2|'''),
           result,
           testValue('''
 1. item 1
-2. item 2|'''),
+- item 2|'''),
         );
       });
       test('Toggle middle list item with previous list item', () {
@@ -84,22 +88,13 @@ item 2|'''),
         expect(
           result,
           testValue('''
-item 1|
+- [ ] item 1|
 - item 2'''),
         );
       });
-      test('Toggle list item with previous list item', () {
-        final result = toggleUnorderedListItem(
-          testValue('''
-- item 1
-item 2|'''),
-        );
-        expect(
-          result,
-          testValue('''
-- item 1
-- item 2|'''),
-        );
+      test('Toggle list item with tag does nothing', () {
+        final result = toggleUnorderedListItem(testValue('- foo :: bar|'));
+        expect(result, isNull);
       });
     });
     group('Ordered', () {
@@ -131,7 +126,7 @@ item 2|'''),
         expect(result, testValue('1. foo |bar'));
       });
 
-      test('Toggle list item with previous list item', () {
+      test('Toggle list item with previous ordered list item', () {
         final result = toggleOrderedListItem(
           testValue('''
 1. item 1
@@ -143,6 +138,23 @@ item 2|'''),
 1. item 1
 2. item 2|'''),
         );
+      });
+      test('Toggle list item with previous unordered list item', () {
+        final result = toggleOrderedListItem(
+          testValue('''
+- item 1
+item 2|'''),
+        );
+        expect(
+          result,
+          testValue('''
+- item 1
+1. item 2|'''),
+        );
+      });
+      test('Toggle list item with tag does nothing', () {
+        final result = toggleOrderedListItem(testValue('- foo :: bar|'));
+        expect(result, isNull);
       });
     });
   });
