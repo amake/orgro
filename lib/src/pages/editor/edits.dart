@@ -121,11 +121,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       {
         TextEditingValue replaceBOL(String replacement) => value
             .replaced(TextRange.collapsed(lineStart), replacement)
-            .copyWith(
-              selection: TextSelection.collapsed(
-                offset: value.selection.baseOffset + replacement.length,
-              ),
-            );
+            .copyWith(selection: value.selection.shift(replacement.length));
 
         // No preceding line, so just insert a list item at the start
         if (lastEOLIdx == -1) return replaceBOL('1. ');
@@ -161,11 +157,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
               TextRange(start: lineStart, end: lineStart + preambleLength),
               '',
             )
-            .copyWith(
-              selection: TextSelection.collapsed(
-                offset: value.selection.baseOffset - preambleLength,
-              ),
-            );
+            .copyWith(selection: value.selection.shift(-preambleLength));
       }
     case OrgListUnorderedItem():
       {
@@ -198,11 +190,8 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
               replacement,
             )
             .copyWith(
-              selection: TextSelection.collapsed(
-                offset:
-                    value.selection.baseOffset +
-                    replacement.length -
-                    foundListItemLength,
+              selection: value.selection.shift(
+                replacement.length - foundListItemLength,
               ),
             );
       }
@@ -234,11 +223,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       {
         TextEditingValue replaceBOL(String replacement) => value
             .replaced(TextRange.collapsed(lineStart), replacement)
-            .copyWith(
-              selection: TextSelection.collapsed(
-                offset: value.selection.baseOffset + replacement.length,
-              ),
-            );
+            .copyWith(selection: value.selection.shift(replacement.length));
 
         // No preceding line, so just insert a list item at the start
         if (lastEOLIdx == -1) return replaceBOL('- ');
@@ -284,11 +269,8 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
               replacement,
             )
             .copyWith(
-              selection: TextSelection.collapsed(
-                offset:
-                    value.selection.baseOffset +
-                    replacement.length -
-                    foundListItemLength,
+              selection: value.selection.shift(
+                replacement.length - foundListItemLength,
               ),
             );
       }
@@ -306,11 +288,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
               TextRange(start: lineStart, end: lineStart + preambleLength),
               '',
             )
-            .copyWith(
-              selection: TextSelection.collapsed(
-                offset: value.selection.baseOffset - preambleLength,
-              ),
-            );
+            .copyWith(selection: value.selection.shift(-preambleLength));
       }
     case OrgListOrderedItem():
       {
@@ -338,15 +316,19 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
               replacement,
             )
             .copyWith(
-              selection: TextSelection.collapsed(
-                offset:
-                    value.selection.baseOffset +
-                    replacement.length -
-                    foundListItemLength,
+              selection: value.selection.shift(
+                replacement.length - foundListItemLength,
               ),
             );
       }
   }
+}
+
+extension TextSelectionUtils on TextSelection {
+  TextSelection shift(int offset) => copyWith(
+    baseOffset: baseOffset + offset,
+    extentOffset: extentOffset + offset,
+  );
 }
 
 String nextBullet(OrgListItem item) => switch (item) {
