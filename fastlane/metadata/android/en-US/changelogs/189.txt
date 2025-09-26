@@ -1,0 +1,6 @@
+- List toggle buttons in editor
+- Continue list on new line in editor
+- Src block code reference links are now supported
+- New keyboard shortcuts on the start screen
+- Rendering improvements
+- Bug fixes
