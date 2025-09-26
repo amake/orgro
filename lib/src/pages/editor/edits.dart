@@ -400,13 +400,25 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
 
   final doc = OrgDocument.parse(value.text);
   final atOffset = doc.nodesAtOffset(lastEOLIdx);
-  final foundListItem =
-      atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-          as OrgListItem?;
-  if (foundListItem == null) return value;
+  final itemInfoBeforePoint = atOffset
+      .where((e) => e.node is OrgListItem)
+      .firstOrNull;
+  if (itemInfoBeforePoint == null) return value;
+
+  final (node: itemBeforePoint as OrgListItem, :span) = itemInfoBeforePoint;
+
+  if (_isEmptyItem(itemBeforePoint)) {
+    // The list item above the cursor is empty (it only contains the line break
+    // we just added and maybe some whitespace), so remove it
+    return value
+        .replaced(TextRange(start: span.start, end: lastEOLIdx + 1), '')
+        .copyWith(
+          selection: value.selection.shift(-(lastEOLIdx + 1 - span.start)),
+        );
+  }
 
   // Insert a new list item
-  final replacement = nextListItem(foundListItem).toMarkup();
+  final replacement = nextListItem(itemBeforePoint).toMarkup();
   return value
       .replaced(value.selection, replacement)
       .copyWith(
@@ -415,3 +427,11 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
         ),
       );
 }
+
+bool _isEmptyItem(OrgListItem item) => switch (item) {
+  OrgListUnorderedItem(tag: _?) => false,
+  OrgListOrderedItem(counterSet: _?) => false,
+  OrgListItem(checkbox: '[X]') => false,
+  OrgListItem(checkbox: '[-]') => false,
+  _ => item.body?.toMarkup().trim() == '',
+};
