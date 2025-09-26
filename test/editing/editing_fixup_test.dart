@@ -154,5 +154,97 @@ foo
         },
       );
     });
+    group('Headline', () {
+      test('First level', () {
+        final result = afterNewLineFixup(
+          testValue('''
+* foo
+|'''),
+        );
+        expect(
+          result,
+          testValue('''
+* foo
+* |'''),
+        );
+      });
+      test('Second level', () {
+        final result = afterNewLineFixup(
+          testValue('''
+** foo
+|'''),
+        );
+        expect(
+          result,
+          testValue('''
+** foo
+** |'''),
+        );
+      });
+      test('Remove empty headline', () {
+        final result = afterNewLineFixup(
+          testValue('''
+* foo
+*${' '}
+|'''),
+        );
+        expect(
+          result,
+          testValue('''
+* foo
+|'''),
+        );
+      });
+      test('Remove empty middle headline', () {
+        final result = afterNewLineFixup(
+          testValue('''
+* foo
+*${' '}
+|
+* bar'''),
+        );
+        expect(
+          result,
+          testValue('''
+* foo
+|
+* bar'''),
+        );
+      });
+      test('Remove solitary empty list item', () {
+        final result = afterNewLineFixup(
+          testValue('''
+*${' '}
+|'''),
+        );
+        expect(result, testValue('|'));
+      });
+      test('Do not remove headline with keyword', () {
+        final result = afterNewLineFixup(
+          testValue('''
+* TODO
+|'''),
+        );
+        expect(
+          result,
+          testValue('''
+* TODO
+* |'''),
+        );
+      });
+      test('Do not remove headline with priority', () {
+        final result = afterNewLineFixup(
+          testValue('''
+* [#A]
+|'''),
+        );
+        expect(
+          result,
+          testValue('''
+* [#A]
+* |'''),
+        );
+      });
+    });
   });
 }

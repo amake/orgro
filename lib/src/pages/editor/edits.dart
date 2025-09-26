@@ -360,16 +360,22 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
 
   final doc = OrgDocument.parse(value.text);
   final atOffset = doc.nodesAtOffset(lastEOLIdx);
-  final itemInfoBeforePoint = atOffset
-      .where((e) => e.node is OrgListItem)
+  final nodeInfoBeforePoint = atOffset
+      .where((e) => e.node is OrgListItem || e.node is OrgHeadline)
       .firstOrNull;
-  if (itemInfoBeforePoint == null) return value;
+  if (nodeInfoBeforePoint == null) return value;
 
-  final (node: itemBeforePoint as OrgListItem, :span) = itemInfoBeforePoint;
+  final (node: nodeBeforePoint, :span) = nodeInfoBeforePoint;
 
-  if (itemBeforePoint.isEmpty) {
-    // The list item above the cursor is empty (it only contains the line break
-    // we just added and maybe some whitespace), so remove it
+  // TODO(aaron): This dispatch is ugly. Is there not a better way?
+  final nodeIsEmpty = switch (nodeBeforePoint) {
+    OrgListItem() => nodeBeforePoint.isEmpty,
+    OrgHeadline() => nodeBeforePoint.isEmpty,
+    _ => throw ArgumentError(),
+  };
+  if (nodeIsEmpty) {
+    // The node above the cursor is empty (it only contains the line break we
+    // just added and maybe some whitespace), so remove it
     return value
         .replaced(TextRange(start: span.start, end: lastEOLIdx + 1), '')
         .copyWith(
@@ -378,7 +384,11 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
   }
 
   // Insert a new list item
-  final replacement = itemBeforePoint.next().toMarkup();
+  final replacement = switch (nodeBeforePoint) {
+    OrgListItem() => nodeBeforePoint.next(),
+    OrgHeadline() => nodeBeforePoint.next(),
+    _ => throw ArgumentError(),
+  }.toMarkup();
   return value
       .replaced(value.selection, replacement)
       .copyWith(
