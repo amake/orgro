@@ -100,23 +100,9 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final atOffset = doc.nodesAtOffset(value.selection.start);
+  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
 
-  final lastEOLIdx = value.selection.start == 0
-      ? -1
-      : value.text.lastIndexOf('\n', value.selection.start - 1);
-  final lineStart = lastEOLIdx + 1;
-
-  // Org syntax lets list items contain line breaks, so the cursor sitting on
-  // the line "after" a list item is still technically in the list item. This is
-  // unintuitive when editing raw markup, so we ignore any found item if the
-  // cursor is at BOL.
-  final foundListItem = value.selection.start == lineStart
-      ? null
-      : atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-            as OrgListItem?;
-
-  switch (foundListItem) {
+  switch (itemAtPoint) {
     case null:
       {
         TextEditingValue replaceBOL(String replacement) => value
@@ -145,13 +131,13 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       }
     case OrgListOrderedItem():
       {
-        final foundListItemLength = foundListItem.toMarkup().length;
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
 
         // Turn into normal text
-        final firstBodyNode = foundListItem.body;
+        final firstBodyNode = itemAtPoint.body;
         final preambleLength = firstBodyNode == null
-            ? foundListItemLength
-            : foundListItem.toMarkupLocating(firstBodyNode).$2;
+            ? itemAtPointLength
+            : itemAtPoint.toMarkupLocating(firstBodyNode).$2;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -161,12 +147,12 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       }
     case OrgListUnorderedItem():
       {
-        if (foundListItem.tag != null) {
+        if (itemAtPoint.tag != null) {
           // Ordered list items can't have tags, so avoid destructive change
           return null;
         }
 
-        final foundListItemLength = foundListItem.toMarkup().length;
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
@@ -178,20 +164,20 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
         final replacement = OrgListOrderedItem(
-          foundListItem.indent,
+          itemAtPoint.indent,
           previous is OrgListOrderedItem ? nextBullet(previous) : '1. ',
           null,
-          foundListItem.checkbox,
-          foundListItem.body,
+          itemAtPoint.checkbox,
+          itemAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: lineStart, end: lineStart + foundListItemLength),
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
               replacement,
             )
             .copyWith(
               selection: value.selection.shift(
-                replacement.length - foundListItemLength,
+                replacement.length - itemAtPointLength,
               ),
             );
       }
@@ -202,23 +188,9 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final atOffset = doc.nodesAtOffset(value.selection.start);
+  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
 
-  final lastEOLIdx = value.selection.start == 0
-      ? -1
-      : value.text.lastIndexOf('\n', value.selection.start - 1);
-  final lineStart = lastEOLIdx + 1;
-
-  // Org syntax lets list items contain line breaks, so the cursor sitting on
-  // the line "after" a list item is still technically in the list item. This is
-  // unintuitive when editing raw markup, so we ignore any found item if the
-  // cursor is at BOL.
-  final foundListItem = value.selection.start == lineStart
-      ? null
-      : atOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-            as OrgListItem?;
-
-  switch (foundListItem) {
+  switch (itemAtPoint) {
     case null:
       {
         TextEditingValue replaceBOL(String replacement) => value
@@ -253,36 +225,36 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       }
     case OrgListUnorderedItem(checkbox: null):
       {
-        final foundListItemLength = foundListItem.toMarkup().length;
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
 
         // Add empty checkbox
         final replacement = OrgListUnorderedItem(
-          foundListItem.indent,
-          foundListItem.bullet,
+          itemAtPoint.indent,
+          itemAtPoint.bullet,
           '[ ]',
           null,
-          foundListItem.body,
+          itemAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: lineStart, end: lineStart + foundListItemLength),
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
               replacement,
             )
             .copyWith(
               selection: value.selection.shift(
-                replacement.length - foundListItemLength,
+                replacement.length - itemAtPointLength,
               ),
             );
       }
     case OrgListUnorderedItem():
       {
-        final foundListItemLength = foundListItem.toMarkup().length;
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
 
         // Turn into normal text
-        final firstBodyNode = foundListItem.tag?.value ?? foundListItem.body;
+        final firstBodyNode = itemAtPoint.tag?.value ?? itemAtPoint.body;
         final preambleLength = firstBodyNode == null
-            ? foundListItemLength
-            : foundListItem.toMarkupLocating(firstBodyNode).$2;
+            ? itemAtPointLength
+            : itemAtPoint.toMarkupLocating(firstBodyNode).$2;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -292,7 +264,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       }
     case OrgListOrderedItem():
       {
-        final foundListItemLength = foundListItem.toMarkup().length;
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
@@ -304,24 +276,57 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
         final replacement = OrgListUnorderedItem(
-          foundListItem.indent,
+          itemAtPoint.indent,
           previous is OrgListUnorderedItem ? previous.bullet : '- ',
-          foundListItem.checkbox,
+          itemAtPoint.checkbox,
           null,
-          foundListItem.body,
+          itemAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: lineStart, end: lineStart + foundListItemLength),
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
               replacement,
             )
             .copyWith(
               selection: value.selection.shift(
-                replacement.length - foundListItemLength,
+                replacement.length - itemAtPointLength,
               ),
             );
       }
   }
+}
+
+({int lineStart, int lastEOLIdx, OrgListItem? itemAtPoint}) _itemInfoAtPoint(
+  TextEditingValue value,
+  OrgDocument doc,
+) {
+  final lastEOLIdx = value.selection.start == 0
+      ? -1
+      : value.text.lastIndexOf('\n', value.selection.start - 1);
+  final lineStart = lastEOLIdx + 1;
+
+  OrgListItem? foundListItem;
+  if (value.selection.start == lineStart) {
+    // Org syntax lets list items contain line breaks, so the cursor sitting on
+    // the line "after" a list item is still technically in the list item. This is
+    // unintuitive when editing raw markup, so we ignore any found item if the
+    // cursor is at BOL.
+    foundListItem = null;
+  } else {
+    var searchOffset = value.selection.start;
+    // nodesAtOffset excludes the node if the offset is just past it, which is
+    // the case if the cursor is at the end of the document.
+    if (searchOffset == value.text.length) searchOffset--;
+    final foundAtOffset = doc.nodesAtOffset(searchOffset);
+    foundListItem =
+        foundAtOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
+            as OrgListItem?;
+  }
+  return (
+    lineStart: lineStart,
+    lastEOLIdx: lastEOLIdx,
+    itemAtPoint: foundListItem,
+  );
 }
 
 extension TextSelectionUtils on TextSelection {

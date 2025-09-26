@@ -36,17 +36,16 @@ class _NodeFinder extends OrgSerializer {
 
   @override
   void visit(OrgNode node) {
-    if (i >= end) return;
+    if (i > end) return;
     final nodeStart = i;
     super.visit(node);
-    if (i >= start) {
+    if (i > start) {
       nodes.add((node: node, span: (start: nodeStart, end: i)));
     }
   }
 
   @override
   void write(String str) {
-    if (i >= end) return;
     i += str.length;
   }
 }
