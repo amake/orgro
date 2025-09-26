@@ -172,6 +172,12 @@ class _KeyboardShortcuts extends StatelessWidget {
       bindings: {
         LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyO): () =>
             loadAndRememberFile(context, pickFile()),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyL): () =>
+            _promptAndOpenUrl(context),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.keyN): () =>
+            _createAndOpenFile(context),
+        LogicalKeySet(platformShortcutKey, LogicalKeyboardKey.period): () =>
+            _openSettingsScreen(context),
       },
       child: Focus(autofocus: true, child: child),
     );
