@@ -403,6 +403,35 @@ On large screens, optionally let the document take up the entire screen width.
 
 Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
 
+* Keyboard shortcuts
+
+The following keyboard shortcuts are supported. Note that on iOS the Meta key is
+Command (⌘) while on Android it is Control (⌃).
+
+- Start screen
+  - Meta-O :: Open a file
+  - Meta-N :: Create a new file
+  - Meta-L :: Open a URL
+  - Meta-. :: Open Settings screen
+- Document screen
+  - Meta-W :: Close document
+  - Meta-E :: Edit document
+  - Meta-Z :: Undo
+  - Meta-Shift-Z :: Redo
+  - Home :: Scroll to top
+  - End :: Scroll to bottom
+  - Meta-F :: Search
+  - In search mode
+    - Meta-G :: Next search hit
+    - Meta-Shift-G :: Previous search hit
+- Editor screen
+  - Various [[https://api.flutter.dev/flutter/widgets/DefaultTextEditingShortcuts-class.html][platform defaults]]
+  - Meta-W :: Close and discard changes
+  - Meta-S :: Close and apply changes
+  - Meta-B :: Bold
+  - Meta-I :: Italic
+  - Meta-U :: Underline
+
 * Examples
 
 [fn:1] This is a footnote. Tap the reference here to jump back.
