@@ -150,6 +150,28 @@ void main() {
       ]);
       expect(doc.nodesInRange(10000, 10001), isEmpty);
     });
+    test('to markup locating', () {
+      final markup = '''
+
+* foo
+- bar
+1. baz ~bazinga~
+''';
+      final doc = OrgDocument.parse(markup);
+      final list = doc.find<OrgList>((_) => true)?.node as OrgList;
+      expect(doc.toMarkupLocating(list), (text: markup, start: 7, end: 30));
+      final firstItem = list.items.first;
+      expect(list.toMarkupLocating(firstItem), (
+        text: '- bar\n1. baz ~bazinga~\n',
+        start: 0,
+        end: 6,
+      ));
+      expect(firstItem.toMarkupLocating(firstItem.body!), (
+        text: '- bar\n',
+        start: 2,
+        end: 6,
+      ));
+    });
   });
   group('Test helper', () {
     test('No selection', () {

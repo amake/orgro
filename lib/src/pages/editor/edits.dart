@@ -160,7 +160,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
         final firstBodyNode = itemAtPoint.body;
         final preambleLength = firstBodyNode == null
             ? itemAtPointLength
-            : itemAtPoint.toMarkupLocating(firstBodyNode).$2;
+            : itemAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -277,7 +277,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
         final firstBodyNode = itemAtPoint.tag?.value ?? itemAtPoint.body;
         final preambleLength = firstBodyNode == null
             ? itemAtPointLength
-            : itemAtPoint.toMarkupLocating(firstBodyNode).$2;
+            : itemAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),

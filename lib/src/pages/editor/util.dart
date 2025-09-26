@@ -19,10 +19,10 @@ extension OrgTreeEditing on OrgNode {
     return finder.nodes;
   }
 
-  (String, int, int) toMarkupLocating(OrgNode node) {
+  ({String text, int start, int end}) toMarkupLocating(OrgNode node) {
     final serializer = _NodeLocatingSeralizer(node);
     final text = toMarkup(serializer: serializer);
-    return (text, serializer.start, serializer.end);
+    return (text: text, start: serializer.start, end: serializer.end);
   }
 }
 
