@@ -25,6 +25,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   if (settings.name == null) return null;
 
   final uri = Uri.tryParse(settings.name!);
+  // TODO(aaron): Handle org-protocol https://orgmode.org/manual/Protocols.html
   if (uri == null) return null;
   // Opening a file via "Open with..." on Android will traverse this code path
   // with a content: URL
