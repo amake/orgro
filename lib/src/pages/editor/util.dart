@@ -66,31 +66,6 @@ class _NodeLocatingSeralizer extends OrgSerializer {
   }
 }
 
-class Region {
-  Region(int start, int end) {
-    spans.add((start, end));
-  }
-
-  final List<(int, int)> spans = [];
-
-  bool get isEmpty => spans.isEmpty;
-
-  void consume(int start, int end) {
-    if (isEmpty) return;
-    final newSpans = <(int, int)>[];
-    for (final (s, e) in spans) {
-      if (start > e || end < s) {
-        newSpans.add((s, e));
-      } else {
-        if (start > s) newSpans.add((s, start));
-        if (end < e) newSpans.add((end, e));
-      }
-    }
-    spans.clear();
-    spans.addAll(newSpans);
-  }
-}
-
 bool lineBreakInserted(String? before, TextEditingValue after) {
   if (before == null) return false;
   if (before.length + 1 != after.text.length) return false;
