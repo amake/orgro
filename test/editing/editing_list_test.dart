@@ -103,6 +103,10 @@ item 2|'''),
       });
       test('Toggle list item on existing item', () {
         final result = toggleOrderedListItem(testValue('1. foo |bar'));
+        expect(result, testValue('1. [ ] foo |bar'));
+      });
+      test('Toggle list item on existing checkbox item', () {
+        final result = toggleOrderedListItem(testValue('1. [ ] foo |bar'));
         expect(result, testValue('foo |bar'));
       });
       test('Toggle unordered list to ordered list', () {

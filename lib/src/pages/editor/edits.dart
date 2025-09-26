@@ -129,6 +129,29 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
         final replacement = nextListItem(previous).toMarkup();
         return replaceBOL(replacement);
       }
+    case OrgListOrderedItem(checkbox: null):
+      {
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
+
+        // Add empty checkbox
+        final replacement = OrgListOrderedItem(
+          itemAtPoint.indent,
+          itemAtPoint.bullet,
+          '[ ]',
+          null,
+          itemAtPoint.body,
+        ).toMarkup();
+        return value
+            .replaced(
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
+              replacement,
+            )
+            .copyWith(
+              selection: value.selection.shift(
+                replacement.length - itemAtPointLength,
+              ),
+            );
+      }
     case OrgListOrderedItem():
       {
         final itemAtPointLength = itemAtPoint.toMarkup().length;
