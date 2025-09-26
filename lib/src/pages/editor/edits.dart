@@ -126,7 +126,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
         // line start
         if (previous is! OrgListOrderedItem) return replaceBOL('1. ');
 
-        final replacement = nextListItem(previous).toMarkup();
+        final replacement = previous.next().toMarkup();
         return replaceBOL(replacement);
       }
     case OrgListOrderedItem(checkbox: null):
@@ -188,7 +188,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
                 as OrgListItem?;
         final replacement = OrgListOrderedItem(
           itemAtPoint.indent,
-          previous is OrgListOrderedItem ? nextBullet(previous) : '1. ',
+          previous is OrgListOrderedItem ? previous.nextBullet : '1. ',
           null,
           itemAtPoint.checkbox,
           itemAtPoint.body,
@@ -237,7 +237,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
         // at line start
         if (previous is! OrgListUnorderedItem) return replaceBOL('- ');
 
-        final replacement = nextListItem(previous).toMarkup();
+        final replacement = previous.next().toMarkup();
         return replaceBOL(replacement);
       }
     case OrgListUnorderedItem(tag: _?):
@@ -352,50 +352,10 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   );
 }
 
-extension TextSelectionUtils on TextSelection {
-  TextSelection shift(int offset) => copyWith(
-    baseOffset: baseOffset + offset,
-    extentOffset: extentOffset + offset,
-  );
-}
-
-String nextBullet(OrgListItem item) => switch (item) {
-  OrgListUnorderedItem() => item.bullet,
-  OrgListOrderedItem() => (() {
-    final decimalIdx = item.bullet.indexOf('.');
-    if (decimalIdx == -1) return item.bullet;
-    final number = int.parse(item.bullet.substring(0, decimalIdx));
-    final delimiter = item.bullet.substring(decimalIdx);
-    return '${number + 1}$delimiter';
-  })(),
-};
-
-OrgListItem nextListItem(OrgListItem previous) => switch (previous) {
-  OrgListUnorderedItem() => OrgListUnorderedItem(
-    previous.indent,
-    nextBullet(previous),
-    previous.checkbox != null ? '[ ]' : null,
-    null,
-    null,
-  ),
-  OrgListOrderedItem() => OrgListOrderedItem(
-    previous.indent,
-    nextBullet(previous),
-    null,
-    previous.checkbox != null ? '[ ]' : null,
-    null,
-  ),
-};
-
-bool atEOL(String text, int offset) {
-  if (offset == text.length) return true;
-  return text.codeUnitAt(offset) == 0x0a;
-}
-
 TextEditingValue? afterNewLineFixup(TextEditingValue value) {
   if (!value.selection.isValid) return null;
   if (value.selection.start < 2) return null;
-  if (!atEOL(value.text, value.selection.start)) return null;
+  if (!value.text.isEOL(value.selection.start)) return null;
   final lastEOLIdx = value.text.lastIndexOf('\n', value.selection.start - 1);
 
   final doc = OrgDocument.parse(value.text);
@@ -407,7 +367,7 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
 
   final (node: itemBeforePoint as OrgListItem, :span) = itemInfoBeforePoint;
 
-  if (_isEmptyItem(itemBeforePoint)) {
+  if (itemBeforePoint.isEmpty) {
     // The list item above the cursor is empty (it only contains the line break
     // we just added and maybe some whitespace), so remove it
     return value
@@ -418,7 +378,7 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
   }
 
   // Insert a new list item
-  final replacement = nextListItem(itemBeforePoint).toMarkup();
+  final replacement = itemBeforePoint.next().toMarkup();
   return value
       .replaced(value.selection, replacement)
       .copyWith(
@@ -427,11 +387,3 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
         ),
       );
 }
-
-bool _isEmptyItem(OrgListItem item) => switch (item) {
-  OrgListUnorderedItem(tag: _?) => false,
-  OrgListOrderedItem(counterSet: _?) => false,
-  OrgListItem(checkbox: '[X]') => false,
-  OrgListItem(checkbox: '[-]') => false,
-  _ => item.body?.toMarkup().trim() == '',
-};

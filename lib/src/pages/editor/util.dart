@@ -75,3 +75,55 @@ bool lineBreakInserted(String? before, TextEditingValue after) {
   if (after.text.codeUnitAt(after.selection.start - 1) != 0x0a) return false;
   return true;
 }
+
+extension TextSelectionUtils on TextSelection {
+  TextSelection shift(int offset) => copyWith(
+    baseOffset: baseOffset + offset,
+    extentOffset: extentOffset + offset,
+  );
+}
+
+extension OrgListItemUtils on OrgListItem {
+  String get nextBullet => switch (this) {
+    OrgListUnorderedItem() => bullet,
+    OrgListOrderedItem() => (() {
+      final decimalIdx = bullet.indexOf('.');
+      if (decimalIdx == -1) return bullet;
+      final number = int.parse(bullet.substring(0, decimalIdx));
+      final delimiter = bullet.substring(decimalIdx);
+      return '${number + 1}$delimiter';
+    })(),
+  };
+
+  OrgListItem next() => switch (this) {
+    OrgListUnorderedItem() => OrgListUnorderedItem(
+      indent,
+      nextBullet,
+      checkbox != null ? '[ ]' : null,
+      null,
+      null,
+    ),
+    OrgListOrderedItem() => OrgListOrderedItem(
+      indent,
+      nextBullet,
+      null,
+      checkbox != null ? '[ ]' : null,
+      null,
+    ),
+  };
+
+  bool get isEmpty => switch (this) {
+    OrgListUnorderedItem(tag: _?) => false,
+    OrgListOrderedItem(counterSet: _?) => false,
+    OrgListItem(checkbox: '[X]') => false,
+    OrgListItem(checkbox: '[-]') => false,
+    _ => body?.toMarkup().trim() == '',
+  };
+}
+
+extension StringUtils on String {
+  bool isEOL(int index) {
+    if (index == length) return true;
+    return codeUnitAt(index) == 0x0a;
+  }
+}
