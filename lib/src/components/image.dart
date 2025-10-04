@@ -7,8 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 bool _isSvg(String url) {
   final segments = Uri.parse(url).pathSegments;
@@ -223,7 +225,32 @@ class _ImageError extends StatelessWidget {
           ),
           icon: const Icon(Icons.error),
         ),
-        Expanded(child: OrgLinkWidget(link)),
+        Expanded(
+          child: OrgEvents(
+            // If we don't override this, the regular handler will open the
+            // image in the interactive viewer.
+            onLinkTap: (link) async {
+              try {
+                final url = Uri.parse(link.location);
+                debugPrint('Launching URL: $url');
+                final handled = await launchUrl(
+                  url,
+                  mode: LaunchMode.externalApplication,
+                );
+                if (!handled && context.mounted) {
+                  showErrorSnackBar(
+                    context,
+                    AppLocalizations.of(context)!.errorLinkNotHandled(url),
+                  );
+                }
+              } catch (e, s) {
+                logError(e, s);
+                if (context.mounted) showErrorSnackBar(context, e);
+              }
+            },
+            child: OrgLinkWidget(link),
+          ),
+        ),
       ],
     );
   }

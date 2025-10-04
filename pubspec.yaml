@@ -35,7 +35,7 @@ dependencies:
   google_fonts: ^6.0.0
   http: ^1.1.0
   intl: ^0.20.2
-  org_flutter: ^9.10.0
+  org_flutter: ^9.10.1
   # org_flutter:
     # path: ../org_flutter
   path_provider: ^2.0.9
