@@ -74,12 +74,21 @@ Future<void> showInteractive(
   String title,
   Widget child,
 ) async {
+  final viewSettings = ViewSettings.of(context);
+  final orgController = OrgController.of(context);
   return await Navigator.push<void>(
     context,
     MaterialPageRoute(
       builder: (builder) => Scaffold(
         appBar: AppBar(title: Text(title)),
-        body: InteractiveViewer(child: Center(child: child)),
+        body: OrgController.defaults(
+          orgController,
+          root: orgController.root,
+          child: OrgRootWidget(
+            style: viewSettings.data.textStyle,
+            child: InteractiveViewer(child: Center(child: child)),
+          ),
+        ),
       ),
     ),
   );
