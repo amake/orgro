@@ -69,7 +69,7 @@ class RememberedFile {
       pinnedIdx == other.pinnedIdx;
 
   @override
-  int get hashCode => Object.hash(identifier, name, uri, lastOpened);
+  int get hashCode => Object.hash(identifier, name, uri, lastOpened, pinnedIdx);
 
   Map<String, Object> toJson() => {
     'identifier': identifier,
