@@ -144,6 +144,19 @@ class InheritedViewSettings extends InheritedWidget {
     }
   }
 
+  AgendaNotificationsPolicy get agendaNotificationsPolicy =>
+      data.agendaNotificationsPolicy;
+  void setAgendaNotificationsPolicy(
+    AgendaNotificationsPolicy value, {
+    bool persist = false,
+  }) {
+    if (persist) {
+      _prefs.setAgendaNotificationsPolicy(value);
+    } else {
+      _update((data) => data.copyWith(agendaNotificationsPolicy: value));
+    }
+  }
+
   bool get fullWidth => data.fullWidth;
   set fullWidth(bool value) {
     _prefs.setFullWidth(value);
@@ -182,6 +195,7 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
+      agendaNotificationsPolicy: prefs.agendaNotificationsPolicy,
       fullWidth: prefs.fullWidth,
       queryString: kDefaultQueryString,
       filterData: FilterData.defaults(),
@@ -214,6 +228,7 @@ class ViewSettingsData {
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
     required this.decryptPolicy,
+    required this.agendaNotificationsPolicy,
     required this.fullWidth,
     required this.filterData,
     required this.queryString,
@@ -227,6 +242,7 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
+  final AgendaNotificationsPolicy agendaNotificationsPolicy;
   final bool fullWidth;
   // Not persisted
   final FilterData filterData;
@@ -244,6 +260,7 @@ class ViewSettingsData {
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
+    AgendaNotificationsPolicy? agendaNotificationsPolicy,
     bool? fullWidth,
     String? queryString,
     FilterData? filterData,
@@ -255,6 +272,8 @@ class ViewSettingsData {
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
     saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
     decryptPolicy: decryptPolicy ?? this.decryptPolicy,
+    agendaNotificationsPolicy:
+        agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
     fullWidth: fullWidth ?? this.fullWidth,
     queryString: queryString ?? this.queryString,
     filterData: filterData ?? this.filterData,
@@ -270,6 +289,7 @@ class ViewSettingsData {
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
       decryptPolicy == other.decryptPolicy &&
+      agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
       fullWidth == other.fullWidth &&
       queryString == other.queryString &&
       filterData == other.filterData;
@@ -283,6 +303,7 @@ class ViewSettingsData {
     localLinksPolicy,
     saveChangesPolicy,
     decryptPolicy,
+    agendaNotificationsPolicy,
     fullWidth,
     queryString,
     filterData,

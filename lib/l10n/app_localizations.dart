@@ -478,6 +478,12 @@ abstract class AppLocalizations {
   /// **'Enter password'**
   String get snackbarActionEnterEncryptionKey;
 
+  /// No description provided for @snackbarMessageNotificationPermissionsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'No permission for notifications'**
+  String get snackbarMessageNotificationPermissionsDenied;
+
   /// No description provided for @dialogTitleError.
   ///
   /// In en, this message translates to:
@@ -633,6 +639,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Never'**
   String get bannerBodyActionDecryptNever;
+
+  /// No description provided for @bannerBodyAgendaNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Get notifications for agenda items in this file?'**
+  String get bannerBodyAgendaNotifications;
+
+  /// No description provided for @bannerBodyActionAgendaEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify me'**
+  String get bannerBodyActionAgendaEnable;
+
+  /// No description provided for @bannerBodyActionAgendaNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get bannerBodyActionAgendaNotNow;
+
+  /// No description provided for @bannerBodyActionAgendaNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get bannerBodyActionAgendaNever;
 
   /// No description provided for @saveChangesDialogTitle.
   ///

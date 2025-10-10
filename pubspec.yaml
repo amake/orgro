@@ -50,6 +50,9 @@ dependencies:
   # https://github.com/jerson/flutter-openpgp/issues/83
   openpgp: 3.10.3
   quick_actions: ^1.1.0
+  flutter_local_notifications: ^19.4.2
+  flutter_timezone: ^5.0.0
+  timezone: ^0.10.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

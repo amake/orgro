@@ -227,6 +227,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'Введите пароль';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
+
+  @override
   String get dialogTitleError => 'Ошибка';
 
   @override
@@ -311,6 +315,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bannerBodyActionDecryptNever => 'Никогда';
+
+  @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
 
   @override
   String get saveChangesDialogTitle => 'Сохранить изменения?';

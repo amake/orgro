@@ -226,6 +226,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'Passwort eingeben';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
+
+  @override
   String get dialogTitleError => 'Fehler';
 
   @override
@@ -310,6 +314,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get bannerBodyActionDecryptNever => 'Nie';
+
+  @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
 
   @override
   String get saveChangesDialogTitle => 'Änderungen speichern?';

@@ -19,6 +19,10 @@ Bidi
 
 - [[file:markup-nested.org][Nested objects]]
 
+* Agenda
+
+- [[file:agenda-scheduling.org][Scheduling]]
+
 * Locale
 
 - [[file:locale-zh_Hant.org][zh-Hant]]

@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import flutter_local_notifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,6 +12,14 @@ import Flutter
         let channel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: controller.binaryMessenger)
 
         channel.setMethodCallHandler(handleNativeSearchMethod)
+
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+        }
+
+        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+            GeneratedPluginRegistrant.register(with: registry)
+        }
 
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

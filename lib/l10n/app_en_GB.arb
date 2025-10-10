@@ -80,6 +80,8 @@
   "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
   "snackbarActionEnterEncryptionKey": "Enter password",
 
+  "snackbarMessageNotificationPermissionsDenied": "No permission for notifications",
+
   "dialogTitleError": "Error",
   "dialogActionConfirm": "OK",
   "dialogActionCancel": "Cancel",
@@ -114,6 +116,11 @@
   "bannerBodyActionDecryptNow": "Decrypt",
   "bannerBodyActionDecryptNotNow": "Not now",
   "bannerBodyActionDecryptNever": "Never",
+
+  "bannerBodyAgendaNotifications": "Get notifications for agenda items in this file?",
+  "bannerBodyActionAgendaEnable": "Notify me",
+  "bannerBodyActionAgendaNotNow": "Not now",
+  "bannerBodyActionAgendaNever": "Never",
 
   "saveChangesDialogTitle": "Save changes?",
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",

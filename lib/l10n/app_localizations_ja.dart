@@ -216,6 +216,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'パスワードを入力';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied => '通知の権限がありません';
+
+  @override
   String get dialogTitleError => 'エラー';
 
   @override
@@ -297,6 +300,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get bannerBodyActionDecryptNever => '復号しない';
+
+  @override
+  String get bannerBodyAgendaNotifications => 'このファイルのアジェンダ項目の通知を受けますか？';
+
+  @override
+  String get bannerBodyActionAgendaEnable => '受ける';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => '今は受けない';
+
+  @override
+  String get bannerBodyActionAgendaNever => '通知は受けない';
 
   @override
   String get saveChangesDialogTitle => '変更を保存しますか？';

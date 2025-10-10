@@ -203,6 +203,49 @@ class DecryptContentBanner extends StatelessWidget {
   }
 }
 
+class AgendaNotificationsBanner extends StatelessWidget {
+  const AgendaNotificationsBanner({
+    required this.visible,
+    required this.onAccept,
+    required this.onDeny,
+    super.key,
+  });
+
+  final VoidCallback onAccept;
+  final void Function(AgendaNotificationsPolicy, {required bool persist})
+  onDeny;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: Text(
+          AppLocalizations.of(context)!.bannerBodyAgendaNotifications,
+        ),
+        leading: const Icon(Icons.calendar_month),
+        actions: [
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaEnable,
+            onPressed: onAccept,
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaNever,
+            onPressed: () =>
+                onDeny(AgendaNotificationsPolicy.deny, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaNotNow,
+            onPressed: () =>
+                onDeny(AgendaNotificationsPolicy.deny, persist: false),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _BannerButton extends StatelessWidget {
   const _BannerButton({required this.text, required this.onPressed});
 

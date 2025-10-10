@@ -18,6 +18,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/document/agenda.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/pages/document/encryption.dart';
 import 'package:orgro/src/pages/document/images.dart';
@@ -142,6 +143,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.tags = analysis.tags ?? [];
     searchDelegate.priorities = analysis.priorities ?? [];
     searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
+    if (isAgendaFile) {
+      setNotifications();
+    }
   }
 
   @override
@@ -392,6 +396,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           visible: _askToDecrypt,
           onAccept: decryptContent,
           onDeny: viewSettings.setDecryptPolicy,
+        ),
+        AgendaNotificationsBanner(
+          visible: _askAboutAgendaNotifications,
+          onAccept: setAgendaFile,
+          onDeny: viewSettings.setAgendaNotificationsPolicy,
         ),
         _maybeConstrainWidth(
           context,
@@ -799,4 +808,21 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages &&
       !_askPermissionToSaveChanges;
+
+  bool? get _hasAgendaEntries =>
+      DocumentProvider.of(context).analysis.hasAgendaEntries;
+
+  bool get _askAboutAgendaNotifications =>
+      _viewSettings.agendaNotificationsPolicy ==
+          AgendaNotificationsPolicy.ask &&
+      !isAgendaFile &&
+      switch (_dataSource) {
+        NativeDataSource(persistable: final p) => p,
+        _ => false,
+      } &&
+      _hasAgendaEntries == true &&
+      !_askForDirectoryPermissions &&
+      !_askPermissionToLoadRemoteImages &&
+      !_askPermissionToSaveChanges &&
+      !_askToDecrypt;
 }

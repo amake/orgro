@@ -23,6 +23,8 @@ enum DecryptPolicy { deny, ask }
 
 enum SortOrder { ascending, descending }
 
+enum AgendaNotificationsPolicy { deny, ask }
+
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const String? kDefaultQueryString = null;
@@ -41,6 +43,7 @@ const kDefaultTextPreviewString =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
 const kDefaultRecentFilesSortOrder = SortOrder.descending;
+const kDefaultAgendaNotificationsPolicy = AgendaNotificationsPolicy.ask;
 
 const kMaxRecentFiles = 10;
 
@@ -60,6 +63,8 @@ const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
 const kRecentFilesSortKey = 'recent_files_sort_key';
 const kRecentFilesSortOrder = 'recent_files_sort_order';
+const kAgendaFileIdsKey = 'agenda_files';
+const kAgendaNotificationsPolicyKey = 'agenda_notifications_policy';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
 
@@ -154,6 +159,7 @@ enum PrefsAspect {
   init,
   appearance,
   recentFiles,
+  agenda,
   viewSettings,
   accessibleDirs,
   customFilterQueries,
@@ -186,6 +192,7 @@ abstract class InheritedPreferences extends InheritedModel<PrefsAspect> {
       _updateShouldNotifyDependentInit(oldWidget, dependencies) ||
       _updateShouldNotifyDependentAppearance(oldWidget, dependencies) ||
       _updateShouldNotifyDependentRecentFiles(oldWidget, dependencies) ||
+      _updateShouldNotifyDependentAgenda(oldWidget, dependencies) ||
       _updateShouldNotifyDependentViewSettings(oldWidget, dependencies) ||
       _updateShouldNotifyDependentAccessibleDirectories(
         oldWidget,
@@ -383,6 +390,38 @@ extension RecentFilesExt on InheritedPreferences {
       data.recentFilesSortOrder != oldWidget.data.recentFilesSortOrder;
 }
 
+extension AgendaExt on InheritedPreferences {
+  List<String> get agendaFileIds => data.agendaFileIds;
+  Future<void> _setAgendaFileIds(List<String> value) async {
+    _update((data) => data.copyWith(agendaFileIds: value));
+    return _setOrRemove(kAgendaFileIdsKey, value);
+  }
+
+  Future<void> addAgendaFileId(String id) async {
+    final ids = [...agendaFileIds, id].unique().toList(growable: false);
+    return await _setAgendaFileIds(ids);
+  }
+
+  AgendaNotificationsPolicy get agendaNotificationsPolicy =>
+      data.agendaNotificationsPolicy;
+  Future<void> setAgendaNotificationsPolicy(
+    AgendaNotificationsPolicy value,
+  ) async {
+    _update((data) => data.copyWith(agendaNotificationsPolicy: value));
+    return await _setOrRemove(
+      kAgendaNotificationsPolicyKey,
+      value.persistableString,
+    );
+  }
+
+  bool _updateShouldNotifyDependentAgenda(
+    InheritedPreferences oldWidget,
+    Set<PrefsAspect> dependencies,
+  ) =>
+      dependencies.contains(PrefsAspect.agenda) &&
+      !listEquals(data.agendaFileIds, oldWidget.data.agendaFileIds);
+}
+
 extension ViewSettingsExt on InheritedPreferences {
   double get textScale => data.textScale;
   Future<void> setTextScale(double value) async {
@@ -522,6 +561,8 @@ class PreferencesData {
       recentFiles = const [],
       recentFilesSortKey = kDefaultRecentFilesSortKey,
       recentFilesSortOrder = kDefaultRecentFilesSortOrder,
+      agendaFileIds = const [],
+      agendaNotificationsPolicy = kDefaultAgendaNotificationsPolicy,
       themeMode = _kDefaultThemeMode,
       remoteImagesPolicy = kDefaultRemoteImagesPolicy,
       localLinksPolicy = kDefaultLocalLinksPolicy,
@@ -558,6 +599,7 @@ class PreferencesData {
       recentFilesSortOrder: SortOrderPersistence.fromString(
         await prefs.getString(kRecentFilesSortOrder),
       ),
+      agendaFileIds: await prefs.getStringList(kAgendaFileIdsKey),
       themeMode: ThemeModePersistence.fromString(
         await prefs.getString(kThemeModeKey),
       ),
@@ -587,6 +629,8 @@ class PreferencesData {
     required this.recentFiles,
     required this.recentFilesSortKey,
     required this.recentFilesSortOrder,
+    required this.agendaFileIds,
+    required this.agendaNotificationsPolicy,
     required this.themeMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -605,6 +649,8 @@ class PreferencesData {
   final List<RememberedFile> recentFiles;
   final RecentFilesSortKey recentFilesSortKey;
   final SortOrder recentFilesSortOrder;
+  final List<String> agendaFileIds;
+  final AgendaNotificationsPolicy agendaNotificationsPolicy;
   final ThemeMode themeMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -623,6 +669,8 @@ class PreferencesData {
     List<RememberedFile>? recentFiles,
     RecentFilesSortKey? recentFilesSortKey,
     SortOrder? recentFilesSortOrder,
+    List<String>? agendaFileIds,
+    AgendaNotificationsPolicy? agendaNotificationsPolicy,
     ThemeMode? themeMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -640,6 +688,9 @@ class PreferencesData {
     recentFiles: recentFiles ?? this.recentFiles,
     recentFilesSortKey: recentFilesSortKey ?? this.recentFilesSortKey,
     recentFilesSortOrder: recentFilesSortOrder ?? this.recentFilesSortOrder,
+    agendaFileIds: agendaFileIds ?? this.agendaFileIds,
+    agendaNotificationsPolicy:
+        agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
     themeMode: themeMode ?? this.themeMode,
     remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -661,6 +712,8 @@ class PreferencesData {
       listEquals(recentFiles, other.recentFiles) &&
       recentFilesSortKey == other.recentFilesSortKey &&
       recentFilesSortOrder == other.recentFilesSortOrder &&
+      listEquals(agendaFileIds, other.agendaFileIds) &&
+      agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
       themeMode == other.themeMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -684,6 +737,8 @@ class PreferencesData {
     Object.hashAll(recentFiles),
     recentFilesSortKey,
     recentFilesSortOrder,
+    Object.hashAll(agendaFileIds),
+    agendaNotificationsPolicy,
     themeMode,
     remoteImagesPolicy,
     localLinksPolicy,
@@ -810,6 +865,24 @@ extension SortOrderPersistence on SortOrder? {
 
 const _kSortOrderAscending = 'ascending';
 const _kSortOrderDescending = 'descending';
+
+const _kAgendaNotificationsPolicyDeny = 'agenda_notifications_policy_deny';
+const _kAgendaNotificationsPolicyAsk = 'agenda_notifications_policy_ask';
+
+extension AgendaNotificationsPolicyPersistence on AgendaNotificationsPolicy? {
+  static AgendaNotificationsPolicy? fromString(String? value) =>
+      switch (value) {
+        _kAgendaNotificationsPolicyDeny => AgendaNotificationsPolicy.deny,
+        _kAgendaNotificationsPolicyAsk => AgendaNotificationsPolicy.ask,
+        _ => null,
+      };
+
+  String? get persistableString => switch (this) {
+    AgendaNotificationsPolicy.deny => _kAgendaNotificationsPolicyDeny,
+    AgendaNotificationsPolicy.ask => _kAgendaNotificationsPolicyAsk,
+    null => null,
+  };
+}
 
 Widget resetPreferencesListItem(BuildContext context) => ListTile(
   title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),

@@ -36,6 +36,8 @@ abstract class DataSource {
   FutureOr<DataSource> resolveRelative(String relativePath);
 
   bool get needsToResolveParent => false;
+
+  Map<String, Object?> toJson();
 }
 
 class WebDataSource extends DataSource {
@@ -82,6 +84,14 @@ class WebDataSource extends DataSource {
   @override
   WebDataSource resolveRelative(String relativePath) =>
       WebDataSource(uri.resolveUri(Uri(path: relativePath)));
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'web',
+    'name': name,
+    'id': id,
+    'uri': uri.toString(),
+  };
 }
 
 class AssetDataSource extends DataSource {
@@ -109,6 +119,14 @@ class AssetDataSource extends DataSource {
   AssetDataSource resolveRelative(String relativePath) => AssetDataSource(
     Uri.parse(key).resolveUri(Uri(path: relativePath)).toFilePath(),
   );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'asset',
+    'name': name,
+    'id': id,
+    'key': key,
+  };
 }
 
 class NativeDataSource extends DataSource {
@@ -237,6 +255,16 @@ class NativeDataSource extends DataSource {
       return File.fromUri(uri);
     },
   );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'native',
+    'name': name,
+    'id': id,
+    'identifier': identifier,
+    'uri': uri,
+    'persistable': persistable,
+  };
 }
 
 class LoadedNativeDataSource extends NativeDataSource {

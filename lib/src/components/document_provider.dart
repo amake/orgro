@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
@@ -199,6 +200,7 @@ class DocumentAnalysis {
     var hasRemoteImages = false;
     var hasRelativeLinks = false;
     var hasEncryptedContent = false;
+    var hasAgendaEntries = false;
     doc.visit<OrgNode>((node) {
       if (node is OrgLink) {
         hasRemoteImages |=
@@ -210,6 +212,10 @@ class DocumentAnalysis {
         }
       } else if (node is OrgPgpBlock) {
         hasEncryptedContent = true;
+      } else if (node is OrgSection) {
+        // TODO(aaron): Is this right? Is it efficient?
+        // TODO(aaron): Should we detect only *pending* entries?
+        hasAgendaEntries = node.scheduledAt.isNotEmpty;
       }
       return !hasRemoteImages ||
           (!hasRelativeLinks && canResolveRelativeLinks) ||
@@ -240,6 +246,7 @@ class DocumentAnalysis {
       hasRelativeLinks: hasRelativeLinks,
       hasEncryptedContent: hasEncryptedContent,
       needsEncryption: needsEncryption,
+      hasAgendaEntries: hasAgendaEntries,
       keywords: keywords.toList(growable: false),
       tags: tags.toList(growable: false),
       priorities: priorities.toList(growable: false),
@@ -251,6 +258,7 @@ class DocumentAnalysis {
     this.hasRelativeLinks,
     this.hasEncryptedContent,
     this.needsEncryption,
+    this.hasAgendaEntries,
     this.keywords,
     this.tags,
     this.priorities,
@@ -260,6 +268,7 @@ class DocumentAnalysis {
   final bool? hasRelativeLinks;
   final bool? hasEncryptedContent;
   final bool? needsEncryption;
+  final bool? hasAgendaEntries;
   final List<String>? keywords;
   final List<String>? tags;
   final List<String>? priorities;
@@ -271,6 +280,7 @@ class DocumentAnalysis {
       hasRelativeLinks == other.hasRelativeLinks &&
       hasEncryptedContent == other.hasEncryptedContent &&
       needsEncryption == other.needsEncryption &&
+      hasAgendaEntries == other.hasAgendaEntries &&
       listEquals(keywords, other.keywords) &&
       listEquals(tags, other.tags) &&
       listEquals(priorities, other.priorities);
@@ -281,6 +291,7 @@ class DocumentAnalysis {
     hasRelativeLinks,
     hasEncryptedContent,
     needsEncryption,
+    hasAgendaEntries,
     keywords == null ? null : Object.hashAll(keywords!),
     tags == null ? null : Object.hashAll(tags!),
     priorities == null ? null : Object.hashAll(priorities!),

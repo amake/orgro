@@ -225,6 +225,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
+
+  @override
   String get dialogTitleError => 'Error';
 
   @override
@@ -309,6 +313,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bannerBodyActionDecryptNever => 'Never';
+
+  @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
 
   @override
   String get saveChangesDialogTitle => 'Save changes?';
@@ -687,6 +704,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
+
+  @override
   String get dialogTitleError => 'Error';
 
   @override
@@ -771,6 +792,19 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get bannerBodyActionDecryptNever => 'Never';
+
+  @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
 
   @override
   String get saveChangesDialogTitle => 'Save changes?';
@@ -1149,6 +1183,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
+
+  @override
   String get dialogTitleError => 'Error';
 
   @override
@@ -1233,6 +1271,19 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get bannerBodyActionDecryptNever => 'Never';
+
+  @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
 
   @override
   String get saveChangesDialogTitle => 'Save changes?';
