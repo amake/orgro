@@ -19,15 +19,23 @@
 
   "settingsScreenTitle": "設定",
   "settingsSectionDefaultText": "デフォルトの書式",
+  "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
+
+  "settingsItemLoading": "ロード中...",
 
   "settingsItemAppearance": "外観",
   "settingsItemTextScale": "文字サイズ",
   "settingsItemFontFamily": "書体",
 
+  "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",
+  "settingsDialogNotificationsTitle": "設定済みの通知",
+  "settingsItemClearNotifications": "すべての通知を削除",
+
   "settingsActionClearCache": "キャッシュを削除",
   "settingsActionResetPreferences": "設定を初期化",
 
+  "snackbarMessageNotificationsCleared": "通知を削除しました",
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
   "snackbarMessagePreferencesReset": "設定を初期化しました",
 

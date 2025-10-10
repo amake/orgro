@@ -59,7 +59,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsSectionDefaultText => 'Schrift';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Datenverwaltung';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Farbschema';
@@ -71,10 +77,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsItemFontFamily => 'Schriftart';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Cache löschen';
 
   @override
   String get settingsActionResetPreferences => 'Einstellungen Zurücksetzen';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache gelöscht';

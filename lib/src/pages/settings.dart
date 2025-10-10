@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
+import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
@@ -29,6 +30,15 @@ class SettingsPage extends StatelessWidget {
                   fontFamilyListItem(context),
                   textScaleListItem(context),
                   _TextPreview(),
+                  Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.settingsSectionNotifications,
+                    ),
+                  ),
+                  NotificationsListItems(),
                   Divider(),
                   ListHeader(
                     title: Text(

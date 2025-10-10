@@ -1,15 +1,19 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:intl/intl.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/main.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -199,6 +203,23 @@ Future<void> setNotificationsForDocument(
   }
 }
 
+Future<void> clearNotificationsForFile(String id) async {
+  final plugin = FlutterLocalNotificationsPlugin();
+  for (final element in await plugin.pendingNotificationRequests()) {
+    final payload = json.decode(element.payload!);
+    switch (payload) {
+      case {'dataSource': {'id': final elementId}}:
+        if (elementId == id) {
+          debugPrint('Canceling notification with ID $id (${element.id})');
+          await plugin.cancel(element.id);
+        }
+    }
+  }
+}
+
+Future<void> clearAllNotifications() async =>
+    await FlutterLocalNotificationsPlugin().cancelAll();
+
 extension OrgSectionUtil on OrgSection {
   bool get isTodo => headline.keyword?.done == false;
   bool get isDone => headline.keyword?.done == true;
@@ -253,3 +274,163 @@ extension OrgSectionUtil on OrgSection {
     'title': headline.rawTitle,
   };
 }
+
+class NotificationsListItems extends StatefulWidget {
+  const NotificationsListItems({super.key});
+
+  @override
+  State<NotificationsListItems> createState() => _NotificationsListItemsState();
+}
+
+class _NotificationsListItemsState extends State<NotificationsListItems> {
+  List<PendingNotificationRequest>? _pendingNotifications;
+  late final Timer _reloadTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _reloadTimer = Timer.periodic(const Duration(seconds: 5), (_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _reloadTimer.cancel();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    final pending = await FlutterLocalNotificationsPlugin()
+        .pendingNotificationRequests();
+    setState(() => _pendingNotifications = pending);
+  }
+
+  bool get _hasNotifications =>
+      _pendingNotifications != null && _pendingNotifications!.isNotEmpty;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            _pendingNotifications == null
+                ? AppLocalizations.of(context)!.settingsItemLoading
+                : AppLocalizations.of(
+                    context,
+                  )!.settingsItemInspectNotifications(
+                    _pendingNotifications!.length,
+                  ),
+          ),
+          onTap: _hasNotifications
+              ? () => showDialog<void>(
+                  context: context,
+                  builder: (context) =>
+                      _PendingNotificationsDialog(_pendingNotifications!),
+                )
+              : null,
+        ),
+        if (_hasNotifications)
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context)!.settingsItemClearNotifications,
+            ),
+            onTap: () async {
+              await Preferences.of(
+                context,
+                PrefsAspect.agenda,
+              ).clearAgendaFileIds();
+              await clearAllNotifications();
+              await _load();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.snackbarMessageNotificationsCleared,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+      ],
+    );
+  }
+}
+
+class _PendingNotificationsDialog extends StatelessWidget {
+  const _PendingNotificationsDialog(this.notifications);
+
+  final List<PendingNotificationRequest> notifications;
+
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = 16.0;
+    final iconColor = Theme.of(context).hintColor;
+    return AlertDialog(
+      title: Text(
+        AppLocalizations.of(context)!.settingsDialogNotificationsTitle,
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: notifications.length,
+          itemBuilder: (context, index) {
+            final notification = notifications[index];
+            final payload = json.decode(notification.payload!);
+            final dateTime = switch (payload) {
+              {
+                'scheduledAt': final String scheduledAt,
+                'timezone': final String timezone,
+              } =>
+                _formatNotificationDateTime(
+                  tz.TZDateTime.from(
+                    DateTime.parse(scheduledAt),
+                    tz.getLocation(timezone),
+                  ).toLocal(),
+                  AppLocalizations.of(context)!.localeName,
+                ),
+              _ => throw UnimplementedError(
+                'Unknown notification payload: $payload',
+              ),
+            };
+            return ListTile(
+              title: Text(notification.title!),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    spacing: 4,
+                    children: [
+                      Icon(
+                        Icons.insert_drive_file_outlined,
+                        size: iconSize,
+                        color: iconColor,
+                      ),
+                      Text(notification.body!),
+                    ],
+                  ),
+                  Row(
+                    spacing: 4,
+                    children: [
+                      Icon(Icons.access_time, size: iconSize, color: iconColor),
+                      Text(dateTime),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Do not make format object a constant because it will break dynamic UI
+// language switching
+String _formatNotificationDateTime(DateTime date, String locale) =>
+    DateFormat.yMd(locale).add_jm().format(date);

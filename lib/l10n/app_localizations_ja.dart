@@ -59,7 +59,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDefaultText => 'デフォルトの書式';
 
   @override
+  String get settingsSectionNotifications => '通知';
+
+  @override
   String get settingsSectionDataManagement => 'データ管理';
+
+  @override
+  String get settingsItemLoading => 'ロード中...';
 
   @override
   String get settingsItemAppearance => '外観';
@@ -71,10 +77,35 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemFontFamily => '書体';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString 件の通知',
+      zero: '通知なし',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => '設定済みの通知';
+
+  @override
+  String get settingsItemClearNotifications => 'すべての通知を削除';
+
+  @override
   String get settingsActionClearCache => 'キャッシュを削除';
 
   @override
   String get settingsActionResetPreferences => '設定を初期化';
+
+  @override
+  String get snackbarMessageNotificationsCleared => '通知を削除しました';
 
   @override
   String get snackbarMessageCacheCleared => 'キャッシュを削除しました';

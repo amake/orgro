@@ -4,13 +4,13 @@
   foo
 
 * TODO On a future day
-  SCHEDULED: <2025-10-10 Fri>
+  SCHEDULED: <2025-10-11 Sat>
 
   bar
 
 
 * TODO Do the thing at the exact time
-  SCHEDULED: <2025-10-09 Thu 19:27>
+  SCHEDULED: <2025-10-10 Fri 22:40>
 
   baz
 

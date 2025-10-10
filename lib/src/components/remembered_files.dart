@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
@@ -188,6 +189,11 @@ class _RememberedFilesState extends State<RememberedFiles> {
     } on Exception catch (e, s) {
       logError(e, s);
     }
+    // Agenda files are identified by [NativeDataSource.id] which is the URI.
+    //
+    // TODO(aaron): This is confusing
+    _prefs.removeAgendaFileId(recentFile.uri);
+    await clearNotificationsForFile(recentFile.uri);
     _prefs.removeRecentFile(recentFile);
   }
 

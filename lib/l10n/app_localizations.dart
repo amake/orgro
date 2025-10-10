@@ -202,11 +202,23 @@ abstract class AppLocalizations {
   /// **'Default text'**
   String get settingsSectionDefaultText;
 
+  /// No description provided for @settingsSectionNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsSectionNotifications;
+
   /// No description provided for @settingsSectionDataManagement.
   ///
   /// In en, this message translates to:
   /// **'Data management'**
   String get settingsSectionDataManagement;
+
+  /// No description provided for @settingsItemLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get settingsItemLoading;
 
   /// No description provided for @settingsItemAppearance.
   ///
@@ -226,6 +238,24 @@ abstract class AppLocalizations {
   /// **'Font'**
   String get settingsItemFontFamily;
 
+  /// No description provided for @settingsItemInspectNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}'**
+  String settingsItemInspectNotifications(num n);
+
+  /// No description provided for @settingsDialogNotificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending notifications'**
+  String get settingsDialogNotificationsTitle;
+
+  /// No description provided for @settingsItemClearNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all notifications'**
+  String get settingsItemClearNotifications;
+
   /// No description provided for @settingsActionClearCache.
   ///
   /// In en, this message translates to:
@@ -237,6 +267,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restore defaults'**
   String get settingsActionResetPreferences;
+
+  /// No description provided for @snackbarMessageNotificationsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications cleared'**
+  String get snackbarMessageNotificationsCleared;
 
   /// No description provided for @snackbarMessageCacheCleared.
   ///

@@ -47,8 +47,5 @@ extension AgendaHandler on DocumentPageState {
     // https://pub.dev/packages/workmanager
     //
     // and also on launch because background tasks are rarely run?
-
-    // TODO(aaron): Add a control to the Settings screen to clear all
-    // notifications (and agenda files?)
   }
 }

@@ -59,7 +59,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -71,10 +77,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
@@ -538,7 +570,13 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -550,10 +588,36 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
@@ -1017,7 +1081,13 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -1029,10 +1099,36 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';

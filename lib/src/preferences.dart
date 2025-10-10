@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
@@ -262,6 +263,7 @@ class _AppPreferences extends InheritedPreferences {
         logError(e, s);
       }
     }
+    await clearAllNotifications();
     await _prefs.clear();
     final cleared = await PreferencesData.fromSharedPreferences(_prefs);
     _update((_) => cleared);
@@ -400,6 +402,15 @@ extension AgendaExt on InheritedPreferences {
   Future<void> addAgendaFileId(String id) async {
     final ids = [...agendaFileIds, id].unique().toList(growable: false);
     return await _setAgendaFileIds(ids);
+  }
+
+  Future<void> removeAgendaFileId(String id) async {
+    final ids = List.of(agendaFileIds)..remove(id);
+    return await _setAgendaFileIds(ids);
+  }
+
+  Future<void> clearAgendaFileIds() async {
+    return await _setAgendaFileIds([]);
   }
 
   AgendaNotificationsPolicy get agendaNotificationsPolicy =>

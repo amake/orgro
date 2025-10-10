@@ -19,15 +19,23 @@
 
   "settingsScreenTitle": "Settings",
   "settingsSectionDefaultText": "Default text",
+  "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
+
+  "settingsItemLoading": "Loading...",
 
   "settingsItemAppearance": "Appearance",
   "settingsItemTextScale": "Scale",
   "settingsItemFontFamily": "Font",
 
+  "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
+  "settingsDialogNotificationsTitle": "Pending notifications",
+  "settingsItemClearNotifications": "Clear all notifications",
+
   "settingsActionClearCache": "Clear cache",
   "settingsActionResetPreferences": "Restore defaults",
 
+  "snackbarMessageNotificationsCleared": "Notifications cleared",
   "snackbarMessageCacheCleared": "Cache cleared",
   "snackbarMessagePreferencesReset": "Preferences reset",
 
