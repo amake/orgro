@@ -189,11 +189,8 @@ class _RememberedFilesState extends State<RememberedFiles> {
     } on Exception catch (e, s) {
       logError(e, s);
     }
-    // Agenda files are identified by [NativeDataSource.id] which is the URI.
-    //
-    // TODO(aaron): This is confusing
-    _prefs.removeAgendaFileId(recentFile.uri);
-    await clearNotificationsForFile(recentFile.uri);
+    _prefs.removeAgendaFileJsons((json) => json['uri'] == recentFile.uri);
+    await clearNotificationsForFiles((json) => json['uri'] == recentFile.uri);
     _prefs.removeRecentFile(recentFile);
   }
 

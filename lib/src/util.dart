@@ -26,6 +26,20 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension ListUtils<T> on List<T> {
+  bool equals(List<T> other, {bool Function(T?, T?)? valueEquals}) {
+    valueEquals ??= (a, b) => a == b;
+    if (identical(this, other)) return true;
+    if (length != other.length) return false;
+    for (var i = 0; i < length; i++) {
+      if (!valueEquals(this[i], other[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
 extension Iter2Utils<T, U> on Iterable<(T, U)> {
   Iterable<V> map2<V>(V Function(T, U) visit) sync* {
     for (final (a, b) in this) {

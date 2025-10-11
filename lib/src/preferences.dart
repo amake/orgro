@@ -64,7 +64,7 @@ const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
 const kRecentFilesSortKey = 'recent_files_sort_key';
 const kRecentFilesSortOrder = 'recent_files_sort_order';
-const kAgendaFileIdsKey = 'agenda_files';
+const kAgendaFileJsonsKey = 'agenda_file_jsons';
 const kAgendaNotificationsPolicyKey = 'agenda_notifications_policy';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
@@ -393,24 +393,38 @@ extension RecentFilesExt on InheritedPreferences {
 }
 
 extension AgendaExt on InheritedPreferences {
-  List<String> get agendaFileIds => data.agendaFileIds;
-  Future<void> _setAgendaFileIds(List<String> value) async {
-    _update((data) => data.copyWith(agendaFileIds: value));
-    return _setOrRemove(kAgendaFileIdsKey, value);
+  List<Map<String, dynamic>> get agendaFileJsons => data.agendaFileJsons;
+  Future<void> _setAgendaFileJsons(List<Map<String, dynamic>> value) async {
+    _update((data) => data.copyWith(agendaFileJsons: value));
+    return _setOrRemove(
+      kAgendaFileJsonsKey,
+      value.map(json.encode).toList(growable: false),
+    );
   }
 
-  Future<void> addAgendaFileId(String id) async {
-    final ids = [...agendaFileIds, id].unique().toList(growable: false);
-    return await _setAgendaFileIds(ids);
+  Future<void> addAgendaFileJson(Map<String, dynamic> json) async {
+    final jsons = [json, ...agendaFileJsons]
+        .unique(
+          cache: LinkedHashSet(
+            equals: (a, b) => a['uri'] == b['uri'],
+            hashCode: (o) => o['uri'].hashCode,
+          ),
+        )
+        .toList(growable: false);
+    return await _setAgendaFileJsons(jsons);
   }
 
-  Future<void> removeAgendaFileId(String id) async {
-    final ids = List.of(agendaFileIds)..remove(id);
-    return await _setAgendaFileIds(ids);
+  Future<void> removeAgendaFileJsons(
+    bool Function(Map<String, dynamic>) predicate,
+  ) async {
+    final jsons = agendaFileJsons
+        .where((json) => !predicate(json))
+        .toList(growable: false);
+    return await _setAgendaFileJsons(jsons);
   }
 
-  Future<void> clearAgendaFileIds() async {
-    return await _setAgendaFileIds([]);
+  Future<void> clearAgendaFileJsons() async {
+    return await _setAgendaFileJsons([]);
   }
 
   AgendaNotificationsPolicy get agendaNotificationsPolicy =>
@@ -430,7 +444,7 @@ extension AgendaExt on InheritedPreferences {
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.agenda) &&
-      !listEquals(data.agendaFileIds, oldWidget.data.agendaFileIds);
+      !listEquals(data.agendaFileJsons, oldWidget.data.agendaFileJsons);
 }
 
 extension ViewSettingsExt on InheritedPreferences {
@@ -572,7 +586,7 @@ class PreferencesData {
       recentFiles = const [],
       recentFilesSortKey = kDefaultRecentFilesSortKey,
       recentFilesSortOrder = kDefaultRecentFilesSortOrder,
-      agendaFileIds = const [],
+      agendaFileJsons = const [],
       agendaNotificationsPolicy = kDefaultAgendaNotificationsPolicy,
       themeMode = _kDefaultThemeMode,
       remoteImagesPolicy = kDefaultRemoteImagesPolicy,
@@ -610,7 +624,10 @@ class PreferencesData {
       recentFilesSortOrder: SortOrderPersistence.fromString(
         await prefs.getString(kRecentFilesSortOrder),
       ),
-      agendaFileIds: await prefs.getStringList(kAgendaFileIdsKey),
+      agendaFileJsons: (await prefs.getStringList(kAgendaFileJsonsKey))
+          ?.map<dynamic>(json.decode)
+          .cast<Map<String, dynamic>>()
+          .toList(growable: false),
       themeMode: ThemeModePersistence.fromString(
         await prefs.getString(kThemeModeKey),
       ),
@@ -640,7 +657,7 @@ class PreferencesData {
     required this.recentFiles,
     required this.recentFilesSortKey,
     required this.recentFilesSortOrder,
-    required this.agendaFileIds,
+    required this.agendaFileJsons,
     required this.agendaNotificationsPolicy,
     required this.themeMode,
     required this.remoteImagesPolicy,
@@ -660,7 +677,7 @@ class PreferencesData {
   final List<RememberedFile> recentFiles;
   final RecentFilesSortKey recentFilesSortKey;
   final SortOrder recentFilesSortOrder;
-  final List<String> agendaFileIds;
+  final List<Map<String, dynamic>> agendaFileJsons;
   final AgendaNotificationsPolicy agendaNotificationsPolicy;
   final ThemeMode themeMode;
   final RemoteImagesPolicy remoteImagesPolicy;
@@ -680,7 +697,7 @@ class PreferencesData {
     List<RememberedFile>? recentFiles,
     RecentFilesSortKey? recentFilesSortKey,
     SortOrder? recentFilesSortOrder,
-    List<String>? agendaFileIds,
+    List<Map<String, dynamic>>? agendaFileJsons,
     AgendaNotificationsPolicy? agendaNotificationsPolicy,
     ThemeMode? themeMode,
     RemoteImagesPolicy? remoteImagesPolicy,
@@ -699,7 +716,7 @@ class PreferencesData {
     recentFiles: recentFiles ?? this.recentFiles,
     recentFilesSortKey: recentFilesSortKey ?? this.recentFilesSortKey,
     recentFilesSortOrder: recentFilesSortOrder ?? this.recentFilesSortOrder,
-    agendaFileIds: agendaFileIds ?? this.agendaFileIds,
+    agendaFileJsons: agendaFileJsons ?? this.agendaFileJsons,
     agendaNotificationsPolicy:
         agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
     themeMode: themeMode ?? this.themeMode,
@@ -723,7 +740,10 @@ class PreferencesData {
       listEquals(recentFiles, other.recentFiles) &&
       recentFilesSortKey == other.recentFilesSortKey &&
       recentFilesSortOrder == other.recentFilesSortOrder &&
-      listEquals(agendaFileIds, other.agendaFileIds) &&
+      agendaFileJsons.equals(
+        other.agendaFileJsons,
+        valueEquals: (a, b) => mapEquals(a, b),
+      ) &&
       agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
       themeMode == other.themeMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
@@ -748,7 +768,7 @@ class PreferencesData {
     Object.hashAll(recentFiles),
     recentFilesSortKey,
     recentFilesSortOrder,
-    Object.hashAll(agendaFileIds),
+    Object.hashAll(agendaFileJsons),
     agendaNotificationsPolicy,
     themeMode,
     remoteImagesPolicy,

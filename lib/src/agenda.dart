@@ -203,14 +203,16 @@ Future<void> setNotificationsForDocument(
   }
 }
 
-Future<void> clearNotificationsForFile(String id) async {
+Future<void> clearNotificationsForFiles(
+  bool Function(Map<String, dynamic>) predicate,
+) async {
   final plugin = FlutterLocalNotificationsPlugin();
   for (final element in await plugin.pendingNotificationRequests()) {
     final payload = json.decode(element.payload!);
     switch (payload) {
-      case {'dataSource': {'id': final elementId}}:
-        if (elementId == id) {
-          debugPrint('Canceling notification with ID $id (${element.id})');
+      case {'dataSource': final Map<String, dynamic> dataSource}:
+        if (predicate(dataSource)) {
+          debugPrint('Canceling notification with ID ${element.id}');
           await plugin.cancel(element.id);
         }
     }
@@ -339,7 +341,7 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
               await Preferences.of(
                 context,
                 PrefsAspect.agenda,
-              ).clearAgendaFileIds();
+              ).clearAgendaFileJsons();
               await clearAllNotifications();
               await _load();
               if (context.mounted) {

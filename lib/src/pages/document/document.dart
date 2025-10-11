@@ -144,6 +144,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.priorities = analysis.priorities ?? [];
     searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
     if (isAgendaFile) {
+      // The same file's persistent identifier may change; re-add to overwrite
+      // stale entry.
+      setAgendaFile();
       setNotifications();
     }
   }
@@ -815,11 +818,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   bool get _askAboutAgendaNotifications =>
       _viewSettings.agendaNotificationsPolicy ==
           AgendaNotificationsPolicy.ask &&
+      canBeAgendaFile &&
       !isAgendaFile &&
-      switch (_dataSource) {
-        NativeDataSource(persistable: final p) => p,
-        _ => false,
-      } &&
       _hasAgendaEntries == true &&
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages &&
