@@ -151,6 +151,8 @@
   "inputCustomFilterDialogTitle": "カスタムフィルタ",
   "inputCustomFilterDialogHistoryButton": "履歴",
 
+  "loadingProgressDialogTitle": "ロード中…",
+  "preparingProgressDialogTitle": "準備中…",
   "decryptingProgressDialogTitle": "復号中…",
   "encryptingProgressDialogTitle": "暗号化中…",
   "serializingProgressDialogTitle": "書き出し中…",

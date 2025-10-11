@@ -394,6 +394,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => '履歴';
 
   @override
+  String get loadingProgressDialogTitle => 'ロード中…';
+
+  @override
+  String get preparingProgressDialogTitle => '準備中…';
+
+  @override
   String get decryptingProgressDialogTitle => '復号中…';
 
   @override

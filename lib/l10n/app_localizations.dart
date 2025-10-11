@@ -796,6 +796,18 @@ abstract class AppLocalizations {
   /// **'History'**
   String get inputCustomFilterDialogHistoryButton;
 
+  /// No description provided for @loadingProgressDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loadingProgressDialogTitle;
+
+  /// No description provided for @preparingProgressDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing…'**
+  String get preparingProgressDialogTitle;
+
   /// No description provided for @decryptingProgressDialogTitle.
   ///
   /// In en, this message translates to:

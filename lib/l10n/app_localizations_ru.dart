@@ -415,6 +415,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => 'История';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Расшифрование…';
 
   @override

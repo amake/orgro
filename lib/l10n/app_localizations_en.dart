@@ -413,6 +413,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => 'History';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
 
   @override
@@ -931,6 +937,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get inputCustomFilterDialogHistoryButton => 'History';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
 
   @override
@@ -1447,6 +1459,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get inputCustomFilterDialogHistoryButton => 'History';
+
+  @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
 
   @override
   String get decryptingProgressDialogTitle => 'Decrypting…';

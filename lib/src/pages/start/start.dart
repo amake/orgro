@@ -109,7 +109,16 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
           child: const Icon(Icons.create),
         ),
         FloatingActionButton(
-          onPressed: () => loadAndRememberFile(context, pickFile()),
+          onPressed: () => loadAndRememberFile(
+            context,
+            progessTask(
+              context,
+              dialogTitle: AppLocalizations.of(
+                context,
+              )!.preparingProgressDialogTitle,
+              task: pickFile(),
+            ).then((value) => value.result),
+          ),
           heroTag: 'OpenFileFAB',
           foregroundColor: Theme.of(context).colorScheme.onSecondary,
           child: const Icon(Icons.folder_open),

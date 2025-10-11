@@ -152,6 +152,8 @@
   "inputCustomFilterDialogTitle": "Custom filter query",
   "inputCustomFilterDialogHistoryButton": "History",
 
+  "loadingProgressDialogTitle": "Loading…",
+  "preparingProgressDialogTitle": "Preparing…",
   "decryptingProgressDialogTitle": "Decrypting…",
   "encryptingProgressDialogTitle": "Encrypting…",
   "serializingProgressDialogTitle": "Serialising…",

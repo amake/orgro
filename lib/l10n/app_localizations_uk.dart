@@ -413,6 +413,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => 'History';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
 
   @override

@@ -267,7 +267,13 @@ class _RememberedFileListTile extends StatelessWidget {
         ),
         onTap: () async => loadAndRememberFile(
           context,
-          readFileWithIdentifier(recentFile.identifier),
+          progessTask(
+            context,
+            dialogTitle: AppLocalizations.of(
+              context,
+            )!.loadingProgressDialogTitle,
+            task: readFileWithIdentifier(recentFile.identifier),
+          ).then((value) => value.result),
         ),
       ),
     );
