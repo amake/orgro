@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
@@ -285,26 +287,31 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
 Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
   BuildContext context, {
   required Future<T> task,
-  required String dialogTitle,
+  String? dialogTitle,
+  VoidCallback? onCancel,
 }) async {
   var canceled = false;
 
-  final dialogFuture = showDialog<(T, Object?)>(
+  final route = DialogRoute<(T, Object?)>(
     context: context,
+    barrierDismissible: true,
     builder: (context) =>
         ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
   );
+  final dialogFuture = Navigator.push(context, route);
 
   task
       .then((result) {
         if (!canceled && context.mounted) {
-          Navigator.pop(context, (result, null));
+          Navigator.removeRoute(context, route, (result, null));
         }
       })
       .onError((error, stackTrace) {
         if (context.mounted) showErrorSnackBar(context, error);
         logError(error, stackTrace);
-        if (!canceled && context.mounted) Navigator.pop(context, (null, error));
+        if (!canceled && context.mounted) {
+          Navigator.removeRoute(context, route, (null, error));
+        }
       });
 
   // Popped will be one of:
@@ -325,6 +332,30 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
       : (succeeded: false, result: null);
 }
 
+Future<({bool succeeded, T? result})> progessTask<T>(
+  BuildContext context, {
+  String? dialogTitle,
+  required FutureOr<T> task,
+}) async {
+  final route = DialogRoute<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) =>
+        ProgressIndicatorDialog(title: dialogTitle, dismissable: false),
+  );
+  Navigator.push(context, route);
+  try {
+    final result = await task;
+    return (succeeded: true, result: result);
+  } catch (error, stackTrace) {
+    if (context.mounted) showErrorSnackBar(context, error);
+    logError(error, stackTrace);
+    return (succeeded: false, result: null);
+  } finally {
+    if (context.mounted) Navigator.removeRoute(context, route);
+  }
+}
+
 class ProgressIndicatorDialog extends StatelessWidget {
   const ProgressIndicatorDialog({
     required this.title,
@@ -332,7 +363,7 @@ class ProgressIndicatorDialog extends StatelessWidget {
     super.key,
   });
 
-  final String title;
+  final String? title;
   final bool dismissable;
 
   @override
@@ -340,7 +371,7 @@ class ProgressIndicatorDialog extends StatelessWidget {
     return PopScope(
       canPop: dismissable,
       child: AlertDialog(
-        title: Text(title),
+        title: title == null ? null : Text(title!),
         content: const LinearProgressIndicator(),
       ),
     );

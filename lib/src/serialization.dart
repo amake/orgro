@@ -82,29 +82,14 @@ Future<String?> serializeWithProgressUI(
   OrgTree doc,
   OrgroSerializer serializer,
 ) async {
-  final dialogFuture = showDialog<String>(
-    context: context,
-    builder: (context) => ProgressIndicatorDialog(
-      title: serializer.willEncrypt
-          ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
-          : AppLocalizations.of(context)!.serializingProgressDialogTitle,
-      dismissable: true,
-    ),
+  final (:succeeded, :result) = await cancelableProgressTask(
+    context,
+    dialogTitle: serializer.willEncrypt
+        ? AppLocalizations.of(context)!.encryptingProgressDialogTitle
+        : AppLocalizations.of(context)!.serializingProgressDialogTitle,
+    task: serialize(doc, serializer),
+    onCancel: serializer.cancel,
   );
-  var canceled = false;
-  serialize(doc, serializer)
-      .then((value) {
-        if (!canceled && context.mounted) Navigator.pop(context, value);
-      })
-      .onError((error, stackTrace) {
-        if (context.mounted) showErrorSnackBar(context, error);
-        logError(error, stackTrace);
-        if (!canceled && context.mounted) Navigator.pop(context);
-      });
-  final result = await dialogFuture;
-  if (result == null) {
-    canceled = true;
-    serializer.cancel();
-  }
+
   return result;
 }

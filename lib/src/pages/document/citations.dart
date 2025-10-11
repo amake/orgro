@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/data_source.dart';
@@ -40,23 +40,13 @@ extension CitationHandler on DocumentPageState {
       return false;
     }
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
+    final (:succeeded, result: entries!) = await progessTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      task: _findBibTeXEntries(bibFiles.reversed, keys, dataSource),
     );
 
-    final entries = await _findBibTeXEntries(
-      bibFiles.reversed,
-      keys,
-      dataSource,
-    );
-
-    if (!mounted) return false;
-
-    Navigator.pop(context);
+    if (!mounted || !succeeded) return false;
 
     if (entries.isEmpty) {
       showErrorSnackBar(

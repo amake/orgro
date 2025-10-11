@@ -130,21 +130,16 @@ extension LinkHandler on DocumentPageState {
       return false;
     }
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ProgressIndicatorDialog(
-        title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-      ),
+    final (:succeeded, result: resolved!) = await progessTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      task: source.resolveRelative(fileLink.body),
     );
 
-    var popped = false;
+    if (!succeeded) return false;
 
     try {
-      final resolved = await source.resolveRelative(fileLink.body);
       if (mounted) {
-        Navigator.pop(context);
-        popped = true;
         if (fileLink.body.endsWith('.org')) {
           await loadDocument(context, resolved, target: fileLink.extra);
           return true;
@@ -165,10 +160,7 @@ extension LinkHandler on DocumentPageState {
       }
     } catch (e, s) {
       logError(e, s);
-      if (mounted) {
-        if (!popped) Navigator.pop(context);
-        showErrorSnackBar(context, e);
-      }
+      if (mounted) showErrorSnackBar(context, e);
     }
     return false;
   }
