@@ -65,6 +65,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsSectionDataManagement => 'Управление данных';
 
   @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override

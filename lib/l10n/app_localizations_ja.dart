@@ -65,6 +65,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDataManagement => 'データ管理';
 
   @override
+  String get agendaNotificationsChannelName => 'アジェンダ通知';
+
+  @override
+  String get agendaNotificationsChannelDescription => 'Org Agenda項目の通知';
+
+  @override
   String get settingsItemLoading => 'ロード中...';
 
   @override

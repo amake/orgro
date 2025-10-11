@@ -214,6 +214,18 @@ abstract class AppLocalizations {
   /// **'Data management'**
   String get settingsSectionDataManagement;
 
+  /// No description provided for @agendaNotificationsChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Agenda Notifications'**
+  String get agendaNotificationsChannelName;
+
+  /// No description provided for @agendaNotificationsChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications for Org Agenda items'**
+  String get agendaNotificationsChannelDescription;
+
   /// No description provided for @settingsItemLoading.
   ///
   /// In en, this message translates to:

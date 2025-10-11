@@ -65,6 +65,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDataManagement => 'Data management';
 
   @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override
@@ -576,6 +583,13 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsSectionDataManagement => 'Data management';
 
   @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override
@@ -1085,6 +1099,13 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
 
   @override
   String get settingsItemLoading => 'Loading...';

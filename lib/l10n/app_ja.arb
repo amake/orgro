@@ -22,6 +22,9 @@
   "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
 
+  "agendaNotificationsChannelName": "アジェンダ通知",
+  "agendaNotificationsChannelDescription": "Org Agenda項目の通知",
+
   "settingsItemLoading": "ロード中...",
 
   "settingsItemAppearance": "外観",

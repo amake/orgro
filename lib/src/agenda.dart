@@ -114,6 +114,7 @@ Future<bool> checkNotificationPermissions() async {
 Future<void> setNotificationsForDocument(
   DataSource dataSource,
   OrgTree doc,
+  AppLocalizations localizations,
 ) async {
   final plugin = FlutterLocalNotificationsPlugin();
   final pendingNotifications = <(tz.TZDateTime, PendingNotificationRequest)>[];
@@ -183,11 +184,12 @@ Future<void> setNotificationsForDocument(
           element.headline.rawTitle,
           dataSource.name,
           dateTime,
-          const NotificationDetails(
+          NotificationDetails(
             android: AndroidNotificationDetails(
               'com.madlonkay.orgro.agenda',
-              'Agenda Notifications',
-              channelDescription: 'Notifications for Org Agenda items',
+              localizations.agendaNotificationsChannelName,
+              channelDescription:
+                  localizations.agendaNotificationsChannelDescription,
             ),
             iOS: DarwinNotificationDetails(),
           ),
@@ -220,6 +222,7 @@ Future<void> setNotificationsForDocument(
 
 Future<void> setNotificationsForAllAgendaDocuments(
   List<Map<String, dynamic>> agendaFileJsons,
+  AppLocalizations localizations,
 ) async {
   for (final elem in agendaFileJsons) {
     switch (elem) {
@@ -227,7 +230,11 @@ Future<void> setNotificationsForAllAgendaDocuments(
         try {
           final dataSource = await readFileWithIdentifier(id);
           final parsed = await ParsedOrgFileInfo.from(dataSource);
-          await setNotificationsForDocument(dataSource, parsed.doc);
+          await setNotificationsForDocument(
+            dataSource,
+            parsed.doc,
+            localizations,
+          );
         } catch (e, s) {
           logError(e, s);
         }

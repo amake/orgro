@@ -65,6 +65,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsSectionDataManagement => 'Data management';
 
   @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override

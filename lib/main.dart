@@ -112,11 +112,21 @@ void backgroundTaskDispatcher() {
 
 Future<void> _handleBackgroundFetch() async {
   DartPluginRegistrant.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await PreferencesData.fromSharedPreferences(
     SharedPreferencesAsync(),
   );
+
+  final localizationsResolver = LocalizationsResolver(
+    supportedLocales: AppLocalizations.supportedLocales,
+  );
+  final locale = localizationsResolver.locale;
+  final localizations = lookupAppLocalizations(locale);
   // TODO(aaron): Update agenda also on launch because background tasks are
   // rarely run?
-  await setNotificationsForAllAgendaDocuments(prefs.agendaFileJsons);
+  await setNotificationsForAllAgendaDocuments(
+    prefs.agendaFileJsons,
+    localizations,
+  );
 }

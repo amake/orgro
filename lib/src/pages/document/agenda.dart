@@ -46,8 +46,9 @@ extension AgendaHandler on DocumentPageState {
 
     final dataSource = DocumentProvider.of(context).dataSource;
     final doc = DocumentProvider.of(context).doc;
+    final localizations = AppLocalizations.of(context)!;
 
-    await setNotificationsForDocument(dataSource, doc);
+    await setNotificationsForDocument(dataSource, doc, localizations);
     // TODO(aaron): Show a confirmation snackbar with a summary? That would be
     // nice on the first run for a file, but annoying on updates (which may be
     // frequent)

@@ -29,6 +29,9 @@
   "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
 
+  "agendaNotificationsChannelName": "Agenda Notifications",
+  "agendaNotificationsChannelDescription": "Notifications for Org Agenda items",
+
   "settingsItemLoading": "Loading...",
 
   "settingsItemAppearance": "Appearance",
