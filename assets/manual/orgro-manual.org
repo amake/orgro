@@ -528,6 +528,9 @@ following settings from the local variables list:
   are located. By default this is ~"data"~, but popular Emacs distros may
   customize it.
 
+- ~org-hidden-keywords~ :: Document metadata keywords (~#+TITLE:~, ~#+AUTHOR:~,
+  etc.) to hide.
+
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.
 

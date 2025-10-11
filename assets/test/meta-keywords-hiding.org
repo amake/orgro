@@ -1,0 +1,12 @@
+#+TITLE: A very good doc
+#+SUBTITLE: The foo story
+#+AUTHOR: That Guy
+#+EMAIL: thatguy@example.com
+#+DATE: 2024-11-05
+#+FOO: a regular meta line
+
+#+title: a VERY GOOD DOC
+
+# Local Variables:
+# org-hidden-keywords: (title subtitle foo)
+# End:
