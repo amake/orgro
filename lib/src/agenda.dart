@@ -180,8 +180,7 @@ Future<void> setNotificationsForDocument(
         );
         await plugin.zonedSchedule(
           id,
-          // TODO(aaron): This should probably be the plaintext title
-          element.headline.rawTitle,
+          element.headline.title?.toPlainText() ?? element.headline.rawTitle,
           dataSource.name,
           dateTime,
           NotificationDetails(
@@ -314,7 +313,7 @@ extension OrgSectionUtil on OrgSection {
   Map<String, Object?> toAgendaPayloadJson() => {
     'id': ids.firstOrNull,
     'customId': customIds.firstOrNull,
-    'title': headline.rawTitle,
+    'rawTitle': headline.rawTitle,
   };
 }
 
