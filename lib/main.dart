@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,8 @@ import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/quick_actions.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
 final startKey = GlobalKey<StartPageState>();
 
@@ -30,6 +34,8 @@ void main() {
   }
 
   runApp(buildApp());
+
+  Workmanager().initialize(backgroundTaskDispatcher);
 
   initNotifications();
 
@@ -82,4 +88,35 @@ class _MyApp extends StatelessWidget {
       onGenerateRoute: onGenerateRoute,
     );
   }
+}
+
+@pragma('vm:entry-point')
+void backgroundTaskDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    switch (task) {
+      case kAgendaUpdateTask:
+        // Custom task to update agenda notifications
+        await _handleBackgroundFetch();
+        break;
+      case Workmanager.iOSBackgroundTask:
+        // iOS Background Fetch task
+        await _handleBackgroundFetch();
+        break;
+      default:
+        debugPrint('Unknown background task: $task');
+    }
+
+    return Future.value(true);
+  });
+}
+
+Future<void> _handleBackgroundFetch() async {
+  DartPluginRegistrant.ensureInitialized();
+
+  final prefs = await PreferencesData.fromSharedPreferences(
+    SharedPreferencesAsync(),
+  );
+  // TODO(aaron): Update agenda also on launch because background tasks are
+  // rarely run?
+  await setNotificationsForAllAgendaDocuments(prefs.agendaFileJsons);
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -16,10 +17,13 @@ import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:workmanager/workmanager.dart';
 
 // https://pub.dev/packages/flutter_local_notifications#ios-pending-notifications-limit
 const kMaxNotifications = 64;
 const kMaxNotificationId = 0x7FFFFFFF;
+
+const kAgendaUpdateTask = 'com.madlonkay.orgro.agenda-update';
 
 void initNotifications() async {
   tz.initializeTimeZones();
@@ -46,6 +50,17 @@ void initNotifications() async {
     initializationSettings,
     onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
   );
+
+  // Background refresh is automatically scheduled on iOS
+  if (Platform.isAndroid) {
+    await Workmanager().registerPeriodicTask(
+      kAgendaUpdateTask,
+      kAgendaUpdateTask,
+      frequency: const Duration(minutes: 15),
+      initialDelay: const Duration(minutes: 15),
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
+    );
+  }
 }
 
 void onDidReceiveNotificationResponse(NotificationResponse details) {
@@ -199,6 +214,25 @@ Future<void> setNotificationsForDocument(
         continue;
       default:
         throw UnimplementedError('Unknown notification element: $element');
+    }
+  }
+}
+
+Future<void> setNotificationsForAllAgendaDocuments(
+  List<Map<String, dynamic>> agendaFileJsons,
+) async {
+  for (final elem in agendaFileJsons) {
+    switch (elem) {
+      case {'type': 'native', 'identifier': final String id}:
+        try {
+          final dataSource = await readFileWithIdentifier(id);
+          final parsed = await ParsedOrgFileInfo.from(dataSource);
+          await setNotificationsForDocument(dataSource, parsed.doc);
+        } catch (e, s) {
+          logError(e, s);
+        }
+      default:
+        throw UnimplementedError('Unknown agenda file JSON: $elem');
     }
   }
 }
