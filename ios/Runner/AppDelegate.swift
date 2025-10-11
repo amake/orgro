@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import flutter_local_notifications
+import workmanager_apple
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -22,6 +23,11 @@ import flutter_local_notifications
         }
 
         GeneratedPluginRegistrant.register(with: self)
+
+        #if DEBUG
+        WorkmanagerDebug.setCurrent(LoggingDebugHandler())
+        #endif
+
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }
