@@ -74,4 +74,21 @@ void main() {
       );
     });
   });
+  group('Sequentially', () {
+    test('Execute sequentially', () async {
+      final acc = <int>[];
+      final fn = sequentially((int i) async {
+        await Future<void>.delayed(Duration(milliseconds: i * 50));
+        acc.add(i);
+        return i;
+      });
+      final stopwatch = Stopwatch()..start();
+      final results = await Future.wait(List.generate(3, (i) => fn(2 - i)));
+      stopwatch.stop();
+      expect(results, [2, 1, 0]);
+      expect(acc, [2, 1, 0]);
+      // The total time should be about 150ms (100ms + 50ms + 0ms)
+      expect(stopwatch.elapsedMilliseconds, inInclusiveRange(140, 200));
+    });
+  });
 }

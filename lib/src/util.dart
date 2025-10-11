@@ -203,3 +203,11 @@ extension BoolUtil on bool {
     return this ? 1 : -1;
   }
 }
+
+Future<T> Function(U) sequentially<T, U>(Future<T> Function(U) fn) {
+  Future<T>? current;
+  return (U arg) {
+    current = current?.then((_) => fn(arg)) ?? fn(arg);
+    return current!;
+  };
+}

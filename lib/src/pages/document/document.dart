@@ -143,10 +143,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.tags = analysis.tags ?? [];
     searchDelegate.priorities = analysis.priorities ?? [];
     searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
-    if (isAgendaFile) {
+    if (analysis.loaded && isAgendaFile) {
       // The same file's persistent identifier may change; re-add to overwrite
       // stale entry.
       setAgendaFile();
+      debugPrint('AMK setting notifications!');
       setNotifications();
     }
   }

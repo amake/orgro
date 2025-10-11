@@ -403,6 +403,7 @@ extension AgendaExt on InheritedPreferences {
   }
 
   Future<void> addAgendaFileJson(Map<String, dynamic> json) async {
+    if (agendaFileJsons.any((e) => mapEquals(e, json))) return;
     final jsons = [json, ...agendaFileJsons]
         .unique(
           cache: LinkedHashSet(

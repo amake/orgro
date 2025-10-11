@@ -44,7 +44,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
   void initState() {
     super.initState();
     _docs = [widget.doc];
-    _analyses = [const DocumentAnalysis()];
+    _analyses = [DocumentAnalysis.empty()];
     _analyze(widget.doc).then((analysis) {
       setState(() => _analyses[0] = analysis);
     });
@@ -242,6 +242,7 @@ class DocumentAnalysis {
     });
 
     return DocumentAnalysis(
+      loaded: true,
       hasRemoteImages: hasRemoteImages,
       hasRelativeLinks: hasRelativeLinks,
       hasEncryptedContent: hasEncryptedContent,
@@ -253,7 +254,10 @@ class DocumentAnalysis {
     );
   }
 
+  factory DocumentAnalysis.empty() => const DocumentAnalysis(loaded: false);
+
   const DocumentAnalysis({
+    required this.loaded,
     this.hasRemoteImages,
     this.hasRelativeLinks,
     this.hasEncryptedContent,
@@ -264,6 +268,7 @@ class DocumentAnalysis {
     this.priorities,
   });
 
+  final bool loaded;
   final bool? hasRemoteImages;
   final bool? hasRelativeLinks;
   final bool? hasEncryptedContent;
@@ -276,6 +281,7 @@ class DocumentAnalysis {
   @override
   bool operator ==(Object other) =>
       other is DocumentAnalysis &&
+      loaded == other.loaded &&
       hasRemoteImages == other.hasRemoteImages &&
       hasRelativeLinks == other.hasRelativeLinks &&
       hasEncryptedContent == other.hasEncryptedContent &&
@@ -287,6 +293,7 @@ class DocumentAnalysis {
 
   @override
   int get hashCode => Object.hash(
+    loaded,
     hasRemoteImages,
     hasRelativeLinks,
     hasEncryptedContent,
