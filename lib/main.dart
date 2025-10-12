@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
@@ -14,11 +15,13 @@ import 'package:orgro/src/quick_actions.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 
 final startKey = GlobalKey<StartPageState>();
 
-void main() {
+void main() async {
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
       'google_fonts',
@@ -35,11 +38,18 @@ void main() {
 
   runApp(buildApp());
 
-  Workmanager().initialize(backgroundTaskDispatcher);
-
-  initNotifications();
-
-  clearTemporaryAttachments();
+  try {
+    final workmanager = Workmanager();
+    await workmanager.initialize(backgroundTaskDispatcher);
+    await initNotifications(workmanager);
+  } catch (e, s) {
+    logError(e, s);
+  }
+  try {
+    await clearTemporaryAttachments();
+  } catch (e, s) {
+    logError(e, s);
+  }
 }
 
 Widget buildApp({bool isTest = false}) => Preferences(
@@ -93,17 +103,21 @@ class _MyApp extends StatelessWidget {
 @pragma('vm:entry-point')
 void backgroundTaskDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    switch (task) {
-      case kAgendaUpdateTask:
-        // Custom task to update agenda notifications
-        await _handleBackgroundFetch();
-        break;
-      case Workmanager.iOSBackgroundTask:
-        // iOS Background Fetch task
-        await _handleBackgroundFetch();
-        break;
-      default:
-        debugPrint('Unknown background task: $task');
+    try {
+      switch (task) {
+        case kAgendaUpdateTask:
+          // Custom task to update agenda notifications
+          await _handleBackgroundFetch();
+          break;
+        case Workmanager.iOSBackgroundTask:
+          // iOS Background Fetch task
+          await _handleBackgroundFetch();
+          break;
+        default:
+          debugPrint('Unknown background task: $task');
+      }
+    } catch (e, s) {
+      debugPrint('ExecuteTask error: $e\n$s');
     }
 
     return Future.value(true);
@@ -113,6 +127,11 @@ void backgroundTaskDispatcher() {
 Future<void> _handleBackgroundFetch() async {
   DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
+
+  final currentTimeZone = await FlutterTimezone.getLocalTimezone();
+  debugPrint('Current time zone: $currentTimeZone');
+  tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
 
   final prefs = await PreferencesData.fromSharedPreferences(
     SharedPreferencesAsync(),
@@ -122,6 +141,8 @@ Future<void> _handleBackgroundFetch() async {
     supportedLocales: AppLocalizations.supportedLocales,
   );
   final locale = localizationsResolver.locale;
+  debugPrint('Background fetch detected locale: $locale');
+
   final localizations = lookupAppLocalizations(locale);
   // TODO(aaron): Update agenda also on launch because background tasks are
   // rarely run?

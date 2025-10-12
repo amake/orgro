@@ -28,6 +28,10 @@ import workmanager_apple
         WorkmanagerDebug.setCurrent(LoggingDebugHandler())
         #endif
 
+        WorkmanagerPlugin.setPluginRegistrantCallback { registry in
+            GeneratedPluginRegistrant.register(with: registry)
+        }
+
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }

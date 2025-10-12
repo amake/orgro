@@ -25,7 +25,7 @@ const kMaxNotificationId = 0x7FFFFFFF;
 
 const kAgendaUpdateTask = 'com.madlonkay.orgro.agenda-update';
 
-void initNotifications() async {
+Future<void> initNotifications(Workmanager workmanager) async {
   tz.initializeTimeZones();
   final currentTimeZone = await FlutterTimezone.getLocalTimezone();
   debugPrint('Current time zone: $currentTimeZone');
@@ -53,7 +53,7 @@ void initNotifications() async {
 
   // Background refresh is automatically scheduled on iOS
   if (Platform.isAndroid) {
-    await Workmanager().registerPeriodicTask(
+    await workmanager.registerPeriodicTask(
       kAgendaUpdateTask,
       kAgendaUpdateTask,
       frequency: const Duration(minutes: 15),
