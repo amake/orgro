@@ -20,17 +20,17 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children:
             [
-                  appearanceListItem(context),
-                  Divider(),
+                  const AppearanceSettingListItem(),
+                  const Divider(),
                   ListHeader(
                     title: Text(
                       AppLocalizations.of(context)!.settingsSectionDefaultText,
                     ),
                   ),
-                  fontFamilyListItem(context),
-                  textScaleListItem(context),
-                  _TextPreview(),
-                  Divider(),
+                  const FontFamilySettingListItem(),
+                  const TextScaleSettingListItem(),
+                  const _TextPreview(),
+                  const Divider(),
                   ListHeader(
                     title: Text(
                       AppLocalizations.of(
@@ -38,8 +38,8 @@ class SettingsPage extends StatelessWidget {
                       )!.settingsSectionNotifications,
                     ),
                   ),
-                  NotificationsListItems(),
-                  Divider(),
+                  const NotificationsListItems(),
+                  const Divider(),
                   ListHeader(
                     title: Text(
                       AppLocalizations.of(
@@ -47,9 +47,9 @@ class SettingsPage extends StatelessWidget {
                       )!.settingsSectionDataManagement,
                     ),
                   ),
-                  clearCachesListItem(context),
+                  const ClearCachesListItem(),
                   const ResetDirectoryPermissionsListItem(),
-                  resetPreferencesListItem(context),
+                  const ResetPreferencesListItem(),
                 ]
                 .map(
                   (child) => switch (child) {

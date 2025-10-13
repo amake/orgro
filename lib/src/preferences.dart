@@ -927,26 +927,33 @@ extension AgendaNotificationsPolicyPersistence on AgendaNotificationsPolicy? {
   };
 }
 
-Widget resetPreferencesListItem(BuildContext context) => ListTile(
-  title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
-  onTap: () async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => const ConfirmResetDialog(),
+class ResetPreferencesListItem extends StatelessWidget {
+  const ResetPreferencesListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.settingsActionResetPreferences),
+      onTap: () async {
+        final result = await showDialog<bool>(
+          context: context,
+          builder: (context) => const ConfirmResetDialog(),
+        );
+        if (result != true || !context.mounted) return;
+        await Preferences.of(context, PrefsAspect.nil).reset();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.snackbarMessagePreferencesReset,
+              ),
+            ),
+          );
+        }
+      },
     );
-    if (result != true || !context.mounted) return;
-    await Preferences.of(context, PrefsAspect.nil).reset();
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.snackbarMessagePreferencesReset,
-          ),
-        ),
-      );
-    }
-  },
-);
+  }
+}
 
 class ResetDirectoryPermissionsListItem extends StatelessWidget {
   const ResetDirectoryPermissionsListItem({super.key});

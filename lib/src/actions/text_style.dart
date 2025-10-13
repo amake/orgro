@@ -13,21 +13,26 @@ PopupMenuEntry<VoidCallback> textScaleMenuItem(
   );
 }
 
-Widget textScaleListItem(BuildContext context) {
-  final viewSettings = ViewSettings.of(context);
-  return ListTile(
-    title: Row(
-      children: [
-        Expanded(
-          child: Text(AppLocalizations.of(context)!.settingsItemTextScale),
-        ),
-        TextSizeAdjuster(
-          value: viewSettings.textScale,
-          onChanged: (value) => viewSettings.textScale = value,
-        ),
-      ],
-    ),
-  );
+class TextScaleSettingListItem extends StatelessWidget {
+  const TextScaleSettingListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final viewSettings = ViewSettings.of(context);
+    return ListTile(
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(AppLocalizations.of(context)!.settingsItemTextScale),
+          ),
+          TextSizeAdjuster(
+            value: viewSettings.textScale,
+            onChanged: (value) => viewSettings.textScale = value,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
@@ -40,18 +45,23 @@ PopupMenuEntry<VoidCallback> fontFamilyMenuItem(
   );
 }
 
-Widget fontFamilyListItem(BuildContext context) {
-  final viewSettings = ViewSettings.of(context);
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.settingsItemFontFamily),
-    subtitle: Text(viewSettings.fontFamily),
-    onTap: () async {
-      final selection = await _chooseFont(context, viewSettings.fontFamily);
-      if (selection != null) {
-        viewSettings.fontFamily = selection;
-      }
-    },
-  );
+class FontFamilySettingListItem extends StatelessWidget {
+  const FontFamilySettingListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final viewSettings = ViewSettings.of(context);
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.settingsItemFontFamily),
+      subtitle: Text(viewSettings.fontFamily),
+      onTap: () async {
+        final selection = await _chooseFont(context, viewSettings.fontFamily);
+        if (selection != null) {
+          viewSettings.fontFamily = selection;
+        }
+      },
+    );
+  }
 }
 
 class TextStyleButton extends StatefulWidget {
