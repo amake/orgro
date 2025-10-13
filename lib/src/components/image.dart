@@ -320,7 +320,8 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
         );
       }
       return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
-    } catch (e) {
+    } catch (e, s) {
+      logError(e, s);
       scheduleMicrotask(() {
         PaintingBinding.instance.imageCache.evict(key);
       });

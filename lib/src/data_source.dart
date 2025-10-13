@@ -240,7 +240,8 @@ class NativeDataSource extends DataSource {
         );
         debugPrint('Found file $uri parent dir: ${parent.uri}');
         return (rootId, parent.identifier);
-      } on Exception {
+      } on Exception catch (e, s) {
+        logError(e, s);
         // Next
       }
     }
