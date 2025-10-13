@@ -48,6 +48,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   clearCachesListItem(context),
+                  const ResetDirectoryPermissionsListItem(),
                   resetPreferencesListItem(context),
                 ]
                 .map(

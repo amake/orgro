@@ -52,10 +52,12 @@
 
   "settingsActionClearCache": "Clear cache",
   "settingsActionResetPreferences": "Restore defaults",
+  "settingsActionResetDirectoryPermissions": "Reset directory permissions",
 
   "snackbarMessageNotificationsCleared": "Notifications cleared",
   "snackbarMessageCacheCleared": "Cache cleared",
   "snackbarMessagePreferencesReset": "Preferences reset",
+  "snackbarMessageDirectoryPermissionsReset": "Directory permissions reset",
 
   "confirmResetPreferencesDialogTitle": "Restore defaults?",
   "confirmResetPreferencesDialogMessage": "This will reset all preferences to their default values. This action can’t be undone.",

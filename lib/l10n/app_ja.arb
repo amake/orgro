@@ -37,10 +37,12 @@
 
   "settingsActionClearCache": "キャッシュを削除",
   "settingsActionResetPreferences": "設定を初期化",
+  "settingsActionResetDirectoryPermissions": "ディレクトリのアクセス権限をリセット",
 
   "snackbarMessageNotificationsCleared": "通知を削除しました",
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
   "snackbarMessagePreferencesReset": "設定を初期化しました",
+  "snackbarMessageDirectoryPermissionsReset": "ディレクトリのアクセス権限をリセットしました",
 
   "confirmResetPreferencesDialogTitle": "設定を初期化しますか?",
   "confirmResetPreferencesDialogMessage": "すべての設定が初期値に戻されます。この操作は元に戻せません。",

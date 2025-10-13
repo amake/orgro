@@ -280,6 +280,12 @@ abstract class AppLocalizations {
   /// **'Restore defaults'**
   String get settingsActionResetPreferences;
 
+  /// No description provided for @settingsActionResetDirectoryPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset directory permissions'**
+  String get settingsActionResetDirectoryPermissions;
+
   /// No description provided for @snackbarMessageNotificationsCleared.
   ///
   /// In en, this message translates to:
@@ -297,6 +303,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preferences reset'**
   String get snackbarMessagePreferencesReset;
+
+  /// No description provided for @snackbarMessageDirectoryPermissionsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory permissions reset'**
+  String get snackbarMessageDirectoryPermissionsReset;
 
   /// No description provided for @confirmResetPreferencesDialogTitle.
   ///

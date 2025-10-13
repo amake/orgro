@@ -531,6 +531,17 @@ extension AccessibleDirectoriesExt on InheritedPreferences {
     return await _setAccessibleDirs(dirs);
   }
 
+  Future<void> clearAccessibleDirs() async {
+    for (final dir in accessibleDirs) {
+      try {
+        await disposeNativeSourceIdentifier(dir);
+      } catch (e, s) {
+        logError(e, s);
+      }
+    }
+    return await _setAccessibleDirs([]);
+  }
+
   bool _updateShouldNotifyDependentAccessibleDirectories(
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
@@ -936,3 +947,31 @@ Widget resetPreferencesListItem(BuildContext context) => ListTile(
     }
   },
 );
+
+class ResetDirectoryPermissionsListItem extends StatelessWidget {
+  const ResetDirectoryPermissionsListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        AppLocalizations.of(context)!.settingsActionResetDirectoryPermissions,
+      ),
+      onTap: () async {
+        final prefs = Preferences.of(context, PrefsAspect.accessibleDirs);
+        await prefs.clearAccessibleDirs();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(
+                  context,
+                )!.snackbarMessageDirectoryPermissionsReset,
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+}

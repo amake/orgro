@@ -111,6 +111,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsActionResetPreferences => '設定を初期化';
 
   @override
+  String get settingsActionResetDirectoryPermissions => 'ディレクトリのアクセス権限をリセット';
+
+  @override
   String get snackbarMessageNotificationsCleared => '通知を削除しました';
 
   @override
@@ -118,6 +121,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get snackbarMessagePreferencesReset => '設定を初期化しました';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'ディレクトリのアクセス権限をリセットしました';
 
   @override
   String get confirmResetPreferencesDialogTitle => '設定を初期化しますか?';

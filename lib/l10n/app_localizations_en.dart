@@ -113,6 +113,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
@@ -120,6 +124,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -637,6 +645,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
@@ -644,6 +656,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -1161,6 +1177,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
 
   @override
@@ -1168,6 +1188,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
