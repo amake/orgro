@@ -211,3 +211,25 @@ Future<T> Function(U) sequentially<T, U>(Future<T> Function(U) fn) {
     return current!;
   };
 }
+
+Future<T> Function(U) sequentiallyWithLockfile<T, U>(
+  FutureOr<File> lockfileFuture,
+  Future<T> Function(U) fn,
+) {
+  return (U arg) async {
+    final lockfile = await lockfileFuture;
+    while (true) {
+      if (lockfile.existsSync()) {
+        // wait and retry
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        continue;
+      }
+      lockfile.createSync(exclusive: true);
+      try {
+        return await fn(arg);
+      } finally {
+        lockfile.deleteSync();
+      }
+    }
+  };
+}

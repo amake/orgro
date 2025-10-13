@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:orgro/src/util.dart';
@@ -89,6 +91,24 @@ void main() {
       expect(acc, [2, 1, 0]);
       // The total time should be about 150ms (100ms + 50ms + 0ms)
       expect(stopwatch.elapsedMilliseconds, inInclusiveRange(140, 200));
+    });
+    test('Execute sequentially with lock file', () async {
+      final acc = <int>[];
+      final lockfile = File('test.lock');
+      expect(lockfile.existsSync(), isFalse);
+      final fn = sequentiallyWithLockfile(lockfile, (int i) async {
+        await Future<void>.delayed(Duration(milliseconds: i * 50));
+        acc.add(i);
+        return i;
+      });
+      final stopwatch = Stopwatch()..start();
+      final results = await Future.wait(List.generate(3, (i) => fn(2 - i)));
+      stopwatch.stop();
+      expect(results, [2, 1, 0]);
+      expect(acc, [2, 1, 0]);
+      // The total time should be about 150ms (100ms + 50ms + 0ms)
+      expect(stopwatch.elapsedMilliseconds, inInclusiveRange(140, 200));
+      expect(lockfile.existsSync(), isFalse);
     });
   });
 }

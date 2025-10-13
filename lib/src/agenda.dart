@@ -15,9 +15,10 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/util.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:workmanager/workmanager.dart';
 
 // https://pub.dev/packages/flutter_local_notifications#ios-pending-notifications-limit
 const kMaxNotifications = 64;
@@ -25,7 +26,7 @@ const kMaxNotificationId = 0x7FFFFFFF;
 
 const kAgendaUpdateTask = 'com.madlonkay.orgro.agenda-update';
 
-Future<void> initNotifications(Workmanager workmanager) async {
+Future<void> initNotifications() async {
   tz.initializeTimeZones();
   final currentTimeZone = await FlutterTimezone.getLocalTimezone();
   debugPrint('Current time zone: $currentTimeZone');
@@ -50,17 +51,6 @@ Future<void> initNotifications(Workmanager workmanager) async {
     initializationSettings,
     onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
   );
-
-  // Background refresh is automatically scheduled on iOS
-  if (Platform.isAndroid) {
-    await workmanager.registerPeriodicTask(
-      kAgendaUpdateTask,
-      kAgendaUpdateTask,
-      frequency: const Duration(minutes: 15),
-      initialDelay: const Duration(minutes: 15),
-      existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
-    );
-  }
 }
 
 void onDidReceiveNotificationResponse(NotificationResponse details) {
@@ -111,11 +101,33 @@ Future<bool> checkNotificationPermissions() async {
   throw UnimplementedError('Unsupported platform');
 }
 
-Future<void> setNotificationsForDocument(
-  DataSource dataSource,
-  OrgTree doc,
-  AppLocalizations localizations,
+const _kNotificationsUpdateLockfile = '.notificationsUpdate.lock';
+
+Future<File> _getLockfile() async {
+  final tmpDir = await getTemporaryDirectory();
+  final lockfile = File.fromUri(
+    tmpDir.uri.resolve(_kNotificationsUpdateLockfile),
+  );
+  return lockfile;
+}
+
+Future<void> cleanNotficationsLockfile() async {
+  final lockfile = await _getLockfile();
+  if (!lockfile.existsSync()) return;
+  if (DateTime.now().difference(lockfile.lastModifiedSync()) <
+      const Duration(hours: 1)) {
+    return;
+  }
+
+  lockfile.deleteSync();
+}
+
+final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
+  (DataSource, OrgTree, AppLocalizations) args,
 ) async {
+  final (dataSource, doc, localizations) = args;
+  debugPrint('Setting agenda notifications for document ${dataSource.name}');
+
   final plugin = FlutterLocalNotificationsPlugin();
   final pendingNotifications = <(tz.TZDateTime, PendingNotificationRequest)>[];
   for (final element in await plugin.pendingNotificationRequests()) {
@@ -217,7 +229,7 @@ Future<void> setNotificationsForDocument(
         throw UnimplementedError('Unknown notification element: $element');
     }
   }
-}
+});
 
 Future<void> setNotificationsForAllAgendaDocuments(
   List<Map<String, dynamic>> agendaFileJsons,
@@ -229,11 +241,11 @@ Future<void> setNotificationsForAllAgendaDocuments(
         try {
           final dataSource = await readFileWithIdentifier(id);
           final parsed = await ParsedOrgFileInfo.from(dataSource);
-          await setNotificationsForDocument(
+          await setNotificationsForDocument((
             dataSource,
             parsed.doc,
             localizations,
-          );
+          ));
         } catch (e, s) {
           logError(e, s);
         }
