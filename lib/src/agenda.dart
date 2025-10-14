@@ -25,8 +25,11 @@ const kMaxNotifications = 64;
 const kMaxNotificationId = 0x7FFFFFFF;
 
 const kAgendaUpdateTask = 'com.madlonkay.orgro.agenda-update';
+const kAgendaNotificationsCategory = 'com.madlonkay.orgro.agenda';
+const kAgendaNotificationsChannel = 'com.madlonkay.orgro.agenda';
+const kAgendaNotificationsActionView = 'com.madlonkay.orgro.agenda.view';
 
-Future<void> initNotifications() async {
+Future<void> initNotifications(AppLocalizations localizations) async {
   tz.initializeTimeZones();
   final currentTimeZone = await FlutterTimezone.getLocalTimezone();
   debugPrint('Current time zone: $currentTimeZone');
@@ -36,13 +39,25 @@ Future<void> initNotifications() async {
   const initializationSettingsAndroid = AndroidInitializationSettings(
     'ic_notification',
   );
-  const initializationSettingsDarwin = DarwinInitializationSettings(
+  final initializationSettingsDarwin = DarwinInitializationSettings(
     // We request later on demand
     requestSoundPermission: false,
     requestBadgePermission: false,
     requestAlertPermission: false,
+    notificationCategories: [
+      DarwinNotificationCategory(
+        kAgendaNotificationsCategory,
+        actions: [
+          DarwinNotificationAction.plain(
+            kAgendaNotificationsActionView,
+            localizations.agendaNotificationsActionView,
+            options: {DarwinNotificationActionOption.foreground},
+          ),
+        ],
+      ),
+    ],
   );
-  const initializationSettings = InitializationSettings(
+  final initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsDarwin,
     macOS: initializationSettingsDarwin,
@@ -51,6 +66,10 @@ Future<void> initNotifications() async {
     initializationSettings,
     onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
   );
+  final launchDetails = await plugin.getNotificationAppLaunchDetails();
+  if (launchDetails?.didNotificationLaunchApp == true) {
+    onDidReceiveNotificationResponse(launchDetails!.notificationResponse!);
+  }
 }
 
 void onDidReceiveNotificationResponse(NotificationResponse details) {
@@ -197,12 +216,21 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
           dateTime,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              'com.madlonkay.orgro.agenda',
+              kAgendaNotificationsChannel,
               localizations.agendaNotificationsChannelName,
               channelDescription:
                   localizations.agendaNotificationsChannelDescription,
+              actions: [
+                AndroidNotificationAction(
+                  kAgendaNotificationsActionView,
+                  localizations.agendaNotificationsActionView,
+                  showsUserInterface: true,
+                ),
+              ],
             ),
-            iOS: DarwinNotificationDetails(),
+            iOS: DarwinNotificationDetails(
+              categoryIdentifier: kAgendaNotificationsCategory,
+            ),
           ),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           payload: json.encode({

@@ -72,6 +72,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Notifications for Org Agenda items';
 
   @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override

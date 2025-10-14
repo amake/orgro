@@ -226,6 +226,12 @@ abstract class AppLocalizations {
   /// **'Notifications for Org Agenda items'**
   String get agendaNotificationsChannelDescription;
 
+  /// No description provided for @agendaNotificationsActionView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get agendaNotificationsActionView;
+
   /// No description provided for @settingsItemLoading.
   ///
   /// In en, this message translates to:

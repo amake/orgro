@@ -72,6 +72,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notifications for Org Agenda items';
 
   @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override
@@ -604,6 +607,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
       'Notifications for Org Agenda items';
 
   @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
   String get settingsItemLoading => 'Loading...';
 
   @override
@@ -1134,6 +1140,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get agendaNotificationsChannelDescription =>
       'Notifications for Org Agenda items';
+
+  @override
+  String get agendaNotificationsActionView => 'View';
 
   @override
   String get settingsItemLoading => 'Loading...';

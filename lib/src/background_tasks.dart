@@ -28,18 +28,29 @@ class _BackgroundTasksState extends State<BackgroundTasks> {
   @override
   void initState() {
     super.initState();
-    _doInit();
     _timer = Timer.periodic(
       const Duration(minutes: 15),
       (_) => _handleBackgroundFetch('periodic timer'),
     );
   }
 
+  bool _inited = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _doInit();
+      _inited = true;
+    }
+  }
+
   void _doInit() async {
     try {
+      final localizations = AppLocalizations.of(context)!;
       final workmanager = Workmanager();
       await workmanager.initialize(backgroundTaskDispatcher);
-      await initNotifications();
+      await initNotifications(localizations);
       // Background refresh is automatically scheduled on iOS
       if (Platform.isAndroid) {
         await workmanager.registerPeriodicTask(

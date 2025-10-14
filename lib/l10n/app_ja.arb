@@ -24,6 +24,7 @@
 
   "agendaNotificationsChannelName": "アジェンダ通知",
   "agendaNotificationsChannelDescription": "Org Agenda項目の通知",
+  "agendaNotificationsActionView": "表示",
 
   "settingsItemLoading": "ロード中...",
 

@@ -71,6 +71,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get agendaNotificationsChannelDescription => 'Org Agenda項目の通知';
 
   @override
+  String get agendaNotificationsActionView => '表示';
+
+  @override
   String get settingsItemLoading => 'ロード中...';
 
   @override

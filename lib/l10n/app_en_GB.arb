@@ -24,6 +24,7 @@
 
   "agendaNotificationsChannelName": "Agenda Notifications",
   "agendaNotificationsChannelDescription": "Notifications for Org Agenda items",
+  "agendaNotificationsActionView": "View",
 
   "settingsItemLoading": "Loading...",
 
