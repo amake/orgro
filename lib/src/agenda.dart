@@ -176,7 +176,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final toSchedule = <(tz.TZDateTime, OrgSection)>[];
   doc.visitSections((section) {
     if (section.isPending()) {
-      for (final dateTime in section.scheduledAt) {
+      for (final dateTime in section.scheduledAt.unique()) {
         if (dateTime.isAfter(DateTime.now())) {
           var tzDateTime = tz.TZDateTime.from(dateTime, tz.local);
           if (tzDateTime.hour == 0 && tzDateTime.minute == 0) {
@@ -305,49 +305,63 @@ Future<void> clearAllNotifications() async =>
 extension OrgSectionUtil on OrgSection {
   bool get isTodo => headline.keyword?.done == false;
   bool get isDone => headline.keyword?.done == true;
+  bool get isScheduled =>
+      planning.any((entry) => entry.keyword.content == 'SCHEDULED:');
+  bool get isClosed =>
+      planning.any((entry) => entry.keyword.content == 'CLOSED:');
 
-  List<DateTime> get scheduledAt => planning
-      .where((entry) => entry.keyword.content == 'SCHEDULED:')
-      .map((entry) {
-        final value = entry.value;
-        return switch (value) {
-          OrgSimpleTimestamp() => value.dateTime,
+  List<DateTime> get scheduledAt => activeTimestamps
+      .map(
+        (ts) => switch (ts) {
+          OrgSimpleTimestamp() => ts.dateTime,
+          OrgTimeRangeTimestamp() => ts.startDateTime,
           // TODO(aaron): Handle other kinds of timestamps, if they are valid for
           // agenda scheduling
           _ => null,
-        };
-      })
+        },
+      )
       .whereType<DateTime>()
       .toList(growable: false);
 
   bool isPending({DateTime? now}) {
-    final planning = this.planning;
-    if (planning.any((entry) => entry.keyword.content == 'CLOSED:')) {
-      return false;
-    }
+    if (isDone || isClosed) return false;
+
     now ??= DateTime.now();
-    return planning.any((entry) {
-      // TODO(aaron): Is the keyword needed, or can any active timestamp do?
-      if (entry.keyword.content != 'SCHEDULED:') return false;
-      final value = entry.value;
-      return switch (value) {
-        OrgSimpleTimestamp() => value.isActive && value.dateTime.isAfter(now!),
+    return activeTimestamps.any(
+      (ts) => switch (ts) {
+        OrgSimpleTimestamp() => ts.dateTime.isAfter(now!),
+        OrgTimeRangeTimestamp() => ts.startDateTime.isAfter(now!),
         // TODO(aaron): Handle other kinds of timestamps, if they are valid for
         // agenda scheduling
         _ => false,
-      };
-    });
+      },
+    );
   }
 
   List<OrgPlanningEntry> get planning {
     final entries = <OrgPlanningEntry>[];
-    // TODO(aaron): Are planning entries valid anywhere in the content?
-    // What about mere active timestamps?
-    content?.visit<OrgPlanningEntry>((entry) {
+    bool visitor(OrgPlanningEntry entry) {
       entries.add(entry);
       return true;
-    });
+    }
+
+    // Don't just call this.visit because we don't want to visit subsections
+    headline.visit(visitor);
+    content?.visit(visitor);
     return entries;
+  }
+
+  List<OrgTimestamp> get activeTimestamps {
+    final timestamps = <OrgTimestamp>[];
+    bool visitor(OrgTimestamp timestamp) {
+      if (timestamp.isActive) timestamps.add(timestamp);
+      return true;
+    }
+
+    // Don't just call this.visit because we don't want to visit subsections
+    headline.visit(visitor);
+    content?.visit(visitor);
+    return timestamps;
   }
 
   Map<String, Object?> toAgendaPayloadJson() => {
