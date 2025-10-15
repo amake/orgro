@@ -45,10 +45,26 @@ void main() async {
   }
 }
 
-Widget buildApp({bool isTest = false}) => Preferences(
+Widget buildApp({bool isTest = false}) => ExecutionMode(
   isTest: isTest,
-  child: RememberedFiles(child: const _MyApp()),
+  child: Preferences(
+    isTest: isTest,
+    child: RememberedFiles(child: const _MyApp()),
+  ),
 );
+
+class ExecutionMode extends InheritedWidget {
+  static ExecutionMode of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ExecutionMode>()!;
+
+  const ExecutionMode({required this.isTest, super.key, required super.child});
+
+  final bool isTest;
+
+  @override
+  bool updateShouldNotify(ExecutionMode oldWidget) =>
+      isTest != oldWidget.isTest;
+}
 
 // Not the "real" splash screen; just something to cover the blank while waiting
 // for Preferences to load

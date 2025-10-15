@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/main.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
@@ -39,7 +40,7 @@ class _BackgroundTasksState extends State<BackgroundTasks> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_inited) {
+    if (!_inited && !ExecutionMode.of(context).isTest) {
       _doInit();
       _inited = true;
     }
