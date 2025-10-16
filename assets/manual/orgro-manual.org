@@ -335,6 +335,24 @@ Orgro can “narrow” the view to a specific section in two ways:
 
 Close the narrowed view by touching the Back button in the top app bar.
 
+* Agenda
+
+Orgro will offer to remind you of upcoming Org Agenda items (any section with an
+active timestamp like <2025-10-16 Thu>) by sending you a local notification.
+Look for a banner at the top of a document containing such sections.
+
+If you allow notifications, that file will be remembered as an “agenda file” and
+Orgro will update pending notifications across all agenda files at the following
+times:
+
+- At app launch
+- Periodically while open
+- When opening or editing an agenda file
+- Periodically in the background, subject to OS background task limitations
+
+In the Settings screen you can see a list of pending notifications. You can also
+clear all notifications; when doing so all agenda files are forgotten.
+
 * Reader Mode
 
 Enable Reader Mode to reflow text, hide emphasis markers, and make meta lines
