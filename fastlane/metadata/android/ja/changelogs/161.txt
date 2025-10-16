@@ -1,2 +1,2 @@
-- ローカル変数の `org-attach-id-dir` 設定を順守
+- ローカル変数の `org-attach-id-dir` 設定を遵守
 - ARCHIVEされたセクションの挙動を改善
