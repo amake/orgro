@@ -91,5 +91,5 @@ Future<String?> serializeWithProgressUI(
     onCancel: serializer.cancel,
   );
 
-  return result;
+  return succeeded ? result : null;
 }
