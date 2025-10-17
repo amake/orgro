@@ -147,7 +147,6 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       // The same file's persistent identifier may change; re-add to overwrite
       // stale entry.
       setAgendaFile();
-      debugPrint('AMK setting notifications!');
       setNotifications();
     }
   }
