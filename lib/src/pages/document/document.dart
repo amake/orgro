@@ -699,7 +699,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     final writeFuture = _writeFuture;
     if (writeFuture != null) {
       debugPrint('waiting for autosave to finish');
-      await progressTask(context, task: writeFuture);
+      await progressTask(
+        context,
+        dialogTitle: AppLocalizations.of(context)!.savingProgressDialogTitle,
+        task: writeFuture,
+      );
       if (!_dirty.value) return;
     }
 
