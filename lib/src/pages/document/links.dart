@@ -130,7 +130,7 @@ extension LinkHandler on DocumentPageState {
       return false;
     }
 
-    final (:succeeded, result: resolved!) = await progessTask(
+    final (:succeeded, result: resolved!) = await progressTask(
       context,
       dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
       task: source.resolveRelative(fileLink.body),

@@ -332,7 +332,7 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
       : (succeeded: false, result: null);
 }
 
-Future<({bool succeeded, T? result})> progessTask<T>(
+Future<({bool succeeded, T? result})> progressTask<T>(
   BuildContext context, {
   String? dialogTitle,
   required FutureOr<T> task,

@@ -111,7 +111,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
         FloatingActionButton(
           onPressed: () => loadAndRememberFile(
             context,
-            progessTask(
+            progressTask(
               context,
               dialogTitle: AppLocalizations.of(
                 context,

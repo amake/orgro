@@ -40,7 +40,7 @@ extension CitationHandler on DocumentPageState {
       return false;
     }
 
-    final (:succeeded, result: entries!) = await progessTask(
+    final (:succeeded, result: entries!) = await progressTask(
       context,
       dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
       task: _findBibTeXEntries(bibFiles.reversed, keys, dataSource),
