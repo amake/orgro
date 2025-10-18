@@ -94,15 +94,15 @@ class _MyApp extends StatelessWidget {
       theme: orgroLightTheme,
       darkTheme: orgroDarkTheme,
       themeMode: Preferences.of(context, PrefsAspect.appearance).themeMode,
-      home: QuickActions(
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: Preferences.of(context, PrefsAspect.init).isInitialized
-              ? BackgroundTasks(child: StartPage(key: startKey))
-              : const _Splash(),
-          transitionBuilder: (child, animation) =>
-              FadeTransition(opacity: animation, child: child),
-        ),
+      home: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: Preferences.of(context, PrefsAspect.init).isInitialized
+            ? QuickActions(
+                child: BackgroundTasks(child: StartPage(key: startKey)),
+              )
+            : const _Splash(),
+        transitionBuilder: (child, animation) =>
+            FadeTransition(opacity: animation, child: child),
       ),
       onGenerateRoute: onGenerateRoute,
     );
