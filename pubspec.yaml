@@ -1,6 +1,6 @@
 name: orgro
 description: An Org Mode file viewer
-version: 1.65.1+192
+version: 1.65.2+193
 homepage: https://orgro.org
 
 publish_to: none
