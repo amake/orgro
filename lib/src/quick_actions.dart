@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/remembered_files.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/util.dart';
@@ -37,9 +38,13 @@ class _QuickActionsState extends State<QuickActions> {
   void initState() {
     super.initState();
     _quickActions = qa.QuickActions();
-    _quickActions.initialize((shortcutType) {
-      _handleQuickAction(QuickAction.values.byName(shortcutType));
-    });
+    _quickActions
+        .initialize((shortcutType) {
+          _handleQuickAction(QuickAction.values.byName(shortcutType));
+        })
+        .onError((e, s) {
+          logError(e, s);
+        });
   }
 
   Future<void> _handleQuickAction(QuickAction action) async {
