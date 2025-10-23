@@ -96,7 +96,7 @@ extension LinkHandler on DocumentPageState {
     );
 
     if (!succeeded) {
-      cancelFindFileForId(requestId: requestId);
+      await cancelFindFileForId(requestId: requestId);
       return false;
     }
 
