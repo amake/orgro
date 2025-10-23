@@ -515,5 +515,15 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String errorSectionNotFound(String section) {
+    return '「$section」が見つかりませんでした';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return '未対応の検索オプション: $option';
+  }
+
+  @override
   String get editInsertedHeadline => '[編集によって挿入]';
 }

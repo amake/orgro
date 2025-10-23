@@ -988,6 +988,18 @@ abstract class AppLocalizations {
   /// **'File with ID “{id}” not found'**
   String errorExternalIdNotFound(String id);
 
+  /// No description provided for @errorSectionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Section not found: {section}'**
+  String errorSectionNotFound(String section);
+
+  /// No description provided for @errorUnsupportedSearchOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported search option: {option}'**
+  String errorUnsupportedSearchOption(String option);
+
   /// No description provided for @editInsertedHeadline.
   ///
   /// In en, this message translates to:

@@ -189,6 +189,8 @@
   "errorDecryptionFailed": "復号が失敗しました",
   "errorLinkNotHandled": "リンク「{link}」を開けませんでした",
   "errorExternalIdNotFound": "ID「{id}」のファイルが見つかりませんでした",
+  "errorSectionNotFound": "「{section}」が見つかりませんでした",
+  "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
 
   "editInsertedHeadline": "[編集によって挿入]"
 }

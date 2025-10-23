@@ -26,17 +26,10 @@ extension LinkHandler on DocumentPageState {
     OrgFileLink? fileLink = _tryParseFileLink(doc, link);
     if (fileLink != null) return await _openFileLink(link, fileLink);
 
-    if (isOrgIdUrl(link.location)) {
-      return await _openExternalIdLink(link.location);
-    }
-
     if (looksLikeImagePath(link.location)) {
       await showInteractive(context, link.location, RemoteImage(link));
       return true;
     }
-
-    final handled = await _openLocalFallbackTargets(doc, link.location);
-    if (handled) return true;
 
     // Handle as a general URL
     try {
@@ -68,15 +61,15 @@ extension LinkHandler on DocumentPageState {
     }
   }
 
-  Future<bool> _openExternalIdLink(String url) async {
-    assert(isOrgIdUrl(url));
+  Future<bool> _openExternalIdLink(OrgFileLink fileLink) async {
+    assert(fileLink.scheme == 'id:');
 
     final dataSource = DocumentProvider.of(context).dataSource;
     if (dataSource is! NativeDataSource) {
       debugPrint('Unsupported data source: ${dataSource.runtimeType}');
       showErrorSnackBar(
         context,
-        AppLocalizations.of(context)!.errorLinkNotHandled(url),
+        AppLocalizations.of(context)!.errorLinkNotHandled(fileLink.toString()),
       );
       return false;
     }
@@ -86,7 +79,7 @@ extension LinkHandler on DocumentPageState {
       return false;
     }
 
-    final targetId = parseOrgIdUrl(url);
+    final targetId = fileLink.body;
     final requestId = Object().hashCode.toString();
 
     final (:succeeded, result: foundFile) = await cancelableProgressTask(
@@ -116,12 +109,18 @@ extension LinkHandler on DocumentPageState {
       );
       return false;
     } else {
-      await loadDocument(context, foundFile, target: url);
+      await loadDocument(context, foundFile, target: fileLink.toString());
       return true;
     }
   }
 
   Future<bool> _openFileLink(OrgLink link, OrgFileLink fileLink) async {
+    if (fileLink.scheme == 'id:') {
+      // An internal ID link within the current document would have been handled
+      // within org_flutter, so it must be external.
+      return await _openExternalIdLink(fileLink);
+    }
+
     if (!fileLink.isRelative) return false;
 
     final source = DocumentProvider.of(context).dataSource;
@@ -162,13 +161,6 @@ extension LinkHandler on DocumentPageState {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
     }
-    return false;
-  }
-
-  Future<bool> _openLocalFallbackTargets(OrgTree doc, String target) async {
-    final locator = OrgLocator.of(context)!;
-    if (await locator.jumpToLinkTarget(target)) return true;
-    if (await locator.jumpToName(target)) return true;
     return false;
   }
 

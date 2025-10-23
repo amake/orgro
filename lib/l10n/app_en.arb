@@ -324,6 +324,22 @@
       }
     }
   },
+  "errorSectionNotFound": "Section not found: {section}",
+  "@errorSectionNotFound": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "errorUnsupportedSearchOption": "Unsupported search option: {option}",
+  "@errorUnsupportedSearchOption": {
+    "placeholders": {
+      "option": {
+        "type": "String"
+      }
+    }
+  },
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

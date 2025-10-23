@@ -47,6 +47,7 @@ Future<OrgTree?> narrow(
   BuildContext context,
   DataSource dataSource,
   OrgTree section,
+  String? target,
   int layer,
 ) async {
   final viewSettings = ViewSettings.of(context);
@@ -59,6 +60,7 @@ Future<OrgTree?> narrow(
     arguments: NarrowRouteArgs(
       dataSource: dataSource,
       section: section,
+      target: target,
       layer: layer,
       viewSettings: viewSettings,
       orgController: orgController,

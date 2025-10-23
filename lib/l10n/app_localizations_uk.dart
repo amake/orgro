@@ -536,5 +536,15 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }

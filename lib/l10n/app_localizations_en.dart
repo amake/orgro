@@ -536,6 +536,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }
 
@@ -1071,6 +1081,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }
 
@@ -1603,6 +1623,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String errorExternalIdNotFound(String id) {
     return 'File with ID “$id” not found';
+  }
+
+  @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
   }
 
   @override

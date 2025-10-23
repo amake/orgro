@@ -12,6 +12,7 @@ class NarrowRouteArgs {
   const NarrowRouteArgs({
     required this.dataSource,
     required this.section,
+    required this.target,
     required this.layer,
     required this.viewSettings,
     required this.orgController,
@@ -21,6 +22,7 @@ class NarrowRouteArgs {
 
   final DataSource dataSource;
   final OrgTree section;
+  final String? target;
   final int layer;
   final InheritedViewSettings viewSettings;
   final OrgControllerData orgController;
@@ -81,6 +83,7 @@ class _NarrowRouteTop extends StatelessWidget {
                     )!.pageTitleNarrow(dataSource.name),
                     initialQuery: viewSettings.queryString,
                     initialFilter: viewSettings.filterData,
+                    initialTarget: args.target,
                     root: false,
                   ),
                 ),

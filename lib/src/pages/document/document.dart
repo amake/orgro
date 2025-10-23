@@ -120,7 +120,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       (value) => setState(() => canResolveRelativeLinks = value),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      openNarrowTarget(widget.initialTarget);
+      handleInitialTarget(widget.initialTarget);
       ensureOpenOnNarrow();
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
@@ -165,7 +165,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final target = bucket!.read<String>(kRestoreNarrowTargetKey);
         if (widget.initialTarget == null) {
-          openNarrowTarget(target);
+          handleInitialTarget(target);
         }
         if (widget.initialMode == null && target == null) {
           restoreMode();
