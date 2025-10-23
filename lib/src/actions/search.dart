@@ -204,7 +204,9 @@ class SearchField extends StatelessWidget {
             child: IconTheme.merge(
               data: iconTheme,
               child: IconButton(
-                icon: const Icon(Icons.clear),
+                // Icons.clear looks too much like Icons.close so we substitute
+                // Icons.cancel, which is the same but the X is in a circle.
+                icon: const Icon(Icons.cancel),
                 onPressed: onClear,
               ),
             ),
