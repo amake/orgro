@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/document_provider.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
@@ -79,7 +80,7 @@ extension NarrowHandler on DocumentPageState {
       return;
     }
     // Last resort: handle as search
-    searchDelegate.query = target;
+    searchDelegate.query = SearchQuery(target, QueryType.plain);
     searchDelegate.start(context);
   }
 

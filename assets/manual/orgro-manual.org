@@ -386,6 +386,10 @@ will be expanded, while sections without hits will be collapsed. Hits are
 highlighted. Navigate hits with the up and down buttons in the lower right of
 the screen.
 
+Touch the =Aa= button to toggle to regular expressions search mode, or the =.*=
+button to toggle back to plain text mode. Regular expressions are not
+Emacs-style, but rather follow [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet][JavaScript syntax and semantics]].
+
 * Sparse trees
 
 Touch the floating search button in the lower right of the screen. An input bar

@@ -6,7 +6,6 @@ import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/routes.dart';
-import 'package:orgro/src/util.dart';
 
 class NarrowRouteArgs {
   const NarrowRouteArgs({
@@ -72,7 +71,7 @@ class _NarrowRouteTop extends StatelessWidget {
                 settings: viewSettings.readerMode
                     ? OrgSettings.hideMarkup
                     : const OrgSettings(),
-                searchQuery: viewSettings.queryString?.asRegex(),
+                searchQuery: viewSettings.searchQuery.asPattern(),
                 sparseQuery: viewSettings.filterData.asSparseQuery(),
                 restorationId: 'org_narrow_$layer:${dataSource.id}',
                 child: OrgLocator(
@@ -81,7 +80,7 @@ class _NarrowRouteTop extends StatelessWidget {
                     title: AppLocalizations.of(
                       context,
                     )!.pageTitleNarrow(dataSource.name),
-                    initialQuery: viewSettings.queryString,
+                    initialQuery: viewSettings.searchQuery,
                     initialFilter: viewSettings.filterData,
                     initialTarget: args.target,
                     root: false,

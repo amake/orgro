@@ -7,6 +7,7 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -28,7 +29,8 @@ enum AgendaNotificationsPolicy { deny, ask }
 
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
-const String? kDefaultQueryString = null;
+const kDefaultQueryString = '';
+const kDefaultQueryType = QueryType.plain;
 const kDefaultFilterKeywords = <String>[];
 const kDefaultFilterTags = <String>[];
 const kDefaultFilterPriorities = <String>[];

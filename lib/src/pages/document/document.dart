@@ -54,7 +54,7 @@ const _kDefaultInitialMode = InitialMode.view;
 
 const kRestoreNarrowTargetKey = 'restore_narrow_target';
 const kRestoreModeKey = 'restore_mode';
-const kRestoreSearchQueryKey = 'restore_search_query';
+const kRestoreSearchQueryKey = 'restore_search_query_2';
 const kRestoreSearchFilterKey = 'restore_search_filter';
 const kRestoreDirtyDocumentKey = 'restore_dirty_document';
 
@@ -73,7 +73,7 @@ class DocumentPage extends StatefulWidget {
   final int layer;
   final String title;
   final String? initialTarget;
-  final String? initialQuery;
+  final SearchQuery? initialQuery;
   final InitialMode? initialMode;
   final FilterData? initialFilter;
   final bool root;
@@ -107,7 +107,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     super.initState();
     searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
-        if (query.isEmpty || query.length > 3) {
+        if (query.isEmpty || query.queryString.length > 3) {
           _doQuery(query);
         }
       },
@@ -200,13 +200,13 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     ];
   }
 
-  void _doQuery(String query) {
+  void _doQuery(SearchQuery query) {
     if (query.isEmpty) {
-      bucket!.remove<String>(kRestoreSearchQueryKey);
+      bucket!.remove<void>(kRestoreSearchQueryKey);
     } else {
-      bucket!.write(kRestoreSearchQueryKey, query);
+      bucket!.write(kRestoreSearchQueryKey, query.toJson());
     }
-    _viewSettings.queryString = query;
+    _viewSettings.searchQuery = query;
   }
 
   void _doSearchFilter(FilterData filterData) {

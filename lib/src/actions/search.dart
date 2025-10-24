@@ -11,21 +11,27 @@ class MySearchDelegate {
     required this.onQueryChanged,
     required this.onQuerySubmitted,
     required this.onFilterChanged,
-    String? initialQuery,
+    SearchQuery? initialQuery,
     FilterData? initialFilter,
-  }) : _searchController = TextEditingController(text: initialQuery),
+  }) : _searchController = TextEditingController(
+         text: initialQuery?.queryString,
+       ),
        _selectedFilter = ValueNotifier(initialFilter ?? FilterData.defaults()) {
     _searchController.addListener(
       debounce(
-        () => onQueryChanged(_searchController.text),
+        () => onQueryChanged(
+          SearchQuery(_searchController.text, _queryType.value),
+        ),
         const Duration(milliseconds: 500),
       ),
     );
     _selectedFilter.addListener(() => onFilterChanged(_selectedFilter.value));
+    _queryType.value = initialQuery?.type ?? QueryType.plain;
+    _queryType.addListener(() => onQuerySubmitted(query));
   }
 
-  final void Function(String) onQueryChanged;
-  final void Function(String) onQuerySubmitted;
+  final void Function(SearchQuery) onQueryChanged;
+  final void Function(SearchQuery) onQuerySubmitted;
   final void Function(FilterData) onFilterChanged;
   List<String> keywords = [];
   List<String> tags = [];
@@ -33,13 +39,18 @@ class MySearchDelegate {
   List<OrgTodoStates> todoSettings = [];
   final ValueNotifier<FilterData> _selectedFilter;
   final ValueNotifier<bool> searchMode = ValueNotifier(false);
+  final ValueNotifier<QueryType> _queryType = ValueNotifier(QueryType.plain);
   final TextEditingController _searchController;
   final FocusNode _searchFocusNode = FocusNode();
   final _searchResultsNavigationKey =
       GlobalKey<_SearchResultsNavigationState>();
 
-  set query(String value) {
-    _searchController.text = value;
+  SearchQuery get query =>
+      SearchQuery(_searchController.text, _queryType.value);
+
+  set query(SearchQuery value) {
+    _searchController.text = value.queryString;
+    _queryType.value = value.type;
     // Apply immediately because we debounce in the listener, and short queries
     // are swallowed, etc.
     onQuerySubmitted(value);
@@ -52,8 +63,10 @@ class MySearchDelegate {
     filterData: _selectedFilter,
     focusNode: _searchFocusNode,
     todoSettings: todoSettings,
+    queryType: _queryType,
     onClear: _clearSearchQuery,
-    onSubmitted: onQuerySubmitted,
+    onSubmitted: (value) =>
+        onQuerySubmitted(SearchQuery(value, _queryType.value)),
   );
 
   Widget buildBottomSheet(BuildContext context) {
@@ -93,15 +106,13 @@ class MySearchDelegate {
   void _clearSearchQuery() {
     _searchController.clear();
     // Apply immediately because we debounce in the listener
-    onQuerySubmitted(_searchController.text);
+    onQuerySubmitted(SearchQuery('', _queryType.value));
     // It's somehow surprising to clear the filter here as well, so don't
   }
 
   bool get hasQuery =>
       _searchController.value.text.isNotEmpty ||
       _selectedFilter.value.isNotEmpty;
-
-  String get queryString => _searchController.value.text;
 
   void navigateSearchHits({required bool forward}) {
     // TODO(aaron): I don't like having to use a global key to do this. It seems
@@ -120,6 +131,7 @@ class SearchField extends StatelessWidget {
     required this.filterData,
     required this.focusNode,
     required this.todoSettings,
+    required this.queryType,
     this.onClear,
     this.onSubmitted,
     super.key,
@@ -128,8 +140,23 @@ class SearchField extends StatelessWidget {
   final FocusNode focusNode;
   final List<OrgTodoStates> todoSettings;
   final ValueNotifier<FilterData> filterData;
+  final ValueNotifier<QueryType> queryType;
   final VoidCallback? onClear;
   final void Function(String)? onSubmitted;
+
+  bool _isError(String text) {
+    switch (queryType.value) {
+      case QueryType.regex:
+        try {
+          RegExp(text);
+          return false;
+        } catch (e) {
+          return true;
+        }
+      default:
+        return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,30 +198,56 @@ class SearchField extends StatelessWidget {
                                     IconTheme.of(context).size!,
                               )
                             : constraints,
-                        child: TextField(
-                          autofocus: true,
-                          focusNode: focusNode,
-                          style: style,
-                          controller: _controller,
-                          textInputAction: TextInputAction.search,
-                          cursorColor: theme.colorScheme.secondary,
-                          onSubmitted: onSubmitted,
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(
-                              context,
-                            )!.hintTextSearch,
-                            border: InputBorder.none,
-                            prefixIcon: IconTheme.merge(
-                              data: iconTheme,
-                              child: const Icon(Icons.search),
-                            ),
-                          ),
+                        child: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _controller,
+                          builder: (context, value, child) {
+                            final isError = _isError(value.text);
+                            return TextField(
+                              autofocus: true,
+                              focusNode: focusNode,
+                              style: style,
+                              controller: _controller,
+                              textInputAction: TextInputAction.search,
+                              cursorColor: theme.colorScheme.secondary,
+                              onSubmitted: onSubmitted,
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(
+                                  context,
+                                )!.hintTextSearch,
+                                border: InputBorder.none,
+                                prefixIcon: IconTheme.merge(
+                                  data: isError
+                                      ? IconThemeData(
+                                          color: theme.colorScheme.error,
+                                        )
+                                      : iconTheme,
+                                  child: isError
+                                      ? const Icon(Icons.error)
+                                      : const Icon(Icons.search),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+            ),
+          ),
+          ValueListenableBuilder<QueryType>(
+            valueListenable: queryType,
+            builder: (context, value, child) => TextButton(
+              onPressed: () => queryType.value = switch (value) {
+                QueryType.plain => QueryType.regex,
+                QueryType.regex => QueryType.plain,
+              },
+              style: TextButton.styleFrom(foregroundColor: color),
+              child: Text(switch (value) {
+                QueryType.plain => 'Aa',
+                QueryType.regex => '.*',
+              }),
             ),
           ),
           ValueListenableBuilder<TextEditingValue>(
@@ -354,4 +407,36 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
   Color? _backgroundColor(BuildContext context) => _enabled
       ? null // default
       : Theme.of(context).disabledColor;
+}
+
+extension PatternUtils on Pattern? {
+  String? queryText() {
+    final self = this;
+    return switch (self) {
+      null => null,
+      String() => self,
+      RegExp() => self.pattern,
+      _ => throw ArgumentError(),
+    };
+  }
+
+  bool get isEmpty {
+    final self = this;
+    return switch (self) {
+      String() => self.isEmpty,
+      RegExp() => self.pattern.isEmpty,
+      null => true,
+      _ => throw ArgumentError(),
+    };
+  }
+
+  int get length {
+    final self = this;
+    return switch (self) {
+      String() => self.length,
+      RegExp() => self.pattern.length,
+      null => 0,
+      _ => throw ArgumentError(),
+    };
+  }
 }

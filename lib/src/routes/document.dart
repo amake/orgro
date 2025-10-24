@@ -7,7 +7,6 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/routes.dart';
-import 'package:orgro/src/util.dart';
 
 class DocumentRouteArgs {
   const DocumentRouteArgs({required this.dataSource, this.target, this.mode});
@@ -119,7 +118,7 @@ class _DocumentPageWrapper extends StatelessWidget {
                   ? OrgSettings.hideMarkup
                   : const OrgSettings(),
               interpretEmbeddedSettings: true,
-              searchQuery: viewSettings.queryString?.asRegex(),
+              searchQuery: viewSettings.searchQuery.asPattern(),
               sparseQuery: viewSettings.filterData.asSparseQuery(),
               // errorHandler is invoked during build, so we need to schedule the
               // snack bar for after the frame

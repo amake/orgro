@@ -21,7 +21,12 @@ extension RestorationUtils on DocumentPageState {
   }
 
   void restoreSearchState() {
-    final searchQuery = bucket!.read<String>(kRestoreSearchQueryKey);
+    final searchQueryJson = bucket!.read<Map<Object?, Object?>>(
+      kRestoreSearchQueryKey,
+    );
+    final searchQuery = searchQueryJson == null
+        ? null
+        : SearchQuery.fromJson(searchQueryJson.cast<String, dynamic>());
     if (searchQuery != null && searchQuery.isNotEmpty) {
       searchDelegate.query = searchQuery;
     }
