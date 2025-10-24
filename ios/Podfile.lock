@@ -97,13 +97,13 @@ SPEC CHECKSUMS:
   flutter_timezone: 7c838e17ffd4645d261e87037e5bebf6d38fe544
   open_file_ios: 5ff7526df64e4394b4fe207636b67a95e83078bb
   openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  quick_actions_ios: 4b07fb49d8d8f3518d7565fbb7a91014067a7d82
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
 PODFILE CHECKSUM: c5ea6be7508deb66b84e6302bf319338a7f21583
