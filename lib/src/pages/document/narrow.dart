@@ -72,16 +72,20 @@ extension NarrowHandler on DocumentPageState {
     final handled = await OrgLocator.of(context)!.jumpToSearchOption(target);
     if (handled || !mounted) return;
 
-    if (isLineNumberSearch(target) || isRegexpSearch(target)) {
+    if (isLineNumberSearch(target)) {
       showErrorSnackBar(
         context,
         AppLocalizations.of(context)!.errorUnsupportedSearchOption(target),
       );
-      return;
+    } else if (isRegexpSearch(target)) {
+      final pattern = parseRegexpSearch(target);
+      searchDelegate.query = SearchQuery(pattern, QueryType.regex);
+      searchDelegate.start(context);
+    } else {
+      // Last resort: handle as plain text search
+      searchDelegate.query = SearchQuery(target, QueryType.plain);
+      searchDelegate.start(context);
     }
-    // Last resort: handle as search
-    searchDelegate.query = SearchQuery(target, QueryType.plain);
-    searchDelegate.start(context);
   }
 
   void ensureOpenOnNarrow() {

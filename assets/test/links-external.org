@@ -2,10 +2,12 @@
 - External ID link to Foobar (in links-local.org): [[id:430FF498-F007-4474-9085-607D9AA4524E]]
   - TODO(aaron): Make this work with ~AssetDataSource~
   - With named element search: [[id:430FF498-F007-4474-9085-607D9AA4524E::foo bar]]
+  - With regex search: [[id:430FF498-F007-4474-9085-607D9AA4524E::/o.b/]]
 - External ID link to links-local.org root: [[id:032D6128-CFF9-453D-AAF5-AC916F447D5C]]
   - With section search: [[id:032D6128-CFF9-453D-AAF5-AC916F447D5C::*Foobar]]
   - With custom ID search: [[id:032D6128-CFF9-453D-AAF5-AC916F447D5C::#bizzbuzz_id]]
   - With named element search: [[id:032D6128-CFF9-453D-AAF5-AC916F447D5C::foo bar]]
+  - With regex search: [[id:032D6128-CFF9-453D-AAF5-AC916F447D5C::/zzbu/]]
 - External section link to nonexistent section in links-local.org: [[file:links-local.org::*Hogehoge]]
 - External ID link to nonexistent ID: [[id:nonexistent-id]]
   - TODO(aaron): Make this work with ~AssetDataSource~
