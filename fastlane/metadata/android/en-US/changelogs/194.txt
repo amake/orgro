@@ -1,0 +1,3 @@
+- Support searching by regex
+- Support id: links with search options
+- Bug fixes
