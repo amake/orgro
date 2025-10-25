@@ -538,10 +538,10 @@ packages:
     dependency: "direct main"
     description:
       name: openpgp
-      sha256: "8d3fcb7f5ad3ee1874524a896201dcaa7a171430d062c1bea4303374967a7e1f"
+      sha256: c7ee63baa9c3d5e10245a3b040203338a96be0429da087ef1b2a75f68fcc0b08
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.7"
+    version: "3.10.3"
   org_flutter:
     dependency: "direct main"
     description:
