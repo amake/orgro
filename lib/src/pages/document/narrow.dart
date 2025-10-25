@@ -29,7 +29,8 @@ extension NarrowHandler on DocumentPageState {
 
     try {
       final fileLink = OrgFileLink.parse(target);
-      assert(fileLink.scheme == 'id:');
+      if (fileLink.scheme != 'id:') throw Exception('Not an id: link');
+
       final section = OrgController.of(context).sectionWithId(fileLink.body);
       if (section != null) {
         // We may have an id: link with search option e.g. in the case of
