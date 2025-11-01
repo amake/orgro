@@ -408,35 +408,3 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
       ? null // default
       : Theme.of(context).disabledColor;
 }
-
-extension PatternUtils on Pattern? {
-  String? queryText() {
-    final self = this;
-    return switch (self) {
-      null => null,
-      String() => self,
-      RegExp() => self.pattern,
-      _ => throw ArgumentError(),
-    };
-  }
-
-  bool get isEmpty {
-    final self = this;
-    return switch (self) {
-      String() => self.isEmpty,
-      RegExp() => self.pattern.isEmpty,
-      null => true,
-      _ => throw ArgumentError(),
-    };
-  }
-
-  int get length {
-    final self = this;
-    return switch (self) {
-      String() => self.length,
-      RegExp() => self.pattern.length,
-      null => 0,
-      _ => throw ArgumentError(),
-    };
-  }
-}
