@@ -1,0 +1,23 @@
+#+STARTUP: showeverything
+
+From https://github.com/amake/orgro/issues/175
+
+* Table Renders Correctly
+|-------+-------|
+| ~Text | -Text |
+|-------+-------|
+|   +5+ |   -10 |
+|-------+-------|
+
+* Tables Render Incorrectly
+|------+------|
+| Text | Text |
+|------+------|
+|   +5 |  -10 |
+|------+------|
+
+|-------+------|
+| +Text | Text |
+|-------+------|
+|     5 |  -10 |
+|-------+------|

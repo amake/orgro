@@ -9,6 +9,7 @@
 - [[file:layout-blocks.org][Blocks]]
 - [[file:layout-planning.org][Planning]]
 - [[file:layout-indent.org][Indent]]
+- [[file:layout-tables.org][Tables]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]
