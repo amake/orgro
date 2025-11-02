@@ -267,7 +267,14 @@ class _EditorToolbar extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.calendar_today),
-              onPressed: Actions.handler(context, const InsertDateIntent()),
+              onPressed: Actions.handler(
+                context,
+                const InsertDateIntent(active: false),
+              ),
+              onLongPress: Actions.handler(
+                context,
+                const InsertDateIntent(active: true),
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.subscript),

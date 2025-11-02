@@ -76,16 +76,17 @@ String? _tryParseUrl(String? str) {
 
 Future<TextEditingValue?> insertDate(
   TextEditingValue value,
+  bool active,
   DateTime date,
   TimeOfDay? time,
 ) async {
   if (!value.selection.isValid) return null;
   final replacement = OrgSimpleTimestamp(
-    '[',
+    active ? '<' : '[',
     date.toOrgDate(),
     time?.toOrgTime(),
     [],
-    ']',
+    active ? '>' : ']',
   ).toMarkup();
   return value
       .replaced(value.selection, replacement)

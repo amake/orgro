@@ -144,7 +144,8 @@ class InsertLinkAction extends _TextEditingAction<InsertLinkIntent> {
 }
 
 class InsertDateIntent extends Intent {
-  const InsertDateIntent();
+  const InsertDateIntent({required this.active});
+  final bool active;
 }
 
 class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
@@ -166,7 +167,7 @@ class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
         context: context,
         initialTime: TimeOfDay.now(),
       );
-      _applyEdit((value) => insertDate(value, date, time));
+      _applyEdit((value) => insertDate(value, intent.active, date, time));
     }
   }
 }

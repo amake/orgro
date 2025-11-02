@@ -149,6 +149,7 @@ void main() {
       test('Date with selection', () async {
         final result = await insertDate(
           testValue('foo |bar|'),
+          false,
           DateTime(2024, 6, 15),
           null,
         );
@@ -157,6 +158,7 @@ void main() {
       test('Date with empty selection', () async {
         final result = await insertDate(
           testValue('foo bar|'),
+          false,
           DateTime(2024, 6, 20),
           null,
         );
@@ -165,6 +167,7 @@ void main() {
       test('Date empty', () async {
         final result = await insertDate(
           testValue('|'),
+          false,
           DateTime(2024, 6, 20),
           null,
         );
@@ -173,10 +176,20 @@ void main() {
       test('Date with time', () async {
         final result = await insertDate(
           testValue('foo |bar|'),
+          false,
           DateTime(2024, 6, 15),
           TimeOfDay(hour: 14, minute: 30),
         );
         expect(result, testValue('foo [2024-06-15 Sat 14:30|]'));
+      });
+      test('Active date with time', () async {
+        final result = await insertDate(
+          testValue('foo |bar|'),
+          true,
+          DateTime(2024, 6, 15),
+          TimeOfDay(hour: 14, minute: 30),
+        );
+        expect(result, testValue('foo <2024-06-15 Sat 14:30|>'));
       });
     });
   });
