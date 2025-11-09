@@ -3,70 +3,98 @@
 
   "menuItemAppearance": "Aussehen",
   "menuItemSettings": "Einstellungen",
-  "menuItemClearCache": "Cache löschen",
+  "menuItemClearCache": "Clear cache",
   "menuItemOrgroManual": "Orgro Handbuch",
   "menuItemOrgManual": "Org Handbuch",
-  "menuItemTestFile": "Test Datei",
+  "menuItemTestFile": "Testdatei",
   "menuItemAbout": "Über",
+  "menuItemOpenUrl": "Öffne URL",
+
+  "quickActionNewDocument": "Neues Dokument",
+  "quickActionTopPin": "Öffne {name}",
 
   "appearanceModeAutomatic": "Automatisch",
   "appearanceModeLight": "Hell",
   "appearanceModeDark": "Dunkel",
 
   "settingsScreenTitle": "Einstellungen",
-  "settingsSectionDefaultText": "Schrift",
+  "settingsSectionDefaultText": "Vorgegebener Text",
+  "settingsSectionNotifications": "Benachrichtigungen",
   "settingsSectionDataManagement": "Datenverwaltung",
 
-  "settingsItemAppearance": "Farbschema",
+  "agendaNotificationsChannelName": "Agenda Benachrichtigungen",
+  "agendaNotificationsChannelDescription": "Benachrichtigungen für Org Agenda Einträge",
+  "agendaNotificationsActionView": "View",
+
+  "settingsItemLoading": "Ladet…",
+
+  "settingsItemAppearance": "Aussehen",
   "settingsItemTextScale": "Größe",
   "settingsItemFontFamily": "Schriftart",
 
+  "settingsItemInspectNotifications": "{n, plural, =0{Keine Benachrichtigungen} =1{1 offene Benachrichtigung} other{{n} offene Benachrichtigungen}}",
+  "settingsDialogNotificationsTitle": "Offene Benachrichtigungen",
+  "settingsItemClearNotifications": "Lösche alle Benachrichtigungen",
+
   "settingsActionClearCache": "Cache löschen",
-  "settingsActionResetPreferences": "Einstellungen Zurücksetzen",
+  "settingsActionResetPreferences": "Einstellungen zurücksetzen",
+  "settingsActionResetDirectoryPermissions": "Verzeichnisberechtigungen zurücksetzen",
 
+  "snackbarMessageNotificationsCleared": "Benachrichtigungen gelöscht",
   "snackbarMessageCacheCleared": "Cache gelöscht",
-  "snackbarMessagePreferencesReset": "Einstellungen Zurückgesetzt",
+  "snackbarMessagePreferencesReset": "Einstellungen zurückgesetzt",
+  "snackbarMessageDirectoryPermissionsReset": "Verzeichnisberechtigungen zurückgesetzt",
 
-  "confirmResetPreferencesDialogTitle": "Einstellungen Zurücksetzen?",
+  "confirmResetPreferencesDialogTitle": "Einstellungen löschen?",
   "confirmResetPreferencesDialogMessage": "Es werden alle Einstellungen zurückgesetzt. Dies kann nicht rückgängig gemacht werden.",
-  "confirmResetPreferencesActionReset": "Zurücksetzen",
+  "confirmResetPreferencesActionReset": "Löschen",
   "confirmResetPreferencesActionCancel": "Abbrechen",
 
-  "aboutLinkSupport": "Support · Feedback",
+  "aboutLinkSupport": "Unterstützung · Feedback",
   "aboutLinkChangelog": "Changelog",
 
-  "buttonOpenFile": "Datei öffnen",
-  "buttonCreateFile": "Datei erstellen",
-  "buttonOpenOrgroManual": "Orgro Handbuch öffnen",
-  "buttonOpenOrgManual": "Org Handbuch öffnen",
+  "buttonOpenFile": "Öffne Datei",
+  "buttonCreateFile": "Erstelle Datei",
+  "buttonOpenOrgroManual": "Öffne Orgro Handbuch",
+  "buttonOpenOrgManual": "Öffne Org Handbuch",
+  "buttonOpenUrl": "Öffne URL",
 
-  "buttonSupport": "Hilfe · Feedback",
+  "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
 
-  "sectionHeaderRecentFiles": "Zuletzt geöffnet",
+  "sectionHeaderPinnedFiles": "Angeheftete Dateien",
+  "sectionHeaderRecentFiles": "Letzte Dateien",
+  "recentFilesSortDialogTitle": "Sorte nach",
+  "sortKeyLastOpened": "Letztens geöffnet",
+  "sortKeyName": "Name",
+  "sortKeyLocation": "Ort",
+  "sortOrderAscending": "Aufsteigend",
+  "sortOrderDescending": "Absteigend",
 
   "fileSourceDocuments": "Dokumente",
   "fileSourceDownloads": "Downloads",
   "fileSourceGoogleDrive": "Google Drive",
 
   "menuItemReaderMode": "Lesemodus",
-  "menuItemFullWidth": "Volle Breite",
-  "menuItemScrollTop": "Nach Oben Scrollen",
-  "menuItemScrollBottom": "Nach Unten Scrollen",
+  "menuItemFullWidth": "Volle breite",
+  "menuItemScrollTop": "Nach oben scrollen",
+  "menuItemScrollBottom": "Nach unten scrollen",
 
   "menuItemUndo": "Rückgängig",
   "menuItemRedo": "Wiederholen",
 
-  "hintTextSearch": "Suchen...",
-  "searchHits": "{n, plural, =0{0 Treffer} =1{1 Treffer} other{{n} Treffer}}",
+  "hintTextSearch": "Suchen…",
+  "searchHits": "{n, plural, =0{0 Ergebnisse} =1{1 Ergebnis} other{{n} Ergebnisse}}",
   "searchResultSelection": "{current} / {total}",
   "customFilterChipName": "Benutzerdefiniert",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro hat nicht die Berechtigung um relative Links aufzulösen",
   "snackbarActionGrantAccess": "Zugriff erlauben",
 
-  "snackbarMessageNeedsEncryptionKey": "Konnte nicht Speichern. Verschlüsselung Passwort fehlt.",
+  "snackbarMessageNeedsEncryptionKey": "Konnte nicht Speichern. Verschlüsselungspasswort fehlt.",
   "snackbarActionEnterEncryptionKey": "Passwort eingeben",
+
+  "snackbarMessageNotificationPermissionsDenied": "Keine Berechtigung für Benachrichtigungen",
 
   "dialogTitleError": "Fehler",
   "dialogActionConfirm": "OK",
@@ -74,7 +102,7 @@
   "dialogActionHelp": "Hilfe",
 
   "pageTitleError": "Fehler",
-  "pageTitleLoading": "Laden...",
+  "pageTitleLoading": "Ladet…",
   "pageTitleNarrow": "{name} › Beschränkt",
   "pageTitleEditing": "{name} › Bearbeiten",
 
@@ -101,13 +129,19 @@
   "bannerBodyActionDecryptNotNow": "Nicht jetzt",
   "bannerBodyActionDecryptNever": "Nie",
 
+  "bannerBodyAgendaNotifications": "Willst du Benachrichtigungen für Agenda Einträge in dieser Datei bekommen?",
+  "bannerBodyActionAgendaEnable": "Ja",
+  "bannerBodyActionAgendaNotNow": "Nicht jetzt",
+  "bannerBodyActionAgendaNever": "Nie",
+
   "saveChangesDialogTitle": "Änderungen speichern?",
   "saveChangesDialogMessage": "Orgro kann deine Änderungen nicht speichern.",
   "saveActionShare": "Teilen",
-  "saveActionDiscard": "Wegwerfen",
+  "saveActionDiscard": "Verwerfen",
+  "saveActionSaveAs": "Speichern als",
 
-  "discardChangesDialogTitle": "Änderungen wegwerfen?",
-  "discardActionDiscard": "Wegwerfen",
+  "discardChangesDialogTitle": "Änderung verwerfen?",
+  "discardActionDiscard": "Verwerfen",
   "discardActionCancel": "Abbrechen",
 
   "savedMessage": "Gespeichert",
@@ -118,7 +152,8 @@
 
   "inputCustomFilterDialogTitle": "Benutzerdefinierter Filter",
   "inputCustomFilterDialogHistoryButton": "Verlauf",
-
+  "loadingProgressDialogTitle": "Laden…",
+  "preparingProgressDialogTitle": "Vorbereiten…",
   "decryptingProgressDialogTitle": "Entschlüsseln…",
   "encryptingProgressDialogTitle": "Verschlüsseln…",
   "serializingProgressDialogTitle": "Serialisieren…",
@@ -127,28 +162,33 @@
   "citationsDialogTitle": "Zitate",
 
   "createFileDialogTitle": "Neue Datei erstellen",
-  "createFileDefaultName": "unbetitelt.org",
+  "createFileDefaultName": "unbenannt.org",
 
-  "startTimePickerTitle": "Wähle Startzeit",
-  "endTimePickerTitle": "Wähle Endzeit",
+  "saveAsDialogTitle": "Speichern als",
+
+  "inputUrlDialogTitle": "URL eingeben",
+
+  "startTimePickerTitle": "Startzeit eingeben",
+  "endTimePickerTitle": "Endzeit eingeben",
 
   "snackbarMessageBibliographiesNotFound": "Keine Bibliografien gefunden",
-  "snackbarMessageCitationKeysNotFound": "Zitate nicht gefunden",
+  "snackbarMessageCitationKeysNotFound": "Zitatenschlüssel nicht gefunden",
   "snackbarMessageCitationsNotFound": "Zitate nicht gefunden",
-  "snackbarMessageSomeCitationsNotFound": "Folgende Zitate nicht gefunden: {citations}",
+  "snackbarMessageSomeCitationsNotFound": "Zitate nicht gefunden: {citations}",
 
   "errorCannotResolveRelativePath": "Kann nicht relativen Pfad zu diesem Dokument lösen",
   "errorPathResolvedToNonFile": "{path} gelöst zu einer nicht vorhandenen Datei: {resolved}",
   "errorUnknownType": "Unbekannter Typ: {type}",
   "errorUnexpectedHttpResponse": "Unerwartete HTTP-Antwort: {response}",
-  "errorOrgParser": "Parser Fehler: {result}",
-
+  "errorOrgParser": "Parserfehler: {result}",
   "errorOrgExecution": "Fehler beim Ausführen vom unteren Code: {message}\n\n{code}",
   "errorOrgTimeout": "Durchführung vom unteren Code nach {timeout}ms. unterbrochen\n\n{code}",
   "errorOrgArgument": "Ungültiges Argument: {item}",
   "errorDecryptionFailed": "Entschlüsseln fehlgeschlagen",
-  "errorLinkNotHandled": "Konnte nicht Link öffnen: “{link}”",
+  "errorLinkNotHandled": "Konnte nicht Link Öffnen: “{link}”",
   "errorExternalIdNotFound": "Datei mit ID “{id}” nicht gefunden",
+  "errorSectionNotFound": "Teil nicht gefunden: {section}",
+  "errorUnsupportedSearchOption": "Nicht unterstützte Suchoption: {option}",
 
-  "editInsertedHeadline": "[Von Bearbeitung eingefügt]"
+  "editInsertedHeadline": "[Eingefügt durch Bearbeitung]"
 }
