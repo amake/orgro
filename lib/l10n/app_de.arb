@@ -12,13 +12,6 @@
 
   "quickActionNewDocument": "Neues Dokument",
   "quickActionTopPin": "Öffne {name}",
-  "@quickActionTopPin": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
 
   "appearanceModeAutomatic": "Automatisch",
   "appearanceModeLight": "Hell",
@@ -40,14 +33,6 @@
   "settingsItemFontFamily": "Schriftart",
 
   "settingsItemInspectNotifications": "{n, plural, =0{Keine Benachrichtigungen} =1{1 offene Benachrichtigung} other{{n} offene Benachrichtigungen}}",
-  "@settingsItemInspectNotifications": {
-    "placeholders": {
-      "n": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "settingsDialogNotificationsTitle": "Offene Benachrichtigungen",
   "settingsItemClearNotifications": "Lösche alle Benachrichtigungen",
 
@@ -76,13 +61,6 @@
 
   "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
-  "@buttonVersion": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
 
   "sectionHeaderPinnedFiles": "Angeheftete Dateien",
   "sectionHeaderRecentFiles": "Letzte Dateien",
@@ -107,27 +85,7 @@
 
   "hintTextSearch": "Suchen…",
   "searchHits": "{n, plural, =0{0 Ergebnisse} =1{1 Ergebnis} other{{n} Ergebnisse}}",
-  "@searchHits": {
-    "placeholders": {
-      "n": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "searchResultSelection": "{current} / {total}",
-  "@searchResultSelection": {
-    "placeholders": {
-      "current": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "total": {
-        "type": "num",
-        "format": "decimalPattern"
-      }
-    }
-  },
   "customFilterChipName": "Benutzerdefiniert",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro hat nicht die Berechtigung um relative Links aufzulösen",
@@ -146,21 +104,7 @@
   "pageTitleError": "Fehler",
   "pageTitleLoading": "Ladet…",
   "pageTitleNarrow": "{name} › Beschränkt",
-  "@pageTitleNarrow": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "pageTitleEditing": "{name} › Bearbeiten",
-  "@pageTitleEditing": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
 
   "sectionActionNarrow": "Beschränkt",
   "sectionActionCycleTodo": "TODO wechseln",
@@ -231,114 +175,20 @@
   "snackbarMessageCitationKeysNotFound": "Zitatenschlüssel nicht gefunden",
   "snackbarMessageCitationsNotFound": "Zitate nicht gefunden",
   "snackbarMessageSomeCitationsNotFound": "Zitate nicht gefunden: {citations}",
-  "@snackbarMessageSomeCitationsNotFound": {
-    "placeholders": {
-      "citations": {
-        "type": "String"
-      }
-    }
-  },
 
   "errorCannotResolveRelativePath": "Kann nicht relativen Pfad zu diesem Dokument lösen",
   "errorPathResolvedToNonFile": "{path} gelöst zu einer nicht vorhandenen Datei: {resolved}",
-  "@errorPathResolvedToNonFile": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      },
-      "resolved": {
-        "type": "String"
-      }
-    }
-  },
   "errorUnknownType": "Unbekannter Typ: {type}",
-  "@errorUnknownType": {
-    "placeholders": {
-      "type": {
-        "type": "Object"
-      }
-    }
-  },
   "errorUnexpectedHttpResponse": "Unerwartete HTTP-Antwort: {response}",
-  "@errorUnexpectedHttpResponse": {
-    "placeholders": {
-      "response": {
-        "type": "Object"
-      }
-    }
-  },
   "errorOrgParser": "Parserfehler: {result}",
-  "@errorOrgParser": {
-    "placeholders": {
-      "result": {
-        "type": "Object"
-      }
-    }
-  },
   "errorOrgExecution": "Fehler beim Ausführen vom unteren Code: {message}\n\n{code}",
-  "@errorOrgExecution": {
-    "placeholders": {
-      "message": {
-        "type": "Object"
-      },
-      "code": {
-        "type": "String"
-      }
-    }
-  },
   "errorOrgTimeout": "Durchführung vom unteren Code nach {timeout}ms. unterbrochen\n\n{code}",
-  "@errorOrgTimeout": {
-    "placeholders": {
-      "timeout": {
-        "type": "num",
-        "format": "decimalPattern"
-      },
-      "code": {
-        "type": "String"
-      }
-    }
-  },
   "errorOrgArgument": "Ungültiges Argument: {item}",
-  "@errorOrgArgument": {
-    "placeholders": {
-      "item": {
-        "type": "Object"
-      }
-    }
-  },
   "errorDecryptionFailed": "Entschlüsseln fehlgeschlagen",
   "errorLinkNotHandled": "Konnte nicht Link Öffnen: “{link}”",
-  "@errorLinkNotHandled": {
-    "placeholders": {
-      "link": {
-        "type": "Object"
-      }
-    }
-  },
   "errorExternalIdNotFound": "Datei mit ID “{id}” nicht gefunden",
-  "@errorExternalIdNotFound": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
   "errorSectionNotFound": "Teil nicht gefunden: {section}",
-  "@errorSectionNotFound": {
-    "placeholders": {
-      "section": {
-        "type": "String"
-      }
-    }
-  },
   "errorUnsupportedSearchOption": "Nicht unterstützte Suchoption: {option}",
-  "@errorUnsupportedSearchOption": {
-    "placeholders": {
-      "option": {
-        "type": "String"
-      }
-    }
-  },
 
   "editInsertedHeadline": "[Eingefügt durch Bearbeitung]"
 }
