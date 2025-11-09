@@ -1,1 +1,0 @@
-- Allow extending Org entities via local variables; see manual for details

@@ -1,1 +1,0 @@
-- Org document text can now be selected and copied

@@ -1,2 +1,0 @@
-- Text is now only reflowed in Reader Mode
-- SVG images are now supported

@@ -1,5 +1,0 @@
-- Slide sections to cycle TODO
-- Long touch on headline once again narrows immediately
-- Support numerous #+STARTUP keyword options; see manual for details
-- attachment: links are now supported
-- Bug fixes

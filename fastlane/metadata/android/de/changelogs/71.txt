@@ -1,2 +1,0 @@
-- Support “greater” blocks with arbitrary names such as #+begin_foo
-- Fix handling of inline markup in headline titles

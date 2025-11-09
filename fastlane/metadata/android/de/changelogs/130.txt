@@ -1,1 +1,0 @@
-- Open media links and attachments in external apps

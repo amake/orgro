@@ -1,1 +1,0 @@
-- Support symmetric decryption/encryption of Org Crypt sections

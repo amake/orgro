@@ -1,3 +1,0 @@
-- Restore various state after being terminated by the OS
-- Improve resolution of Org Cite bibliographies
-- Bug fixes

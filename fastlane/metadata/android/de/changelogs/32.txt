@@ -1,2 +1,0 @@
-- Improved Reader Mode
-- Bug fixes

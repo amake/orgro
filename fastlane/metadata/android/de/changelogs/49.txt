@@ -1,3 +1,0 @@
-- Minor update to appearance
-- Ugly fonts no longer offered
-- READ_EXTERNAL_STORAGE permission no longer claimed

@@ -1,1 +1,0 @@
-- Property lines and planning/clock lines no longer wrap
