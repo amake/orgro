@@ -64,7 +64,6 @@ jA0ECQMI05i+dd7lsRry0joBcGZQ4m+N9M/Z3I2Xw7SSn2uPMRpWbH9UIRkzPTXU
       expect(analysis.hasEncryptedContent, isTrue);
       expect(analysis.needsEncryption, isTrue);
     });
-    // TODO(aaron): test keywords, tags, priorities
     test('Keywords', () {
       final doc = OrgDocument.parse('''
 * TODO foo

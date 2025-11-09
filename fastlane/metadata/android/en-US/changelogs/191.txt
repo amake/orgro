@@ -1,0 +1,4 @@
+- Get notifications about Org Agenda items
+- Honor `org-hidden-keywords` set in local variables
+- Add control to reset directory permissions
+- Bug fixes

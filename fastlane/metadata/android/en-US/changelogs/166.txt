@@ -1,0 +1,2 @@
+- The recent files list can now be sorted
+- Aligning inline images is now supported

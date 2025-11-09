@@ -1,0 +1,32 @@
+This is an org mode file content I have in my disk. Below is a simple emacs-lisp
+code block, with specific -n -r and -l switches:
+
+#+name: codeblock-emacs-lisp-01
+#+caption: Label format that blends in as emacs-lisp comments
+#+begin_src emacs-lisp -n -r -l ";;ref:%s"
+(save-excursion                ;;ref:this-line
+  (goto-char (point-min))      ;;ref:and-that-line
+#+end_src
+
+I can now reference [[(this-line)]] and then [[(and-that-line)]]. Hitting =C-c C-o= on
+these links jumps the point immediately to that specific line in the codeblock.
+
+The next is the same, but uses the default coderef format.
+
+#+name: codeblock-emacs-lisp-02
+#+caption: Label format that blends in as emacs-lisp comments
+#+begin_src emacs-lisp -n -r
+(save-excursion                ;;(ref:foo-line)
+  (goto-char (point-min))      ;;(ref:bar-line)
+#+end_src
+
+I can now reference [[(foo-line)]] and then [[(bar-line)]]. Hitting =C-c C-o= on these
+links jumps the point immediately to that specific line in the codeblock.
+
+#+name: codeblock-js-01
+#+begin_src python -n -r
+  fahrenheit = (celsius * 1.8) + 32 # (ref:baz-line)
+#+end_src
+
+I can now reference [[(baz-line)]]. Hitting =C-c C-o= on this link jumps the point
+immediately to that specific line in the codeblock.

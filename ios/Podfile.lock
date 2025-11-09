@@ -6,7 +6,11 @@ PODS:
     - Flutter
     - FlutterMacOS
     - UniversalDetector2 (= 2.0.1)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_tex_js_ios (0.0.1):
+    - Flutter
+  - flutter_timezone (0.0.1):
     - Flutter
   - open_file_ios (0.0.1):
     - Flutter
@@ -15,6 +19,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - quick_actions_ios (0.0.1):
+    - Flutter
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -26,19 +32,25 @@ PODS:
   - UniversalDetector2 (2.0.1)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - workmanager_apple (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
   - flutter_charset_detector_darwin (from `.symlinks/plugins/flutter_charset_detector_darwin/darwin`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_tex_js_ios (from `.symlinks/plugins/flutter_tex_js_ios/ios`)
+  - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
   - openpgp (from `.symlinks/plugins/openpgp/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 SPEC REPOS:
   trunk:
@@ -51,14 +63,20 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_charset_detector_darwin:
     :path: ".symlinks/plugins/flutter_charset_detector_darwin/darwin"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_tex_js_ios:
     :path: ".symlinks/plugins/flutter_tex_js_ios/ios"
+  flutter_timezone:
+    :path: ".symlinks/plugins/flutter_timezone/ios"
   open_file_ios:
     :path: ".symlinks/plugins/open_file_ios/ios"
   openpgp:
     :path: ".symlinks/plugins/openpgp/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  quick_actions_ios:
+    :path: ".symlinks/plugins/quick_actions_ios/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
@@ -67,21 +85,27 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  workmanager_apple:
+    :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
   file_picker_writable: 3a458aa8cdb7c1378cb3e8ec0543ead87a77d0be
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3
+  flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_tex_js_ios: 5d44702447dc77d1ee6e234375d346e2b8c55924
+  flutter_timezone: 7c838e17ffd4645d261e87037e5bebf6d38fe544
   open_file_ios: 5ff7526df64e4394b4fe207636b67a95e83078bb
-  openpgp: 6f25f5a61dfe355e48713f96c9148dbe8ac96a1e
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
+  workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
-PODFILE CHECKSUM: 12493ef27cb9170072186c3bbc894b59f1f9ea5d
+PODFILE CHECKSUM: c5ea6be7508deb66b84e6302bf319338a7f21583
 
 COCOAPODS: 1.16.2

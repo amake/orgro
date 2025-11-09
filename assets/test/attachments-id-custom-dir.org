@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       C259CE94-D4C8-4C4F-9C9E-9ABE446E7DA3
+:END:
+
+[[attachment:orgro-icon.png]]
+
+
+# Local Variables:
+# org-attach-id-dir: "../manual/data"
+# End:

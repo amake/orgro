@@ -24,10 +24,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemOrgroManual => 'Orgroマニュアル';
 
   @override
+  String get menuItemOrgManual => 'Orgマニュアル';
+
+  @override
   String get menuItemTestFile => 'テストファイル';
 
   @override
   String get menuItemAbout => 'アプリについて';
+
+  @override
+  String get menuItemOpenUrl => 'URLを開く';
+
+  @override
+  String get quickActionNewDocument => '新規ドキュメント';
+
+  @override
+  String quickActionTopPin(String name) {
+    return '$nameを開く';
+  }
 
   @override
   String get appearanceModeAutomatic => '自動';
@@ -45,7 +59,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDefaultText => 'デフォルトの書式';
 
   @override
+  String get settingsSectionNotifications => '通知';
+
+  @override
   String get settingsSectionDataManagement => 'データ管理';
+
+  @override
+  String get agendaNotificationsChannelName => 'アジェンダ通知';
+
+  @override
+  String get agendaNotificationsChannelDescription => 'Org Agenda項目の通知';
+
+  @override
+  String get agendaNotificationsActionView => '表示';
+
+  @override
+  String get settingsItemLoading => 'ロード中...';
 
   @override
   String get settingsItemAppearance => '外観';
@@ -57,16 +86,48 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemFontFamily => '書体';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString 件の通知',
+      zero: '通知なし',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => '設定済みの通知';
+
+  @override
+  String get settingsItemClearNotifications => 'すべての通知を削除';
+
+  @override
   String get settingsActionClearCache => 'キャッシュを削除';
 
   @override
   String get settingsActionResetPreferences => '設定を初期化';
 
   @override
+  String get settingsActionResetDirectoryPermissions => 'ディレクトリのアクセス権限をリセット';
+
+  @override
+  String get snackbarMessageNotificationsCleared => '通知を削除しました';
+
+  @override
   String get snackbarMessageCacheCleared => 'キャッシュを削除しました';
 
   @override
   String get snackbarMessagePreferencesReset => '設定を初期化しました';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'ディレクトリのアクセス権限をリセットしました';
 
   @override
   String get confirmResetPreferencesDialogTitle => '設定を初期化しますか?';
@@ -100,6 +161,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get buttonOpenOrgManual => 'Orgマニュアルを開く';
 
   @override
+  String get buttonOpenUrl => 'URLを開く';
+
+  @override
   String get buttonSupport => 'サポート・お問い合わせ';
 
   @override
@@ -108,7 +172,28 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'ピン留めされたファイル';
+
+  @override
   String get sectionHeaderRecentFiles => '最近のファイル';
+
+  @override
+  String get recentFilesSortDialogTitle => '並び替え';
+
+  @override
+  String get sortKeyLastOpened => '最終アクセス';
+
+  @override
+  String get sortKeyName => '名前';
+
+  @override
+  String get sortKeyLocation => '保存場所';
+
+  @override
+  String get sortOrderAscending => '昇順';
+
+  @override
+  String get sortOrderDescending => '降順';
 
   @override
   String get fileSourceDocuments => 'ドキュメント';
@@ -152,11 +237,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -176,6 +261,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get snackbarActionEnterEncryptionKey => 'パスワードを入力';
+
+  @override
+  String get snackbarMessageNotificationPermissionsDenied => '通知の権限がありません';
 
   @override
   String get dialogTitleError => 'エラー';
@@ -261,6 +349,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionDecryptNever => '復号しない';
 
   @override
+  String get bannerBodyAgendaNotifications => 'このファイルのアジェンダ項目の通知を受けますか？';
+
+  @override
+  String get bannerBodyActionAgendaEnable => '受ける';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => '今は受けない';
+
+  @override
+  String get bannerBodyActionAgendaNever => '通知は受けない';
+
+  @override
   String get saveChangesDialogTitle => '変更を保存しますか？';
 
   @override
@@ -271,6 +371,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get saveActionDiscard => '破棄する';
+
+  @override
+  String get saveActionSaveAs => '名前をつけて保存する';
 
   @override
   String get discardChangesDialogTitle => '変更を破棄しますか？';
@@ -301,6 +404,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => '履歴';
 
   @override
+  String get loadingProgressDialogTitle => 'ロード中…';
+
+  @override
+  String get preparingProgressDialogTitle => '準備中…';
+
+  @override
   String get decryptingProgressDialogTitle => '復号中…';
 
   @override
@@ -323,6 +432,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get createFileDefaultName => '名称未設定.org';
+
+  @override
+  String get saveAsDialogTitle => '名前をつけて保存';
+
+  @override
+  String get inputUrlDialogTitle => 'URLを入力';
 
   @override
   String get startTimePickerTitle => '開始時間の選択';
@@ -374,8 +489,8 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return '以下のコードの実行が ${timeoutString}ms でタイムアウトしました\n\n$code';
@@ -397,6 +512,16 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String errorExternalIdNotFound(String id) {
     return 'ID「$id」のファイルが見つかりませんでした';
+  }
+
+  @override
+  String errorSectionNotFound(String section) {
+    return '「$section」が見つかりませんでした';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return '未対応の検索オプション: $option';
   }
 
   @override

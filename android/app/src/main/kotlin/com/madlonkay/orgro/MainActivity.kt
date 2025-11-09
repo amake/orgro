@@ -1,5 +1,8 @@
 package com.madlonkay.orgro
 
+import android.os.Bundle
+import dev.fluttercommunity.workmanager.LoggingDebugHandler
+import dev.fluttercommunity.workmanager.WorkmanagerDebug
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -15,6 +18,12 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
             launch {
                 handleNativeSearchMethod(call, result, applicationContext)
             }
+        }
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (BuildConfig.DEBUG) {
+            WorkmanagerDebug.setCurrent(LoggingDebugHandler())
         }
     }
 }

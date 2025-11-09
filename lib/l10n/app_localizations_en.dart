@@ -24,10 +24,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemOrgroManual => 'Orgro Manual';
 
   @override
+  String get menuItemOrgManual => 'Org Manual';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override
   String get menuItemAbout => 'About';
+
+  @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
+  String quickActionTopPin(String name) {
+    return 'Open $name';
+  }
 
   @override
   String get appearanceModeAutomatic => 'Automatic';
@@ -45,7 +59,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -57,16 +87,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -100,6 +164,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonOpenOrgManual => 'Open Org Manual';
 
   @override
+  String get buttonOpenUrl => 'Open URL';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -108,7 +175,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Recent files';
+
+  @override
+  String get recentFilesSortDialogTitle => 'Sort by';
+
+  @override
+  String get sortKeyLastOpened => 'Last opened';
+
+  @override
+  String get sortKeyName => 'Name';
+
+  @override
+  String get sortKeyLocation => 'Location';
+
+  @override
+  String get sortOrderAscending => 'Ascending';
+
+  @override
+  String get sortOrderDescending => 'Descending';
 
   @override
   String get fileSourceDocuments => 'Documents';
@@ -159,11 +247,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -185,6 +273,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get snackbarActionEnterEncryptionKey => 'Enter password';
+
+  @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
 
   @override
   String get dialogTitleError => 'Error';
@@ -273,6 +365,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -284,6 +389,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveActionDiscard => 'Discard';
+
+  @override
+  String get saveActionSaveAs => 'Save as';
 
   @override
   String get discardChangesDialogTitle => 'Discard changes?';
@@ -316,6 +424,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => 'History';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
 
   @override
@@ -338,6 +452,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
 
   @override
   String get startTimePickerTitle => 'Select start time';
@@ -390,8 +510,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return 'Evaluation of the below code timed out after ${timeoutString}ms.\n\n$code';
@@ -413,6 +533,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String errorExternalIdNotFound(String id) {
     return 'File with ID “$id” not found';
+  }
+
+  @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
   }
 
   @override
@@ -439,10 +569,24 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get menuItemOrgroManual => 'Orgro Manual';
 
   @override
+  String get menuItemOrgManual => 'Org Manual';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override
   String get menuItemAbout => 'About';
+
+  @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
+  String quickActionTopPin(String name) {
+    return 'Open $name';
+  }
 
   @override
   String get appearanceModeAutomatic => 'Automatic';
@@ -460,7 +604,23 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -472,16 +632,50 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -515,6 +709,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get buttonOpenOrgManual => 'Open Org Manual';
 
   @override
+  String get buttonOpenUrl => 'Open URL';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -523,7 +720,28 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Recent files';
+
+  @override
+  String get recentFilesSortDialogTitle => 'Sort by';
+
+  @override
+  String get sortKeyLastOpened => 'Last opened';
+
+  @override
+  String get sortKeyName => 'Name';
+
+  @override
+  String get sortKeyLocation => 'Location';
+
+  @override
+  String get sortOrderAscending => 'Ascending';
+
+  @override
+  String get sortOrderDescending => 'Descending';
 
   @override
   String get fileSourceDocuments => 'Documents';
@@ -574,11 +792,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -600,6 +818,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get snackbarActionEnterEncryptionKey => 'Enter password';
+
+  @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
 
   @override
   String get dialogTitleError => 'Error';
@@ -688,6 +910,19 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -699,6 +934,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get saveActionDiscard => 'Discard';
+
+  @override
+  String get saveActionSaveAs => 'Save as';
 
   @override
   String get discardChangesDialogTitle => 'Discard changes?';
@@ -729,6 +967,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get inputCustomFilterDialogHistoryButton => 'History';
+
+  @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
 
   @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
@@ -755,6 +999,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get createFileDefaultName => 'untitled.org';
 
   @override
+  String get saveAsDialogTitle => 'Save as';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
+
+  @override
   String get startTimePickerTitle => 'Select start time';
 
   @override
@@ -805,8 +1055,8 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return 'Evaluation of the below code timed out after ${timeoutString}ms.\n\n$code';
@@ -828,6 +1078,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String errorExternalIdNotFound(String id) {
     return 'File with ID “$id” not found';
+  }
+
+  @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
   }
 
   @override
@@ -854,10 +1114,24 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get menuItemOrgroManual => 'Orgro Manual';
 
   @override
+  String get menuItemOrgManual => 'Org Manual';
+
+  @override
   String get menuItemTestFile => 'Test File';
 
   @override
   String get menuItemAbout => 'About';
+
+  @override
+  String get menuItemOpenUrl => 'Open URL';
+
+  @override
+  String get quickActionNewDocument => 'New Document';
+
+  @override
+  String quickActionTopPin(String name) {
+    return 'Open $name';
+  }
 
   @override
   String get appearanceModeAutomatic => 'Automatic';
@@ -875,7 +1149,23 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
+  String get settingsSectionNotifications => 'Notifications';
+
+  @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get agendaNotificationsChannelName => 'Agenda Notifications';
+
+  @override
+  String get agendaNotificationsChannelDescription =>
+      'Notifications for Org Agenda items';
+
+  @override
+  String get agendaNotificationsActionView => 'View';
+
+  @override
+  String get settingsItemLoading => 'Loading...';
 
   @override
   String get settingsItemAppearance => 'Appearance';
@@ -887,16 +1177,50 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String settingsItemInspectNotifications(num n) {
+    final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
+      localeName,
+    );
+    final String nString = nNumberFormat.format(n);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nString pending notifications',
+      one: '1 pending notification',
+      zero: 'No notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsDialogNotificationsTitle => 'Pending notifications';
+
+  @override
+  String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
   String get settingsActionClearCache => 'Clear cache';
 
   @override
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
+  String get settingsActionResetDirectoryPermissions =>
+      'Reset directory permissions';
+
+  @override
+  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
 
   @override
   String get snackbarMessagePreferencesReset => 'Preferences reset';
+
+  @override
+  String get snackbarMessageDirectoryPermissionsReset =>
+      'Directory permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -930,6 +1254,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get buttonOpenOrgManual => 'Open Org Manual';
 
   @override
+  String get buttonOpenUrl => 'Open URL';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -938,7 +1265,28 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
+  String get sectionHeaderPinnedFiles => 'Pinned files';
+
+  @override
   String get sectionHeaderRecentFiles => 'Recent files';
+
+  @override
+  String get recentFilesSortDialogTitle => 'Sort by';
+
+  @override
+  String get sortKeyLastOpened => 'Last opened';
+
+  @override
+  String get sortKeyName => 'Name';
+
+  @override
+  String get sortKeyLocation => 'Location';
+
+  @override
+  String get sortOrderAscending => 'Ascending';
+
+  @override
+  String get sortOrderDescending => 'Descending';
 
   @override
   String get fileSourceDocuments => 'Documents';
@@ -989,11 +1337,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String searchResultSelection(num current, num total) {
-    final intl.NumberFormat currentNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat currentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String currentString = currentNumberFormat.format(current);
-    final intl.NumberFormat totalNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String totalString = totalNumberFormat.format(total);
 
     return '$currentString / $totalString';
@@ -1015,6 +1363,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get snackbarActionEnterEncryptionKey => 'Enter password';
+
+  @override
+  String get snackbarMessageNotificationPermissionsDenied =>
+      'No permission for notifications';
 
   @override
   String get dialogTitleError => 'Error';
@@ -1103,6 +1455,19 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
+  String get bannerBodyAgendaNotifications =>
+      'Get notifications for agenda items in this file?';
+
+  @override
+  String get bannerBodyActionAgendaEnable => 'Notify me';
+
+  @override
+  String get bannerBodyActionAgendaNotNow => 'Not now';
+
+  @override
+  String get bannerBodyActionAgendaNever => 'Never';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -1114,6 +1479,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get saveActionDiscard => 'Discard';
+
+  @override
+  String get saveActionSaveAs => 'Save as';
 
   @override
   String get discardChangesDialogTitle => 'Discard changes?';
@@ -1146,6 +1514,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get inputCustomFilterDialogHistoryButton => 'History';
 
   @override
+  String get loadingProgressDialogTitle => 'Loading…';
+
+  @override
+  String get preparingProgressDialogTitle => 'Preparing…';
+
+  @override
   String get decryptingProgressDialogTitle => 'Decrypting…';
 
   @override
@@ -1168,6 +1542,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get createFileDefaultName => 'untitled.org';
+
+  @override
+  String get saveAsDialogTitle => 'Save as';
+
+  @override
+  String get inputUrlDialogTitle => 'Enter URL';
 
   @override
   String get startTimePickerTitle => 'Select start time';
@@ -1220,8 +1600,8 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String errorOrgTimeout(num timeout, String code) {
-    final intl.NumberFormat timeoutNumberFormat = intl
-        .NumberFormat.decimalPattern(localeName);
+    final intl.NumberFormat timeoutNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
     return 'Evaluation of the below code timed out after ${timeoutString}ms.\n\n$code';
@@ -1243,6 +1623,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String errorExternalIdNotFound(String id) {
     return 'File with ID “$id” not found';
+  }
+
+  @override
+  String errorSectionNotFound(String section) {
+    return 'Section not found: $section';
+  }
+
+  @override
+  String errorUnsupportedSearchOption(String option) {
+    return 'Unsupported search option: $option';
   }
 
   @override

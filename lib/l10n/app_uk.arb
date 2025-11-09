@@ -2,40 +2,21 @@
   "appTitle": "Orgro",
 
   "menuItemAppearance": "Вигляд",
-  "menuItemSettings": "Settings",
   "menuItemClearCache": "Очистити кеш",
   "menuItemOrgroManual": "Посібник Orgro",
-  "menuItemTestFile": "Test File",
+  "menuItemOrgManual": "Посібник Org",
   "menuItemAbout": "Про застосунок",
 
   "appearanceModeAutomatic": "Автоматичний",
   "appearanceModeLight": "Світлий",
   "appearanceModeDark": "Темний",
 
-  "settingsScreenTitle": "Settings",
-  "settingsSectionDefaultText": "Default text",
-  "settingsSectionDataManagement": "Data management",
-
-  "settingsItemAppearance": "Appearance",
-  "settingsItemTextScale": "Scale",
-  "settingsItemFontFamily": "Font",
-
-  "settingsActionClearCache": "Clear cache",
-  "settingsActionResetPreferences": "Restore defaults",
-
   "snackbarMessageCacheCleared": "Кеш очищено",
-  "snackbarMessagePreferencesReset": "Preferences reset",
-
-  "confirmResetPreferencesDialogTitle": "Restore defaults?",
-  "confirmResetPreferencesDialogMessage": "This will reset all preferences to their default values. This action can’t be undone.",
-  "confirmResetPreferencesActionReset": "Restore",
-  "confirmResetPreferencesActionCancel": "Cancel",
 
   "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
   "aboutLinkChangelog": "Список змін",
 
   "buttonOpenFile": "Відкрити файл",
-  "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Відкрити Посібник Orgro",
   "buttonOpenOrgManual": "Відкрити Посібник Org",
 
@@ -44,42 +25,20 @@
 
   "sectionHeaderRecentFiles": "Останні файли",
 
-  "fileSourceDocuments": "Documents",
-  "fileSourceDownloads": "Downloads",
-  "fileSourceGoogleDrive": "Google Drive",
-
   "menuItemReaderMode": "Режим читання",
-  "menuItemFullWidth": "Full width",
   "menuItemScrollTop": "Прокрутити вверх",
   "menuItemScrollBottom": "Прокрутити вниз",
 
-  "menuItemUndo": "Undo",
-  "menuItemRedo": "Redo",
-
   "hintTextSearch": "Шукати...",
-  "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
-  "searchResultSelection": "{current} / {total}",
-  "customFilterChipName": "Custom",
 
   "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",
 
-  "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
-  "snackbarActionEnterEncryptionKey": "Enter password",
-
   "dialogTitleError": "Помилка",
-  "dialogActionConfirm": "OK",
-  "dialogActionCancel": "Cancel",
-  "dialogActionHelp": "Help",
 
   "pageTitleError": "Помилка",
   "pageTitleLoading": "Завантаження...",
   "pageTitleNarrow": "{name} › гілка",
-
-  "pageTitleEditing": "{name} › editing",
-
-  "sectionActionNarrow": "Narrow",
-  "sectionActionCycleTodo": "Cycle TODO",
 
   "bannerBodyRemoteImages": "Цей документ містить віддалені зображення. Бажаєте завантажувати їх?",
   "bannerBodyActionShowAlways": "Завжди",
@@ -91,63 +50,8 @@
   "bannerBodyActionGrantNever": "Ніколи",
   "bannerBodyActionGrantNow": "Надати дозвіл",
 
-  "bannerBodySaveDocumentOrg": "Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]",
-  "bannerBodyActionSaveAlways": "Always",
-  "bannerBodyActionSaveNever": "Never",
-  "bannerBodyActionSaveOnce": "Just this time",
-
-  "bannerBodyDecryptContent": "This document contains encrypted content. Decrypt it now?",
-  "bannerBodyActionDecryptNow": "Decrypt",
-  "bannerBodyActionDecryptNotNow": "Not now",
-  "bannerBodyActionDecryptNever": "Never",
-
-  "saveChangesDialogTitle": "Save changes?",
-  "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
-  "saveActionShare": "Share",
-  "saveActionDiscard": "Discard",
-
-  "discardChangesDialogTitle": "Discard changes?",
-  "discardActionDiscard": "Discard",
-  "discardActionCancel": "Cancel",
-
-  "savedMessage": "Saved",
-
-  "inputDecryptionPasswordDialogTitle": "Enter password for decrypting",
-  "inputEncryptionPasswordDialogTitle": "Enter password for encrypting",
-  "inputEncryptionPasswordDialogBody": "This password will be used to encrypt Org Crypt sections for which no password has been specified.",
-
-  "inputCustomFilterDialogTitle": "Custom filter query",
-  "inputCustomFilterDialogHistoryButton": "History",
-
-  "decryptingProgressDialogTitle": "Decrypting…",
-  "encryptingProgressDialogTitle": "Encrypting…",
-  "serializingProgressDialogTitle": "Serializing…",
-  "savingProgressDialogTitle": "Saving…",
-  "searchingProgressDialogTitle": "Searching…",
-  "citationsDialogTitle": "Citations",
-
-  "createFileDialogTitle": "Create new file",
-  "createFileDefaultName": "untitled.org",
-
-  "startTimePickerTitle": "Select start time",
-  "endTimePickerTitle": "Select end time",
-
-  "snackbarMessageBibliographiesNotFound": "No bibliographies found",
-  "snackbarMessageCitationKeysNotFound": "Citation keys not found",
-  "snackbarMessageCitationsNotFound": "Citations not found",
-  "snackbarMessageSomeCitationsNotFound": "Citations not found: {citations}",
-
   "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
   "errorUnknownType": "Невідомий тип: {type}",
-  "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}",
-  "errorOrgParser": "Parser error: {result}",
-  "errorOrgExecution": "Execution error in the below code: {message}\n\n{code}",
-  "errorOrgTimeout": "Evaluation of the below code timed out after {timeout}ms.\n\n{code}",
-  "errorOrgArgument": "Invalid argument: {item}",
-  "errorDecryptionFailed": "Decryption failed",
-  "errorLinkNotHandled": "Couldn’t open link “{link}”",
-  "errorExternalIdNotFound": "File with ID “{id}” not found",
-
-  "editInsertedHeadline": "[Inserted by edit]"
+  "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}"
 }

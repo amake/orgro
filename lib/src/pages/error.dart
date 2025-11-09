@@ -15,9 +15,9 @@ class ErrorPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 16,
             children: <Widget>[
               const Icon(Icons.error),
-              const SizedBox(height: 16),
               Text(error, textAlign: TextAlign.center),
             ],
           ),

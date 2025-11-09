@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/data_source.dart';
@@ -40,24 +40,13 @@ extension CitationHandler on DocumentPageState {
       return false;
     }
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder:
-          (context) => ProgressIndicatorDialog(
-            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-          ),
+    final (:succeeded, result: entries!) = await progressTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      task: _findBibTeXEntries(bibFiles.reversed, keys, dataSource),
     );
 
-    final entries = await _findBibTeXEntries(
-      bibFiles.reversed,
-      keys,
-      dataSource,
-    );
-
-    if (!mounted) return false;
-
-    Navigator.pop(context);
+    if (!mounted || !succeeded) return false;
 
     if (entries.isEmpty) {
       showErrorSnackBar(
@@ -101,9 +90,7 @@ extension CitationHandler on DocumentPageState {
       try {
         final resolved = await dataSource.resolveRelative(bibFile);
         final content = await resolved.content;
-        final entries =
-            BibTeXDefinition().build().parse(content).value
-                as List<BibTeXEntry>;
+        final entries = BibTeXDefinition().build().parse(content).value;
         for (final entry in entries) {
           if (remainingKeys.contains(entry.key)) {
             results.add(entry);
@@ -126,10 +113,9 @@ List<String> extractBibliograpies(OrgTree tree) {
   tree.visit<OrgMeta>((meta) {
     if (meta.key.toLowerCase() == '#+bibliography:' && meta.value != null) {
       final trailing = meta.value!.toMarkup().trim();
-      final bibFile =
-          trailing.startsWith('"') && trailing.endsWith('"')
-              ? trailing.substring(1, trailing.length - 1)
-              : trailing;
+      final bibFile = trailing.startsWith('"') && trailing.endsWith('"')
+          ? trailing.substring(1, trailing.length - 1)
+          : trailing;
       results.add(bibFile);
     }
     return true;
@@ -151,10 +137,9 @@ extension EntryPresentation on BibTeXEntry {
       result = trimmed;
     }
     if (key == 'pages') {
-      result =
-          result.contains('-') || result.contains(',')
-              ? 'pp. ${result.replaceAll('--', '–')}'
-              : 'p. $result';
+      result = result.contains('-') || result.contains(',')
+          ? 'pp. ${result.replaceAll('--', '–')}'
+          : 'p. $result';
     }
     if (key == 'volume') result = 'Vol. $result';
     if (key == 'number') result = 'No. $result';

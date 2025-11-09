@@ -60,8 +60,9 @@ void main() {
   - [X] bar
   - [ ] baz
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgListItem>((item) => item.body!.toMarkup() == 'bar\n')!;
+        final (path: _, node: target) = doc.find<OrgListItem>(
+          (item) => item.body!.toMarkup() == 'bar\n',
+        )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [0%] and [0/1]
@@ -79,8 +80,9 @@ void main() {
     - [X] bazinga
     - [ ] bazoonga
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgListItem>((item) => item.body!.toMarkup() == 'bar\n')!;
+        final (path: _, node: target) = doc.find<OrgListItem>(
+          (item) => item.body!.toMarkup() == 'bar\n',
+        )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [0%] and [0/1]
@@ -100,10 +102,9 @@ void main() {
     - [X] bazinga
     - [X] bazoonga
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgListItem>(
-              (item) => item.body!.toMarkup() == 'bazoonga\n',
-            )!;
+        final (path: _, node: target) = doc.find<OrgListItem>(
+          (item) => item.body!.toMarkup() == 'bazoonga\n',
+        )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [100%] and [1/1]
@@ -123,10 +124,9 @@ void main() {
     - [X] bazinga
     - [ ] bazoonga
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgListItem>(
-              (item) => item.body!.toMarkup() == 'bazoonga\n',
-            )!;
+        final (path: _, node: target) = doc.find<OrgListItem>(
+          (item) => item.body!.toMarkup() == 'bazoonga\n',
+        )!;
         final result = recalculateListStats(doc, target);
         expect(result.toMarkup(), '''
 [0%] and [0/1]
@@ -206,8 +206,9 @@ Root [%] and [/]
 * top [%] and [/]
 ** foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [0%] and [0/0]
@@ -219,8 +220,9 @@ Root [%] and [/]
 * top [0%] and [0/1]
 ** TODO foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [0%] and [0/1]
@@ -232,8 +234,9 @@ Root [%] and [/]
 * top [0%] and [0/1]
 ** DONE foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [100%] and [1/1]
@@ -245,8 +248,9 @@ Root [%] and [/]
 * top [100%] and [1/1]
 ** TODO foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [0%] and [0/1]
@@ -258,8 +262,9 @@ Root [%] and [/]
 * top [100%] and [1/1]
 ** foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [0%] and [0/0]
@@ -274,8 +279,9 @@ Root [%] and [/]
   :END:
 ** TODO foo
 ''');
-        final (path: _, node: target) =
-            doc.find<OrgHeadline>((headline) => headline.rawTitle == 'foo')!;
+        final (path: _, node: target) = doc.find<OrgHeadline>(
+          (headline) => headline.rawTitle == 'foo',
+        )!;
         final result = recalculateHeadlineStats(doc, target);
         expect(result.toMarkup(), '''
 * top [%] and [/]

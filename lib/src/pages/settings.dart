@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
+import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
@@ -17,33 +18,46 @@ class SettingsPage extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
       ),
       body: ListView(
-        children: [
-              appearanceListItem(context),
-              Divider(),
-              ListHeader(
-                title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDefaultText,
-                ),
-              ),
-              fontFamilyListItem(context),
-              textScaleListItem(context),
-              _TextPreview(),
-              Divider(),
-              ListHeader(
-                title: Text(
-                  AppLocalizations.of(context)!.settingsSectionDataManagement,
-                ),
-              ),
-              clearCachesListItem(context),
-              resetPreferencesListItem(context),
-            ]
-            .map(
-              (child) => switch (child) {
-                Divider() => child,
-                _ => _constrain(child),
-              },
-            )
-            .toList(growable: false),
+        children:
+            [
+                  const AppearanceSettingListItem(),
+                  const Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(context)!.settingsSectionDefaultText,
+                    ),
+                  ),
+                  const FontFamilySettingListItem(),
+                  const TextScaleSettingListItem(),
+                  const _TextPreview(),
+                  const Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.settingsSectionNotifications,
+                    ),
+                  ),
+                  const NotificationsListItems(),
+                  const Divider(),
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.settingsSectionDataManagement,
+                    ),
+                  ),
+                  const ClearCachesListItem(),
+                  const ResetDirectoryPermissionsListItem(),
+                  const ResetPreferencesListItem(),
+                ]
+                .map(
+                  (child) => switch (child) {
+                    Divider() => child,
+                    _ => _constrain(child),
+                  },
+                )
+                .toList(growable: false),
       ),
     );
   }
@@ -80,7 +94,9 @@ class _TextPreviewState extends State<_TextPreview> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_inited) {
-      _controller.text = _prefs.textPreviewString;
+      _controller.text = _prefs.textPreviewString.isEmpty
+          ? kDefaultTextPreviewString
+          : _prefs.textPreviewString;
       _inited = true;
     }
   }

@@ -15,34 +15,38 @@ PopupMenuItem<VoidCallback> appearanceMenuItem(BuildContext context) {
   );
 }
 
-Widget appearanceListItem(BuildContext context) {
-  final prefs = Preferences.of(context, PrefsAspect.appearance);
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
-    subtitle: Text(prefs.themeMode.toDisplayString(context)),
-    onTap: () async {
-      final newMode = await _chooseThemeMode(context, prefs.themeMode);
-      if (newMode != null) {
-        prefs.setThemeMode(newMode);
-      }
-    },
-  );
+class AppearanceSettingListItem extends StatelessWidget {
+  const AppearanceSettingListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final prefs = Preferences.of(context, PrefsAspect.appearance);
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
+      subtitle: Text(prefs.themeMode.toDisplayString(context)),
+      onTap: () async {
+        final newMode = await _chooseThemeMode(context, prefs.themeMode);
+        if (newMode != null) {
+          prefs.setThemeMode(newMode);
+        }
+      },
+    );
+  }
 }
 
 Future<ThemeMode?> _chooseThemeMode(BuildContext context, ThemeMode current) =>
     showDialog<ThemeMode>(
       context: context,
-      builder:
-          (context) => SimpleDialog(
-            children: [
-              for (final mode in ThemeMode.values)
-                CheckboxListTile(
-                  value: current == mode,
-                  title: Text(mode.toDisplayString(context)),
-                  onChanged: (_) => Navigator.pop(context, mode),
-                ),
-            ],
-          ),
+      builder: (context) => SimpleDialog(
+        children: [
+          for (final mode in ThemeMode.values)
+            CheckboxListTile(
+              value: current == mode,
+              title: Text(mode.toDisplayString(context)),
+              onChanged: (_) => Navigator.pop(context, mode),
+            ),
+        ],
+      ),
     );
 
 extension ThemeModeDisplayString on ThemeMode {

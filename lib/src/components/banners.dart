@@ -40,9 +40,8 @@ class _NicelyTimedBannerState extends State<_NicelyTimedBanner> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 100),
-      transitionBuilder:
-          (child, animation) =>
-              SizeTransition(sizeFactor: animation, child: child),
+      transitionBuilder: (child, animation) =>
+          SizeTransition(sizeFactor: animation, child: child),
       child: _ready && widget.visible ? widget.child : const SizedBox.shrink(),
     );
   }
@@ -141,11 +140,10 @@ class SavePermissionsBanner extends StatelessWidget {
       child: MaterialBanner(
         content: OrgText(
           AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap:
-              (link) => launchUrl(
-                Uri.parse(link.location),
-                mode: LaunchMode.externalApplication,
-              ),
+          onLinkTap: (link) => launchUrl(
+            Uri.parse(link.location),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
         leading: const Icon(Icons.save),
         actions: [
@@ -198,6 +196,49 @@ class DecryptContentBanner extends StatelessWidget {
           _BannerButton(
             text: AppLocalizations.of(context)!.bannerBodyActionDecryptNotNow,
             onPressed: () => onDeny(DecryptPolicy.deny, persist: false),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AgendaNotificationsBanner extends StatelessWidget {
+  const AgendaNotificationsBanner({
+    required this.visible,
+    required this.onAccept,
+    required this.onDeny,
+    super.key,
+  });
+
+  final VoidCallback onAccept;
+  final void Function(AgendaNotificationsPolicy, {required bool persist})
+  onDeny;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return _NicelyTimedBanner(
+      visible: visible,
+      child: MaterialBanner(
+        content: Text(
+          AppLocalizations.of(context)!.bannerBodyAgendaNotifications,
+        ),
+        leading: const Icon(Icons.calendar_month),
+        actions: [
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaEnable,
+            onPressed: onAccept,
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaNever,
+            onPressed: () =>
+                onDeny(AgendaNotificationsPolicy.deny, persist: true),
+          ),
+          _BannerButton(
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaNotNow,
+            onPressed: () =>
+                onDeny(AgendaNotificationsPolicy.deny, persist: false),
           ),
         ],
       ),

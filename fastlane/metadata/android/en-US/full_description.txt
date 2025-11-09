@@ -1,17 +1,23 @@
-Orgro is an Org Mode file editor and viewer with lots of features for comfortable reading on the go:
+Orgro is an Org Mode file editor and viewer that brings essential Org features to mobile:
 
-- Reflowed text for easy viewing on mobile screens
+- TODO and checkbox toggling, with progress cookies
 
-- Syntax highlighting that faithfully recreates the appearance in Emacs, in both light and dark modes
+- Quick actions to start a new Org doc or go straight to your most important one
 
-- Reader mode for hiding extraneous markup and showing only what's important
+- Notifications for Org Agenda items
 
-- Narrow your view to just a single section, just like in Emacs
+- Narrow, search, and filter your document just like in Emacs
 
-- Beautiful tables with guaranteed correct spacing, even with non-ASCII characters
+- Org Crypt section symmetric decryption/encryption
 
-- Open external links in your web browser, and section links in narrowed views
+- Org Cite bibliography support
 
-- Expand or collapse sections, blocks, and drawers just like in Emacs
+- Syntax highlighting, beautiful tables, LaTeX rendering
+
+- Expand or collapse sections, blocks, and drawers
+
+- Reflowed text for easy viewing on mobile
 
 Note: INTERNET permission is required for displaying remote images and dynamically loading fonts from online sources (Google Fonts, AWS S3).
+
+Notification- and execution-related permissions required for Org Agenda notifications and background updating of agenda.

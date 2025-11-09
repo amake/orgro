@@ -1,0 +1,2 @@
+- Add lots of keyboard shortcuts to the document view and editor screens
+- Bug fixes

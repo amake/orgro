@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 extension IterUtils<T> on Iterable<T> {
   Iterable<R> zipMap<R, U>(Iterable<U> b, R Function(T, U) visit) sync* {
@@ -22,6 +22,28 @@ extension IterUtils<T> on Iterable<T> {
         seen.add(item);
         yield item;
       }
+    }
+  }
+}
+
+extension ListUtils<T> on List<T> {
+  bool equals(List<T> other, {bool Function(T?, T?)? valueEquals}) {
+    valueEquals ??= (a, b) => a == b;
+    if (identical(this, other)) return true;
+    if (length != other.length) return false;
+    for (var i = 0; i < length; i++) {
+      if (!valueEquals(this[i], other[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+extension Iter2Utils<T, U> on Iterable<(T, U)> {
+  Iterable<V> map2<V>(V Function(T, U) visit) sync* {
+    for (final (a, b) in this) {
+      yield visit(a, b);
     }
   }
 }
@@ -70,10 +92,9 @@ TextBox renderedBounds(
       .first;
 }
 
-final platformShortcutKey =
-    Platform.isIOS || Platform.isMacOS
-        ? LogicalKeyboardKey.meta
-        : LogicalKeyboardKey.control;
+final platformShortcutKey = Platform.isIOS || Platform.isMacOS
+    ? LogicalKeyboardKey.meta
+    : LogicalKeyboardKey.control;
 
 extension GlobalPaintBounds on BuildContext {
   Rect? get _globalPaintBounds {
@@ -113,18 +134,18 @@ VoidCallback debounce(VoidCallback func, Duration duration) {
   };
 }
 
-String joinPath(String base, String rest) {
-  if (rest.isEmpty) return base;
-  if (base.isEmpty) return rest;
-  if (base.endsWith('/')) return '$base$rest';
-  return '$base/$rest';
-}
-
 extension StringExtension on String {
   (String, String) splitLeadingWhitespace() {
     final idx = indexOf(RegExp(r'\S'));
     if (idx == -1) return ('', this);
     return (substring(0, idx), substring(idx));
+  }
+
+  String trimSuff(String suffix) {
+    if (endsWith(suffix)) {
+      return substring(0, length - suffix.length);
+    }
+    return this;
   }
 
   String trimPrefSuff(String prefix, String suffix) {
@@ -147,4 +168,68 @@ extension StringExtension on String {
     final lineBreak = detectLineBreak() ?? '\n';
     return endsWith(lineBreak) ? this : '$this$lineBreak';
   }
+
+  String joinPath(String next) {
+    if (next.isEmpty) return this;
+    if (isEmpty) return next;
+    if (endsWith('/')) return '$this$next';
+    return '$this/$next';
+  }
+
+  RegExp asRegex() {
+    final escaped = RegExp.escape(this);
+    return RegExp(escaped, unicode: true, caseSensitive: false);
+  }
+
+  String toSnakeCase() {
+    final buffer = StringBuffer();
+    for (final char in codeUnits) {
+      if (char >= 65 && char <= 90) {
+        if (buffer.isNotEmpty) {
+          buffer.write('_');
+        }
+        buffer.writeCharCode(char + 32);
+      } else {
+        buffer.writeCharCode(char);
+      }
+    }
+    return buffer.toString();
+  }
+}
+
+extension BoolUtil on bool {
+  int compareTo(bool other) {
+    if (this == other) return 0;
+    return this ? 1 : -1;
+  }
+}
+
+Future<T> Function(U) sequentially<T, U>(Future<T> Function(U) fn) {
+  Future<T>? current;
+  return (U arg) {
+    current = current?.then((_) => fn(arg)) ?? fn(arg);
+    return current!;
+  };
+}
+
+Future<T> Function(U) sequentiallyWithLockfile<T, U>(
+  FutureOr<File> lockfileFuture,
+  Future<T> Function(U) fn,
+) {
+  return (U arg) async {
+    final lockfile = await lockfileFuture;
+    while (true) {
+      if (lockfile.existsSync()) {
+        // wait and retry
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        continue;
+      }
+      lockfile.createSync(exclusive: true);
+      try {
+        return await fn(arg);
+      } finally {
+        lockfile.deleteSync();
+      }
+    }
+  };
 }

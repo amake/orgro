@@ -196,9 +196,9 @@ private func restoreUrl(from identifier: String) -> URL? {
 }
 
 func log(_ message: String) {
-    //#if DEBUG
+    #if DEBUG
         print(message)
-    //#endif
+    #endif
 }
 
 class ConcurrentSet<T: Hashable> {

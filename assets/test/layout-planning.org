@@ -1,0 +1,19 @@
+#+STARTUP: showall nohidedrawers
+
+* foo
+  SCHEDULED: <2025-03-19 Wed>
+  :LOGBOOK:
+  CLOCK: [2025-03-17 Mon 19:48]--[2025-03-17 Mon 23:10] =>  3:22
+  :END:
+
+* bar
+  DEADLINE: <2025-03-04 Tue>
+
+* DONE baz
+  CLOSED: [2025-03-17 Mon 19:48]
+
+* DONE booz
+  CLOSED: [2025-03-17 Mon 19:50] DEADLINE: <2025-03-17 Mon> SCHEDULED: <2025-03-17 Mon>
+
+* bazonga
+  CLOSEK: [2025-03-17 Mon 19:48] CLOSED: foo CLOSED:foo CLOSED:

@@ -20,11 +20,10 @@ class BottomInputBar extends StatelessWidget {
         // This should never happen
         debugPrint('Closing bottom sheet');
       },
-      builder:
-          (context) => Padding(
-            padding: EdgeInsets.only(bottom: bottomPadding),
-            child: child,
-          ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: child,
+      ),
     );
   }
 }

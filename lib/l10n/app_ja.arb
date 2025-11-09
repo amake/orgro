@@ -5,8 +5,13 @@
   "menuItemSettings": "設定",
   "menuItemClearCache": "キャッシュを削除",
   "menuItemOrgroManual": "Orgroマニュアル",
+  "menuItemOrgManual": "Orgマニュアル",
   "menuItemTestFile": "テストファイル",
   "menuItemAbout": "アプリについて",
+  "menuItemOpenUrl": "URLを開く",
+
+  "quickActionNewDocument": "新規ドキュメント",
+  "quickActionTopPin": "{name}を開く",
 
   "appearanceModeAutomatic": "自動",
   "appearanceModeLight": "ライト",
@@ -14,17 +19,31 @@
 
   "settingsScreenTitle": "設定",
   "settingsSectionDefaultText": "デフォルトの書式",
+  "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
+
+  "agendaNotificationsChannelName": "アジェンダ通知",
+  "agendaNotificationsChannelDescription": "Org Agenda項目の通知",
+  "agendaNotificationsActionView": "表示",
+
+  "settingsItemLoading": "ロード中...",
 
   "settingsItemAppearance": "外観",
   "settingsItemTextScale": "文字サイズ",
   "settingsItemFontFamily": "書体",
 
+  "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",
+  "settingsDialogNotificationsTitle": "設定済みの通知",
+  "settingsItemClearNotifications": "すべての通知を削除",
+
   "settingsActionClearCache": "キャッシュを削除",
   "settingsActionResetPreferences": "設定を初期化",
+  "settingsActionResetDirectoryPermissions": "ディレクトリのアクセス権限をリセット",
 
+  "snackbarMessageNotificationsCleared": "通知を削除しました",
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
   "snackbarMessagePreferencesReset": "設定を初期化しました",
+  "snackbarMessageDirectoryPermissionsReset": "ディレクトリのアクセス権限をリセットしました",
 
   "confirmResetPreferencesDialogTitle": "設定を初期化しますか?",
   "confirmResetPreferencesDialogMessage": "すべての設定が初期値に戻されます。この操作は元に戻せません。",
@@ -38,11 +57,19 @@
   "buttonCreateFile": "ファイルを作成",
   "buttonOpenOrgroManual": "Orgroマニュアルを開く",
   "buttonOpenOrgManual": "Orgマニュアルを開く",
+  "buttonOpenUrl": "URLを開く",
 
   "buttonSupport": "サポート・お問い合わせ",
   "buttonVersion": "v{version}",
 
+  "sectionHeaderPinnedFiles": "ピン留めされたファイル",
   "sectionHeaderRecentFiles": "最近のファイル",
+  "recentFilesSortDialogTitle": "並び替え",
+  "sortKeyLastOpened": "最終アクセス",
+  "sortKeyName": "名前",
+  "sortKeyLocation": "保存場所",
+  "sortOrderAscending": "昇順",
+  "sortOrderDescending": "降順",
 
   "fileSourceDocuments": "ドキュメント",
   "fileSourceDownloads": "ダウンロード",
@@ -66,6 +93,8 @@
 
   "snackbarMessageNeedsEncryptionKey": "保存できませんでした。暗号化するためのパスワードが必要",
   "snackbarActionEnterEncryptionKey": "パスワードを入力",
+
+  "snackbarMessageNotificationPermissionsDenied": "通知の権限がありません",
 
   "dialogTitleError": "エラー",
   "dialogActionConfirm": "OK",
@@ -101,10 +130,16 @@
   "bannerBodyActionDecryptNotNow": "今は復号しない",
   "bannerBodyActionDecryptNever": "復号しない",
 
+  "bannerBodyAgendaNotifications": "このファイルのアジェンダ項目の通知を受けますか？",
+  "bannerBodyActionAgendaEnable": "受ける",
+  "bannerBodyActionAgendaNotNow": "今は受けない",
+  "bannerBodyActionAgendaNever": "通知は受けない",
+
   "saveChangesDialogTitle": "変更を保存しますか？",
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
   "saveActionShare": "共有する",
   "saveActionDiscard": "破棄する",
+  "saveActionSaveAs": "名前をつけて保存する",
 
   "discardChangesDialogTitle": "変更を破棄しますか？",
   "discardActionDiscard": "破棄する",
@@ -119,6 +154,8 @@
   "inputCustomFilterDialogTitle": "カスタムフィルタ",
   "inputCustomFilterDialogHistoryButton": "履歴",
 
+  "loadingProgressDialogTitle": "ロード中…",
+  "preparingProgressDialogTitle": "準備中…",
   "decryptingProgressDialogTitle": "復号中…",
   "encryptingProgressDialogTitle": "暗号化中…",
   "serializingProgressDialogTitle": "書き出し中…",
@@ -128,6 +165,10 @@
 
   "createFileDialogTitle": "ファイルを作成",
   "createFileDefaultName": "名称未設定.org",
+
+  "saveAsDialogTitle": "名前をつけて保存",
+
+  "inputUrlDialogTitle": "URLを入力",
 
   "startTimePickerTitle": "開始時間の選択",
   "endTimePickerTitle": "終了時間の選択",
@@ -148,6 +189,8 @@
   "errorDecryptionFailed": "復号が失敗しました",
   "errorLinkNotHandled": "リンク「{link}」を開けませんでした",
   "errorExternalIdNotFound": "ID「{id}」のファイルが見つかりませんでした",
+  "errorSectionNotFound": "「{section}」が見つかりませんでした",
+  "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
 
   "editInsertedHeadline": "[編集によって挿入]"
 }

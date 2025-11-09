@@ -7,9 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
-import 'package:orgro/src/navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 bool _isSvg(String url) {
   final segments = Uri.parse(url).pathSegments;
@@ -17,35 +18,32 @@ bool _isSvg(String url) {
 }
 
 class RemoteImage extends StatelessWidget {
-  const RemoteImage(this.link, {super.key});
+  const RemoteImage(this.link, {this.scaled = false, super.key});
 
   final OrgLink link;
+  final bool scaled;
+
   String get url => link.location;
+
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(context, url, _image(context, url)),
-      child: _scaledImage(context, url),
-    );
-  }
+  Widget build(BuildContext context) =>
+      scaled ? _scaledImage(context, url) : _image(context, url);
 
   Widget _image(BuildContext context, String url) {
     if (_isSvg(url)) {
       return SvgPicture.network(
         url,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
       );
     } else {
       return Image(
         image: CachedNetworkImageProvider(url),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
   }
@@ -55,21 +53,19 @@ class RemoteImage extends StatelessWidget {
       return SvgPicture.network(
         url,
         placeholderBuilder: (context) => const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
       );
     } else {
       return Image(
         image: CachedNetworkImageProvider(
           url,
-          scale: MediaQuery.of(context).devicePixelRatio,
+          scale: MediaQuery.devicePixelRatioOf(context),
         ),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
   }
@@ -80,30 +76,28 @@ class LocalImage extends StatelessWidget {
     required this.link,
     required this.dataSource,
     required this.relativePath,
+    this.minimizeSize = false,
     super.key,
   });
 
   final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
+  final bool minimizeSize;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => showInteractive(context, relativePath, _image()),
-      child: _image(minimizeSize: true),
-    );
-  }
-
-  Widget _image({bool minimizeSize = false}) =>
-      _isSvg(relativePath)
-          ? _LocalSvgImage(dataSource: dataSource, relativePath: relativePath)
-          : _LocalOtherImage(
-            link: link,
-            dataSource: dataSource,
-            relativePath: relativePath,
-            minimizeSize: minimizeSize,
-          );
+  Widget build(BuildContext context) => _isSvg(relativePath)
+      ? _LocalSvgImage(
+          link: link,
+          dataSource: dataSource,
+          relativePath: relativePath,
+        )
+      : _LocalOtherImage(
+          link: link,
+          dataSource: dataSource,
+          relativePath: relativePath,
+          minimizeSize: minimizeSize,
+        );
 }
 
 class _LocalOtherImage extends StatelessWidget {
@@ -124,19 +118,15 @@ class _LocalOtherImage extends StatelessWidget {
     if (!minimizeSize) {
       return Image(
         image: _DataSourceImage(dataSource, relativePath),
-        errorBuilder:
-            (context, error, stackTrace) =>
-                _ImageError(link: link, error: error.toString()),
-        loadingBuilder:
-            (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? child
-                    : const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+        loadingBuilder: (context, child, loadingProgress) =>
+            loadingProgress == null ? child : const CircularProgressIndicator(),
       );
     }
     return LayoutBuilder(
       builder: (context, constraints) {
-        final scale = MediaQuery.of(context).devicePixelRatio;
+        final scale = MediaQuery.devicePixelRatioOf(context);
         return Image(
           image: ResizeImage.resizeIfNeeded(
             constraints.hasBoundedWidth
@@ -147,14 +137,12 @@ class _LocalOtherImage extends StatelessWidget {
                 : null,
             _DataSourceImage(dataSource, relativePath, scale: scale),
           ),
-          errorBuilder:
-              (context, error, stackTrace) =>
-                  _ImageError(link: link, error: error.toString()),
-          loadingBuilder:
-              (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : const CircularProgressIndicator(),
+          errorBuilder: (context, error, stackTrace) =>
+              _ImageError(link: link, error: error.toString()),
+          loadingBuilder: (context, child, loadingProgress) =>
+              loadingProgress == null
+              ? child
+              : const CircularProgressIndicator(),
         );
       },
     );
@@ -162,9 +150,13 @@ class _LocalOtherImage extends StatelessWidget {
 }
 
 class _LocalSvgImage extends StatelessWidget {
-  _LocalSvgImage({required this.dataSource, required this.relativePath})
-    : assert(_isSvg(relativePath));
+  _LocalSvgImage({
+    required this.link,
+    required this.dataSource,
+    required this.relativePath,
+  }) : assert(_isSvg(relativePath));
 
+  final OrgLink link;
   final DataSource dataSource;
   final String relativePath;
 
@@ -176,6 +168,8 @@ class _LocalSvgImage extends StatelessWidget {
         relativePath: relativePath,
       ),
       placeholderBuilder: (context) => const CircularProgressIndicator(),
+      errorBuilder: (context, error, stackTrace) =>
+          _ImageError(link: link, error: error.toString()),
     );
   }
 }
@@ -214,6 +208,7 @@ class _ImageError extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: 8,
       children: [
         IconButton(
           padding: EdgeInsets.zero,
@@ -221,19 +216,41 @@ class _ImageError extends StatelessWidget {
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
           ),
-          onPressed:
-              () => showDialog<void>(
-                context: context,
-                builder:
-                    (context) => AlertDialog(
-                      icon: const Icon(Icons.error),
-                      content: Text(error),
-                    ),
-              ),
+          onPressed: () => showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              icon: const Icon(Icons.error),
+              content: Text(error),
+            ),
+          ),
           icon: const Icon(Icons.error),
         ),
-        const SizedBox(width: 8),
-        Expanded(child: OrgLinkWidget(link)),
+        Expanded(
+          child: OrgEvents(
+            // If we don't override this, the regular handler will open the
+            // image in the interactive viewer.
+            onLinkTap: (link) async {
+              try {
+                final url = Uri.parse(link.location);
+                debugPrint('Launching URL: $url');
+                final handled = await launchUrl(
+                  url,
+                  mode: LaunchMode.externalApplication,
+                );
+                if (!handled && context.mounted) {
+                  showErrorSnackBar(
+                    context,
+                    AppLocalizations.of(context)!.errorLinkNotHandled(url),
+                  );
+                }
+              } catch (e, s) {
+                logError(e, s);
+                if (context.mounted) showErrorSnackBar(context, e);
+              }
+            },
+            child: OrgLinkWidget(link),
+          ),
+        ),
       ],
     );
   }
@@ -265,10 +282,9 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
       chunkEvents: chunkEvents.stream,
       scale: key.scale,
       debugLabel: key.dataSource.id,
-      informationCollector:
-          () => <DiagnosticsNode>[
-            ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
-          ],
+      informationCollector: () => <DiagnosticsNode>[
+        ErrorDescription('Path: ${key.dataSource.id} / $relativePath'),
+      ],
     );
   }
 
@@ -304,7 +320,8 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
         );
       }
       return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
-    } catch (e) {
+    } catch (e, s) {
+      logError(e, s);
       scheduleMicrotask(() {
         PaintingBinding.instance.imageCache.evict(key);
       });

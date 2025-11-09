@@ -5,9 +5,9 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
 
@@ -36,6 +36,8 @@ abstract class DataSource {
   FutureOr<DataSource> resolveRelative(String relativePath);
 
   bool get needsToResolveParent => false;
+
+  Map<String, Object?> toJson();
 }
 
 class WebDataSource extends DataSource {
@@ -68,10 +70,9 @@ class WebDataSource extends DataSource {
       } else {
         throw OrgroError(
           'Unexpected HTTP response: $response',
-          localizedMessage:
-              (context) => AppLocalizations.of(
-                context,
-              )!.errorUnexpectedHttpResponse(response),
+          localizedMessage: (context) => AppLocalizations.of(
+            context,
+          )!.errorUnexpectedHttpResponse(response),
         );
       }
     } on Exception catch (e, s) {
@@ -83,6 +84,14 @@ class WebDataSource extends DataSource {
   @override
   WebDataSource resolveRelative(String relativePath) =>
       WebDataSource(uri.resolveUri(Uri(path: relativePath)));
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'web',
+    'name': name,
+    'id': id,
+    'uri': uri.toString(),
+  };
 }
 
 class AssetDataSource extends DataSource {
@@ -110,6 +119,14 @@ class AssetDataSource extends DataSource {
   AssetDataSource resolveRelative(String relativePath) => AssetDataSource(
     Uri.parse(key).resolveUri(Uri(path: relativePath)).toFilePath(),
   );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'asset',
+    'name': name,
+    'id': id,
+    'key': key,
+  };
 }
 
 class NativeDataSource extends DataSource {
@@ -162,9 +179,8 @@ class NativeDataSource extends DataSource {
     if (parentDirIdentifier == null) {
       throw OrgroError(
         'Can’t resolve path relative to this document',
-        localizedMessage:
-            (context) =>
-                AppLocalizations.of(context)!.errorCannotResolveRelativePath,
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!.errorCannotResolveRelativePath,
       );
     }
     // TODO(aaron): See if we can resolve to a non-existent file for writing
@@ -175,10 +191,9 @@ class NativeDataSource extends DataSource {
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
-        localizedMessage:
-            (context) => AppLocalizations.of(
-              context,
-            )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
+        localizedMessage: (context) => AppLocalizations.of(
+          context,
+        )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
       );
     }
     return NativeDataSource(
@@ -225,7 +240,8 @@ class NativeDataSource extends DataSource {
         );
         debugPrint('Found file $uri parent dir: ${parent.uri}');
         return (rootId, parent.identifier);
-      } on Exception {
+      } on Exception catch (e, s) {
+        logError(e, s);
         // Next
       }
     }
@@ -240,6 +256,16 @@ class NativeDataSource extends DataSource {
       return File.fromUri(uri);
     },
   );
+
+  @override
+  Map<String, Object?> toJson() => {
+    'type': 'native',
+    'name': name,
+    'id': id,
+    'identifier': identifier,
+    'uri': uri,
+    'persistable': persistable,
+  };
 }
 
 class LoadedNativeDataSource extends NativeDataSource {

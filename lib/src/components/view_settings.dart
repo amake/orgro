@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
@@ -143,14 +144,27 @@ class InheritedViewSettings extends InheritedWidget {
     }
   }
 
+  AgendaNotificationsPolicy get agendaNotificationsPolicy =>
+      data.agendaNotificationsPolicy;
+  void setAgendaNotificationsPolicy(
+    AgendaNotificationsPolicy value, {
+    bool persist = false,
+  }) {
+    if (persist) {
+      _prefs.setAgendaNotificationsPolicy(value);
+    } else {
+      _update((data) => data.copyWith(agendaNotificationsPolicy: value));
+    }
+  }
+
   bool get fullWidth => data.fullWidth;
   set fullWidth(bool value) {
     _prefs.setFullWidth(value);
   }
 
-  String? get queryString => data.queryString;
-  set queryString(String? value) =>
-      _update((data) => data.copyWith(queryString: value));
+  SearchQuery get searchQuery => data.searchQuery;
+  set searchQuery(SearchQuery value) =>
+      _update((data) => data.copyWith(searchQuery: value));
 
   FilterData get filterData => data.filterData;
   set filterData(FilterData value) =>
@@ -181,8 +195,9 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
+      agendaNotificationsPolicy: prefs.agendaNotificationsPolicy,
       fullWidth: prefs.fullWidth,
-      queryString: kDefaultQueryString,
+      searchQuery: SearchQuery.defaults(),
       filterData: FilterData.defaults(),
     );
   }
@@ -213,9 +228,10 @@ class ViewSettingsData {
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
     required this.decryptPolicy,
+    required this.agendaNotificationsPolicy,
     required this.fullWidth,
     required this.filterData,
-    required this.queryString,
+    required this.searchQuery,
   });
 
   // From preferences
@@ -226,10 +242,11 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
+  final AgendaNotificationsPolicy agendaNotificationsPolicy;
   final bool fullWidth;
   // Not persisted
   final FilterData filterData;
-  final String? queryString;
+  final SearchQuery searchQuery;
 
   TextStyle get textStyle => loadFontWithVariants(
     fontFamily,
@@ -243,8 +260,9 @@ class ViewSettingsData {
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
+    AgendaNotificationsPolicy? agendaNotificationsPolicy,
     bool? fullWidth,
-    String? queryString,
+    SearchQuery? searchQuery,
     FilterData? filterData,
   }) => ViewSettingsData(
     textScale: textScale ?? this.textScale,
@@ -254,8 +272,10 @@ class ViewSettingsData {
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
     saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
     decryptPolicy: decryptPolicy ?? this.decryptPolicy,
+    agendaNotificationsPolicy:
+        agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
     fullWidth: fullWidth ?? this.fullWidth,
-    queryString: queryString ?? this.queryString,
+    searchQuery: searchQuery ?? this.searchQuery,
     filterData: filterData ?? this.filterData,
   );
 
@@ -269,8 +289,9 @@ class ViewSettingsData {
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
       decryptPolicy == other.decryptPolicy &&
+      agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
       fullWidth == other.fullWidth &&
-      queryString == other.queryString &&
+      searchQuery == other.searchQuery &&
       filterData == other.filterData;
 
   @override
@@ -282,10 +303,78 @@ class ViewSettingsData {
     localLinksPolicy,
     saveChangesPolicy,
     decryptPolicy,
+    agendaNotificationsPolicy,
     fullWidth,
-    queryString,
+    searchQuery,
     filterData,
   );
+}
+
+enum QueryType { plain, regex }
+
+const _kQueryTypePlain = 'plain';
+const _kQueryTypeRegex = 'regex';
+
+extension QueryTypePersistence on QueryType? {
+  String? get persistableString => switch (this) {
+    QueryType.plain => _kQueryTypePlain,
+    QueryType.regex => _kQueryTypeRegex,
+    _ => null,
+  };
+
+  static QueryType? fromString(String? value) => switch (value) {
+    _kQueryTypePlain => QueryType.plain,
+    _kQueryTypeRegex => QueryType.regex,
+    _ => null,
+  };
+}
+
+class SearchQuery {
+  factory SearchQuery.defaults() =>
+      const SearchQuery(kDefaultQueryString, kDefaultQueryType);
+
+  factory SearchQuery.fromJson(Map<String, dynamic> json) => SearchQuery(
+    json['queryString'] as String,
+    QueryTypePersistence.fromString(json['type'] as String)!,
+  );
+
+  const SearchQuery(this.queryString, this.type);
+
+  final String queryString;
+  final QueryType type;
+
+  bool get isEmpty => queryString.isEmpty;
+  bool get isNotEmpty => !isEmpty;
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! SearchQuery) return false;
+    return queryString == other.queryString && type == other.type;
+  }
+
+  @override
+  int get hashCode => Object.hash(queryString, type);
+
+  Map<String, dynamic> toJson() => {
+    'queryString': queryString,
+    'type': type.persistableString,
+  };
+
+  Pattern? asPattern() {
+    if (isEmpty) return null;
+    switch (type) {
+      case QueryType.plain:
+        final escaped = RegExp.escape(queryString);
+        return RegExp(escaped, unicode: true, caseSensitive: false);
+      case QueryType.regex:
+        try {
+          return RegExp(queryString);
+        } catch (e, s) {
+          logError(e, s);
+          return null;
+        }
+    }
+  }
 }
 
 class FilterData {
@@ -357,4 +446,27 @@ class FilterData {
     Object.hashAll(priorities),
     customFilter,
   );
+
+  OrgQueryMatcher? asSparseQuery() {
+    if (isEmpty) return null;
+
+    return OrgQueryAndMatcher([
+      if (customFilter.isNotEmpty) OrgQueryMatcher.fromMarkup(customFilter),
+      ...keywords.map(
+        (value) => OrgQueryPropertyMatcher(
+          property: 'TODO',
+          operator: '=',
+          value: value,
+        ),
+      ),
+      ...tags.map((value) => OrgQueryTagMatcher(value)),
+      ...priorities.map(
+        (value) => OrgQueryPropertyMatcher(
+          property: 'PRIORITY',
+          operator: '=',
+          value: value,
+        ),
+      ),
+    ]);
+  }
 }

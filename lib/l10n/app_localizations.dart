@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_ja.dart';
+import 'app_localizations_ru.dart';
 import 'app_localizations_uk.dart';
 
 // ignore_for_file: type=lint
@@ -96,11 +97,12 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('de'),
     Locale('en'),
+    Locale('de'),
     Locale('en', 'GB'),
     Locale('en', 'US'),
     Locale('ja'),
+    Locale('ru'),
     Locale('uk'),
   ];
 
@@ -134,6 +136,12 @@ abstract class AppLocalizations {
   /// **'Orgro Manual'**
   String get menuItemOrgroManual;
 
+  /// No description provided for @menuItemOrgManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Org Manual'**
+  String get menuItemOrgManual;
+
   /// No description provided for @menuItemTestFile.
   ///
   /// In en, this message translates to:
@@ -145,6 +153,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get menuItemAbout;
+
+  /// No description provided for @menuItemOpenUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open URL'**
+  String get menuItemOpenUrl;
+
+  /// No description provided for @quickActionNewDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'New Document'**
+  String get quickActionNewDocument;
+
+  /// No description provided for @quickActionTopPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {name}'**
+  String quickActionTopPin(String name);
 
   /// No description provided for @appearanceModeAutomatic.
   ///
@@ -176,11 +202,41 @@ abstract class AppLocalizations {
   /// **'Default text'**
   String get settingsSectionDefaultText;
 
+  /// No description provided for @settingsSectionNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsSectionNotifications;
+
   /// No description provided for @settingsSectionDataManagement.
   ///
   /// In en, this message translates to:
   /// **'Data management'**
   String get settingsSectionDataManagement;
+
+  /// No description provided for @agendaNotificationsChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Agenda Notifications'**
+  String get agendaNotificationsChannelName;
+
+  /// No description provided for @agendaNotificationsChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications for Org Agenda items'**
+  String get agendaNotificationsChannelDescription;
+
+  /// No description provided for @agendaNotificationsActionView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get agendaNotificationsActionView;
+
+  /// No description provided for @settingsItemLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get settingsItemLoading;
 
   /// No description provided for @settingsItemAppearance.
   ///
@@ -200,6 +256,24 @@ abstract class AppLocalizations {
   /// **'Font'**
   String get settingsItemFontFamily;
 
+  /// No description provided for @settingsItemInspectNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}'**
+  String settingsItemInspectNotifications(num n);
+
+  /// No description provided for @settingsDialogNotificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending notifications'**
+  String get settingsDialogNotificationsTitle;
+
+  /// No description provided for @settingsItemClearNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all notifications'**
+  String get settingsItemClearNotifications;
+
   /// No description provided for @settingsActionClearCache.
   ///
   /// In en, this message translates to:
@@ -212,6 +286,18 @@ abstract class AppLocalizations {
   /// **'Restore defaults'**
   String get settingsActionResetPreferences;
 
+  /// No description provided for @settingsActionResetDirectoryPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset directory permissions'**
+  String get settingsActionResetDirectoryPermissions;
+
+  /// No description provided for @snackbarMessageNotificationsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications cleared'**
+  String get snackbarMessageNotificationsCleared;
+
   /// No description provided for @snackbarMessageCacheCleared.
   ///
   /// In en, this message translates to:
@@ -223,6 +309,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preferences reset'**
   String get snackbarMessagePreferencesReset;
+
+  /// No description provided for @snackbarMessageDirectoryPermissionsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory permissions reset'**
+  String get snackbarMessageDirectoryPermissionsReset;
 
   /// No description provided for @confirmResetPreferencesDialogTitle.
   ///
@@ -284,6 +376,12 @@ abstract class AppLocalizations {
   /// **'Open Org Manual'**
   String get buttonOpenOrgManual;
 
+  /// No description provided for @buttonOpenUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open URL'**
+  String get buttonOpenUrl;
+
   /// No description provided for @buttonSupport.
   ///
   /// In en, this message translates to:
@@ -296,11 +394,53 @@ abstract class AppLocalizations {
   /// **'v{version}'**
   String buttonVersion(String version);
 
+  /// No description provided for @sectionHeaderPinnedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned files'**
+  String get sectionHeaderPinnedFiles;
+
   /// No description provided for @sectionHeaderRecentFiles.
   ///
   /// In en, this message translates to:
   /// **'Recent files'**
   String get sectionHeaderRecentFiles;
+
+  /// No description provided for @recentFilesSortDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get recentFilesSortDialogTitle;
+
+  /// No description provided for @sortKeyLastOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Last opened'**
+  String get sortKeyLastOpened;
+
+  /// No description provided for @sortKeyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get sortKeyName;
+
+  /// No description provided for @sortKeyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get sortKeyLocation;
+
+  /// No description provided for @sortOrderAscending.
+  ///
+  /// In en, this message translates to:
+  /// **'Ascending'**
+  String get sortOrderAscending;
+
+  /// No description provided for @sortOrderDescending.
+  ///
+  /// In en, this message translates to:
+  /// **'Descending'**
+  String get sortOrderDescending;
 
   /// No description provided for @fileSourceDocuments.
   ///
@@ -403,6 +543,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter password'**
   String get snackbarActionEnterEncryptionKey;
+
+  /// No description provided for @snackbarMessageNotificationPermissionsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'No permission for notifications'**
+  String get snackbarMessageNotificationPermissionsDenied;
 
   /// No description provided for @dialogTitleError.
   ///
@@ -560,6 +706,30 @@ abstract class AppLocalizations {
   /// **'Never'**
   String get bannerBodyActionDecryptNever;
 
+  /// No description provided for @bannerBodyAgendaNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Get notifications for agenda items in this file?'**
+  String get bannerBodyAgendaNotifications;
+
+  /// No description provided for @bannerBodyActionAgendaEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify me'**
+  String get bannerBodyActionAgendaEnable;
+
+  /// No description provided for @bannerBodyActionAgendaNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get bannerBodyActionAgendaNotNow;
+
+  /// No description provided for @bannerBodyActionAgendaNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get bannerBodyActionAgendaNever;
+
   /// No description provided for @saveChangesDialogTitle.
   ///
   /// In en, this message translates to:
@@ -583,6 +753,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Discard'**
   String get saveActionDiscard;
+
+  /// No description provided for @saveActionSaveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as'**
+  String get saveActionSaveAs;
 
   /// No description provided for @discardChangesDialogTitle.
   ///
@@ -638,6 +814,18 @@ abstract class AppLocalizations {
   /// **'History'**
   String get inputCustomFilterDialogHistoryButton;
 
+  /// No description provided for @loadingProgressDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loadingProgressDialogTitle;
+
+  /// No description provided for @preparingProgressDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing…'**
+  String get preparingProgressDialogTitle;
+
   /// No description provided for @decryptingProgressDialogTitle.
   ///
   /// In en, this message translates to:
@@ -685,6 +873,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'untitled.org'**
   String get createFileDefaultName;
+
+  /// No description provided for @saveAsDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as'**
+  String get saveAsDialogTitle;
+
+  /// No description provided for @inputUrlDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter URL'**
+  String get inputUrlDialogTitle;
 
   /// No description provided for @startTimePickerTitle.
   ///
@@ -788,6 +988,18 @@ abstract class AppLocalizations {
   /// **'File with ID “{id}” not found'**
   String errorExternalIdNotFound(String id);
 
+  /// No description provided for @errorSectionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Section not found: {section}'**
+  String errorSectionNotFound(String section);
+
+  /// No description provided for @errorUnsupportedSearchOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported search option: {option}'**
+  String errorUnsupportedSearchOption(String option);
+
   /// No description provided for @editInsertedHeadline.
   ///
   /// In en, this message translates to:
@@ -806,7 +1018,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'ja', 'uk'].contains(locale.languageCode);
+      <String>['de', 'en', 'ja', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -835,6 +1047,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'ja':
       return AppLocalizationsJa();
+    case 'ru':
+      return AppLocalizationsRu();
     case 'uk':
       return AppLocalizationsUk();
   }

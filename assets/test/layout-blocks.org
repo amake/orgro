@@ -4,12 +4,20 @@ Source
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_src
 
    #+begin_src python
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_src
 
 Arbitrary
@@ -18,6 +26,10 @@ Arbitrary
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_foo
 
 Named
@@ -26,24 +38,40 @@ Named
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_comment
 
    #+begin_example
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_example
 
    #+begin_export
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_export
 
    #+begin_verse
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_verse
 
 Greater
@@ -52,14 +80,70 @@ Greater
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_quote
 
    #+begin_center
   a
    /b/ [[foo]]
     c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
    #+end_center
 
+Dynamic
+
+   #+begin_src emacs-lisp
+     (defun org-dblock-write:myblock (_params)
+       (insert "*Hello*, \n/world/!\n\n| a | b | c |\n|---+---+---|\n| 1 | 3 | 2 |"))
+   #+end_src
+
+   #+BEGIN: myblock :parameter1 value1 :parameter2 value2
+   *Hello*,
+   /world/!
+
+   | a | b | c |
+   |---+---+---|
+   | 1 | 3 | 2 |
+   #+END:
+
+   Manually deindented
+
+   #+BEGIN: myblock :parameter1 value1 :parameter2 value2
+  *Hello*,
+  /world/!
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
+   #+END:
+
+Invalid
+
+   #+begin_
+  a
+   /b/ [[foo]]
+    c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
+   #+end_
+
+   #+begin:
+  a
+   /b/ [[foo]]
+    c
+
+  | a | b | c |
+  |---+---+---|
+  | 1 | 3 | 2 |
+   #+end:
 
 # Local Variables:
 # org-hide-emphasis-markers: t

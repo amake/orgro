@@ -13,15 +13,18 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace 'com.madlonkay.orgro'
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    // We set this to match what is expected by binaries we compile at build time in F-Droid:
+    // https://github.com/jerson/openpgp-mobile/blob/0e5e05ca4b7863fb82c2c5932e802ed9c1ab929d/Makefile.android#L2
+    ndkVersion '28.0.13004108'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '11'
     }
 
     sourceSets {
@@ -35,8 +38,11 @@ android {
         versionCode flutter.versionCode
         versionName flutter.versionName
         // No need to list base locale (en)
-        resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de']
-        manifestPlaceholders += [displayName: '@string/app_name']
+        resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de', 'ru']
+        manifestPlaceholders += [
+            displayName: '@string/app_name',
+            appLinkHost: '@string/app_link_host'
+        ]
     }
 
     signingConfigs {
@@ -48,14 +54,27 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            manifestPlaceholders += [displayName: '@string/app_name_debug']
+            manifestPlaceholders += [
+                displayName: '@string/app_name_debug',
+                appLinkHost: '@string/app_link_host_debug'
+            ]
         }
         profile {
-            applicationIdSuffix '.profile'
-            manifestPlaceholders += [displayName: '@string/app_name_profile']
+            // TODO(aaron): Remove temporary workaround for
+            // https://github.com/flutter/flutter/issues/169215
+            //
+            // applicationIdSuffix '.profile'
+            manifestPlaceholders += [
+                displayName: '@string/app_name_profile',
+                appLinkHost: '@string/app_link_host_profile'
+            ]
         }
         release {
             signingConfig signingConfigs.release
@@ -68,6 +87,7 @@ flutter {
 }
 
 dependencies {
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }

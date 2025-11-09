@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:orgro/l10n/app_localizations.dart';
 import 'package:open_file/open_file.dart';
 import 'package:org_flutter/org_flutter.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/attachments.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
+import 'package:orgro/src/components/image.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -23,14 +24,12 @@ extension LinkHandler on DocumentPageState {
     final doc = DocumentProvider.of(context).doc;
 
     OrgFileLink? fileLink = _tryParseFileLink(doc, link);
-    if (fileLink != null) return await _openFileLink(fileLink);
+    if (fileLink != null) return await _openFileLink(link, fileLink);
 
-    if (isOrgIdUrl(link.location)) {
-      return await _openExternalIdLink(link.location);
+    if (looksLikeImagePath(link.location)) {
+      await showInteractive(context, link.location, RemoteImage(link));
+      return true;
     }
-
-    final handled = await _openLocalFallbackTargets(doc, link.location);
-    if (handled) return true;
 
     // Handle as a general URL
     try {
@@ -55,22 +54,22 @@ extension LinkHandler on DocumentPageState {
 
   OrgFileLink? _tryParseFileLink(OrgTree doc, OrgLink link) {
     try {
-      return convertLinkResolvingAttachments(doc, link);
+      return convertLinkResolvingAttachments(context, doc, link);
     } on Exception {
       // Wasn't a file link
       return null;
     }
   }
 
-  Future<bool> _openExternalIdLink(String url) async {
-    assert(isOrgIdUrl(url));
+  Future<bool> _openExternalIdLink(OrgFileLink fileLink) async {
+    assert(fileLink.scheme == 'id:');
 
     final dataSource = DocumentProvider.of(context).dataSource;
     if (dataSource is! NativeDataSource) {
       debugPrint('Unsupported data source: ${dataSource.runtimeType}');
       showErrorSnackBar(
         context,
-        AppLocalizations.of(context)!.errorLinkNotHandled(url),
+        AppLocalizations.of(context)!.errorLinkNotHandled(fileLink.toString()),
       );
       return false;
     }
@@ -80,7 +79,7 @@ extension LinkHandler on DocumentPageState {
       return false;
     }
 
-    final targetId = parseOrgIdUrl(url);
+    final targetId = fileLink.body;
     final requestId = Object().hashCode.toString();
 
     final (:succeeded, result: foundFile) = await cancelableProgressTask(
@@ -97,7 +96,7 @@ extension LinkHandler on DocumentPageState {
     );
 
     if (!succeeded) {
-      cancelFindFileForId(requestId: requestId);
+      await cancelFindFileForId(requestId: requestId);
       return false;
     }
 
@@ -110,12 +109,19 @@ extension LinkHandler on DocumentPageState {
       );
       return false;
     } else {
-      return await loadDocument(context, foundFile, target: url);
+      await loadDocument(context, foundFile, target: fileLink.toString());
+      return true;
     }
   }
 
-  Future<bool> _openFileLink(OrgFileLink link) async {
-    if (!link.isRelative) return false;
+  Future<bool> _openFileLink(OrgLink link, OrgFileLink fileLink) async {
+    if (fileLink.scheme == 'id:') {
+      // An internal ID link within the current document would have been handled
+      // within org_flutter, so it must be external.
+      return await _openExternalIdLink(fileLink);
+    }
+
+    if (!fileLink.isRelative) return false;
 
     final source = DocumentProvider.of(context).dataSource;
     if (source.needsToResolveParent) {
@@ -123,42 +129,38 @@ extension LinkHandler on DocumentPageState {
       return false;
     }
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder:
-          (context) => ProgressIndicatorDialog(
-            title: AppLocalizations.of(context)!.searchingProgressDialogTitle,
-          ),
+    final (:succeeded, result: resolved!) = await progressTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      task: source.resolveRelative(fileLink.body),
     );
 
-    var popped = false;
+    if (!succeeded) return false;
 
     try {
-      final resolved = await source.resolveRelative(link.body);
       if (mounted) {
-        Navigator.pop(context);
-        popped = true;
-        if (link.body.endsWith('.org')) {
-          return await loadDocument(context, resolved, target: link.extra);
+        if (fileLink.body.endsWith('.org')) {
+          await loadDocument(context, resolved, target: fileLink.extra);
+          return true;
+        } else if (looksLikeImagePath(fileLink.body)) {
+          await showInteractive(
+            context,
+            fileLink.body,
+            LocalImage(
+              link: link,
+              dataSource: source,
+              relativePath: fileLink.body,
+            ),
+          );
+          return true;
         } else {
           return await _openFileInExternalApp(resolved);
         }
       }
     } catch (e, s) {
       logError(e, s);
-      if (mounted) {
-        if (!popped) Navigator.pop(context);
-        showErrorSnackBar(context, e);
-      }
+      if (mounted) showErrorSnackBar(context, e);
     }
-    return false;
-  }
-
-  Future<bool> _openLocalFallbackTargets(OrgTree doc, String target) async {
-    final locator = OrgLocator.of(context)!;
-    if (await locator.jumpToLinkTarget(target)) return true;
-    if (await locator.jumpToName(target)) return true;
     return false;
   }
 
@@ -186,16 +188,14 @@ extension LinkHandler on DocumentPageState {
               context,
             )!.snackbarMessageNeedsDirectoryPermissions,
           ),
-          action:
-              canResolveRelativeLinks == true
-                  ? SnackBarAction(
-                    label:
-                        AppLocalizations.of(
-                          context,
-                        )!.snackbarActionGrantAccess.toUpperCase(),
-                    onPressed: doPickDirectory,
-                  )
-                  : null,
+          action: canResolveRelativeLinks == true
+              ? SnackBarAction(
+                  label: AppLocalizations.of(
+                    context,
+                  )!.snackbarActionGrantAccess.toUpperCase(),
+                  onPressed: doPickDirectory,
+                )
+              : null,
         ),
       );
 
@@ -244,12 +244,11 @@ Uri? expandAbbreviatedUrl(OrgTree doc, OrgLink link) {
     return null;
   }
 
-  final formatted =
-      format.contains('%s')
-          ? format.replaceFirst('%s', tag)
-          : format.contains('%h')
-          ? format.replaceFirst('%h', Uri.encodeComponent(tag))
-          : '$format$tag';
+  final formatted = format.contains('%s')
+      ? format.replaceFirst('%s', tag)
+      : format.contains('%h')
+      ? format.replaceFirst('%h', Uri.encodeComponent(tag))
+      : '$format$tag';
   return Uri.tryParse(formatted);
 }
 

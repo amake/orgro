@@ -47,7 +47,7 @@ class _AppIcon extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Image.asset(
         'assets/manual/orgro-icon.png',
-        scale: MediaQuery.of(context).devicePixelRatio,
+        scale: MediaQuery.devicePixelRatioOf(context),
       ),
     );
   }

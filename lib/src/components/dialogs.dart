@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
@@ -26,11 +31,10 @@ class SavePermissionDialog extends StatelessWidget {
         width: double.maxFinite,
         child: OrgText(
           AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap:
-              (link) => launchUrl(
-                Uri.parse(link.location),
-                mode: LaunchMode.externalApplication,
-              ),
+          onLinkTap: (link) => launchUrl(
+            Uri.parse(link.location),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
       ),
       actions: [
@@ -51,23 +55,55 @@ class SavePermissionDialog extends StatelessWidget {
   }
 }
 
-class ShareUnsaveableChangesDialog extends StatelessWidget {
-  const ShareUnsaveableChangesDialog({
+class SaveChangesDialog extends StatelessWidget {
+  const SaveChangesDialog({
     required this.doc,
     required this.serializer,
+    required this.message,
     super.key,
   });
 
   final OrgDocument doc;
   final OrgroSerializer serializer;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.save),
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
-      content: Text(AppLocalizations.of(context)!.saveChangesDialogMessage),
+      content: message == null ? null : Text(message!),
       actions: [
+        ListTile(
+          title: Text(SaveAction.saveAs.toDisplayString(context)),
+          onTap: () async {
+            final fileName = await showDialog<String>(
+              context: context,
+              builder: (context) => InputFileNameDialog(
+                title: AppLocalizations.of(context)!.saveAsDialogTitle,
+              ),
+            );
+            if (fileName == null || !context.mounted) return;
+            final markup = await serializeWithProgressUI(
+              context,
+              doc,
+              serializer,
+            );
+            if (markup == null) return;
+            final savedFile = await createAndSaveFile(fileName, markup);
+            if (savedFile == null || !context.mounted) return;
+            final rememberedFiles = RememberedFiles.of(context);
+            final rememberedFile = RememberedFile(
+              name: fileName,
+              uri: savedFile.uri,
+              identifier: savedFile.identifier,
+              lastOpened: DateTime.now(),
+            );
+            await rememberedFiles.add([rememberedFile]);
+            if (!context.mounted) return;
+            Navigator.pop(context, true);
+          },
+        ),
         Builder(
           builder: (context) {
             return ListTile(
@@ -86,9 +122,8 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
                 );
                 if (markup == null) return;
 
-                final result = await Share.share(
-                  markup,
-                  sharePositionOrigin: origin,
+                final result = await SharePlus.instance.share(
+                  ShareParams(text: markup, sharePositionOrigin: origin),
                 );
 
                 // Don't close popup unless user successfully shared
@@ -108,10 +143,11 @@ class ShareUnsaveableChangesDialog extends StatelessWidget {
   }
 }
 
-enum SaveAction { share, discard }
+enum SaveAction { saveAs, share, discard }
 
 extension SaveActionDisplayString on SaveAction {
   String toDisplayString(BuildContext context) => switch (this) {
+    SaveAction.saveAs => AppLocalizations.of(context)!.saveActionSaveAs,
     SaveAction.share => AppLocalizations.of(context)!.saveActionShare,
     SaveAction.discard => AppLocalizations.of(context)!.saveActionDiscard,
   };
@@ -187,7 +223,8 @@ class InputPasswordDialog extends StatelessWidget {
       content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [Text(bodyText!), const SizedBox(height: 8), content],
+        spacing: 8,
+        children: [Text(bodyText!), content],
       );
     }
     return AlertDialog(
@@ -199,7 +236,9 @@ class InputPasswordDialog extends StatelessWidget {
 }
 
 class InputFileNameDialog extends StatefulWidget {
-  const InputFileNameDialog({super.key});
+  const InputFileNameDialog({required this.title, super.key});
+
+  final String title;
 
   @override
   State<InputFileNameDialog> createState() => _InputFileNameDialogState();
@@ -235,7 +274,7 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.create),
-      title: Text(AppLocalizations.of(context)!.createFileDialogTitle),
+      title: Text(widget.title),
       content: TextField(
         autofocus: true,
         controller: _controller,
@@ -248,27 +287,31 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
 Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
   BuildContext context, {
   required Future<T> task,
-  required String dialogTitle,
+  String? dialogTitle,
+  VoidCallback? onCancel,
 }) async {
   var canceled = false;
 
-  final dialogFuture = showDialog<(T, Object?)>(
+  final route = DialogRoute<(T, Object?)>(
     context: context,
-    builder:
-        (context) =>
-            ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
+    barrierDismissible: true,
+    builder: (context) =>
+        ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
   );
+  final dialogFuture = Navigator.push(context, route);
 
   task
       .then((result) {
         if (!canceled && context.mounted) {
-          Navigator.pop(context, (result, null));
+          Navigator.removeRoute(context, route, (result, null));
         }
       })
       .onError((error, stackTrace) {
         if (context.mounted) showErrorSnackBar(context, error);
         logError(error, stackTrace);
-        if (!canceled && context.mounted) Navigator.pop(context, (null, error));
+        if (!canceled && context.mounted) {
+          Navigator.removeRoute(context, route, (null, error));
+        }
       });
 
   // Popped will be one of:
@@ -289,6 +332,30 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
       : (succeeded: false, result: null);
 }
 
+Future<({bool succeeded, T? result})> progressTask<T>(
+  BuildContext context, {
+  String? dialogTitle,
+  required FutureOr<T> task,
+}) async {
+  final route = DialogRoute<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) =>
+        ProgressIndicatorDialog(title: dialogTitle, dismissable: false),
+  );
+  Navigator.push(context, route);
+  try {
+    final result = await task;
+    return (succeeded: true, result: result);
+  } catch (error, stackTrace) {
+    if (context.mounted) showErrorSnackBar(context, error);
+    logError(error, stackTrace);
+    return (succeeded: false, result: null);
+  } finally {
+    if (context.mounted) Navigator.removeRoute(context, route);
+  }
+}
+
 class ProgressIndicatorDialog extends StatelessWidget {
   const ProgressIndicatorDialog({
     required this.title,
@@ -296,7 +363,7 @@ class ProgressIndicatorDialog extends StatelessWidget {
     super.key,
   });
 
-  final String title;
+  final String? title;
   final bool dismissable;
 
   @override
@@ -304,7 +371,7 @@ class ProgressIndicatorDialog extends StatelessWidget {
     return PopScope(
       canPop: dismissable,
       child: AlertDialog(
-        title: Text(title),
+        title: title == null ? null : Text(title!),
         content: const LinearProgressIndicator(),
       ),
     );
@@ -347,20 +414,18 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
       actions: [
         _DialogButton(
           text: AppLocalizations.of(context)!.dialogActionHelp,
-          onPressed:
-              () => launchUrl(
-                Uri.parse(
-                  'https://orgmode.org/manual/Matching-tags-and-properties.html',
-                ),
-                mode: LaunchMode.externalApplication,
-              ),
+          onPressed: () => launchUrl(
+            Uri.parse(
+              'https://orgmode.org/manual/Matching-tags-and-properties.html',
+            ),
+            mode: LaunchMode.externalApplication,
+          ),
         ),
         if (history.isNotEmpty)
           _DialogButton(
-            text:
-                AppLocalizations.of(
-                  context,
-                )!.inputCustomFilterDialogHistoryButton,
+            text: AppLocalizations.of(
+              context,
+            )!.inputCustomFilterDialogHistoryButton,
             onPressed: () async {
               final entry = await _pickFromHistory(context, history);
               if (entry != null) _controller.text = entry;
@@ -372,12 +437,12 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         ),
         ValueListenableBuilder(
           valueListenable: _controller,
-          builder:
-              (context, value, _) => _DialogButton(
-                text: AppLocalizations.of(context)!.dialogActionConfirm,
-                onPressed:
-                    _validate(value.text) ? () => _confirm(value.text) : null,
-              ),
+          builder: (context, value, _) => _DialogButton(
+            text: AppLocalizations.of(context)!.dialogActionConfirm,
+            onPressed: _validate(value.text)
+                ? () => _confirm(value.text)
+                : null,
+          ),
         ),
       ],
     );
@@ -414,11 +479,10 @@ class CustomFilterHistoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final history =
-        Preferences.of(
-          context,
-          PrefsAspect.customFilterQueries,
-        ).customFilterQueries;
+    final history = Preferences.of(
+      context,
+      PrefsAspect.customFilterQueries,
+    ).customFilterQueries;
     return SimpleDialog(
       children: [
         for (final entry in history)
@@ -470,17 +534,13 @@ class CitationsDialog extends StatelessWidget {
               },
               title: Text(entry.getPrettyValue('title') ?? entry.key),
               subtitle: details.isEmpty ? null : Text(details),
-              trailing:
-                  url == null
-                      ? null
-                      : IconButton(
-                        icon: const Icon(Icons.open_in_new),
-                        onPressed:
-                            () => launchUrl(
-                              url,
-                              mode: LaunchMode.externalApplication,
-                            ),
-                      ),
+              trailing: url == null
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.open_in_new),
+                      onPressed: () =>
+                          launchUrl(url, mode: LaunchMode.externalApplication),
+                    ),
             );
           },
           itemCount: entries.length,
@@ -488,6 +548,166 @@ class CitationsDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+class RecentFilesSortDialog extends StatefulWidget {
+  const RecentFilesSortDialog({
+    required this.sortKey,
+    required this.sortOrder,
+    super.key,
+  });
+
+  final RecentFilesSortKey sortKey;
+  final SortOrder sortOrder;
+
+  @override
+  State<RecentFilesSortDialog> createState() => _RecentFilesSortDialogState();
+}
+
+class _RecentFilesSortDialogState extends State<RecentFilesSortDialog> {
+  late RecentFilesSortKey _sortKey;
+  late SortOrder _sortOrder;
+
+  @override
+  void initState() {
+    super.initState();
+    _sortKey = widget.sortKey;
+    _sortOrder = widget.sortOrder;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.recentFilesSortDialogTitle),
+      content: SizedBox(
+        width: 0,
+        child: RadioGroup<RecentFilesSortKey>(
+          groupValue: _sortKey,
+          onChanged: (value) {
+            if (value != null) setState(() => _sortKey = value);
+          },
+          child: RadioGroup<SortOrder>(
+            groupValue: _sortOrder,
+            onChanged: (value) {
+              if (value != null) setState(() => _sortOrder = value);
+            },
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final key in RecentFilesSortKey.values)
+                  RadioListTile<RecentFilesSortKey>(
+                    value: key,
+                    title: Text(key.toDisplayString(context)),
+                  ),
+                const Divider(),
+                for (final order in SortOrder.values)
+                  RadioListTile<SortOrder>(
+                    value: order,
+                    title: Text(order.toDisplayString(context)),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionCancel,
+          onPressed: () => Navigator.pop(context),
+        ),
+        _DialogButton(
+          text: AppLocalizations.of(context)!.dialogActionConfirm,
+          onPressed: () => Navigator.pop(context, (_sortKey, _sortOrder)),
+        ),
+      ],
+    );
+  }
+}
+
+class InputUrlDialog extends StatefulWidget {
+  const InputUrlDialog({super.key});
+
+  @override
+  State<InputUrlDialog> createState() => _InputUrlDialogState();
+}
+
+class _InputUrlDialogState extends State<InputUrlDialog> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  bool _inited = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inited) {
+      _maybeFillFromClipboard();
+      _inited = true;
+    }
+  }
+
+  void _maybeFillFromClipboard() async {
+    if (!await Clipboard.hasStrings()) return;
+    final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
+    final text = clipboard?.text;
+    if (text == null || !_isUrl(text)) return;
+    _controller.text = text;
+  }
+
+  bool _isUrl(String text) => Uri.tryParse(text)?.hasScheme == true;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.insert_link),
+      title: Text(AppLocalizations.of(context)!.inputUrlDialogTitle),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        onSubmitted: _confirm,
+      ),
+    );
+  }
+
+  bool _validate(String value) {
+    if (value.isEmpty) return false;
+    return _isUrl(value);
+  }
+
+  Future<void> _confirm(String value) async {
+    if (!_validate(value)) return;
+    Navigator.pop(context, Uri.parse(value));
+  }
+}
+
+extension RecentFilesSortKeyDisplayString on RecentFilesSortKey {
+  String toDisplayString(BuildContext context) => switch (this) {
+    RecentFilesSortKey.lastOpened => AppLocalizations.of(
+      context,
+    )!.sortKeyLastOpened,
+    RecentFilesSortKey.name => AppLocalizations.of(context)!.sortKeyName,
+    RecentFilesSortKey.location => AppLocalizations.of(
+      context,
+    )!.sortKeyLocation,
+  };
+}
+
+extension SortOrderDisplayString on SortOrder {
+  String toDisplayString(BuildContext context) => switch (this) {
+    SortOrder.ascending => AppLocalizations.of(context)!.sortOrderAscending,
+    SortOrder.descending => AppLocalizations.of(context)!.sortOrderDescending,
+  };
 }
 
 class _DialogButton extends StatelessWidget {

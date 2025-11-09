@@ -2,23 +2,90 @@ import 'package:flutter/foundation.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/document_provider.dart';
+import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
+import 'package:orgro/src/statistics.dart';
 
 extension NarrowHandler on DocumentPageState {
-  void openNarrowTarget(String? target) {
-    if (target == null || target.isEmpty) {
-      return;
-    }
-    OrgTree? section;
+  Future<void> handleInitialTarget(String? target) async {
+    if (target == null || target.isEmpty) return;
+
+    // The target may be:
+    // - *section
+    // - #custom-id
+    // - /regexp/
+    // - named target
+    // - 42 (line number)
+    // - id:some-uuid
+    // - id:some-uuid::$SEARCH_OPTION
+    //   - SEARCH_OPTION can be any of the above except id:some-uuid
+    //
+    // https://orgmode.org/manual/Search-Options.html
+
+    // TODO(aaron): This logic is pretty similar to OrgEvents.dispatchLinkTap;
+    // maybe we can consolidate it.
+
     try {
-      section = OrgController.of(context).sectionForTarget(target);
-    } on Exception catch (e, s) {
-      logError(e, s);
+      final fileLink = OrgFileLink.parse(target);
+      if (fileLink.scheme != 'id:') throw Exception('Not an id: link');
+
+      final section = OrgController.of(context).sectionWithId(fileLink.body);
+      if (section != null) {
+        // We may have an id: link with search option e.g. in the case of
+        // opening an id: link pointing to another file.
+        await doNarrow(section, searchOption: fileLink.extra);
+      } else {
+        // It was an id: link but we couldn't find the section
+        debugPrint('No section with id: ${fileLink.body}');
+        showErrorSnackBar(
+          context,
+          AppLocalizations.of(context)!.errorSectionNotFound(fileLink.body),
+        );
+      }
+      return;
+    } catch (e) {
+      // Not an id: link
     }
-    if (section != null) {
-      doNarrow(section);
+
+    if (!mounted) return;
+
+    try {
+      final section = OrgController.of(context).sectionForTarget(target);
+      if (section != null) {
+        await doNarrow(section);
+      } else {
+        // It was a section query but we couldn't find the section
+        debugPrint('No section for target: $target');
+        showErrorSnackBar(
+          context,
+          AppLocalizations.of(context)!.errorSectionNotFound(target),
+        );
+      }
+      return;
+    } catch (e) {
+      // Not a section target
+    }
+
+    if (!mounted) return;
+
+    final handled = await OrgLocator.of(context)!.jumpToSearchOption(target);
+    if (handled || !mounted) return;
+
+    if (isLineNumberSearch(target)) {
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.errorUnsupportedSearchOption(target),
+      );
+    } else if (isRegexpSearch(target)) {
+      final pattern = parseRegexpSearch(target);
+      searchDelegate.query = SearchQuery(pattern, QueryType.regex);
+      searchDelegate.start(context);
+    } else {
+      // Last resort: handle as plain text search
+      searchDelegate.query = SearchQuery(target, QueryType.plain);
+      searchDelegate.start(context);
     }
   }
 
@@ -34,21 +101,23 @@ extension NarrowHandler on DocumentPageState {
     );
   }
 
-  Future<void> doNarrow(OrgTree section) async {
+  Future<void> doNarrow(OrgTree section, {String? searchOption}) async {
     final docProvider = DocumentProvider.of(context);
     final doc = docProvider.doc;
     if (section == doc) {
       debugPrint('Suppressing narrow to currently open document');
+      await handleInitialTarget(searchOption);
       return;
     }
-    final target = _targetForSection(section);
-    if (target != null) {
-      bucket!.write(kRestoreNarrowTargetKey, target);
+    final restorationTarget = _targetForSection(section);
+    if (restorationTarget != null) {
+      bucket!.write(kRestoreNarrowTargetKey, restorationTarget);
     }
     final newSection = await narrow(
       context,
       docProvider.dataSource,
       section,
+      searchOption,
       widget.layer + 1,
     );
     bucket!.remove<String>(kRestoreNarrowTargetKey);
@@ -87,7 +156,9 @@ extension NarrowHandler on DocumentPageState {
     final doc = DocumentProvider.of(context).doc;
     switch (after) {
       case OrgSection():
-        return doc.editNode(before)!.replace(after).commit();
+        var newDoc = doc.editNode(before)!.replace(after).commit() as OrgTree;
+        newDoc = recalculateHeadlineStats(newDoc, after.headline);
+        return newDoc;
       case OrgDocument():
         // If the narrowed section was edited, an OrgDocument will come back.
         //

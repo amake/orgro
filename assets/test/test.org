@@ -7,6 +7,9 @@
 - [[file:layout-spacing-0.org][Spacing (0)]]
 - [[file:layout-spacing-1.org][Spacing (1)]]
 - [[file:layout-blocks.org][Blocks]]
+- [[file:layout-planning.org][Planning]]
+- [[file:layout-indent.org][Indent]]
+- [[file:layout-tables.org][Tables]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]
@@ -16,6 +19,10 @@ Bidi
 * Markup
 
 - [[file:markup-nested.org][Nested objects]]
+
+* Agenda
+
+- [[file:agenda-scheduling.org][Scheduling]]
 
 * Locale
 
@@ -33,16 +40,20 @@ Bidi
 - [[file:links-external.org][External]]
 - [[file:links-abbreviation.org][Abbreviations]]
 - [[file:links-radio.org][Radio]]
+- [[file:links-coderef.org][Coderef]]
 
 * Media
 
 - [[file:media-svg.org][SVG image]]
+- [[file:media-alignment.org][Alignment]]
+- [[file:media-alignment-bidi.org][Bidi alignment]]
 - [[file:media-avif.org][AVIF image]]
 - [[file:media-error.org][Error cases]]
 
 * Visibility
 
 - [[file:visibility-sparse.org][Sparse trees]]
+- [[file:visibility-archive.org][Archive]]
 
 * Local variables
 
@@ -68,12 +79,14 @@ Error cases
 - [[file:startup-entitiesplain.org][entitiesplain]]
 - [[file:startup-entitiespretty.org][entitiespretty]]
 - [[file:startup-hidestars.org][hidestars]]
+- [[file:startup-num.org][num]]
 
 * Meta keywords
 
 - [[file:meta-keywords-layout.org][Layout]]
 - [[file:meta-keywords-doc-info.org][Doc info]]
 - [[file:meta-keywords-edge-cases.org][Edge cases]]
+- [[file:meta-keywords-hiding.org][Hiding]]
 
 * =TODO= keywords
 
@@ -84,6 +97,7 @@ Error cases
 * Attachments
 
 - [[file:attachments-dir.org][:DIR:]]
+- [[file:attachments-id-custom-dir.org][:ID: with custom dir]]
 - [[file:attachments-external-apps.org][External apps]]
 
 * Encryption

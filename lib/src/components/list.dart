@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:orgro/src/fonts.dart';
 
 class ListHeader extends StatelessWidget {
-  const ListHeader({required this.title, super.key});
+  const ListHeader({required this.title, this.trailing, super.key});
 
   final Widget title;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class ListHeader extends StatelessWidget {
         ),
         child: title,
       ),
-      trailing: fontPreloader(context),
+      trailing: trailing,
     );
   }
 }

@@ -77,32 +77,32 @@ void _initCustomFonts() {
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
         ),
-        '2928d982eeb13fe2a86ea1b24275163cc3db3641fbbfc207c5d0f0b6a130154c',
-        8608580,
+        'f3a80e2bacd32e461b70f08c08bc22cb7fe4ceb261bb4972e0438b9e533ef11e',
+        9063692,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
         ),
-        'c656679e4749eb3231f288aa86216b477f95b0529ef2f0341ecebfaf4710ef1e',
-        8580216,
+        'd310b405c05efa50ff01f1a5389f54cd8a0828fe6f72c012da5a72c405b1ad4a',
+        9045356,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w400,
           fontStyle: FontStyle.italic,
         ),
-        'd548452f0782f3b4e683725845f8b508ebb1b218c721364655546684e9294fd5',
-        8942120,
+        'afaf795557c04dcd6adcae6f50fce8e1dfcd1fd6336acfc9555fa3a2a3244b59',
+        9405708,
       ),
       _IosevkaFile(
         const DynamicFontsVariant(
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.italic,
         ),
-        '9366a4f781af66e403f5f3f7b3c00905d43ded0be08698a76cf39826e992eb67',
-        8943492,
+        'fdc515c3b19ebbf1fa2e5440f8c1bdb093ac06d2e6392ca67d97e005fe8e4e58',
+        9370800,
       ),
     ].fold<Map<DynamicFontsVariant, DynamicFontsFile>>(
       {},
@@ -238,18 +238,13 @@ void _initCustomFonts() {
 Iterable<String> get availableFontFamilies sync* {
   yield* _kCustomFonts;
   for (final family in GoogleFonts.asMap().keys) {
-    if (_kMonospaceGoogleFontFamilies.contains(family)) {
+    if (_kGoogleFontFamilies.contains(family)) {
       yield family;
     }
   }
 }
 
-// There is currently no way to filter by category. This list manually compiled from
-// https://fonts.google.com/?category=Monospace
-//
-// TODO(aaron): Remove this pending solution to
-// https://github.com/material-foundation/google-fonts-flutter/issues/112
-const _kMonospaceGoogleFontFamilies = <String>{
+const _kGoogleFontFamilies = <String>{
   'Roboto Mono',
   'DM Mono',
   'Inconsolata',
@@ -289,6 +284,13 @@ const _kMonospaceGoogleFontFamilies = <String>{
   'Roboto Slab',
   'Merriweather',
   'PT Serif',
+  // https://github.com/amake/orgro/issues/154
+  'Source Sans 3',
+  'Roboto',
+  'Inter',
+  'Atkinson Hyperlegible',
+  'Noto Serif',
+  'Source Serif 4',
 
   // https://github.com/amake/orgro/issues/113
   'M PLUS 1 Code',
@@ -334,12 +336,19 @@ TextStyle _loadDynamicFont(String fontFamily) {
 // Hack: Load the preferred content font in a dummy widget before it's actually
 // needed. This helps prevent Flash of Unstyled Text, which in turn makes
 // restoring the scroll position more accurate.
-Widget fontPreloader(BuildContext context) => Text(
-  '',
-  style: loadFontWithVariants(
-    Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
-  ),
-);
+class FontPreloader extends StatelessWidget {
+  const FontPreloader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '',
+      style: loadFontWithVariants(
+        Preferences.of(context, PrefsAspect.viewSettings).fontFamily,
+      ),
+    );
+  }
+}
 
 class _FiraGoFile extends DynamicFontsFile {
   _FiraGoFile(this.variant, String expectedFileHash, int expectedLength)
@@ -365,7 +374,7 @@ class _IosevkaFile extends DynamicFontsFile {
     : super(expectedFileHash, expectedLength);
 
   static const name = 'Iosevka';
-  static const version = '33.0.0';
+  static const version = '33.3.1';
 
   final DynamicFontsVariant variant;
 

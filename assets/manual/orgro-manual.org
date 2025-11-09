@@ -39,6 +39,12 @@ scroll to ensure proper display.
 
 Diminish meta lines like =#+RESULTS:= with [[*Reader Mode][Reader Mode]].
 
+Touch a code reference like [[(foo)]] to jump to the corresponding line.
+
+#+begin_src elisp
+  (calculate-the-thing) ;;(ref:foo)
+#+end_src
+
 ** Syntax highlighting
 
 Syntax highlighting is applied for [[https://github.com/git-touch/highlight/tree/master/highlight/lib/languages][many languages]] in =src= blocks.
@@ -167,6 +173,8 @@ For more details, including supported apps and OS restrictions, see the [[https:
 
 Image links are also supported; see [[*Images][Images]].
 
+Code reference links are supported as well: see [[(foo)]].
+
 #+LINK: OrgroIssue https://github.com/amake/orgro/issues/
 
 Link abbreviations are supported if they are defined via ~#+LINK:~ lines:
@@ -217,8 +225,13 @@ Further, HTTP(S) links to images can be optionally loaded and displayed inline:
 
 Long touch an image to open it in a view where you can zoom and pan.
 
+Image alignment via ~#+ATTR*~ keywords is supported:
+
+#+ATTR_ORG: :align center
+[[./orgro-icon.png]]
+
 Images are cached on your device. To clear the cache and reset your choice if
-you chose =Always= or =Never=, see the action menu on the top screen.
+you chose =Always= or =Never=, see the Settings screen.
 
 ** Footnotes
 
@@ -322,6 +335,24 @@ Orgro can “narrow” the view to a specific section in two ways:
 
 Close the narrowed view by touching the Back button in the top app bar.
 
+* Agenda
+
+Orgro will offer to remind you of upcoming Org Agenda items (any section with an
+active timestamp like <2025-10-16 Thu>) by sending you a local notification.
+Look for a banner at the top of a document containing such sections.
+
+If you allow notifications, that file will be remembered as an “agenda file” and
+Orgro will update pending notifications across all agenda files at the following
+times:
+
+- At app launch
+- Periodically while open
+- When opening or editing an agenda file
+- Periodically in the background, subject to OS background task limitations
+
+In the Settings screen you can see a list of pending notifications. You can also
+clear all notifications; when doing so all agenda files are forgotten.
+
 * Reader Mode
 
 Enable Reader Mode to reflow text, hide emphasis markers, and make meta lines
@@ -342,6 +373,11 @@ Emacs:
 
 Activate with the button in the top app bar.
 
+** Archived sections                                                :ARCHIVE:
+
+Archived sections always start out collapsed, and do not participate in
+visibility cycling. However you can open them by tapping the headline.
+
 * Search
 
 Touch the floating search button in the lower right of the screen. A search
@@ -349,6 +385,10 @@ field will appear in the top app bar; enter your query here. Relevant sections
 will be expanded, while sections without hits will be collapsed. Hits are
 highlighted. Navigate hits with the up and down buttons in the lower right of
 the screen.
+
+Touch the =Aa= button to toggle to regular expressions search mode, or the =.*=
+button to toggle back to plain text mode. Regular expressions are not
+Emacs-style, but rather follow [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet][JavaScript syntax and semantics]].
 
 * Sparse trees
 
@@ -385,6 +425,35 @@ On large screens, optionally let the document take up the entire screen width.
 
 Feel free to raise an issue [[https://github.com/amake/orgro/issues][on GitHub]].
 
+* Keyboard shortcuts
+
+The following keyboard shortcuts are supported. Note that on iOS the Meta key is
+Command (⌘) while on Android it is Control (⌃).
+
+- Start screen
+  - Meta-O :: Open a file
+  - Meta-N :: Create a new file
+  - Meta-L :: Open a URL
+  - Meta-. :: Open Settings screen
+- Document screen
+  - Meta-W :: Close document
+  - Meta-E :: Edit document
+  - Meta-Z :: Undo
+  - Meta-Shift-Z :: Redo
+  - Home :: Scroll to top
+  - End :: Scroll to bottom
+  - Meta-F :: Search
+  - In search mode
+    - Meta-G :: Next search hit
+    - Meta-Shift-G :: Previous search hit
+- Editor screen
+  - Various [[https://api.flutter.dev/flutter/widgets/DefaultTextEditingShortcuts-class.html][platform defaults]]
+  - Meta-W :: Close and discard changes
+  - Meta-S :: Close and apply changes
+  - Meta-B :: Bold
+  - Meta-I :: Italic
+  - Meta-U :: Underline
+
 * Examples
 
 [fn:1] This is a footnote. Tap the reference here to jump back.
@@ -412,6 +481,7 @@ Options recognized by Orgro:
 - entitiespretty / entitiesplain
 - [no]inlineimages
 - [no]fold / overview / content / show[2..5]levels / showall / showeverything
+- [no]num
 
 * =TODO= keywords
 
@@ -475,6 +545,13 @@ following settings from the local variables list:
 
 - ~bidi-paragraph-direction~ :: Override per-paragraph detection of text
   direction; see [[*Right-to-left scripts and bidi texts][Right-to-left scripts and bidi texts]].
+
+- ~org-attach-id-dir~ :: Specify the directory in which ~:ID:~-based attachments
+  are located. By default this is ~"data"~, but popular Emacs distros may
+  customize it.
+
+- ~org-hidden-keywords~ :: Document metadata keywords (~#+TITLE:~, ~#+AUTHOR:~,
+  etc.) to hide.
 
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.

@@ -11,17 +11,16 @@ class FullyRestorableTextEditingController
   }) {
     final selection =
         selectionBaseOffset == null || selectionExtentOffset == null
-            ? null
-            : TextSelection(
-              baseOffset: selectionBaseOffset,
-              extentOffset: selectionExtentOffset,
-            );
-    final value =
-        text == null
-            ? TextEditingValue.empty
-            : selection == null
-            ? TextEditingValue(text: text)
-            : TextEditingValue(text: text, selection: selection);
+        ? null
+        : TextSelection(
+            baseOffset: selectionBaseOffset,
+            extentOffset: selectionExtentOffset,
+          );
+    final value = text == null
+        ? TextEditingValue.empty
+        : selection == null
+        ? TextEditingValue(text: text)
+        : TextEditingValue(text: text, selection: selection);
     return FullyRestorableTextEditingController.fromValue(value);
   }
 

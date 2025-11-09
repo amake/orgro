@@ -1,0 +1,12 @@
+* foo
+  bar
+* bizz
+  bazz
+** buzz
+   bozz
+** burz                                                             :ARCHIVE:
+   borz
+* TODO [#A] bazinga https://example.com                             :ARCHIVE:
+  bozo
+* bazonga https://example.com                                       :archive:
+  bozo

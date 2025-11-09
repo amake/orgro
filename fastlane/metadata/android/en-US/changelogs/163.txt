@@ -1,0 +1,4 @@
+- Improve block rendering
+- Support dynamic blocks
+- Honor `org-attach-id-dir` set in local variables
+- Improved handling of archived sections

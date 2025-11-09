@@ -28,12 +28,11 @@ OrgTree _recalculateCheckboxes(OrgTree tree) {
     final parent = scope.parent;
     if (parent is! OrgListItem || parent.checkbox == null) continue;
 
-    final newCheckbox =
-        scope.done == 0
-            ? '[ ]'
-            : scope.done == scope.total
-            ? '[X]'
-            : '[-]';
+    final newCheckbox = scope.done == 0
+        ? '[ ]'
+        : scope.done == scope.total
+        ? '[X]'
+        : '[-]';
 
     if (parent.checkbox == newCheckbox) continue;
 
@@ -118,12 +117,14 @@ List<_ProgressScope> _visitListScopes(
 
 OrgTree recalculateHeadlineStats(OrgTree root, OrgHeadline target) {
   final (node: _, :path) = root.find((node) => identical(node, target))!;
-  final tree =
-      path.reversed
-          .whereType<OrgTree>()
-          // Skip the section that the headline belongs to
-          .skip(1)
-          .first;
+  final tree = path.reversed
+      .whereType<OrgTree>()
+      // Skip the section that the headline belongs to
+      .skip(1)
+      .firstOrNull;
+  // If cycling the root of a narrowed view, this will be nulll and we can't
+  // recalculate until we're back at the wide view
+  if (tree == null) return root;
   final replacement = _recalculateHeadlineStats(tree);
   return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
 }

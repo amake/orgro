@@ -1,0 +1,14 @@
+- List
+ foo
+  bar
+   baz
+
+   #+begin_foo
+  a
+   /b/ [[foo]]
+    c
+   #+end_foo
+
+# Local Variables:
+# org-hide-emphasis-markers: t
+# End:

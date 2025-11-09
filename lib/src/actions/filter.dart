@@ -4,7 +4,6 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:orgro/src/util.dart';
 
 class FilterChipsInput extends StatelessWidget {
   const FilterChipsInput({
@@ -33,13 +32,13 @@ class FilterChipsInput extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
+              spacing: 8,
               children: [
                 if (filter.customFilter.isEmpty)
                   _CustomChip(
-                    label:
-                        AppLocalizations.of(
-                          context,
-                        )!.customFilterChipName.toUpperCase(),
+                    label: AppLocalizations.of(
+                      context,
+                    )!.customFilterChipName.toUpperCase(),
                     onPressed: () async {
                       final newQuery = await showDialog<String>(
                         context: context,
@@ -53,56 +52,49 @@ class FilterChipsInput extends StatelessWidget {
                     },
                     onLongPress:
                         Preferences.of(
-                              context,
-                              PrefsAspect.customFilterQueries,
-                            ).customFilterQueries.isNotEmpty
-                            ? () async {
-                              final newQuery = await showDialog<String>(
-                                context: context,
-                                builder:
-                                    (context) =>
-                                        const CustomFilterHistoryDialog(),
+                          context,
+                          PrefsAspect.customFilterQueries,
+                        ).customFilterQueries.isNotEmpty
+                        ? () async {
+                            final newQuery = await showDialog<String>(
+                              context: context,
+                              builder: (context) =>
+                                  const CustomFilterHistoryDialog(),
+                            );
+                            if (newQuery != null) {
+                              selectedFilter.value = filter.copyWith(
+                                customFilter: newQuery,
                               );
-                              if (newQuery != null) {
-                                selectedFilter.value = filter.copyWith(
-                                  customFilter: newQuery,
-                                );
-                              }
                             }
-                            : null,
+                          }
+                        : null,
                   ),
                 for (final keyword in keywords)
                   if (filter.keywords.isEmpty)
                     _KeywordChip(
                       keyword,
                       done: todoSettings.any((e) => e.done.contains(keyword)),
-                      onPressed:
-                          () =>
-                              selectedFilter.value = filter.copyWith(
-                                keywords: [...filter.keywords, keyword],
-                              ),
+                      onPressed: () => selectedFilter.value = filter.copyWith(
+                        keywords: [...filter.keywords, keyword],
+                      ),
                     ),
                 for (final priority in priorities)
                   if (filter.priorities.isEmpty)
                     _PriorityChip(
                       priority,
-                      onPressed:
-                          () =>
-                              selectedFilter.value = filter.copyWith(
-                                priorities: [...filter.priorities, priority],
-                              ),
+                      onPressed: () => selectedFilter.value = filter.copyWith(
+                        priorities: [...filter.priorities, priority],
+                      ),
                     ),
                 for (final tag in tags)
                   if (!filter.tags.contains(tag))
                     _TagChip(
                       tag,
-                      onPressed:
-                          () =>
-                              selectedFilter.value = filter.copyWith(
-                                tags: [...filter.tags, tag],
-                              ),
+                      onPressed: () => selectedFilter.value = filter.copyWith(
+                        tags: [...filter.tags, tag],
+                      ),
                     ),
-              ].separatedBy(const SizedBox(width: 8)).toList(growable: false),
+              ],
             ),
           ),
         );
@@ -126,6 +118,7 @@ class SelectedFilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 8,
       children: [
         if (filter.customFilter.isNotEmpty)
           _CustomChip(
@@ -136,32 +129,29 @@ class SelectedFilterChips extends StatelessWidget {
           _KeywordChip(
             keyword,
             done: todoSettings.any((e) => e.done.contains(keyword)),
-            onDeleted:
-                () => onChange(
-                  filter.copyWith(
-                    keywords: List.of(filter.keywords)..remove(keyword),
-                  ),
-                ),
+            onDeleted: () => onChange(
+              filter.copyWith(
+                keywords: List.of(filter.keywords)..remove(keyword),
+              ),
+            ),
           ),
         for (final priority in filter.priorities)
           _PriorityChip(
             priority,
-            onDeleted:
-                () => onChange(
-                  filter.copyWith(
-                    priorities: List.of(filter.priorities)..remove(priority),
-                  ),
-                ),
+            onDeleted: () => onChange(
+              filter.copyWith(
+                priorities: List.of(filter.priorities)..remove(priority),
+              ),
+            ),
           ),
         for (final tag in filter.tags)
           _TagChip(
             tag,
-            onDeleted:
-                () => onChange(
-                  filter.copyWith(tags: List.of(filter.tags)..remove(tag)),
-                ),
+            onDeleted: () => onChange(
+              filter.copyWith(tags: List.of(filter.tags)..remove(tag)),
+            ),
           ),
-      ].separatedBy(const SizedBox(width: 8)).toList(growable: false),
+      ],
     );
   }
 }
@@ -181,10 +171,9 @@ class _KeywordChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputChip(
-      avatar:
-          done
-              ? const Icon(Icons.check_circle)
-              : const Icon(Icons.check_circle_outline),
+      avatar: done
+          ? const Icon(Icons.check_circle)
+          : const Icon(Icons.check_circle_outline),
       label: Text(keyword),
       onPressed: onPressed,
       onDeleted: onDeleted,
@@ -247,15 +236,14 @@ class _CustomChip extends StatelessWidget {
       onLongPress: onLongPress,
       child: InputChip(
         avatar: const Icon(Icons.edit),
-        label:
-            label != null
-                ? Text(label!)
-                : ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width / 4,
-                  ),
-                  child: Text(query!),
+        label: label != null
+            ? Text(label!)
+            : ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.sizeOf(context).width / 4,
                 ),
+                child: Text(query!),
+              ),
         onPressed: onPressed,
         onDeleted: onDeleted,
       ),

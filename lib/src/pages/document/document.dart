@@ -5,10 +5,12 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
+import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
+import 'package:orgro/src/components/scroll.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
@@ -16,6 +18,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/encryption.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/document/agenda.dart';
 import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/pages/document/encryption.dart';
 import 'package:orgro/src/pages/document/images.dart';
@@ -40,23 +43,18 @@ extension InitialModePersistence on InitialMode? {
     null => null,
   };
 
-  static InitialMode? fromString(String? value) {
-    switch (value) {
-      case 'view':
-        return InitialMode.view;
-      case 'edit':
-        return InitialMode.edit;
-      default:
-        return null;
-    }
-  }
+  static InitialMode? fromString(String? value) => switch (value) {
+    'view' => InitialMode.view,
+    'edit' => InitialMode.edit,
+    _ => null,
+  };
 }
 
 const _kDefaultInitialMode = InitialMode.view;
 
 const kRestoreNarrowTargetKey = 'restore_narrow_target';
 const kRestoreModeKey = 'restore_mode';
-const kRestoreSearchQueryKey = 'restore_search_query';
+const kRestoreSearchQueryKey = 'restore_search_query_2';
 const kRestoreSearchFilterKey = 'restore_search_filter';
 const kRestoreDirtyDocumentKey = 'restore_dirty_document';
 
@@ -75,7 +73,7 @@ class DocumentPage extends StatefulWidget {
   final int layer;
   final String title;
   final String? initialTarget;
-  final String? initialQuery;
+  final SearchQuery? initialQuery;
   final InitialMode? initialMode;
   final FilterData? initialFilter;
   final bool root;
@@ -95,7 +93,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
-  double get _screenWidth => MediaQuery.of(context).size.width;
+  double get _screenWidth => MediaQuery.sizeOf(context).width;
 
   // Not sure why this size
   bool get _biggishScreen => _screenWidth > 500;
@@ -109,7 +107,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     super.initState();
     searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
-        if (query.isEmpty || query.length > 3) {
+        if (query.isEmpty || query.queryString.length > 3) {
           _doQuery(query);
         }
       },
@@ -122,7 +120,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       (value) => setState(() => canResolveRelativeLinks = value),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      openNarrowTarget(widget.initialTarget);
+      handleInitialTarget(widget.initialTarget);
       ensureOpenOnNarrow();
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
@@ -145,6 +143,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.tags = analysis.tags ?? [];
     searchDelegate.priorities = analysis.priorities ?? [];
     searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
+    if (analysis.loaded && isAgendaFile) {
+      // The same file's persistent identifier may change; re-add to overwrite
+      // stale entry.
+      setAgendaFile();
+      setNotifications();
+    }
   }
 
   @override
@@ -161,7 +165,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final target = bucket!.read<String>(kRestoreNarrowTargetKey);
         if (widget.initialTarget == null) {
-          openNarrowTarget(target);
+          handleInitialTarget(target);
         }
         if (widget.initialMode == null && target == null) {
           restoreMode();
@@ -196,13 +200,13 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     ];
   }
 
-  void _doQuery(String query) {
+  void _doQuery(SearchQuery query) {
     if (query.isEmpty) {
-      bucket!.remove<String>(kRestoreSearchQueryKey);
+      bucket!.remove<void>(kRestoreSearchQueryKey);
     } else {
-      bucket!.write(kRestoreSearchQueryKey, query);
+      bucket!.write(kRestoreSearchQueryKey, query.toJson());
     }
-    _viewSettings.queryString = query;
+    _viewSettings.searchQuery = query;
   }
 
   void _doSearchFilter(FilterData filterData) {
@@ -241,11 +245,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       if (_bigScreen) {
         yield TextStyleButton(
           textScale: scopedViewSettings.textScale,
-          onTextScaleChanged:
-              (value) => viewSettings.setTextScale(scopeKey, value),
+          onTextScaleChanged: (value) =>
+              viewSettings.setTextScale(scopeKey, value),
           fontFamily: scopedViewSettings.fontFamily,
-          onFontFamilyChanged:
-              (value) => viewSettings.setFontFamily(scopeKey, value),
+          onFontFamilyChanged: (value) =>
+              viewSettings.setFontFamily(scopeKey, value),
         );
         yield ReaderModeButton(
           enabled: scopedViewSettings.readerMode,
@@ -262,44 +266,41 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       } else {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
-          itemBuilder:
-              (context) => [
-                undoMenuItem(context, onChanged: _undo),
-                redoMenuItem(context, onChanged: _redo),
-                const PopupMenuDivider(),
-                textScaleMenuItem(
-                  context,
-                  textScale: scopedViewSettings.textScale,
-                  onChanged:
-                      (value) => viewSettings.setTextScale(scopeKey, value),
-                ),
-                fontFamilyMenuItem(
-                  context,
-                  fontFamily: scopedViewSettings.fontFamily,
-                  onChanged:
-                      (value) => viewSettings.setFontFamily(scopeKey, value),
-                ),
-                const PopupMenuDivider(),
-                readerModeMenuItem(
-                  context,
-                  enabled: scopedViewSettings.readerMode,
-                  onChanged: (value) => viewSettings.readerMode = value,
-                ),
-                if (_allowFullScreen(context))
-                  fullWidthMenuItem(
-                    context,
-                    enabled: scopedViewSettings.fullWidth,
-                    onChanged: (value) => viewSettings.fullWidth = value,
-                  ),
-                const PopupMenuDivider(),
-                // Disused because icon button is always visible now
-                // PopupMenuItem<VoidCallback>(
-                //   child: const Text('Cycle visibility'),
-                //   value: OrgController.of(context).cycleVisibility,
-                // ),
-                scrollTopMenuItem(context),
-                scrollBottomMenuItem(context),
-              ],
+          itemBuilder: (context) => [
+            undoMenuItem(context, onChanged: _undo),
+            redoMenuItem(context, onChanged: _redo),
+            const PopupMenuDivider(),
+            textScaleMenuItem(
+              context,
+              textScale: scopedViewSettings.textScale,
+              onChanged: (value) => viewSettings.setTextScale(scopeKey, value),
+            ),
+            fontFamilyMenuItem(
+              context,
+              fontFamily: scopedViewSettings.fontFamily,
+              onChanged: (value) => viewSettings.setFontFamily(scopeKey, value),
+            ),
+            const PopupMenuDivider(),
+            readerModeMenuItem(
+              context,
+              enabled: scopedViewSettings.readerMode,
+              onChanged: (value) => viewSettings.readerMode = value,
+            ),
+            if (_allowFullScreen(context))
+              fullWidthMenuItem(
+                context,
+                enabled: scopedViewSettings.fullWidth,
+                onChanged: (value) => viewSettings.fullWidth = value,
+              ),
+            const PopupMenuDivider(),
+            // Disused because icon button is always visible now
+            // PopupMenuItem<VoidCallback>(
+            //   child: const Text('Cycle visibility'),
+            //   value: OrgController.of(context).cycleVisibility,
+            // ),
+            scrollTopMenuItem(context),
+            scrollBottomMenuItem(context),
+          ],
         );
       }
     }
@@ -309,50 +310,42 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: searchDelegate.searchMode,
-      builder:
-          (context, searchMode, _) => ValueListenableBuilder<bool>(
-            valueListenable: _dirty,
-            builder: (context, dirty, _) {
-              return PopScope(
-                canPop:
-                    searchMode ||
-                    !dirty ||
-                    _doc is! OrgDocument ||
-                    !widget.root,
-                onPopInvokedWithResult: _onPopInvoked,
-                child: Scaffold(
-                  body: KeyboardShortcuts(
-                    // Builder is here to ensure that the primary scroll controller set by the
-                    // Scaffold makes it into the body's context
-                    child: Builder(
-                      builder:
-                          (context) => CustomScrollView(
-                            restorationId:
-                                'document_scroll_view_${widget.layer}',
-                            slivers: [
-                              _buildAppBar(context, searchMode: searchMode),
-                              _buildDocument(context),
-                            ],
-                          ),
-                    ),
-                  ),
-                  // Builder is here to ensure that the Scaffold makes it into the
-                  // body's context
-                  floatingActionButton: Builder(
-                    builder:
-                        (context) => _buildFloatingActionButton(
-                          context,
-                          searchMode: searchMode,
-                        ),
-                  ),
-                  bottomSheet:
-                      searchMode
-                          ? searchDelegate.buildBottomSheet(context)
-                          : null,
+      builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
+        valueListenable: _dirty,
+        builder: (context, dirty, _) {
+          return PopScope(
+            canPop:
+                searchMode || !dirty || _doc is! OrgDocument || !widget.root,
+            onPopInvokedWithResult: _onPopInvoked,
+            child: KeyboardShortcuts(
+              onEdit: doEdit,
+              onUndo: _undo,
+              onRedo: _redo,
+              searchDelegate: searchDelegate,
+              child: Scaffold(
+                body: CustomScrollView(
+                  restorationId: 'document_scroll_view_${widget.layer}',
+                  slivers: [
+                    _buildAppBar(context, searchMode: searchMode),
+                    _buildDocument(context),
+                  ],
                 ),
-              );
-            },
-          ),
+                // Builder is here to ensure that the Scaffold makes it into the
+                // body's context
+                floatingActionButton: Builder(
+                  builder: (context) => _buildFloatingActionButton(
+                    context,
+                    searchMode: searchMode,
+                  ),
+                ),
+                bottomSheet: searchMode
+                    ? searchDelegate.buildBottomSheet(context)
+                    : null,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -381,16 +374,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       delegate: SliverChildListDelegate([
         DirectoryPermissionsBanner(
           visible: _askForDirectoryPermissions,
-          onDismiss:
-              () => viewSettings.setLocalLinksPolicy(
-                LocalLinksPolicy.deny,
-                persist: false,
-              ),
-          onForbid:
-              () => viewSettings.setLocalLinksPolicy(
-                LocalLinksPolicy.deny,
-                persist: true,
-              ),
+          onDismiss: () => viewSettings.setLocalLinksPolicy(
+            LocalLinksPolicy.deny,
+            persist: false,
+          ),
+          onForbid: () => viewSettings.setLocalLinksPolicy(
+            LocalLinksPolicy.deny,
+            persist: true,
+          ),
           onAllow: doPickDirectory,
         ),
         RemoteImagePermissionsBanner(
@@ -408,6 +399,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           visible: _askToDecrypt,
           onAccept: decryptContent,
           onDeny: viewSettings.setDecryptPolicy,
+        ),
+        AgendaNotificationsBanner(
+          visible: _askAboutAgendaNotifications,
+          onAccept: setAgendaFile,
+          onDeny: viewSettings.setAgendaNotificationsPolicy,
         ),
         _maybeConstrainWidth(
           context,
@@ -448,10 +444,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   // Add some extra padding on big screens to make things not feel so
   // tight. We can do this instead of adjusting the [OrgTheme.rootPadding]
   // because we are shrinkwapping the document
-  Widget _maybePadForBigScreen(Widget child) =>
-      _bigScreen
-          ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
-          : child;
+  Widget _maybePadForBigScreen(Widget child) => _bigScreen
+      ? SliverPadding(padding: _kBigScreenDocumentPadding, sliver: child)
+      : child;
 
   Widget _maybeConstrainWidth(BuildContext context, {required Widget child}) {
     if (_viewSettings.fullWidth || !_bigScreen || !_allowFullScreen(context)) {
@@ -491,27 +486,34 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   Widget _buildFloatingActionButton(
     BuildContext context, {
     required bool searchMode,
-  }) =>
-      searchMode
-          ? const SearchResultsNavigation()
-          : Column(
+  }) => searchMode
+      ? searchDelegate.buildSearchResultsNavigation()
+      : ScrollingBuilder(
+          builder: (context, scrolling) => Column(
             mainAxisAlignment: MainAxisAlignment.end,
+            spacing: 16,
             children: [
               FloatingActionButton(
-                onPressed: doEdit,
+                onPressed: () {
+                  if (scrolling) return;
+                  doEdit();
+                },
                 heroTag: '${widget.title}EditFAB',
                 mini: true,
                 child: const Icon(Icons.edit),
               ),
-              const SizedBox(height: 16),
               BadgableFloatingActionButton(
                 badgeVisible: searchDelegate.hasQuery,
-                onPressed: () => searchDelegate.start(context),
+                onPressed: () {
+                  if (scrolling) return;
+                  searchDelegate.start(context);
+                },
                 heroTag: '${widget.title}FAB',
                 child: const Icon(Icons.search),
               ),
             ],
-          );
+          ),
+        );
 
   Future<void> doEdit({bool requestFocus = false}) async {
     final controller = OrgController.of(context);
@@ -552,20 +554,17 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             AppLocalizations.of(context)!.snackbarMessageNeedsEncryptionKey,
           ),
           action: SnackBarAction(
-            label:
-                AppLocalizations.of(
-                  context,
-                )!.snackbarActionEnterEncryptionKey.toUpperCase(),
+            label: AppLocalizations.of(
+              context,
+            )!.snackbarActionEnterEncryptionKey.toUpperCase(),
             onPressed: () async {
               final password = await showDialog<String>(
                 context: context,
-                builder:
-                    (context) => InputPasswordDialog(
-                      title:
-                          AppLocalizations.of(
-                            context,
-                          )!.inputEncryptionPasswordDialogTitle,
-                    ),
+                builder: (context) => InputPasswordDialog(
+                  title: AppLocalizations.of(
+                    context,
+                  )!.inputEncryptionPasswordDialogTitle,
+                ),
               );
               if (password == null || !context.mounted) return;
               final docProvider = DocumentProvider.of(context);
@@ -700,19 +699,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     final writeFuture = _writeFuture;
     if (writeFuture != null) {
       debugPrint('waiting for autosave to finish');
-      showDialog<String>(
-        context: context,
-        barrierDismissible: false,
-        builder:
-            (context) => ProgressIndicatorDialog(
-              title: AppLocalizations.of(context)!.savingProgressDialogTitle,
-            ),
+      await progressTask(
+        context,
+        dialogTitle: AppLocalizations.of(context)!.savingProgressDialogTitle,
+        task: writeFuture,
       );
-      await writeFuture.whenComplete(() => navigator.pop());
-      if (!_dirty.value) {
-        navigator.pop();
-        return;
-      }
+      if (!_dirty.value) return;
     }
 
     if (!mounted) return;
@@ -736,23 +728,22 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       }
     }
 
+    if (!mounted) return;
+
     final docProvider = DocumentProvider.of(context);
     var passwords = docProvider.passwords;
     if (docProvider.analysis.needsEncryption == true &&
         doc.missingEncryptionKey(passwords)) {
       final password = await showDialog<String>(
         context: context,
-        builder:
-            (context) => InputPasswordDialog(
-              title:
-                  AppLocalizations.of(
-                    context,
-                  )!.inputEncryptionPasswordDialogTitle,
-              bodyText:
-                  AppLocalizations.of(
-                    context,
-                  )!.inputEncryptionPasswordDialogBody,
-            ),
+        builder: (context) => InputPasswordDialog(
+          title: AppLocalizations.of(
+            context,
+          )!.inputEncryptionPasswordDialogTitle,
+          bodyText: AppLocalizations.of(
+            context,
+          )!.inputEncryptionPasswordDialogBody,
+        ),
       );
       if (!mounted) return;
       if (password == null) {
@@ -787,12 +778,19 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       return;
     }
 
-    // Prompt to share
+    final isScratchDocument =
+        source is AssetDataSource && source.key == LocalAssets.scratch;
+
+    // Prompt to save or share
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (context) =>
-              ShareUnsaveableChangesDialog(doc: doc, serializer: serializer),
+      builder: (context) => SaveChangesDialog(
+        doc: doc,
+        serializer: serializer,
+        message: isScratchDocument
+            ? null
+            : AppLocalizations.of(context)!.saveChangesDialogMessage,
+      ),
     );
 
     if (result == true) navigator.pop();
@@ -807,4 +805,18 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       !_askForDirectoryPermissions &&
       !_askPermissionToLoadRemoteImages &&
       !_askPermissionToSaveChanges;
+
+  bool? get _hasAgendaEntries =>
+      DocumentProvider.of(context).analysis.hasAgendaEntries;
+
+  bool get _askAboutAgendaNotifications =>
+      _viewSettings.agendaNotificationsPolicy ==
+          AgendaNotificationsPolicy.ask &&
+      canBeAgendaFile &&
+      !isAgendaFile &&
+      _hasAgendaEntries == true &&
+      !_askForDirectoryPermissions &&
+      !_askPermissionToLoadRemoteImages &&
+      !_askPermissionToSaveChanges &&
+      !_askToDecrypt;
 }

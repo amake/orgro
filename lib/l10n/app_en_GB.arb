@@ -5,8 +5,13 @@
   "menuItemSettings": "Settings",
   "menuItemClearCache": "Clear cache",
   "menuItemOrgroManual": "Orgro Manual",
+  "menuItemOrgManual": "Org Manual",
   "menuItemTestFile": "Test File",
   "menuItemAbout": "About",
+  "menuItemOpenUrl": "Open URL",
+
+  "quickActionNewDocument": "New Document",
+  "quickActionTopPin": "Open {name}",
 
   "appearanceModeAutomatic": "Automatic",
   "appearanceModeLight": "Light",
@@ -14,17 +19,31 @@
 
   "settingsScreenTitle": "Settings",
   "settingsSectionDefaultText": "Default text",
+  "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
+
+  "agendaNotificationsChannelName": "Agenda Notifications",
+  "agendaNotificationsChannelDescription": "Notifications for Org Agenda items",
+  "agendaNotificationsActionView": "View",
+
+  "settingsItemLoading": "Loading...",
 
   "settingsItemAppearance": "Appearance",
   "settingsItemTextScale": "Scale",
   "settingsItemFontFamily": "Font",
 
+  "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
+  "settingsDialogNotificationsTitle": "Pending notifications",
+  "settingsItemClearNotifications": "Clear all notifications",
+
   "settingsActionClearCache": "Clear cache",
   "settingsActionResetPreferences": "Restore defaults",
+  "settingsActionResetDirectoryPermissions": "Reset directory permissions",
 
+  "snackbarMessageNotificationsCleared": "Notifications cleared",
   "snackbarMessageCacheCleared": "Cache cleared",
   "snackbarMessagePreferencesReset": "Preferences reset",
+  "snackbarMessageDirectoryPermissionsReset": "Directory permissions reset",
 
   "confirmResetPreferencesDialogTitle": "Restore defaults?",
   "confirmResetPreferencesDialogMessage": "This will reset all preferences to their default values. This action can’t be undone.",
@@ -38,11 +57,19 @@
   "buttonCreateFile": "Create File",
   "buttonOpenOrgroManual": "Open Orgro Manual",
   "buttonOpenOrgManual": "Open Org Manual",
+  "buttonOpenUrl": "Open URL",
 
   "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
 
+  "sectionHeaderPinnedFiles": "Pinned files",
   "sectionHeaderRecentFiles": "Recent files",
+  "recentFilesSortDialogTitle": "Sort by",
+  "sortKeyLastOpened": "Last opened",
+  "sortKeyName": "Name",
+  "sortKeyLocation": "Location",
+  "sortOrderAscending": "Ascending",
+  "sortOrderDescending": "Descending",
 
   "fileSourceDocuments": "Documents",
   "fileSourceDownloads": "Downloads",
@@ -66,6 +93,8 @@
 
   "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
   "snackbarActionEnterEncryptionKey": "Enter password",
+
+  "snackbarMessageNotificationPermissionsDenied": "No permission for notifications",
 
   "dialogTitleError": "Error",
   "dialogActionConfirm": "OK",
@@ -102,10 +131,16 @@
   "bannerBodyActionDecryptNotNow": "Not now",
   "bannerBodyActionDecryptNever": "Never",
 
+  "bannerBodyAgendaNotifications": "Get notifications for agenda items in this file?",
+  "bannerBodyActionAgendaEnable": "Notify me",
+  "bannerBodyActionAgendaNotNow": "Not now",
+  "bannerBodyActionAgendaNever": "Never",
+
   "saveChangesDialogTitle": "Save changes?",
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
   "saveActionShare": "Share",
   "saveActionDiscard": "Discard",
+  "saveActionSaveAs": "Save as",
 
   "discardChangesDialogTitle": "Discard changes?",
   "discardActionDiscard": "Discard",
@@ -120,6 +155,8 @@
   "inputCustomFilterDialogTitle": "Custom filter query",
   "inputCustomFilterDialogHistoryButton": "History",
 
+  "loadingProgressDialogTitle": "Loading…",
+  "preparingProgressDialogTitle": "Preparing…",
   "decryptingProgressDialogTitle": "Decrypting…",
   "encryptingProgressDialogTitle": "Encrypting…",
   "serializingProgressDialogTitle": "Serialising…",
@@ -129,6 +166,10 @@
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
+
+  "saveAsDialogTitle": "Save as",
+
+  "inputUrlDialogTitle": "Enter URL",
 
   "startTimePickerTitle": "Select start time",
   "endTimePickerTitle": "Select end time",
@@ -149,6 +190,8 @@
   "errorDecryptionFailed": "Decryption failed",
   "errorLinkNotHandled": "Couldn’t open link “{link}”",
   "errorExternalIdNotFound": "File with ID “{id}” not found",
+  "errorSectionNotFound": "Section not found: {section}",
+  "errorUnsupportedSearchOption": "Unsupported search option: {option}",
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

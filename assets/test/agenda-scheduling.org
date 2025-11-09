@@ -1,0 +1,20 @@
+* TODO In the past
+  SCHEDULED: <2025-10-05 Sun>
+
+  foo
+
+* TODO On a future day
+  SCHEDULED: <2025-10-11 Sat>
+
+  bar
+
+
+* TODO Do the thing at the exact time
+  SCHEDULED: <2025-10-10 Fri 22:40>
+
+  baz
+
+* DONE In the future but completed
+  CLOSED: [2025-10-01 Wed 21:43] SCHEDULED: <2026-03-02 Mon>
+
+  bazinga
