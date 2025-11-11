@@ -1,0 +1,4 @@
+- Support searching by regex
+- Support id: links with search options
+- Updated German localization
+- Bug fixes
