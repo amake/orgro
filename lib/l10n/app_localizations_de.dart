@@ -18,7 +18,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemSettings => 'Einstellungen';
 
   @override
-  String get menuItemClearCache => 'Cache löschen';
+  String get menuItemClearCache => 'Clear cache';
 
   @override
   String get menuItemOrgroManual => 'Orgro Handbuch';
@@ -27,20 +27,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemOrgManual => 'Org Handbuch';
 
   @override
-  String get menuItemTestFile => 'Test Datei';
+  String get menuItemTestFile => 'Testdatei';
 
   @override
   String get menuItemAbout => 'Über';
 
   @override
-  String get menuItemOpenUrl => 'Open URL';
+  String get menuItemOpenUrl => 'Öffne URL';
 
   @override
-  String get quickActionNewDocument => 'New Document';
+  String get quickActionNewDocument => 'Neues Dokument';
 
   @override
   String quickActionTopPin(String name) {
-    return 'Open $name';
+    return 'Öffne $name';
   }
 
   @override
@@ -56,29 +56,29 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsScreenTitle => 'Einstellungen';
 
   @override
-  String get settingsSectionDefaultText => 'Schrift';
+  String get settingsSectionDefaultText => 'Vorgegebener Text';
 
   @override
-  String get settingsSectionNotifications => 'Notifications';
+  String get settingsSectionNotifications => 'Benachrichtigungen';
 
   @override
   String get settingsSectionDataManagement => 'Datenverwaltung';
 
   @override
-  String get agendaNotificationsChannelName => 'Agenda Notifications';
+  String get agendaNotificationsChannelName => 'Agenda Benachrichtigungen';
 
   @override
   String get agendaNotificationsChannelDescription =>
-      'Notifications for Org Agenda items';
+      'Benachrichtigungen für Org Agenda Einträge';
 
   @override
   String get agendaNotificationsActionView => 'View';
 
   @override
-  String get settingsItemLoading => 'Loading...';
+  String get settingsItemLoading => 'Ladet…';
 
   @override
-  String get settingsItemAppearance => 'Farbschema';
+  String get settingsItemAppearance => 'Aussehen';
 
   @override
   String get settingsItemTextScale => 'Größe';
@@ -96,79 +96,79 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nString pending notifications',
-      one: '1 pending notification',
-      zero: 'No notifications',
+      other: '$nString offene Benachrichtigungen',
+      one: '1 offene Benachrichtigung',
+      zero: 'Keine Benachrichtigungen',
     );
     return '$_temp0';
   }
 
   @override
-  String get settingsDialogNotificationsTitle => 'Pending notifications';
+  String get settingsDialogNotificationsTitle => 'Offene Benachrichtigungen';
 
   @override
-  String get settingsItemClearNotifications => 'Clear all notifications';
+  String get settingsItemClearNotifications => 'Lösche alle Benachrichtigungen';
 
   @override
   String get settingsActionClearCache => 'Cache löschen';
 
   @override
-  String get settingsActionResetPreferences => 'Einstellungen Zurücksetzen';
+  String get settingsActionResetPreferences => 'Einstellungen zurücksetzen';
 
   @override
   String get settingsActionResetDirectoryPermissions =>
-      'Reset directory permissions';
+      'Verzeichnisberechtigungen zurücksetzen';
 
   @override
-  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+  String get snackbarMessageNotificationsCleared =>
+      'Benachrichtigungen gelöscht';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache gelöscht';
 
   @override
-  String get snackbarMessagePreferencesReset => 'Einstellungen Zurückgesetzt';
+  String get snackbarMessagePreferencesReset => 'Einstellungen zurückgesetzt';
 
   @override
   String get snackbarMessageDirectoryPermissionsReset =>
-      'Directory permissions reset';
+      'Verzeichnisberechtigungen zurückgesetzt';
 
   @override
-  String get confirmResetPreferencesDialogTitle =>
-      'Einstellungen Zurücksetzen?';
+  String get confirmResetPreferencesDialogTitle => 'Einstellungen löschen?';
 
   @override
   String get confirmResetPreferencesDialogMessage =>
       'Es werden alle Einstellungen zurückgesetzt. Dies kann nicht rückgängig gemacht werden.';
 
   @override
-  String get confirmResetPreferencesActionReset => 'Zurücksetzen';
+  String get confirmResetPreferencesActionReset => 'Löschen';
 
   @override
   String get confirmResetPreferencesActionCancel => 'Abbrechen';
 
   @override
-  String get aboutLinkSupport => 'Support · Feedback';
+  String get aboutLinkSupport => 'Unterstützung · Feedback';
 
   @override
   String get aboutLinkChangelog => 'Changelog';
 
   @override
-  String get buttonOpenFile => 'Datei öffnen';
+  String get buttonOpenFile => 'Öffne Datei';
 
   @override
-  String get buttonCreateFile => 'Datei erstellen';
+  String get buttonCreateFile => 'Erstelle Datei';
 
   @override
-  String get buttonOpenOrgroManual => 'Orgro Handbuch öffnen';
+  String get buttonOpenOrgroManual => 'Öffne Orgro Handbuch';
 
   @override
-  String get buttonOpenOrgManual => 'Org Handbuch öffnen';
+  String get buttonOpenOrgManual => 'Öffne Org Handbuch';
 
   @override
-  String get buttonOpenUrl => 'Open URL';
+  String get buttonOpenUrl => 'Öffne URL';
 
   @override
-  String get buttonSupport => 'Hilfe · Feedback';
+  String get buttonSupport => 'Support · Feedback';
 
   @override
   String buttonVersion(String version) {
@@ -176,28 +176,28 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get sectionHeaderPinnedFiles => 'Pinned files';
+  String get sectionHeaderPinnedFiles => 'Angeheftete Dateien';
 
   @override
-  String get sectionHeaderRecentFiles => 'Zuletzt geöffnet';
+  String get sectionHeaderRecentFiles => 'Letzte Dateien';
 
   @override
-  String get recentFilesSortDialogTitle => 'Sort by';
+  String get recentFilesSortDialogTitle => 'Sorte nach';
 
   @override
-  String get sortKeyLastOpened => 'Last opened';
+  String get sortKeyLastOpened => 'Letztens geöffnet';
 
   @override
   String get sortKeyName => 'Name';
 
   @override
-  String get sortKeyLocation => 'Location';
+  String get sortKeyLocation => 'Ort';
 
   @override
-  String get sortOrderAscending => 'Ascending';
+  String get sortOrderAscending => 'Aufsteigend';
 
   @override
-  String get sortOrderDescending => 'Descending';
+  String get sortOrderDescending => 'Absteigend';
 
   @override
   String get fileSourceDocuments => 'Dokumente';
@@ -212,13 +212,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemReaderMode => 'Lesemodus';
 
   @override
-  String get menuItemFullWidth => 'Volle Breite';
+  String get menuItemFullWidth => 'Volle breite';
 
   @override
-  String get menuItemScrollTop => 'Nach Oben Scrollen';
+  String get menuItemScrollTop => 'Nach oben scrollen';
 
   @override
-  String get menuItemScrollBottom => 'Nach Unten Scrollen';
+  String get menuItemScrollBottom => 'Nach unten scrollen';
 
   @override
   String get menuItemUndo => 'Rückgängig';
@@ -227,7 +227,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemRedo => 'Wiederholen';
 
   @override
-  String get hintTextSearch => 'Suchen...';
+  String get hintTextSearch => 'Suchen…';
 
   @override
   String searchHits(num n) {
@@ -239,9 +239,9 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nString Treffer',
-      one: '1 Treffer',
-      zero: '0 Treffer',
+      other: '$nString Ergebnisse',
+      one: '1 Ergebnis',
+      zero: '0 Ergebnisse',
     );
     return '$_temp0';
   }
@@ -270,14 +270,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get snackbarMessageNeedsEncryptionKey =>
-      'Konnte nicht Speichern. Verschlüsselung Passwort fehlt.';
+      'Konnte nicht Speichern. Verschlüsselungspasswort fehlt.';
 
   @override
   String get snackbarActionEnterEncryptionKey => 'Passwort eingeben';
 
   @override
   String get snackbarMessageNotificationPermissionsDenied =>
-      'No permission for notifications';
+      'Keine Berechtigung für Benachrichtigungen';
 
   @override
   String get dialogTitleError => 'Fehler';
@@ -295,7 +295,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pageTitleError => 'Fehler';
 
   @override
-  String get pageTitleLoading => 'Laden...';
+  String get pageTitleLoading => 'Ladet…';
 
   @override
   String pageTitleNarrow(String name) {
@@ -367,16 +367,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get bannerBodyAgendaNotifications =>
-      'Get notifications for agenda items in this file?';
+      'Willst du Benachrichtigungen für Agenda Einträge in dieser Datei bekommen?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Notify me';
+  String get bannerBodyActionAgendaEnable => 'Ja';
 
   @override
-  String get bannerBodyActionAgendaNotNow => 'Not now';
+  String get bannerBodyActionAgendaNotNow => 'Nicht jetzt';
 
   @override
-  String get bannerBodyActionAgendaNever => 'Never';
+  String get bannerBodyActionAgendaNever => 'Nie';
 
   @override
   String get saveChangesDialogTitle => 'Änderungen speichern?';
@@ -389,16 +389,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get saveActionShare => 'Teilen';
 
   @override
-  String get saveActionDiscard => 'Wegwerfen';
+  String get saveActionDiscard => 'Verwerfen';
 
   @override
-  String get saveActionSaveAs => 'Save as';
+  String get saveActionSaveAs => 'Speichern als';
 
   @override
-  String get discardChangesDialogTitle => 'Änderungen wegwerfen?';
+  String get discardChangesDialogTitle => 'Änderung verwerfen?';
 
   @override
-  String get discardActionDiscard => 'Wegwerfen';
+  String get discardActionDiscard => 'Verwerfen';
 
   @override
   String get discardActionCancel => 'Abbrechen';
@@ -425,10 +425,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get inputCustomFilterDialogHistoryButton => 'Verlauf';
 
   @override
-  String get loadingProgressDialogTitle => 'Loading…';
+  String get loadingProgressDialogTitle => 'Laden…';
 
   @override
-  String get preparingProgressDialogTitle => 'Preparing…';
+  String get preparingProgressDialogTitle => 'Vorbereiten…';
 
   @override
   String get decryptingProgressDialogTitle => 'Entschlüsseln…';
@@ -452,33 +452,34 @@ class AppLocalizationsDe extends AppLocalizations {
   String get createFileDialogTitle => 'Neue Datei erstellen';
 
   @override
-  String get createFileDefaultName => 'unbetitelt.org';
+  String get createFileDefaultName => 'unbenannt.org';
 
   @override
-  String get saveAsDialogTitle => 'Save as';
+  String get saveAsDialogTitle => 'Speichern als';
 
   @override
-  String get inputUrlDialogTitle => 'Enter URL';
+  String get inputUrlDialogTitle => 'URL eingeben';
 
   @override
-  String get startTimePickerTitle => 'Wähle Startzeit';
+  String get startTimePickerTitle => 'Startzeit eingeben';
 
   @override
-  String get endTimePickerTitle => 'Wähle Endzeit';
+  String get endTimePickerTitle => 'Endzeit eingeben';
 
   @override
   String get snackbarMessageBibliographiesNotFound =>
       'Keine Bibliografien gefunden';
 
   @override
-  String get snackbarMessageCitationKeysNotFound => 'Zitate nicht gefunden';
+  String get snackbarMessageCitationKeysNotFound =>
+      'Zitatenschlüssel nicht gefunden';
 
   @override
   String get snackbarMessageCitationsNotFound => 'Zitate nicht gefunden';
 
   @override
   String snackbarMessageSomeCitationsNotFound(String citations) {
-    return 'Folgende Zitate nicht gefunden: $citations';
+    return 'Zitate nicht gefunden: $citations';
   }
 
   @override
@@ -502,7 +503,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String errorOrgParser(Object result) {
-    return 'Parser Fehler: $result';
+    return 'Parserfehler: $result';
   }
 
   @override
@@ -529,7 +530,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String errorLinkNotHandled(Object link) {
-    return 'Konnte nicht Link öffnen: “$link”';
+    return 'Konnte nicht Link Öffnen: “$link”';
   }
 
   @override
@@ -539,14 +540,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String errorSectionNotFound(String section) {
-    return 'Section not found: $section';
+    return 'Teil nicht gefunden: $section';
   }
 
   @override
   String errorUnsupportedSearchOption(String option) {
-    return 'Unsupported search option: $option';
+    return 'Nicht unterstützte Suchoption: $option';
   }
 
   @override
-  String get editInsertedHeadline => '[Von Bearbeitung eingefügt]';
+  String get editInsertedHeadline => '[Eingefügt durch Bearbeitung]';
 }
