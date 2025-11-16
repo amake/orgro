@@ -1,0 +1,14 @@
+* TODO Repeating hourly
+  SCHEDULED: <2026-08-10 Mon 10:40 +1h>
+
+* TODO Repeating daily
+  SCHEDULED: <2026-07-10 Fri 10:40 +1d>
+
+* TODO Repeating weekly
+  SCHEDULED: <2026-06-10 Wed 10:40 +1w>
+
+* TODO Repeating monthly
+  SCHEDULED: <2026-05-10 Sun 10:40 +1m>
+
+* TODO Repeating yearly
+  SCHEDULED: <2026-04-10 Fri 10:40 +1y>

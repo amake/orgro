@@ -208,7 +208,9 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final toSchedule = <(tz.TZDateTime, OrgSection)>[];
   doc.visitSections((section) {
     if (section.isPending()) {
-      for (final dateTime in section.scheduledAt.unique()) {
+      for (final dateTime in section.scheduledAt.unique().take(
+        kMaxNotifications,
+      )) {
         if (dateTime.isAfter(DateTime.now())) {
           var tzDateTime = tz.TZDateTime.from(dateTime, tz.local);
           if (tzDateTime.hour == 0 && tzDateTime.minute == 0) {
@@ -349,32 +351,30 @@ extension OrgSectionUtil on OrgSection {
   bool get isClosed =>
       planning.any((entry) => entry.keyword.content == 'CLOSED:');
 
-  List<DateTime> get scheduledAt => activeTimestamps
-      .map(
-        (ts) => switch (ts) {
-          OrgSimpleTimestamp() => ts.dateTime,
-          OrgTimeRangeTimestamp() => ts.startDateTime,
-          // TODO(aaron): Handle other kinds of timestamps, if they are valid for
-          // agenda scheduling
-          _ => null,
-        },
-      )
-      .whereType<DateTime>()
-      .toList(growable: false);
+  Iterable<DateTime> get scheduledAt sync* {
+    final timestamps = activeTimestamps.toList(growable: false)..sort();
+    final iters = timestamps
+        .expand((dt) => expandTimestamp(dt))
+        .map((e) => e.iterator)
+        .toList(growable: false);
+    while (true) {
+      var done = true;
+      for (final iter in iters) {
+        if (!iter.moveNext()) continue;
+        done = false;
+        yield iter.current;
+      }
+      if (done) break;
+    }
+  }
 
   bool isPending({DateTime? now}) {
     if (isDone || isClosed) return false;
 
     now ??= DateTime.now();
-    return activeTimestamps.any(
-      (ts) => switch (ts) {
-        OrgSimpleTimestamp() => ts.dateTime.isAfter(now!),
-        OrgTimeRangeTimestamp() => ts.startDateTime.isAfter(now!),
-        // TODO(aaron): Handle other kinds of timestamps, if they are valid for
-        // agenda scheduling
-        _ => false,
-      },
-    );
+    return scheduledAt
+        .take(kMaxNotifications)
+        .any((dateTime) => dateTime.isAfter(now!));
   }
 
   List<OrgPlanningEntry> get planning {
@@ -408,6 +408,66 @@ extension OrgSectionUtil on OrgSection {
     'customId': customIds.firstOrNull,
     'rawTitle': headline.rawTitle,
   };
+}
+
+// - `+`: Add the specified offset to the original datetime
+//   https://orgmode.org/manual/Repeated-tasks.html
+// - `++`: Add the specified offset enough times to get past *now*
+//   https://orgmode.org/manual/Repeated-tasks.html
+// - `-`: Subtract the specified offset from the original datetime if this is a
+//   DEADLINE. Add if this is a SCHEDULED.
+//   https://orgmode.org/manual/Deadlines-and-Scheduling.html
+// - `--`: When a SCHEDULED and has a repeater, add the specified offset to the
+//   original datetime only for the first occurrence.
+//   https://orgmode.org/manual/Deadlines-and-Scheduling.html
+// - `.+`: Add the specified offset to the time the task was completed
+//   https://orgmode.org/manual/Repeated-tasks.html
+// - Min-max style: can ignore max for now
+//   https://orgmode.org/manual/Tracking-your-habits.html
+
+List<Iterable<DateTime>> expandTimestamp(OrgTimestamp timestamp) =>
+    switch (timestamp) {
+      OrgSimpleTimestamp() => [
+        expandDate(timestamp.dateTime, timestamp.modifiers),
+      ],
+      OrgTimeRangeTimestamp() => [
+        expandDate(timestamp.startDateTime, timestamp.modifiers),
+      ],
+      OrgDateRangeTimestamp() => [
+        ...expandTimestamp(timestamp.start),
+        ...expandTimestamp(timestamp.end),
+      ],
+    };
+
+Iterable<DateTime> expandDate(
+  DateTime dateTime,
+  List<OrgTimestampModifier> modifiers,
+) sync* {
+  if (modifiers.isEmpty) {
+    yield dateTime;
+    return;
+  }
+  final repeater = modifiers.where((m) => m.isRepeater).firstOrNull;
+  final delay = modifiers.where((m) => m.isDelay).firstOrNull;
+
+  int? delayValue;
+  DateTime applyDelay(DateTime dt) {
+    if (delay == null) return dt;
+    delayValue ??= int.parse(delay.value);
+    return dt.addModifier(delayValue!, delay.unit);
+  }
+
+  yield applyDelay(dateTime);
+  if (repeater == null) return;
+
+  final repeaterValue = int.parse(repeater.value);
+  DateTime applyRepeater(DateTime dt) =>
+      dt.addModifier(repeaterValue, repeater.unit);
+
+  while (true) {
+    dateTime = applyRepeater(dateTime);
+    yield delay?.prefix == '-' ? applyDelay(dateTime) : dateTime;
+  }
 }
 
 class NotificationsListItems extends StatefulWidget {

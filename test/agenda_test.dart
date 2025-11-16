@@ -227,5 +227,110 @@ void main() {
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, isEmpty);
     });
+    group('Modifiers', () {
+      test('Simple with repeater', () {
+        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          DateTime(2025, 10, 5),
+          DateTime(2025, 10, 12),
+          DateTime(2025, 10, 19),
+          DateTime(2025, 10, 26),
+          DateTime(2025, 11, 2),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 5)]);
+      });
+      test('Simple with delay', () {
+        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun -1d>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt, [DateTime(2025, 10, 6)]);
+      });
+      test('Simple with repeater and delay', () {
+        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w -1d>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          DateTime(2025, 10, 6),
+          DateTime(2025, 10, 13),
+          DateTime(2025, 10, 20),
+          DateTime(2025, 10, 27),
+          DateTime(2025, 11, 3),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 6)]);
+      });
+      test('Simple with repeater and one-time delay', () {
+        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w --1d>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          DateTime(2025, 10, 6),
+          DateTime(2025, 10, 12),
+          DateTime(2025, 10, 19),
+          DateTime(2025, 10, 26),
+          DateTime(2025, 11, 2),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 5)]);
+      });
+      test('Time range', () {
+        final doc = OrgDocument.parse(
+          '* TODO foo <2025-10-05 Sun 10:00-11:00 +1d>',
+        );
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          DateTime(2025, 10, 5, 10, 0),
+          DateTime(2025, 10, 6, 10, 0),
+          DateTime(2025, 10, 7, 10, 0),
+          DateTime(2025, 10, 8, 10, 0),
+          DateTime(2025, 10, 9, 10, 0),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          DateTime(2026, 1, 13, 10, 0),
+        ]);
+      });
+      test('Multiple', () {
+        final doc = OrgDocument.parse(
+          '* TODO foo <2025-10-05 Sun 10:00 +1d> <2026-10-05 Sun 10:00 +1d>',
+        );
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          DateTime(2025, 10, 5, 10, 0),
+          DateTime(2026, 10, 5, 10, 0),
+          DateTime(2025, 10, 6, 10, 0),
+          DateTime(2026, 10, 6, 10, 0),
+          DateTime(2025, 10, 7, 10, 0),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          DateTime(2025, 11, 24, 10, 0),
+        ]);
+      });
+    });
   });
 }

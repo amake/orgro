@@ -23,6 +23,9 @@ Bidi
 * Agenda
 
 - [[file:agenda-scheduling.org][Scheduling]]
+- [[file:agenda-repeating-simple.org][Simple repeating (=+=)]]
+- [[file:agenda-repeating-past-now.org][Repeating past now (=++=)]]
+- [[file:agenda-repeating-from-now.org][Repeating from now (=.+=)]]
 
 * Locale
 
