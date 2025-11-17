@@ -86,6 +86,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemFontFamily => '書体';
 
   @override
+  String get settingsItemGrantNotificationPermissions => '通知を有効にする';
+
+  @override
   String settingsItemInspectNotifications(num n) {
     final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
       localeName,
@@ -263,7 +266,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'パスワードを入力';
 
   @override
-  String get snackbarMessageNotificationPermissionsDenied => '通知の権限がありません';
+  String get snackbarMessageNeedsNotificationsPermissions => '通知を送信する権限がありません';
+
+  @override
+  String get snackbarActionGrantNotificationsPermissions => '許可する';
 
   @override
   String get dialogTitleError => 'エラー';

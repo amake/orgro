@@ -87,6 +87,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+
+  @override
   String settingsItemInspectNotifications(num n) {
     final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
       localeName,
@@ -275,8 +278,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
-  String get snackbarMessageNotificationPermissionsDenied =>
-      'No permission for notifications';
+  String get snackbarMessageNeedsNotificationsPermissions =>
+      'Orgro doesn’t have permission to send notifications';
+
+  @override
+  String get snackbarActionGrantNotificationsPermissions => 'Allow';
 
   @override
   String get dialogTitleError => 'Error';
@@ -632,6 +638,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+
+  @override
   String settingsItemInspectNotifications(num n) {
     final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
       localeName,
@@ -820,8 +829,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
-  String get snackbarMessageNotificationPermissionsDenied =>
-      'No permission for notifications';
+  String get snackbarMessageNeedsNotificationsPermissions =>
+      'Orgro doesn’t have permission to send notifications';
+
+  @override
+  String get snackbarActionGrantNotificationsPermissions => 'Allow';
 
   @override
   String get dialogTitleError => 'Error';
@@ -1177,6 +1189,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+
+  @override
   String settingsItemInspectNotifications(num n) {
     final intl.NumberFormat nNumberFormat = intl.NumberFormat.decimalPattern(
       localeName,
@@ -1365,8 +1380,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get snackbarActionEnterEncryptionKey => 'Enter password';
 
   @override
-  String get snackbarMessageNotificationPermissionsDenied =>
-      'No permission for notifications';
+  String get snackbarMessageNeedsNotificationsPermissions =>
+      'Orgro doesn’t have permission to send notifications';
+
+  @override
+  String get snackbarActionGrantNotificationsPermissions => 'Allow';
 
   @override
   String get dialogTitleError => 'Error';

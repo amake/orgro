@@ -111,4 +111,30 @@ void main() {
       expect(lockfile.existsSync(), isFalse);
     });
   });
+  group('Debounce', () {
+    test('Debounce calls', () async {
+      var acc = 0;
+      final debouncedFn = debounce(
+        () => acc += 1,
+        const Duration(milliseconds: 10),
+      );
+      debouncedFn();
+      debouncedFn();
+      debouncedFn();
+      await Future<void>.delayed(Duration(milliseconds: 20));
+      expect(acc, 1);
+    });
+    test('Debounce calls with arg', () async {
+      var val = 0;
+      final debouncedFn = debounce1(
+        (int arg) async => val = arg,
+        const Duration(milliseconds: 10),
+      );
+      debouncedFn(10);
+      debouncedFn(20);
+      debouncedFn(30);
+      await Future<void>.delayed(Duration(milliseconds: 20));
+      expect(val, 30);
+    });
+  });
 }

@@ -134,6 +134,14 @@ VoidCallback debounce(VoidCallback func, Duration duration) {
   };
 }
 
+void Function(T) debounce1<T>(void Function(T) func, Duration duration) {
+  Timer? timer;
+  return (T arg) {
+    timer?.cancel();
+    timer = Timer(duration, () => func(arg));
+  };
+}
+
 extension StringExtension on String {
   (String, String) splitLeadingWhitespace() {
     final idx = indexOf(RegExp(r'\S'));

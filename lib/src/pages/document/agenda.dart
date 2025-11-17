@@ -1,9 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:app_settings/app_settings.dart';
+import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/data_source.dart';
-import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/document/document.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
@@ -24,25 +24,52 @@ extension AgendaHandler on DocumentPageState {
     _ => false,
   };
 
+  Future<void> enableNotifications() async {
+    if (!await checkNotificationPermissions()) {
+      final granted = await requestNotificationPermissions();
+      if (!granted) {
+        if (mounted) _complainAboutDenied(context);
+        debugPrint('User denied notification permissions');
+        return;
+      }
+    }
+    setAgendaFile();
+  }
+
   void setAgendaFile() => Preferences.of(
     context,
     PrefsAspect.agenda,
   ).addAgendaFileJson(_dataSource.toJson());
 
-  Future<void> setNotifications() => _setNotifications(context);
+  void setNotifications() => _setNotifications(context);
 }
 
-final _setNotifications = sequentially((BuildContext context) async {
-  if (!await checkNotificationPermissions()) {
-    debugPrint('No permission for notifications');
-    if (context.mounted) {
-      showErrorSnackBar(
-        context,
+void _complainAboutDenied(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
         AppLocalizations.of(
           context,
-        )!.snackbarMessageNotificationPermissionsDenied,
-      );
-    }
+        )!.snackbarMessageNeedsNotificationsPermissions,
+      ),
+      action: SnackBarAction(
+        label: AppLocalizations.of(
+          context,
+        )!.snackbarActionGrantNotificationsPermissions.toUpperCase(),
+        onPressed: () async {
+          if (!await requestNotificationPermissions()) {
+            AppSettings.openAppSettings(type: AppSettingsType.notification);
+          }
+        },
+      ),
+    ),
+  );
+}
+
+final _setNotifications = debounce1((BuildContext context) async {
+  if (!await checkNotificationPermissions()) {
+    debugPrint('No permission for notifications');
+    if (context.mounted) _complainAboutDenied(context);
     return;
   }
 
@@ -56,4 +83,4 @@ final _setNotifications = sequentially((BuildContext context) async {
   // TODO(aaron): Show a confirmation snackbar with a summary? That would be
   // nice on the first run for a file, but annoying on updates (which may be
   // frequent)
-});
+}, Duration(milliseconds: 300));

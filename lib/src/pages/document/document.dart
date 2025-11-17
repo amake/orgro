@@ -402,7 +402,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         ),
         AgendaNotificationsBanner(
           visible: _askAboutAgendaNotifications,
-          onAccept: setAgendaFile,
+          onAccept: enableNotifications,
           onDeny: viewSettings.setAgendaNotificationsPolicy,
         ),
         _maybeConstrainWidth(

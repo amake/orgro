@@ -39,6 +39,7 @@
   "settingsItemTextScale": "Scale",
   "settingsItemFontFamily": "Font",
 
+  "settingsItemGrantNotificationPermissions": "Enable notifications",
   "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
   "@settingsItemInspectNotifications": {
     "placeholders": {
@@ -136,7 +137,8 @@
   "snackbarMessageNeedsEncryptionKey": "Could not save. Missing encryption password.",
   "snackbarActionEnterEncryptionKey": "Enter password",
 
-  "snackbarMessageNotificationPermissionsDenied": "No permission for notifications",
+  "snackbarMessageNeedsNotificationsPermissions": "Orgro doesn’t have permission to send notifications",
+  "snackbarActionGrantNotificationsPermissions": "Allow",
 
   "dialogTitleError": "Error",
   "dialogActionConfirm": "OK",

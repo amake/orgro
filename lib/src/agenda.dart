@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -100,10 +101,33 @@ Future<bool> checkNotificationPermissions() async {
         AndroidFlutterLocalNotificationsPlugin
       >();
   if (androidImpl != null) {
-    var status = await androidImpl.areNotificationsEnabled();
-    if (status == true) return true;
-    status = await androidImpl.requestNotificationsPermission();
-    return status == true;
+    if (await androidImpl.areNotificationsEnabled() != true) return false;
+    if (await androidImpl.canScheduleExactNotifications() != true) return false;
+    return true;
+  }
+  final iosImpl = plugin
+      .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin
+      >();
+  if (iosImpl != null) {
+    final permissions = await iosImpl.checkPermissions();
+    return permissions?.isEnabled == true;
+  }
+  throw UnimplementedError('Unsupported platform');
+}
+
+Future<bool> requestNotificationPermissions() async {
+  final plugin = FlutterLocalNotificationsPlugin();
+  final androidImpl = plugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
+  if (androidImpl != null) {
+    if (await androidImpl.requestNotificationsPermission() != true) {
+      return false;
+    }
+    if (await androidImpl.requestExactAlarmsPermission() != true) return false;
+    return true;
   }
   final iosImpl = plugin
       .resolvePlatformSpecificImplementation<
@@ -145,6 +169,13 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   (DataSource, OrgTree, AppLocalizations) args,
 ) async {
   final (dataSource, doc, localizations) = args;
+  if (!(await checkNotificationPermissions())) {
+    debugPrint(
+      'Skipping setting notifications because permissions not granted.',
+    );
+    return;
+  }
+
   debugPrint('Setting agenda notifications for document ${dataSource.name}');
 
   final plugin = FlutterLocalNotificationsPlugin();
@@ -380,6 +411,7 @@ class NotificationsListItems extends StatefulWidget {
 
 class _NotificationsListItemsState extends State<NotificationsListItems> {
   List<PendingNotificationRequest>? _pendingNotifications;
+  bool? _permissionsGranted;
   late final Timer _reloadTimer;
 
   @override
@@ -398,7 +430,11 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   Future<void> _load() async {
     final pending = await FlutterLocalNotificationsPlugin()
         .pendingNotificationRequests();
-    setState(() => _pendingNotifications = pending);
+    final permissionsGranted = await checkNotificationPermissions();
+    setState(() {
+      _pendingNotifications = pending;
+      _permissionsGranted = permissionsGranted;
+    });
   }
 
   bool get _hasNotifications =>
@@ -408,25 +444,42 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          title: Text(
-            _pendingNotifications == null
-                ? AppLocalizations.of(context)!.settingsItemLoading
-                : AppLocalizations.of(
-                    context,
-                  )!.settingsItemInspectNotifications(
-                    _pendingNotifications!.length,
-                  ),
+        if (_permissionsGranted == false)
+          ListTile(
+            title: Text(
+              AppLocalizations.of(
+                context,
+              )!.settingsItemGrantNotificationPermissions,
+            ),
+            onTap: () async {
+              final granted = await requestNotificationPermissions();
+              if (granted) {
+                await _load();
+              } else {
+                AppSettings.openAppSettings(type: AppSettingsType.notification);
+              }
+            },
           ),
-          onTap: _hasNotifications
-              ? () => showDialog<void>(
-                  context: context,
-                  builder: (context) =>
-                      _PendingNotificationsDialog(_pendingNotifications!),
-                )
-              : null,
-        ),
-        if (_hasNotifications)
+        if (_permissionsGranted == true)
+          ListTile(
+            title: Text(
+              _pendingNotifications == null
+                  ? AppLocalizations.of(context)!.settingsItemLoading
+                  : AppLocalizations.of(
+                      context,
+                    )!.settingsItemInspectNotifications(
+                      _pendingNotifications!.length,
+                    ),
+            ),
+            onTap: _hasNotifications
+                ? () => showDialog<void>(
+                    context: context,
+                    builder: (context) =>
+                        _PendingNotificationsDialog(_pendingNotifications!),
+                  )
+                : null,
+          ),
+        if (_permissionsGranted == true && _hasNotifications)
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.settingsItemClearNotifications,

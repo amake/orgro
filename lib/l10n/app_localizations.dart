@@ -256,6 +256,12 @@ abstract class AppLocalizations {
   /// **'Font'**
   String get settingsItemFontFamily;
 
+  /// No description provided for @settingsItemGrantNotificationPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications'**
+  String get settingsItemGrantNotificationPermissions;
+
   /// No description provided for @settingsItemInspectNotifications.
   ///
   /// In en, this message translates to:
@@ -544,11 +550,17 @@ abstract class AppLocalizations {
   /// **'Enter password'**
   String get snackbarActionEnterEncryptionKey;
 
-  /// No description provided for @snackbarMessageNotificationPermissionsDenied.
+  /// No description provided for @snackbarMessageNeedsNotificationsPermissions.
   ///
   /// In en, this message translates to:
-  /// **'No permission for notifications'**
-  String get snackbarMessageNotificationPermissionsDenied;
+  /// **'Orgro doesn’t have permission to send notifications'**
+  String get snackbarMessageNeedsNotificationsPermissions;
+
+  /// No description provided for @snackbarActionGrantNotificationsPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get snackbarActionGrantNotificationsPermissions;
 
   /// No description provided for @dialogTitleError.
   ///

@@ -32,6 +32,7 @@
   "settingsItemTextScale": "文字サイズ",
   "settingsItemFontFamily": "書体",
 
+  "settingsItemGrantNotificationPermissions": "通知を有効にする",
   "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",
   "settingsDialogNotificationsTitle": "設定済みの通知",
   "settingsItemClearNotifications": "すべての通知を削除",
@@ -94,7 +95,8 @@
   "snackbarMessageNeedsEncryptionKey": "保存できませんでした。暗号化するためのパスワードが必要",
   "snackbarActionEnterEncryptionKey": "パスワードを入力",
 
-  "snackbarMessageNotificationPermissionsDenied": "通知の権限がありません",
+  "snackbarMessageNeedsNotificationsPermissions": "通知を送信する権限がありません",
+  "snackbarActionGrantNotificationsPermissions": "許可する",
 
   "dialogTitleError": "エラー",
   "dialogActionConfirm": "OK",

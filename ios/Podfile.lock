@@ -1,4 +1,6 @@
 PODS:
+  - app_settings (5.1.1):
+    - Flutter
   - file_picker_writable (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -36,6 +38,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
   - flutter_charset_detector_darwin (from `.symlinks/plugins/flutter_charset_detector_darwin/darwin`)
@@ -57,6 +60,8 @@ SPEC REPOS:
     - UniversalDetector2
 
 EXTERNAL SOURCES:
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
   file_picker_writable:
     :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
@@ -89,6 +94,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
+  app_settings: 5127ae0678de1dcc19f2293271c51d37c89428b2
   file_picker_writable: 3a458aa8cdb7c1378cb3e8ec0543ead87a77d0be
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3

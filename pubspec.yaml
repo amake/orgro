@@ -54,6 +54,7 @@ dependencies:
   flutter_timezone: ^5.0.0
   timezone: ^0.10.1
   workmanager: ^0.9.0+3
+  app_settings: ^6.1.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

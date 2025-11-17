@@ -353,6 +353,9 @@ times:
 In the Settings screen you can see a list of pending notifications. You can also
 clear all notifications; when doing so all agenda files are forgotten.
 
+If you denied notification permissions, look for “Enable notifications” in the
+Settings screen.
+
 * Reader Mode
 
 Enable Reader Mode to reflow text, hide emphasis markers, and make meta lines
