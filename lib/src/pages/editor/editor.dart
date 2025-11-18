@@ -205,93 +205,101 @@ class _EditorToolbar extends StatelessWidget {
         ),
       ),
       width: double.infinity,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            ValueListenableBuilder(
-              valueListenable: undoController,
-              builder: (context, value, _) => IconButton(
-                icon: const Icon(Icons.undo),
-                onPressed: value.canUndo ? undoController.undo : null,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: undoController,
+                builder: (context, value, _) => IconButton(
+                  icon: const Icon(Icons.undo),
+                  onPressed: value.canUndo ? undoController.undo : null,
+                ),
               ),
-            ),
-            ValueListenableBuilder(
-              valueListenable: undoController,
-              builder: (context, value, _) => IconButton(
-                icon: const Icon(Icons.redo),
-                onPressed: value.canRedo ? undoController.redo : null,
+              ValueListenableBuilder(
+                valueListenable: undoController,
+                builder: (context, value, _) => IconButton(
+                  icon: const Icon(Icons.redo),
+                  onPressed: value.canRedo ? undoController.redo : null,
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_list_bulleted),
-              onPressed: Actions.handler(
-                context,
-                const ToggleListItemIntent(ordered: false),
+              IconButton(
+                icon: const Icon(Icons.format_list_bulleted),
+                onPressed: Actions.handler(
+                  context,
+                  const ToggleListItemIntent(ordered: false),
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_list_numbered),
-              onPressed: Actions.handler(
-                context,
-                const ToggleListItemIntent(ordered: true),
+              IconButton(
+                icon: const Icon(Icons.format_list_numbered),
+                onPressed: Actions.handler(
+                  context,
+                  const ToggleListItemIntent(ordered: true),
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_bold),
-              onPressed: Actions.handler(context, const MakeBoldIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_italic),
-              onPressed: Actions.handler(context, const MakeItalicIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_underline),
-              onPressed: Actions.handler(context, const MakeUnderlineIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.format_strikethrough),
-              onPressed: Actions.handler(
-                context,
-                const MakeStrikethroughIntent(),
+              IconButton(
+                icon: const Icon(Icons.format_bold),
+                onPressed: Actions.handler(context, const MakeBoldIntent()),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.code),
-              onPressed: Actions.handler(context, const MakeCodeIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.link),
-              onPressed: Actions.handler(context, const InsertLinkIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: Actions.handler(
-                context,
-                const InsertDateIntent(active: false),
+              IconButton(
+                icon: const Icon(Icons.format_italic),
+                onPressed: Actions.handler(context, const MakeItalicIntent()),
               ),
-              onLongPress: Actions.handler(
-                context,
-                const InsertDateIntent(active: true),
+              IconButton(
+                icon: const Icon(Icons.format_underline),
+                onPressed: Actions.handler(
+                  context,
+                  const MakeUnderlineIntent(),
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.subscript),
-              onPressed: Actions.handler(context, const MakeSubscriptIntent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.superscript),
-              onPressed: Actions.handler(
-                context,
-                const MakeSuperscriptIntent(),
+              IconButton(
+                icon: const Icon(Icons.format_strikethrough),
+                onPressed: Actions.handler(
+                  context,
+                  const MakeStrikethroughIntent(),
+                ),
               ),
-            ),
-            // TODO(aaron): Offer more quick-insert actions?
-            // - Lists
-            // - Code blocks
-            // - Sections
-          ],
+              IconButton(
+                icon: const Icon(Icons.code),
+                onPressed: Actions.handler(context, const MakeCodeIntent()),
+              ),
+              IconButton(
+                icon: const Icon(Icons.link),
+                onPressed: Actions.handler(context, const InsertLinkIntent()),
+              ),
+              IconButton(
+                icon: const Icon(Icons.calendar_today),
+                onPressed: Actions.handler(
+                  context,
+                  const InsertDateIntent(active: false),
+                ),
+                onLongPress: Actions.handler(
+                  context,
+                  const InsertDateIntent(active: true),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.subscript),
+                onPressed: Actions.handler(
+                  context,
+                  const MakeSubscriptIntent(),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.superscript),
+                onPressed: Actions.handler(
+                  context,
+                  const MakeSuperscriptIntent(),
+                ),
+              ),
+              // TODO(aaron): Offer more quick-insert actions?
+              // - Lists
+              // - Code blocks
+              // - Sections
+            ],
+          ),
         ),
       ),
     );
