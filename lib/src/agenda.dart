@@ -253,6 +253,12 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
               icon: kAgendaNotificationsAndroidIcon,
               channelDescription:
                   localizations.agendaNotificationsChannelDescription,
+              // Priority.max is apparently deprecated, but we set it in the
+              // hopes it makes a difference on older Android versions.
+              priority: .max,
+              // Importance.max is required to make "Pop on screen" on by
+              // default. Presumably users would want this for agenda items.
+              importance: .max,
               actions: [
                 AndroidNotificationAction(
                   kAgendaNotificationsActionView,
