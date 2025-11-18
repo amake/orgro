@@ -1,0 +1,3 @@
+- Fix notifications on recent versions of Android
+- Allow fixing notification permissions from Settings screen
+- Other bug fixes
