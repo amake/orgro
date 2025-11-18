@@ -416,6 +416,9 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   bool? _permissionsGranted;
   late final Timer _reloadTimer;
 
+  InheritedPreferences get _prefs =>
+      Preferences.of(context, PrefsAspect.agenda);
+
   @override
   void initState() {
     super.initState();
@@ -432,7 +435,9 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   Future<void> _load() async {
     final pending = await FlutterLocalNotificationsPlugin()
         .pendingNotificationRequests();
-    final permissionsGranted = await checkNotificationPermissions();
+    final permissionsGranted =
+        _prefs.agendaNotificationsPolicy != .deny &&
+        await checkNotificationPermissions();
     setState(() {
       _pendingNotifications = pending;
       _permissionsGranted = permissionsGranted;
@@ -454,6 +459,7 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
               )!.settingsItemGrantNotificationPermissions,
             ),
             onTap: () async {
+              await _prefs.setAgendaNotificationsPolicy(.ask);
               final granted = await requestNotificationPermissions();
               if (granted) {
                 await _load();
