@@ -355,16 +355,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionDecryptNever => '復号しない';
 
   @override
-  String get bannerBodyAgendaNotifications => 'このファイルのアジェンダ項目の通知を受けますか？';
+  String get bannerBodyAgendaNotifications => 'このファイルのアジェンダ項目の通知を受け取りますか？';
 
   @override
-  String get bannerBodyActionAgendaEnable => '受ける';
+  String get bannerBodyActionAgendaEnable => '受け取る';
 
   @override
-  String get bannerBodyActionAgendaNotNow => '今は受けない';
+  String get bannerBodyActionAgendaNotNow => '今は受け取らない';
 
   @override
-  String get bannerBodyActionAgendaNever => '通知は受けない';
+  String get bannerBodyActionAgendaNever => '受け取らない';
 
   @override
   String get saveChangesDialogTitle => '変更を保存しますか？';

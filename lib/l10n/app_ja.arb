@@ -132,10 +132,10 @@
   "bannerBodyActionDecryptNotNow": "今は復号しない",
   "bannerBodyActionDecryptNever": "復号しない",
 
-  "bannerBodyAgendaNotifications": "このファイルのアジェンダ項目の通知を受けますか？",
-  "bannerBodyActionAgendaEnable": "受ける",
-  "bannerBodyActionAgendaNotNow": "今は受けない",
-  "bannerBodyActionAgendaNever": "通知は受けない",
+  "bannerBodyAgendaNotifications": "このファイルのアジェンダ項目の通知を受け取りますか？",
+  "bannerBodyActionAgendaEnable": "受け取る",
+  "bannerBodyActionAgendaNotNow": "今は受け取らない",
+  "bannerBodyActionAgendaNever": "受け取らない",
 
   "saveChangesDialogTitle": "変更を保存しますか？",
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
