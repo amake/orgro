@@ -15,7 +15,7 @@ import workmanager_apple
         channel.setMethodCallHandler(handleNativeSearchMethod)
 
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+            UNUserNotificationCenter.current().delegate = self
         }
 
         FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
