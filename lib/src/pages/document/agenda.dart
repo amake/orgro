@@ -4,6 +4,7 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/document/document.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
@@ -79,7 +80,15 @@ final _setNotifications = debounce1((BuildContext context) async {
   final doc = DocumentProvider.of(context).doc;
   final localizations = AppLocalizations.of(context)!;
 
-  await setNotificationsForDocument((dataSource, doc, localizations));
+  try {
+    await setNotificationsForDocument((dataSource, doc, localizations));
+  } catch (e, s) {
+    logError(e, s);
+    if (context.mounted) {
+      showErrorSnackBar(context, localizations.errorSchedulingNotifications(e));
+    }
+  }
+
   // TODO(aaron): Show a confirmation snackbar with a summary? That would be
   // nice on the first run for a file, but annoying on updates (which may be
   // frequent)

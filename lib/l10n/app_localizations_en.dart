@@ -552,6 +552,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String errorSchedulingNotifications(Object message) {
+    return 'Failed to schedule notifications: $message';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }
 
@@ -1103,6 +1108,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String errorSchedulingNotifications(Object message) {
+    return 'Failed to schedule notifications: $message';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }
 
@@ -1651,6 +1661,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String errorUnsupportedSearchOption(String option) {
     return 'Unsupported search option: $option';
+  }
+
+  @override
+  String errorSchedulingNotifications(Object message) {
+    return 'Failed to schedule notifications: $message';
   }
 
   @override

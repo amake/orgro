@@ -552,5 +552,10 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String errorSchedulingNotifications(Object message) {
+    return 'Failed to schedule notifications: $message';
+  }
+
+  @override
   String get editInsertedHeadline => '[Inserted by edit]';
 }

@@ -193,6 +193,7 @@
   "errorExternalIdNotFound": "ID「{id}」のファイルが見つかりませんでした",
   "errorSectionNotFound": "「{section}」が見つかりませんでした",
   "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
+  "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",
 
   "editInsertedHeadline": "[編集によって挿入]"
 }

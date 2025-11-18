@@ -342,6 +342,14 @@
       }
     }
   },
+  "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
+  "@errorSchedulingNotifications": {
+    "placeholders": {
+      "message": {
+        "type": "Object"
+      }
+    }
+  },
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

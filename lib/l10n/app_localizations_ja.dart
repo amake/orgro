@@ -531,5 +531,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String errorSchedulingNotifications(Object message) {
+    return '通知の設定に失敗しました: $message';
+  }
+
+  @override
   String get editInsertedHeadline => '[編集によって挿入]';
 }

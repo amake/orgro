@@ -194,6 +194,7 @@
   "errorExternalIdNotFound": "File with ID “{id}” not found",
   "errorSectionNotFound": "Section not found: {section}",
   "errorUnsupportedSearchOption": "Unsupported search option: {option}",
+  "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
 
   "editInsertedHeadline": "[Inserted by edit]"
 }

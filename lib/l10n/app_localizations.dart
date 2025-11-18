@@ -1012,6 +1012,12 @@ abstract class AppLocalizations {
   /// **'Unsupported search option: {option}'**
   String errorUnsupportedSearchOption(String option);
 
+  /// No description provided for @errorSchedulingNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to schedule notifications: {message}'**
+  String errorSchedulingNotifications(Object message);
+
   /// No description provided for @editInsertedHeadline.
   ///
   /// In en, this message translates to:
