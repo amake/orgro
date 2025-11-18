@@ -29,6 +29,7 @@ const kAgendaUpdateTask = 'com.madlonkay.orgro.agenda-update';
 const kAgendaNotificationsCategory = 'com.madlonkay.orgro.agenda';
 const kAgendaNotificationsChannel = 'com.madlonkay.orgro.agenda';
 const kAgendaNotificationsActionView = 'com.madlonkay.orgro.agenda.view';
+const kAgendaNotificationsAndroidIcon = 'ic_notification';
 
 Future<void> initNotifications(AppLocalizations localizations) async {
   tz.initializeTimeZones();
@@ -38,7 +39,7 @@ Future<void> initNotifications(AppLocalizations localizations) async {
 
   final plugin = FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid = AndroidInitializationSettings(
-    'ic_notification',
+    kAgendaNotificationsAndroidIcon,
   );
   final initializationSettingsDarwin = DarwinInitializationSettings(
     // We request later on demand
@@ -249,6 +250,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
             android: AndroidNotificationDetails(
               kAgendaNotificationsChannel,
               localizations.agendaNotificationsChannelName,
+              icon: kAgendaNotificationsAndroidIcon,
               channelDescription:
                   localizations.agendaNotificationsChannelDescription,
               actions: [
