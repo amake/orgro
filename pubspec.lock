@@ -503,12 +503,13 @@ packages:
     source: hosted
     version: "1.0.6"
   open_file_ios:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: open_file_ios
-      sha256: "02996f01e5f6863832068e97f8f3a5ef9b613516db6897f373b43b79849e4d07"
-      url: "https://pub.dev"
-    source: hosted
+      path: open_file_ios
+      ref: "feature/uiscene-compat"
+      resolved-ref: "0ff6f4c70c57b7fe4b14c9985f42bf5befed9acc"
+      url: "https://github.com/amake/open_file.git"
+    source: git
     version: "1.0.3"
   open_file_linux:
     dependency: transitive

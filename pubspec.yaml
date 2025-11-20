@@ -71,3 +71,13 @@ flutter:
     - assets/test/
     - "assets/test/foo: bar/"
     - assets/licenses/
+
+dependency_overrides:
+  # TODO(aaron): Remove override pending resolution to
+  # https://github.com/crazecoder/open_file/issues/340
+  open_file_ios:
+    # path: ../open_file/open_file_ios
+    git:
+      url: https://github.com/amake/open_file.git
+      ref: feature/uiscene-compat
+      path: open_file_ios
