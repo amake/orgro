@@ -156,7 +156,7 @@ extension NarrowHandler on DocumentPageState {
     final doc = DocumentProvider.of(context).doc;
     switch (after) {
       case OrgSection():
-        var newDoc = doc.editNode(before)!.replace(after).commit() as OrgTree;
+        var newDoc = doc.editNode(before)!.replace(after).commit<OrgTree>();
         newDoc = recalculateHeadlineStats(newDoc, after.headline);
         return newDoc;
       case OrgDocument():

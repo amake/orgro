@@ -44,14 +44,6 @@ extension EncryptionHandler on DocumentPageState {
       }
       final block = blocks[i];
       try {
-        final replacement = OrgDecryptedContent.fromDecryptedResult(
-          cleartext,
-          OrgroDecryptedContentSerializer(
-            block,
-            cleartext: cleartext,
-            password: password,
-          ),
-        );
         final enclosingCryptSection =
             newDoc.findContainingTree(
               block,
@@ -59,14 +51,22 @@ extension EncryptionHandler on DocumentPageState {
                   tree is OrgSection && tree.tags.contains('crypt'),
             ) ??
             newDoc.findContainingTree(block)!;
+        final replacement = OrgDecryptedContent.fromDecryptedResult(
+          enclosingCryptSection.level,
+          cleartext,
+          OrgroDecryptedContentSerializer(
+            block,
+            cleartext: cleartext,
+            password: password,
+          ),
+        );
         if (enclosingCryptSection is OrgSection) {
           toRemember.add((
             password: password,
             predicate: enclosingCryptSection.buildMatcher(),
           ));
         }
-        newDoc =
-            newDoc.editNode(block)!.replace(replacement).commit() as OrgTree;
+        newDoc = newDoc.editNode(block)!.replace(replacement).commit<OrgTree>();
       } catch (e, s) {
         logError(e, s);
         showErrorSnackBar(context, e);

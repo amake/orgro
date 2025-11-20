@@ -58,6 +58,7 @@ jA0ECQMI05i+dd7lsRry0joBcGZQ4m+N9M/Z3I2Xw7SSn2uPMRpWbH9UIRkzPTXU
         password: password,
       );
       final replacement = OrgDecryptedContent.fromDecryptedResult(
+        1,
         'bar\n',
         serializer,
       );

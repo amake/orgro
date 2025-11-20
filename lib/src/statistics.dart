@@ -14,7 +14,7 @@ OrgTree recalculateListStats(OrgTree root, OrgListItem target) {
   final tree = path.reversed.whereType<OrgTree>().first;
   var replacement = _recalculateCheckboxes(tree);
   replacement = _recalculateListStats(replacement);
-  return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
+  return root.edit().find(tree)!.replace(replacement).commit<OrgTree>();
 }
 
 OrgTree _recalculateCheckboxes(OrgTree tree) {
@@ -46,7 +46,7 @@ OrgTree _recalculateCheckboxes(OrgTree tree) {
         OrgListOrderedItem() => parent.copyWith(checkbox: newCheckbox),
         OrgListUnorderedItem() => parent.copyWith(checkbox: newCheckbox),
       };
-      result = zipper.replace(newListItem).commit() as OrgTree;
+      result = zipper.replace(newListItem).commit<OrgTree>();
     } else {
       // The parent has been removed from the tree by a previous edit; we
       // are recalculating anyway so just ignore.
@@ -70,7 +70,7 @@ OrgTree _recalculateListStats(OrgTree tree) {
     }
     for (final cookie in scope.cookies) {
       final newCookie = cookie.update(done: scope.done, total: scope.total);
-      result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
+      result = result.editNode(cookie)!.replace(newCookie).commit<OrgTree>();
     }
   }
   return result;
@@ -126,7 +126,7 @@ OrgTree recalculateHeadlineStats(OrgTree root, OrgHeadline target) {
   // recalculate until we're back at the wide view
   if (tree == null) return root;
   final replacement = _recalculateHeadlineStats(tree);
-  return root.edit().find(tree)!.replace(replacement).commit() as OrgTree;
+  return root.edit().find(tree)!.replace(replacement).commit<OrgTree>();
 }
 
 OrgTree _recalculateHeadlineStats(OrgTree tree) {
@@ -141,7 +141,7 @@ OrgTree _recalculateHeadlineStats(OrgTree tree) {
     }
     for (final cookie in scope.cookies) {
       final newCookie = cookie.update(done: scope.done, total: scope.total);
-      result = result.editNode(cookie)!.replace(newCookie).commit() as OrgTree;
+      result = result.editNode(cookie)!.replace(newCookie).commit<OrgTree>();
     }
   }
   return result;

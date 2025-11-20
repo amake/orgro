@@ -82,11 +82,9 @@ extension TimestampsExtension on DocumentPageState {
 
   void _updateNode(OrgNode oldNode, OrgNode newNode) {
     if (oldNode == newNode) return;
-    final newDoc =
-        DocumentProvider.of(
-              context,
-            ).doc.editNode(oldNode)!.replace(newNode).commit()
-            as OrgTree;
+    final newDoc = DocumentProvider.of(
+      context,
+    ).doc.editNode(oldNode)!.replace(newNode).commit<OrgTree>();
     updateDocument(newDoc);
   }
 }

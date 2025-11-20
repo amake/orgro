@@ -581,7 +581,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   void _onListItemTap(OrgListItem item) {
     final replacement = item.toggleCheckbox();
-    var newTree = _doc.editNode(item)!.replace(replacement).commit() as OrgTree;
+    var newTree = _doc.editNode(item)!.replace(replacement).commit<OrgTree>();
     newTree = recalculateListStats(newTree, replacement);
     updateDocument(newTree);
   }
