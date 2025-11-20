@@ -184,11 +184,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         onPressed: () {
           final todoSettings = OrgSettings.of(context).settings.todoSettings;
           try {
-            final replacement = section.headline.cycleTodo(todoSettings);
+            final replacement = section.cycleTodo(todoStates: todoSettings);
             var newDoc =
-                _doc.editNode(section.headline)!.replace(replacement).commit()
+                _doc.editNode(section)!.replace(replacement).commit()
                     as OrgTree;
-            newDoc = recalculateHeadlineStats(newDoc, replacement);
+            newDoc = recalculateHeadlineStats(newDoc, replacement.headline);
             updateDocument(newDoc);
           } catch (e, s) {
             logError(e, s);
