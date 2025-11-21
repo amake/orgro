@@ -117,10 +117,10 @@ packages:
     dependency: "direct main"
     description:
       name: dynamic_fonts
-      sha256: c32fe513415a924789646737b589d2024f2392f1e2a50c38bcaee503cd4c36ff
+      sha256: dab9d09f0b95f873302a8a81c41e5f82d758fa73fc0626cc6d1b92b0630d4e5d
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.2"
+    version: "3.0.0"
   equatable:
     dependency: transitive
     description:
