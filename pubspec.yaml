@@ -81,3 +81,6 @@ dependency_overrides:
       url: https://github.com/amake/open_file.git
       ref: feature/uiscene-compat
       path: open_file_ios
+  # TODO(aaron): 2.5.0 moved to FFI, but this is not working correctly in Orgro:
+  # https://github.com/flutter/packages/pull/9762
+  path_provider_foundation: <2.5.0
