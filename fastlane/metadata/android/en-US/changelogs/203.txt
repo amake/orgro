@@ -1,0 +1,3 @@
+- Support repeating notifications
+- Completion logging when toggling repeating TODOs
+- Bug fixes
