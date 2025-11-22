@@ -1,0 +1,4 @@
+- Support repeating notifications
+- Completion logging when toggling repeating TODOs
+- Visibility cycling now skips full display; long press for full display
+- Bug fixes
