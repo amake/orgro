@@ -240,7 +240,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     if (!searchMode || _biggishScreen) {
       yield IconButton(
         icon: const Icon(Icons.repeat),
-        onPressed: OrgController.of(context).cycleVisibility,
+        onPressed: () => OrgController.of(
+          context,
+        ).cycleVisibility(skip: OrgVisibilityState.subtree),
+        onLongPress: () => OrgController.of(
+          context,
+        ).cycleVisibility(to: OrgVisibilityState.subtree),
       );
       if (_bigScreen) {
         yield TextStyleButton(
