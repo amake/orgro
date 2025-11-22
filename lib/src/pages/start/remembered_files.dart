@@ -48,7 +48,7 @@ class RememberedFilesBody extends StatelessWidget {
             itemBuilder: (context, index) {
               final pinnedFile = sortedPins[index];
               return _constrain(
-                _RememberedFileListTile(pinnedFile),
+                _RememberedFileManagementListTile(pinnedFile),
                 key: ValueKey(pinnedFile),
               );
             },
@@ -80,7 +80,7 @@ class RememberedFilesBody extends StatelessWidget {
             itemBuilder: (context, index) {
               final recentFile = sortedRecents[index];
               return _constrain(
-                _RememberedFileListTile(recentFile),
+                _RememberedFileManagementListTile(recentFile),
                 key: ValueKey(recentFile),
               );
             },
@@ -191,8 +191,8 @@ String? _appName(BuildContext context, String uriString) {
   };
 }
 
-class _RememberedFileListTile extends StatelessWidget {
-  const _RememberedFileListTile(this.recentFile);
+class _RememberedFileManagementListTile extends StatelessWidget {
+  const _RememberedFileManagementListTile(this.recentFile);
 
   final RememberedFile recentFile;
 
@@ -224,47 +224,9 @@ class _RememberedFileListTile extends StatelessWidget {
           ),
         ],
       ),
-      child: ListTile(
-        leading: const Icon(Icons.insert_drive_file),
-        title: Text(recentFile.name),
-        subtitle: Row(
-          children: [
-            Icon(
-              Icons.access_time,
-              size: Theme.of(context).textTheme.bodyMedium?.fontSize,
-              applyTextScaling: true,
-            ),
-            const SizedBox(width: 2),
-            Text(
-              _formatLastOpenedDate(
-                recentFile.lastOpened,
-                AppLocalizations.of(context)!.localeName,
-              ),
-              style: const TextStyle(
-                fontFeatures: [FontFeature.tabularFigures()],
-              ),
-            ),
-            ...(() sync* {
-              final appName = _appName(context, recentFile.uri);
-              if (appName != null) {
-                yield const SizedBox(width: 8);
-                yield Icon(
-                  Icons.folder_outlined,
-                  size: Theme.of(context).textTheme.bodyMedium?.fontSize,
-                  applyTextScaling: true,
-                );
-                yield const SizedBox(width: 2);
-                yield Expanded(
-                  child: Text(
-                    appName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }
-            })(),
-          ],
-        ),
+      child: RememberedFileListTile(
+        recentFile,
+        showAccessTime: true,
         onTap: () async => loadAndRememberFile(
           context,
           progressTask(
@@ -276,6 +238,70 @@ class _RememberedFileListTile extends StatelessWidget {
           ).then((value) => value.result),
         ),
       ),
+    );
+  }
+}
+
+class RememberedFileListTile extends StatelessWidget {
+  const RememberedFileListTile(
+    this.rememberedFile, {
+    required this.onTap,
+    this.showAccessTime,
+    super.key,
+  });
+
+  final RememberedFile rememberedFile;
+  final VoidCallback onTap;
+  final bool? showAccessTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.insert_drive_file),
+      title: Text(rememberedFile.name),
+      subtitle: Row(
+        children: [
+          if (showAccessTime == true) ...[
+            Icon(
+              Icons.access_time,
+              size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+              applyTextScaling: true,
+            ),
+            const SizedBox(width: 2),
+            Text(
+              _formatLastOpenedDate(
+                rememberedFile.lastOpened,
+                AppLocalizations.of(context)!.localeName,
+              ),
+              style: const TextStyle(
+                fontFeatures: [FontFeature.tabularFigures()],
+              ),
+            ),
+          ],
+          ...(() sync* {
+            final appName = _appName(context, rememberedFile.uri);
+            if (appName != null) {
+              if (showAccessTime == true) {
+                yield const SizedBox(width: 8);
+              }
+              yield Icon(
+                Icons.folder_outlined,
+                size: Theme.of(context).textTheme.bodyMedium?.fontSize,
+                applyTextScaling: true,
+              );
+              yield const SizedBox(width: 2);
+              yield Expanded(
+                child: Text(
+                  appName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            }
+          })(),
+        ],
+      ),
+      onTap: onTap,
     );
   }
 }

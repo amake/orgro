@@ -28,6 +28,7 @@ import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/document/restoration.dart';
 import 'package:orgro/src/pages/document/timestamps.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/statistics.dart';
 import 'package:orgro/src/util.dart';
@@ -66,6 +67,7 @@ class DocumentPage extends StatefulWidget {
     this.initialTarget,
     this.initialQuery,
     this.initialFilter,
+    this.afterOpen,
     required this.root,
     super.key,
   });
@@ -76,6 +78,7 @@ class DocumentPage extends StatefulWidget {
   final SearchQuery? initialQuery;
   final InitialMode? initialMode;
   final FilterData? initialFilter;
+  final AfterOpenCallback? afterOpen;
   final bool root;
 
   @override
@@ -125,7 +128,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
           case InitialMode.view:
-            // do nothing
+            widget.afterOpen?.call(this);
             break;
           case InitialMode.edit:
             doEdit(requestFocus: true);

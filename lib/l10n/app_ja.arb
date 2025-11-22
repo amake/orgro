@@ -175,6 +175,9 @@
   "startTimePickerTitle": "開始時間の選択",
   "endTimePickerTitle": "終了時間の選択",
 
+  "captureToDialogTitle": "キャプチャ先",
+  "snackbarMessageInvalidCaptureUri": "不正なキャプチャURL",
+
   "snackbarMessageBibliographiesNotFound": "参考文献ファイルの指定がありませんでした",
   "snackbarMessageCitationKeysNotFound": "文献キーが見つかりませんでした",
   "snackbarMessageCitationsNotFound": "文献情報が見つかりませんでした",

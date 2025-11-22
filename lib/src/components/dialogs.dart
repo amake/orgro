@@ -8,6 +8,7 @@ import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/document/citations.dart';
+import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:petit_bibtex/bibtex.dart';
@@ -708,6 +709,34 @@ extension SortOrderDisplayString on SortOrder {
     SortOrder.ascending => AppLocalizations.of(context)!.sortOrderAscending,
     SortOrder.descending => AppLocalizations.of(context)!.sortOrderDescending,
   };
+}
+
+class SelectFileDialog extends StatelessWidget {
+  const SelectFileDialog({required this.title, required this.files, super.key});
+
+  final String title;
+  final List<RememberedFile> files;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (context, idx) {
+            final file = files[idx];
+            return RememberedFileListTile(
+              file,
+              onTap: () => Navigator.pop(context, file),
+            );
+          },
+          itemCount: files.length,
+        ),
+      ),
+    );
+  }
 }
 
 class _DialogButton extends StatelessWidget {

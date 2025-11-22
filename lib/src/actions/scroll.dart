@@ -10,7 +10,7 @@ class ScrollToDocumentBoundaryAction
   ]) {
     if (context != null) {
       if (intent.forward) {
-        _scrollToBottom(context);
+        scrollToBottom(context);
       } else {
         _scrollToTop(context);
       }
@@ -30,7 +30,7 @@ void _scrollToTop(BuildContext context) {
   _scrollTo(controller, controller.position.minScrollExtent);
 }
 
-void _scrollToBottom(BuildContext context) {
+void scrollToBottom(BuildContext context) {
   final controller = PrimaryScrollController.of(context);
   _scrollTo(controller, controller.position.maxScrollExtent);
 }

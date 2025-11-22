@@ -473,6 +473,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get endTimePickerTitle => 'Endzeit eingeben';
 
   @override
+  String get captureToDialogTitle => 'Capture to';
+
+  @override
+  String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
+
+  @override
   String get snackbarMessageBibliographiesNotFound =>
       'Keine Bibliografien gefunden';
 

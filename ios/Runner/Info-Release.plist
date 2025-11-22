@@ -142,5 +142,18 @@
             </array>
         </dict>
     </dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>com.madlonkay.orgro.org-protocol</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>org-protocol</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

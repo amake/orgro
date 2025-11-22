@@ -474,6 +474,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get endTimePickerTitle => 'Выбрать время конца';
 
   @override
+  String get captureToDialogTitle => 'Capture to';
+
+  @override
+  String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
+
+  @override
   String get snackbarMessageBibliographiesNotFound => 'Не найдены библиографии';
 
   @override

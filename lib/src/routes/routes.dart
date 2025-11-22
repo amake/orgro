@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orgro/src/assets.dart';
+import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/narrow.dart';
@@ -25,11 +26,27 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   if (settings.name == null) return null;
 
   final uri = Uri.tryParse(settings.name!);
-  // TODO(aaron): Handle org-protocol https://orgmode.org/manual/Protocols.html
   if (uri == null) return null;
+
+  debugPrint(
+    'Received URI with scheme="${uri.scheme}", '
+    'host="${uri.host}", path="${uri.path}", query="${uri.query}"',
+  );
+
+  if (kOrgProtocolSchemes.contains(uri.scheme)) {
+    // This may not ever actually happen
+    debugPrint('Suppressing org-protocol URI: $uri');
+    return null;
+  }
+
   // Opening a file via "Open with..." on Android will traverse this code path
   // with a content: URL
   if (!_allowedHosts.contains(uri.host)) return null;
+
+  // org-protocol URLs on Android pass through here for some reason. We
+  // shouldn't be going to '/' because it should always be present at the root
+  // of the navigation stack.
+  if (uri.path == '/') return null;
 
   switch (uri.path.trimSuff('/')) {
     case Routes.document:

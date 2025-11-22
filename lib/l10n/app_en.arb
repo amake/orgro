@@ -230,6 +230,9 @@
   "startTimePickerTitle": "Select start time",
   "endTimePickerTitle": "Select end time",
 
+  "captureToDialogTitle": "Capture to",
+  "snackbarMessageInvalidCaptureUri": "Invalid capture URL",
+
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",
   "snackbarMessageCitationKeysNotFound": "Citation keys not found",
   "snackbarMessageCitationsNotFound": "Citations not found",

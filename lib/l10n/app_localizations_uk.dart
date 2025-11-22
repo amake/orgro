@@ -472,6 +472,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get endTimePickerTitle => 'Select end time';
 
   @override
+  String get captureToDialogTitle => 'Capture to';
+
+  @override
+  String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
+
+  @override
   String get snackbarMessageBibliographiesNotFound => 'No bibliographies found';
 
   @override

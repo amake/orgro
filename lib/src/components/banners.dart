@@ -30,6 +30,7 @@ class _NicelyTimedBannerState extends State<_NicelyTimedBanner> {
 
   void _onRouteAnimationStatusChanged(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
+      if (!mounted) return;
       setState(() => _ready = true);
       final route = ModalRoute.of(context);
       route!.animation?.removeStatusListener(_onRouteAnimationStatusChanged);

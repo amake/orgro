@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/start/util.dart';
 
 Future<NativeDataSource?> pickFile() async =>
@@ -57,7 +59,8 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
     super.initState();
     _filePickerState = FilePickerWritable().init()
       ..registerFileOpenHandler(_loadFile)
-      ..registerErrorEventHandler(_handleError);
+      ..registerErrorEventHandler(_handleError)
+      ..registerUriHandler(_handleUri);
   }
 
   Future<bool> _loadFile(FileInfo fileInfo, File file) async {
@@ -92,5 +95,19 @@ mixin PlatformOpenHandler<T extends StatefulWidget> on State<T> {
       ..removeFileOpenHandler(_loadFile)
       ..removeErrorEventHandler(_handleError);
     super.dispose();
+  }
+
+  // It doesn't make a lot of sense to handle org-capture URIs here, but
+  // file_picker_writable implements the callback that handles URI opening, so
+  // for now we have no choice.
+  //
+  // TODO(aaron): See if file_picker_writable can refuse handling of non-file URIs
+  bool _handleUri(Uri uri) {
+    debugPrint('Received URI: $uri; scheme=${uri.scheme}, host=${uri.host}');
+    if (isCaptureUri(uri)) {
+      captureUri(context, uri).onError(logError);
+      return true;
+    }
+    return false;
   }
 }

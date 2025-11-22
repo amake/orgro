@@ -452,6 +452,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get endTimePickerTitle => '終了時間の選択';
 
   @override
+  String get captureToDialogTitle => 'キャプチャ先';
+
+  @override
+  String get snackbarMessageInvalidCaptureUri => '不正なキャプチャURL';
+
+  @override
   String get snackbarMessageBibliographiesNotFound => '参考文献ファイルの指定がありませんでした';
 
   @override

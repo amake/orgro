@@ -124,7 +124,7 @@ extension OrgListItemUtils on OrgListItem {
 extension OrgHeadlineUtils on OrgHeadline {
   bool get isEmpty => toMarkup().trim() == stars.value;
 
-  OrgHeadline next() => OrgHeadline(stars, null, null, null, null, null, null);
+  OrgHeadline next() => OrgHeadline(stars, null, null, null, null, null, '');
 }
 
 extension StringUtils on String {

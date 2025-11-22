@@ -8,12 +8,20 @@ import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/routes.dart';
 
+typedef AfterOpenCallback = void Function(DocumentPageState);
+
 class DocumentRouteArgs {
-  const DocumentRouteArgs({required this.dataSource, this.target, this.mode});
+  const DocumentRouteArgs({
+    required this.dataSource,
+    this.target,
+    this.mode,
+    this.afterOpen,
+  });
 
   final DataSource dataSource;
   final String? target;
   final InitialMode? mode;
+  final AfterOpenCallback? afterOpen;
 }
 
 class DocumentRoute extends MaterialPageRoute<void> {
@@ -77,6 +85,7 @@ class _DocumentRouteTopState extends State<_DocumentRouteTop> {
               layer: 0,
               target: _args.target,
               initialMode: _args.mode,
+              afterOpen: _args.afterOpen,
             ),
           );
         } else if (snapshot.hasError) {
@@ -93,12 +102,14 @@ class _DocumentPageWrapper extends StatelessWidget {
   const _DocumentPageWrapper({
     required this.layer,
     required this.target,
+    required this.afterOpen,
     this.initialMode,
   });
 
   final int layer;
   final String? target;
   final InitialMode? initialMode;
+  final AfterOpenCallback? afterOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +143,7 @@ class _DocumentPageWrapper extends StatelessWidget {
                   title: dataSource.name,
                   initialTarget: target,
                   initialMode: initialMode,
+                  afterOpen: afterOpen,
                   root: true,
                 ),
               ),

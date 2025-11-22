@@ -18,21 +18,27 @@ Future<void> loadHttpUrl(BuildContext context, Uri uri) => Navigator.pushNamed(
   arguments: DocumentRouteArgs(dataSource: WebDataSource(uri)),
 );
 
-Future<void> loadAsset(BuildContext context, String key, {InitialMode? mode}) =>
-    Navigator.pushNamed(
-      context,
-      Routes.document,
-      arguments: DocumentRouteArgs(
-        dataSource: AssetDataSource(key),
-        mode: mode,
-      ),
-    );
+Future<void> loadAsset(
+  BuildContext context,
+  String key, {
+  InitialMode? mode,
+  AfterOpenCallback? afterOpen,
+}) => Navigator.pushNamed(
+  context,
+  Routes.document,
+  arguments: DocumentRouteArgs(
+    dataSource: AssetDataSource(key),
+    mode: mode,
+    afterOpen: afterOpen,
+  ),
+);
 
 Future<void> loadDocument(
   BuildContext context,
   DataSource dataSource, {
   String? target,
   InitialMode? mode,
+  AfterOpenCallback? afterOpen,
 }) => Navigator.pushNamed(
   context,
   Routes.document,
@@ -40,6 +46,7 @@ Future<void> loadDocument(
     dataSource: dataSource,
     target: target,
     mode: mode,
+    afterOpen: afterOpen,
   ),
 );
 

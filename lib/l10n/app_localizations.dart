@@ -910,6 +910,18 @@ abstract class AppLocalizations {
   /// **'Select end time'**
   String get endTimePickerTitle;
 
+  /// No description provided for @captureToDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture to'**
+  String get captureToDialogTitle;
+
+  /// No description provided for @snackbarMessageInvalidCaptureUri.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid capture URL'**
+  String get snackbarMessageInvalidCaptureUri;
+
   /// No description provided for @snackbarMessageBibliographiesNotFound.
   ///
   /// In en, this message translates to:
