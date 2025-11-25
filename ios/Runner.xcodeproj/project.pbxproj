@@ -100,7 +100,9 @@
 		C4AC25282ED5A3C200756304 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				"Info-Debug.plist",
+				"Info-Profile.plist",
+				"Info-Release.plist",
 			);
 			target = C4AC25182ED5A3C200756304 /* OrgroCapture */;
 		};
@@ -834,7 +836,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = OrgroCapture/Info.plist;
+				INFOPLIST_FILE = "OrgroCapture/Info-Debug.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = OrgroCapture;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -847,7 +849,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.OrgroCapture;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.debug1.OrgroCapture;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -876,7 +878,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = OrgroCapture/Info.plist;
+				INFOPLIST_FILE = "OrgroCapture/Info-Release.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = OrgroCapture;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -916,7 +918,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = OrgroCapture/Info.plist;
+				INFOPLIST_FILE = "OrgroCapture/Info-Profile.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = OrgroCapture;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -928,7 +930,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.OrgroCapture;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madlonkay.orgro.profile1.OrgroCapture;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
