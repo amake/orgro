@@ -6,4 +6,7 @@
     <string name="app_link_host">orgro.org</string>
     <string name="app_link_host_debug">debug.orgro.org</string>
     <string name="app_link_host_profile">profile.orgro.org</string>
+    <string name="org_protocol_scheme">org-protocol</string>
+    <string name="org_protocol_scheme_debug">org-protocol-debug</string>
+    <string name="org_protocol_scheme_profile">org-protocol-profile</string>
 </resources>
