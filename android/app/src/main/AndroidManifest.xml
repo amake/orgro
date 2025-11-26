@@ -19,6 +19,20 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="${displayName}">
+        <activity
+            android:name=".CaptureActivity"
+            android:exported="true"
+            android:label="@string/title_activity_capture"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:taskAffinity=""
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <!-- For scheduled notifications -->
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"

@@ -9,4 +9,5 @@
     <string name="org_protocol_scheme">org-protocol</string>
     <string name="org_protocol_scheme_debug">org-protocol-debug</string>
     <string name="org_protocol_scheme_profile">org-protocol-profile</string>
+    <string name="title_activity_capture">Capture</string>
 </resources>
