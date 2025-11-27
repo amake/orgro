@@ -369,6 +369,16 @@ so:
 Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
 section for details.
 
+* Capture
+
+Orgro supports =org-protocol://capture= URLs. When receiving such a URL, Orgro
+will ask you which file to capture to (if there are known files), or capture
+directly into a new, blank document.
+
+Because it is rare to encounter =org-protocol= URLs in the wild, Orgro includes
+“Capture” native share targets for both iOS and Android; look for them in the
+standard share interface for your system.
+
 * Reader Mode
 
 Enable Reader Mode to reflow text, hide emphasis markers, and make meta lines
