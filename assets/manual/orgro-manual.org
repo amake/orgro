@@ -264,12 +264,25 @@ If you like to have a nice horizontal line in your document, you can do that:
 
 Enjoy!
 
+** Timestamps
+
+- Active :: <2025-11-27 Thu>
+- Inactive :: [2025-11-27 Thu]
+- With time :: [2025-11-27 Thu 12:34]
+- Time range :: [2025-11-27 Thu 12:34-23:45]
+- Date range :: [2025-11-27 Thu]--[2025-11-28 Fri]
+
+Tap a timestamp to edit it. In the editor, long press the timestamp insertion
+button to insert an active timestamp instead of an inactive one.
+
+Active timestamps in sections indicate agenda items for which Orgro can send you
+notifications; see [[*Agenda][Agenda]].
+
 ** Other
 
 Other syntaxes that are highlighted but not (yet) interpreted in any special
 way:
 
-- Timestamps and ranges :: [2020-05-05 Tue]
 - Anonymous footnotes :: guess what[fn:: this is an anonymous footnote]
 - Macro references :: {{{date}}}
 
