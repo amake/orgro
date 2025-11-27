@@ -1,0 +1,26 @@
+* Debug
+
+- URL :: [[org-protocol-debug://capture?url=https://example.com]]
+- Title :: [[org-protocol-debug://capture?title=Foo]]
+- Body :: [[org-protocol-debug://capture?body=Foo+bar]]
+- All :: [[org-protocol-debug://capture?url=https://example.com&title=Foo&body=Foo+bar]]
+- Empty :: [[org-protocol-debug://capture]]
+- Other protocol :: [[org-protocol-debug://foo]]
+
+* Profile
+
+- URL :: [[org-protocol-profile://capture?url=https://example.com]]
+- Title :: [[org-protocol-profile://capture?title=Foo]]
+- Body :: [[org-protocol-profile://capture?body=Foo+bar]]
+- All :: [[org-protocol-profile://capture?url=https://example.com&title=Foo&body=Foo+bar]]
+- Empty :: [[org-protocol-profile://capture]]
+- Other protocol :: [[org-protocol-profile://foo]]
+
+* Release
+
+- URL :: [[org-protocol://capture?url=https://example.com]]
+- Title :: [[org-protocol://capture?title=Foo]]
+- Body :: [[org-protocol://capture?body=Foo+bar]]
+- All :: [[org-protocol://capture?url=https://example.com&title=Foo&body=Foo+bar]]
+- Empty :: [[org-protocol://capture]]
+- Other protocol :: [[org-protocol://foo]]

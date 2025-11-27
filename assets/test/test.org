@@ -27,6 +27,10 @@ Bidi
 - [[file:agenda-repeating-past-now.org][Repeating past now (=++=)]]
 - [[file:agenda-repeating-from-now.org][Repeating from now (=.+=)]]
 
+* Org Protocol
+
+- [[file:org-protocol-capture.org][Capture]]
+
 * Locale
 
 - [[file:locale-zh_Hant.org][zh-Hant]]
