@@ -6,9 +6,9 @@ Files open in “overview” visibility mode, with top sections folded.
 
 Tap a section header to expand it ↓
 
-* Supported Org Mode features
+* Supported Org Mode syntax
 
-Orgro can understand the following Org Mode features:
+Orgro can understand the following Org Mode syntax:
 
 ** Sections
 
@@ -45,7 +45,7 @@ Touch a code reference like [[(foo)]] to jump to the corresponding line.
   (calculate-the-thing) ;;(ref:foo)
 #+end_src
 
-** Syntax highlighting
+** Code syntax highlighting
 
 Syntax highlighting is applied for [[https://github.com/git-touch/highlight/tree/master/highlight/lib/languages][many languages]] in =src= blocks.
 
@@ -244,25 +244,6 @@ Jump to named foonotes by touching a footnote reference.[fn:1]
 Orgro can follow citations when a BibTeX bibliography has been specified like
 above[cite:@OrgroManual]. Touch a citation for details.
 
-** Attachments                                                       :ATTACH:
-   :PROPERTIES:
-   :ID:       C259CE94-D4C8-4C4F-9C9E-9ABE446E7DA3
-   :END:
-
-Orgro can show attached images and open links to attached Org Mode files like
-so:
-
-[[attachment:orgro-icon.png]]
-
-[[attachment:orgro-manual-attachment.org]]
-
-[[attachment:hello-world.pdf]]
-
-[[attachment:orgro-app-store-promotion.mp4]]
-
-Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
-section for details.
-
 ** Encryption
 
 Orgro recognizes encrypted content (OpenPGP/RFC 4880 messages starting with
@@ -355,6 +336,25 @@ clear all notifications; when doing so all agenda files are forgotten.
 
 If you denied notification permissions, look for “Enable notifications” in the
 Settings screen.
+
+* Attachments                                                        :ATTACH:
+  :PROPERTIES:
+  :ID:       C259CE94-D4C8-4C4F-9C9E-9ABE446E7DA3
+  :END:
+
+Orgro can show attached images and open links to attached Org Mode files like
+so:
+
+[[attachment:orgro-icon.png]]
+
+[[attachment:orgro-manual-attachment.org]]
+
+[[attachment:hello-world.pdf]]
+
+[[attachment:orgro-app-store-promotion.mp4]]
+
+Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
+section for details.
 
 * Reader Mode
 
