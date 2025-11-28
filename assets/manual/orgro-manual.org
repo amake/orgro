@@ -391,11 +391,12 @@ in one of two places:
 * Visibility Cycling
 
 Rotate sections between expanded and collapsed states just like Org Mode in
-Emacs:
+Emacs. Tapping the button in the top app bar cycles between:
 
 1. Overview: Show only top-level headlines
 2. Contents: Show all headlines of all levels, but no body text
-3. Show all: Show everything
+
+Long press the button to show everything.
 
 Activate with the button in the top app bar.
 
