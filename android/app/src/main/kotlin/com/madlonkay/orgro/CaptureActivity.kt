@@ -56,17 +56,9 @@ class CaptureActivity : ComponentActivity() {
         }
     }
 
-    private val orgProtocolScheme
-        get() = getString(when (BuildConfig.BUILD_TYPE) {
-            "debug" -> R.string.org_protocol_scheme_debug
-            "profile" -> R.string.org_protocol_scheme_profile
-            "release" -> R.string.org_protocol_scheme
-            else -> throw Exception()
-        })
-
     private fun shareParts(url: String?, title: String?, body: String?) {
         val builder = Uri.Builder()
-            .scheme(orgProtocolScheme)
+            .scheme(BuildConfig.ORG_PROTOCOL_SCHEME)
             .authority("capture")
         if (url != null) builder.appendQueryParameter("url", url)
         if (title != null) builder.appendQueryParameter("title", title)
