@@ -95,18 +95,14 @@ class ShareViewController: UIViewController {
         comp.queryItems = queryItems
         let orgUrl = comp.url!
         logger.critical("Going to open url: \(orgUrl)")
-        let success = await openURL(orgUrl)
+        let success = await application.open(orgUrl)
         logger.critical("Open url succeeded: \(success)")
     }
-
-    @discardableResult
-    private func openURL(_ url: URL, completion: ((Bool) -> Void)? = nil) async -> Bool {
-        let responder = sequence(first: self, next: \.next)
-            .first(where: { $0 is UIApplication })
-        guard let application = responder as? UIApplication else {
-            return false
+    
+    private var application: UIApplication {
+        get {
+            return sequence(first: self, next: \.next).first(where: { $0 is UIApplication }) as! UIApplication
         }
-        return await application.open(url, options: [:])
     }
 
     func close() {
