@@ -27,7 +27,10 @@ well into the core without compromises.)
 I also wanted to try writing a parser with
 [PetitParser](https://github.com/petitparser/dart-petitparser); the result
 powers this application and is available as a separate library,
-[org_parser](https://github.com/amake/org_parser).
+[org_parser](https://github.com/amake/org_parser). Further, the display engine
+is also available as a separate package for any [Flutter](https://flutter.dev/)
+app that wants to display Org markup:
+[org_flutter](https://github.com/amake/org_flutter).
 
 # Features
 
