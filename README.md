@@ -97,5 +97,5 @@ build and install from source:
 
 # Support Orgro
 
-If you like this app, please show your support by [sponsoring the
-author](https://github.com/sponsors/amake) ❤️
+If you like this app, please show your support by buying a copy, or [sponsoring
+the author](https://github.com/sponsors/amake) ❤️
