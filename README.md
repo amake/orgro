@@ -79,11 +79,6 @@ powers this application and is available as a separate library,
 
 See the [manual](https://orgro.org/manual) for details.
 
-# Limitations
-
-Many Org Mode syntax structures are highlighted but not meaningfully
-interpreted.
-
 # FAQ
 
 See [here](https://orgro.org/faq/)
