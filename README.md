@@ -18,10 +18,11 @@ I started taking notes in Org Mode at work, then found myself wanting to view
 them on my tablet in meetings. By default on iOS you can't open an `.org` file
 at all, as the OS doesn't even know that it's plain text.
 
-Other mobile Org Mode apps are focused on very different things like to-dos or
-task management; Orgro is instead first and foremost a *viewer*, letting you see
-and search the contents of your org files. (Recently it also gained editing
-capabilities. I hope to enhance these in the future.)
+Other mobile Org Mode apps seem focused on specific use cases like to-dos or
+task management; Orgro is instead meant to be a well-rounded and high-fidelity
+experience for viewing, navigating, and editing Org documents. (In the 5+ years
+since I started Orgro, I've added additional functionality only when it fits
+well into the core without compromises.)
 
 I also wanted to try writing a parser with
 [PetitParser](https://github.com/petitparser/dart-petitparser); the result
@@ -30,27 +31,53 @@ powers this application and is available as a separate library,
 
 # Features
 
-- Syntax highlighting for most Org Mode syntax structures
+## Display
+- Syntax highlighting for all Org Mode syntax structures
 - Expand and collapse sections, blocks, and drawers
 - Reflow text for easy viewing on narrow screens
+- “Reader mode” where extraneous markup is hidden
 - Pretty table rendering
-- Functional external links and section links (works well with
-  [Org-roam](https://www.orgroam.com/))
-- Visibility cycling
-- Search
-- Narrowing
-- [Sparse Tree](https://orgmode.org/manual/Sparse-Trees.html)-style filtering
-- "Reader mode" where extraneous markup is hidden
 - Inline and block LaTeX rendering
+
+## Navigation
+- Visibility cycling
+- Narrowing
+- Functional external links, section links, and relative links to other Org
+  files (works well with [Org-roam](https://www.orgroam.com/))
+- Search: both plain text and regexp
+- [Sparse Tree](https://orgmode.org/manual/Sparse-Trees.html)-style filtering
 - Jump to/from footnotes
+- Jump to `<<link targets>>`, `<<<radio targets>>>`, and src block code
+  references like `(foo)`
+
+## Editing
+- Edit entire files or narrowed sections as plain text, with various insertion
+  helpers
+- Some “structured” editing available
+  - Tap to toggle checkboxes
+  - Slide sections to cycle TODO states
+  - Tap to edit timestamps via date/time picker
+
+## Task management
+- Functional checkboxes, with [statistics
+  cookies](https://orgmode.org/manual/Breaking-Down-Tasks.html)
+- Easy cycling of TODO states
+- Notifications for Org Agenda items, including recurring items
+
+## External media
+- Display linked images
+- Attachment support
 - Display [Org Cite](https://orgmode.org/manual/Citations.html) citations
+
+## More
+- Capture text and links from other apps via the standard OS share UI, and also
+  [`org-protocol://`](https://orgmode.org/manual/Protocols.html) links
 - Decrypt/encrypt [Org Crypt](https://orgmode.org/manual/Org-Crypt.html)
   sections (currently symmetric keys only)
-- Editing capability
-  ([details](https://orgro.org/faq/#can-i-edit-my-files-with-orgro))
-- Honor document-local `#+STARTUP:` and `#+TODO:` directives
+- Honor document-local `#+STARTUP:`, `#+TODO:`, `#+LANGUAGE:` directives, and
+  some local variables
 
-See the [manual](./assets/manual/orgro-manual.org) for details.
+See the [manual](https://orgro.org/manual) for details.
 
 # Limitations
 
