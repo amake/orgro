@@ -111,6 +111,7 @@ class SaveChangesDialog extends StatelessWidget {
               title: Text(SaveAction.share.toDisplayString(context)),
               onTap: () async {
                 final navigator = Navigator.of(context);
+                final route = ModalRoute.of(context)!;
 
                 // Compute origin of share sheet for tablets
                 final box = context.findRenderObject() as RenderBox?;
@@ -129,7 +130,12 @@ class SaveChangesDialog extends StatelessWidget {
 
                 // Don't close popup unless user successfully shared
                 if (result.status == ShareResultStatus.success) {
-                  navigator.pop(true);
+                  // We remove the route instead of popping because we might
+                  // have shared back into Orgro, in which case a new route
+                  // (capture target selection dialog or scratch doc) is pushed
+                  // just as we're closing this one (the save dialog) and the
+                  // document.
+                  navigator.removeRoute(route, true);
                 }
               },
             );

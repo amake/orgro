@@ -701,7 +701,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     // Don't try to save anything other than a root document
     if (doc is! OrgDocument || !widget.root) return;
 
+    // Grab the route now when we're sure it's on top, so we don't accidentally
+    // pop the wrong one later.
     final navigator = Navigator.of(context);
+    final docRoute = ModalRoute.of(context)!;
+    void pop() {
+      if (!mounted) return;
+      navigator.removeRoute(docRoute);
+    }
 
     // If we are already in the middle of saving, wait for that to finish
     final writeFuture = _writeFuture;
@@ -760,7 +767,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           builder: (context) => const DiscardChangesDialog(),
         );
         if (discard == true) {
-          navigator.pop();
+          pop();
         }
         return;
       } else {
@@ -782,7 +789,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       final markup = await serializeWithProgressUI(context, doc, serializer);
       if (markup == null) return;
       await time('write', () => source.write(markup));
-      navigator.pop();
+      pop();
       return;
     }
 
@@ -801,7 +808,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       ),
     );
 
-    if (result == true) navigator.pop();
+    if (result == true) pop();
   }
 
   bool? get _hasEncryptedContent =>
