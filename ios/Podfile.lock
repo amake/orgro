@@ -1,5 +1,5 @@
 PODS:
-  - app_settings (5.1.1):
+  - app_settings (6.1.2):
     - Flutter
   - file_picker_writable (0.0.1):
     - Flutter
@@ -94,7 +94,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 5127ae0678de1dcc19f2293271c51d37c89428b2
+  app_settings: 0341ec6daa4f0c50f5a421bf0ad7c36084db6e90
   file_picker_writable: 3a458aa8cdb7c1378cb3e8ec0543ead87a77d0be
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3
