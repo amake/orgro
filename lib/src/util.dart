@@ -97,7 +97,7 @@ final platformShortcutKey = Platform.isIOS || Platform.isMacOS
     : LogicalKeyboardKey.control;
 
 extension GlobalPaintBounds on BuildContext {
-  Rect? get _globalPaintBounds {
+  Rect? get globalPaintBounds {
     if (!mounted) return null;
     try {
       final renderObject = findRenderObject();
@@ -115,8 +115,8 @@ extension GlobalPaintBounds on BuildContext {
 
 extension TopBoundComparator on GlobalKey {
   int compareByTopBound(GlobalKey other) {
-    final thisBounds = currentContext?._globalPaintBounds;
-    final otherBounds = other.currentContext?._globalPaintBounds;
+    final thisBounds = currentContext?.globalPaintBounds;
+    final otherBounds = other.currentContext?.globalPaintBounds;
     if (thisBounds != null && otherBounds != null) {
       return thisBounds.top.compareTo(otherBounds.top);
     }

@@ -181,24 +181,27 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
 
   List<Widget> _onSectionSlide(OrgSection section) {
     return [
-      ResponsiveSlidableAction(
-        label: AppLocalizations.of(context)!.sectionActionCycleTodo,
-        icon: Icons.repeat,
-        onPressed: () {
-          final todoSettings = OrgSettings.of(context).settings.todoSettings;
-          try {
-            final replacement = section.cycleTodo(todoStates: todoSettings);
-            var newDoc =
-                _doc.editNode(section)!.replace(replacement).commit()
-                    as OrgTree;
-            newDoc = recalculateHeadlineStats(newDoc, replacement.headline);
-            updateDocument(newDoc);
-          } catch (e, s) {
-            logError(e, s);
-            // TODO(aaron): Make this more friendly?
-            showErrorSnackBar(context, e);
-          }
-        },
+      PrimaryScrollController(
+        controller: PrimaryScrollController.of(context),
+        child: ResponsiveSlidableAction(
+          label: AppLocalizations.of(context)!.sectionActionCycleTodo,
+          icon: Icons.repeat,
+          onPressed: () {
+            final todoSettings = OrgSettings.of(context).settings.todoSettings;
+            try {
+              final replacement = section.cycleTodo(todoStates: todoSettings);
+              var newDoc =
+                  _doc.editNode(section)!.replace(replacement).commit()
+                      as OrgTree;
+              newDoc = recalculateHeadlineStats(newDoc, replacement.headline);
+              updateDocument(newDoc);
+            } catch (e, s) {
+              logError(e, s);
+              // TODO(aaron): Make this more friendly?
+              showErrorSnackBar(context, e);
+            }
+          },
+        ),
       ),
     ];
   }
