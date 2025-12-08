@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:orgro/src/util.dart';
@@ -46,15 +48,13 @@ class ResponsiveSlidableAction extends StatelessWidget {
             builder: (context, constraints) {
               final short =
                   constraints.maxHeight < IconTheme.of(context).size! * 2;
-              if (short) {
-                return _SmallIconLabel(icon: icon, label: label);
-              }
-              final veryTall =
-                  constraints.maxHeight > MediaQuery.sizeOf(context).height / 2;
-              if (veryTall) {
-                return _FloatingIconLabel(icon: icon, label: label);
-              }
-              return _MediumIconLabel(icon: icon, label: label);
+              return short
+                  ? _SmallIconLabel(icon: icon, label: label)
+                  : _FloatingIconLabel(
+                      icon: icon,
+                      label: label,
+                      width: constraints.maxWidth,
+                    );
             },
           ),
         ),
@@ -79,28 +79,16 @@ class _SmallIconLabel extends StatelessWidget {
   }
 }
 
-class _MediumIconLabel extends StatelessWidget {
-  const _MediumIconLabel({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      spacing: 4,
-      children: [Icon(icon), Text(label)],
-    );
-  }
-}
-
 class _FloatingIconLabel extends StatefulWidget {
-  const _FloatingIconLabel({required this.icon, required this.label});
+  const _FloatingIconLabel({
+    required this.icon,
+    required this.label,
+    required this.width,
+  });
 
   final IconData icon;
   final String label;
+  final double width;
 
   @override
   State<_FloatingIconLabel> createState() => _FloatingIconLabelState();
@@ -127,18 +115,38 @@ class _FloatingIconLabelState extends State<_FloatingIconLabel> {
 
   void _handleScroll() {
     final outerBounds = _outerKey.currentContext?.globalPaintBounds;
-    if (outerBounds == null) return;
-    final top = outerBounds.top;
-    var offset = top < 0 ? -top : 0.0;
     final innerBounds = _innerKey.currentContext?.globalPaintBounds;
-    if (innerBounds != null) {
-      final innerHeight = innerBounds.height;
-      final outerHeight = outerBounds.height;
-      final maxOffset = outerHeight - innerHeight;
-      if (offset > maxOffset) {
-        offset = maxOffset;
+    if (outerBounds == null || innerBounds == null) return;
+    final outerHeight = outerBounds.height;
+    final innerHeight = innerBounds.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final screenPadding = MediaQuery.paddingOf(context);
+    final usableScreenHeight =
+        screenHeight - kToolbarHeight - screenPadding.top;
+    double offset;
+    if (outerHeight > usableScreenHeight) {
+      // Align to top
+      if (outerBounds.top < kToolbarHeight + screenPadding.top) {
+        offset = -outerBounds.top + kToolbarHeight + screenPadding.top;
+      } else if (outerBounds.top + innerHeight > screenHeight) {
+        offset = screenHeight - outerBounds.top - innerHeight;
+      } else {
+        offset = 0;
+      }
+    } else {
+      // Align to middle
+      final middleTop = outerHeight / 2 - innerHeight / 2;
+      final middleBottom = outerHeight / 2 + innerHeight / 2;
+      if (outerBounds.top + middleTop < kToolbarHeight + screenPadding.top) {
+        offset = -outerBounds.top + kToolbarHeight + screenPadding.top;
+      } else if (outerBounds.top + middleBottom > screenHeight) {
+        offset = screenHeight - outerBounds.top - innerHeight;
+      } else {
+        offset = middleTop;
       }
     }
+    final maxOffset = outerHeight - innerHeight;
+    offset = min(max(0, offset), maxOffset);
     if (offset != _offset) {
       setState(() => _offset = offset);
     }
@@ -152,17 +160,22 @@ class _FloatingIconLabelState extends State<_FloatingIconLabel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       key: _outerKey,
       children: [
-        SizedBox(height: _offset),
-        Padding(
+        Positioned(
+          top: _offset,
           key: _innerKey,
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 4,
-            children: [Icon(widget.icon), Text(widget.label)],
+          child: SizedBox(
+            width: widget.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4,
+                children: [Icon(widget.icon), Text(widget.label)],
+              ),
+            ),
           ),
         ),
       ],
