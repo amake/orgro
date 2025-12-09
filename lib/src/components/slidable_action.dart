@@ -125,16 +125,10 @@ class _FloatingIconLabelState extends State<_FloatingIconLabel> {
         screenHeight - kToolbarHeight - screenPadding.top;
     double offset;
     if (outerHeight > usableScreenHeight) {
-      // Align to top
-      if (outerBounds.top < kToolbarHeight + screenPadding.top) {
-        offset = -outerBounds.top + kToolbarHeight + screenPadding.top;
-      } else if (outerBounds.top + innerHeight > screenHeight) {
-        offset = screenHeight - outerBounds.top - innerHeight;
-      } else {
-        offset = 0;
-      }
+      // Align to middle of screen
+      offset = screenHeight / 2 - outerBounds.top - innerHeight / 2;
     } else {
-      // Align to middle
+      // Align to middle of outer container
       final middleTop = outerHeight / 2 - innerHeight / 2;
       final middleBottom = outerHeight / 2 + innerHeight / 2;
       if (outerBounds.top + middleTop < kToolbarHeight + screenPadding.top) {
