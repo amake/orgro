@@ -10,6 +10,7 @@
 - [[file:layout-planning.org][Planning]]
 - [[file:layout-indent.org][Indent]]
 - [[file:layout-tables.org][Tables]]
+- [[file:layout-reflow.org][Reflow]]
 
 Bidi
 - [[file:layout-bidi-rtl.org][RTL]]

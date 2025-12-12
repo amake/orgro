@@ -1,0 +1,28 @@
+#+STARTUP: showall
+
+View this with Reader Mode enabled to see the results of reflowing.
+
+** Latin
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum.
+
+** Japanese
+
+(Note that spaces are not added where lines were unwrapped.)
+
+どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いて
+いた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞
+くとそれは書生という人間中で一番獰悪な種族であったそうだ。この書生というのは時々
+我々を捕えて煮て食うという話である。しかしその当時は何という考もなかったから別段
+恐しいとも思わなかった。ただ彼の掌に載せられてスーと持ち上げられた時何だかフワフ
+ワした感じがあったばかりである。掌の上で少し落ちついて書生の顔を見たのがいわゆる
+人間というものの見始であろう。この時妙なものだと思った感じが今でも残っている。第
+一毛をもって装飾されべきはずの顔がつるつるしてまるで薬缶だ。その後猫にもだいぶ逢っ
+たがこんな片輪には一度も出会わした事がない。のみならず顔の真中があまりに突起して
+いる。そうしてその穴の中から時々ぷうぷうと煙を吹く。どうも咽せぽくて実に弱った。
+これが人間の飲む煙草というものである事はようやくこの頃知った。
