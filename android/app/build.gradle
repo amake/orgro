@@ -67,7 +67,6 @@ android {
                 appLinkHost: '@string/app_link_host_debug',
                 orgProtocolScheme: '@string/org_protocol_scheme_debug'
             ]
-            buildConfigField "String", "ORG_PROTOCOL_SCHEME", '"org-protocol-debug"'
         }
         profile {
             applicationIdSuffix '.profile'
@@ -76,11 +75,9 @@ android {
                 appLinkHost: '@string/app_link_host_profile',
                 orgProtocolScheme: '@string/org_protocol_scheme_profile'
             ]
-            buildConfigField "String", "ORG_PROTOCOL_SCHEME", '"org-protocol-profile"'
         }
         release {
             signingConfig signingConfigs.release
-            buildConfigField "String", "ORG_PROTOCOL_SCHEME", '"org-protocol"'
         }
     }
 }
