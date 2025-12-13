@@ -1094,4 +1094,4 @@ packages:
     version: "6.6.1"
 sdks:
   dart: ">=3.10.0 <4.0.0"
-  flutter: ">=3.38.4 <4.0.0"
+  flutter: ">=3.38.5 <4.0.0"
