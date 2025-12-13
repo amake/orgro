@@ -1,0 +1,3 @@
+- Support capturing text and links shared from other apps
+- Support org-protocol://capture URLs
+- Bug fixes
