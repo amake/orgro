@@ -295,7 +295,6 @@ class _EditorToolbar extends StatelessWidget {
                 ),
               ),
               // TODO(aaron): Offer more quick-insert actions?
-              // - Lists
               // - Code blocks
               // - Sections
             ],
