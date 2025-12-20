@@ -398,3 +398,51 @@ TextEditingValue? afterNewLineFixup(TextEditingValue value) {
         ),
       );
 }
+
+const _indentStep = '  ';
+
+TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
+  if (!value.selection.isValid) return null;
+
+  final doc = OrgDocument.parse(value.text);
+  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
+
+  switch (itemAtPoint) {
+    case null:
+      // No list item at the cursor
+      return null;
+    case OrgListItem():
+      {
+        if (!increase && itemAtPoint.indent.isEmpty) {
+          // Can't decrease indent any further
+          return null;
+        }
+        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        var newIndent = itemAtPoint.indent;
+        if (newIndent.length % 2 != 0) {
+          newIndent = increase ? ' $newIndent' : newIndent.substring(1);
+        }
+        if (increase) {
+          newIndent = '$_indentStep$newIndent';
+        } else {
+          newIndent = newIndent.length >= _indentStep.length
+              ? newIndent.substring(_indentStep.length)
+              : '';
+        }
+        final replacement = switch (itemAtPoint) {
+          OrgListOrderedItem() => itemAtPoint.copyWith(indent: newIndent),
+          OrgListUnorderedItem() => itemAtPoint.copyWith(indent: newIndent),
+        }.toMarkup();
+        return value
+            .replaced(
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
+              replacement,
+            )
+            .copyWith(
+              selection: value.selection.shift(
+                replacement.length - itemAtPointLength,
+              ),
+            );
+      }
+  }
+}

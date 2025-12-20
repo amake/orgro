@@ -146,4 +146,38 @@ item 2|'''),
       });
     });
   });
+  group('Indentation', () {
+    test('Indent unordered list item', () {
+      final result = changeIndent(testValue('- foo |bar'), true);
+      expect(result, testValue('  - foo |bar'));
+    });
+    test('Deindent unordered list item', () {
+      final result = changeIndent(testValue('  - foo |bar'), false);
+      expect(result, testValue('- foo |bar'));
+    });
+    test('Indent ordered list item', () {
+      final result = changeIndent(testValue('1. foo |bar'), true);
+      expect(result, testValue('  1. foo |bar'));
+    });
+    test('Deindent ordered list item', () {
+      final result = changeIndent(testValue('  1. foo |bar'), false);
+      expect(result, testValue('1. foo |bar'));
+    });
+    test('Deindent item with no indentation', () {
+      final result = changeIndent(testValue('1. foo |bar'), false);
+      expect(result, isNull);
+    });
+    test('Deindent item with odd indentation', () {
+      final result = changeIndent(testValue(' 1. foo |bar'), false);
+      expect(result, testValue('1. foo |bar'));
+    });
+    test('Indent item with odd indentation', () {
+      final result = changeIndent(testValue(' 1. foo |bar'), true);
+      expect(result, testValue('    1. foo |bar'));
+    });
+    test('Indent non-list item', () {
+      final result = changeIndent(testValue(' foo |bar'), true);
+      expect(result, isNull);
+    });
+  });
 }

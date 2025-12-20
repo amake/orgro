@@ -202,3 +202,17 @@ class AfterNewLineAction extends _TextEditingAction<AfterNewLineIntent> {
     _applyEdit(afterNewLineFixup);
   }
 }
+
+class ChangeIndentIntent extends Intent {
+  const ChangeIndentIntent({required this.increase});
+  final bool increase;
+}
+
+class ChangeIndentAction extends _TextEditingAction<ChangeIndentIntent> {
+  ChangeIndentAction(super.controller);
+
+  @override
+  void invoke(covariant ChangeIndentIntent intent, [BuildContext? context]) {
+    _applyEdit((value) => changeIndent(value, intent.increase));
+  }
+}

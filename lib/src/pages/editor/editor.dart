@@ -133,6 +133,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
             ToggleListItemIntent: ToggleListItemAction(_controller.value),
             AfterNewLineIntent: AfterNewLineAction(_controller.value),
+            ChangeIndentIntent: ChangeIndentAction(_controller.value),
             ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           },
           child: FocusScope(
@@ -237,6 +238,20 @@ class _EditorToolbar extends StatelessWidget {
                 onPressed: Actions.handler(
                   context,
                   const ToggleListItemIntent(ordered: true),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.format_indent_decrease),
+                onPressed: Actions.handler(
+                  context,
+                  const ChangeIndentIntent(increase: false),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.format_indent_increase),
+                onPressed: Actions.handler(
+                  context,
+                  const ChangeIndentIntent(increase: true),
                 ),
               ),
               IconButton(
