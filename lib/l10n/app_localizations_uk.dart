@@ -214,6 +214,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemReaderMode => 'Режим читання';
 
   @override
+  String get menuItemWakelock => 'Keep screen on';
+
+  @override
   String get menuItemFullWidth => 'Full width';
 
   @override

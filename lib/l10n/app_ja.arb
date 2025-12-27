@@ -77,6 +77,7 @@
   "fileSourceGoogleDrive": "Google ドライブ",
 
   "menuItemReaderMode": "リーダーモード",
+  "menuItemWakelock": "画面を常にオンにする",
   "menuItemFullWidth": "画面幅いっぱいで表示",
   "menuItemScrollTop": "上へスクロール",
   "menuItemScrollBottom": "下へスクロール",

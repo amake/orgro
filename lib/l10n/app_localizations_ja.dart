@@ -211,6 +211,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemReaderMode => 'リーダーモード';
 
   @override
+  String get menuItemWakelock => '画面を常にオンにする';
+
+  @override
   String get menuItemFullWidth => '画面幅いっぱいで表示';
 
   @override

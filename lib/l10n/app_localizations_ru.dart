@@ -216,6 +216,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get menuItemReaderMode => 'Режим чтения';
 
   @override
+  String get menuItemWakelock => 'Keep screen on';
+
+  @override
   String get menuItemFullWidth => 'Полноширинный';
 
   @override

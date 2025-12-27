@@ -215,6 +215,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuItemReaderMode => 'Lesemodus';
 
   @override
+  String get menuItemWakelock => 'Keep screen on';
+
+  @override
   String get menuItemFullWidth => 'Volle breite';
 
   @override

@@ -214,6 +214,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemReaderMode => 'Reader mode';
 
   @override
+  String get menuItemWakelock => 'Keep screen on';
+
+  @override
   String get menuItemFullWidth => 'Full width';
 
   @override
@@ -776,6 +779,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get menuItemReaderMode => 'Reader mode';
 
   @override
+  String get menuItemWakelock => 'Keep screen on';
+
+  @override
   String get menuItemFullWidth => 'Full width';
 
   @override
@@ -1336,6 +1342,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get menuItemReaderMode => 'Reader mode';
+
+  @override
+  String get menuItemWakelock => 'Keep screen on';
 
   @override
   String get menuItemFullWidth => 'Full width';

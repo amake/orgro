@@ -41,6 +41,7 @@ const kDefaultLocalLinksPolicy = LocalLinksPolicy.ask;
 const kDefaultSaveChangesPolicy = SaveChangesPolicy.ask;
 const kDefaultDecryptPolicy = DecryptPolicy.ask;
 const kDefaultFullWidth = false;
+const kDefaultWakelock = false;
 const kDefaultScopedPreferences = <String, dynamic>{};
 const kDefaultTextPreviewString =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
@@ -61,6 +62,7 @@ const kRecentFilesJsonKey = 'recent_files_json';
 const kAccessibleDirectoriesKey = 'accessible_directories_json';
 const kCustomFilterQueriesKey = 'custom_filter_queries_json';
 const kFullWidthKey = 'full_width';
+const kWakelockKey = 'wakelock';
 const kScopedPreferencesJsonKey = 'scoped_preferences';
 const kTextPreviewStringKey = 'text_preview_string';
 const kThemeModeKey = 'theme_mode';
@@ -499,6 +501,12 @@ extension ViewSettingsExt on InheritedPreferences {
     return _setOrRemove(kFullWidthKey, value);
   }
 
+  bool get wakelock => data.wakelock;
+  Future<void> setWakelock(bool value) async {
+    _update((data) => data.copyWith(wakelock: value));
+    return _setOrRemove(kWakelockKey, value);
+  }
+
   Map<String, dynamic> get scopedPreferences => data.scopedPreferences;
   Future<void> setScopedPreferences(Map<String, dynamic> value) async {
     _update((data) => data.copyWith(scopedPreferences: value));
@@ -518,6 +526,7 @@ extension ViewSettingsExt on InheritedPreferences {
       data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
       data.decryptPolicy != oldWidget.data.decryptPolicy ||
       data.fullWidth != oldWidget.data.fullWidth ||
+      data.wakelock != oldWidget.data.wakelock ||
       !data.scopedPreferences.unorderedEquals(oldWidget.data.scopedPreferences);
 }
 
@@ -610,6 +619,7 @@ class PreferencesData {
       accessibleDirs = const [],
       customFilterQueries = const [],
       fullWidth = kDefaultFullWidth,
+      wakelock = kDefaultWakelock,
       scopedPreferences = const {},
       textPreviewString = kDefaultTextPreviewString;
 
@@ -660,6 +670,7 @@ class PreferencesData {
       accessibleDirs: await prefs.getStringList(kAccessibleDirectoriesKey),
       customFilterQueries: await prefs.getStringList(kCustomFilterQueriesKey),
       fullWidth: await prefs.getBool(kFullWidthKey),
+      wakelock: await prefs.getBool(kWakelockKey),
       textPreviewString: await prefs.getString(kTextPreviewStringKey),
       scopedPreferences: scopedPreferences,
     );
@@ -682,6 +693,7 @@ class PreferencesData {
     required this.accessibleDirs,
     required this.customFilterQueries,
     required this.fullWidth,
+    required this.wakelock,
     required this.scopedPreferences,
     required this.textPreviewString,
   });
@@ -702,6 +714,7 @@ class PreferencesData {
   final List<String> accessibleDirs;
   final List<String> customFilterQueries;
   final bool fullWidth;
+  final bool wakelock;
   final Map<String, dynamic> scopedPreferences;
   final String textPreviewString;
 
@@ -722,6 +735,7 @@ class PreferencesData {
     List<String>? accessibleDirs,
     List<String>? customFilterQueries,
     bool? fullWidth,
+    bool? wakelock,
     Map<String, dynamic>? scopedPreferences,
     String? textPreviewString,
   }) => PreferencesData(
@@ -742,6 +756,7 @@ class PreferencesData {
     accessibleDirs: accessibleDirs ?? this.accessibleDirs,
     customFilterQueries: customFilterQueries ?? this.customFilterQueries,
     fullWidth: fullWidth ?? this.fullWidth,
+    wakelock: wakelock ?? this.wakelock,
     scopedPreferences: scopedPreferences ?? this.scopedPreferences,
     textPreviewString: textPreviewString ?? this.textPreviewString,
   );
@@ -768,6 +783,7 @@ class PreferencesData {
       listEquals(accessibleDirs, other.accessibleDirs) &&
       listEquals(customFilterQueries, other.customFilterQueries) &&
       fullWidth == other.fullWidth &&
+      wakelock == other.wakelock &&
       scopedPreferences.unorderedEquals(
         other.scopedPreferences,
         valueEquals: (a, b) =>
@@ -793,6 +809,7 @@ class PreferencesData {
     Object.hashAll(accessibleDirs),
     Object.hashAll(customFilterQueries),
     fullWidth,
+    wakelock,
     Object.hashAll(scopedPreferences.keys),
     Object.hashAll(scopedPreferences.values),
     textPreviewString,

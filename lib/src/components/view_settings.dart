@@ -47,6 +47,7 @@ class _ViewSettingsState extends State<ViewSettings> {
         saveChangesPolicy: prefs.saveChangesPolicy,
         decryptPolicy: prefs.decryptPolicy,
         fullWidth: prefs.fullWidth,
+        wakelock: prefs.wakelock,
       ),
     );
   }
@@ -162,6 +163,11 @@ class InheritedViewSettings extends InheritedWidget {
     _prefs.setFullWidth(value);
   }
 
+  bool get wakelock => data.wakelock;
+  set wakelock(bool value) {
+    _prefs.setWakelock(value);
+  }
+
   SearchQuery get searchQuery => data.searchQuery;
   set searchQuery(SearchQuery value) =>
       _update((data) => data.copyWith(searchQuery: value));
@@ -197,6 +203,7 @@ class ViewSettingsData {
       decryptPolicy: prefs.decryptPolicy,
       agendaNotificationsPolicy: prefs.agendaNotificationsPolicy,
       fullWidth: prefs.fullWidth,
+      wakelock: prefs.wakelock,
       searchQuery: SearchQuery.defaults(),
       filterData: FilterData.defaults(),
     );
@@ -230,6 +237,7 @@ class ViewSettingsData {
     required this.decryptPolicy,
     required this.agendaNotificationsPolicy,
     required this.fullWidth,
+    required this.wakelock,
     required this.filterData,
     required this.searchQuery,
   });
@@ -244,6 +252,7 @@ class ViewSettingsData {
   final DecryptPolicy decryptPolicy;
   final AgendaNotificationsPolicy agendaNotificationsPolicy;
   final bool fullWidth;
+  final bool wakelock;
   // Not persisted
   final FilterData filterData;
   final SearchQuery searchQuery;
@@ -262,6 +271,7 @@ class ViewSettingsData {
     DecryptPolicy? decryptPolicy,
     AgendaNotificationsPolicy? agendaNotificationsPolicy,
     bool? fullWidth,
+    bool? wakelock,
     SearchQuery? searchQuery,
     FilterData? filterData,
   }) => ViewSettingsData(
@@ -275,6 +285,7 @@ class ViewSettingsData {
     agendaNotificationsPolicy:
         agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
     fullWidth: fullWidth ?? this.fullWidth,
+    wakelock: wakelock ?? this.wakelock,
     searchQuery: searchQuery ?? this.searchQuery,
     filterData: filterData ?? this.filterData,
   );
@@ -291,6 +302,7 @@ class ViewSettingsData {
       decryptPolicy == other.decryptPolicy &&
       agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
       fullWidth == other.fullWidth &&
+      wakelock == other.wakelock &&
       searchQuery == other.searchQuery &&
       filterData == other.filterData;
 
@@ -305,6 +317,7 @@ class ViewSettingsData {
     decryptPolicy,
     agendaNotificationsPolicy,
     fullWidth,
+    wakelock,
     searchQuery,
     filterData,
   );

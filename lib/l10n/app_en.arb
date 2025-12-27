@@ -99,6 +99,7 @@
   "fileSourceGoogleDrive": "Google Drive",
 
   "menuItemReaderMode": "Reader mode",
+  "menuItemWakelock": "Keep screen on",
   "menuItemFullWidth": "Full width",
   "menuItemScrollTop": "Scroll to top",
   "menuItemScrollBottom": "Scroll to bottom",

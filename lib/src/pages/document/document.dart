@@ -5,6 +5,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/geometry.dart';
+import 'package:orgro/src/actions/wakelock.dart';
 import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
@@ -32,6 +33,9 @@ import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:orgro/src/statistics.dart';
 import 'package:orgro/src/util.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+
+var _activeDocuments = 0;
 
 const _kBigScreenDocumentPadding = EdgeInsets.all(16);
 
@@ -108,6 +112,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
   void initState() {
     super.initState();
+    _activeDocuments++;
     searchDelegate = MySearchDelegate(
       onQueryChanged: (query) {
         if (query.isEmpty || query.queryString.length > 3) {
@@ -152,6 +157,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       setAgendaFile();
       setNotifications();
     }
+    WakelockPlus.toggle(enable: _viewSettings.wakelock).onError((e, s) {
+      logError(e, s);
+      if (mounted) showErrorSnackBar(context, e);
+    });
   }
 
   @override
@@ -228,6 +237,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   void dispose() {
     searchDelegate.dispose();
     _dirty.dispose();
+    if (--_activeDocuments == 0) {
+      debugPrint('Disabling wakelock as no active documents remain');
+      WakelockPlus.disable().onError(logError);
+    }
     super.dispose();
   }
 
@@ -296,6 +309,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               context,
               enabled: scopedViewSettings.readerMode,
               onChanged: (value) => viewSettings.readerMode = value,
+            ),
+            wakelockMenuItem(
+              context,
+              enabled: scopedViewSettings.wakelock,
+              onChanged: (value) => viewSettings.wakelock = value,
             ),
             if (_allowFullScreen(context))
               fullWidthMenuItem(

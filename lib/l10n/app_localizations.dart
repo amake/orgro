@@ -472,6 +472,12 @@ abstract class AppLocalizations {
   /// **'Reader mode'**
   String get menuItemReaderMode;
 
+  /// No description provided for @menuItemWakelock.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep screen on'**
+  String get menuItemWakelock;
+
   /// No description provided for @menuItemFullWidth.
   ///
   /// In en, this message translates to:
