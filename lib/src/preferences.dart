@@ -660,6 +660,7 @@ class PreferencesData {
       accessibleDirs: await prefs.getStringList(kAccessibleDirectoriesKey),
       customFilterQueries: await prefs.getStringList(kCustomFilterQueriesKey),
       fullWidth: await prefs.getBool(kFullWidthKey),
+      textPreviewString: await prefs.getString(kTextPreviewStringKey),
       scopedPreferences: scopedPreferences,
     );
   }
