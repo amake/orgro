@@ -14,11 +14,13 @@ import workmanager_apple
     }
 
     func register(with registry: any FlutterPluginRegistry) {
-        let registrar = registry.registrar(forPlugin: "native_search")!
+        let nsRegistrar = registry.registrar(forPlugin: "native_search")!
+        let nsChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: nsRegistrar.messenger())
+        nsChannel.setMethodCallHandler(handleNativeSearchMethod)
 
-        let channel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: registrar.messenger())
-
-        channel.setMethodCallHandler(handleNativeSearchMethod)
+        let apRegistrar = registry.registrar(forPlugin: "app_purchase")!
+        let apChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/app_purchase", binaryMessenger: apRegistrar.messenger())
+        apChannel.setMethodCallHandler(handleAppPurchaseMethod)
 
         GeneratedPluginRegistrant.register(with: registry)
 

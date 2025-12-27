@@ -7,6 +7,7 @@ import 'package:orgro/src/background_tasks.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/entitlements.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/quick_actions.dart';
@@ -47,9 +48,11 @@ void main() async {
 
 Widget buildApp({bool isTest = false}) => ExecutionMode(
   isTest: isTest,
-  child: Preferences(
-    isTest: isTest,
-    child: RememberedFiles(child: const _MyApp()),
+  child: UserEntitlements(
+    child: Preferences(
+      isTest: isTest,
+      child: RememberedFiles(child: const _MyApp()),
+    ),
   ),
 );
 

@@ -17,6 +17,8 @@
 		A5645E442679FA6DB1A59022 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184FC03850B3BE107F0ECCFE /* Pods_RunnerTests.framework */; };
 		C42757322C8490AE00E74B62 /* LineReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42757302C8490AE00E74B62 /* LineReader.swift */; };
 		C42757332C8490AE00E74B62 /* NativeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42757312C8490AE00E74B62 /* NativeSearch.swift */; };
+		C47F4DFD2EF6E37A00115BD0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */; };
+		C47F4E1D2EF76CEF00115BD0 /* AppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */; };
 		C4AC25232ED5A3C200756304 /* OrgroCapture.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C4AC25192ED5A3C200756304 /* OrgroCapture.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4E0B8912B3C4E850058873A /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E0B8902B3C4E850058873A /* RunnerTests.swift */; };
 /* End PBXBuildFile section */
@@ -89,6 +91,8 @@
 		C47453672DB1297E0065AA13 /* Runner-Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-Release.entitlements"; sourceTree = "<group>"; };
 		C47453682DB136A00065AA13 /* Runner-Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-Debug.entitlements"; sourceTree = "<group>"; };
 		C47453692DB136A00065AA13 /* Runner-Profile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-Profile.entitlements"; sourceTree = "<group>"; };
+		C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPurchase.swift; sourceTree = "<group>"; };
 		C4AC25192ED5A3C200756304 /* OrgroCapture.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OrgroCapture.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4C13FA82761C6B000C59B99 /* Info-Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Release.plist"; sourceTree = "<group>"; };
 		C4C13FA92761C74200C59B99 /* Info-Profile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Profile.plist"; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A07486CA6E49BD944540B97D /* Pods_Runner.framework in Frameworks */,
+				C47F4DFD2EF6E37A00115BD0 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +171,7 @@
 		8B42D4DD939E39E1794DBF6F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */,
 				589A0B73F2A24932722A264C /* Pods_Runner.framework */,
 				184FC03850B3BE107F0ECCFE /* Pods_RunnerTests.framework */,
 			);
@@ -224,6 +230,7 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				C42757302C8490AE00E74B62 /* LineReader.swift */,
 				C42757312C8490AE00E74B62 /* NativeSearch.swift */,
+				C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -396,6 +403,7 @@
 				"${BUILT_PRODUCTS_DIR}/flutter_local_notifications/flutter_local_notifications.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_tex_js_ios/flutter_tex_js_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_timezone/flutter_timezone.framework",
+				"${BUILT_PRODUCTS_DIR}/in_app_purchase_storekit/in_app_purchase_storekit.framework",
 				"${BUILT_PRODUCTS_DIR}/open_file_ios/open_file_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/openpgp/openpgp.framework",
 				"${BUILT_PRODUCTS_DIR}/package_info_plus/package_info_plus.framework",
@@ -417,6 +425,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_local_notifications.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_tex_js_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_timezone.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/in_app_purchase_storekit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/open_file_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openpgp.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/package_info_plus.framework",
@@ -520,6 +529,7 @@
 				C42757322C8490AE00E74B62 /* LineReader.swift in Sources */,
 				C42757332C8490AE00E74B62 /* NativeSearch.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				C47F4E1D2EF76CEF00115BD0 /* AppPurchase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

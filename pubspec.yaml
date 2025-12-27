@@ -56,6 +56,7 @@ dependencies:
   workmanager: ^0.9.0+3
   app_settings: ^7.0.0
   wakelock_plus: ^1.4.0
+  in_app_purchase: ^3.2.3
 
 dev_dependencies:
   flutter_lints: ^6.0.0

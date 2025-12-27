@@ -6,6 +6,7 @@ import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/entitlements.dart';
 import 'package:orgro/src/preferences.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -20,6 +21,11 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children:
             [
+                  if (kWalledGarden) ...[
+                    ListHeader(title: Text('Purchase')), // TODO(aaron): l10n
+                    const EntitlementsSettingListItems(),
+                    const Divider(),
+                  ],
                   const AppearanceSettingListItem(),
                   const Divider(),
                   ListHeader(

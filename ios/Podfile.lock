@@ -14,6 +14,9 @@ PODS:
     - Flutter
   - flutter_timezone (0.0.1):
     - Flutter
+  - in_app_purchase_storekit (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - open_file_ios (1.0.3):
     - Flutter
   - openpgp (0.6.0):
@@ -49,6 +52,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_tex_js_ios (from `.symlinks/plugins/flutter_tex_js_ios/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
+  - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/darwin`)
   - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
   - openpgp (from `.symlinks/plugins/openpgp/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -80,6 +84,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_tex_js_ios/ios"
   flutter_timezone:
     :path: ".symlinks/plugins/flutter_timezone/ios"
+  in_app_purchase_storekit:
+    :path: ".symlinks/plugins/in_app_purchase_storekit/darwin"
   open_file_ios:
     :path: ".symlinks/plugins/open_file_ios/ios"
   openpgp:
@@ -111,6 +117,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   flutter_tex_js_ios: 5d44702447dc77d1ee6e234375d346e2b8c55924
   flutter_timezone: 7c838e17ffd4645d261e87037e5bebf6d38fe544
+  in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
   open_file_ios: 46184d802ee7959203f6392abcfa0dd49fdb5be0
   openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499

@@ -3,6 +3,8 @@ SHELL := /usr/bin/env bash
 flutter := ./flutter/bin/flutter
 dart := ./flutter/bin/dart
 version_define = --dart-define=ORGRO_VERSION=$(shell sed -nE 's/version: *(([0-9.])+)\+.*/\1/p' pubspec.yaml)
+walled_garden_define := --dart-define=ORGRO_WALLED_GARDEN=true
+dart_defines = $(version_define) $(walled_garden_define)
 ui_string_keys = jq -r 'keys | .[] | select(startswith("@") | not)' $(1)
 ui_string_values = jq -r 'to_entries | .[] | select(.key | startswith("@") | not) | .value' $(1)
 spellcheck = $(call ui_string_values,lib/l10n/app_$(1).arb) | \
@@ -15,7 +17,7 @@ all: release
 
 .PHONY: run
 run: ## Run app with full environment
-	$(flutter) run $(version_define) $(args)
+	$(flutter) run $(dart_defines) $(args)
 
 .PHONY: clean
 clean: ## Clean project
@@ -57,8 +59,8 @@ l10n-check: ## Check l10n data for issues
 .PHONY: build
 build:
 	find ./assets -name '*~' -delete
-	$(flutter) build appbundle $(version_define)
-	$(flutter) build ipa $(version_define)
+	$(flutter) build appbundle $(dart_defines)
+	$(flutter) build ipa $(dart_defines)
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
