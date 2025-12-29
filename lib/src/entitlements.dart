@@ -43,7 +43,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         if (mounted) showErrorSnackBar(context, e);
       },
     );
-    _checkLegacyPurchase().onError(logError);
+    _checkLegacyPurchase(false).onError(logError);
   }
 
   @override
@@ -52,12 +52,13 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     _subscription.cancel();
   }
 
-  Future<void> _checkLegacyPurchase() async {
+  Future<void> _checkLegacyPurchase(bool refresh) async {
     var legacyUnlock = false;
     DateTime? firstSeen;
     try {
       final info = await _channel.invokeMapMethod<String, dynamic>(
         'getAppPurchaseInfo',
+        {'refresh': refresh},
       );
       debugPrint('App purchase info: $info');
       final originalPurchaseVersion = info!['originalAppVersion'] as String;
@@ -132,7 +133,7 @@ class InheritedEntitlements extends InheritedWidget {
   });
 
   final EntitlementsData entitlements;
-  final Future<void> Function() reload;
+  final Future<void> Function(bool) reload;
 
   @override
   bool updateShouldNotify(covariant InheritedEntitlements oldWidget) =>
@@ -253,7 +254,7 @@ class _EntitlementsSettingListItemsState
     final entitlements = UserEntitlements.of(context)!;
     try {
       await InAppPurchase.instance.restorePurchases();
-      await entitlements.reload();
+      await entitlements.reload(true);
     } catch (e, s) {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);

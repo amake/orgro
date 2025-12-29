@@ -31,8 +31,16 @@ func handleAppPurchaseMethod(call: FlutterMethodCall, result: @escaping FlutterR
 
 @available(iOS 16.0, *)
 private func getAppPurchaseInfo(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) async {
+    guard let args = call.arguments as? [String:Any?] else {
+        result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'refresh'"))
+        return
+    }
+    guard let refresh = args["refresh"] as? Bool else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'refresh'"))
+        return
+    }
     do {
-        let verificationResult = try await AppTransaction.shared
+        let verificationResult = refresh ? try await AppTransaction.refresh() : try await AppTransaction.shared
         switch verificationResult {
         case .verified(let appTransaction):
             result([
