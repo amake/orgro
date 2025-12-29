@@ -316,8 +316,9 @@ class _EntitlementsSettingListItemsState
         ] else if (entitlements.legacyUnlock == true)
           ListTile(
             leading: const Icon(Icons.workspace_premium),
-            title: Text('Thank you for supporting Orgro!'),
-            onLongPress: () => _showDebugInfo(entitlements!),
+            title: Text('Purchased'),
+            subtitle: const Text('Thank you for being a long-time supporter!'),
+            onLongPress: () => _showDebugInfo(entitlements),
           )
         else if (entitlements.iapUnlock == true)
           ListTile(
