@@ -28,7 +28,7 @@ void main() async {
 
   if (kReleaseMode) {
     // Disable debug printing for release builds
-    debugPrint = (_, {wrapWidth}) {};
+    // debugPrint = (_, {wrapWidth}) {};
   }
 
   runApp(buildApp());

@@ -34,6 +34,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   @override
   void initState() {
     super.initState();
+    debugPrint('AMK initializing UserEntitlements');
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () => _subscription.cancel(),
@@ -80,7 +81,11 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   void _listenToPurchaseUpdated(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
+    debugPrint('AMK purchase update: $purchaseDetailsList');
     for (final purchaseDetails in purchaseDetailsList) {
+      debugPrint(
+        'AMK handling purchase: ${purchaseDetails.productID}, ${purchaseDetails.purchaseID}, ${purchaseDetails.status}, ${purchaseDetails.transactionDate}',
+      );
       if (purchaseDetails.status == .pending) {
         // TODO(aaron): Show some UI indicating purchase is pending?
       } else {
@@ -202,8 +207,13 @@ class _EntitlementsSettingListItemsState
   }
 
   Future<void> _initStore() async {
-    if (_available != null) return;
+    debugPrint('AMK trying to init store');
+    if (_available != null) {
+      debugPrint('AMK store already initialized');
+      return;
+    }
     if (!(await InAppPurchase.instance.isAvailable())) {
+      debugPrint('AMK store not available');
       setState(() => _available = false);
       return;
     }
@@ -211,6 +221,7 @@ class _EntitlementsSettingListItemsState
       _orgroUnlockProductId,
     });
     if (response.error != null) {
+      debugPrint('AMK error querying products: ${response.error}');
       logError(response.error!, StackTrace.current);
       if (mounted) showErrorSnackBar(context, response.error!);
       return;
@@ -219,6 +230,7 @@ class _EntitlementsSettingListItemsState
       debugPrint('No products found');
       return;
     }
+    debugPrint('AMK products found: ${response.productDetails}');
     setState(() {
       _available = true;
       _productDetails = response.productDetails.first;
