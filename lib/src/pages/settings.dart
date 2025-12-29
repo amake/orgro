@@ -23,7 +23,7 @@ class SettingsPage extends StatelessWidget {
             [
                   if (kWalledGarden) ...[
                     ListHeader(title: Text('Purchase')), // TODO(aaron): l10n
-                    const EntitlementsSettingListItems(),
+                    EntitlementsSettingListItems(),
                     const Divider(),
                   ],
                   const AppearanceSettingListItem(),

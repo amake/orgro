@@ -28,16 +28,18 @@ class UserEntitlements extends StatefulWidget {
 }
 
 class _UserEntitlementsState extends State<UserEntitlements> {
-  late final StreamSubscription<List<PurchaseDetails>> _subscription;
+  StreamSubscription<List<PurchaseDetails>>? _subscription;
   var _entitlements = EntitlementsData(loaded: false);
 
   @override
   void initState() {
     super.initState();
+    if (!kWalledGarden) return;
+
     debugPrint('AMK initializing UserEntitlements');
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
-      onDone: () => _subscription.cancel(),
+      onDone: () => _subscription?.cancel(),
       onError: (Object e, StackTrace s) {
         logError(e, s);
         if (mounted) showErrorSnackBar(context, e);
@@ -49,7 +51,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   @override
   void dispose() {
     super.dispose();
-    _subscription.cancel();
+    _subscription?.cancel();
   }
 
   Future<void> _checkLegacyPurchase(bool refresh) async {
@@ -186,7 +188,8 @@ class EntitlementsData {
 }
 
 class EntitlementsSettingListItems extends StatefulWidget {
-  const EntitlementsSettingListItems({super.key});
+  const EntitlementsSettingListItems({super.key})
+    : assert(kWalledGarden, 'Only use this in Walled Garden builds.');
 
   @override
   State<EntitlementsSettingListItems> createState() =>
@@ -285,20 +288,20 @@ class _EntitlementsSettingListItemsState
 
   @override
   Widget build(BuildContext context) {
-    final entitlements = UserEntitlements.of(context)?.entitlements;
+    final entitlements = UserEntitlements.of(context)!.entitlements;
     return Column(
       children: [
-        if (entitlements == null || !entitlements.loaded)
+        if (!entitlements.loaded)
           ListTile(
             leading: const CircularProgressIndicator(),
             title: const Text('Loading info...'),
           ),
-        if (entitlements?.inTrial == true)
+        if (entitlements.inTrial)
           ListTile(
             leading: const Icon(Icons.timer),
-            title: Text('Your free trial ends at ${entitlements?.trialEnd}'),
+            title: Text('Your free trial ends at ${entitlements.trialEnd}'),
           ),
-        if (entitlements?.unlocked == false) ...[
+        if (!entitlements.unlocked) ...[
           ListTile(
             enabled: _available == true,
             title: const Text('Purchase Orgro'),
@@ -310,17 +313,17 @@ class _EntitlementsSettingListItemsState
             title: const Text('Restore purchases'),
             onTap: _restorePurchases,
           ),
-        ] else if (entitlements?.legacyUnlock == true)
+        ] else if (entitlements.legacyUnlock == true)
           ListTile(
             leading: const Icon(Icons.workspace_premium),
             title: Text('Thank you for supporting Orgro!'),
             onLongPress: () => _showDebugInfo(entitlements!),
           )
-        else if (entitlements?.iapUnlock == true)
+        else if (entitlements.iapUnlock == true)
           ListTile(
             leading: const Icon(Icons.check_circle_outline),
             title: Text('Purchased'),
-            onLongPress: () => _showDebugInfo(entitlements!),
+            onLongPress: () => _showDebugInfo(entitlements),
           ),
       ],
     );
