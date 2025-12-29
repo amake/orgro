@@ -1,0 +1,4 @@
+Orgro is moving from pre-paid to “freeium”: after a free trial, pay (once) for a lifetime unlock. All existing customers will keep their current, fully unlocked status; check the Settings screen to confirm.
+
+- Indent/deindent buttons in editor
+- Option to keep screen on while viewing a document
