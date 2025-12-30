@@ -11,6 +11,14 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         tools:node="remove" />
 
+    <!--
+        Google Play doesn't have a good way to detect legacy purchases so we are
+        not doing try-before-you-buy on Android. Remove the permission added by
+        the in_app_purchase plugin.
+    -->
+    <uses-permission android:name="com.android.vending.BILLING"
+        tools:node="remove" />
+
     <!-- For scheduled notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />

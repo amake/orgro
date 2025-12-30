@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +8,15 @@ import 'package:orgro/src/debug.dart';
 
 const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
 
-const kWalledGarden =
-    String.fromEnvironment('ORGRO_WALLED_GARDEN', defaultValue: 'false') ==
-    'true';
+// This must be `const` so we can't combine it with the `Platform` check
+const _kWalledGarden = bool.fromEnvironment(
+  'ORGRO_WALLED_GARDEN',
+  defaultValue: false,
+);
+
+// Google Play doesn't have a good way to record legacy purchases, so it will
+// stay paid up front.
+final kWalledGarden = _kWalledGarden && Platform.isIOS;
 
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
@@ -188,7 +195,7 @@ class EntitlementsData {
 }
 
 class EntitlementsSettingListItems extends StatefulWidget {
-  const EntitlementsSettingListItems({super.key})
+  EntitlementsSettingListItems({super.key})
     : assert(kWalledGarden, 'Only use this in Walled Garden builds.');
 
   @override
