@@ -45,6 +45,7 @@ const kDefaultWakelock = false;
 const kDefaultScopedPreferences = <String, dynamic>{};
 const kDefaultTextPreviewString =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const kDefaultDeveloperMode = false;
 const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
 const kDefaultRecentFilesSortOrder = SortOrder.descending;
 const kDefaultAgendaNotificationsPolicy = AgendaNotificationsPolicy.ask;
@@ -593,12 +594,19 @@ extension CustomizationExt on InheritedPreferences {
     return _setOrRemove(kTextPreviewStringKey, value);
   }
 
+  bool get developerMode => data.developerMode;
+  Future<void> setDeveloperMode(bool value) async {
+    _update((data) => data.copyWith(developerMode: value));
+    // Do not persist this one
+  }
+
   bool _updateShouldNotifyDependentCustomization(
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.customization) &&
-      data.textPreviewString != oldWidget.data.textPreviewString;
+          data.textPreviewString != oldWidget.data.textPreviewString ||
+      data.developerMode != oldWidget.data.developerMode;
 }
 
 class PreferencesData {
@@ -621,7 +629,8 @@ class PreferencesData {
       fullWidth = kDefaultFullWidth,
       wakelock = kDefaultWakelock,
       scopedPreferences = const {},
-      textPreviewString = kDefaultTextPreviewString;
+      textPreviewString = kDefaultTextPreviewString,
+      developerMode = kDefaultDeveloperMode;
 
   static Future<PreferencesData> fromSharedPreferences(
     SharedPreferencesAsync prefs,
@@ -696,6 +705,7 @@ class PreferencesData {
     required this.wakelock,
     required this.scopedPreferences,
     required this.textPreviewString,
+    required this.developerMode,
   });
 
   final double textScale;
@@ -717,6 +727,7 @@ class PreferencesData {
   final bool wakelock;
   final Map<String, dynamic> scopedPreferences;
   final String textPreviewString;
+  final bool developerMode;
 
   PreferencesData copyWith({
     double? textScale,
@@ -738,6 +749,7 @@ class PreferencesData {
     bool? wakelock,
     Map<String, dynamic>? scopedPreferences,
     String? textPreviewString,
+    bool? developerMode,
   }) => PreferencesData(
     textScale: textScale ?? this.textScale,
     fontFamily: fontFamily ?? this.fontFamily,
@@ -759,6 +771,7 @@ class PreferencesData {
     wakelock: wakelock ?? this.wakelock,
     scopedPreferences: scopedPreferences ?? this.scopedPreferences,
     textPreviewString: textPreviewString ?? this.textPreviewString,
+    developerMode: developerMode ?? this.developerMode,
   );
 
   @override
@@ -789,7 +802,8 @@ class PreferencesData {
         valueEquals: (a, b) =>
             mapEquals(a as Map<String, dynamic>?, b as Map<String, dynamic>?),
       ) &&
-      textPreviewString == other.textPreviewString;
+      textPreviewString == other.textPreviewString &&
+      developerMode == other.developerMode;
 
   @override
   int get hashCode => Object.hash(
@@ -812,7 +826,8 @@ class PreferencesData {
     wakelock,
     Object.hashAll(scopedPreferences.keys),
     Object.hashAll(scopedPreferences.values),
-    textPreviewString,
+
+    Object.hash(textPreviewString, developerMode),
   );
 }
 

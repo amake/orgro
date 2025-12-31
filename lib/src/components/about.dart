@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/components/developer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const orgroVersion = String.fromEnvironment(
@@ -16,7 +17,7 @@ void openAboutDialog(BuildContext context) {
         applicationVersion: orgroVersion,
         applicationIcon: const Padding(
           padding: EdgeInsets.all(8),
-          child: _AppIcon(),
+          child: DeveloperAccess(child: _AppIcon()),
         ),
         children: [
           Column(
