@@ -71,6 +71,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDonate => '支援';
 
   @override
+  String get settingsSectionPurchase => '購入';
+
+  @override
   String get agendaNotificationsChannelName => 'アジェンダ通知';
 
   @override
@@ -558,4 +561,32 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get donateItemSubtitle => 'ご支援に感謝します！';
+
+  @override
+  String get entitlementsLoadingItem => 'ロード中…';
+
+  @override
+  String entitlementsFreeTrialItem(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(
+      localeName,
+    ).add_jm();
+    final String dateString = dateDateFormat.format(date);
+
+    return '無料期間は$dateStringに終了します';
+  }
+
+  @override
+  String get entitlementsPurchaseItemTitle => 'Orgroを購入する';
+
+  @override
+  String get entitlementsPurchaseItemSubtitle => '全機能が解放され、開発者の士気が上がります';
+
+  @override
+  String get entitlementsRestorePurchasesItem => '購入を復元';
+
+  @override
+  String get entitlementsPurchasedItem => '購入済み';
+
+  @override
+  String get entitlementsLegacyPurchaseItemSubtitle => '長い間ご支援頂きありがとうございます！';
 }

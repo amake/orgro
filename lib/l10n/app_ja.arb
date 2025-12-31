@@ -23,6 +23,7 @@
   "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
   "settingsSectionDonate": "支援",
+  "settingsSectionPurchase": "購入",
 
   "agendaNotificationsChannelName": "アジェンダ通知",
   "agendaNotificationsChannelDescription": "Org Agenda項目の通知",
@@ -204,5 +205,21 @@
   "editInsertedHeadline": "[編集によって挿入]",
 
   "donateItemTitle": "Orgroの開発を支援する",
-  "donateItemSubtitle": "ご支援に感謝します！"
+  "donateItemSubtitle": "ご支援に感謝します！",
+
+  "entitlementsLoadingItem": "ロード中…",
+  "entitlementsFreeTrialItem": "無料期間は{date}に終了します",
+  "@entitlementsFreeTrialItem": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMd+jm"
+      }
+    }
+  },
+  "entitlementsPurchaseItemTitle": "Orgroを購入する",
+  "entitlementsPurchaseItemSubtitle": "全機能が解放され、開発者の士気が上がります",
+  "entitlementsRestorePurchasesItem": "購入を復元",
+  "entitlementsPurchasedItem": "購入済み",
+  "entitlementsLegacyPurchaseItemSubtitle": "長い間ご支援頂きありがとうございます！"
 }

@@ -26,7 +26,11 @@ class SettingsPage extends StatelessWidget {
         children:
             [
                   if (kWalledGarden && developerMode) ...[
-                    ListHeader(title: Text('Purchase')), // TODO(aaron): l10n
+                    ListHeader(
+                      title: Text(
+                        AppLocalizations.of(context)!.settingsSectionPurchase,
+                      ),
+                    ),
                     EntitlementsSettingListItems(),
                     const Divider(),
                   ],

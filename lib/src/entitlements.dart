@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
@@ -298,42 +299,68 @@ class _EntitlementsSettingListItemsState
   @override
   Widget build(BuildContext context) {
     final entitlements = UserEntitlements.of(context)!.entitlements;
+    final developerMode = Preferences.of(
+      context,
+      PrefsAspect.customization,
+    ).developerMode;
     return Column(
       children: [
         if (!entitlements.loaded)
           ListTile(
             leading: const CircularProgressIndicator(),
-            title: const Text('Loading info...'),
+            title: Text(AppLocalizations.of(context)!.entitlementsLoadingItem),
           ),
         if (entitlements.inTrial)
           ListTile(
             leading: const Icon(Icons.timer),
-            title: Text('Your free trial ends at ${entitlements.trialEnd}'),
+            title: Text(
+              AppLocalizations.of(
+                context,
+              )!.entitlementsFreeTrialItem(entitlements.trialEnd!),
+            ),
           ),
         if (!entitlements.unlocked) ...[
           ListTile(
             enabled: _available == true,
-            title: const Text('Purchase Orgro'),
-            subtitle: const Text('Unlock all features and support development'),
+            title: Text(
+              AppLocalizations.of(context)!.entitlementsPurchaseItemTitle,
+            ),
+            subtitle: Text(
+              AppLocalizations.of(context)!.entitlementsPurchaseItemSubtitle,
+            ),
             onTap: _buyProduct,
           ),
           ListTile(
             enabled: _available == true,
-            title: const Text('Restore purchases'),
+            title: Text(
+              AppLocalizations.of(context)!.entitlementsRestorePurchasesItem,
+            ),
             onTap: _restorePurchases,
           ),
         ] else if (entitlements.legacyUnlock == true)
           ListTile(
             leading: const Icon(Icons.workspace_premium),
-            title: Text('Purchased'),
-            subtitle: const Text('Thank you for being a long-time supporter!'),
-            onLongPress: () => _showDebugInfo(entitlements),
+            title: Text(
+              AppLocalizations.of(context)!.entitlementsPurchasedItem,
+            ),
+            subtitle: Text(
+              AppLocalizations.of(
+                context,
+              )!.entitlementsLegacyPurchaseItemSubtitle,
+            ),
+            onLongPress: developerMode
+                ? () => _showDebugInfo(entitlements)
+                : null,
           )
         else if (entitlements.iapUnlock == true)
           ListTile(
             leading: const Icon(Icons.check_circle_outline),
-            title: Text('Purchased'),
-            onLongPress: () => _showDebugInfo(entitlements),
+            title: Text(
+              AppLocalizations.of(context)!.entitlementsPurchasedItem,
+            ),
+            onLongPress: developerMode
+                ? () => _showDebugInfo(entitlements)
+                : null,
           ),
       ],
     );

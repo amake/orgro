@@ -30,6 +30,7 @@
   "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
   "settingsSectionDonate": "Donate",
+  "settingsSectionPurchase": "Purchase",
 
   "agendaNotificationsChannelName": "Agenda Notifications",
   "agendaNotificationsChannelDescription": "Notifications for Org Agenda items",
@@ -360,5 +361,21 @@
   "editInsertedHeadline": "[Inserted by edit]",
 
   "donateItemTitle": "Donate to support Orgro",
-  "donateItemSubtitle": "Your support is appreciated!"
+  "donateItemSubtitle": "Your support is appreciated!",
+
+  "entitlementsLoadingItem": "Loading info...",
+  "entitlementsFreeTrialItem": "Your free trial ends at {date}",
+  "@entitlementsFreeTrialItem": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMd+jm"
+      }
+    }
+  },
+  "entitlementsPurchaseItemTitle": "Purchase Orgro",
+  "entitlementsPurchaseItemSubtitle": "Unlock all features and support development",
+  "entitlementsRestorePurchasesItem": "Restore purchases",
+  "entitlementsPurchasedItem": "Purchased",
+  "entitlementsLegacyPurchaseItemSubtitle": "Thank you for being a long-time supporter!"
 }

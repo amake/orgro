@@ -71,6 +71,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDonate => 'Donate';
 
   @override
+  String get settingsSectionPurchase => 'Purchase';
+
+  @override
   String get agendaNotificationsChannelName => 'Agenda Notifications';
 
   @override
@@ -579,6 +582,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get donateItemSubtitle => 'Your support is appreciated!';
+
+  @override
+  String get entitlementsLoadingItem => 'Loading info...';
+
+  @override
+  String entitlementsFreeTrialItem(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(
+      localeName,
+    ).add_jm();
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Your free trial ends at $dateString';
+  }
+
+  @override
+  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+
+  @override
+  String get entitlementsPurchaseItemSubtitle =>
+      'Unlock all features and support development';
+
+  @override
+  String get entitlementsRestorePurchasesItem => 'Restore purchases';
+
+  @override
+  String get entitlementsPurchasedItem => 'Purchased';
+
+  @override
+  String get entitlementsLegacyPurchaseItemSubtitle =>
+      'Thank you for being a long-time supporter!';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -643,6 +676,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get settingsSectionDonate => 'Donate';
+
+  @override
+  String get settingsSectionPurchase => 'Purchase';
 
   @override
   String get agendaNotificationsChannelName => 'Agenda Notifications';
@@ -1153,6 +1192,36 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get donateItemSubtitle => 'Your support is appreciated!';
+
+  @override
+  String get entitlementsLoadingItem => 'Loading info...';
+
+  @override
+  String entitlementsFreeTrialItem(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(
+      localeName,
+    ).add_jm();
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Your free trial ends at $dateString';
+  }
+
+  @override
+  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+
+  @override
+  String get entitlementsPurchaseItemSubtitle =>
+      'Unlock all features and support development';
+
+  @override
+  String get entitlementsRestorePurchasesItem => 'Restore purchases';
+
+  @override
+  String get entitlementsPurchasedItem => 'Purchased';
+
+  @override
+  String get entitlementsLegacyPurchaseItemSubtitle =>
+      'Thank you for being a long-time supporter!';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1217,6 +1286,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get settingsSectionDataManagement => 'Data management';
+
+  @override
+  String get settingsSectionDonate => 'Donate';
+
+  @override
+  String get settingsSectionPurchase => 'Purchase';
 
   @override
   String get agendaNotificationsChannelName => 'Agenda Notifications';
@@ -1727,4 +1802,34 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get donateItemSubtitle => 'Your support is appreciated!';
+
+  @override
+  String get entitlementsLoadingItem => 'Loading info...';
+
+  @override
+  String entitlementsFreeTrialItem(DateTime date) {
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(
+      localeName,
+    ).add_jm();
+    final String dateString = dateDateFormat.format(date);
+
+    return 'Your free trial ends at $dateString';
+  }
+
+  @override
+  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+
+  @override
+  String get entitlementsPurchaseItemSubtitle =>
+      'Unlock all features and support development';
+
+  @override
+  String get entitlementsRestorePurchasesItem => 'Restore purchases';
+
+  @override
+  String get entitlementsPurchasedItem => 'Purchased';
+
+  @override
+  String get entitlementsLegacyPurchaseItemSubtitle =>
+      'Thank you for being a long-time supporter!';
 }

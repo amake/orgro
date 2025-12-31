@@ -226,6 +226,12 @@ abstract class AppLocalizations {
   /// **'Donate'**
   String get settingsSectionDonate;
 
+  /// No description provided for @settingsSectionPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase'**
+  String get settingsSectionPurchase;
+
   /// No description provided for @agendaNotificationsChannelName.
   ///
   /// In en, this message translates to:
@@ -1065,6 +1071,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your support is appreciated!'**
   String get donateItemSubtitle;
+
+  /// No description provided for @entitlementsLoadingItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading info...'**
+  String get entitlementsLoadingItem;
+
+  /// No description provided for @entitlementsFreeTrialItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free trial ends at {date}'**
+  String entitlementsFreeTrialItem(DateTime date);
+
+  /// No description provided for @entitlementsPurchaseItemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Orgro'**
+  String get entitlementsPurchaseItemTitle;
+
+  /// No description provided for @entitlementsPurchaseItemSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock all features and support development'**
+  String get entitlementsPurchaseItemSubtitle;
+
+  /// No description provided for @entitlementsRestorePurchasesItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get entitlementsRestorePurchasesItem;
+
+  /// No description provided for @entitlementsPurchasedItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchased'**
+  String get entitlementsPurchasedItem;
+
+  /// No description provided for @entitlementsLegacyPurchaseItemSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for being a long-time supporter!'**
+  String get entitlementsLegacyPurchaseItemSubtitle;
 }
 
 class _AppLocalizationsDelegate
