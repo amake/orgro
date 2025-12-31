@@ -22,6 +22,7 @@
   "settingsSectionDefaultText": "Default text",
   "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
+  "settingsSectionDonate": "Donate",
 
   "agendaNotificationsChannelName": "Agenda Notifications",
   "agendaNotificationsChannelDescription": "Notifications for Org Agenda items",
@@ -201,5 +202,8 @@
   "errorUnsupportedSearchOption": "Unsupported search option: {option}",
   "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
 
-  "editInsertedHeadline": "[Inserted by edit]"
+  "editInsertedHeadline": "[Inserted by edit]",
+
+  "donateItemTitle": "Donate to support Orgro",
+  "donateItemSubtitle": "Your support is appreciated!"
 }

@@ -30,6 +30,15 @@ class SettingsPage extends StatelessWidget {
                     EntitlementsSettingListItems(),
                     const Divider(),
                   ],
+                  if (!kWalledGarden) ...[
+                    ListHeader(
+                      title: Text(
+                        AppLocalizations.of(context)!.settingsSectionDonate,
+                      ),
+                    ),
+                    const DonateSettingListItem(),
+                    const Divider(),
+                  ],
                   ListHeader(
                     title: Text(
                       AppLocalizations.of(context)!.settingsSectionAppearance,

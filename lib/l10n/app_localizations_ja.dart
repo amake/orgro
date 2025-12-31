@@ -68,6 +68,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDataManagement => 'データ管理';
 
   @override
+  String get settingsSectionDonate => '支援';
+
+  @override
   String get agendaNotificationsChannelName => 'アジェンダ通知';
 
   @override
@@ -549,4 +552,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get editInsertedHeadline => '[編集によって挿入]';
+
+  @override
+  String get donateItemTitle => 'Orgroの開発を支援する';
+
+  @override
+  String get donateItemSubtitle => 'ご支援に感謝します！';
 }

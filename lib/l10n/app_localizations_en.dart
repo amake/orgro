@@ -68,6 +68,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDataManagement => 'Data management';
 
   @override
+  String get settingsSectionDonate => 'Donate';
+
+  @override
   String get agendaNotificationsChannelName => 'Agenda Notifications';
 
   @override
@@ -570,6 +573,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editInsertedHeadline => '[Inserted by edit]';
+
+  @override
+  String get donateItemTitle => 'Donate to support Orgro';
+
+  @override
+  String get donateItemSubtitle => 'Your support is appreciated!';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -1138,6 +1147,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get editInsertedHeadline => '[Inserted by edit]';
+
+  @override
+  String get donateItemTitle => 'Donate to support Orgro';
+
+  @override
+  String get donateItemSubtitle => 'Your support is appreciated!';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1706,4 +1721,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get editInsertedHeadline => '[Inserted by edit]';
+
+  @override
+  String get donateItemTitle => 'Donate to support Orgro';
+
+  @override
+  String get donateItemSubtitle => 'Your support is appreciated!';
 }

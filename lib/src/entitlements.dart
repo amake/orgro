@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
 
@@ -337,3 +339,22 @@ class _EntitlementsSettingListItemsState
     );
   }
 }
+
+class DonateSettingListItem extends StatelessWidget {
+  const DonateSettingListItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.favorite),
+      title: Text(AppLocalizations.of(context)!.donateItemTitle),
+      subtitle: Text(AppLocalizations.of(context)!.donateItemSubtitle),
+      onTap: visitDonateLink,
+    );
+  }
+}
+
+void visitDonateLink() => launchUrl(
+  Uri.parse('https://orgro.org/donate/'),
+  mode: LaunchMode.externalApplication,
+);

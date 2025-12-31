@@ -68,6 +68,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsSectionDataManagement => 'Управление данных';
 
   @override
+  String get settingsSectionDonate => 'Donate';
+
+  @override
   String get agendaNotificationsChannelName => 'Agenda Notifications';
 
   @override
@@ -572,4 +575,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get editInsertedHeadline => '[Вставлено при изменении]';
+
+  @override
+  String get donateItemTitle => 'Donate to support Orgro';
+
+  @override
+  String get donateItemSubtitle => 'Your support is appreciated!';
 }

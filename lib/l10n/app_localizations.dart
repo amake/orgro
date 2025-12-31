@@ -220,6 +220,12 @@ abstract class AppLocalizations {
   /// **'Data management'**
   String get settingsSectionDataManagement;
 
+  /// No description provided for @settingsSectionDonate.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get settingsSectionDonate;
+
   /// No description provided for @agendaNotificationsChannelName.
   ///
   /// In en, this message translates to:
@@ -1047,6 +1053,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'[Inserted by edit]'**
   String get editInsertedHeadline;
+
+  /// No description provided for @donateItemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate to support Orgro'**
+  String get donateItemTitle;
+
+  /// No description provided for @donateItemSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your support is appreciated!'**
+  String get donateItemSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -22,6 +22,7 @@
   "settingsSectionDefaultText": "デフォルトの書式",
   "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
+  "settingsSectionDonate": "支援",
 
   "agendaNotificationsChannelName": "アジェンダ通知",
   "agendaNotificationsChannelDescription": "Org Agenda項目の通知",
@@ -200,5 +201,8 @@
   "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
   "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",
 
-  "editInsertedHeadline": "[編集によって挿入]"
+  "editInsertedHeadline": "[編集によって挿入]",
+
+  "donateItemTitle": "Orgroの開発を支援する",
+  "donateItemSubtitle": "ご支援に感謝します！"
 }
