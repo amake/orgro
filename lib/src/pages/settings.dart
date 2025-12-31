@@ -26,6 +26,11 @@ class SettingsPage extends StatelessWidget {
                     EntitlementsSettingListItems(),
                     const Divider(),
                   ],
+                  ListHeader(
+                    title: Text(
+                      AppLocalizations.of(context)!.settingsSectionAppearance,
+                    ),
+                  ),
                   const AppearanceSettingListItem(),
                   const Divider(),
                   ListHeader(

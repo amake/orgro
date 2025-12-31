@@ -18,6 +18,7 @@
   "appearanceModeDark": "ダーク",
 
   "settingsScreenTitle": "設定",
+  "settingsSectionAppearance": "外観",
   "settingsSectionDefaultText": "デフォルトの書式",
   "settingsSectionNotifications": "通知",
   "settingsSectionDataManagement": "データ管理",
@@ -28,7 +29,7 @@
 
   "settingsItemLoading": "ロード中...",
 
-  "settingsItemAppearance": "外観",
+  "settingsItemTheme": "モード",
   "settingsItemTextScale": "文字サイズ",
   "settingsItemFontFamily": "書体",
 

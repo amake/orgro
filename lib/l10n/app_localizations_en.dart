@@ -56,6 +56,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsScreenTitle => 'Settings';
 
   @override
+  String get settingsSectionAppearance => 'Appearance';
+
+  @override
   String get settingsSectionDefaultText => 'Default text';
 
   @override
@@ -78,7 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemLoading => 'Loading...';
 
   @override
-  String get settingsItemAppearance => 'Appearance';
+  String get settingsItemTheme => 'Theme';
 
   @override
   String get settingsItemTextScale => 'Scale';
@@ -621,6 +624,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsScreenTitle => 'Settings';
 
   @override
+  String get settingsSectionAppearance => 'Appearance';
+
+  @override
   String get settingsSectionDefaultText => 'Default text';
 
   @override
@@ -643,7 +649,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemLoading => 'Loading...';
 
   @override
-  String get settingsItemAppearance => 'Appearance';
+  String get settingsItemTheme => 'Theme';
 
   @override
   String get settingsItemTextScale => 'Scale';
@@ -1186,6 +1192,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsScreenTitle => 'Settings';
 
   @override
+  String get settingsSectionAppearance => 'Appearance';
+
+  @override
   String get settingsSectionDefaultText => 'Default text';
 
   @override
@@ -1208,7 +1217,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsItemLoading => 'Loading...';
 
   @override
-  String get settingsItemAppearance => 'Appearance';
+  String get settingsItemTheme => 'Theme';
 
   @override
   String get settingsItemTextScale => 'Scale';

@@ -25,6 +25,7 @@
   "appearanceModeDark": "Dark",
 
   "settingsScreenTitle": "Settings",
+  "settingsSectionAppearance": "Appearance",
   "settingsSectionDefaultText": "Default text",
   "settingsSectionNotifications": "Notifications",
   "settingsSectionDataManagement": "Data management",
@@ -35,7 +36,7 @@
 
   "settingsItemLoading": "Loading...",
 
-  "settingsItemAppearance": "Appearance",
+  "settingsItemTheme": "Theme",
   "settingsItemTextScale": "Scale",
   "settingsItemFontFamily": "Font",
 

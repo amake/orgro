@@ -196,6 +196,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsScreenTitle;
 
+  /// No description provided for @settingsSectionAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsSectionAppearance;
+
   /// No description provided for @settingsSectionDefaultText.
   ///
   /// In en, this message translates to:
@@ -238,11 +244,11 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get settingsItemLoading;
 
-  /// No description provided for @settingsItemAppearance.
+  /// No description provided for @settingsItemTheme.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
-  String get settingsItemAppearance;
+  /// **'Theme'**
+  String get settingsItemTheme;
 
   /// No description provided for @settingsItemTextScale.
   ///

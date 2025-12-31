@@ -56,6 +56,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsScreenTitle => 'Settings';
 
   @override
+  String get settingsSectionAppearance => 'Appearance';
+
+  @override
   String get settingsSectionDefaultText => 'Default text';
 
   @override
@@ -78,7 +81,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsItemLoading => 'Loading...';
 
   @override
-  String get settingsItemAppearance => 'Appearance';
+  String get settingsItemTheme => 'Theme';
 
   @override
   String get settingsItemTextScale => 'Scale';

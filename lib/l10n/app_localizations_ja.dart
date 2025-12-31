@@ -56,6 +56,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsScreenTitle => '設定';
 
   @override
+  String get settingsSectionAppearance => '外観';
+
+  @override
   String get settingsSectionDefaultText => 'デフォルトの書式';
 
   @override
@@ -77,7 +80,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemLoading => 'ロード中...';
 
   @override
-  String get settingsItemAppearance => '外観';
+  String get settingsItemTheme => 'モード';
 
   @override
   String get settingsItemTextScale => '文字サイズ';

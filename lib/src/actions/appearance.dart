@@ -22,7 +22,7 @@ class AppearanceSettingListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final prefs = Preferences.of(context, PrefsAspect.appearance);
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.settingsItemAppearance),
+      title: Text(AppLocalizations.of(context)!.settingsItemTheme),
       subtitle: Text(prefs.themeMode.toDisplayString(context)),
       onTap: () async {
         final newMode = await _chooseThemeMode(context, prefs.themeMode);

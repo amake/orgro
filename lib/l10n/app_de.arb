@@ -18,6 +18,7 @@
   "appearanceModeDark": "Dunkel",
 
   "settingsScreenTitle": "Einstellungen",
+  "settingsSectionAppearance": "Aussehen",
   "settingsSectionDefaultText": "Vorgegebener Text",
   "settingsSectionNotifications": "Benachrichtigungen",
   "settingsSectionDataManagement": "Datenverwaltung",
@@ -28,7 +29,6 @@
 
   "settingsItemLoading": "Ladet…",
 
-  "settingsItemAppearance": "Aussehen",
   "settingsItemTextScale": "Größe",
   "settingsItemFontFamily": "Schriftart",
 

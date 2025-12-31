@@ -18,10 +18,10 @@
   "appearanceModeDark": "Тёмная",
 
   "settingsScreenTitle": "Настройки",
+  "settingsSectionAppearance": "Внешний вид",
   "settingsSectionDefaultText": "Текст по умолчанию",
   "settingsSectionDataManagement": "Управление данных",
 
-  "settingsItemAppearance": "Внешний вид",
   "settingsItemTextScale": "Размер",
   "settingsItemFontFamily": "Шрифт",
 
