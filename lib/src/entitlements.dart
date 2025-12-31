@@ -303,6 +303,9 @@ class _EntitlementsSettingListItemsState
       context,
       PrefsAspect.customization,
     ).developerMode;
+    final onLongPress = developerMode
+        ? () => _showDebugInfo(entitlements)
+        : null;
     return Column(
       children: [
         if (!entitlements.loaded)
@@ -318,6 +321,7 @@ class _EntitlementsSettingListItemsState
                 context,
               )!.entitlementsFreeTrialItem(entitlements.trialEnd!),
             ),
+            onLongPress: onLongPress,
           ),
         if (!entitlements.unlocked) ...[
           ListTile(
@@ -336,6 +340,7 @@ class _EntitlementsSettingListItemsState
               AppLocalizations.of(context)!.entitlementsRestorePurchasesItem,
             ),
             onTap: _restorePurchases,
+            onLongPress: onLongPress,
           ),
         ] else if (entitlements.legacyUnlock == true)
           ListTile(
@@ -348,9 +353,7 @@ class _EntitlementsSettingListItemsState
                 context,
               )!.entitlementsLegacyPurchaseItemSubtitle,
             ),
-            onLongPress: developerMode
-                ? () => _showDebugInfo(entitlements)
-                : null,
+            onLongPress: onLongPress,
           )
         else if (entitlements.iapUnlock == true)
           ListTile(
@@ -358,9 +361,7 @@ class _EntitlementsSettingListItemsState
             title: Text(
               AppLocalizations.of(context)!.entitlementsPurchasedItem,
             ),
-            onLongPress: developerMode
-                ? () => _showDebugInfo(entitlements)
-                : null,
+            onLongPress: onLongPress,
           ),
       ],
     );
