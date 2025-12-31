@@ -1,0 +1,2 @@
+- Indent/deindent buttons in editor
+- Option to keep screen on while viewing a document
