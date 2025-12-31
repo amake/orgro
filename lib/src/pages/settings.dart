@@ -14,6 +14,10 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final developerMode = Preferences.of(
+      context,
+      PrefsAspect.customization,
+    ).developerMode;
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
@@ -21,7 +25,7 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children:
             [
-                  if (kWalledGarden) ...[
+                  if (kWalledGarden && developerMode) ...[
                     ListHeader(title: Text('Purchase')), // TODO(aaron): l10n
                     EntitlementsSettingListItems(),
                     const Divider(),
