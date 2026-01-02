@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children:
             [
-                  if (kWalledGarden && developerMode) ...[
+                  if (kFreemium && developerMode) ...[
                     ListHeader(
                       title: Text(
                         AppLocalizations.of(context)!.settingsSectionPurchase,

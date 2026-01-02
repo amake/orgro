@@ -11,15 +11,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
 
-// This must be `const` so we can't combine it with the `Platform` check
-const _kWalledGarden = bool.fromEnvironment(
+const kWalledGarden = bool.fromEnvironment(
   'ORGRO_WALLED_GARDEN',
   defaultValue: false,
 );
 
 // Google Play doesn't have a good way to record legacy purchases, so it will
 // stay paid up front.
-final kWalledGarden = _kWalledGarden && Platform.isIOS;
+final kFreemium = kWalledGarden && Platform.isIOS;
 
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
@@ -44,7 +43,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   @override
   void initState() {
     super.initState();
-    if (!kWalledGarden) return;
+    if (!kFreemium) return;
 
     debugPrint('AMK initializing UserEntitlements');
     _subscription = InAppPurchase.instance.purchaseStream.listen(
@@ -125,7 +124,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
 
   @override
   Widget build(BuildContext context) {
-    if (!kWalledGarden) {
+    if (!kFreemium) {
       return widget.child;
     }
     return InheritedEntitlements(
@@ -199,7 +198,7 @@ class EntitlementsData {
 
 class EntitlementsSettingListItems extends StatefulWidget {
   EntitlementsSettingListItems({super.key})
-    : assert(kWalledGarden, 'Only use this in Walled Garden builds.');
+    : assert(kFreemium, 'Only use this in freemium builds.');
 
   @override
   State<EntitlementsSettingListItems> createState() =>
