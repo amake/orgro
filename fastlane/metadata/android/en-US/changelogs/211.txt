@@ -1,0 +1,3 @@
+- Item or section level increase/decrease buttons in editor
+- Option to keep screen on while viewing a document
+- Capture into clipboard or new file
