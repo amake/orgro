@@ -467,6 +467,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get captureToDialogTitle => 'キャプチャ先';
 
   @override
+  String get captureToClipboardItem => 'クリップボード';
+
+  @override
+  String get captureToNewDocumentItem => '新規ファイル';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => '不正なキャプチャURL';
 
   @override

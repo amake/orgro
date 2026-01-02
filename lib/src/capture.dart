@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -31,6 +32,8 @@ bool isValidCapturePayload(Uri uri) {
   return true;
 }
 
+enum CaptureTarget { clipboard, scratch, document }
+
 Future<void> captureUri(BuildContext context, Uri uri) async {
   if (!isValidCapturePayload(uri)) {
     debugPrint('Invalid capture URI: $uri');
@@ -42,29 +45,34 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
   }
   final rememberedFiles = RememberedFiles.of(context);
   final files = [...rememberedFiles.pinned, ...rememberedFiles.recents];
-  // TODO(aaron): Maybe offer to capture to clipboard? Although presumably the
-  // user could have chosen to share to clipboard directly.
-  if (files.isEmpty) {
-    await loadAndRememberAsset(
-      context,
-      LocalAssets.scratch,
-      afterOpen: (state) => captureToDocument(state, uri),
-    );
-    return;
-  }
-  final captureTo = await showDialog<RememberedFile>(
+  final result = await showDialog<(CaptureTarget, RememberedFile?)>(
     context: context,
-    builder: (context) => SelectFileDialog(
+    builder: (context) => CaptureTargetDialog(
       title: AppLocalizations.of(context)!.captureToDialogTitle,
       files: files,
     ),
   );
-  if (captureTo == null || !context.mounted) return;
-  await loadAndRememberFile(
-    context,
-    readFileWithIdentifier(captureTo.identifier),
-    afterOpen: (state) => captureToDocument(state, uri),
-  );
+  switch (result) {
+    case null:
+      break;
+    case (CaptureTarget.clipboard, _):
+      final (newDoc, _) = captureUriToSection(OrgDocument(null, []), uri);
+      await Clipboard.setData(ClipboardData(text: newDoc.toMarkup()));
+    case (CaptureTarget.scratch, _):
+      if (!context.mounted) return;
+      await loadAndRememberAsset(
+        context,
+        LocalAssets.scratch,
+        afterOpen: (state) => captureToDocument(state, uri),
+      );
+    case (CaptureTarget.document, final captureTo!):
+      if (!context.mounted) return;
+      await loadAndRememberFile(
+        context,
+        readFileWithIdentifier(captureTo.identifier),
+        afterOpen: (state) => captureToDocument(state, uri),
+      );
+  }
 }
 
 void captureToDocument(DocumentPageState state, Uri uri) {

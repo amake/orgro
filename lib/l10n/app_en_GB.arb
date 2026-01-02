@@ -181,6 +181,8 @@
   "endTimePickerTitle": "Select end time",
 
   "captureToDialogTitle": "Capture to",
+  "captureToClipboardItem": "Clipboard",
+  "captureToNewDocumentItem": "New file",
   "snackbarMessageInvalidCaptureUri": "Invalid capture URL",
 
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
@@ -717,8 +718,12 @@ extension SortOrderDisplayString on SortOrder {
   };
 }
 
-class SelectFileDialog extends StatelessWidget {
-  const SelectFileDialog({required this.title, required this.files, super.key});
+class CaptureTargetDialog extends StatelessWidget {
+  const CaptureTargetDialog({
+    required this.title,
+    required this.files,
+    super.key,
+  });
 
   final String title;
   final List<RememberedFile> files;
@@ -732,13 +737,35 @@ class SelectFileDialog extends StatelessWidget {
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, idx) {
-            final file = files[idx];
-            return RememberedFileListTile(
-              file,
-              onTap: () => Navigator.pop(context, file),
-            );
+            switch (idx) {
+              case 0:
+                return ListTile(
+                  leading: const Icon(Icons.copy),
+                  title: Text(
+                    AppLocalizations.of(context)!.captureToClipboardItem,
+                  ),
+                  onTap: () =>
+                      Navigator.pop(context, (CaptureTarget.clipboard, null)),
+                );
+              case 1:
+                return ListTile(
+                  leading: const Icon(Icons.add),
+                  title: Text(
+                    AppLocalizations.of(context)!.captureToNewDocumentItem,
+                  ),
+                  onTap: () =>
+                      Navigator.pop(context, (CaptureTarget.scratch, null)),
+                );
+              default:
+                final file = files[idx - 2];
+                return RememberedFileListTile(
+                  file,
+                  onTap: () =>
+                      Navigator.pop(context, (CaptureTarget.document, file)),
+                );
+            }
           },
-          itemCount: files.length,
+          itemCount: files.length + 2,
         ),
       ),
     );

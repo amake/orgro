@@ -488,6 +488,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get captureToDialogTitle => 'Capture to';
 
   @override
+  String get captureToClipboardItem => 'Clipboard';
+
+  @override
+  String get captureToNewDocumentItem => 'New file';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
 
   @override

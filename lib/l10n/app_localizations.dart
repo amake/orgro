@@ -940,6 +940,18 @@ abstract class AppLocalizations {
   /// **'Capture to'**
   String get captureToDialogTitle;
 
+  /// No description provided for @captureToClipboardItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Clipboard'**
+  String get captureToClipboardItem;
+
+  /// No description provided for @captureToNewDocumentItem.
+  ///
+  /// In en, this message translates to:
+  /// **'New file'**
+  String get captureToNewDocumentItem;
+
   /// No description provided for @snackbarMessageInvalidCaptureUri.
   ///
   /// In en, this message translates to:

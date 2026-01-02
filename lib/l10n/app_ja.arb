@@ -180,6 +180,8 @@
   "endTimePickerTitle": "終了時間の選択",
 
   "captureToDialogTitle": "キャプチャ先",
+  "captureToClipboardItem": "クリップボード",
+  "captureToNewDocumentItem": "新規ファイル",
   "snackbarMessageInvalidCaptureUri": "不正なキャプチャURL",
 
   "snackbarMessageBibliographiesNotFound": "参考文献ファイルの指定がありませんでした",
