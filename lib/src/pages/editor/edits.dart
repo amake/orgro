@@ -101,9 +101,12 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint) = _nodeInfoAtPoint<OrgListItem>(
+    value,
+    doc,
+  );
 
-  switch (itemAtPoint) {
+  switch (nodeAtPoint) {
     case null:
       {
         TextEditingValue replaceBOL(String replacement) => value
@@ -132,15 +135,15 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       }
     case OrgListOrderedItem(checkbox: null):
       {
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Add empty checkbox
         final replacement = OrgListOrderedItem(
-          itemAtPoint.indent,
-          itemAtPoint.bullet,
+          nodeAtPoint.indent,
+          nodeAtPoint.bullet,
           '[ ]',
           null,
-          itemAtPoint.body,
+          nodeAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
@@ -155,13 +158,13 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       }
     case OrgListOrderedItem():
       {
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Turn into normal text
-        final firstBodyNode = itemAtPoint.body;
+        final firstBodyNode = nodeAtPoint.body;
         final preambleLength = firstBodyNode == null
             ? itemAtPointLength
-            : itemAtPoint.toMarkupLocating(firstBodyNode).start;
+            : nodeAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -171,12 +174,12 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
       }
     case OrgListUnorderedItem():
       {
-        if (itemAtPoint.tag != null) {
+        if (nodeAtPoint.tag != null) {
           // Ordered list items can't have tags, so avoid destructive change
           return null;
         }
 
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
@@ -188,11 +191,11 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
         final replacement = OrgListOrderedItem(
-          itemAtPoint.indent,
+          nodeAtPoint.indent,
           previous is OrgListOrderedItem ? previous.nextBullet : '1. ',
           null,
-          itemAtPoint.checkbox,
-          itemAtPoint.body,
+          nodeAtPoint.checkbox,
+          nodeAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
@@ -212,9 +215,12 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint) = _nodeInfoAtPoint<OrgListItem>(
+    value,
+    doc,
+  );
 
-  switch (itemAtPoint) {
+  switch (nodeAtPoint) {
     case null:
       {
         TextEditingValue replaceBOL(String replacement) => value
@@ -249,15 +255,15 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       }
     case OrgListUnorderedItem(checkbox: null):
       {
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Add empty checkbox
         final replacement = OrgListUnorderedItem(
-          itemAtPoint.indent,
-          itemAtPoint.bullet,
+          nodeAtPoint.indent,
+          nodeAtPoint.bullet,
           '[ ]',
           null,
-          itemAtPoint.body,
+          nodeAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
@@ -272,13 +278,13 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       }
     case OrgListUnorderedItem():
       {
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Turn into normal text
-        final firstBodyNode = itemAtPoint.tag?.value ?? itemAtPoint.body;
+        final firstBodyNode = nodeAtPoint.tag?.value ?? nodeAtPoint.body;
         final preambleLength = firstBodyNode == null
             ? itemAtPointLength
-            : itemAtPoint.toMarkupLocating(firstBodyNode).start;
+            : nodeAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
               TextRange(start: lineStart, end: lineStart + preambleLength),
@@ -288,7 +294,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
       }
     case OrgListOrderedItem():
       {
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
@@ -300,11 +306,11 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
                     ?.node
                 as OrgListItem?;
         final replacement = OrgListUnorderedItem(
-          itemAtPoint.indent,
+          nodeAtPoint.indent,
           previous is OrgListUnorderedItem ? previous.bullet : '- ',
-          itemAtPoint.checkbox,
+          nodeAtPoint.checkbox,
           null,
-          itemAtPoint.body,
+          nodeAtPoint.body,
         ).toMarkup();
         return value
             .replaced(
@@ -320,37 +326,29 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   }
 }
 
-({int lineStart, int lastEOLIdx, OrgListItem? itemAtPoint}) _itemInfoAtPoint(
-  TextEditingValue value,
-  OrgDocument doc,
-) {
+({int lineStart, int lastEOLIdx, T? nodeAtPoint})
+_nodeInfoAtPoint<T extends OrgNode>(TextEditingValue value, OrgDocument doc) {
   final lastEOLIdx = value.selection.start == 0
       ? -1
       : value.text.lastIndexOf('\n', value.selection.start - 1);
   final lineStart = lastEOLIdx + 1;
 
-  OrgListItem? foundListItem;
+  T? foundNode;
   if (value.selection.start == lineStart) {
     // Org syntax lets list items contain line breaks, so the cursor sitting on
     // the line "after" a list item is still technically in the list item. This is
     // unintuitive when editing raw markup, so we ignore any found item if the
     // cursor is at BOL.
-    foundListItem = null;
+    foundNode = null;
   } else {
     var searchOffset = value.selection.start;
     // nodesAtOffset excludes the node if the offset is just past it, which is
     // the case if the cursor is at the end of the document.
     if (searchOffset == value.text.length) searchOffset--;
     final foundAtOffset = doc.nodesAtOffset(searchOffset);
-    foundListItem =
-        foundAtOffset.where((e) => e.node is OrgListItem).firstOrNull?.node
-            as OrgListItem?;
+    foundNode = foundAtOffset.where((e) => e.node is T).firstOrNull?.node as T?;
   }
-  return (
-    lineStart: lineStart,
-    lastEOLIdx: lastEOLIdx,
-    itemAtPoint: foundListItem,
-  );
+  return (lineStart: lineStart, lastEOLIdx: lastEOLIdx, nodeAtPoint: foundNode);
 }
 
 TextEditingValue? afterNewLineFixup(TextEditingValue value) {
@@ -405,44 +403,80 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :itemAtPoint) = _itemInfoAtPoint(value, doc);
+  {
+    final (:lineStart, :lastEOLIdx, :nodeAtPoint) =
+        _nodeInfoAtPoint<OrgListItem>(value, doc);
+    if (nodeAtPoint != null) {
+      if (!increase && nodeAtPoint.indent.isEmpty) {
+        // Can't decrease indent any further
+        return null;
+      }
+      final itemAtPointLength = nodeAtPoint.toMarkup().length;
+      var newIndent = nodeAtPoint.indent;
+      if (newIndent.length % 2 != 0) {
+        newIndent = increase ? ' $newIndent' : newIndent.substring(1);
+      }
+      if (increase) {
+        newIndent = '$_indentStep$newIndent';
+      } else {
+        newIndent = newIndent.length >= _indentStep.length
+            ? newIndent.substring(_indentStep.length)
+            : '';
+      }
+      final replacement = switch (nodeAtPoint) {
+        OrgListOrderedItem() => nodeAtPoint.copyWith(indent: newIndent),
+        OrgListUnorderedItem() => nodeAtPoint.copyWith(indent: newIndent),
+      }.toMarkup();
+      return value
+          .replaced(
+            TextRange(start: lineStart, end: lineStart + itemAtPointLength),
+            replacement,
+          )
+          .copyWith(
+            selection: value.selection.shift(
+              replacement.length - itemAtPointLength,
+            ),
+          );
+    }
 
-  switch (itemAtPoint) {
-    case null:
-      // No list item at the cursor
-      return null;
-    case OrgListItem():
-      {
-        if (!increase && itemAtPoint.indent.isEmpty) {
+    {
+      final (:lineStart, :lastEOLIdx, :nodeAtPoint) =
+          _nodeInfoAtPoint<OrgSection>(value, doc);
+      if (nodeAtPoint != null) {
+        if (nodeAtPoint.level == 1 && !increase) {
           // Can't decrease indent any further
           return null;
         }
-        final itemAtPointLength = itemAtPoint.toMarkup().length;
-        var newIndent = itemAtPoint.indent;
-        if (newIndent.length % 2 != 0) {
-          newIndent = increase ? ' $newIndent' : newIndent.substring(1);
-        }
-        if (increase) {
-          newIndent = '$_indentStep$newIndent';
-        } else {
-          newIndent = newIndent.length >= _indentStep.length
-              ? newIndent.substring(_indentStep.length)
-              : '';
-        }
-        final replacement = switch (itemAtPoint) {
-          OrgListOrderedItem() => itemAtPoint.copyWith(indent: newIndent),
-          OrgListUnorderedItem() => itemAtPoint.copyWith(indent: newIndent),
-        }.toMarkup();
+        final sectionAtPointLength = nodeAtPoint.toMarkup().length;
+        final newLevel = increase
+            ? nodeAtPoint.level + 1
+            : nodeAtPoint.level - 1;
+        final replacement = nodeAtPoint
+            .copyWith(
+              headline: nodeAtPoint.headline.copyWith(
+                stars: (
+                  value: '*' * newLevel,
+                  trailing: nodeAtPoint.headline.stars.trailing,
+                ),
+              ),
+            )
+            .toMarkup();
         return value
             .replaced(
-              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
+              TextRange(
+                start: lineStart,
+                end: lineStart + sectionAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
               selection: value.selection.shift(
-                replacement.length - itemAtPointLength,
+                replacement.length - sectionAtPointLength,
               ),
             );
       }
+    }
+
+    return null;
   }
 }

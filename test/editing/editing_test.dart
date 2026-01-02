@@ -192,5 +192,21 @@ void main() {
         expect(result, testValue('foo <2024-06-15 Sat 14:30|>'));
       });
     });
+    group('Section', () {
+      group('Indentation', () {
+        test('Indent section', () {
+          final result = changeIndent(testValue('* foo |bar'), true);
+          expect(result, testValue('** foo |bar'));
+        });
+        test('Deindent section', () {
+          final result = changeIndent(testValue('*** foo |bar'), false);
+          expect(result, testValue('** foo |bar'));
+        });
+        test('Deindent base section', () {
+          final result = changeIndent(testValue('* foo |bar'), false);
+          expect(result, isNull);
+        });
+      });
+    });
   });
 }
