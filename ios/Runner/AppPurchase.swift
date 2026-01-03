@@ -5,9 +5,6 @@
 //  Created by Aaron Madlon-Kay on 2025/12/20.
 //
 
-// TODO(aaron): This entire file might not be necessary. Check if the app
-// purchase shows up in the purchase stream; if yes, we can remove this.
-
 import Foundation
 import Flutter
 import StoreKit
@@ -18,18 +15,13 @@ func handleAppPurchaseMethod(call: FlutterMethodCall, result: @escaping FlutterR
     switch call.method {
     case "getAppPurchaseInfo":
         Task {
-            if #available(iOS 16.0, *) {
-                await getAppPurchaseInfo(call, result)
-            } else {
-                // TODO(aaron): Fallback on earlier versions
-            }
+            await getAppPurchaseInfo(call, result)
         }
     default:
         result(FlutterError(code: "UnsupportedMethod", message: "\(call.method) is not supported", details: nil))
     }
 }
 
-@available(iOS 16.0, *)
 private func getAppPurchaseInfo(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) async {
     guard let args = call.arguments as? [String:Any?] else {
         result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'refresh'"))
