@@ -72,6 +72,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   Future<void> _checkLegacyPurchase(bool refresh) async {
     String? originalAppVersion;
     DateTime? originalPurchaseDate;
+    Object? error;
     try {
       final info = await _channel.invokeMapMethod<String, dynamic>(
         'getAppPurchaseInfo',
@@ -84,12 +85,16 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         timestamp.toInt() * 1000,
         isUtc: true,
       );
+    } catch (e) {
+      error = e;
+      rethrow;
     } finally {
       setState(() {
         _entitlements = _entitlements.copyWith(
           loaded: true,
           originalPurchaseDate: originalPurchaseDate,
           originalAppVersion: originalAppVersion,
+          error: error,
         );
       });
     }
@@ -162,23 +167,27 @@ class EntitlementsData {
     this.originalPurchaseDate,
     this.originalAppVersion,
     this.iapUnlock,
+    this.error,
   });
 
   final bool loaded;
   final DateTime? originalPurchaseDate;
   final String? originalAppVersion;
   final bool? iapUnlock;
+  final Object? error;
 
+  bool get hasError => error != null;
   bool get legacyUnlock =>
       originalAppVersion != null &&
       int.parse(originalAppVersion!) <= kLastPaidVersion;
   bool get unlocked => legacyUnlock == true || iapUnlock == true;
   bool get inTrial =>
+      hasError ||
       !unlocked &&
-      originalPurchaseDate != null &&
-      DateTime.now().difference(originalPurchaseDate!).inDays <
-          _trialPeriodDays;
-  DateTime? get trialEnd => inTrial
+          originalPurchaseDate != null &&
+          DateTime.now().difference(originalPurchaseDate!).inDays <
+              _trialPeriodDays;
+  DateTime? get trialEnd => inTrial && originalPurchaseDate != null
       ? originalPurchaseDate!.add(Duration(days: _trialPeriodDays))
       : null;
 
@@ -188,22 +197,30 @@ class EntitlementsData {
       other.loaded == loaded &&
       other.originalPurchaseDate == originalPurchaseDate &&
       other.originalAppVersion == originalAppVersion &&
-      other.iapUnlock == iapUnlock;
+      other.iapUnlock == iapUnlock &&
+      other.error == error;
 
   @override
-  int get hashCode =>
-      Object.hash(loaded, originalPurchaseDate, originalAppVersion, iapUnlock);
+  int get hashCode => Object.hash(
+    loaded,
+    originalPurchaseDate,
+    originalAppVersion,
+    iapUnlock,
+    error,
+  );
 
   EntitlementsData copyWith({
     bool? loaded,
     DateTime? originalPurchaseDate,
     String? originalAppVersion,
     bool? iapUnlock,
+    Object? error,
   }) => EntitlementsData(
     loaded: loaded ?? this.loaded,
     originalPurchaseDate: originalPurchaseDate ?? this.originalPurchaseDate,
     originalAppVersion: originalAppVersion ?? this.originalAppVersion,
     iapUnlock: iapUnlock ?? this.iapUnlock,
+    error: error ?? this.error,
   );
 }
 
@@ -229,12 +246,14 @@ class _EntitlementsSettingListItemsState
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text('• Loaded: ${entitlements.loaded}'),
               Text('• Legacy unlock: ${entitlements.legacyUnlock}'),
               Text('• IAP unlock: ${entitlements.iapUnlock}'),
               Text('• Purchased version: ${entitlements.originalAppVersion}'),
               Text('• Purchase date: ${entitlements.originalPurchaseDate}'),
               Text('• In trial: ${entitlements.inTrial}'),
               Text('• Trial end: ${entitlements.trialEnd}'),
+              Text('• Error: ${entitlements.error}'),
             ],
           ),
         );
@@ -263,9 +282,9 @@ class _EntitlementsSettingListItemsState
           ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: Text(
-              AppLocalizations.of(
-                context,
-              )!.entitlementsFreeTrialItem(entitlements.trialEnd!),
+              AppLocalizations.of(context)!.entitlementsFreeTrialItem(
+                entitlements.trialEnd ?? DateTime.now(),
+              ),
             ),
             onLongPress: onLongPress,
           ),
