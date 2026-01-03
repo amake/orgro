@@ -140,34 +140,39 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       // We don't use RestorationMixin here because we don't want StartPage to
       // have its own bucket; we want it and QuickActions to use the root bucket
       // so that routes remembered by either can be restored here.
-      _restoreRoute();
+      final restored = _restoreRoute();
+      if (!restored) {
+        // TODO(aaron): Starting in freemium release, open Settings screen here
+        // if the trial has expired
+      }
     }
   }
 
-  void _restoreRoute() {
+  bool _restoreRoute() {
     final bucket = RestorationScope.of(context);
     final restoreRoute = bucket.read<String>(kRestoreRouteKey);
     debugPrint('restoreState; restoreRoute=$restoreRoute');
-    if (restoreRoute != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final restoreData = json.decode(restoreRoute);
-        final context = this.context;
-        switch (restoreData) {
-          case {'route': Routes.document, 'fileId': String fileId}:
-            await loadAndRememberFile(context, readFileWithIdentifier(fileId));
-            return;
-          case {'route': Routes.document, 'url': String url}:
-            await loadAndRememberUrl(context, Uri.parse(url));
-            return;
-          case {'route': Routes.document, 'assetKey': String key}:
-            await loadAndRememberAsset(context, key);
-            return;
-          default:
-            debugPrint('Unknown route: ${restoreData['route']}');
-            return;
-        }
-      });
-    }
+    if (restoreRoute == null) return false;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final restoreData = json.decode(restoreRoute);
+      final context = this.context;
+      switch (restoreData) {
+        case {'route': Routes.document, 'fileId': String fileId}:
+          await loadAndRememberFile(context, readFileWithIdentifier(fileId));
+          return;
+        case {'route': Routes.document, 'url': String url}:
+          await loadAndRememberUrl(context, Uri.parse(url));
+          return;
+        case {'route': Routes.document, 'assetKey': String key}:
+          await loadAndRememberAsset(context, key);
+          return;
+        default:
+          debugPrint('Unknown route: ${restoreData['route']}');
+          return;
+      }
+    });
+    return true;
   }
 }
 

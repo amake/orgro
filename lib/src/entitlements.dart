@@ -437,6 +437,7 @@ class LockedBarrier extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!kFreemium) return child;
 
+    // TODO(aaron): Remove this when going freemium
     final developerMode = Preferences.of(
       context,
       PrefsAspect.customization,

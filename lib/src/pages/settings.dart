@@ -26,7 +26,9 @@ class SettingsPage extends StatelessWidget {
         body: ListView(
           children:
               [
-                    if (kFreemium && developerMode) ...[
+                    if (kFreemium &&
+                        developerMode // TODO(aaron): Remove this when going freemium
+                        ) ...[
                       ListHeader(
                         title: Text(
                           AppLocalizations.of(context)!.settingsSectionPurchase,
