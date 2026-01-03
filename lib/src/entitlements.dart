@@ -20,6 +20,11 @@ const kWalledGarden = bool.fromEnvironment(
 // stay paid up front.
 final kFreemium = kWalledGarden && Platform.isIOS;
 
+// The last app version that was paid (non-freemium). This is the version code
+// (not the version "name") because that's what iOS's AppTransaction API
+// returns: CFBundleVersion which is $(FLUTTER_BUILD_NUMBER).
+const kLastPaidVersion = 212;
+
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
 const _trialPeriodDays = 7;
@@ -64,18 +69,17 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   }
 
   Future<void> _checkLegacyPurchase(bool refresh) async {
-    var legacyUnlock = false;
-    DateTime? firstSeen;
+    String? originalAppVersion;
+    DateTime? originalPurchaseDate;
     try {
       final info = await _channel.invokeMapMethod<String, dynamic>(
         'getAppPurchaseInfo',
         {'refresh': refresh},
       );
       debugPrint('App purchase info: $info');
-      final originalPurchaseVersion = info!['originalAppVersion'] as String;
-      legacyUnlock = originalPurchaseVersion.startsWith('1.');
+      originalAppVersion = info!['originalAppVersion'] as String;
       final timestamp = info['originalPurchaseDate'] as double;
-      firstSeen = DateTime.fromMillisecondsSinceEpoch(
+      originalPurchaseDate = DateTime.fromMillisecondsSinceEpoch(
         timestamp.toInt() * 1000,
         isUtc: true,
       );
@@ -83,8 +87,8 @@ class _UserEntitlementsState extends State<UserEntitlements> {
       setState(() {
         _entitlements = _entitlements.copyWith(
           loaded: true,
-          legacyUnlock: legacyUnlock,
-          firstSeen: firstSeen,
+          originalPurchaseDate: originalPurchaseDate,
+          originalAppVersion: originalAppVersion,
         );
       });
     }
@@ -154,44 +158,50 @@ class InheritedEntitlements extends InheritedWidget {
 class EntitlementsData {
   const EntitlementsData({
     required this.loaded,
-    this.firstSeen,
-    this.legacyUnlock,
+    this.originalPurchaseDate,
+    this.originalAppVersion,
     this.iapUnlock,
   });
 
   final bool loaded;
-  final DateTime? firstSeen;
-  final bool? legacyUnlock;
+  final DateTime? originalPurchaseDate;
+  final String? originalAppVersion;
   final bool? iapUnlock;
 
+  bool get legacyUnlock =>
+      originalAppVersion != null &&
+      int.parse(originalAppVersion!) <= kLastPaidVersion;
   bool get unlocked => legacyUnlock == true || iapUnlock == true;
   bool get inTrial =>
       !unlocked &&
-      firstSeen != null &&
-      DateTime.now().difference(firstSeen!).inDays < _trialPeriodDays;
-  DateTime? get trialEnd =>
-      inTrial ? firstSeen!.add(Duration(days: _trialPeriodDays)) : null;
+      originalPurchaseDate != null &&
+      DateTime.now().difference(originalPurchaseDate!).inDays <
+          _trialPeriodDays;
+  DateTime? get trialEnd => inTrial
+      ? originalPurchaseDate!.add(Duration(days: _trialPeriodDays))
+      : null;
 
   @override
   bool operator ==(Object other) =>
       other is EntitlementsData &&
       other.loaded == loaded &&
-      other.firstSeen == firstSeen &&
-      other.legacyUnlock == legacyUnlock &&
+      other.originalPurchaseDate == originalPurchaseDate &&
+      other.originalAppVersion == originalAppVersion &&
       other.iapUnlock == iapUnlock;
 
   @override
-  int get hashCode => Object.hash(loaded, firstSeen, legacyUnlock, iapUnlock);
+  int get hashCode =>
+      Object.hash(loaded, originalPurchaseDate, originalAppVersion, iapUnlock);
 
   EntitlementsData copyWith({
     bool? loaded,
-    DateTime? firstSeen,
-    bool? legacyUnlock,
+    DateTime? originalPurchaseDate,
+    String? originalAppVersion,
     bool? iapUnlock,
   }) => EntitlementsData(
     loaded: loaded ?? this.loaded,
-    firstSeen: firstSeen ?? this.firstSeen,
-    legacyUnlock: legacyUnlock ?? this.legacyUnlock,
+    originalPurchaseDate: originalPurchaseDate ?? this.originalPurchaseDate,
+    originalAppVersion: originalAppVersion ?? this.originalAppVersion,
     iapUnlock: iapUnlock ?? this.iapUnlock,
   );
 }
@@ -285,7 +295,8 @@ class _EntitlementsSettingListItemsState
             children: [
               Text('• Legacy unlock: ${entitlements.legacyUnlock}'),
               Text('• IAP unlock: ${entitlements.iapUnlock}'),
-              Text('• First seen: ${entitlements.firstSeen}'),
+              Text('• Purchased version: ${entitlements.originalAppVersion}'),
+              Text('• Purchase date: ${entitlements.originalPurchaseDate}'),
               Text('• In trial: ${entitlements.inTrial}'),
               Text('• Trial end: ${entitlements.trialEnd}'),
             ],
