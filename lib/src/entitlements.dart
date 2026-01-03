@@ -177,9 +177,17 @@ class EntitlementsData {
   final Object? error;
 
   bool get hasError => error != null;
-  bool get legacyUnlock =>
-      originalAppVersion != null &&
-      int.parse(originalAppVersion!) <= kLastPaidVersion;
+  bool get legacyUnlock {
+    if (originalAppVersion == null) return false;
+    final parsed = int.tryParse(originalAppVersion!);
+    if (parsed == null) {
+      // iOS sandbox will have '1.0' for the version, which isn't an int so we
+      // pass through here.
+      return false;
+    }
+    return parsed <= kLastPaidVersion;
+  }
+
   bool get unlocked => legacyUnlock == true || iapUnlock == true;
   bool get inTrial =>
       hasError ||
