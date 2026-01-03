@@ -491,7 +491,7 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
           )!.entitlementsLockedDialogActionRestore,
         ),
         DialogButton(
-          onPressed: visitFaqLink,
+          onPressed: visitUnlockLink,
           text: AppLocalizations.of(
             context,
           )!.entitlementsLockedDialogActionMoreInfo,
@@ -501,7 +501,7 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
   }
 }
 
-void visitFaqLink() => launchUrl(
-  Uri.parse('https://orgro.org/faq/'),
+void visitUnlockLink() => launchUrl(
+  Uri.parse('https://orgro.org/unlock/'),
   mode: LaunchMode.externalApplication,
 );
