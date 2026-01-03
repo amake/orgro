@@ -18,74 +18,78 @@ class SettingsPage extends StatelessWidget {
       context,
       PrefsAspect.customization,
     ).developerMode;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
-      ),
-      body: ListView(
-        children:
-            [
-                  if (kFreemium && developerMode) ...[
+    return LockedBarrier(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
+        ),
+        body: ListView(
+          children:
+              [
+                    if (kFreemium && developerMode) ...[
+                      ListHeader(
+                        title: Text(
+                          AppLocalizations.of(context)!.settingsSectionPurchase,
+                        ),
+                      ),
+                      EntitlementsSettingListItems(),
+                      const Divider(),
+                    ],
+                    if (!kWalledGarden) ...[
+                      ListHeader(
+                        title: Text(
+                          AppLocalizations.of(context)!.settingsSectionDonate,
+                        ),
+                      ),
+                      const DonateSettingListItem(),
+                      const Divider(),
+                    ],
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(context)!.settingsSectionPurchase,
+                        AppLocalizations.of(context)!.settingsSectionAppearance,
                       ),
                     ),
-                    EntitlementsSettingListItems(),
+                    const AppearanceSettingListItem(),
                     const Divider(),
-                  ],
-                  if (!kWalledGarden) ...[
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(context)!.settingsSectionDonate,
+                        AppLocalizations.of(
+                          context,
+                        )!.settingsSectionDefaultText,
                       ),
                     ),
-                    const DonateSettingListItem(),
+                    const FontFamilySettingListItem(),
+                    const TextScaleSettingListItem(),
+                    const _TextPreview(),
                     const Divider(),
-                  ],
-                  ListHeader(
-                    title: Text(
-                      AppLocalizations.of(context)!.settingsSectionAppearance,
+                    ListHeader(
+                      title: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.settingsSectionNotifications,
+                      ),
                     ),
-                  ),
-                  const AppearanceSettingListItem(),
-                  const Divider(),
-                  ListHeader(
-                    title: Text(
-                      AppLocalizations.of(context)!.settingsSectionDefaultText,
+                    const NotificationsListItems(),
+                    const Divider(),
+                    ListHeader(
+                      title: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.settingsSectionDataManagement,
+                      ),
                     ),
-                  ),
-                  const FontFamilySettingListItem(),
-                  const TextScaleSettingListItem(),
-                  const _TextPreview(),
-                  const Divider(),
-                  ListHeader(
-                    title: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.settingsSectionNotifications,
-                    ),
-                  ),
-                  const NotificationsListItems(),
-                  const Divider(),
-                  ListHeader(
-                    title: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.settingsSectionDataManagement,
-                    ),
-                  ),
-                  const ClearCachesListItem(),
-                  const ResetDirectoryPermissionsListItem(),
-                  const ResetPreferencesListItem(),
-                ]
-                .map(
-                  (child) => switch (child) {
-                    Divider() => child,
-                    _ => _constrain(child),
-                  },
-                )
-                .toList(growable: false),
+                    const ClearCachesListItem(),
+                    const ResetDirectoryPermissionsListItem(),
+                    const ResetPreferencesListItem(),
+                  ]
+                  .map(
+                    (child) => switch (child) {
+                      Divider() => child,
+                      _ => _constrain(child),
+                    },
+                  )
+                  .toList(growable: false),
+        ),
       ),
     );
   }

@@ -420,7 +420,7 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         onSubmitted: _confirm,
       ),
       actions: [
-        _DialogButton(
+        DialogButton(
           text: AppLocalizations.of(context)!.dialogActionHelp,
           onPressed: () => launchUrl(
             Uri.parse(
@@ -430,7 +430,7 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
           ),
         ),
         if (history.isNotEmpty)
-          _DialogButton(
+          DialogButton(
             text: AppLocalizations.of(
               context,
             )!.inputCustomFilterDialogHistoryButton,
@@ -439,13 +439,13 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
               if (entry != null) _controller.text = entry;
             },
           ),
-        _DialogButton(
+        DialogButton(
           text: AppLocalizations.of(context)!.dialogActionCancel,
           onPressed: () => Navigator.pop(context),
         ),
         ValueListenableBuilder(
           valueListenable: _controller,
-          builder: (context, value, _) => _DialogButton(
+          builder: (context, value, _) => DialogButton(
             text: AppLocalizations.of(context)!.dialogActionConfirm,
             onPressed: _validate(value.text)
                 ? () => _confirm(value.text)
@@ -619,11 +619,11 @@ class _RecentFilesSortDialogState extends State<RecentFilesSortDialog> {
         ),
       ),
       actions: [
-        _DialogButton(
+        DialogButton(
           text: AppLocalizations.of(context)!.dialogActionCancel,
           onPressed: () => Navigator.pop(context),
         ),
-        _DialogButton(
+        DialogButton(
           text: AppLocalizations.of(context)!.dialogActionConfirm,
           onPressed: () => Navigator.pop(context, (_sortKey, _sortOrder)),
         ),
@@ -772,8 +772,8 @@ class CaptureTargetDialog extends StatelessWidget {
   }
 }
 
-class _DialogButton extends StatelessWidget {
-  const _DialogButton({required this.text, required this.onPressed});
+class DialogButton extends StatelessWidget {
+  const DialogButton({super.key, required this.text, required this.onPressed});
 
   final VoidCallback? onPressed;
   final String text;

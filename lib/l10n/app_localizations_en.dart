@@ -621,6 +621,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
       'Thank you for being a long-time supporter!';
+
+  @override
+  String get entitlementsLockedDialogTitle => 'Your free trial has ended';
+
+  @override
+  String get entitlementsLockedDialogMessage =>
+      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+
+  @override
+  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+
+  @override
+  String get entitlementsLockedDialogActionRestore => 'Restore';
+
+  @override
+  String get entitlementsLockedDialogActionMoreInfo => 'Learn more';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -1240,6 +1256,22 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
       'Thank you for being a long-time supporter!';
+
+  @override
+  String get entitlementsLockedDialogTitle => 'Your free trial has ended';
+
+  @override
+  String get entitlementsLockedDialogMessage =>
+      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+
+  @override
+  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+
+  @override
+  String get entitlementsLockedDialogActionRestore => 'Restore';
+
+  @override
+  String get entitlementsLockedDialogActionMoreInfo => 'Learn more';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1859,4 +1891,20 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
       'Thank you for being a long-time supporter!';
+
+  @override
+  String get entitlementsLockedDialogTitle => 'Your free trial has ended';
+
+  @override
+  String get entitlementsLockedDialogMessage =>
+      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+
+  @override
+  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+
+  @override
+  String get entitlementsLockedDialogActionRestore => 'Restore';
+
+  @override
+  String get entitlementsLockedDialogActionMoreInfo => 'Learn more';
 }

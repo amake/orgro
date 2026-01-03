@@ -1131,6 +1131,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Thank you for being a long-time supporter!'**
   String get entitlementsLegacyPurchaseItemSubtitle;
+
+  /// No description provided for @entitlementsLockedDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free trial has ended'**
+  String get entitlementsLockedDialogTitle;
+
+  /// No description provided for @entitlementsLockedDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To continue using Orgro, please purchase a license or restore your previous purchases.'**
+  String get entitlementsLockedDialogMessage;
+
+  /// No description provided for @entitlementsLockedDialogActionPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase'**
+  String get entitlementsLockedDialogActionPurchase;
+
+  /// No description provided for @entitlementsLockedDialogActionRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get entitlementsLockedDialogActionRestore;
+
+  /// No description provided for @entitlementsLockedDialogActionMoreInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more'**
+  String get entitlementsLockedDialogActionMoreInfo;
 }
 
 class _AppLocalizationsDelegate

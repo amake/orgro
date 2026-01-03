@@ -598,4 +598,20 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get entitlementsLegacyPurchaseItemSubtitle => '長い間ご支援頂きありがとうございます！';
+
+  @override
+  String get entitlementsLockedDialogTitle => '無料期間は終了しました';
+
+  @override
+  String get entitlementsLockedDialogMessage =>
+      '引き続きOrgroをご利用いただくには、購入するか、購入済みの場合は復元してください。';
+
+  @override
+  String get entitlementsLockedDialogActionPurchase => '購入する';
+
+  @override
+  String get entitlementsLockedDialogActionRestore => '購入を復元';
+
+  @override
+  String get entitlementsLockedDialogActionMoreInfo => '詳しく見る';
 }

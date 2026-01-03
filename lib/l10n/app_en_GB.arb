@@ -225,5 +225,11 @@
   "entitlementsPurchaseItemSubtitle": "Unlock all features and support development",
   "entitlementsRestorePurchasesItem": "Restore purchases",
   "entitlementsPurchasedItem": "Purchased",
-  "entitlementsLegacyPurchaseItemSubtitle": "Thank you for being a long-time supporter!"
+  "entitlementsLegacyPurchaseItemSubtitle": "Thank you for being a long-time supporter!",
+
+  "entitlementsLockedDialogTitle": "Your free trial has ended",
+  "entitlementsLockedDialogMessage": "To continue using Orgro, please purchase a license or restore your previous purchases.",
+  "entitlementsLockedDialogActionPurchase": "Purchase",
+  "entitlementsLockedDialogActionRestore": "Restore",
+  "entitlementsLockedDialogActionMoreInfo": "Learn more"
 }
