@@ -177,6 +177,7 @@ class EntitlementsData {
   final Object? error;
 
   bool get hasError => error != null;
+  bool get sandboxed => Platform.isIOS && originalAppVersion == '1.0';
   bool get legacyUnlock {
     if (originalAppVersion == null) return false;
     final parsed = int.tryParse(originalAppVersion!);
@@ -191,6 +192,7 @@ class EntitlementsData {
   bool get unlocked => legacyUnlock == true || iapUnlock == true;
   bool get inTrial =>
       hasError ||
+      sandboxed ||
       !unlocked &&
           originalPurchaseDate != null &&
           DateTime.now().difference(originalPurchaseDate!).inDays <
@@ -255,6 +257,8 @@ class _EntitlementsSettingListItemsState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('• Loaded: ${entitlements.loaded}'),
+              Text('• Unlocked: ${entitlements.unlocked}'),
+              Text('• Sandboxed: ${entitlements.sandboxed}'),
               Text('• Legacy unlock: ${entitlements.legacyUnlock}'),
               Text('• IAP unlock: ${entitlements.iapUnlock}'),
               Text('• Purchased version: ${entitlements.originalAppVersion}'),
