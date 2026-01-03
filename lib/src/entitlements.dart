@@ -412,6 +412,11 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
     final entitlements = UserEntitlements.of(context)!;
     try {
       await InAppPurchase.instance.restorePurchases();
+    } catch (e, s) {
+      logError(e, s);
+      if (mounted) showErrorSnackBar(context, e);
+    }
+    try {
       await entitlements.reload(true);
     } catch (e, s) {
       logError(e, s);
