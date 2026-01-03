@@ -325,7 +325,7 @@ class _EntitlementsSettingListItemsState
           ),
         if (entitlements.inTrial)
           ListTile(
-            leading: const Icon(Icons.timer),
+            leading: const Icon(Icons.timer_outlined),
             title: Text(
               AppLocalizations.of(
                 context,
