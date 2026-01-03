@@ -220,6 +220,7 @@
       }
     }
   },
+  "entitlementsTrialExpiredItem": "Your free trial has ended",
   "entitlementsPurchaseItemTitle": "Purchase Orgro",
   "entitlementsPurchaseItemSubtitle": "Unlock all features and support development",
   "entitlementsRestorePurchasesItem": "Restore purchases",

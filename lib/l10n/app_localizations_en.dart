@@ -603,6 +603,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get entitlementsTrialExpiredItem => 'Your free trial has ended';
+
+  @override
   String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
 
   @override
@@ -1219,6 +1222,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String get entitlementsTrialExpiredItem => 'Your free trial has ended';
+
+  @override
   String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
 
   @override
@@ -1833,6 +1839,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
     return 'Your free trial ends at $dateString';
   }
+
+  @override
+  String get entitlementsTrialExpiredItem => 'Your free trial has ended';
 
   @override
   String get entitlementsPurchaseItemTitle => 'Purchase Orgro';

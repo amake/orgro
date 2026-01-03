@@ -334,6 +334,14 @@ class _EntitlementsSettingListItemsState
             onLongPress: onLongPress,
           ),
         if (!entitlements.unlocked) ...[
+          if (!entitlements.inTrial)
+            ListTile(
+              leading: const Icon(Icons.lock_outline),
+              title: Text(
+                AppLocalizations.of(context)!.entitlementsTrialExpiredItem,
+              ),
+              onLongPress: onLongPress,
+            ),
           ListTile(
             enabled: _available == true,
             title: Text(

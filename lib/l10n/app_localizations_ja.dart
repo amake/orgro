@@ -582,6 +582,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get entitlementsTrialExpiredItem => '無料期間は終了しました';
+
+  @override
   String get entitlementsPurchaseItemTitle => 'Orgroを購入する';
 
   @override

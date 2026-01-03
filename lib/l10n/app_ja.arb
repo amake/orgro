@@ -219,6 +219,7 @@
       }
     }
   },
+  "entitlementsTrialExpiredItem": "無料期間は終了しました",
   "entitlementsPurchaseItemTitle": "Orgroを購入する",
   "entitlementsPurchaseItemSubtitle": "全機能が解放され、開発者の士気が上がります",
   "entitlementsRestorePurchasesItem": "購入を復元",

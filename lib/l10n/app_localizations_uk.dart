@@ -603,6 +603,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get entitlementsTrialExpiredItem => 'Your free trial has ended';
+
+  @override
   String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
 
   @override

@@ -1096,6 +1096,12 @@ abstract class AppLocalizations {
   /// **'Your free trial ends at {date}'**
   String entitlementsFreeTrialItem(DateTime date);
 
+  /// No description provided for @entitlementsTrialExpiredItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Your free trial has ended'**
+  String get entitlementsTrialExpiredItem;
+
   /// No description provided for @entitlementsPurchaseItemTitle.
   ///
   /// In en, this message translates to:
