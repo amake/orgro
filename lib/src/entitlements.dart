@@ -320,7 +320,6 @@ class _EntitlementsSettingListItemsState
             onTap: buyProduct,
           ),
           ListTile(
-            enabled: purchaseAvailable == true,
             title: Text(
               AppLocalizations.of(context)!.entitlementsRestorePurchasesItem,
             ),
