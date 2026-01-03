@@ -24,7 +24,7 @@ final kFreemium = kWalledGarden && Platform.isIOS;
 // The last app version that was paid (non-freemium). This is the version code
 // (not the version "name") because that's what iOS's AppTransaction API
 // returns: CFBundleVersion which is $(FLUTTER_BUILD_NUMBER).
-const kLastPaidVersion = 212;
+const kLastPaidVersion = 213;
 
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
