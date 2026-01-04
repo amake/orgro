@@ -324,13 +324,13 @@ class _EntitlementsSettingListItemsState
             subtitle: Text(
               AppLocalizations.of(context)!.entitlementsPurchaseItemSubtitle,
             ),
-            onTap: buyProduct,
+            onTap: () => buyProduct().onError(_onError),
           ),
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.entitlementsRestorePurchasesItem,
             ),
-            onTap: restorePurchases,
+            onTap: () => restorePurchases().onError(_onError),
             onLongPress: onLongPress,
           ),
         ] else if (entitlements.legacyPurchase == true)
@@ -359,6 +359,11 @@ class _EntitlementsSettingListItemsState
           ),
       ],
     );
+  }
+
+  void _onError(Object e, StackTrace s) {
+    logError(e, s);
+    if (mounted) showErrorSnackBar(context, e);
   }
 }
 
@@ -404,32 +409,17 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
     });
   }
 
-  void buyProduct() async {
-    try {
-      final purchaseParam = PurchaseParam(productDetails: productDetails!);
-      await InAppPurchase.instance.buyNonConsumable(
-        purchaseParam: purchaseParam,
-      );
-    } catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
+  Future<void> buyProduct() async {
+    final purchaseParam = PurchaseParam(productDetails: productDetails!);
+    await InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
   }
 
-  void restorePurchases() async {
+  Future<void> restorePurchases() async {
     final entitlements = UserEntitlements.of(context)!;
-    try {
-      await InAppPurchase.instance.restorePurchases();
-    } catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
-    try {
-      await entitlements.reload(true);
-    } catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
-    }
+    await Future.wait([
+      InAppPurchase.instance.restorePurchases(),
+      entitlements.reload(true),
+    ]);
   }
 }
 
@@ -498,14 +488,18 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
       ),
       actions: [
         DialogButton(
-          onPressed: purchaseAvailable ? buyProduct : null,
+          onPressed: purchaseAvailable
+              ? () => buyProduct().then(_close, onError: _onError)
+              : null,
           text: AppLocalizations.of(context)!
               .entitlementsLockedDialogActionPurchase(
                 productDetails?.price ?? '-',
               ),
         ),
         DialogButton(
-          onPressed: purchaseAvailable ? restorePurchases : null,
+          onPressed: purchaseAvailable
+              ? () => restorePurchases().then(_close, onError: _onError)
+              : null,
           text: AppLocalizations.of(
             context,
           )!.entitlementsLockedDialogActionRestore,
@@ -518,6 +512,15 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
         ),
       ],
     );
+  }
+
+  void _close(_) {
+    if (mounted) Navigator.pop(context);
+  }
+
+  void _onError(Object e, StackTrace s) {
+    logError(e, s);
+    if (mounted) showErrorSnackBar(context, e);
   }
 }
 
