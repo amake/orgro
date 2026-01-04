@@ -121,7 +121,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
           setState(() {
             _entitlements = _entitlements.copyWith(
               loaded: true,
-              iapUnlock: true,
+              inAppPurchase: true,
             );
           });
         }
@@ -166,19 +166,19 @@ class EntitlementsData {
     required this.loaded,
     this.originalPurchaseDate,
     this.originalAppVersion,
-    this.iapUnlock,
+    this.inAppPurchase,
     this.error,
   });
 
   final bool loaded;
   final DateTime? originalPurchaseDate;
   final String? originalAppVersion;
-  final bool? iapUnlock;
+  final bool? inAppPurchase;
   final Object? error;
 
   bool get hasError => error != null;
   bool get sandboxed => Platform.isIOS && originalAppVersion == '1.0';
-  bool get legacyUnlock {
+  bool get legacyPurchase {
     if (originalAppVersion == null) return false;
     final parsed = int.tryParse(originalAppVersion!);
     if (parsed == null) {
@@ -189,11 +189,11 @@ class EntitlementsData {
     return parsed <= kLastPaidVersion;
   }
 
-  bool get unlocked => legacyUnlock == true || iapUnlock == true;
+  bool get purchased => legacyPurchase == true || inAppPurchase == true;
   bool get inTrial {
-    if (unlocked) return false; // Already unlocked
+    if (purchased) return false; // Already purchased
     if (hasError) return true; // Avoid locking out on error
-    if (sandboxed) return true; // Always in trial in sandbox (if not unlocked)
+    if (sandboxed) return true; // Always in trial in sandbox (if not purchased)
     return originalPurchaseDate != null &&
         DateTime.now().isBefore(originalPurchaseDate!.add(_trialPeriod));
   }
@@ -208,7 +208,7 @@ class EntitlementsData {
       other.loaded == loaded &&
       other.originalPurchaseDate == originalPurchaseDate &&
       other.originalAppVersion == originalAppVersion &&
-      other.iapUnlock == iapUnlock &&
+      other.inAppPurchase == inAppPurchase &&
       other.error == error;
 
   @override
@@ -216,7 +216,7 @@ class EntitlementsData {
     loaded,
     originalPurchaseDate,
     originalAppVersion,
-    iapUnlock,
+    inAppPurchase,
     error,
   );
 
@@ -224,13 +224,13 @@ class EntitlementsData {
     bool? loaded,
     DateTime? originalPurchaseDate,
     String? originalAppVersion,
-    bool? iapUnlock,
+    bool? inAppPurchase,
     Object? error,
   }) => EntitlementsData(
     loaded: loaded ?? this.loaded,
     originalPurchaseDate: originalPurchaseDate ?? this.originalPurchaseDate,
     originalAppVersion: originalAppVersion ?? this.originalAppVersion,
-    iapUnlock: iapUnlock ?? this.iapUnlock,
+    inAppPurchase: inAppPurchase ?? this.inAppPurchase,
     error: error ?? this.error,
   );
 }
@@ -258,10 +258,10 @@ class _EntitlementsSettingListItemsState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('• Loaded: ${entitlements.loaded}'),
-              Text('• Unlocked: ${entitlements.unlocked}'),
+              Text('• Purchased: ${entitlements.purchased}'),
               Text('• Sandboxed: ${entitlements.sandboxed}'),
-              Text('• Legacy unlock: ${entitlements.legacyUnlock}'),
-              Text('• IAP unlock: ${entitlements.iapUnlock}'),
+              Text('• Legacy purchase: ${entitlements.legacyPurchase}'),
+              Text('• IAP: ${entitlements.inAppPurchase}'),
               Text('• Purchased version: ${entitlements.originalAppVersion}'),
               Text('• Purchase date: ${entitlements.originalPurchaseDate}'),
               Text('• In trial: ${entitlements.inTrial}'),
@@ -303,7 +303,7 @@ class _EntitlementsSettingListItemsState
             ),
             onLongPress: onLongPress,
           ),
-        if (!entitlements.unlocked) ...[
+        if (!entitlements.purchased) ...[
           if (!entitlements.inTrial)
             ListTile(
               leading: const Icon(Icons.lock_outline),
@@ -329,7 +329,7 @@ class _EntitlementsSettingListItemsState
             onTap: restorePurchases,
             onLongPress: onLongPress,
           ),
-        ] else if (entitlements.legacyUnlock == true)
+        ] else if (entitlements.legacyPurchase == true)
           ListTile(
             leading: const Icon(Icons.workspace_premium),
             title: Text(
@@ -342,7 +342,7 @@ class _EntitlementsSettingListItemsState
             ),
             onLongPress: onLongPress,
           )
-        else if (entitlements.iapUnlock == true)
+        else if (entitlements.inAppPurchase == true)
           ListTile(
             leading: const Icon(Icons.check_circle_outline),
             title: Text(
