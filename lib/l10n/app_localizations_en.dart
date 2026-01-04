@@ -606,7 +606,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get entitlementsTrialExpiredItem => 'Your free trial has ended';
 
   @override
-  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+  String entitlementsPurchaseItemTitle(String price) {
+    return 'Purchase Orgro for $price (one-time payment)';
+  }
 
   @override
   String get entitlementsPurchaseItemSubtitle =>
@@ -630,10 +632,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get entitlementsLockedDialogMessage =>
-      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+      'To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.';
 
   @override
-  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+  String entitlementsLockedDialogActionPurchase(String price) {
+    return 'Purchase ($price)';
+  }
 
   @override
   String get entitlementsLockedDialogActionRestore => 'Restore';
@@ -1244,7 +1248,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get entitlementsTrialExpiredItem => 'Your free trial has ended';
 
   @override
-  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+  String entitlementsPurchaseItemTitle(String price) {
+    return 'Purchase Orgro for $price (one-time payment)';
+  }
 
   @override
   String get entitlementsPurchaseItemSubtitle =>
@@ -1268,10 +1274,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get entitlementsLockedDialogMessage =>
-      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+      'To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.';
 
   @override
-  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+  String entitlementsLockedDialogActionPurchase(String price) {
+    return 'Purchase ($price)';
+  }
 
   @override
   String get entitlementsLockedDialogActionRestore => 'Restore';
@@ -1882,7 +1890,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get entitlementsTrialExpiredItem => 'Your free trial has ended';
 
   @override
-  String get entitlementsPurchaseItemTitle => 'Purchase Orgro';
+  String entitlementsPurchaseItemTitle(String price) {
+    return 'Purchase Orgro for $price (one-time payment)';
+  }
 
   @override
   String get entitlementsPurchaseItemSubtitle =>
@@ -1906,10 +1916,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get entitlementsLockedDialogMessage =>
-      'To continue using Orgro, please purchase a license or restore your previous purchases.';
+      'To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.';
 
   @override
-  String get entitlementsLockedDialogActionPurchase => 'Purchase';
+  String entitlementsLockedDialogActionPurchase(String price) {
+    return 'Purchase ($price)';
+  }
 
   @override
   String get entitlementsLockedDialogActionRestore => 'Restore';

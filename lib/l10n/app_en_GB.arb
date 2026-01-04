@@ -221,7 +221,7 @@
     }
   },
   "entitlementsTrialExpiredItem": "Your free trial has ended",
-  "entitlementsPurchaseItemTitle": "Purchase Orgro",
+  "entitlementsPurchaseItemTitle": "Purchase Orgro for {price} (one-time payment)",
   "entitlementsPurchaseItemSubtitle": "Unlock all features and support development",
   "entitlementsRestorePurchasesItem": "Restore purchases",
   "entitlementsPurchasedItem": "Purchased",
@@ -229,8 +229,8 @@
   "entitlementsLegacyPurchaseItemSubtitle": "Thank you for being a long-time supporter!",
 
   "entitlementsLockedDialogTitle": "Your free trial has ended",
-  "entitlementsLockedDialogMessage": "To continue using Orgro, please purchase a license or restore your previous purchases.",
-  "entitlementsLockedDialogActionPurchase": "Purchase",
+  "entitlementsLockedDialogMessage": "To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.",
+  "entitlementsLockedDialogActionPurchase": "Purchase ({price})",
   "entitlementsLockedDialogActionRestore": "Restore",
   "entitlementsLockedDialogActionMoreInfo": "Learn more"
 }

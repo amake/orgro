@@ -220,7 +220,7 @@
     }
   },
   "entitlementsTrialExpiredItem": "無料期間は終了しました",
-  "entitlementsPurchaseItemTitle": "Orgroを購入する",
+  "entitlementsPurchaseItemTitle": "Orgroを{price}で購入（買切り）",
   "entitlementsPurchaseItemSubtitle": "全機能が解放され、開発者の士気が上がります",
   "entitlementsRestorePurchasesItem": "購入を復元",
   "entitlementsPurchasedItem": "購入済み",
@@ -228,8 +228,8 @@
   "entitlementsLegacyPurchaseItemSubtitle": "長い間ご支援頂きありがとうございます！",
 
   "entitlementsLockedDialogTitle": "無料期間は終了しました",
-  "entitlementsLockedDialogMessage": "引き続きOrgroをご利用いただくには、購入するか、購入済みの場合は復元してください。",
-  "entitlementsLockedDialogActionPurchase": "購入する",
+  "entitlementsLockedDialogMessage": "引き続きOrgroをご利用いただくには、購入するか、購入済みの場合は復元してください。\n\n購入は一度きりの支払いで、すべての機能が解放されます。",
+  "entitlementsLockedDialogActionPurchase": "購入する（{price}）",
   "entitlementsLockedDialogActionRestore": "購入を復元",
   "entitlementsLockedDialogActionMoreInfo": "詳しく見る"
 }

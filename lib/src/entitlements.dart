@@ -315,9 +315,11 @@ class _EntitlementsSettingListItemsState
               onLongPress: onLongPress,
             ),
           ListTile(
-            enabled: purchaseAvailable == true,
+            enabled: purchaseAvailable,
             title: Text(
-              AppLocalizations.of(context)!.entitlementsPurchaseItemTitle,
+              AppLocalizations.of(
+                context,
+              )!.entitlementsPurchaseItemTitle(productDetails?.price ?? '-'),
             ),
             subtitle: Text(
               AppLocalizations.of(context)!.entitlementsPurchaseItemSubtitle,
@@ -361,8 +363,8 @@ class _EntitlementsSettingListItemsState
 }
 
 mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
-  bool? purchaseAvailable;
-  late ProductDetails productDetails;
+  ProductDetails? productDetails;
+  bool get purchaseAvailable => productDetails != null;
 
   @override
   void initState() {
@@ -375,13 +377,12 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
 
   Future<void> _initStore() async {
     debugPrint('AMK trying to init store');
-    if (purchaseAvailable != null) {
+    if (purchaseAvailable) {
       debugPrint('AMK store already initialized');
       return;
     }
     if (!(await InAppPurchase.instance.isAvailable())) {
       debugPrint('AMK store not available');
-      setState(() => purchaseAvailable = false);
       return;
     }
     final response = await InAppPurchase.instance.queryProductDetails({
@@ -399,14 +400,13 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
     }
     debugPrint('AMK products found: ${response.productDetails}');
     setState(() {
-      purchaseAvailable = true;
       productDetails = response.productDetails.first;
     });
   }
 
   void buyProduct() async {
     try {
-      final purchaseParam = PurchaseParam(productDetails: productDetails);
+      final purchaseParam = PurchaseParam(productDetails: productDetails!);
       await InAppPurchase.instance.buyNonConsumable(
         purchaseParam: purchaseParam,
       );
@@ -498,13 +498,14 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
       ),
       actions: [
         DialogButton(
-          onPressed: purchaseAvailable == true ? buyProduct : null,
-          text: AppLocalizations.of(
-            context,
-          )!.entitlementsLockedDialogActionPurchase,
+          onPressed: purchaseAvailable ? buyProduct : null,
+          text: AppLocalizations.of(context)!
+              .entitlementsLockedDialogActionPurchase(
+                productDetails?.price ?? '-',
+              ),
         ),
         DialogButton(
-          onPressed: purchaseAvailable == true ? restorePurchases : null,
+          onPressed: purchaseAvailable ? restorePurchases : null,
           text: AppLocalizations.of(
             context,
           )!.entitlementsLockedDialogActionRestore,

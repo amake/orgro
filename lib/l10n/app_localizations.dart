@@ -1105,8 +1105,8 @@ abstract class AppLocalizations {
   /// No description provided for @entitlementsPurchaseItemTitle.
   ///
   /// In en, this message translates to:
-  /// **'Purchase Orgro'**
-  String get entitlementsPurchaseItemTitle;
+  /// **'Purchase Orgro for {price} (one-time payment)'**
+  String entitlementsPurchaseItemTitle(String price);
 
   /// No description provided for @entitlementsPurchaseItemSubtitle.
   ///
@@ -1147,14 +1147,14 @@ abstract class AppLocalizations {
   /// No description provided for @entitlementsLockedDialogMessage.
   ///
   /// In en, this message translates to:
-  /// **'To continue using Orgro, please purchase a license or restore your previous purchases.'**
+  /// **'To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.'**
   String get entitlementsLockedDialogMessage;
 
   /// No description provided for @entitlementsLockedDialogActionPurchase.
   ///
   /// In en, this message translates to:
-  /// **'Purchase'**
-  String get entitlementsLockedDialogActionPurchase;
+  /// **'Purchase ({price})'**
+  String entitlementsLockedDialogActionPurchase(String price);
 
   /// No description provided for @entitlementsLockedDialogActionRestore.
   ///

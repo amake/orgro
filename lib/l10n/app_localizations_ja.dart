@@ -585,7 +585,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get entitlementsTrialExpiredItem => '無料期間は終了しました';
 
   @override
-  String get entitlementsPurchaseItemTitle => 'Orgroを購入する';
+  String entitlementsPurchaseItemTitle(String price) {
+    return 'Orgroを$priceで購入（買切り）';
+  }
 
   @override
   String get entitlementsPurchaseItemSubtitle => '全機能が解放され、開発者の士気が上がります';
@@ -607,10 +609,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get entitlementsLockedDialogMessage =>
-      '引き続きOrgroをご利用いただくには、購入するか、購入済みの場合は復元してください。';
+      '引き続きOrgroをご利用いただくには、購入するか、購入済みの場合は復元してください。\n\n購入は一度きりの支払いで、すべての機能が解放されます。';
 
   @override
-  String get entitlementsLockedDialogActionPurchase => '購入する';
+  String entitlementsLockedDialogActionPurchase(String price) {
+    return '購入する（$price）';
+  }
 
   @override
   String get entitlementsLockedDialogActionRestore => '購入を復元';
