@@ -1126,6 +1126,12 @@ abstract class AppLocalizations {
   /// **'Purchased'**
   String get entitlementsPurchasedItem;
 
+  /// No description provided for @entitlementsPurchasedItemSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your support'**
+  String get entitlementsPurchasedItemSubtitle;
+
   /// No description provided for @entitlementsLegacyPurchaseItemSubtitle.
   ///
   /// In en, this message translates to:

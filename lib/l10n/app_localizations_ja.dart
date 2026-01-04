@@ -597,6 +597,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get entitlementsPurchasedItem => '購入済み';
 
   @override
+  String get entitlementsPurchasedItemSubtitle => 'ご購入頂きありがとうございます';
+
+  @override
   String get entitlementsLegacyPurchaseItemSubtitle => '長い間ご支援頂きありがとうございます！';
 
   @override

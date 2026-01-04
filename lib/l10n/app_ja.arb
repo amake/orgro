@@ -224,6 +224,7 @@
   "entitlementsPurchaseItemSubtitle": "全機能が解放され、開発者の士気が上がります",
   "entitlementsRestorePurchasesItem": "購入を復元",
   "entitlementsPurchasedItem": "購入済み",
+  "entitlementsPurchasedItemSubtitle": "ご購入頂きありがとうございます",
   "entitlementsLegacyPurchaseItemSubtitle": "長い間ご支援頂きありがとうございます！",
 
   "entitlementsLockedDialogTitle": "無料期間は終了しました",

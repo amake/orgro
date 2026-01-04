@@ -346,6 +346,9 @@ class _EntitlementsSettingListItemsState
             title: Text(
               AppLocalizations.of(context)!.entitlementsPurchasedItem,
             ),
+            subtitle: Text(
+              AppLocalizations.of(context)!.entitlementsPurchasedItemSubtitle,
+            ),
             onLongPress: onLongPress,
           ),
       ],

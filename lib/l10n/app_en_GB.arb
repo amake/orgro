@@ -225,6 +225,7 @@
   "entitlementsPurchaseItemSubtitle": "Unlock all features and support development",
   "entitlementsRestorePurchasesItem": "Restore purchases",
   "entitlementsPurchasedItem": "Purchased",
+  "entitlementsPurchasedItemSubtitle": "Thank you for your support",
   "entitlementsLegacyPurchaseItemSubtitle": "Thank you for being a long-time supporter!",
 
   "entitlementsLockedDialogTitle": "Your free trial has ended",

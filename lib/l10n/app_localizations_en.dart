@@ -619,6 +619,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get entitlementsPurchasedItem => 'Purchased';
 
   @override
+  String get entitlementsPurchasedItemSubtitle => 'Thank you for your support';
+
+  @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
       'Thank you for being a long-time supporter!';
 
@@ -1254,6 +1257,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get entitlementsPurchasedItem => 'Purchased';
 
   @override
+  String get entitlementsPurchasedItemSubtitle => 'Thank you for your support';
+
+  @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
       'Thank you for being a long-time supporter!';
 
@@ -1887,6 +1893,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get entitlementsPurchasedItem => 'Purchased';
+
+  @override
+  String get entitlementsPurchasedItemSubtitle => 'Thank you for your support';
 
   @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
