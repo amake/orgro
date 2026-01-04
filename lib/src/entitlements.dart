@@ -284,13 +284,15 @@ class _EntitlementsSettingListItemsState
     final onLongPress = developerMode
         ? () => _showDebugInfo(entitlements)
         : null;
+    if (!entitlements.loaded) {
+      return ListTile(
+        leading: const CircularProgressIndicator(),
+        title: Text(AppLocalizations.of(context)!.entitlementsLoadingItem),
+        onLongPress: onLongPress,
+      );
+    }
     return Column(
       children: [
-        if (!entitlements.loaded)
-          ListTile(
-            leading: const CircularProgressIndicator(),
-            title: Text(AppLocalizations.of(context)!.entitlementsLoadingItem),
-          ),
         if (entitlements.inTrial)
           ListTile(
             leading: const Icon(Icons.timer_outlined),
@@ -465,7 +467,7 @@ class LockedBarrier extends StatelessWidget {
     if (!developerMode) return child;
 
     final entitlements = UserEntitlements.of(context)!.entitlements;
-    if (entitlements.unlocked || entitlements.inTrial) {
+    if (!entitlements.loaded || entitlements.unlocked || entitlements.inTrial) {
       return child;
     }
 
