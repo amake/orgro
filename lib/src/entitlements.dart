@@ -28,7 +28,7 @@ const kLastPaidVersion = 212;
 
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
-const _trialPeriodDays = 7;
+const _trialPeriod = Duration(days: 7);
 
 class UserEntitlements extends StatefulWidget {
   static InheritedEntitlements? of(BuildContext context) =>
@@ -190,15 +190,16 @@ class EntitlementsData {
   }
 
   bool get unlocked => legacyUnlock == true || iapUnlock == true;
-  bool get inTrial =>
-      hasError ||
-      sandboxed ||
-      !unlocked &&
-          originalPurchaseDate != null &&
-          DateTime.now().difference(originalPurchaseDate!).inDays <
-              _trialPeriodDays;
+  bool get inTrial {
+    if (unlocked) return false; // Already unlocked
+    if (hasError) return true; // Avoid locking out on error
+    if (sandboxed) return true; // Always in trial in sandbox (if not unlocked)
+    return originalPurchaseDate != null &&
+        DateTime.now().isBefore(originalPurchaseDate!.add(_trialPeriod));
+  }
+
   DateTime? get trialEnd => inTrial && originalPurchaseDate != null
-      ? originalPurchaseDate!.add(Duration(days: _trialPeriodDays))
+      ? originalPurchaseDate!.add(_trialPeriod)
       : null;
 
   @override
