@@ -10,6 +10,7 @@ import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/entitlements.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/navigation.dart';
@@ -132,6 +133,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    var restored = false;
     if (!_inited) {
       _inited = true;
       // RestorationMixin.restoreRoute is ultimately called during
@@ -140,10 +142,14 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       // We don't use RestorationMixin here because we don't want StartPage to
       // have its own bucket; we want it and QuickActions to use the root bucket
       // so that routes remembered by either can be restored here.
-      final restored = _restoreRoute();
-      if (!restored) {
-        // TODO(aaron): Starting in freemium release, open Settings screen here
-        // if the trial has expired
+      restored = _restoreRoute();
+    }
+    if (!restored && kFreemium) {
+      final entitlements = UserEntitlements.of(context)!.entitlements;
+      if (entitlements.locked) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _openSettingsScreen(context),
+        );
       }
     }
   }

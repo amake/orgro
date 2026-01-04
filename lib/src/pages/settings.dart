@@ -14,10 +14,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final developerMode = Preferences.of(
-      context,
-      PrefsAspect.customization,
-    ).developerMode;
     return LockedBarrier(
       child: Scaffold(
         appBar: AppBar(
@@ -26,9 +22,7 @@ class SettingsPage extends StatelessWidget {
         body: ListView(
           children:
               [
-                    if (kFreemium &&
-                        developerMode // TODO(aaron): Remove this when going freemium
-                        ) ...[
+                    if (kFreemium) ...[
                       ListHeader(
                         title: Text(
                           AppLocalizations.of(context)!.settingsSectionPurchase,

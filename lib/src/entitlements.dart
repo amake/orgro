@@ -198,6 +198,8 @@ class EntitlementsData {
         DateTime.now().isBefore(originalPurchaseDate!.add(_trialPeriod));
   }
 
+  bool get locked => kFreemium && loaded && !purchased && !inTrial;
+
   DateTime? get trialEnd => inTrial && originalPurchaseDate != null
       ? originalPurchaseDate!.add(_trialPeriod)
       : null;
@@ -459,28 +461,21 @@ class LockedBarrier extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!kFreemium) return child;
 
-    // TODO(aaron): Remove this when going freemium
-    final developerMode = Preferences.of(
-      context,
-      PrefsAspect.customization,
-    ).developerMode;
-    if (!developerMode) return child;
-
     final entitlements = UserEntitlements.of(context)!.entitlements;
-    if (!entitlements.loaded || entitlements.unlocked || entitlements.inTrial) {
-      return child;
+    if (entitlements.locked) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          showDialog<void>(
+            context: context,
+            builder: (context) => const LockedDialog(),
+          );
+        },
+        child: child,
+      );
     }
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        showDialog<void>(
-          context: context,
-          builder: (context) => const LockedDialog(),
-        );
-      },
-      child: child,
-    );
+    return child;
   }
 }
 
