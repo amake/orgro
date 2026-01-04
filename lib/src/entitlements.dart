@@ -468,7 +468,7 @@ class LockedBarrier extends StatelessWidget {
         onPopInvokedWithResult: (didPop, result) {
           showDialog<void>(
             context: context,
-            builder: (context) => const LockedDialog(),
+            builder: (context) => LockedDialog(),
           );
         },
         child: child,
@@ -480,7 +480,8 @@ class LockedBarrier extends StatelessWidget {
 }
 
 class LockedDialog extends StatefulWidget {
-  const LockedDialog({super.key});
+  LockedDialog({super.key})
+    : assert(kFreemium, 'Only use this in freemium builds.');
 
   @override
   State<LockedDialog> createState() => _LockedDialogState();
