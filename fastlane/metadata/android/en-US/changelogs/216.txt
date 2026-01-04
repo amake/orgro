@@ -1,0 +1,3 @@
+- (iOS only) Orgro is now free to try for 7 days. Afterwards you can purchase a
+  one-time, permanent unlock of all features. Customers who previously purchased
+  the app are automatically unlocked for no charge.
