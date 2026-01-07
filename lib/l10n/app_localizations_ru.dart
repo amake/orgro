@@ -96,6 +96,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsItemFontFamily => 'Шрифт';
 
   @override
+  String get settingsItemDefaultTextPreviewString =>
+      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
+
+  @override
   String get settingsItemGrantNotificationPermissions => 'Enable notifications';
 
   @override

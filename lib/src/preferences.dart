@@ -43,8 +43,7 @@ const kDefaultDecryptPolicy = DecryptPolicy.ask;
 const kDefaultFullWidth = false;
 const kDefaultWakelock = false;
 const kDefaultScopedPreferences = <String, dynamic>{};
-const kDefaultTextPreviewString =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+const kDefaultTextPreviewString = '';
 const kDefaultDeveloperMode = false;
 const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
 const kDefaultRecentFilesSortOrder = SortOrder.descending;

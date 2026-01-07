@@ -34,6 +34,7 @@
   "settingsItemTheme": "モード",
   "settingsItemTextScale": "文字サイズ",
   "settingsItemFontFamily": "書体",
+  "settingsItemDefaultTextPreviewString": "【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。",
 
   "settingsItemGrantNotificationPermissions": "通知を有効にする",
   "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",

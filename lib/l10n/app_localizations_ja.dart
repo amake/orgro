@@ -95,6 +95,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemFontFamily => '書体';
 
   @override
+  String get settingsItemDefaultTextPreviewString =>
+      '【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。';
+
+  @override
   String get settingsItemGrantNotificationPermissions => '通知を有効にする';
 
   @override

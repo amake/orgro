@@ -96,6 +96,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String get settingsItemDefaultTextPreviewString =>
+      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
+
+  @override
   String get settingsItemGrantNotificationPermissions => 'Enable notifications';
 
   @override
@@ -738,6 +742,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemFontFamily => 'Font';
 
   @override
+  String get settingsItemDefaultTextPreviewString =>
+      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
+
+  @override
   String get settingsItemGrantNotificationPermissions => 'Enable notifications';
 
   @override
@@ -1378,6 +1386,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get settingsItemFontFamily => 'Font';
+
+  @override
+  String get settingsItemDefaultTextPreviewString =>
+      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
   String get settingsItemGrantNotificationPermissions => 'Enable notifications';

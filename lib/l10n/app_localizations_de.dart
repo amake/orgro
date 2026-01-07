@@ -96,6 +96,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsItemFontFamily => 'Schriftart';
 
   @override
+  String get settingsItemDefaultTextPreviewString =>
+      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
+
+  @override
   String get settingsItemGrantNotificationPermissions => 'Enable notifications';
 
   @override

@@ -274,6 +274,12 @@ abstract class AppLocalizations {
   /// **'Font'**
   String get settingsItemFontFamily;
 
+  /// No description provided for @settingsItemDefaultTextPreviewString.
+  ///
+  /// In en, this message translates to:
+  /// **'This is what document text will look like in the selected font and scale.\n\nTap to edit.'**
+  String get settingsItemDefaultTextPreviewString;
+
   /// No description provided for @settingsItemGrantNotificationPermissions.
   ///
   /// In en, this message translates to:

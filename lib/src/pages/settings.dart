@@ -123,7 +123,7 @@ class _TextPreviewState extends State<_TextPreview> {
     super.didChangeDependencies();
     if (!_inited) {
       _controller.text = _prefs.textPreviewString.isEmpty
-          ? kDefaultTextPreviewString
+          ? AppLocalizations.of(context)!.settingsItemDefaultTextPreviewString
           : _prefs.textPreviewString;
       _inited = true;
     }

@@ -41,6 +41,7 @@
   "settingsItemTheme": "Theme",
   "settingsItemTextScale": "Scale",
   "settingsItemFontFamily": "Font",
+  "settingsItemDefaultTextPreviewString": "This is what document text will look like in the selected font and scale.\n\nTap to edit.",
 
   "settingsItemGrantNotificationPermissions": "Enable notifications",
   "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
