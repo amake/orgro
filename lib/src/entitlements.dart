@@ -360,11 +360,6 @@ class _EntitlementsSettingListItemsState
       ],
     );
   }
-
-  void _onError(Object e, StackTrace s) {
-    logError(e, s);
-    if (mounted) showErrorSnackBar(context, e);
-  }
 }
 
 mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
@@ -517,14 +512,24 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
   void _close(_) {
     if (mounted) Navigator.pop(context);
   }
-
-  void _onError(Object e, StackTrace s) {
-    logError(e, s);
-    if (mounted) showErrorSnackBar(context, e);
-  }
 }
 
 void visitUnlockLink() => launchUrl(
   Uri.parse('https://orgro.org/unlock/'),
   mode: LaunchMode.externalApplication,
 );
+
+extension _ErrorUtils<T extends StatefulWidget> on State<T> {
+  Future<void> _onError(Object e, StackTrace s) async {
+    logError(e, s);
+    if (!mounted) return;
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.dialogTitleError),
+        content: Text(e.toString()),
+      ),
+    );
+  }
+}
