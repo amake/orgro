@@ -8,8 +8,12 @@
 import Foundation
 import Flutter
 import StoreKit
+import os
 
-private var jobs = ConcurrentSet<String>()
+fileprivate let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: "AppPurchase"
+)
 
 func handleAppPurchaseMethod(call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
@@ -40,12 +44,12 @@ private func getAppPurchaseInfo(_ call: FlutterMethodCall, _ result: @escaping F
                 "originalPurchaseDate": appTransaction.originalPurchaseDate.timeIntervalSince1970
             ])
         case .unverified(_, let verificationError):
-            print("AMK error \(verificationError)")
+            logger.critical("AppTransaction verification error: \(verificationError)")
             result(FlutterError(code: "VerificationError", message: "The app transaction could not be verified", details: verificationError.localizedDescription))
         }
     }
     catch {
-        print("AMK error \(error)")
+        logger.critical("Error checking AppTransaction: \(error)")
         result(FlutterError(code: "UnknownError", message: error.localizedDescription, details: nil))
     }
 }

@@ -52,7 +52,6 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     super.initState();
     if (!kFreemium) return;
 
-    debugPrint('AMK initializing UserEntitlements');
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () => _subscription?.cancel(),
@@ -104,10 +103,11 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   void _listenToPurchaseUpdated(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-    debugPrint('AMK purchase update: $purchaseDetailsList');
+    debugPrint('Purchase update: $purchaseDetailsList');
     for (final purchaseDetails in purchaseDetailsList) {
       debugPrint(
-        'AMK handling purchase: ${purchaseDetails.productID}, ${purchaseDetails.purchaseID}, ${purchaseDetails.status}, ${purchaseDetails.transactionDate}',
+        'Handling purchase: ${purchaseDetails.productID}, ${purchaseDetails.purchaseID}, '
+        '${purchaseDetails.status}, ${purchaseDetails.transactionDate}',
       );
       if (purchaseDetails.status == .pending) {
         // TODO(aaron): Show some UI indicating purchase is pending?
@@ -377,20 +377,17 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _initStore() async {
-    debugPrint('AMK trying to init store');
-    if (purchaseAvailable) {
-      debugPrint('AMK store already initialized');
-      return;
-    }
+    if (purchaseAvailable) return;
+
     if (!(await InAppPurchase.instance.isAvailable())) {
-      debugPrint('AMK store not available');
+      debugPrint('Store not available');
       return;
     }
     final response = await InAppPurchase.instance.queryProductDetails({
       _orgroUnlockProductId,
     });
     if (response.error != null) {
-      debugPrint('AMK error querying products: ${response.error}');
+      debugPrint('Error querying products: ${response.error}');
       logError(response.error!, StackTrace.current);
       if (mounted) showErrorSnackBar(context, response.error!);
       return;
@@ -399,7 +396,9 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
       debugPrint('No products found');
       return;
     }
-    debugPrint('AMK products found: ${response.productDetails}');
+    debugPrint(
+      'Products found: ${response.productDetails.map((e) => e.title)}',
+    );
     setState(() {
       productDetails = response.productDetails.first;
     });
