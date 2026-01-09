@@ -8,6 +8,7 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:url_launcher/url_launcher.dart';
 
 const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
@@ -201,7 +202,7 @@ class EntitlementsData {
   bool get locked => kFreemium && loaded && !purchased && !inTrial;
 
   DateTime? get trialEnd => inTrial && originalPurchaseDate != null
-      ? originalPurchaseDate!.add(_trialPeriod)
+      ? tz.TZDateTime.from(originalPurchaseDate!, tz.local).add(_trialPeriod)
       : null;
 
   @override
