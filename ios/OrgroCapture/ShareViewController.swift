@@ -3,7 +3,11 @@ import UniformTypeIdentifiers
 import os
 
 // Logging level must be `critical` to be able to see logging in Console.app
+#if DEBUG
+fileprivate let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "OrgroCapture")
+#else
 fileprivate let logger = Logger(.disabled)
+#endif
 
 fileprivate let orgProtocolScheme = Bundle.main.infoDictionary!["AMKOrgProtocolScheme"] as! String
 

@@ -7,6 +7,12 @@
 
 import Foundation
 import Flutter
+import os
+
+fileprivate let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: "NativeSearch"
+)
 
 private var jobs = ConcurrentSet<String>()
 
@@ -33,7 +39,7 @@ private func cancelFindFileForId(_ call: FlutterMethodCall, _ result: @escaping 
         return
     }
     let removed = jobs.remove(requestId)
-    log("Cancelling job \(requestId); cancelled: \(removed != nil)")
+    logger.info("Cancelling job \(requestId); cancelled: \(removed != nil)")
     result(removed != nil)
 }
 
@@ -64,7 +70,7 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
     // https://developer.apple.com/documentation/uikit/view_controllers/providing_access_to_directories
 
     guard url.startAccessingSecurityScopedResource() else {
-        log("Failed to access security scoped resource: \(url)")
+        logger.error("Failed to access security scoped resource: \(url)")
         return
     }
 
@@ -77,21 +83,21 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
 
         guard let fileList =
                 FileManager.default.enumerator(at: url, includingPropertiesForKeys: Array(keys)) else {
-            log("Failed to obtain enumerator")
+            logger.error("Failed to obtain enumerator")
             return
         }
 
         for case let file as URL in fileList {
             guard jobs.contains(requestId) else {
-                log("Quitting job \(requestId) due to cancellation")
+                logger.info("Quitting job \(requestId) due to cancellation")
                 break
             }
 
-            log("Looking at file \(file)")
+            logger.debug("Looking at file \(file)")
             guard let values = try? file.resourceValues(forKeys: keys),
                   let isDirectory = values.isDirectory,
                   let name = values.name else {
-                log("Failed to access resource values: \(file)")
+                logger.error("Failed to access resource values: \(file)")
                 continue
             }
             guard !isDirectory else {
@@ -114,10 +120,10 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
 
             var fileError: NSError? = nil
             NSFileCoordinator().coordinate(readingItemAt: file, error: &fileError) { fileUrl in
-                log("Searching \(fileUrl) for ID \(orgId)")
+                logger.debug("Searching \(fileUrl) for ID \(orgId)")
                 if fileContainsId(fileUrl: fileUrl, id: orgId) {
                     guard let bookmark = try? fileUrl.bookmarkData() else {
-                        log("Failed to get bookmark for file: \(fileUrl)")
+                        logger.info("Failed to get bookmark for file: \(fileUrl)")
                         return
                     }
                     DispatchQueue.main.async {
@@ -134,7 +140,7 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
                 }
             }
             if let fileError = fileError {
-                log("Error accessing file: \(fileError)")
+                logger.error("Error accessing file: \(fileError)")
             }
             if success {
                 break
@@ -142,7 +148,7 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         }
     }
     if let error = error {
-        log("Error accessing dir: \(error)")
+        logger.error("Error accessing dir: \(error)")
     }
     if (!success) {
         result(nil)
@@ -154,7 +160,7 @@ private let idPattern = try! NSRegularExpression(pattern: #"^\s*:ID:\s*(?<value>
 
 private func fileContainsId(fileUrl: URL, id: String) -> Bool {
     guard let reader = LineReader(url: fileUrl) else {
-        log("Failed to instantiate line reader")
+        logger.error("Failed to instantiate line reader")
         return false
     }
     for line in reader {
@@ -191,14 +197,8 @@ private func restoreUrl(from identifier: String) -> URL? {
     guard let url = try? URL(resolvingBookmarkData: bookmark, bookmarkDataIsStale: &isStale) else {
         return nil
     }
-    log("url: \(url) / isStale: \(isStale)");
+    logger.debug("url: \(url) / isStale: \(isStale)")
     return url
-}
-
-func log(_ message: String) {
-    #if DEBUG
-        print(message)
-    #endif
 }
 
 class ConcurrentSet<T: Hashable> {
