@@ -297,6 +297,14 @@ const _kGoogleFontFamilies = <String>{
   'Noto Sans SC',
   'Noto Sans TC',
   // Korean represented by Nanum Gothic Coding
+
+  // google_fonts 7
+  'Atkinson Hyperlegible Mono',
+  'Geist Mono',
+  'Google Sans Code',
+  'Intel One Mono',
+  'Mozilla Text',
+  'SUSE Mono',
 };
 
 TextStyle loadFontWithVariants(String family) {
