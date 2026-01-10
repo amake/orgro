@@ -119,7 +119,6 @@
   "bannerBodyActionGrantNever": "Nie",
   "bannerBodyActionGrantNow": "Zugriff erlauben",
 
-  "bannerBodySaveDocumentOrg": "Änderungen speichern? *Dies ist ein experimentales Feature.* Stelle sicher deine Dateien zu sichern. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Mehr lernen]]",
   "bannerBodyActionSaveAlways": "Immer",
   "bannerBodyActionSaveNever": "Nie",
   "bannerBodyActionSaveOnce": "Nur dieses Mal",

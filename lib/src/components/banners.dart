@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class _NicelyTimedBanner extends StatefulWidget {
   const _NicelyTimedBanner({required this.visible, required this.child});
@@ -139,13 +137,7 @@ class SavePermissionsBanner extends StatelessWidget {
     return _NicelyTimedBanner(
       visible: visible,
       child: MaterialBanner(
-        content: OrgText(
-          AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap: (link) => launchUrl(
-            Uri.parse(link.location),
-            mode: LaunchMode.externalApplication,
-          ),
-        ),
+        content: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
         leading: const Icon(Icons.save),
         actions: [
           _BannerButton(

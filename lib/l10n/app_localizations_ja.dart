@@ -346,8 +346,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionGrantNow => '許可';
 
   @override
-  String get bannerBodySaveDocumentOrg =>
-      '変更を保存しますか？ *これは実験的な機能です。* ファイルをバックアップしておいてください。[[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][詳細]]';
+  String get bannerBodySaveDocument => '変更を保存しますか？';
 
   @override
   String get bannerBodyActionSaveAlways => '常に保存';

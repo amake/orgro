@@ -361,8 +361,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionGrantNow => 'Надати дозвіл';
 
   @override
-  String get bannerBodySaveDocumentOrg =>
-      'Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]';
+  String get bannerBodySaveDocument => 'Would you like to save your changes?';
 
   @override
   String get bannerBodyActionSaveAlways => 'Always';

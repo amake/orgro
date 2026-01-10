@@ -362,8 +362,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get bannerBodyActionGrantNow => 'Zugriff erlauben';
 
   @override
-  String get bannerBodySaveDocumentOrg =>
-      'Änderungen speichern? *Dies ist ein experimentales Feature.* Stelle sicher deine Dateien zu sichern. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Mehr lernen]]';
+  String get bannerBodySaveDocument => 'Would you like to save your changes?';
 
   @override
   String get bannerBodyActionSaveAlways => 'Immer';

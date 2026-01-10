@@ -31,13 +31,7 @@ class SavePermissionDialog extends StatelessWidget {
       // TODO(aaron): Should this be inside OrgText instead?
       content: SizedBox(
         width: double.maxFinite,
-        child: OrgText(
-          AppLocalizations.of(context)!.bannerBodySaveDocumentOrg,
-          onLinkTap: (link) => launchUrl(
-            Uri.parse(link.location),
-            mode: LaunchMode.externalApplication,
-          ),
-        ),
+        child: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
       ),
       actions: [
         ListTile(

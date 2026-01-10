@@ -363,8 +363,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bannerBodyActionGrantNow => 'Дать доступ';
 
   @override
-  String get bannerBodySaveDocumentOrg =>
-      'Вы хотите сохранить изменения в этом документе? *Экспериментальная возможность.* Убедитесь что вы зарезервировали файлы. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Подробнее]]';
+  String get bannerBodySaveDocument => 'Would you like to save your changes?';
 
   @override
   String get bannerBodyActionSaveAlways => 'Всегда';

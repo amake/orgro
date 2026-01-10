@@ -700,11 +700,11 @@ abstract class AppLocalizations {
   /// **'Grant access'**
   String get bannerBodyActionGrantNow;
 
-  /// No description provided for @bannerBodySaveDocumentOrg.
+  /// No description provided for @bannerBodySaveDocument.
   ///
   /// In en, this message translates to:
-  /// **'Would you like to save changes to this document? *This is an experimental feature.* Make sure to back up your files. [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][Learn More]]'**
-  String get bannerBodySaveDocumentOrg;
+  /// **'Would you like to save your changes?'**
+  String get bannerBodySaveDocument;
 
   /// No description provided for @bannerBodyActionSaveAlways.
   ///

@@ -303,7 +303,7 @@ In addition, plain text editing is available from the floating edit button in
 the bottom right corner.
 
 If Orgro has the appropriate permissions, it will save changes back to the
-original file. This is an experimental feature; see the [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][FAQ]] for details.
+original file; see the [[https://orgro.org/faq/#can-i-edit-my-files-with-orgro][FAQ]] for details.
 
 If Orgro does /not/ have the permissions it needs, it will prompt you to share
 the content of your file when you close it.
