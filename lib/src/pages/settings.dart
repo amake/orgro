@@ -106,15 +106,9 @@ class _TextPreview extends StatefulWidget {
 }
 
 class _TextPreviewState extends State<_TextPreview> {
-  late final TextEditingController _controller;
+  final _controller = TextEditingController();
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.customization);
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController()..addListener(_onTextChanged);
-  }
 
   bool _inited = false;
 
@@ -125,6 +119,9 @@ class _TextPreviewState extends State<_TextPreview> {
       _controller.text = _prefs.textPreviewString.isEmpty
           ? AppLocalizations.of(context)!.settingsItemDefaultTextPreviewString
           : _prefs.textPreviewString;
+      // Listen after initialization to avoid triggering onTextChanged
+      // immediately and calling setState during build.
+      _controller.addListener(_onTextChanged);
       _inited = true;
     }
   }
