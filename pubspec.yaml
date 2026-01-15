@@ -57,6 +57,15 @@ dependencies:
   app_settings: ^7.0.0
   wakelock_plus: ^1.4.0
   in_app_purchase: ^3.2.3
+  # Google Play doesn't have a good way to detect legacy purchases so we are not
+  # doing IAP on Android. We have to stub out the Android implementation to keep
+  # the F-Droid build from failing after they delete the non-free dependencies;
+  # see: https://github.com/amake/orgro/issues/183
+  in_app_purchase_stub_android:
+    git:
+      url: https://github.com/amake/in_app_purchase_stub.git
+      ref: main
+      path: in_app_purchase_stub_android
 
 dev_dependencies:
   flutter_lints: ^6.0.0
