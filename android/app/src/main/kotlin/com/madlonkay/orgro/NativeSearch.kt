@@ -9,7 +9,6 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.math.log
 
 private const val TAG = "OrgroNativeSearch"
 
