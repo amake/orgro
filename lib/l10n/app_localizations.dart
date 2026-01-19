@@ -532,11 +532,65 @@ abstract class AppLocalizations {
   /// **'Redo'**
   String get menuItemRedo;
 
+  /// No description provided for @tooltipFullWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle full width'**
+  String get tooltipFullWidth;
+
+  /// No description provided for @tooltipReaderMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle reader mode'**
+  String get tooltipReaderMode;
+
+  /// No description provided for @tooltipScrollTop.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to top'**
+  String get tooltipScrollTop;
+
+  /// No description provided for @tooltipScrollBottom.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll to bottom'**
+  String get tooltipScrollBottom;
+
+  /// No description provided for @tooltipTextStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text style'**
+  String get tooltipTextStyle;
+
+  /// No description provided for @tooltipDecreaseTextScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease text scale'**
+  String get tooltipDecreaseTextScale;
+
+  /// No description provided for @tooltipIncreaseTextScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase text scale'**
+  String get tooltipIncreaseTextScale;
+
+  /// No description provided for @tooltipCycleVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle visibility'**
+  String get tooltipCycleVisibility;
+
   /// No description provided for @hintTextSearch.
   ///
   /// In en, this message translates to:
   /// **'Search...'**
   String get hintTextSearch;
+
+  /// No description provided for @tooltipClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get tooltipClearSearch;
 
   /// No description provided for @searchHits.
   ///
@@ -904,6 +958,12 @@ abstract class AppLocalizations {
   /// **'Citations'**
   String get citationsDialogTitle;
 
+  /// No description provided for @citationsDialogOpenLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get citationsDialogOpenLink;
+
   /// No description provided for @createFileDialogTitle.
   ///
   /// In en, this message translates to:
@@ -1072,11 +1132,113 @@ abstract class AppLocalizations {
   /// **'Failed to schedule notifications: {message}'**
   String errorSchedulingNotifications(Object message);
 
+  /// No description provided for @tooltipErrorDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View error details'**
+  String get tooltipErrorDetails;
+
   /// No description provided for @editInsertedHeadline.
   ///
   /// In en, this message translates to:
   /// **'[Inserted by edit]'**
   String get editInsertedHeadline;
+
+  /// No description provided for @tooltipApplyChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply changes'**
+  String get tooltipApplyChanges;
+
+  /// No description provided for @tooltipUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get tooltipUndo;
+
+  /// No description provided for @tooltipRedo.
+  ///
+  /// In en, this message translates to:
+  /// **'Redo'**
+  String get tooltipRedo;
+
+  /// No description provided for @tooltipToggleUnorderedList.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle unordered list'**
+  String get tooltipToggleUnorderedList;
+
+  /// No description provided for @tooltipToggleOrderedList.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle ordered list'**
+  String get tooltipToggleOrderedList;
+
+  /// No description provided for @tooltipDecreaseIndent.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease indent'**
+  String get tooltipDecreaseIndent;
+
+  /// No description provided for @tooltipIncreaseIndent.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase indent'**
+  String get tooltipIncreaseIndent;
+
+  /// No description provided for @tooltipBold.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold'**
+  String get tooltipBold;
+
+  /// No description provided for @tooltipItalic.
+  ///
+  /// In en, this message translates to:
+  /// **'Italic'**
+  String get tooltipItalic;
+
+  /// No description provided for @tooltipUnderline.
+  ///
+  /// In en, this message translates to:
+  /// **'Underline'**
+  String get tooltipUnderline;
+
+  /// No description provided for @tooltipStrikethrough.
+  ///
+  /// In en, this message translates to:
+  /// **'Strikethrough'**
+  String get tooltipStrikethrough;
+
+  /// No description provided for @tooltipCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code style'**
+  String get tooltipCode;
+
+  /// No description provided for @tooltipInsertLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert link'**
+  String get tooltipInsertLink;
+
+  /// No description provided for @tooltipInsertDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert date'**
+  String get tooltipInsertDate;
+
+  /// No description provided for @tooltipSubscript.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscript'**
+  String get tooltipSubscript;
+
+  /// No description provided for @tooltipSuperscript.
+  ///
+  /// In en, this message translates to:
+  /// **'Superscript'**
+  String get tooltipSuperscript;
 
   /// No description provided for @donateItemTitle.
   ///

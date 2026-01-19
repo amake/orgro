@@ -211,6 +211,7 @@ class _ImageError extends StatelessWidget {
       spacing: 8,
       children: [
         IconButton(
+          tooltip: AppLocalizations.of(context)!.tooltipErrorDetails,
           padding: EdgeInsets.zero,
           visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,

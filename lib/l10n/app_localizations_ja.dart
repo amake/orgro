@@ -242,7 +242,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemRedo => 'やり直す';
 
   @override
+  String get tooltipFullWidth => '画面幅いっぱい表示の切替';
+
+  @override
+  String get tooltipReaderMode => 'リーダーモードの切替';
+
+  @override
+  String get tooltipScrollTop => '上へスクロール';
+
+  @override
+  String get tooltipScrollBottom => '下へスクロール';
+
+  @override
+  String get tooltipTextStyle => '文字スタイル';
+
+  @override
+  String get tooltipDecreaseTextScale => '文字サイズを小さく';
+
+  @override
+  String get tooltipIncreaseTextScale => '文字サイズを大きく';
+
+  @override
+  String get tooltipCycleVisibility => 'TODOを巡回';
+
+  @override
   String get hintTextSearch => '検索...';
+
+  @override
+  String get tooltipClearSearch => '検索をクリア';
 
   @override
   String searchHits(num n) {
@@ -449,6 +476,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get citationsDialogTitle => '参考文献';
 
   @override
+  String get citationsDialogOpenLink => 'リンクを開く';
+
+  @override
   String get createFileDialogTitle => 'ファイルを作成';
 
   @override
@@ -563,7 +593,58 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get tooltipErrorDetails => 'エラー詳細を見る';
+
+  @override
   String get editInsertedHeadline => '[編集によって挿入]';
+
+  @override
+  String get tooltipApplyChanges => '変更を適用する';
+
+  @override
+  String get tooltipUndo => '元に戻す';
+
+  @override
+  String get tooltipRedo => 'やり直す';
+
+  @override
+  String get tooltipToggleUnorderedList => '箇条書きリストの切替';
+
+  @override
+  String get tooltipToggleOrderedList => '番号付きリストの切替';
+
+  @override
+  String get tooltipDecreaseIndent => 'インデントを減らす';
+
+  @override
+  String get tooltipIncreaseIndent => 'インデントを増やす';
+
+  @override
+  String get tooltipBold => '太字';
+
+  @override
+  String get tooltipItalic => '斜体';
+
+  @override
+  String get tooltipUnderline => '下線';
+
+  @override
+  String get tooltipStrikethrough => '取り消し線';
+
+  @override
+  String get tooltipCode => 'コード';
+
+  @override
+  String get tooltipInsertLink => 'リンクを挿入';
+
+  @override
+  String get tooltipInsertDate => '日付を挿入';
+
+  @override
+  String get tooltipSubscript => '下付き文字';
+
+  @override
+  String get tooltipSuperscript => '上付き文字';
 
   @override
   String get donateItemTitle => 'Orgroの開発を支援する';

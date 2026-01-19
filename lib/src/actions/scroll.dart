@@ -41,6 +41,7 @@ class ScrollTopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.tooltipScrollTop,
       icon: const Icon(Icons.keyboard_arrow_up),
       onPressed: Actions.handler(
         context,
@@ -66,6 +67,7 @@ class ScrollBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.tooltipScrollBottom,
       icon: const Icon(Icons.keyboard_arrow_down),
       onPressed: Actions.handler(
         context,

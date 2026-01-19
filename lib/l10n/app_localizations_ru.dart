@@ -247,7 +247,34 @@ class AppLocalizationsRu extends AppLocalizations {
   String get menuItemRedo => 'Повторить';
 
   @override
+  String get tooltipFullWidth => 'Toggle full width';
+
+  @override
+  String get tooltipReaderMode => 'Toggle reader mode';
+
+  @override
+  String get tooltipScrollTop => 'Scroll to top';
+
+  @override
+  String get tooltipScrollBottom => 'Scroll to bottom';
+
+  @override
+  String get tooltipTextStyle => 'Text style';
+
+  @override
+  String get tooltipDecreaseTextScale => 'Decrease text scale';
+
+  @override
+  String get tooltipIncreaseTextScale => 'Increase text scale';
+
+  @override
+  String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
   String get hintTextSearch => 'Поиск...';
+
+  @override
+  String get tooltipClearSearch => 'Clear search';
 
   @override
   String searchHits(num n) {
@@ -471,6 +498,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get citationsDialogTitle => 'Цитаты';
 
   @override
+  String get citationsDialogOpenLink => 'Open link';
+
+  @override
   String get createFileDialogTitle => 'Создать новый файл';
 
   @override
@@ -586,7 +616,58 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get tooltipErrorDetails => 'View error details';
+
+  @override
   String get editInsertedHeadline => '[Вставлено при изменении]';
+
+  @override
+  String get tooltipApplyChanges => 'Apply changes';
+
+  @override
+  String get tooltipUndo => 'Undo';
+
+  @override
+  String get tooltipRedo => 'Redo';
+
+  @override
+  String get tooltipToggleUnorderedList => 'Toggle unordered list';
+
+  @override
+  String get tooltipToggleOrderedList => 'Toggle ordered list';
+
+  @override
+  String get tooltipDecreaseIndent => 'Decrease indent';
+
+  @override
+  String get tooltipIncreaseIndent => 'Increase indent';
+
+  @override
+  String get tooltipBold => 'Bold';
+
+  @override
+  String get tooltipItalic => 'Italic';
+
+  @override
+  String get tooltipUnderline => 'Underline';
+
+  @override
+  String get tooltipStrikethrough => 'Strikethrough';
+
+  @override
+  String get tooltipCode => 'Code style';
+
+  @override
+  String get tooltipInsertLink => 'Insert link';
+
+  @override
+  String get tooltipInsertDate => 'Insert date';
+
+  @override
+  String get tooltipSubscript => 'Subscript';
+
+  @override
+  String get tooltipSuperscript => 'Superscript';
 
   @override
   String get donateItemTitle => 'Donate to support Orgro';

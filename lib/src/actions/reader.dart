@@ -26,6 +26,7 @@ class ReaderModeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.tooltipReaderMode,
       icon: const Icon(Icons.chrome_reader_mode),
       color: enabled ? Theme.of(context).colorScheme.secondary : null,
       onPressed: () => onChanged(!enabled),

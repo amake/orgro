@@ -87,6 +87,7 @@ class _TextStyleButtonState extends State<TextStyleButton>
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: AppLocalizations.of(context)!.tooltipTextStyle,
       icon: const Icon(Icons.format_size),
       onPressed: () =>
           Overlay.of(context).insertAll(_overlays(context).toList()),
@@ -238,6 +239,7 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           IconButton(
+            tooltip: AppLocalizations.of(context)!.tooltipDecreaseTextScale,
             icon: const Icon(Icons.remove),
             onPressed: () => _setValue(_value - _kTextSizeAdjustmentIncrement),
           ),
@@ -248,6 +250,7 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
             ),
           ),
           IconButton(
+            tooltip: AppLocalizations.of(context)!.tooltipIncreaseTextScale,
             icon: const Icon(Icons.add),
             onPressed: () => _setValue(_value + _kTextSizeAdjustmentIncrement),
           ),

@@ -89,7 +89,19 @@
   "menuItemUndo": "取り消す",
   "menuItemRedo": "やり直す",
 
+  "tooltipFullWidth": "画面幅いっぱい表示の切替",
+  "tooltipReaderMode": "リーダーモードの切替",
+  "tooltipScrollTop": "上へスクロール",
+  "tooltipScrollBottom": "下へスクロール",
+
+  "tooltipTextStyle": "文字スタイル",
+  "tooltipDecreaseTextScale": "文字サイズを小さく",
+  "tooltipIncreaseTextScale": "文字サイズを大きく",
+
+  "tooltipCycleVisibility": "TODOを巡回",
+
   "hintTextSearch": "検索...",
+  "tooltipClearSearch": "検索をクリア",
   "searchHits": "{n}件",
   "searchResultSelection": "{current} / {total}",
   "customFilterChipName": "カスタム",
@@ -169,6 +181,7 @@
   "savingProgressDialogTitle": "保存中…",
   "searchingProgressDialogTitle": "検索中…",
   "citationsDialogTitle": "参考文献",
+  "citationsDialogOpenLink": "リンクを開く",
 
   "createFileDialogTitle": "ファイルを作成",
   "createFileDefaultName": "名称未設定.org",
@@ -204,8 +217,26 @@
   "errorSectionNotFound": "「{section}」が見つかりませんでした",
   "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
   "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",
+  "tooltipErrorDetails": "エラー詳細を見る",
 
   "editInsertedHeadline": "[編集によって挿入]",
+
+  "tooltipApplyChanges": "変更を適用する",
+  "tooltipUndo": "元に戻す",
+  "tooltipRedo": "やり直す",
+  "tooltipToggleUnorderedList": "箇条書きリストの切替",
+  "tooltipToggleOrderedList": "番号付きリストの切替",
+  "tooltipDecreaseIndent": "インデントを減らす",
+  "tooltipIncreaseIndent": "インデントを増やす",
+  "tooltipBold": "太字",
+  "tooltipItalic": "斜体",
+  "tooltipUnderline": "下線",
+  "tooltipStrikethrough": "取り消し線",
+  "tooltipCode": "コード",
+  "tooltipInsertLink": "リンクを挿入",
+  "tooltipInsertDate": "日付を挿入",
+  "tooltipSubscript": "下付き文字",
+  "tooltipSuperscript": "上付き文字",
 
   "donateItemTitle": "Orgroの開発を支援する",
   "donateItemSubtitle": "ご支援に感謝します！",

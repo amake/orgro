@@ -258,6 +258,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     final scopedViewSettings = viewSettings.forScope(scopeKey);
     if (!searchMode || _biggishScreen) {
       yield IconButton(
+        tooltip: AppLocalizations.of(context)!.tooltipCycleVisibility,
         icon: const Icon(Icons.repeat),
         onPressed: () => OrgController.of(
           context,

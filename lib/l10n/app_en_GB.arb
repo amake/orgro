@@ -89,7 +89,19 @@
   "menuItemUndo": "Undo",
   "menuItemRedo": "Redo",
 
+  "tooltipFullWidth": "Toggle full width",
+  "tooltipReaderMode": "Toggle reader mode",
+  "tooltipScrollTop": "Scroll to top",
+  "tooltipScrollBottom": "Scroll to bottom",
+
+  "tooltipTextStyle": "Text style",
+  "tooltipDecreaseTextScale": "Decrease text scale",
+  "tooltipIncreaseTextScale": "Increase text scale",
+
+  "tooltipCycleVisibility": "Cycle visibility",
+
   "hintTextSearch": "Search...",
+  "tooltipClearSearch": "Clear search",
   "searchHits": "{n, plural, =0{0 hits} =1{1 hit} other{{n} hits}}",
   "searchResultSelection": "{current} / {total}",
   "customFilterChipName": "Custom",
@@ -170,6 +182,7 @@
   "savingProgressDialogTitle": "Saving…",
   "searchingProgressDialogTitle": "Searching…",
   "citationsDialogTitle": "Citations",
+  "citationsDialogOpenLink": "Open link",
 
   "createFileDialogTitle": "Create new file",
   "createFileDefaultName": "untitled.org",
@@ -205,8 +218,26 @@
   "errorSectionNotFound": "Section not found: {section}",
   "errorUnsupportedSearchOption": "Unsupported search option: {option}",
   "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
+  "tooltipErrorDetails": "View error details",
 
   "editInsertedHeadline": "[Inserted by edit]",
+
+  "tooltipApplyChanges": "Apply changes",
+  "tooltipUndo": "Undo",
+  "tooltipRedo": "Redo",
+  "tooltipToggleUnorderedList": "Toggle unordered list",
+  "tooltipToggleOrderedList": "Toggle ordered list",
+  "tooltipDecreaseIndent": "Decrease indent",
+  "tooltipIncreaseIndent": "Increase indent",
+  "tooltipBold": "Bold",
+  "tooltipItalic": "Italic",
+  "tooltipUnderline": "Underline",
+  "tooltipStrikethrough": "Strikethrough",
+  "tooltipCode": "Code style",
+  "tooltipInsertLink": "Insert link",
+  "tooltipInsertDate": "Insert date",
+  "tooltipSubscript": "Subscript",
+  "tooltipSuperscript": "Superscript",
 
   "donateItemTitle": "Donate to support Orgro",
   "donateItemSubtitle": "Your support is appreciated!",
