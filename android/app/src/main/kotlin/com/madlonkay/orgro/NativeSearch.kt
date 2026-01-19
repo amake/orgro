@@ -141,7 +141,7 @@ suspend fun searchFileForId(uri: Uri, needle: String, context: Context): Boolean
         for (line in it) {
             if (!line.contains(needle)) continue
             val m = idPattern.matchEntire(line) ?: continue
-            if (m.groups["value"]?.value == needle) return@withContext true
+            if (m.groups[1]?.value == needle) return@withContext true
         }
     }
     false
