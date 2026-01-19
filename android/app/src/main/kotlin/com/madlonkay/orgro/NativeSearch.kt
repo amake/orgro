@@ -134,7 +134,7 @@ suspend fun iterateTree(
     null
 }
 
-val idPattern = Regex("^\\s*:ID:\\s*(?<value>\\S+)\\s*\$", RegexOption.IGNORE_CASE)
+val idPattern = Regex("""^\s*:ID:\s*(?<value>\S+)\s*$""", RegexOption.IGNORE_CASE)
 
 suspend fun searchFileForId(uri: Uri, needle: String, context: Context): Boolean = withContext(Dispatchers.IO)  {
     context.contentResolver.openInputStream(uri)?.bufferedReader()?.useLines {
