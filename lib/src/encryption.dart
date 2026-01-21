@@ -33,6 +33,13 @@ extension OrgSectionEncryption on OrgSection {
     if (sections.isNotEmpty) return true;
 
     final content = this.content?.children ?? [];
+
+    if (content.length == 1 && content.single is OrgDecryptedContent) {
+      // User decrypted. Re-encryption will be handled by that node, so we must
+      // return false or else we get double encryption.
+      return false;
+    }
+
     // An encrypted section should have only leading whitespace and a PGP block
     if (content.length != 2) return true;
 
