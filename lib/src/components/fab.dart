@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class BadgableFloatingActionButton extends StatelessWidget {
   const BadgableFloatingActionButton({
+    this.tooltip,
     required this.child,
     required this.badgeVisible,
     required this.onPressed,
@@ -9,6 +10,7 @@ class BadgableFloatingActionButton extends StatelessWidget {
     super.key,
   });
 
+  final String? tooltip;
   final Widget child;
   final bool badgeVisible;
   final VoidCallback onPressed;
@@ -17,6 +19,7 @@ class BadgableFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      tooltip: tooltip,
       heroTag: heroTag,
       onPressed: onPressed,
       foregroundColor: Theme.of(context).colorScheme.onSecondary,

@@ -180,6 +180,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get buttonOpenUrl => 'URLを開く';
 
   @override
+  String get tooltipCreateFile => 'ファイルを作成';
+
+  @override
+  String get tooltipOpenFile => 'ファイルを開く';
+
+  @override
   String get buttonSupport => 'サポート・お問い合わせ';
 
   @override
@@ -264,6 +270,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tooltipCycleVisibility => 'TODOを巡回';
+
+  @override
+  String get tooltipEditDocument => 'ドキュメントを編集';
+
+  @override
+  String get tooltipSearchDocument => 'ドキュメントを検索';
+
+  @override
+  String get tooltipPreviousSearchHit => '前の検索結果';
+
+  @override
+  String get tooltipNextSearchHit => '次の検索結果';
 
   @override
   String get hintTextSearch => '検索...';

@@ -104,12 +104,14 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       spacing: 16,
       children: [
         FloatingActionButton(
+          tooltip: AppLocalizations.of(context)!.tooltipCreateFile,
           onPressed: () => _createAndOpenFile(context),
           heroTag: 'NewFileFAB',
           mini: true,
           child: const Icon(Icons.create),
         ),
         FloatingActionButton(
+          tooltip: AppLocalizations.of(context)!.tooltipOpenFile,
           onPressed: () => loadAndRememberFile(
             context,
             progressTask(

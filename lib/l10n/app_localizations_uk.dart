@@ -183,6 +183,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get buttonOpenUrl => 'Open URL';
 
   @override
+  String get tooltipCreateFile => 'Create file';
+
+  @override
+  String get tooltipOpenFile => 'Open file';
+
+  @override
   String get buttonSupport => 'Підтримка · Зворотній звʼязок';
 
   @override
@@ -267,6 +273,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
+  String get tooltipEditDocument => 'Edit document';
+
+  @override
+  String get tooltipSearchDocument => 'Search document';
+
+  @override
+  String get tooltipPreviousSearchHit => 'Previous search result';
+
+  @override
+  String get tooltipNextSearchHit => 'Next search result';
 
   @override
   String get hintTextSearch => 'Шукати...';

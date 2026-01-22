@@ -412,6 +412,18 @@ abstract class AppLocalizations {
   /// **'Open URL'**
   String get buttonOpenUrl;
 
+  /// No description provided for @tooltipCreateFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Create file'**
+  String get tooltipCreateFile;
+
+  /// No description provided for @tooltipOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open file'**
+  String get tooltipOpenFile;
+
   /// No description provided for @buttonSupport.
   ///
   /// In en, this message translates to:
@@ -579,6 +591,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cycle visibility'**
   String get tooltipCycleVisibility;
+
+  /// No description provided for @tooltipEditDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit document'**
+  String get tooltipEditDocument;
+
+  /// No description provided for @tooltipSearchDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Search document'**
+  String get tooltipSearchDocument;
+
+  /// No description provided for @tooltipPreviousSearchHit.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous search result'**
+  String get tooltipPreviousSearchHit;
+
+  /// No description provided for @tooltipNextSearchHit.
+  ///
+  /// In en, this message translates to:
+  /// **'Next search result'**
+  String get tooltipNextSearchHit;
 
   /// No description provided for @hintTextSearch.
   ///

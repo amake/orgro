@@ -183,6 +183,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonOpenUrl => 'Open URL';
 
   @override
+  String get tooltipCreateFile => 'Create file';
+
+  @override
+  String get tooltipOpenFile => 'Open file';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -267,6 +273,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
+  String get tooltipEditDocument => 'Edit document';
+
+  @override
+  String get tooltipSearchDocument => 'Search document';
+
+  @override
+  String get tooltipPreviousSearchHit => 'Previous search result';
+
+  @override
+  String get tooltipNextSearchHit => 'Next search result';
 
   @override
   String get hintTextSearch => 'Search...';
@@ -909,6 +927,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get buttonOpenUrl => 'Open URL';
 
   @override
+  String get tooltipCreateFile => 'Create file';
+
+  @override
+  String get tooltipOpenFile => 'Open file';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -993,6 +1017,18 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
+  String get tooltipEditDocument => 'Edit document';
+
+  @override
+  String get tooltipSearchDocument => 'Search document';
+
+  @override
+  String get tooltipPreviousSearchHit => 'Previous search result';
+
+  @override
+  String get tooltipNextSearchHit => 'Next search result';
 
   @override
   String get hintTextSearch => 'Search...';
@@ -1635,6 +1671,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get buttonOpenUrl => 'Open URL';
 
   @override
+  String get tooltipCreateFile => 'Create file';
+
+  @override
+  String get tooltipOpenFile => 'Open file';
+
+  @override
   String get buttonSupport => 'Support · Feedback';
 
   @override
@@ -1719,6 +1761,18 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
+  String get tooltipEditDocument => 'Edit document';
+
+  @override
+  String get tooltipSearchDocument => 'Search document';
+
+  @override
+  String get tooltipPreviousSearchHit => 'Previous search result';
+
+  @override
+  String get tooltipNextSearchHit => 'Next search result';
 
   @override
   String get hintTextSearch => 'Search...';

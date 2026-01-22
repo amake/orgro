@@ -64,6 +64,9 @@
   "buttonOpenOrgManual": "Orgマニュアルを開く",
   "buttonOpenUrl": "URLを開く",
 
+  "tooltipCreateFile": "ファイルを作成",
+  "tooltipOpenFile": "ファイルを開く",
+
   "buttonSupport": "サポート・お問い合わせ",
   "buttonVersion": "v{version}",
 
@@ -99,6 +102,11 @@
   "tooltipIncreaseTextScale": "文字サイズを大きく",
 
   "tooltipCycleVisibility": "TODOを巡回",
+
+  "tooltipEditDocument": "ドキュメントを編集",
+  "tooltipSearchDocument": "ドキュメントを検索",
+  "tooltipPreviousSearchHit": "前の検索結果",
+  "tooltipNextSearchHit": "次の検索結果",
 
   "hintTextSearch": "検索...",
   "tooltipClearSearch": "検索をクリア",

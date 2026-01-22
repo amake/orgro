@@ -524,6 +524,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             spacing: 16,
             children: [
               FloatingActionButton(
+                tooltip: AppLocalizations.of(context)!.tooltipEditDocument,
                 onPressed: () {
                   if (scrolling) return;
                   doEdit();
@@ -533,6 +534,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 child: const Icon(Icons.edit),
               ),
               BadgableFloatingActionButton(
+                tooltip: AppLocalizations.of(context)!.tooltipSearchDocument,
                 badgeVisible: searchDelegate.hasQuery,
                 onPressed: () {
                   if (scrolling) return;

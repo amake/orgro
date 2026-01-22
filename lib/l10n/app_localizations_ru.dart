@@ -185,6 +185,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get buttonOpenUrl => 'Открыть URL-адрес';
 
   @override
+  String get tooltipCreateFile => 'Create file';
+
+  @override
+  String get tooltipOpenFile => 'Open file';
+
+  @override
   String get buttonSupport => 'Поддержка · Обратная связь';
 
   @override
@@ -269,6 +275,18 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tooltipCycleVisibility => 'Cycle visibility';
+
+  @override
+  String get tooltipEditDocument => 'Edit document';
+
+  @override
+  String get tooltipSearchDocument => 'Search document';
+
+  @override
+  String get tooltipPreviousSearchHit => 'Previous search result';
+
+  @override
+  String get tooltipNextSearchHit => 'Next search result';
 
   @override
   String get hintTextSearch => 'Поиск...';

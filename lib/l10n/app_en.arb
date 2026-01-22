@@ -79,6 +79,9 @@
   "buttonOpenOrgManual": "Open Org Manual",
   "buttonOpenUrl": "Open URL",
 
+  "tooltipCreateFile": "Create file",
+  "tooltipOpenFile": "Open file",
+
   "buttonSupport": "Support · Feedback",
   "buttonVersion": "v{version}",
   "@buttonVersion": {
@@ -121,6 +124,11 @@
   "tooltipIncreaseTextScale": "Increase text scale",
 
   "tooltipCycleVisibility": "Cycle visibility",
+
+  "tooltipEditDocument": "Edit document",
+  "tooltipSearchDocument": "Search document",
+  "tooltipPreviousSearchHit": "Previous search result",
+  "tooltipNextSearchHit": "Next search result",
 
   "hintTextSearch": "Search...",
   "tooltipClearSearch": "Clear search",

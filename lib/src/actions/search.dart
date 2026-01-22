@@ -320,6 +320,7 @@ class _SearchResultsNavigationState extends State<_SearchResultsNavigation> {
       children: [
         _DisablableMiniFloatingActionButton(
           heroTag: 'prevSearchHitFAB',
+          tooltip: AppLocalizations.of(context)!.tooltipPreviousSearchHit,
           onPressed: _keys.isEmpty ? null : () => _scrollToRelativeIndex(-1),
           child: const Icon(Icons.keyboard_arrow_up),
         ),
@@ -344,6 +345,7 @@ class _SearchResultsNavigationState extends State<_SearchResultsNavigation> {
         ),
         _DisablableMiniFloatingActionButton(
           heroTag: 'nextSearchHitFAB',
+          tooltip: AppLocalizations.of(context)!.tooltipNextSearchHit,
           onPressed: _keys.isEmpty ? null : () => _scrollToRelativeIndex(1),
           child: const Icon(Icons.keyboard_arrow_down),
         ),
@@ -382,11 +384,13 @@ class _SearchResultsNavigationState extends State<_SearchResultsNavigation> {
 
 class _DisablableMiniFloatingActionButton extends StatelessWidget {
   const _DisablableMiniFloatingActionButton({
+    this.tooltip,
     this.onPressed,
     this.heroTag,
     this.child,
   });
 
+  final String? tooltip;
   final VoidCallback? onPressed;
   final Widget? child;
   final Object? heroTag;
@@ -396,6 +400,7 @@ class _DisablableMiniFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      tooltip: tooltip,
       heroTag: heroTag,
       onPressed: onPressed,
       foregroundColor: Theme.of(context).colorScheme.onSecondary,
