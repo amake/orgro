@@ -41,9 +41,15 @@ class CaptureActivity : ComponentActivity() {
             Log.d("OrgroCapture", "Got title: $it")
             it
         }
-        title = title ?: intent.getStringExtra(Intent.EXTRA_SUBJECT)?.let {
+        intent.getStringExtra(Intent.EXTRA_SUBJECT)?.let {
             Log.d("OrgroCapture", "Got subject: $it")
-            it
+            // Tusky's "Share content of post" uses TEXT for the content and
+            // SUBJECT for the toot URL
+            if (isUri(it) && url == null) {
+                url = it
+            } else {
+                title = title ?: it
+            }
         }
         shareParts(url, title, body)
     }
