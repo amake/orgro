@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
@@ -178,16 +180,101 @@ class NativeDataSource extends DataSource {
   FutureOr<NativeDataSource> resolveRelative(String relativePath) async {
     if (parentDirIdentifier == null) {
       throw OrgroError(
-        'Can’t resolve path relative to this document',
+        "Can't resolve path relative to this document",
         localizedMessage: (context) =>
             AppLocalizations.of(context)!.errorCannotResolveRelativePath,
       );
     }
     // TODO(aaron): See if we can resolve to a non-existent file for writing
+    try {
+      final resolved = await FilePickerWritable().resolveRelativePath(
+        directoryIdentifier: parentDirIdentifier!,
+        relativePath: relativePath,
+      );
+      if (resolved is! FileInfo) {
+        throw OrgroError(
+          '$relativePath resolved to a non-file: $resolved',
+          localizedMessage: (context) => AppLocalizations.of(
+            context,
+          )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
+        );
+      }
+      return NativeDataSource(
+        resolved.fileName ?? Uri.parse(resolved.uri).pathSegments.last,
+        resolved.identifier,
+        resolved.uri,
+        persistable: resolved.persistable,
+      );
+    } on Exception {
+      // Normal resolution failed; try symlink-aware resolution.
+      // This handles git's portable symlink format where symlinks are stored
+      // as small text files containing the target path.
+      return _resolveWithSymlinks(relativePath);
+    }
+  }
+
+  /// Resolves a relative path while handling git-style symlinks.
+  ///
+  /// Git stores symlinks as small text files containing the target path.
+  /// This method detects such files and follows them during path resolution.
+  Future<NativeDataSource> _resolveWithSymlinks(String relativePath) async {
+    final components = p.posix.split(relativePath);
+    String currentDirId = parentDirIdentifier!;
+
+    // Resolve each directory component, following symlinks as needed
+    for (int i = 0; i < components.length - 1; i++) {
+      final component = components[i];
+      if (component.isEmpty || component == '.') continue;
+
+      final resolved = await FilePickerWritable().resolveRelativePath(
+        directoryIdentifier: currentDirId,
+        relativePath: component,
+      );
+
+      if (resolved is DirectoryInfo) {
+        // Normal directory, continue traversal
+        currentDirId = resolved.identifier;
+      } else if (resolved is FileInfo) {
+        // Might be a git symlink file; try to read and follow it
+        final symlinkTarget = await _readGitSymlink(resolved);
+        if (symlinkTarget != null) {
+          // It's a symlink! Resolve the target path relative to current dir
+          final targetResolved = await FilePickerWritable().resolveRelativePath(
+            directoryIdentifier: currentDirId,
+            relativePath: symlinkTarget,
+          );
+          if (targetResolved is DirectoryInfo) {
+            currentDirId = targetResolved.identifier;
+          } else {
+            throw OrgroError(
+              'Symlink target "$symlinkTarget" is not a directory',
+              localizedMessage: (context) =>
+                  AppLocalizations.of(context)!.errorPathResolvedToNonFile(
+                    symlinkTarget,
+                    targetResolved.uri,
+                  ),
+            );
+          }
+        } else {
+          throw OrgroError(
+            'Path component "$component" is a file, not a directory',
+            localizedMessage: (context) =>
+                AppLocalizations.of(context)!.errorPathResolvedToNonFile(
+                  component,
+                  resolved.uri,
+                ),
+          );
+        }
+      }
+    }
+
+    // Resolve the final component (the actual file)
+    final lastComponent = components.last;
     final resolved = await FilePickerWritable().resolveRelativePath(
-      directoryIdentifier: parentDirIdentifier!,
-      relativePath: relativePath,
+      directoryIdentifier: currentDirId,
+      relativePath: lastComponent,
     );
+
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
@@ -196,12 +283,49 @@ class NativeDataSource extends DataSource {
         )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
       );
     }
+
     return NativeDataSource(
       resolved.fileName ?? Uri.parse(resolved.uri).pathSegments.last,
       resolved.identifier,
       resolved.uri,
       persistable: resolved.persistable,
     );
+  }
+
+  /// Reads a file and returns its contents if it looks like a git symlink.
+  ///
+  /// Git symlinks are small text files (typically < 1KB) containing a relative
+  /// path with no newlines or special characters.
+  Future<String?> _readGitSymlink(FileInfo fileInfo) async {
+    try {
+      final bytes = await FilePickerWritable().readFile(
+        identifier: fileInfo.identifier,
+        reader: (_, file) => file.readAsBytes(),
+      );
+
+      // Git symlinks are very small (just a path)
+      if (bytes.length > 1024) return null;
+
+      // Check for binary content (null bytes or high bytes in first portion)
+      for (int i = 0; i < bytes.length && i < 100; i++) {
+        if (bytes[i] == 0 || bytes[i] > 127) return null;
+      }
+
+      final contents = utf8.decode(bytes).trim();
+
+      // Validate it looks like a relative path
+      if (contents.isEmpty ||
+          contents.contains('\n') ||
+          contents.contains('\r') ||
+          contents.length > 256 ||
+          contents.startsWith('/')) {
+        return null;
+      }
+
+      return contents;
+    } on Exception {
+      return null;
+    }
   }
 
   Future<FileInfo> write(String content) => FilePickerWritable().writeFile(
