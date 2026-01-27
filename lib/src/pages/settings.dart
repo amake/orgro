@@ -4,6 +4,7 @@ import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
+import 'package:orgro/src/components/developer.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/entitlements.dart';
@@ -17,7 +18,9 @@ class SettingsPage extends StatelessWidget {
     return LockedBarrier(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.settingsScreenTitle),
+          title: DeveloperAccess(
+            child: Text(AppLocalizations.of(context)!.settingsScreenTitle),
+          ),
         ),
         body: ListView(
           children:
