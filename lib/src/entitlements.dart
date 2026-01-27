@@ -72,6 +72,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
   Future<void> _checkLegacyPurchase(bool refresh) async {
     String? originalAppVersion;
     DateTime? originalPurchaseDate;
+    String? environment;
     Object? error;
     try {
       final info = await _channel.invokeMapMethod<String, dynamic>(
@@ -85,6 +86,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         timestamp.toInt() * 1000,
         isUtc: true,
       );
+      environment = info['environment'] as String;
     } catch (e) {
       error = e;
       rethrow;
@@ -94,6 +96,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
           loaded: true,
           originalPurchaseDate: originalPurchaseDate,
           originalAppVersion: originalAppVersion,
+          environment: environment,
           error: error,
         );
       });
@@ -167,6 +170,7 @@ class EntitlementsData {
     required this.loaded,
     this.originalPurchaseDate,
     this.originalAppVersion,
+    this.environment,
     this.inAppPurchase,
     this.error,
   });
@@ -174,11 +178,12 @@ class EntitlementsData {
   final bool loaded;
   final DateTime? originalPurchaseDate;
   final String? originalAppVersion;
+  final String? environment;
   final bool? inAppPurchase;
   final Object? error;
 
   bool get hasError => error != null;
-  bool get sandboxed => Platform.isIOS && originalAppVersion == '1.0';
+  bool get sandboxed => environment == 'sandbox';
   bool get legacyPurchase {
     if (originalAppVersion == null) return false;
     final parsed = int.tryParse(originalAppVersion!);
@@ -211,6 +216,7 @@ class EntitlementsData {
       other.loaded == loaded &&
       other.originalPurchaseDate == originalPurchaseDate &&
       other.originalAppVersion == originalAppVersion &&
+      other.environment == environment &&
       other.inAppPurchase == inAppPurchase &&
       other.error == error;
 
@@ -219,6 +225,7 @@ class EntitlementsData {
     loaded,
     originalPurchaseDate,
     originalAppVersion,
+    environment,
     inAppPurchase,
     error,
   );
@@ -227,12 +234,14 @@ class EntitlementsData {
     bool? loaded,
     DateTime? originalPurchaseDate,
     String? originalAppVersion,
+    String? environment,
     bool? inAppPurchase,
     Object? error,
   }) => EntitlementsData(
     loaded: loaded ?? this.loaded,
     originalPurchaseDate: originalPurchaseDate ?? this.originalPurchaseDate,
     originalAppVersion: originalAppVersion ?? this.originalAppVersion,
+    environment: environment ?? this.environment,
     inAppPurchase: inAppPurchase ?? this.inAppPurchase,
     error: error ?? this.error,
   );
@@ -262,7 +271,7 @@ class _EntitlementsSettingListItemsState
             children: [
               Text('• Loaded: ${entitlements.loaded}'),
               Text('• Purchased: ${entitlements.purchased}'),
-              Text('• Sandboxed: ${entitlements.sandboxed}'),
+              Text('• Environment: ${entitlements.environment}'),
               Text('• Legacy purchase: ${entitlements.legacyPurchase}'),
               Text('• IAP: ${entitlements.inAppPurchase}'),
               Text('• Purchased version: ${entitlements.originalAppVersion}'),
