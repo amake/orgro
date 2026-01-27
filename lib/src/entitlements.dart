@@ -301,8 +301,9 @@ class _EntitlementsSettingListItemsState
             leading: const Icon(Icons.timer_outlined),
             title: Text(
               AppLocalizations.of(context)!.entitlementsFreeTrialItem(
-                entitlements.trialEnd ?? DateTime.now(),
-              ),
+                    entitlements.trialEnd ?? DateTime.now(),
+                  ) +
+                  (entitlements.sandboxed ? ' (sandbox)' : ''),
             ),
             onLongPress: onLongPress,
           ),
