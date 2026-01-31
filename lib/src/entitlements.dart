@@ -183,7 +183,7 @@ class EntitlementsData {
   final Object? error;
 
   bool get hasError => error != null;
-  bool get sandboxed => environment == 'sandbox';
+  bool get sandboxed => environment == 'Sandbox';
   bool get legacyPurchase {
     if (originalAppVersion == null) return false;
     final parsed = int.tryParse(originalAppVersion!);
