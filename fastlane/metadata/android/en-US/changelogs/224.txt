@@ -1,0 +1,3 @@
+- Offer several additional fonts
+- Improved accessibility
+- Bug fixes
