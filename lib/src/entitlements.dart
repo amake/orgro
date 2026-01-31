@@ -81,7 +81,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
       );
       debugPrint('App purchase info: $info');
       originalAppVersion = info!['originalAppVersion'] as String;
-      final timestamp = info['originalPurchaseDate'] as double;
+      final timestamp = info['originalPurchaseTimestamp'] as double;
       originalPurchaseDate = DateTime.fromMillisecondsSinceEpoch(
         timestamp.toInt() * 1000,
         isUtc: true,
