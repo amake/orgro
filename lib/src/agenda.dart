@@ -65,7 +65,7 @@ Future<void> initNotifications(AppLocalizations localizations) async {
     macOS: initializationSettingsDarwin,
   );
   await plugin.initialize(
-    initializationSettings,
+    settings: initializationSettings,
     onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
   );
   final launchDetails = await plugin.getNotificationAppLaunchDetails();
@@ -188,7 +188,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
         if (id == dataSource.id) {
           // This notification is for this file; we will reschedule it below
           debugPrint('Canceling notification with ID $id (${element.id})');
-          await plugin.cancel(element.id);
+          await plugin.cancel(id: element.id);
         }
       case {
         'scheduledAt': final String scheduledAt,
@@ -244,11 +244,13 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
           'Scheduling notification for $dateTime: ($id) ${element.headline.rawTitle}',
         );
         await plugin.zonedSchedule(
-          id,
-          element.headline.title?.toPlainText() ?? element.headline.rawTitle,
-          dataSource.name,
-          dateTime,
-          NotificationDetails(
+          id: id,
+          title:
+              element.headline.title?.toPlainText() ??
+              element.headline.rawTitle,
+          body: dataSource.name,
+          scheduledDate: dateTime,
+          notificationDetails: NotificationDetails(
             android: AndroidNotificationDetails(
               kAgendaNotificationsChannel,
               localizations.agendaNotificationsChannelName,
@@ -290,7 +292,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
     switch (element) {
       case PendingNotificationRequest():
         // This notification got pushed off the end. Cancel it.
-        await plugin.cancel(element.id);
+        await plugin.cancel(id: element.id);
       case OrgSection():
         // This notification got pushed off the end. Don't schedule it.
         continue;
@@ -334,7 +336,7 @@ Future<void> clearNotificationsForFiles(
       case {'dataSource': final Map<String, dynamic> dataSource}:
         if (predicate(dataSource)) {
           debugPrint('Canceling notification with ID ${element.id}');
-          await plugin.cancel(element.id);
+          await plugin.cancel(id: element.id);
         }
     }
   }
