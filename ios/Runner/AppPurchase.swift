@@ -42,7 +42,7 @@ private func getAppPurchaseInfo(_ call: FlutterMethodCall, _ result: @escaping F
             result([
                 "originalAppVersion": appTransaction.originalAppVersion,
                 "originalPurchaseTimestamp": appTransaction.originalPurchaseDate.timeIntervalSince1970,
-                "environment": appTransaction.environment,
+                "environment": appTransaction.environment.rawValue,
             ])
         case .unverified(_, let verificationError):
             logger.critical("AppTransaction verification error: \(verificationError)")
