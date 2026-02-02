@@ -206,7 +206,7 @@ class EntitlementsData {
 
   bool get locked => kFreemium && loaded && !purchased && !inTrial;
 
-  DateTime? get trialEnd => inTrial && originalPurchaseDate != null
+  DateTime? get trialEnd => originalPurchaseDate != null
       ? tz.TZDateTime.from(originalPurchaseDate!, tz.local).add(_trialPeriod)
       : null;
 
