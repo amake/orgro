@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/app_purchase.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,40 +24,6 @@ final kFreemium = kWalledGarden && Platform.isIOS;
 // (not the version "name") because that's what iOS's AppTransaction API
 // returns: CFBundleVersion which is $(FLUTTER_BUILD_NUMBER).
 const kLastPaidVersion = 214;
-
-typedef _AppPurchaseInfo = Map<String, dynamic>;
-
-enum _InfoSource { cache, native }
-
-const _channel = MethodChannel('com.madlonkay.orgro/app_purchase');
-
-Future<(_InfoSource, _AppPurchaseInfo)> _appPurchaseInfoFromNative(
-  bool refresh,
-) async {
-  final info = await _channel.invokeMapMethod<String, dynamic>(
-    'getAppPurchaseInfo',
-    {'refresh': refresh},
-  );
-  debugPrint('App purchase info: $info');
-  return (_InfoSource.native, info!);
-}
-
-const _kLegacyPurchaseCacheFile = 'legacy_purchase_info.json';
-
-Future<File> getLegacyPurchaseCacheFile() async {
-  final dir = await getApplicationSupportDirectory();
-  return File.fromUri(dir.uri.resolve(_kLegacyPurchaseCacheFile));
-}
-
-Future<(_InfoSource, _AppPurchaseInfo)?> _appPurchaseInfoFromCache() async {
-  final file = await getLegacyPurchaseCacheFile();
-  if (!await file.exists()) return null;
-
-  final contents = await file.readAsString();
-  final info = json.decode(contents) as Map<String, dynamic>;
-  debugPrint('Cached app purchase info: $info');
-  return (_InfoSource.cache, info);
-}
 
 const _orgroUnlockProductId = 'orgro_unlock_1';
 
@@ -108,13 +72,10 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     DateTime? originalPurchaseDate;
     String? environment;
     Object? error;
-    _AppPurchaseInfo? info;
-    _InfoSource? source;
+    AppPurchaseInfo? info;
+    AppPurchaseInfoSource? source;
     try {
-      (source, info) = refresh
-          ? await _appPurchaseInfoFromNative(true)
-          : await _appPurchaseInfoFromCache() ??
-                await _appPurchaseInfoFromNative(false);
+      (source, info) = await getAppPurchaseInfo(refresh);
       originalAppVersion = info['originalAppVersion'] as String;
       final timestamp = info['originalPurchaseTimestamp'] as double;
       originalPurchaseDate = DateTime.fromMillisecondsSinceEpoch(
@@ -137,9 +98,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
       if (error == null &&
           source == .native &&
           newEntitlements.legacyPurchase) {
-        final file = await getLegacyPurchaseCacheFile();
-        final contents = json.encode(info);
-        await file.writeAsString(contents);
+        await cacheAppPurchaseInfo(info!);
       }
     }
   }

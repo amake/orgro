@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:orgro/l10n/app_localizations.dart';
-import 'package:orgro/src/entitlements.dart';
+import 'package:orgro/src/app_purchase.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:path_provider/path_provider.dart';
