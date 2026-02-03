@@ -91,6 +91,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         loaded: true,
         originalPurchaseDate: originalPurchaseDate,
         originalAppVersion: originalAppVersion,
+        appPurchaseInfoSource: source,
         environment: environment,
         error: error,
       );
@@ -170,6 +171,7 @@ class EntitlementsData {
     required this.loaded,
     this.originalPurchaseDate,
     this.originalAppVersion,
+    this.appPurchaseInfoSource,
     this.environment,
     this.inAppPurchase,
     this.error,
@@ -178,6 +180,7 @@ class EntitlementsData {
   final bool loaded;
   final DateTime? originalPurchaseDate;
   final String? originalAppVersion;
+  final AppPurchaseInfoSource? appPurchaseInfoSource;
   final String? environment;
   final bool? inAppPurchase;
   final Object? error;
@@ -216,6 +219,7 @@ class EntitlementsData {
       other.loaded == loaded &&
       other.originalPurchaseDate == originalPurchaseDate &&
       other.originalAppVersion == originalAppVersion &&
+      other.appPurchaseInfoSource == appPurchaseInfoSource &&
       other.environment == environment &&
       other.inAppPurchase == inAppPurchase &&
       other.error == error;
@@ -225,6 +229,7 @@ class EntitlementsData {
     loaded,
     originalPurchaseDate,
     originalAppVersion,
+    appPurchaseInfoSource,
     environment,
     inAppPurchase,
     error,
@@ -234,6 +239,7 @@ class EntitlementsData {
     bool? loaded,
     DateTime? originalPurchaseDate,
     String? originalAppVersion,
+    AppPurchaseInfoSource? appPurchaseInfoSource,
     String? environment,
     bool? inAppPurchase,
     Object? error,
@@ -241,6 +247,7 @@ class EntitlementsData {
     loaded: loaded ?? this.loaded,
     originalPurchaseDate: originalPurchaseDate ?? this.originalPurchaseDate,
     originalAppVersion: originalAppVersion ?? this.originalAppVersion,
+    appPurchaseInfoSource: appPurchaseInfoSource ?? this.appPurchaseInfoSource,
     environment: environment ?? this.environment,
     inAppPurchase: inAppPurchase ?? this.inAppPurchase,
     error: error ?? this.error,
@@ -276,6 +283,9 @@ class _EntitlementsSettingListItemsState
               Text('• IAP: ${entitlements.inAppPurchase}'),
               Text('• Purchased version: ${entitlements.originalAppVersion}'),
               Text('• Purchase date: ${entitlements.originalPurchaseDate}'),
+              Text(
+                '• App purchase info source: ${entitlements.appPurchaseInfoSource}',
+              ),
               Text('• In trial: ${entitlements.inTrial}'),
               Text('• Trial end: ${entitlements.trialEnd}'),
               Text('• Error: ${entitlements.error}'),
