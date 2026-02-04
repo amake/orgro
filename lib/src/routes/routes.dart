@@ -6,7 +6,6 @@ import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/narrow.dart';
 import 'package:orgro/src/routes/settings.dart';
 import 'package:orgro/src/util.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const kRestoreRouteKey = 'restore_route_key';
 
@@ -58,15 +57,6 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case Routes.settings:
       return SettingsRoute();
   }
-
-  // We shouldn't be receiving any unknown paths here, but if the deep link
-  // settings change out from under us then it's possible. In that case we
-  // should kick back to the browser.
-  final externalUri = Uri.https('orgro.org', uri.path);
-  launchUrl(externalUri, mode: LaunchMode.externalApplication).onError((e, s) {
-    debugPrint('Error launching "$externalUri": $e');
-    return false;
-  });
 
   return null;
 }
