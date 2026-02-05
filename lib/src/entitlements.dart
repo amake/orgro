@@ -446,7 +446,14 @@ mixin PurchaseHelper<T extends StatefulWidget> on State<T> {
 
   Future<void> buyProduct() async {
     final purchaseParam = PurchaseParam(productDetails: productDetails!);
-    await InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+    final (succeeded: _, :result) = await progressTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.preparingProgressDialogTitle,
+      task: InAppPurchase.instance.buyNonConsumable(
+        purchaseParam: purchaseParam,
+      ),
+    );
+    debugPrint('Buy result: $result');
   }
 
   Future<void> restorePurchases() async {
