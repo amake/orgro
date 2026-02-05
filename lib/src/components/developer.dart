@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
@@ -22,6 +23,9 @@ class _DeveloperAccessState extends State<DeveloperAccess> {
           final prefs = Preferences.of(context, PrefsAspect.customization);
           final newMode = !prefs.developerMode;
           await prefs.setDeveloperMode(newMode);
+          if (kReleaseMode) {
+            debugPrint = newMode ? debugPrintThrottled : debugPrintNoop;
+          }
           if (!context.mounted) return;
           showErrorSnackBar(
             context,

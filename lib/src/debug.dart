@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/src/error.dart';
 
+void debugPrintNoop(String? message, {int? wrapWidth}) {}
+
 // Set to true to make debug builds look like release builds. Useful for taking
 // App Store screenshots on the iOS Simulator.
 const kScreenshotMode = false;
