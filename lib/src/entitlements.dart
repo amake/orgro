@@ -43,7 +43,7 @@ class UserEntitlements extends StatefulWidget {
 
 class _UserEntitlementsState extends State<UserEntitlements> {
   StreamSubscription<List<PurchaseDetails>>? _subscription;
-  var _entitlements = EntitlementsData(loaded: false);
+  var _entitlements = EntitlementsData.empty();
 
   @override
   void initState() {
@@ -167,6 +167,8 @@ class InheritedEntitlements extends InheritedWidget {
 }
 
 class EntitlementsData {
+  factory EntitlementsData.empty() => const EntitlementsData(loaded: false);
+
   const EntitlementsData({
     required this.loaded,
     this.originalPurchaseDate,
