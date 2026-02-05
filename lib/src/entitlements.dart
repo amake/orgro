@@ -69,7 +69,7 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     // We skip checking for legacy purchases until after a short delay to give
     // IAP purchases a chance to load. If the user has already purchased via
     // IAP, we don't need to check for legacy purchases.
-    Future.delayed(const Duration(milliseconds: 100), () async {
+    Future.delayed(const Duration(milliseconds: 150), () async {
       if (_entitlements.purchased) return;
       await _checkLegacyPurchase(false).onError(logError);
     });
