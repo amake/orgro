@@ -50,6 +50,9 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     super.initState();
     if (!kFreemium) return;
 
+    // TODO(aaron): Remove after testing
+    // ignore: avoid_print
+    print('Setting up purchase listener: ${DateTime.timestamp()}');
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () => _subscription?.cancel(),
@@ -58,7 +61,18 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         if (mounted) showErrorSnackBar(context, e);
       },
     );
-    _checkLegacyPurchase(false).onError(logError);
+    // In some scenarios retrieving app purchase info requires user interaction
+    // even when not refreshing (despite Apple's docs saying otherwise). In
+    // particular this seems to happen in scenarios where the user has multiple
+    // Apple accounts or is not signed into any account at all.
+    //
+    // We skip checking for legacy purchases until after a short delay to give
+    // IAP purchases a chance to load. If the user has already purchased via
+    // IAP, we don't need to check for legacy purchases.
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      if (_entitlements.purchased) return;
+      await _checkLegacyPurchase(false).onError(logError);
+    });
   }
 
   @override
@@ -123,6 +137,10 @@ class _UserEntitlementsState extends State<UserEntitlements> {
             purchaseDetails.status == .restored &&
                 purchaseDetails.productID == _orgroUnlockProductId) {
           // We don't have a backend to verify purchases
+
+          // TODO(aaron): Remove after testing
+          // ignore: avoid_print
+          print('Unlock purchase detected: ${DateTime.timestamp()}');
           setState(() {
             _entitlements = _entitlements.copyWith(
               loaded: true,
