@@ -989,25 +989,28 @@ class ResetPreferencesListItem extends StatelessWidget {
   }
 }
 
-class ResetDirectoryPermissionsListItem extends StatelessWidget {
-  const ResetDirectoryPermissionsListItem({super.key});
+class ResetPermissionsListItem extends StatelessWidget {
+  const ResetPermissionsListItem({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        AppLocalizations.of(context)!.settingsActionResetDirectoryPermissions,
-      ),
+      title: Text(AppLocalizations.of(context)!.settingsActionResetPermissions),
       onTap: () async {
         final prefs = Preferences.of(context, PrefsAspect.accessibleDirs);
         await prefs.clearAccessibleDirs();
+        await prefs.setRemoteImagesPolicy(kDefaultRemoteImagesPolicy);
+        await prefs.setLocalLinksPolicy(kDefaultLocalLinksPolicy);
+        await prefs.setSaveChangesPolicy(kDefaultSaveChangesPolicy);
+        await prefs.setDecryptPolicy(kDefaultDecryptPolicy);
+        await prefs.setAgendaNotificationsPolicy(
+          kDefaultAgendaNotificationsPolicy,
+        );
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                AppLocalizations.of(
-                  context,
-                )!.snackbarMessageDirectoryPermissionsReset,
+                AppLocalizations.of(context)!.snackbarMessagePermissionsReset,
               ),
             ),
           );

@@ -132,8 +132,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
-  String get settingsActionResetDirectoryPermissions =>
-      'Reset directory permissions';
+  String get settingsActionResetPermissions => 'Reset permissions';
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
@@ -145,8 +144,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get snackbarMessagePreferencesReset => 'Preferences reset';
 
   @override
-  String get snackbarMessageDirectoryPermissionsReset =>
-      'Directory permissions reset';
+  String get snackbarMessagePermissionsReset => 'Permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -880,8 +878,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
-  String get settingsActionResetDirectoryPermissions =>
-      'Reset directory permissions';
+  String get settingsActionResetPermissions => 'Reset permissions';
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
@@ -893,8 +890,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get snackbarMessagePreferencesReset => 'Preferences reset';
 
   @override
-  String get snackbarMessageDirectoryPermissionsReset =>
-      'Directory permissions reset';
+  String get snackbarMessagePermissionsReset => 'Permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
@@ -1628,8 +1624,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsActionResetPreferences => 'Restore defaults';
 
   @override
-  String get settingsActionResetDirectoryPermissions =>
-      'Reset directory permissions';
+  String get settingsActionResetPermissions => 'Reset permissions';
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
@@ -1641,8 +1636,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get snackbarMessagePreferencesReset => 'Preferences reset';
 
   @override
-  String get snackbarMessageDirectoryPermissionsReset =>
-      'Directory permissions reset';
+  String get snackbarMessagePermissionsReset => 'Permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Restore defaults?';

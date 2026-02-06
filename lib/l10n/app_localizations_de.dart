@@ -132,8 +132,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsActionResetPreferences => 'Einstellungen zurücksetzen';
 
   @override
-  String get settingsActionResetDirectoryPermissions =>
-      'Verzeichnisberechtigungen zurücksetzen';
+  String get settingsActionResetPermissions => 'Reset permissions';
 
   @override
   String get snackbarMessageNotificationsCleared =>
@@ -146,8 +145,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get snackbarMessagePreferencesReset => 'Einstellungen zurückgesetzt';
 
   @override
-  String get snackbarMessageDirectoryPermissionsReset =>
-      'Verzeichnisberechtigungen zurückgesetzt';
+  String get snackbarMessagePermissionsReset => 'Permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle => 'Einstellungen löschen?';

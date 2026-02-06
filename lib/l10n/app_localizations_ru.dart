@@ -133,8 +133,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Восстановить изначальные настройки';
 
   @override
-  String get settingsActionResetDirectoryPermissions =>
-      'Reset directory permissions';
+  String get settingsActionResetPermissions => 'Reset permissions';
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
@@ -146,8 +145,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get snackbarMessagePreferencesReset => 'Сбросить настройки';
 
   @override
-  String get snackbarMessageDirectoryPermissionsReset =>
-      'Directory permissions reset';
+  String get snackbarMessagePermissionsReset => 'Permissions reset';
 
   @override
   String get confirmResetPreferencesDialogTitle =>
