@@ -452,6 +452,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Orgro kann deine Änderungen nicht speichern.';
 
   @override
+  String get saveChangesDialogForbiddenMessage =>
+      'You chose to forbid Orgro from saving back to the original file.';
+
+  @override
   String get saveActionShare => 'Teilen';
 
   @override

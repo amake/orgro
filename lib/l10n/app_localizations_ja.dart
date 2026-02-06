@@ -433,6 +433,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get saveChangesDialogMessage => '元ファイルに書き戻しできません。';
 
   @override
+  String get saveChangesDialogForbiddenMessage => '元ファイルに書き戻さないよう設定されています。';
+
+  @override
   String get saveActionShare => '共有する';
 
   @override

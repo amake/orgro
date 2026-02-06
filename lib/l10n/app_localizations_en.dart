@@ -451,6 +451,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Orgro can’t write your changes back to the original file.';
 
   @override
+  String get saveChangesDialogForbiddenMessage =>
+      'You chose to forbid Orgro from saving back to the original file.';
+
+  @override
   String get saveActionShare => 'Share';
 
   @override
@@ -1195,6 +1199,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
       'Orgro can’t write your changes back to the original file.';
 
   @override
+  String get saveChangesDialogForbiddenMessage =>
+      'You chose to forbid Orgro from saving back to the original file.';
+
+  @override
   String get saveActionShare => 'Share';
 
   @override
@@ -1937,6 +1945,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get saveChangesDialogMessage =>
       'Orgro can’t write your changes back to the original file.';
+
+  @override
+  String get saveChangesDialogForbiddenMessage =>
+      'You chose to forbid Orgro from saving back to the original file.';
 
   @override
   String get saveActionShare => 'Share';

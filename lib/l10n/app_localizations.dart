@@ -874,6 +874,12 @@ abstract class AppLocalizations {
   /// **'Orgro can’t write your changes back to the original file.'**
   String get saveChangesDialogMessage;
 
+  /// No description provided for @saveChangesDialogForbiddenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You chose to forbid Orgro from saving back to the original file.'**
+  String get saveChangesDialogForbiddenMessage;
+
   /// No description provided for @saveActionShare.
   ///
   /// In en, this message translates to:

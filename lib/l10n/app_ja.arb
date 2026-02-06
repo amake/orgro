@@ -164,6 +164,7 @@
 
   "saveChangesDialogTitle": "変更を保存しますか？",
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
+  "saveChangesDialogForbiddenMessage": "元ファイルに書き戻さないよう設定されています。",
   "saveActionShare": "共有する",
   "saveActionDiscard": "破棄する",
   "saveActionSaveAs": "名前をつけて保存する",

@@ -828,6 +828,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         serializer: serializer,
         message: isScratchDocument
             ? null
+            : saveChangesPolicy == .deny
+            ? AppLocalizations.of(context)!.saveChangesDialogForbiddenMessage
             : AppLocalizations.of(context)!.saveChangesDialogMessage,
       ),
     );

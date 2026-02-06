@@ -165,6 +165,7 @@
 
   "saveChangesDialogTitle": "Save changes?",
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
+  "saveChangesDialogForbiddenMessage": "You chose to forbid Orgro from saving back to the original file.",
   "saveActionShare": "Share",
   "saveActionDiscard": "Discard",
   "saveActionSaveAs": "Save as",
