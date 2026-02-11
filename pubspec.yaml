@@ -7,11 +7,11 @@ publish_to: none
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
-  flutter: ^3.38.9
+  flutter: ^3.41.0
 
 dependencies:
   cached_network_image: ^3.0.0
-  dynamic_fonts: ^3.0.0
+  dynamic_fonts: ^3.0.1
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
   # file_picker_writable: ^2.1.0
