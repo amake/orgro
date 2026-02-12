@@ -61,6 +61,21 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         if (mounted) showErrorSnackBar(context, e);
       },
     );
+
+    _initPurchaseHistory();
+  }
+
+  Future<void> _initPurchaseHistory() async {
+    try {
+      // Naive testing seems to show that this isn't necessary: past purchases
+      // will show up in the purchaseStream without it. But apparently at least
+      // on iOS this is unreliable, and we are expected to call this.
+      //
+      // We may need to rethink this if we do IAP on Android.
+      await InAppPurchase.instance.restorePurchases();
+    } catch (e, s) {
+      logError(e, s);
+    }
     // In some scenarios retrieving app purchase info requires user interaction
     // even when not refreshing (despite Apple's docs saying otherwise). In
     // particular this seems to happen in scenarios where the user has multiple
@@ -69,10 +84,13 @@ class _UserEntitlementsState extends State<UserEntitlements> {
     // We skip checking for legacy purchases until after a short delay to give
     // IAP purchases a chance to load. If the user has already purchased via
     // IAP, we don't need to check for legacy purchases.
-    Future.delayed(const Duration(milliseconds: 150), () async {
-      if (_entitlements.purchased) return;
-      await _checkLegacyPurchase(false).onError(logError);
-    });
+    await Future<void>.delayed(const Duration(seconds: 1));
+    if (_entitlements.purchased) return;
+    try {
+      await _checkLegacyPurchase(false);
+    } catch (e, s) {
+      logError(e, s);
+    }
   }
 
   @override
