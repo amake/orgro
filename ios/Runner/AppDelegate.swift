@@ -4,25 +4,22 @@ import flutter_local_notifications
 import workmanager_apple
 
 @main
-@objc class AppDelegate: FlutterAppDelegate, FlutterPluginRegistrant {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
     override func application(
       _ application: UIApplication,
       didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        pluginRegistrant = self
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
-    func register(with registry: any FlutterPluginRegistry) {
-        let nsRegistrar = registry.registrar(forPlugin: "native_search")!
-        let nsChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: nsRegistrar.messenger())
+    func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+        GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+        let nsChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/native_search", binaryMessenger: engineBridge.applicationRegistrar.messenger())
         nsChannel.setMethodCallHandler(handleNativeSearchMethod)
 
-        let apRegistrar = registry.registrar(forPlugin: "app_purchase")!
-        let apChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/app_purchase", binaryMessenger: apRegistrar.messenger())
+        let apChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/app_purchase", binaryMessenger: engineBridge.applicationRegistrar.messenger())
         apChannel.setMethodCallHandler(handleAppPurchaseMethod)
-
-        GeneratedPluginRegistrant.register(with: registry)
 
         UNUserNotificationCenter.current().delegate = self
 
