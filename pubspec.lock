@@ -149,10 +149,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: d07d37192dbf97461359c1518788f203b0c9102cfd2c35a716b823741219542c
+      sha256: "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.5"
+    version: "2.2.0"
   file:
     dependency: transitive
     description:
@@ -275,10 +275,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_local_notifications_windows
-      sha256: "7ddd964fa85b6a23e96956c5b63ef55cdb9e5947b71b95712204db42ad46da61"
+      sha256: e97a1a3016512437d9c0b12fae7d1491c3c7b9aa7f03a69b974308840656b02a
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -1048,10 +1048,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: cfde38aa257dae62ffe79c87fab20165dfdf6988c1d31b58ebf59b9106062aad
+      sha256: b1aca26728b7cc7a3af971bb6f601554a8ae9df2e0a006de8450ba06a17ad36a
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.6"
+    version: "6.4.0"
   url_launcher_linux:
     dependency: transitive
     description:
