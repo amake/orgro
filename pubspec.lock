@@ -643,18 +643,18 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: c07400eb6937681773ffcdc1d3488d7b58b91ad9f4ca01a5ff75ccc6764a00ae
+      sha256: b31103474e33b8d98776fdc384a3b88a56e3b93ec1fcd7426c221744856dfdad
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.2"
+    version: "10.3.3"
   org_parser:
     dependency: transitive
     description:
       name: org_parser
-      sha256: cd396ec796922b0485952d4e92386eb219186cdcbd5378af4c2526db6aa6ba06
+      sha256: "7d73aa3b42972b70759e453d49a80de8332fdeb4885b60970ee4733e65c1e72b"
       url: "https://pub.dev"
     source: hosted
-    version: "11.1.0"
+    version: "11.1.1"
   package_info_plus:
     dependency: transitive
     description:
@@ -755,10 +755,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "1a97266a94f7350d30ae522c0af07890c70b8e62c71e8e3920d1db4d23c057d1"
+      sha256: "91bd59303e9f769f108f8df05e371341b15d59e995e6806aefab827b58336675"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "7.0.2"
   platform:
     dependency: transitive
     description:
@@ -1048,10 +1048,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: b1aca26728b7cc7a3af971bb6f601554a8ae9df2e0a006de8450ba06a17ad36a
+      sha256: "580fe5dfb51671ae38191d316e027f6b76272b026370708c2d898799750a02b0"
       url: "https://pub.dev"
     source: hosted
-    version: "6.4.0"
+    version: "6.4.1"
   url_launcher_linux:
     dependency: transitive
     description:
