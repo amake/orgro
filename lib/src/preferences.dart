@@ -391,9 +391,9 @@ extension RecentFilesExt on InheritedPreferences {
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.recentFiles) &&
-          !listEquals(data.recentFiles, oldWidget.data.recentFiles) ||
-      data.recentFilesSortKey != oldWidget.data.recentFilesSortKey ||
-      data.recentFilesSortOrder != oldWidget.data.recentFilesSortOrder;
+      (!listEquals(data.recentFiles, oldWidget.data.recentFiles) ||
+          data.recentFilesSortKey != oldWidget.data.recentFilesSortKey ||
+          data.recentFilesSortOrder != oldWidget.data.recentFilesSortOrder);
 }
 
 extension AgendaExt on InheritedPreferences {
@@ -520,16 +520,18 @@ extension ViewSettingsExt on InheritedPreferences {
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.viewSettings) &&
-          data.textScale != oldWidget.data.textScale ||
-      data.fontFamily != oldWidget.data.fontFamily ||
-      data.readerMode != oldWidget.data.readerMode ||
-      data.remoteImagesPolicy != oldWidget.data.remoteImagesPolicy ||
-      data.localLinksPolicy != oldWidget.data.localLinksPolicy ||
-      data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
-      data.decryptPolicy != oldWidget.data.decryptPolicy ||
-      data.fullWidth != oldWidget.data.fullWidth ||
-      data.wakelock != oldWidget.data.wakelock ||
-      !data.scopedPreferences.unorderedEquals(oldWidget.data.scopedPreferences);
+      (data.textScale != oldWidget.data.textScale ||
+          data.fontFamily != oldWidget.data.fontFamily ||
+          data.readerMode != oldWidget.data.readerMode ||
+          data.remoteImagesPolicy != oldWidget.data.remoteImagesPolicy ||
+          data.localLinksPolicy != oldWidget.data.localLinksPolicy ||
+          data.saveChangesPolicy != oldWidget.data.saveChangesPolicy ||
+          data.decryptPolicy != oldWidget.data.decryptPolicy ||
+          data.fullWidth != oldWidget.data.fullWidth ||
+          data.wakelock != oldWidget.data.wakelock ||
+          !data.scopedPreferences.unorderedEquals(
+            oldWidget.data.scopedPreferences,
+          ));
 }
 
 extension AccessibleDirectoriesExt on InheritedPreferences {
@@ -606,8 +608,8 @@ extension CustomizationExt on InheritedPreferences {
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.customization) &&
-          data.textPreviewString != oldWidget.data.textPreviewString ||
-      data.developerMode != oldWidget.data.developerMode;
+      (data.textPreviewString != oldWidget.data.textPreviewString ||
+          data.developerMode != oldWidget.data.developerMode);
 }
 
 class PreferencesData {
