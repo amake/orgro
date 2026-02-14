@@ -449,7 +449,9 @@ extension AgendaExt on InheritedPreferences {
     Set<PrefsAspect> dependencies,
   ) =>
       dependencies.contains(PrefsAspect.agenda) &&
-      !listEquals(data.agendaFileJsons, oldWidget.data.agendaFileJsons);
+      (!listEquals(data.agendaFileJsons, oldWidget.data.agendaFileJsons) ||
+          data.agendaNotificationsPolicy !=
+              oldWidget.data.agendaNotificationsPolicy);
 }
 
 extension ViewSettingsExt on InheritedPreferences {
@@ -660,6 +662,10 @@ class PreferencesData {
           ?.map<dynamic>(json.decode)
           .cast<Map<String, dynamic>>()
           .toList(growable: false),
+      agendaNotificationsPolicy:
+          AgendaNotificationsPolicyPersistence.fromString(
+            await prefs.getString(kAgendaNotificationsPolicyKey),
+          ),
       themeMode: ThemeModePersistence.fromString(
         await prefs.getString(kThemeModeKey),
       ),
