@@ -294,10 +294,6 @@ class LoadedNativeDataSource extends NativeDataSource {
   @override
   DataSource get minimize =>
       NativeDataSource(name, identifier, uri, persistable: persistable);
-
-  @override
-  Future<LoadedNativeDataSource> resolveParent(List<String> accessibleDirs) =>
-      throw UnimplementedError();
 }
 
 class NativeDirectoryInfo {
