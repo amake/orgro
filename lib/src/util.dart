@@ -227,16 +227,16 @@ Future<T> Function(U) sequentiallyWithLockfile<T, U>(
   return (U arg) async {
     final lockfile = await lockfileFuture;
     while (true) {
-      if (lockfile.existsSync()) {
-        // wait and retry
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-        continue;
-      }
-      lockfile.createSync(exclusive: true);
       try {
-        return await fn(arg);
-      } finally {
-        lockfile.deleteSync();
+        lockfile.createSync(exclusive: true);
+        try {
+          return await fn(arg);
+        } finally {
+          lockfile.deleteSync();
+        }
+      } on FileSystemException {
+        // Someone else acquired the lock; wait and retry.
+        await Future<void>.delayed(const Duration(milliseconds: 50));
       }
     }
   };
