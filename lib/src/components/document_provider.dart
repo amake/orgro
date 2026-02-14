@@ -46,7 +46,9 @@ class _DocumentProviderState extends State<DocumentProvider> {
     _docs = [widget.doc];
     _analyses = [DocumentAnalysis.empty()];
     _analyze(widget.doc).then((analysis) {
-      setState(() => _analyses[0] = analysis);
+      if (mounted) {
+        setState(() => _analyses[0] = analysis);
+      }
     });
     _dataSource = widget.dataSource;
   }
@@ -59,7 +61,7 @@ class _DocumentProviderState extends State<DocumentProvider> {
       PrefsAspect.accessibleDirs,
     ).accessibleDirs;
     _resolveDataSourceParent(accessibleDirs).then((dataSource) {
-      if (dataSource != null) {
+      if (mounted && dataSource != null) {
         setState(() => _dataSource = dataSource);
       }
     });
