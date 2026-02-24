@@ -41,7 +41,8 @@ extension LinkHandler on DocumentPageState {
         url,
         mode: LaunchMode.externalApplication,
       );
-      if (!handled && mounted) {
+      if (handled) return true;
+      if (mounted) {
         showErrorSnackBar(
           context,
           AppLocalizations.of(context)!.errorLinkNotHandled(url),
