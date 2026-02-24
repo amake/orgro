@@ -71,6 +71,32 @@ class RemoteImage extends StatelessWidget {
   }
 }
 
+class DataImage extends StatelessWidget {
+  const DataImage(this.link, this.data, {super.key});
+
+  final OrgLink link;
+  final UriData data;
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.isMimeType('image/svg+xml')) {
+      return SvgPicture.memory(
+        data.contentAsBytes(),
+        placeholderBuilder: (context) => const CircularProgressIndicator(),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+      );
+    } else {
+      return Image.memory(
+        data.contentAsBytes(),
+        scale: MediaQuery.devicePixelRatioOf(context),
+        errorBuilder: (context, error, stackTrace) =>
+            _ImageError(link: link, error: error.toString()),
+      );
+    }
+  }
+}
+
 class LocalImage extends StatelessWidget {
   const LocalImage({
     required this.link,

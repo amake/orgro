@@ -13,6 +13,14 @@ extension ImageHandler on DocumentPageState {
     if (looksLikeUrl(link.location)) {
       return _loadRemoteImage(link);
     }
+    final data = Uri.tryParse(link.location)?.data;
+    if (data != null) {
+      return GestureDetector(
+        onLongPress: () =>
+            showInteractive(context, link.location, DataImage(link, data)),
+        child: DataImage(link, data),
+      );
+    }
     final doc = DocumentProvider.of(context).doc;
     try {
       final fileLink = convertLinkResolvingAttachments(context, doc, link);

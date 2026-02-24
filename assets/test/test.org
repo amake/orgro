@@ -56,6 +56,7 @@ Bidi
 - [[file:media-alignment.org][Alignment]]
 - [[file:media-alignment-bidi.org][Bidi alignment]]
 - [[file:media-avif.org][AVIF image]]
+- [[file:media-data-url.org][Data URL]]
 - [[file:media-error.org][Error cases]]
 
 * Visibility
