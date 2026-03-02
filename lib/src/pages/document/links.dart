@@ -196,32 +196,32 @@ extension LinkHandler on DocumentPageState {
                   label: AppLocalizations.of(
                     context,
                   )!.snackbarActionGrantAccess.toUpperCase(),
-                  onPressed: doPickDirectory,
+                  onPressed: () => doPickDirectory(context),
                 )
               : null,
         ),
       );
+}
 
-  Future<void> doPickDirectory() async {
-    try {
-      final source = DocumentProvider.of(context).dataSource;
-      if (source is! NativeDataSource) {
-        return;
-      }
-      final dirInfo = await pickDirectory(initialDirUri: source.uri);
-      if (dirInfo == null) return;
-      if (!mounted) return;
-      debugPrint(
-        'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}',
-      );
-      await Preferences.of(
-        context,
-        PrefsAspect.nil,
-      ).addAccessibleDir(dirInfo.identifier);
-    } catch (e, s) {
-      logError(e, s);
-      if (mounted) showErrorSnackBar(context, e);
+Future<void> doPickDirectory(BuildContext context) async {
+  try {
+    final source = DocumentProvider.of(context).dataSource;
+    if (source is! NativeDataSource) {
+      return;
     }
+    final dirInfo = await pickDirectory(initialDirUri: source.uri);
+    if (dirInfo == null) return;
+    if (!context.mounted) return;
+    debugPrint(
+      'Added accessible dir; uri: ${dirInfo.uri}; identifier: ${dirInfo.identifier}',
+    );
+    await Preferences.of(
+      context,
+      PrefsAspect.nil,
+    ).addAccessibleDir(dirInfo.identifier);
+  } catch (e, s) {
+    logError(e, s);
+    if (context.mounted) showErrorSnackBar(context, e);
   }
 }
 

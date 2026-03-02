@@ -49,6 +49,7 @@ Bidi
 - [[file:links-abbreviation.org][Abbreviations]]
 - [[file:links-radio.org][Radio]]
 - [[file:links-coderef.org][Coderef]]
+- [[file:links-transclusion.org][Transclusion]]
 
 * Media
 

@@ -426,6 +426,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionAgendaNever => '受け取らない';
 
   @override
+  String get transclusionPermissionsMessage => 'ディレクトリのアクセス権が必要';
+
+  @override
   String get saveChangesDialogTitle => '変更を保存しますか？';
 
   @override
@@ -610,6 +613,16 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String errorSchedulingNotifications(Object message) {
     return '通知の設定に失敗しました: $message';
+  }
+
+  @override
+  String errorUnsupportedLinkType(Object link) {
+    return '非対応のリンクタイプ: $link';
+  }
+
+  @override
+  String errorUnsupportedDataSource(Object source) {
+    return '非対応のデータソース: $source';
   }
 
   @override

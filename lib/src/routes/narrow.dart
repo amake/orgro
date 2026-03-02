@@ -17,6 +17,7 @@ class NarrowRouteArgs {
     required this.orgController,
     required this.bucket,
     required this.onDocChanged,
+    required this.transclusion,
   });
 
   final DataSource dataSource;
@@ -27,6 +28,7 @@ class NarrowRouteArgs {
   final OrgControllerData orgController;
   final RestorationBucket bucket;
   final ValueChanged<OrgTree> onDocChanged;
+  final bool transclusion;
 }
 
 class NarrowRoute extends MaterialPageRoute<void> {
@@ -52,6 +54,7 @@ class _NarrowRouteTop extends StatelessWidget {
     final layer = args.layer;
     final viewSettings = args.viewSettings;
     final orgController = args.orgController;
+    final transclusion = args.transclusion;
     return UnmanagedRestorationScope(
       bucket: args.bucket,
       child: DocumentProvider(
@@ -76,14 +79,20 @@ class _NarrowRouteTop extends StatelessWidget {
                 restorationId: 'org_narrow_$layer:${dataSource.id}',
                 child: OrgLocator(
                   child: DocumentPage(
-                    layer: layer,
+                    metadata: DocumentMetadata(
+                      layer: layer,
+                      title: AppLocalizations.of(
+                        context,
+                      )!.pageTitleNarrow(dataSource.name),
+                      root: false,
+                      transclusion: transclusion,
+                    ),
                     title: AppLocalizations.of(
                       context,
                     )!.pageTitleNarrow(dataSource.name),
                     initialQuery: viewSettings.searchQuery,
                     initialFilter: viewSettings.filterData,
                     initialTarget: args.target,
-                    root: false,
                   ),
                 ),
               );

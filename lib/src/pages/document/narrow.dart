@@ -27,11 +27,13 @@ extension NarrowHandler on DocumentPageState {
     // TODO(aaron): This logic is pretty similar to OrgEvents.dispatchLinkTap;
     // maybe we can consolidate it.
 
+    final doc = DocumentProvider.of(context).doc;
+
     try {
       final fileLink = OrgFileLink.parse(target);
       if (fileLink.scheme != 'id:') throw Exception('Not an id: link');
 
-      final section = OrgController.of(context).sectionWithId(fileLink.body);
+      final section = doc.sectionWithId(fileLink.body);
       if (section != null) {
         // We may have an id: link with search option e.g. in the case of
         // opening an id: link pointing to another file.
@@ -52,7 +54,7 @@ extension NarrowHandler on DocumentPageState {
     if (!mounted) return;
 
     try {
-      final section = OrgController.of(context).sectionForTarget(target);
+      final section = doc.sectionForTarget(target);
       if (section != null) {
         await doNarrow(section);
       } else {
@@ -90,7 +92,7 @@ extension NarrowHandler on DocumentPageState {
   }
 
   void ensureOpenOnNarrow() {
-    if (widget.root) return;
+    if (widget.metadata.root) return;
     final doc = DocumentProvider.of(context).doc;
     OrgController.of(context).setVisibilityOf(
       doc,
@@ -118,7 +120,8 @@ extension NarrowHandler on DocumentPageState {
       docProvider.dataSource,
       section,
       searchOption,
-      widget.layer + 1,
+      widget.metadata.layer + 1,
+      widget.metadata.transclusion,
     );
     bucket!.remove<String>(kRestoreNarrowTargetKey);
     if (newSection == null || identical(newSection, section)) {

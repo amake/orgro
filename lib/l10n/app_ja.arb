@@ -162,6 +162,8 @@
   "bannerBodyActionAgendaNotNow": "今は受け取らない",
   "bannerBodyActionAgendaNever": "受け取らない",
 
+  "transclusionPermissionsMessage": "ディレクトリのアクセス権が必要",
+
   "saveChangesDialogTitle": "変更を保存しますか？",
   "saveChangesDialogMessage": "元ファイルに書き戻しできません。",
   "saveChangesDialogForbiddenMessage": "元ファイルに書き戻さないよう設定されています。",
@@ -226,6 +228,9 @@
   "errorSectionNotFound": "「{section}」が見つかりませんでした",
   "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
   "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",
+  "errorUnsupportedLinkType": "非対応のリンクタイプ: {link}",
+  "errorUnsupportedDataSource": "非対応のデータソース: {source}",
+
   "tooltipErrorDetails": "エラー詳細を見る",
 
   "editInsertedHeadline": "[編集によって挿入]",

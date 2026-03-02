@@ -23,3 +23,8 @@ content
 * Short but long tags                              :foo:bar:baz:buzz:bazinga:
 
 content
+
+*************** TODO inline task
+*************** END
+
+content

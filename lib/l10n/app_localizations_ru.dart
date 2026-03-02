@@ -444,6 +444,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bannerBodyActionAgendaNever => 'Never';
 
   @override
+  String get transclusionPermissionsMessage =>
+      'Transclusion requires directory access permissions.';
+
+  @override
   String get saveChangesDialogTitle => 'Сохранить изменения?';
 
   @override
@@ -633,6 +637,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String errorSchedulingNotifications(Object message) {
     return 'Failed to schedule notifications: $message';
+  }
+
+  @override
+  String errorUnsupportedLinkType(Object link) {
+    return 'Unsupported link type: $link';
+  }
+
+  @override
+  String errorUnsupportedDataSource(Object source) {
+    return 'Unsupported data source: $source';
   }
 
   @override

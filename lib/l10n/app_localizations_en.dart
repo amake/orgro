@@ -442,6 +442,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bannerBodyActionAgendaNever => 'Never';
 
   @override
+  String get transclusionPermissionsMessage =>
+      'Transclusion requires directory access permissions.';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -631,6 +635,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String errorSchedulingNotifications(Object message) {
     return 'Failed to schedule notifications: $message';
+  }
+
+  @override
+  String errorUnsupportedLinkType(Object link) {
+    return 'Unsupported link type: $link';
+  }
+
+  @override
+  String errorUnsupportedDataSource(Object source) {
+    return 'Unsupported data source: $source';
   }
 
   @override
@@ -1188,6 +1202,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get bannerBodyActionAgendaNever => 'Never';
 
   @override
+  String get transclusionPermissionsMessage =>
+      'Transclusion requires directory access permissions.';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -1377,6 +1395,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String errorSchedulingNotifications(Object message) {
     return 'Failed to schedule notifications: $message';
+  }
+
+  @override
+  String errorUnsupportedLinkType(Object link) {
+    return 'Unsupported link type: $link';
+  }
+
+  @override
+  String errorUnsupportedDataSource(Object source) {
+    return 'Unsupported data source: $source';
   }
 
   @override
@@ -1934,6 +1962,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get bannerBodyActionAgendaNever => 'Never';
 
   @override
+  String get transclusionPermissionsMessage =>
+      'Transclusion requires directory access permissions.';
+
+  @override
   String get saveChangesDialogTitle => 'Save changes?';
 
   @override
@@ -2123,6 +2155,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String errorSchedulingNotifications(Object message) {
     return 'Failed to schedule notifications: $message';
+  }
+
+  @override
+  String errorUnsupportedLinkType(Object link) {
+    return 'Unsupported link type: $link';
+  }
+
+  @override
+  String errorUnsupportedDataSource(Object source) {
+    return 'Unsupported data source: $source';
   }
 
   @override

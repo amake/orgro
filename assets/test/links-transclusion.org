@@ -1,0 +1,72 @@
+:PROPERTIES:
+:ID:       D73EB545-461D-4DC1-B92B-FD05E2B1BE6C
+:END:
+
+Transclude a file by =file:= link:
+
+#+transclude: [[file:links-transclusion-child.org]]
+
+And again:
+
+#+transclude: [[file:links-transclusion-child.org]]
+
+Transclude a file by =id:= link:
+
+#+transclude: [[id:CC00E1F1-F5A9-4921-AA30-01A1E529AD67]]
+
+Transclude a section by =id:= link:
+
+#+transclude: [[id:081C5CEE-A9FC-49B2-A005-BEC8BF4C2CFB]]
+
+Transclude a section by =file:= link with =::*section-name=:
+
+#+transclude: [[file:links-transclusion-child.org::*Transcluded section]]
+
+Transclude a section by =file:= link with =::#custom-id=:
+
+#+transclude: [[file:links-transclusion-child.org::#foo-custom-id]]
+
+* Levels
+  :PROPERTIES:
+  :ID:       513547E8-3171-4274-A158-8B94E6732ECB
+  :END:
+
+#+transclude: [[file:links-transclusion-child.org]] :level 3
+
+#+transclude: [[id:081C5CEE-A9FC-49B2-A005-BEC8BF4C2CFB]] :level 4
+
+* Only contents
+
+#+transclude: [[file:links-transclusion-child.org]] :only-contents
+
+* Exclude elements
+
+#+transclude: [[file:links-transclusion-child.org]] :exclude-elements "table keyword"
+
+* Src block
+
+#+transclude: [[file:links-transclusion-text.txt]] :src foo
+
+#+transclude: [[file:links-transclusion-text.txt]] :lines 2- :src foo
+
+#+transclude: [[file:links-transclusion-text.txt]] :lines 10- :src foo
+
+* Local
+
+Transclude this file by =id:= link:
+
+#+transclude: [[id:D73EB545-461D-4DC1-B92B-FD05E2B1BE6C]]
+
+Transclude the [[*Levels][Levels]] section by =id:= link:
+
+#+transclude: [[id:513547E8-3171-4274-A158-8B94E6732ECB]]
+
+* Error cases
+
+#+transclude: [[file:non-existent-file.org]]
+
+#+transclude: [[file:/tmp/absolute/path/file.org]]
+
+=id:= links work locally but =*section-name= links do not:
+
+#+transclude: [[*Levels]]

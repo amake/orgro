@@ -862,6 +862,12 @@ abstract class AppLocalizations {
   /// **'Never'**
   String get bannerBodyActionAgendaNever;
 
+  /// No description provided for @transclusionPermissionsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Transclusion requires directory access permissions.'**
+  String get transclusionPermissionsMessage;
+
   /// No description provided for @saveChangesDialogTitle.
   ///
   /// In en, this message translates to:
@@ -1173,6 +1179,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to schedule notifications: {message}'**
   String errorSchedulingNotifications(Object message);
+
+  /// No description provided for @errorUnsupportedLinkType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported link type: {link}'**
+  String errorUnsupportedLinkType(Object link);
+
+  /// No description provided for @errorUnsupportedDataSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported data source: {source}'**
+  String errorUnsupportedDataSource(Object source);
 
   /// No description provided for @tooltipErrorDetails.
   ///

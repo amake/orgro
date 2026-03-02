@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       CC00E1F1-F5A9-4921-AA30-01A1E529AD67
+:END:
+
+This is a transcluded file. This is the top content.
+
+* Transcluded section
+  :PROPERTIES:
+  :ID:       081C5CEE-A9FC-49B2-A005-BEC8BF4C2CFB
+  :END:
+
+This is the content for a transcluded section.
+
+| foo | bar |
+|   1 |   2 |
+
+#+foo: bar
+
+* Another transcluded section
+  :PROPERTIES:
+  :CUSTOM_ID: foo-custom-id
+  :END:
+
+This one has a custom ID.

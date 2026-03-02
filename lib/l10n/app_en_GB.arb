@@ -163,6 +163,8 @@
   "bannerBodyActionAgendaNotNow": "Not now",
   "bannerBodyActionAgendaNever": "Never",
 
+  "transclusionPermissionsMessage": "Transclusion requires directory access permissions.",
+
   "saveChangesDialogTitle": "Save changes?",
   "saveChangesDialogMessage": "Orgro can’t write your changes back to the original file.",
   "saveChangesDialogForbiddenMessage": "You chose to forbid Orgro from saving back to the original file.",
@@ -227,6 +229,9 @@
   "errorSectionNotFound": "Section not found: {section}",
   "errorUnsupportedSearchOption": "Unsupported search option: {option}",
   "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
+  "errorUnsupportedLinkType": "Unsupported link type: {link}",
+  "errorUnsupportedDataSource": "Unsupported data source: {source}",
+
   "tooltipErrorDetails": "View error details",
 
   "editInsertedHeadline": "[Inserted by edit]",

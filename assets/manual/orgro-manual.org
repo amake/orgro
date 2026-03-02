@@ -373,6 +373,22 @@ so:
 Note that this depends on the ability to resolve relative links. See the [[*Links][Links]]
 section for details.
 
+* Transclusion
+
+Orgro supports transclusion of other files in the style of the [[https://nobiot.github.io/org-transclusion/][Org-transclusion]]
+package. Tap the =#+transclude:= keyword to expand or collapse the referenced
+content.
+
+#+transclude: [[file:orgro-manual-demo.org][demo file]]
+
+A subset of Org-transclusion features are supported:
+
+- =id:= links, relative =file:= links
+- =::*section-name=, =::#custom-id= targets
+- =:level= property
+- =:exclude-elements= and =:only-contents= properties
+- =:src= with optional =:lines= property
+
 * Capture
 
 Orgro supports =org-protocol://capture= URLs. When receiving such a URL, Orgro

@@ -28,6 +28,7 @@ import 'package:orgro/src/pages/document/links.dart';
 import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/document/restoration.dart';
 import 'package:orgro/src/pages/document/timestamps.dart';
+import 'package:orgro/src/pages/document/transclusion.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/serialization.dart';
@@ -63,27 +64,39 @@ const kRestoreSearchQueryKey = 'restore_search_query_2';
 const kRestoreSearchFilterKey = 'restore_search_filter';
 const kRestoreDirtyDocumentKey = 'restore_dirty_document';
 
-class DocumentPage extends StatefulWidget {
-  const DocumentPage({
+class DocumentMetadata {
+  DocumentMetadata({
     required this.layer,
     required this.title,
+    required this.root,
+    required this.transclusion,
+  });
+
+  final int layer;
+  final String title;
+  final bool root; // Equivalent to !narrow
+  final bool transclusion;
+}
+
+class DocumentPage extends StatefulWidget {
+  const DocumentPage({
+    required this.title,
+    required this.metadata,
     this.initialMode,
     this.initialTarget,
     this.initialQuery,
     this.initialFilter,
     this.afterOpen,
-    required this.root,
     super.key,
   });
 
-  final int layer;
   final String title;
+  final DocumentMetadata metadata;
   final String? initialTarget;
   final SearchQuery? initialQuery;
   final InitialMode? initialMode;
   final FilterData? initialFilter;
   final AfterOpenCallback? afterOpen;
-  final bool root;
 
   @override
   State createState() => DocumentPageState();
@@ -91,10 +104,12 @@ class DocumentPage extends StatefulWidget {
 
 class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
-  String get restorationId => 'document_page_${widget.layer}';
+  String get restorationId => 'document_page_${widget.metadata.layer}';
 
   late MySearchDelegate searchDelegate;
 
+  bool get _root => widget.metadata.root;
+  bool get _transclusion => widget.metadata.transclusion;
   OrgTree get _doc => DocumentProvider.of(context).doc;
   DataSource get _dataSource => DocumentProvider.of(context).dataSource;
 
@@ -185,8 +200,6 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       });
     });
   }
-
-  void _onSectionLongPress(OrgSection section) async => doNarrow(section);
 
   List<Widget> _onSectionSlide(OrgSection section) {
     return [
@@ -292,8 +305,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
           itemBuilder: (context) => [
-            undoMenuItem(context, onChanged: _undo),
-            redoMenuItem(context, onChanged: _redo),
+            if (!_transclusion) undoMenuItem(context, onChanged: _undo),
+            if (!_transclusion) redoMenuItem(context, onChanged: _redo),
             const PopupMenuDivider(),
             textScaleMenuItem(
               context,
@@ -345,16 +358,21 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         builder: (context, dirty, _) {
           return PopScope(
             canPop:
-                searchMode || !dirty || _doc is! OrgDocument || !widget.root,
+                searchMode ||
+                !dirty ||
+                _doc is! OrgDocument ||
+                !_root ||
+                _transclusion,
             onPopInvokedWithResult: _onPopInvoked,
             child: KeyboardShortcuts(
-              onEdit: doEdit,
-              onUndo: _undo,
-              onRedo: _redo,
+              onEdit: _transclusion ? null : doEdit,
+              onUndo: _transclusion ? null : _undo,
+              onRedo: _transclusion ? null : _redo,
               searchDelegate: searchDelegate,
               child: Scaffold(
                 body: CustomScrollView(
-                  restorationId: 'document_scroll_view_${widget.layer}',
+                  restorationId:
+                      'document_scroll_view_${widget.metadata.layer}',
                   slivers: [
                     _buildAppBar(context, searchMode: searchMode),
                     _buildDocument(context),
@@ -412,7 +430,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             LocalLinksPolicy.deny,
             persist: true,
           ),
-          onAllow: doPickDirectory,
+          onAllow: () => doPickDirectory(context),
         ),
         RemoteImagePermissionsBanner(
           visible: _askPermissionToLoadRemoteImages,
@@ -441,13 +459,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             child: OrgRootWidget(
               style: viewSettings.forScope(_dataSource.id).textStyle,
               onLinkTap: openLink,
-              onSectionLongPress: _onSectionLongPress,
-              onSectionSlide: _onSectionSlide,
+              onSectionLongPress: doNarrow,
+              onSectionSlide: _transclusion ? null : _onSectionSlide,
               onLocalSectionLinkTap: doNarrow,
-              onListItemTap: _onListItemTap,
+              onListItemTap: _transclusion ? null : _onListItemTap,
               onCitationTap: openCitation,
-              onTimestampTap: onTimestampTap,
+              onTimestampTap: _transclusion ? null : onTimestampTap,
               loadImage: loadImage,
+              loadTransclusion: _transclusion ? null : loadTransclusion,
               child: switch (doc) {
                 OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
                 OrgSection() => OrgSectionWidget(
@@ -523,16 +542,17 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             mainAxisAlignment: MainAxisAlignment.end,
             spacing: 16,
             children: [
-              FloatingActionButton(
-                tooltip: AppLocalizations.of(context)!.tooltipEditDocument,
-                onPressed: () {
-                  if (scrolling) return;
-                  doEdit();
-                },
-                heroTag: '${widget.title}EditFAB',
-                mini: true,
-                child: const Icon(Icons.edit),
-              ),
+              if (!_transclusion)
+                FloatingActionButton(
+                  tooltip: AppLocalizations.of(context)!.tooltipEditDocument,
+                  onPressed: () {
+                    if (scrolling) return;
+                    doEdit();
+                  },
+                  heroTag: '${widget.title}EditFAB',
+                  mini: true,
+                  child: const Icon(Icons.edit),
+                ),
               BadgableFloatingActionButton(
                 tooltip: AppLocalizations.of(context)!.tooltipSearchDocument,
                 badgeVisible: searchDelegate.hasQuery,
@@ -548,6 +568,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         );
 
   Future<void> doEdit({bool requestFocus = false}) async {
+    if (_transclusion) return;
+
     final controller = OrgController.of(context);
     bucket!.write(kRestoreModeKey, InitialMode.edit.persistableString);
     final newDoc = await showTextEditor(
@@ -555,7 +577,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       _dataSource,
       _doc,
       requestFocus: requestFocus,
-      layer: widget.layer,
+      layer: widget.metadata.layer,
     );
     bucket!.remove<String>(kRestoreModeKey);
     if (newDoc != null) {
@@ -633,7 +655,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       !_askPermissionToLoadRemoteImages;
 
   bool get _canSaveChanges =>
-      _dataSource is NativeDataSource && _doc is OrgDocument && widget.root;
+      _dataSource is NativeDataSource &&
+      _doc is OrgDocument &&
+      _root &&
+      !_transclusion;
 
   Timer? _writeTimer;
   Future<void>? _writeFuture;
@@ -722,8 +747,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     assert(_dirty.value);
 
     final doc = _doc;
-    // Don't try to save anything other than a root document
-    if (doc is! OrgDocument || !widget.root) return;
+    // Don't try to save anything other than a root, non-transcluded document
+    if (doc is! OrgDocument || !_root || _transclusion) return;
 
     // Grab the route now when we're sure it's on top, so we don't accidentally
     // pop the wrong one later.

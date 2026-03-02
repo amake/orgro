@@ -139,12 +139,16 @@ class _DocumentPageWrapper extends StatelessWidget {
               restorationId: 'org_page:${dataSource.id}',
               child: OrgLocator(
                 child: DocumentPage(
-                  layer: layer,
+                  metadata: DocumentMetadata(
+                    layer: layer,
+                    title: dataSource.name,
+                    root: true,
+                    transclusion: false,
+                  ),
                   title: dataSource.name,
                   initialTarget: target,
                   initialMode: initialMode,
                   afterOpen: afterOpen,
-                  root: true,
                 ),
               ),
             );

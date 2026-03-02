@@ -16,9 +16,9 @@ class KeyboardShortcuts extends StatelessWidget {
   });
 
   final Widget child;
-  final VoidCallback onEdit;
-  final VoidCallback onUndo;
-  final VoidCallback onRedo;
+  final VoidCallback? onEdit;
+  final VoidCallback? onUndo;
+  final VoidCallback? onRedo;
 
   final MySearchDelegate searchDelegate;
 
@@ -63,10 +63,13 @@ class KeyboardShortcuts extends StatelessWidget {
         actions: {
           // TODO(aaron): Init outside of build
           CloseViewIntent: CloseViewAction(),
-          EditIntent: CallbackAction(onInvoke: (_) => onEdit()),
+          if (onEdit != null)
+            EditIntent: CallbackAction(onInvoke: (_) => onEdit!()),
           ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
-          UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo()),
-          RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo()),
+          if (onUndo != null)
+            UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo!()),
+          if (onRedo != null)
+            RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo!()),
           SearchIntent: CallbackAction(
             onInvoke: (_) => searchDelegate.start(context),
           ),

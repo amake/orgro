@@ -56,6 +56,7 @@ Future<OrgTree?> narrow(
   OrgTree section,
   String? target,
   int layer,
+  bool transclusion,
 ) async {
   final viewSettings = ViewSettings.of(context);
   final orgController = OrgController.of(context);
@@ -73,6 +74,7 @@ Future<OrgTree?> narrow(
       orgController: orgController,
       bucket: bucket,
       onDocChanged: (doc) => result = doc,
+      transclusion: transclusion,
     ),
   );
   return result;
