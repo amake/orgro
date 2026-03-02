@@ -159,5 +159,9 @@
 			</array>
 		</dict>
 	</array>
+    <!-- Temporary workaround for overlapping window chrome on iPadOS 26; see
+         https://github.com/flutter/flutter/issues/170461 -->
+    <key>UIDesignRequiresCompatibility</key>
+    <true/>
 </dict>
 </plist>
