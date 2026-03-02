@@ -102,7 +102,7 @@ class DirectoryPermissionsBanner extends StatelessWidget {
       visible: visible,
       child: MaterialBanner(
         content: Text(AppLocalizations.of(context)!.bannerBodyRelativeLinks),
-        leading: const Icon(Icons.photo),
+        leading: const Icon(Icons.link),
         actions: [
           _BannerButton(
             text: AppLocalizations.of(context)!.bannerBodyActionGrantNotNow,
