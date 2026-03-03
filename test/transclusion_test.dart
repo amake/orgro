@@ -41,6 +41,13 @@ c''';
 **** b
 ***** c''');
     });
+    test('section', () {
+      final section = doc.sections[0].sections[0];
+      expect(applyLevel(section, 1).toMarkup(), '* b\n** c');
+      expect(applyLevel(section, 2).toMarkup(), '** b\n*** c');
+      expect(applyLevel(section, 3).toMarkup(), '*** b\n**** c');
+      expect(applyLevel(section, 4).toMarkup(), '**** b\n***** c');
+    });
     test('invalid', () {
       expect(applyLevel(doc, -1).toMarkup(), markup);
       expect(applyLevel(doc, 0).toMarkup(), markup);

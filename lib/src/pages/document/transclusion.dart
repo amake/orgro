@@ -436,7 +436,7 @@ String extractLines(String content, String? linesParam) {
 OrgTree applyLevel(OrgTree doc, int level) {
   if (level < 1 || level > 9) return doc;
 
-  final newSections = doc.sections.map((section) {
+  OrgSection applyToSection(OrgSection section) {
     final delta = level - section.level;
     if (delta == 0) return section;
 
@@ -456,11 +456,13 @@ OrgTree applyLevel(OrgTree doc, int level) {
     }
 
     return section.edit().visit(visitor).commit<OrgSection>();
-  });
+  }
 
   return switch (doc) {
-    OrgDocument() => doc.copyWith(sections: newSections),
-    OrgSection() => doc.copyWith(sections: newSections),
+    OrgDocument() => doc.copyWith(
+      sections: doc.sections.map(applyToSection).toList(growable: false),
+    ),
+    OrgSection() => applyToSection(doc),
     _ => throw UnimplementedError(
       'Unexpected document type: ${doc.runtimeType}',
     ),
