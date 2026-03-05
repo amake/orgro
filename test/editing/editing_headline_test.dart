@@ -24,6 +24,34 @@ void main() {
       final result = insertHeadline(testValue('foo |bar'));
       expect(result, testValue('* foo |bar'));
     });
+    test('Insert after existing', () {
+      final result = insertHeadline(
+        testValue('''
+** foo bar
+|'''),
+      );
+      expect(
+        result,
+        testValue('''
+** foo bar
+** |'''),
+      );
+    });
+    test('Insert within existing', () {
+      final result = insertHeadline(
+        testValue('''
+** foo bar
+baz
+|'''),
+      );
+      expect(
+        result,
+        testValue('''
+** foo bar
+baz
+** |'''),
+      );
+    });
     test('Insert on existing headline', () {
       final result = insertHeadline(testValue('* foo |bar'));
       expect(result, testValue('** foo |bar'));

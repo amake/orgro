@@ -111,31 +111,29 @@ TextEditingValue? insertHeadline(TextEditingValue value) {
             .replaced(TextRange.collapsed(lineStart), replacement)
             .copyWith(selection: value.selection.shift(replacement.length));
 
-        // No preceding line, so just insert a list item at the start
+        // No preceding line, so just insert a headline at the start
         if (lastEOLIdx == -1) return replaceBOL('* ');
 
-        // No list item at the cursor, but there is a preceding line.
-        // If that line is a list item, insert a new one after it.
-        final previous =
-            doc
-                    .nodesAtOffset(lastEOLIdx)
-                    .where((e) => e.node is OrgHeadline)
-                    .firstOrNull
-                    ?.node
-                as OrgHeadline?;
+        // No headline at the cursor, but there may be a containing section.
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .where((e) => e.node is OrgSection)
+            .firstOrNull
+            ?.node;
 
-        // List item not found or not ordered, so just insert a new list item at
-        // line start
-        if (previous is! OrgHeadline) return replaceBOL('* ');
+        // No containing section, so just insert a new list item at line start
+        if (previous is! OrgSection) return replaceBOL('* ');
 
-        final replacement = previous.next().toMarkup();
+        // Insert a new headline at the same level as the containing section's
+        // headline
+        final replacement = previous.headline.next().toMarkup();
         return replaceBOL(replacement);
       }
     case OrgHeadline():
       {
         final itemAtPointLength = nodeAtPoint.toMarkup().length;
 
-        // Add empty checkbox
+        // Add another star to the headline
         final replacement = nodeAtPoint
             .copyWith(
               stars: (
