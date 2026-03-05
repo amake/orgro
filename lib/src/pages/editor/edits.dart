@@ -117,12 +117,12 @@ TextEditingValue? insertHeadline(TextEditingValue value) {
         // No headline at the cursor, but there may be a containing section.
         final previous = doc
             .nodesAtOffset(lastEOLIdx)
-            .where((e) => e.node is OrgSection)
+            .whereType<({OrgSection node, NodeSpan span})>()
             .firstOrNull
             ?.node;
 
         // No containing section, so just insert a new list item at line start
-        if (previous is! OrgSection) return replaceBOL('* ');
+        if (previous == null) return replaceBOL('* ');
 
         // Insert a new headline at the same level as the containing section's
         // headline
@@ -178,13 +178,11 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
 
         // No list item at the cursor, but there is a preceding line.
         // If that line is a list item, insert a new one after it.
-        final previous =
-            doc
-                    .nodesAtOffset(lastEOLIdx)
-                    .where((e) => e.node is OrgListItem)
-                    .firstOrNull
-                    ?.node
-                as OrgListItem?;
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .whereType<({OrgListItem node, NodeSpan span})>()
+            .firstOrNull
+            ?.node;
 
         // List item not found or not ordered, so just insert a new list item at
         // line start
@@ -249,13 +247,11 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
-        final previous =
-            doc
-                    .nodesAtOffset(lastEOLIdx)
-                    .where((e) => e.node is OrgListItem)
-                    .firstOrNull
-                    ?.node
-                as OrgListItem?;
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .whereType<({OrgListItem node, NodeSpan span})>()
+            .firstOrNull
+            ?.node;
         final replacement = OrgListOrderedItem(
           nodeAtPoint.indent,
           previous is OrgListOrderedItem ? previous.nextBullet : '1. ',
@@ -299,13 +295,11 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
 
         // No list item at the cursor, but there is a preceding line.
         // If that line is a list item, insert a new one after it.
-        final previous =
-            doc
-                    .nodesAtOffset(lastEOLIdx)
-                    .where((e) => e.node is OrgListItem)
-                    .firstOrNull
-                    ?.node
-                as OrgListItem?;
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .whereType<({OrgListItem node, NodeSpan span})>()
+            .firstOrNull
+            ?.node;
 
         // List item not found or not unordered, so just insert a new list item
         // at line start
@@ -371,13 +365,11 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
 
         // Switch type of list
         // TODO(aaron): Should this act on entire list, not just this item?
-        final previous =
-            doc
-                    .nodesAtOffset(lastEOLIdx)
-                    .where((e) => e.node is OrgListItem)
-                    .firstOrNull
-                    ?.node
-                as OrgListItem?;
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .whereType<({OrgListItem node, NodeSpan span})>()
+            .firstOrNull
+            ?.node;
         final replacement = OrgListUnorderedItem(
           nodeAtPoint.indent,
           previous is OrgListUnorderedItem ? previous.bullet : '- ',
