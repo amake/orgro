@@ -101,7 +101,7 @@ TextEditingValue? insertHeadline(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeStart) =
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
       _nodeInfoAtPoint<OrgHeadline>(value, doc);
 
   switch (nodeAtPoint) {
@@ -144,7 +144,10 @@ TextEditingValue? insertHeadline(TextEditingValue value) {
             .toMarkup();
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + itemAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
@@ -160,7 +163,7 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeStart) =
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
       _nodeInfoAtPoint<OrgListItem>(value, doc);
 
   switch (nodeAtPoint) {
@@ -204,7 +207,10 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + itemAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
@@ -224,7 +230,10 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
             : nodeAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + preambleLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + preambleLength,
+              ),
               '',
             )
             .copyWith(selection: value.selection.shift(-preambleLength));
@@ -256,7 +265,10 @@ TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + itemAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
@@ -272,7 +284,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 
   final doc = OrgDocument.parse(value.text);
-  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeStart) =
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
       _nodeInfoAtPoint<OrgListItem>(value, doc);
 
   switch (nodeAtPoint) {
@@ -322,7 +334,10 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + itemAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
@@ -342,7 +357,10 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
             : nodeAtPoint.toMarkupLocating(firstBodyNode).start;
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + preambleLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + preambleLength,
+              ),
               '',
             )
             .copyWith(selection: value.selection.shift(-preambleLength));
@@ -369,7 +387,10 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
         ).toMarkup();
         return value
             .replaced(
-              TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+              TextRange(
+                start: nodeSpan!.start,
+                end: nodeSpan.start + itemAtPointLength,
+              ),
               replacement,
             )
             .copyWith(
@@ -381,7 +402,7 @@ TextEditingValue? toggleUnorderedListItem(TextEditingValue value) {
   }
 }
 
-({int lineStart, int lastEOLIdx, T? nodeAtPoint, int? nodeStart})
+({int lineStart, int lastEOLIdx, T? nodeAtPoint, NodeSpan? nodeSpan})
 _nodeInfoAtPoint<T extends OrgNode>(TextEditingValue value, OrgDocument doc) {
   final lastEOLIdx = value.selection.start == 0
       ? -1
@@ -389,6 +410,7 @@ _nodeInfoAtPoint<T extends OrgNode>(TextEditingValue value, OrgDocument doc) {
   final lineStart = lastEOLIdx + 1;
 
   T? foundNode;
+  NodeSpan? nodeSpan;
   if (value.selection.start == lineStart) {
     // Org syntax lets list items contain line breaks, so the cursor sitting on
     // the line "after" a list item is still technically in the list item. This is
@@ -401,16 +423,19 @@ _nodeInfoAtPoint<T extends OrgNode>(TextEditingValue value, OrgDocument doc) {
     // the case if the cursor is at the end of the document.
     if (searchOffset == value.text.length) searchOffset--;
     final foundAtOffset = doc.nodesAtOffset(searchOffset);
-    foundNode = foundAtOffset.where((e) => e.node is T).firstOrNull?.node as T?;
+    final found = foundAtOffset
+        .whereType<({T node, NodeSpan span})>()
+        .firstOrNull;
+    if (found != null) {
+      foundNode = found.node;
+      nodeSpan = found.span;
+    }
   }
-  final nodeStart = foundNode == null
-      ? null
-      : doc.toMarkupLocating(foundNode).start;
   return (
     lineStart: lineStart,
     lastEOLIdx: lastEOLIdx,
     nodeAtPoint: foundNode,
-    nodeStart: nodeStart,
+    nodeSpan: nodeSpan,
   );
 }
 
@@ -467,7 +492,7 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
 
   final doc = OrgDocument.parse(value.text);
   {
-    final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeStart) =
+    final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
         _nodeInfoAtPoint<OrgListItem>(value, doc);
     if (nodeAtPoint != null) {
       if (!increase && nodeAtPoint.indent.isEmpty) {
@@ -492,7 +517,10 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
       }.toMarkup();
       return value
           .replaced(
-            TextRange(start: nodeStart!, end: nodeStart + itemAtPointLength),
+            TextRange(
+              start: nodeSpan!.start,
+              end: nodeSpan.start + itemAtPointLength,
+            ),
             replacement,
           )
           .copyWith(
@@ -503,7 +531,7 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
     }
 
     {
-      final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeStart) =
+      final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
           _nodeInfoAtPoint<OrgSection>(value, doc);
       if (nodeAtPoint != null) {
         if (nodeAtPoint.level == 1 && !increase) {
@@ -527,8 +555,8 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
         return value
             .replaced(
               TextRange(
-                start: nodeStart!,
-                end: nodeStart + sectionAtPointLength,
+                start: nodeSpan!.start,
+                end: nodeSpan.start + sectionAtPointLength,
               ),
               replacement,
             )
