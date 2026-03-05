@@ -80,6 +80,39 @@ item 2|'''),
         final result = toggleUnorderedListItem(testValue('- foo :: bar|'));
         expect(result, isNull);
       });
+      test('Toggle list item on deceptive trailing whitespace', () {
+        final result = toggleUnorderedListItem(
+          testValue('''
+- foo
+ |
+- bar'''),
+        );
+        expect(
+          result,
+          testValue('''
+- [ ] foo
+ |
+- bar'''),
+        );
+      });
+      test(
+        'Toggle list item on ordered item deceptive trailing whitespace',
+        () {
+          final result = toggleUnorderedListItem(
+            testValue('''
+1. foo
+ |
+2. bar'''),
+          );
+          expect(
+            result,
+            testValue('''
+- foo
+ |
+2. bar'''),
+          );
+        },
+      );
     });
     group('Ordered', () {
       test('Toggle ordered empty', () {
@@ -143,6 +176,36 @@ item 2|'''),
       test('Toggle list item with tag does nothing', () {
         final result = toggleOrderedListItem(testValue('- foo :: bar|'));
         expect(result, isNull);
+      });
+      test('Toggle ordered item on deceptive trailing whitespace', () {
+        final result = toggleOrderedListItem(
+          testValue('''
+1. foo
+ |
+2. bar'''),
+        );
+        expect(
+          result,
+          testValue('''
+1. [ ] foo
+ |
+2. bar'''),
+        );
+      });
+      test('Toggle unordered item on deceptive trailing whitespace', () {
+        final result = toggleOrderedListItem(
+          testValue('''
+- foo
+ |
+- bar'''),
+        );
+        expect(
+          result,
+          testValue('''
+1. foo
+ |
+- bar'''),
+        );
       });
     });
   });
