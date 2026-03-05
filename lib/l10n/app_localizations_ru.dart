@@ -665,6 +665,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tooltipRedo => 'Redo';
 
   @override
+  String get tooltipInsertHeadline => 'Insert headline';
+
+  @override
   String get tooltipToggleUnorderedList => 'Toggle unordered list';
 
   @override

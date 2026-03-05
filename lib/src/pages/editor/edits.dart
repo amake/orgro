@@ -97,6 +97,69 @@ Future<TextEditingValue?> insertDate(
       );
 }
 
+TextEditingValue? insertHeadline(TextEditingValue value) {
+  if (!value.selection.isValid) return null;
+
+  final doc = OrgDocument.parse(value.text);
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint) = _nodeInfoAtPoint<OrgHeadline>(
+    value,
+    doc,
+  );
+
+  switch (nodeAtPoint) {
+    case null:
+      {
+        TextEditingValue replaceBOL(String replacement) => value
+            .replaced(TextRange.collapsed(lineStart), replacement)
+            .copyWith(selection: value.selection.shift(replacement.length));
+
+        // No preceding line, so just insert a list item at the start
+        if (lastEOLIdx == -1) return replaceBOL('* ');
+
+        // No list item at the cursor, but there is a preceding line.
+        // If that line is a list item, insert a new one after it.
+        final previous =
+            doc
+                    .nodesAtOffset(lastEOLIdx)
+                    .where((e) => e.node is OrgHeadline)
+                    .firstOrNull
+                    ?.node
+                as OrgHeadline?;
+
+        // List item not found or not ordered, so just insert a new list item at
+        // line start
+        if (previous is! OrgHeadline) return replaceBOL('* ');
+
+        final replacement = previous.next().toMarkup();
+        return replaceBOL(replacement);
+      }
+    case OrgHeadline():
+      {
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
+
+        // Add empty checkbox
+        final replacement = nodeAtPoint
+            .copyWith(
+              stars: (
+                value: '${nodeAtPoint.stars.value}*',
+                trailing: nodeAtPoint.stars.trailing,
+              ),
+            )
+            .toMarkup();
+        return value
+            .replaced(
+              TextRange(start: lineStart, end: lineStart + itemAtPointLength),
+              replacement,
+            )
+            .copyWith(
+              selection: value.selection.shift(
+                replacement.length - itemAtPointLength,
+              ),
+            );
+      }
+  }
+}
+
 TextEditingValue? toggleOrderedListItem(TextEditingValue value) {
   if (!value.selection.isValid) return null;
 

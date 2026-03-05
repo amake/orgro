@@ -1222,6 +1222,12 @@ abstract class AppLocalizations {
   /// **'Redo'**
   String get tooltipRedo;
 
+  /// No description provided for @tooltipInsertHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert headline'**
+  String get tooltipInsertHeadline;
+
   /// No description provided for @tooltipToggleUnorderedList.
   ///
   /// In en, this message translates to:

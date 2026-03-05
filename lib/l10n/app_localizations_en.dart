@@ -663,6 +663,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tooltipRedo => 'Redo';
 
   @override
+  String get tooltipInsertHeadline => 'Insert headline';
+
+  @override
   String get tooltipToggleUnorderedList => 'Toggle unordered list';
 
   @override
@@ -1423,6 +1426,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get tooltipRedo => 'Redo';
 
   @override
+  String get tooltipInsertHeadline => 'Insert headline';
+
+  @override
   String get tooltipToggleUnorderedList => 'Toggle unordered list';
 
   @override
@@ -2181,6 +2187,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tooltipRedo => 'Redo';
+
+  @override
+  String get tooltipInsertHeadline => 'Insert headline';
 
   @override
   String get tooltipToggleUnorderedList => 'Toggle unordered list';

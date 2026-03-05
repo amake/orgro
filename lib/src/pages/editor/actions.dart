@@ -172,6 +172,19 @@ class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
   }
 }
 
+class InsertHeadlineIntent extends Intent {
+  const InsertHeadlineIntent();
+}
+
+class InsertHeadlineAction extends _TextEditingAction<InsertHeadlineIntent> {
+  InsertHeadlineAction(super.controller);
+
+  @override
+  void invoke(covariant InsertHeadlineIntent intent, [BuildContext? context]) {
+    _applyEdit(insertHeadline);
+  }
+}
+
 class ToggleListItemIntent extends Intent {
   const ToggleListItemIntent({required this.ordered});
   final bool ordered;

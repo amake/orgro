@@ -408,6 +408,7 @@
   "tooltipApplyChanges": "Apply changes",
   "tooltipUndo": "Undo",
   "tooltipRedo": "Redo",
+  "tooltipInsertHeadline": "Insert headline",
   "tooltipToggleUnorderedList": "Toggle unordered list",
   "tooltipToggleOrderedList": "Toggle ordered list",
   "tooltipDecreaseIndent": "Decrease indent",

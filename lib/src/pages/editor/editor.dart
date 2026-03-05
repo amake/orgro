@@ -133,6 +133,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
             MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
             ToggleListItemIntent: ToggleListItemAction(_controller.value),
+            InsertHeadlineIntent: InsertHeadlineAction(_controller.value),
             AfterNewLineIntent: AfterNewLineAction(_controller.value),
             ChangeIndentIntent: ChangeIndentAction(_controller.value),
             ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
@@ -231,6 +232,14 @@ class _EditorToolbar extends StatelessWidget {
                   tooltip: AppLocalizations.of(context)!.tooltipRedo,
                   icon: const Icon(Icons.redo),
                   onPressed: value.canRedo ? undoController.redo : null,
+                ),
+              ),
+              IconButton(
+                tooltip: AppLocalizations.of(context)!.tooltipInsertHeadline,
+                icon: const Icon(Icons.emergency),
+                onPressed: Actions.handler(
+                  context,
+                  const InsertHeadlineIntent(),
                 ),
               ),
               IconButton(

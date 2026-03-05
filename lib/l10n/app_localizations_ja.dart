@@ -641,6 +641,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipRedo => 'やり直す';
 
   @override
+  String get tooltipInsertHeadline => '見出しを挿入';
+
+  @override
   String get tooltipToggleUnorderedList => '箇条書きリストの切替';
 
   @override

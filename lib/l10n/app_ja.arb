@@ -238,6 +238,7 @@
   "tooltipApplyChanges": "変更を適用する",
   "tooltipUndo": "元に戻す",
   "tooltipRedo": "やり直す",
+  "tooltipInsertHeadline": "見出しを挿入",
   "tooltipToggleUnorderedList": "箇条書きリストの切替",
   "tooltipToggleOrderedList": "番号付きリストの切替",
   "tooltipDecreaseIndent": "インデントを減らす",
