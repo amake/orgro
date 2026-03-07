@@ -152,25 +152,26 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                   ),
                 ],
               ),
-              body: Column(
+              body: Stack(
                 // mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller.value,
-                      undoController: _undoController,
-                      scrollController: PrimaryScrollController.of(context),
-                      focusNode: _focusNode,
-                      maxLines: null,
-                      expands: true,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                      ),
-                      style: _textStyle,
+                  TextField(
+                    controller: _controller.value,
+                    undoController: _undoController,
+                    scrollController: PrimaryScrollController.of(context),
+                    focusNode: _focusNode,
+                    maxLines: null,
+                    expands: true,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
                     ),
+                    style: _textStyle,
                   ),
-                  _EditorToolbar(undoController: _undoController),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: _EditorToolbar(undoController: _undoController),
+                  ),
                 ],
               ),
             ),
@@ -205,153 +206,183 @@ class _EditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).highlightColor,
-        border: Border(
-          top: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-        ),
-      ),
-      width: double.infinity,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Row(
-            children: [
-              ValueListenableBuilder(
-                valueListenable: undoController,
-                builder: (context, value, _) => IconButton(
-                  tooltip: AppLocalizations.of(context)!.tooltipUndo,
-                  icon: const Icon(Icons.undo),
-                  onPressed: value.canUndo ? undoController.undo : null,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Material(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).highlightColor,
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            width: double.infinity,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: TooltipTheme(
+                data: TooltipTheme.of(context).copyWith(preferBelow: false),
+                child: Row(
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: undoController,
+                      builder: (context, value, _) => IconButton(
+                        tooltip: AppLocalizations.of(context)!.tooltipUndo,
+                        icon: const Icon(Icons.undo),
+                        onPressed: value.canUndo ? undoController.undo : null,
+                      ),
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: undoController,
+                      builder: (context, value, _) => IconButton(
+                        tooltip: AppLocalizations.of(context)!.tooltipRedo,
+                        icon: const Icon(Icons.redo),
+                        onPressed: value.canRedo ? undoController.redo : null,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipInsertHeadline,
+                      icon: const Icon(Icons.emergency),
+                      onPressed: Actions.handler(
+                        context,
+                        const InsertHeadlineIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipToggleUnorderedList,
+                      icon: const Icon(Icons.format_list_bulleted),
+                      onPressed: Actions.handler(
+                        context,
+                        const ToggleListItemIntent(ordered: false),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipToggleOrderedList,
+                      icon: const Icon(Icons.format_list_numbered),
+                      onPressed: Actions.handler(
+                        context,
+                        const ToggleListItemIntent(ordered: true),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipDecreaseIndent,
+                      icon: const Icon(Icons.format_indent_decrease),
+                      onPressed: Actions.handler(
+                        context,
+                        const ChangeIndentIntent(increase: false),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipIncreaseIndent,
+                      icon: const Icon(Icons.format_indent_increase),
+                      onPressed: Actions.handler(
+                        context,
+                        const ChangeIndentIntent(increase: true),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipBold,
+                      icon: const Icon(Icons.format_bold),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeBoldIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipItalic,
+                      icon: const Icon(Icons.format_italic),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeItalicIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipUnderline,
+                      icon: const Icon(Icons.format_underline),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeUnderlineIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipStrikethrough,
+                      icon: const Icon(Icons.format_strikethrough),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeStrikethroughIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipCode,
+                      icon: const Icon(Icons.code),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeCodeIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipInsertLink,
+                      icon: const Icon(Icons.link),
+                      onPressed: Actions.handler(
+                        context,
+                        const InsertLinkIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipInsertDate,
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: Actions.handler(
+                        context,
+                        const InsertDateIntent(active: false),
+                      ),
+                      onLongPress: Actions.handler(
+                        context,
+                        const InsertDateIntent(active: true),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipSubscript,
+                      icon: const Icon(Icons.subscript),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeSubscriptIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(context)!.tooltipSuperscript,
+                      icon: const Icon(Icons.superscript),
+                      onPressed: Actions.handler(
+                        context,
+                        const MakeSuperscriptIntent(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: AppLocalizations.of(
+                        context,
+                      )!.tooltipEncryptSection,
+                      icon: const Icon(Icons.lock_outline),
+                      onPressed: Actions.handler(
+                        context,
+                        const EncryptSectionIntent(),
+                      ),
+                    ),
+                    // TODO(aaron): Offer more quick-insert actions?
+                    // - Code blocks
+                  ],
                 ),
               ),
-              ValueListenableBuilder(
-                valueListenable: undoController,
-                builder: (context, value, _) => IconButton(
-                  tooltip: AppLocalizations.of(context)!.tooltipRedo,
-                  icon: const Icon(Icons.redo),
-                  onPressed: value.canRedo ? undoController.redo : null,
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipInsertHeadline,
-                icon: const Icon(Icons.emergency),
-                onPressed: Actions.handler(
-                  context,
-                  const InsertHeadlineIntent(),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(
-                  context,
-                )!.tooltipToggleUnorderedList,
-                icon: const Icon(Icons.format_list_bulleted),
-                onPressed: Actions.handler(
-                  context,
-                  const ToggleListItemIntent(ordered: false),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipToggleOrderedList,
-                icon: const Icon(Icons.format_list_numbered),
-                onPressed: Actions.handler(
-                  context,
-                  const ToggleListItemIntent(ordered: true),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipDecreaseIndent,
-                icon: const Icon(Icons.format_indent_decrease),
-                onPressed: Actions.handler(
-                  context,
-                  const ChangeIndentIntent(increase: false),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipIncreaseIndent,
-                icon: const Icon(Icons.format_indent_increase),
-                onPressed: Actions.handler(
-                  context,
-                  const ChangeIndentIntent(increase: true),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipBold,
-                icon: const Icon(Icons.format_bold),
-                onPressed: Actions.handler(context, const MakeBoldIntent()),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipItalic,
-                icon: const Icon(Icons.format_italic),
-                onPressed: Actions.handler(context, const MakeItalicIntent()),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipUnderline,
-                icon: const Icon(Icons.format_underline),
-                onPressed: Actions.handler(
-                  context,
-                  const MakeUnderlineIntent(),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipStrikethrough,
-                icon: const Icon(Icons.format_strikethrough),
-                onPressed: Actions.handler(
-                  context,
-                  const MakeStrikethroughIntent(),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipCode,
-                icon: const Icon(Icons.code),
-                onPressed: Actions.handler(context, const MakeCodeIntent()),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipInsertLink,
-                icon: const Icon(Icons.link),
-                onPressed: Actions.handler(context, const InsertLinkIntent()),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipInsertDate,
-                icon: const Icon(Icons.calendar_today),
-                onPressed: Actions.handler(
-                  context,
-                  const InsertDateIntent(active: false),
-                ),
-                onLongPress: Actions.handler(
-                  context,
-                  const InsertDateIntent(active: true),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipSubscript,
-                icon: const Icon(Icons.subscript),
-                onPressed: Actions.handler(
-                  context,
-                  const MakeSubscriptIntent(),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipSuperscript,
-                icon: const Icon(Icons.superscript),
-                onPressed: Actions.handler(
-                  context,
-                  const MakeSuperscriptIntent(),
-                ),
-              ),
-              IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipEncryptSection,
-                icon: const Icon(Icons.lock_outline),
-                onPressed: Actions.handler(
-                  context,
-                  const EncryptSectionIntent(),
-                ),
-              ),
-              // TODO(aaron): Offer more quick-insert actions?
-              // - Code blocks
-            ],
+            ),
           ),
         ),
       ),
