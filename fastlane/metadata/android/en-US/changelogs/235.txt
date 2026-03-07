@@ -1,0 +1,5 @@
+- Support transclusion via #+transclude: directives
+- Support data:image/* images
+- Insert headline, encrypt section buttons in the editor
+- Inline tasks now have distinct syntax highlighting
+- Bug fixes
