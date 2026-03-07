@@ -296,10 +296,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "87fbd7c534435b6c5d9d98b01e1fd527812b82e68ddd8bd35fc45ed0fa8f0a95"
+      sha256: "1ded017b39c8e15c8948ea855070a5ff8ff8b3d5e83f3446e02d6bb12add7ad9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -317,18 +317,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "0948d4daeae906a0c8f0792b9b3450d464fdf562fe73e17921765b5a0a82ce9a"
+      sha256: "3c5fb936d44df5771ebc95e5dd5e7129fac767d764e9a4a01e1412a8210e6cf6"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.13"
+    version: "3.0.14"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: bf0fd9c395b310939ed26581731a4966ecdbc92dc9ff1d83af2b200443dfca60
+      sha256: "216635d1c3990396ed52be587fb130e2a1a1172ce035df6cbc93d69eb186ba26"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.18"
+    version: "2.0.19"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
@@ -386,10 +386,10 @@ packages:
     dependency: transitive
     description:
       name: hooks
-      sha256: "7a08a0d684cb3b8fb604b78455d5d352f502b68079f7b80b831c62220ab0a4f6"
+      sha256: e79ed1e8e1929bc6ecb6ec85f0cb519c887aa5b423705ded0d0f2d9226def388
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   http:
     dependency: "direct main"
     description:
@@ -434,10 +434,10 @@ packages:
     dependency: transitive
     description:
       name: in_app_purchase_storekit
-      sha256: "2f1a1db44798158076ced07d401b349880dd24a29c7c50a1b1a0de230b7f2f62"
+      sha256: "1d512809edd9f12ff88fce4596a13a18134e2499013f4d6a8894b04699363c93"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.8"
+    version: "0.4.8+1"
   in_app_purchase_stub_android:
     dependency: "direct main"
     description:
@@ -547,10 +547,10 @@ packages:
     dependency: transitive
     description:
       name: native_toolchain_c
-      sha256: "89e83885ba09da5fdf2cdacc8002a712ca238c28b7f717910b34bcd27b0d03ac"
+      sha256: "92b2ca62c8bd2b8d2f267cdfccf9bfbdb7322f778f8f91b3ce5b5cda23a3899f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.4"
+    version: "0.17.5"
   objective_c:
     dependency: transitive
     description:
