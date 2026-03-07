@@ -252,6 +252,7 @@
   "tooltipInsertDate": "日付を挿入",
   "tooltipSubscript": "下付き文字",
   "tooltipSuperscript": "上付き文字",
+  "tooltipEncryptSection": "セクションを暗号化",
 
   "donateItemTitle": "Orgroの開発を支援する",
   "donateItemSubtitle": "ご支援に感謝します！",

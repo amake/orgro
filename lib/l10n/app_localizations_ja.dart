@@ -683,6 +683,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipSuperscript => '上付き文字';
 
   @override
+  String get tooltipEncryptSection => 'セクションを暗号化';
+
+  @override
   String get donateItemTitle => 'Orgroの開発を支援する';
 
   @override

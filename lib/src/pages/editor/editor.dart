@@ -136,6 +136,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             InsertHeadlineIntent: InsertHeadlineAction(_controller.value),
             AfterNewLineIntent: AfterNewLineAction(_controller.value),
             ChangeIndentIntent: ChangeIndentAction(_controller.value),
+            EncryptSectionIntent: EncryptSectionAction(_controller.value),
             ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
           },
           child: FocusScope(
@@ -340,9 +341,16 @@ class _EditorToolbar extends StatelessWidget {
                   const MakeSuperscriptIntent(),
                 ),
               ),
+              IconButton(
+                tooltip: AppLocalizations.of(context)!.tooltipEncryptSection,
+                icon: const Icon(Icons.lock_outline),
+                onPressed: Actions.handler(
+                  context,
+                  const EncryptSectionIntent(),
+                ),
+              ),
               // TODO(aaron): Offer more quick-insert actions?
               // - Code blocks
-              // - Sections
             ],
           ),
         ),

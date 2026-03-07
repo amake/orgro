@@ -229,3 +229,16 @@ class ChangeIndentAction extends _TextEditingAction<ChangeIndentIntent> {
     _applyEdit((value) => changeIndent(value, intent.increase));
   }
 }
+
+class EncryptSectionIntent extends Intent {
+  const EncryptSectionIntent();
+}
+
+class EncryptSectionAction extends _TextEditingAction<EncryptSectionIntent> {
+  EncryptSectionAction(super.controller);
+
+  @override
+  void invoke(covariant EncryptSectionIntent intent, [BuildContext? context]) {
+    _applyEdit(encryptSection);
+  }
+}

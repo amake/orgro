@@ -705,6 +705,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tooltipSuperscript => 'Superscript';
 
   @override
+  String get tooltipEncryptSection => 'Encrypt section';
+
+  @override
   String get donateItemTitle => 'Donate to support Orgro';
 
   @override
@@ -1468,6 +1471,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get tooltipSuperscript => 'Superscript';
 
   @override
+  String get tooltipEncryptSection => 'Encrypt section';
+
+  @override
   String get donateItemTitle => 'Donate to support Orgro';
 
   @override
@@ -2229,6 +2235,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tooltipSuperscript => 'Superscript';
+
+  @override
+  String get tooltipEncryptSection => 'Encrypt section';
 
   @override
   String get donateItemTitle => 'Donate to support Orgro';

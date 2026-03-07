@@ -563,3 +563,99 @@ TextEditingValue? changeIndent(TextEditingValue value, bool increase) {
     return null;
   }
 }
+
+TextEditingValue? encryptSection(TextEditingValue value) {
+  if (!value.selection.isValid) return null;
+
+  final doc = OrgDocument.parse(value.text);
+  final (:lineStart, :lastEOLIdx, :nodeAtPoint, :nodeSpan) =
+      _nodeInfoAtPoint<OrgHeadline>(value, doc);
+
+  switch (nodeAtPoint) {
+    case null:
+      {
+        TextEditingValue replaceBOL() {
+          var eol = value.text.indexOf('\n', lineStart);
+          if (eol == -1) eol = value.text.length;
+          return value
+              .replaced(TextRange.collapsed(lineStart), '* ')
+              .replaced(TextRange.collapsed(eol + 2), ' :crypt:')
+              .copyWith(selection: value.selection.shift(2));
+        }
+
+        // No preceding line, so just insert a headline at the start
+        if (lastEOLIdx == -1) return replaceBOL();
+
+        // No headline at the cursor, but there may be a containing section.
+        final previous = doc
+            .nodesAtOffset(lastEOLIdx)
+            .whereType<({OrgSection node, NodeSpan span})>()
+            .firstOrNull;
+
+        // No containing section, so just insert a headline at line start
+        if (previous == null) return replaceBOL();
+
+        final (node: section, :span) = previous;
+        // Already has tag; no change
+        if (section.headline.hasTag('crypt')) return null;
+
+        // Add the :crypt: tag to the containing section's headline
+        final sectionLength = section.toMarkup().length;
+        final newSection = section
+            .copyWith(headline: section.headline.addTag('crypt'))
+            .toMarkup();
+        return value
+            .replaced(
+              TextRange(start: span.start, end: span.start + sectionLength),
+              newSection,
+            )
+            .copyWith(
+              selection: value.selection.shift(
+                newSection.length - sectionLength,
+              ),
+            );
+      }
+    case OrgHeadline():
+      {
+        // Already has tag; no change
+        if (nodeAtPoint.hasTag('crypt')) return null;
+
+        final itemAtPointLength = nodeAtPoint.toMarkup().length;
+
+        final replacement = nodeAtPoint.addTag('crypt').toMarkup();
+        return value.replaced(
+          TextRange(
+            start: nodeSpan!.start,
+            end: nodeSpan.start + itemAtPointLength,
+          ),
+          replacement,
+        )
+        // TODO(aaron): It would be nice to keep the cursor in the same place
+        // relative to the headline body, but it's a pain to tell if it needs
+        // shifting or not
+        //
+        // .copyWith(
+        //   selection: value.selection.shift(
+        //     replacement.length - itemAtPointLength,
+        //   ),
+        // )
+        ;
+      }
+  }
+}
+
+// TODO(aaron): Move to org_parser?
+extension _HeadlineUtil on OrgHeadline {
+  // Org-crypt treats `:crypt:` as case-sensitive
+  bool hasTag(String tag) => tags?.values.contains(tag) == true;
+
+  OrgHeadline addTag(String tag) => hasTag(tag)
+      ? this
+      : copyWith(
+          tags: (
+            leading: tags?.leading ?? ' :',
+            values: [...tags?.values ?? [], tag],
+            trailing: tags?.trailing ?? ':',
+          ),
+        );
+}

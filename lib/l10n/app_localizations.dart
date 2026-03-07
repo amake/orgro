@@ -1306,6 +1306,12 @@ abstract class AppLocalizations {
   /// **'Superscript'**
   String get tooltipSuperscript;
 
+  /// No description provided for @tooltipEncryptSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt section'**
+  String get tooltipEncryptSection;
+
   /// No description provided for @donateItemTitle.
   ///
   /// In en, this message translates to:

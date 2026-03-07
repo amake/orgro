@@ -705,6 +705,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tooltipSuperscript => 'Superscript';
 
   @override
+  String get tooltipEncryptSection => 'Encrypt section';
+
+  @override
   String get donateItemTitle => 'Donate to support Orgro';
 
   @override

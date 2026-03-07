@@ -192,5 +192,65 @@ void main() {
         expect(result, testValue('foo <2024-06-15 Sat 14:30|>'));
       });
     });
+    group('Encrypt', () {
+      test('Encrypt empty', () async {
+        expect(encryptSection(testValue('|')), testValue('* | :crypt:'));
+      });
+      test('Encrypt non-headline', () async {
+        expect(encryptSection(testValue('foo|')), testValue('* foo| :crypt:'));
+      });
+      test('Encrypt existing headline', () async {
+        expect(
+          encryptSection(testValue('* foo|')),
+          testValue('* foo :crypt:|'),
+        );
+      });
+      test('Encrypt existing headline with tags', () async {
+        expect(
+          encryptSection(testValue('* foo| :tag1:tag2:')),
+          testValue('* foo :tag1:tag2:crypt:|'),
+        );
+      });
+      test('Encrypt already encrypted existing headline', () async {
+        expect(encryptSection(testValue('* foo| :crypt:')), isNull);
+      });
+      test('Encrypt under existing headline', () async {
+        expect(
+          encryptSection(
+            testValue('''
+* foo
+|'''),
+          ),
+          testValue('''
+* foo :crypt:
+|'''),
+        );
+      });
+      test('Encrypt in section', () async {
+        expect(
+          encryptSection(
+            testValue('''
+* foo
+bar
+|'''),
+          ),
+          testValue('''
+* foo :crypt:
+bar
+|'''),
+        );
+      });
+      test('Encrypt in already encrypted section', () async {
+        expect(
+          encryptSection(
+            testValue('''
+* foo :crypt:
+bar
+|'''),
+          ),
+          isNull,
+        );
+      });
+    });
   });
 }
