@@ -14,6 +14,7 @@ class BottomInputBar extends StatelessWidget {
     // builder's context.
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
     return BottomSheet(
+      backgroundColor: Colors.transparent,
       enableDrag: false,
       showDragHandle: false,
       onClosing: () {

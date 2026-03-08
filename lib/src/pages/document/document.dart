@@ -370,12 +370,21 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               onRedo: _transclusion ? null : _redo,
               searchDelegate: searchDelegate,
               child: Scaffold(
-                body: CustomScrollView(
-                  restorationId:
-                      'document_scroll_view_${widget.metadata.layer}',
-                  slivers: [
-                    _buildAppBar(context, searchMode: searchMode),
-                    _buildDocument(context),
+                body: Stack(
+                  children: [
+                    CustomScrollView(
+                      restorationId:
+                          'document_scroll_view_${widget.metadata.layer}',
+                      slivers: [
+                        _buildAppBar(context, searchMode: searchMode),
+                        _buildDocument(context),
+                      ],
+                    ),
+                    if (searchMode)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: searchDelegate.buildBottomSheet(context),
+                      ),
                   ],
                 ),
                 // Builder is here to ensure that the Scaffold makes it into the
@@ -386,9 +395,6 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                     searchMode: searchMode,
                   ),
                 ),
-                bottomSheet: searchMode
-                    ? searchDelegate.buildBottomSheet(context)
-                    : null,
               ),
             ),
           );
