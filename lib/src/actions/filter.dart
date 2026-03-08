@@ -239,9 +239,11 @@ class _CustomChip extends StatelessWidget {
       onLongPress: onLongPress,
       child: InputChip(
         avatar: const Icon(Icons.edit),
-        tooltip:
-            label ??
-            AppLocalizations.of(context)!.tooltipCustomFilterQueryChip(query!),
+        // TODO(aaron): The tooltip prevents the long press from working
+        //
+        // tooltip:
+        //     label ??
+        //     AppLocalizations.of(context)!.tooltipCustomFilterQueryChip(query!),
         label: label != null
             ? Text(label!)
             : ConstrainedBox(
