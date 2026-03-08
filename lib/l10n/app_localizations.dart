@@ -1312,6 +1312,30 @@ abstract class AppLocalizations {
   /// **'Encrypt section'**
   String get tooltipEncryptSection;
 
+  /// No description provided for @tooltipKeywordChip.
+  ///
+  /// In en, this message translates to:
+  /// **'“{keyword}” keyword'**
+  String tooltipKeywordChip(String keyword);
+
+  /// No description provided for @tooltipTagChip.
+  ///
+  /// In en, this message translates to:
+  /// **'“{tag}” tag'**
+  String tooltipTagChip(String tag);
+
+  /// No description provided for @tooltipPriorityChip.
+  ///
+  /// In en, this message translates to:
+  /// **'“{todo}” priority'**
+  String tooltipPriorityChip(String todo);
+
+  /// No description provided for @tooltipCustomFilterQueryChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom filter: {query}'**
+  String tooltipCustomFilterQueryChip(String query);
+
   /// No description provided for @donateItemTitle.
   ///
   /// In en, this message translates to:

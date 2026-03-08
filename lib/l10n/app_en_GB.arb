@@ -255,6 +255,11 @@
   "tooltipSuperscript": "Superscript",
   "tooltipEncryptSection": "Encrypt section",
 
+  "tooltipKeywordChip": "“{keyword}” keyword",
+  "tooltipTagChip": "“{tag}” tag",
+  "tooltipPriorityChip": "“{todo}” priority",
+  "tooltipCustomFilterQueryChip": "Custom filter: {query}",
+
   "donateItemTitle": "Donate to support Orgro",
   "donateItemSubtitle": "Your support is appreciated!",
 

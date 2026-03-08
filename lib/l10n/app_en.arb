@@ -424,6 +424,39 @@
   "tooltipSuperscript": "Superscript",
   "tooltipEncryptSection": "Encrypt section",
 
+  "tooltipKeywordChip": "“{keyword}” keyword",
+  "@tooltipKeywordChip": {
+    "placeholders": {
+      "keyword": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipTagChip": "“{tag}” tag",
+  "@tooltipTagChip": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipPriorityChip": "“{todo}” priority",
+  "@tooltipPriorityChip": {
+    "placeholders": {
+      "todo": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipCustomFilterQueryChip": "Custom filter: {query}",
+  "@tooltipCustomFilterQueryChip": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+
   "donateItemTitle": "Donate to support Orgro",
   "donateItemSubtitle": "Your support is appreciated!",
 

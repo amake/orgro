@@ -13,17 +13,20 @@ class BottomInputBar extends StatelessWidget {
     // Get the padding here because it will be zero in the BottomSheet's
     // builder's context.
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
-    return BottomSheet(
-      backgroundColor: Colors.transparent,
-      enableDrag: false,
-      showDragHandle: false,
-      onClosing: () {
-        // This should never happen
-        debugPrint('Closing bottom sheet');
-      },
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: child,
+    return TooltipTheme(
+      data: TooltipTheme.of(context).copyWith(preferBelow: false),
+      child: BottomSheet(
+        backgroundColor: Colors.transparent,
+        enableDrag: false,
+        showDragHandle: false,
+        onClosing: () {
+          // This should never happen
+          debugPrint('Closing bottom sheet');
+        },
+        builder: (context) => Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: child,
+        ),
       ),
     );
   }

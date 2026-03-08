@@ -708,6 +708,26 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tooltipEncryptSection => 'Encrypt section';
 
   @override
+  String tooltipKeywordChip(String keyword) {
+    return '“$keyword” keyword';
+  }
+
+  @override
+  String tooltipTagChip(String tag) {
+    return '“$tag” tag';
+  }
+
+  @override
+  String tooltipPriorityChip(String todo) {
+    return '“$todo” priority';
+  }
+
+  @override
+  String tooltipCustomFilterQueryChip(String query) {
+    return 'Custom filter: $query';
+  }
+
+  @override
   String get donateItemTitle => 'Donate to support Orgro';
 
   @override

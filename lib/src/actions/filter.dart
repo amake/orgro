@@ -174,6 +174,7 @@ class _KeywordChip extends StatelessWidget {
       avatar: done
           ? const Icon(Icons.check_circle)
           : const Icon(Icons.check_circle_outline),
+      tooltip: AppLocalizations.of(context)!.tooltipKeywordChip(keyword),
       label: Text(keyword),
       onPressed: onPressed,
       onDeleted: onDeleted,
@@ -191,6 +192,7 @@ class _TagChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputChip(
       avatar: const Icon(Icons.label),
+      tooltip: AppLocalizations.of(context)!.tooltipTagChip(tag),
       label: Text(tag),
       onPressed: onPressed,
       onDeleted: onDeleted,
@@ -208,6 +210,7 @@ class _PriorityChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputChip(
       avatar: const Icon(Icons.tag),
+      tooltip: AppLocalizations.of(context)!.tooltipPriorityChip(priority),
       label: Text(priority),
       onPressed: onPressed,
       onDeleted: onDeleted,
@@ -236,6 +239,9 @@ class _CustomChip extends StatelessWidget {
       onLongPress: onLongPress,
       child: InputChip(
         avatar: const Icon(Icons.edit),
+        tooltip:
+            label ??
+            AppLocalizations.of(context)!.tooltipCustomFilterQueryChip(query!),
         label: label != null
             ? Text(label!)
             : ConstrainedBox(
