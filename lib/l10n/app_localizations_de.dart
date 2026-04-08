@@ -721,8 +721,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String tooltipPriorityChip(String todo) {
-    return '“$todo” priority';
+  String tooltipPriorityChip(String priority) {
+    return '“$priority” priority';
   }
 
   @override

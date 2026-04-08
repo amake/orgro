@@ -1327,8 +1327,8 @@ abstract class AppLocalizations {
   /// No description provided for @tooltipPriorityChip.
   ///
   /// In en, this message translates to:
-  /// **'“{todo}” priority'**
-  String tooltipPriorityChip(String todo);
+  /// **'“{priority}” priority'**
+  String tooltipPriorityChip(String priority);
 
   /// No description provided for @tooltipCustomFilterQueryChip.
   ///

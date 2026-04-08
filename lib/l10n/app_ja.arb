@@ -256,7 +256,7 @@
 
   "tooltipKeywordChip": "「{keyword}」キーワード",
   "tooltipTagChip": "「{tag}」タグ",
-  "tooltipPriorityChip": "「{todo}」優先度",
+  "tooltipPriorityChip": "「{priority}」優先度",
   "tooltipCustomFilterQueryChip": "カスタム: {query}",
 
   "donateItemTitle": "Orgroの開発を支援する",

@@ -257,7 +257,7 @@
 
   "tooltipKeywordChip": "“{keyword}” keyword",
   "tooltipTagChip": "“{tag}” tag",
-  "tooltipPriorityChip": "“{todo}” priority",
+  "tooltipPriorityChip": "“{priority}” priority",
   "tooltipCustomFilterQueryChip": "Custom filter: {query}",
 
   "donateItemTitle": "Donate to support Orgro",

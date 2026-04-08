@@ -440,10 +440,10 @@
       }
     }
   },
-  "tooltipPriorityChip": "“{todo}” priority",
+  "tooltipPriorityChip": "“{priority}” priority",
   "@tooltipPriorityChip": {
     "placeholders": {
-      "todo": {
+      "priority": {
         "type": "String"
       }
     }

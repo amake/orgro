@@ -718,8 +718,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String tooltipPriorityChip(String todo) {
-    return '“$todo” priority';
+  String tooltipPriorityChip(String priority) {
+    return '“$priority” priority';
   }
 
   @override
@@ -1504,8 +1504,8 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
-  String tooltipPriorityChip(String todo) {
-    return '“$todo” priority';
+  String tooltipPriorityChip(String priority) {
+    return '“$priority” priority';
   }
 
   @override
@@ -2290,8 +2290,8 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
-  String tooltipPriorityChip(String todo) {
-    return '“$todo” priority';
+  String tooltipPriorityChip(String priority) {
+    return '“$priority” priority';
   }
 
   @override
