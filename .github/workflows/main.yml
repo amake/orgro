@@ -18,12 +18,12 @@ jobs:
         flutter-version: 3.41.x
     - name: Install dependencies
       run: flutter pub get
-    - name: Run tests
-      run: make test flutter=flutter
-    - name: Dirty check
-      run: make dirty-check flutter=flutter
     - name: Format check
       run: make format-check dart=dart
+    - name: Dirty check
+      run: make dirty-check flutter=flutter
+    - name: Run tests
+      run: make test flutter=flutter
 
   l10n-check:
     runs-on: ubuntu-latest
