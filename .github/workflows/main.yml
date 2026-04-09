@@ -22,6 +22,8 @@ jobs:
       run: make test flutter=flutter
     - name: Dirty check
       run: make dirty-check flutter=flutter
+    - name: Format check
+      run: make format-check dart=dart
 
   l10n-check:
     runs-on: ubuntu-latest
