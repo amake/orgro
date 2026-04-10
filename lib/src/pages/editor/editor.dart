@@ -206,14 +206,16 @@ class _EditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const borderRadius = BorderRadius.all(Radius.circular(12));
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Material(
+          borderRadius: borderRadius,
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).highlightColor,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              borderRadius: borderRadius,
             ),
             width: double.infinity,
             child: SingleChildScrollView(
