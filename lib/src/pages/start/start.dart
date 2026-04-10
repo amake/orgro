@@ -291,7 +291,12 @@ Future<void> _promptAndOpenUrl(BuildContext context) async {
     builder: (context) => const InputUrlDialog(),
   );
   if (url == null || !context.mounted) return;
-  return await loadHttpUrl(context, url);
+  try {
+    return await loadHttpUrl(context, url);
+  } catch (e, s) {
+    logError(e, s);
+    showErrorSnackBar(context, e);
+  }
 }
 
 class _CreateFileButton extends StatelessWidget {
