@@ -11,6 +11,7 @@ import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreAfterTextKey = 'restore_after_text';
+const _kEditorToolbarReservedHeight = kMinInteractiveDimension + 16;
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -152,27 +153,39 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                   ),
                 ],
               ),
-              body: Stack(
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: _controller.value,
-                    undoController: _undoController,
-                    scrollController: PrimaryScrollController.of(context),
-                    focusNode: _focusNode,
-                    maxLines: null,
-                    expands: true,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
+              body: LayoutBuilder(
+                builder: (context, constraints) => Stack(
+                  children: [
+                    SingleChildScrollView(
+                      controller: PrimaryScrollController.of(context),
+                      padding: EdgeInsets.only(
+                        bottom:
+                            _kEditorToolbarReservedHeight +
+                            MediaQuery.paddingOf(context).bottom,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: TextField(
+                          controller: _controller.value,
+                          undoController: _undoController,
+                          focusNode: _focusNode,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                          ),
+                          style: _textStyle,
+                        ),
+                      ),
                     ),
-                    style: _textStyle,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: _EditorToolbar(undoController: _undoController),
-                  ),
-                ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _EditorToolbar(undoController: _undoController),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
