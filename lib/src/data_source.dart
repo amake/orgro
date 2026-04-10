@@ -41,7 +41,8 @@ abstract class DataSource {
 }
 
 class WebDataSource extends DataSource {
-  WebDataSource(this.uri) : super(uri.pathSegments.last);
+  WebDataSource(this.uri)
+    : super(uri.pathSegments.lastOrNull ?? uri.toString());
 
   final Uri uri;
 
