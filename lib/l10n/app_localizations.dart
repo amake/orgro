@@ -1192,6 +1192,12 @@ abstract class AppLocalizations {
   /// **'Unsupported data source: {source}'**
   String errorUnsupportedDataSource(Object source);
 
+  /// No description provided for @errorInvalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid URL'**
+  String get errorInvalidUrl;
+
   /// No description provided for @tooltipErrorDetails.
   ///
   /// In en, this message translates to:

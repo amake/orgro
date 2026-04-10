@@ -230,6 +230,7 @@
   "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",
   "errorUnsupportedLinkType": "非対応のリンクタイプ: {link}",
   "errorUnsupportedDataSource": "非対応のデータソース: {source}",
+  "errorInvalidUrl": "不正なURL",
 
   "tooltipErrorDetails": "エラー詳細を見る",
 

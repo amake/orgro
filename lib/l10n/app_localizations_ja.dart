@@ -626,6 +626,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get errorInvalidUrl => '不正なURL';
+
+  @override
   String get tooltipErrorDetails => 'エラー詳細を見る';
 
   @override

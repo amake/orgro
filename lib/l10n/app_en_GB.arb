@@ -231,6 +231,7 @@
   "errorSchedulingNotifications": "Failed to schedule notifications: {message}",
   "errorUnsupportedLinkType": "Unsupported link type: {link}",
   "errorUnsupportedDataSource": "Unsupported data source: {source}",
+  "errorInvalidUrl": "Invalid URL",
 
   "tooltipErrorDetails": "View error details",
 

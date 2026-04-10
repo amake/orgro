@@ -648,6 +648,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get errorInvalidUrl => 'Invalid URL';
+
+  @override
   String get tooltipErrorDetails => 'View error details';
 
   @override
@@ -1434,6 +1437,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String get errorInvalidUrl => 'Invalid URL';
+
+  @override
   String get tooltipErrorDetails => 'View error details';
 
   @override
@@ -2218,6 +2224,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String errorUnsupportedDataSource(Object source) {
     return 'Unsupported data source: $source';
   }
+
+  @override
+  String get errorInvalidUrl => 'Invalid URL';
 
   @override
   String get tooltipErrorDetails => 'View error details';

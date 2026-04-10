@@ -400,6 +400,7 @@
       }
     }
   },
+  "errorInvalidUrl": "Invalid URL",
 
   "tooltipErrorDetails": "View error details",
 

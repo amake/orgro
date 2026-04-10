@@ -638,11 +638,15 @@ class InputUrlDialog extends StatefulWidget {
 
 class _InputUrlDialogState extends State<InputUrlDialog> {
   late TextEditingController _controller;
+  String? _errorText;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController()
+      ..addListener(() {
+        if (_errorText != null) setState(() => _errorText = null);
+      });
   }
 
   @override
@@ -681,6 +685,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
         controller: _controller,
         autofocus: true,
         onSubmitted: _confirm,
+        decoration: InputDecoration(errorText: _errorText),
       ),
     );
   }
@@ -691,7 +696,12 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
   }
 
   Future<void> _confirm(String value) async {
-    if (!_validate(value)) return;
+    if (!_validate(value)) {
+      setState(
+        () => _errorText = AppLocalizations.of(context)!.errorInvalidUrl,
+      );
+      return;
+    }
     Navigator.pop(context, Uri.parse(value));
   }
 }

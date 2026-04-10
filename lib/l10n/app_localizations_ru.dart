@@ -650,6 +650,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get errorInvalidUrl => 'Invalid URL';
+
+  @override
   String get tooltipErrorDetails => 'View error details';
 
   @override
