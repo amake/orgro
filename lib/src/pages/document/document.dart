@@ -373,6 +373,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 body: Stack(
                   children: [
                     CustomScrollView(
+                      controller: PrimaryScrollController.of(context),
                       restorationId:
                           'document_scroll_view_${widget.metadata.layer}',
                       slivers: [
@@ -461,27 +462,40 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         ),
         _maybeConstrainWidth(
           context,
-          child: SelectionArea(
-            child: OrgRootWidget(
-              style: viewSettings.forScope(_dataSource.id).textStyle,
-              onLinkTap: openLink,
-              onSectionLongPress: doNarrow,
-              onSectionSlide: _transclusion ? null : _onSectionSlide,
-              onLocalSectionLinkTap: doNarrow,
-              onListItemTap: _transclusion ? null : _onListItemTap,
-              onCitationTap: openCitation,
-              onTimestampTap: _transclusion ? null : onTimestampTap,
-              loadImage: loadImage,
-              loadTransclusion: _transclusion ? null : loadTransclusion,
-              child: switch (doc) {
-                OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
-                OrgSection() => OrgSectionWidget(
-                  doc,
-                  root: true,
-                  shrinkWrap: true,
-                ),
-                _ => throw Exception('Unexpected document type: $doc'),
-              },
+          child: PrimaryScrollController(
+            controller: PrimaryScrollController.of(context),
+            // TODO(aaron): Hack to allow access to the primary scroll
+            // controller for scrolling to top/bottom of document WITHOUT
+            // allowing child scroll views to inherit it as primary.
+            //
+            // This goes hand-in-hand with providing the primary scroll
+            // controller to the CustomScrollView (instead of marking it as
+            // primary: true).
+            //
+            // We must be doing something wrong here.
+            automaticallyInheritForPlatforms: const {},
+            child: SelectionArea(
+              child: OrgRootWidget(
+                style: viewSettings.forScope(_dataSource.id).textStyle,
+                onLinkTap: openLink,
+                onSectionLongPress: doNarrow,
+                onSectionSlide: _transclusion ? null : _onSectionSlide,
+                onLocalSectionLinkTap: doNarrow,
+                onListItemTap: _transclusion ? null : _onListItemTap,
+                onCitationTap: openCitation,
+                onTimestampTap: _transclusion ? null : onTimestampTap,
+                loadImage: loadImage,
+                loadTransclusion: _transclusion ? null : loadTransclusion,
+                child: switch (doc) {
+                  OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
+                  OrgSection() => OrgSectionWidget(
+                    doc,
+                    root: true,
+                    shrinkWrap: true,
+                  ),
+                  _ => throw Exception('Unexpected document type: $doc'),
+                },
+              ),
             ),
           ),
         ),
