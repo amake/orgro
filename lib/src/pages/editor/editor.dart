@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/common.dart';
-import 'package:orgro/src/actions/scroll.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/pages/editor/actions.dart';
@@ -52,9 +51,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
           if (lineBreakInserted(_after, _controller.value.value)) {
             // TODO(aaron): It would be nice to handle this via normal intent
             // dispatch, but the context here doesn't include the Actions below
-            AfterNewLineAction(
-              _controller.value,
-            ).invoke(const AfterNewLineIntent());
+            AfterNewLineAction.directlyApply(_controller.value);
           }
           setState(() {
             _after = _controller.value.text;
@@ -119,27 +116,9 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
       onPopInvokedWithResult: _onPopInvoked,
       child: Shortcuts(
         shortcuts: _shortcuts,
-        child: Actions(
-          actions: {
-            // TODO(aaron): Init these outside of build
-            SaveChangesIntent: CallbackAction(onInvoke: (_) => _save()),
-            CloseViewIntent: CloseViewAction(),
-            MakeBoldIntent: MakeBoldAction(_controller.value),
-            MakeItalicIntent: MakeItalicAction(_controller.value),
-            MakeUnderlineIntent: MakeUnderlineAction(_controller.value),
-            MakeStrikethroughIntent: MakeStrikethroughAction(_controller.value),
-            MakeCodeIntent: MakeCodeAction(_controller.value),
-            InsertLinkIntent: InsertLinkAction(_controller.value),
-            InsertDateIntent: InsertDateAction(_controller.value),
-            MakeSubscriptIntent: MakeSubscriptAction(_controller.value),
-            MakeSuperscriptIntent: MakeSuperscriptAction(_controller.value),
-            ToggleListItemIntent: ToggleListItemAction(_controller.value),
-            InsertHeadlineIntent: InsertHeadlineAction(_controller.value),
-            AfterNewLineIntent: AfterNewLineAction(_controller.value),
-            ChangeIndentIntent: ChangeIndentAction(_controller.value),
-            EncryptSectionIntent: EncryptSectionAction(_controller.value),
-            ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
-          },
+        child: EditorActions(
+          controller: _controller.value,
+          onSave: _save,
           child: FocusScope(
             autofocus: true,
             child: Scaffold(

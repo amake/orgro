@@ -2,26 +2,88 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:orgro/src/actions/actions.dart';
+import 'package:orgro/src/actions/common.dart';
 import 'package:orgro/src/pages/editor/edits.dart';
 import 'package:orgro/src/timestamps.dart';
+
+class EditorActions extends StatelessWidget {
+  EditorActions({
+    required this.controller,
+    required this.onSave,
+    required this.child,
+    super.key,
+  });
+
+  final TextEditingController controller;
+  final VoidCallback onSave;
+  final Widget child;
+
+  late final _actions = <Type, Action<Intent>>{
+    SaveChangesIntent: CallbackAction(onInvoke: (_) => onSave()),
+    CloseViewIntent: CloseViewAction(),
+    MakeBoldIntent: MakeBoldAction(),
+    MakeItalicIntent: MakeItalicAction(),
+    MakeUnderlineIntent: MakeUnderlineAction(),
+    MakeStrikethroughIntent: MakeStrikethroughAction(),
+    MakeCodeIntent: MakeCodeAction(),
+    InsertLinkIntent: InsertLinkAction(),
+    InsertDateIntent: InsertDateAction(),
+    MakeSubscriptIntent: MakeSubscriptAction(),
+    MakeSuperscriptIntent: MakeSuperscriptAction(),
+    ToggleListItemIntent: ToggleListItemAction(),
+    InsertHeadlineIntent: InsertHeadlineAction(),
+    AfterNewLineIntent: AfterNewLineAction(),
+    ChangeIndentIntent: ChangeIndentAction(),
+    EncryptSectionIntent: EncryptSectionAction(),
+    ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return _PrimaryTextEditingController(
+      controller: controller,
+      child: Builder(
+        builder: (context) => Actions(actions: _actions, child: child),
+      ),
+    );
+  }
+}
+
+class _PrimaryTextEditingController extends InheritedWidget {
+  const _PrimaryTextEditingController({
+    required this.controller,
+    required super.child,
+  });
+
+  final TextEditingController controller;
+
+  static TextEditingController of(BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<_PrimaryTextEditingController>()!
+      .controller;
+
+  @override
+  bool updateShouldNotify(covariant _PrimaryTextEditingController oldWidget) =>
+      controller != oldWidget.controller;
+}
 
 class SaveChangesIntent extends Intent {
   const SaveChangesIntent();
 }
 
 abstract class _TextEditingAction<T extends Intent> extends ContextAction<T> {
-  _TextEditingAction(this.controller);
-  final TextEditingController controller;
-
   @override
   bool isEnabled(T intent, [BuildContext? context]) {
-    return super.isEnabled(intent, context) &&
-        controller.value.selection.isValid;
+    if (!super.isEnabled(intent, context)) return false;
+    final controller = _PrimaryTextEditingController.of(context!);
+    return controller.value.selection.isValid;
   }
 
   void _applyEdit(
+    BuildContext? context,
     FutureOr<TextEditingValue?> Function(TextEditingValue) edit,
   ) async {
+    final controller = _PrimaryTextEditingController.of(context!);
     final value = await edit(controller.value);
     if (value == null) return;
     controller.value = value;
@@ -34,11 +96,9 @@ class MakeBoldIntent extends Intent {
 }
 
 class MakeBoldAction extends _TextEditingAction<MakeBoldIntent> {
-  MakeBoldAction(super.controller);
-
   @override
   void invoke(covariant MakeBoldIntent intent, [BuildContext? context]) {
-    _applyEdit(makeBold);
+    _applyEdit(context, makeBold);
   }
 }
 
@@ -47,11 +107,9 @@ class MakeItalicIntent extends Intent {
 }
 
 class MakeItalicAction extends _TextEditingAction<MakeItalicIntent> {
-  MakeItalicAction(super.controller);
-
   @override
   void invoke(covariant MakeItalicIntent intent, [BuildContext? context]) {
-    _applyEdit(makeItalic);
+    _applyEdit(context, makeItalic);
   }
 }
 
@@ -60,11 +118,9 @@ class MakeUnderlineIntent extends Intent {
 }
 
 class MakeUnderlineAction extends _TextEditingAction<MakeUnderlineIntent> {
-  MakeUnderlineAction(super.controller);
-
   @override
   void invoke(covariant MakeUnderlineIntent intent, [BuildContext? context]) {
-    _applyEdit(makeUnderline);
+    _applyEdit(context, makeUnderline);
   }
 }
 
@@ -74,14 +130,12 @@ class MakeStrikethroughIntent extends Intent {
 
 class MakeStrikethroughAction
     extends _TextEditingAction<MakeStrikethroughIntent> {
-  MakeStrikethroughAction(super.controller);
-
   @override
   void invoke(
     covariant MakeStrikethroughIntent intent, [
     BuildContext? context,
   ]) {
-    _applyEdit(makeStrikethrough);
+    _applyEdit(context, makeStrikethrough);
   }
 }
 
@@ -90,11 +144,9 @@ class MakeCodeIntent extends Intent {
 }
 
 class MakeCodeAction extends _TextEditingAction<MakeCodeIntent> {
-  MakeCodeAction(super.controller);
-
   @override
   void invoke(covariant MakeCodeIntent intent, [BuildContext? context]) {
-    _applyEdit(makeCode);
+    _applyEdit(context, makeCode);
   }
 }
 
@@ -103,11 +155,9 @@ class MakeSubscriptIntent extends Intent {
 }
 
 class MakeSubscriptAction extends _TextEditingAction<MakeSubscriptIntent> {
-  MakeSubscriptAction(super.controller);
-
   @override
   void invoke(covariant MakeSubscriptIntent intent, [BuildContext? context]) {
-    _applyEdit(makeSubscript);
+    _applyEdit(context, makeSubscript);
   }
 }
 
@@ -116,11 +166,9 @@ class MakeSuperscriptIntent extends Intent {
 }
 
 class MakeSuperscriptAction extends _TextEditingAction<MakeSuperscriptIntent> {
-  MakeSuperscriptAction(super.controller);
-
   @override
   void invoke(covariant MakeSuperscriptIntent intent, [BuildContext? context]) {
-    _applyEdit(makeSuperscript);
+    _applyEdit(context, makeSuperscript);
   }
 }
 
@@ -129,17 +177,17 @@ class InsertLinkIntent extends Intent {
 }
 
 class InsertLinkAction extends _TextEditingAction<InsertLinkIntent> {
-  InsertLinkAction(super.controller);
-
   @override
   void invoke(
     covariant InsertLinkIntent intent, [
     BuildContext? context,
   ]) async {
+    if (context == null) return;
     final clipboardText = await Clipboard.hasStrings()
         ? (await Clipboard.getData(Clipboard.kTextPlain))?.text
         : null;
-    _applyEdit(((value) => insertLink(value, clipboardText)));
+    if (!context.mounted) return;
+    _applyEdit(context, ((value) => insertLink(value, clipboardText)));
   }
 }
 
@@ -149,26 +197,27 @@ class InsertDateIntent extends Intent {
 }
 
 class InsertDateAction extends _TextEditingAction<InsertDateIntent> {
-  InsertDateAction(super.controller);
-
   @override
   void invoke(
     covariant InsertDateIntent intent, [
     BuildContext? context,
   ]) async {
-    if (context != null) {
-      final date = await showDatePicker(
-        context: context,
-        firstDate: kDatePickerFirstDate,
-        lastDate: kDatePickerLastDate,
-      );
-      if (date == null || !context.mounted) return null;
-      final time = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-      _applyEdit((value) => insertDate(value, intent.active, date, time));
-    }
+    if (context == null) return;
+    final date = await showDatePicker(
+      context: context,
+      firstDate: kDatePickerFirstDate,
+      lastDate: kDatePickerLastDate,
+    );
+    if (date == null || !context.mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (!context.mounted) return;
+    _applyEdit(
+      context,
+      (value) => insertDate(value, intent.active, date, time),
+    );
   }
 }
 
@@ -177,11 +226,9 @@ class InsertHeadlineIntent extends Intent {
 }
 
 class InsertHeadlineAction extends _TextEditingAction<InsertHeadlineIntent> {
-  InsertHeadlineAction(super.controller);
-
   @override
   void invoke(covariant InsertHeadlineIntent intent, [BuildContext? context]) {
-    _applyEdit(insertHeadline);
+    _applyEdit(context, insertHeadline);
   }
 }
 
@@ -191,11 +238,10 @@ class ToggleListItemIntent extends Intent {
 }
 
 class ToggleListItemAction extends _TextEditingAction<ToggleListItemIntent> {
-  ToggleListItemAction(super.controller);
-
   @override
   void invoke(covariant ToggleListItemIntent intent, [BuildContext? context]) {
     _applyEdit(
+      context,
       (value) => intent.ordered
           ? toggleOrderedListItem(value)
           : toggleUnorderedListItem(value),
@@ -208,11 +254,19 @@ class AfterNewLineIntent extends Intent {
 }
 
 class AfterNewLineAction extends _TextEditingAction<AfterNewLineIntent> {
-  AfterNewLineAction(super.controller);
+  // TODO(aaron): This is only needed because where we want to apply this action
+  // doesn't actually have the right context, so we have to apply it directly to
+  // the controller instead of using the standard mechanism.
+  static void directlyApply(TextEditingController controller) {
+    final value = afterNewLineFixup(controller.value);
+    if (value == null) return;
+    controller.value = value;
+    ContextMenuController.removeAny();
+  }
 
   @override
   void invoke(covariant AfterNewLineIntent intent, [BuildContext? context]) {
-    _applyEdit(afterNewLineFixup);
+    _applyEdit(context, afterNewLineFixup);
   }
 }
 
@@ -222,11 +276,9 @@ class ChangeIndentIntent extends Intent {
 }
 
 class ChangeIndentAction extends _TextEditingAction<ChangeIndentIntent> {
-  ChangeIndentAction(super.controller);
-
   @override
   void invoke(covariant ChangeIndentIntent intent, [BuildContext? context]) {
-    _applyEdit((value) => changeIndent(value, intent.increase));
+    _applyEdit(context, (value) => changeIndent(value, intent.increase));
   }
 }
 
@@ -235,10 +287,8 @@ class EncryptSectionIntent extends Intent {
 }
 
 class EncryptSectionAction extends _TextEditingAction<EncryptSectionIntent> {
-  EncryptSectionAction(super.controller);
-
   @override
   void invoke(covariant EncryptSectionIntent intent, [BuildContext? context]) {
-    _applyEdit(encryptSection);
+    _applyEdit(context, encryptSection);
   }
 }
