@@ -55,33 +55,31 @@ class KeyboardShortcuts extends StatelessWidget {
     ),
   };
 
+  late final _actions = <Type, Action<Intent>>{
+    CloseViewIntent: CloseViewAction(),
+    if (onEdit != null) EditIntent: CallbackAction(onInvoke: (_) => onEdit!()),
+    ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
+    if (onUndo != null)
+      UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo!()),
+    if (onRedo != null)
+      RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo!()),
+    SearchIntent: SearchAction(searchDelegate),
+    NavigateSearchHitsIntent: CallbackAction<NavigateSearchHitsIntent>(
+      onInvoke: (intent) {
+        if (searchMode) {
+          searchDelegate.navigateSearchHits(forward: intent.forward);
+        }
+        return null;
+      },
+    ),
+  };
+
   @override
   Widget build(BuildContext context) {
     return Shortcuts(
       shortcuts: _shortcuts,
       child: Actions(
-        actions: {
-          // TODO(aaron): Init outside of build
-          CloseViewIntent: CloseViewAction(),
-          if (onEdit != null)
-            EditIntent: CallbackAction(onInvoke: (_) => onEdit!()),
-          ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
-          if (onUndo != null)
-            UndoTextIntent: CallbackAction(onInvoke: (_) => onUndo!()),
-          if (onRedo != null)
-            RedoTextIntent: CallbackAction(onInvoke: (_) => onRedo!()),
-          SearchIntent: CallbackAction(
-            onInvoke: (_) => searchDelegate.start(context),
-          ),
-          NavigateSearchHitsIntent: CallbackAction<NavigateSearchHitsIntent>(
-            onInvoke: (intent) {
-              if (searchMode) {
-                searchDelegate.navigateSearchHits(forward: intent.forward);
-              }
-              return null;
-            },
-          ),
-        },
+        actions: _actions,
         child: FocusScope(autofocus: true, child: child),
       ),
     );
@@ -94,6 +92,17 @@ class EditIntent extends Intent {
 
 class SearchIntent extends Intent {
   const SearchIntent();
+}
+
+class SearchAction extends ContextAction<SearchIntent> {
+  final MySearchDelegate searchDelegate;
+
+  SearchAction(this.searchDelegate);
+
+  @override
+  void invoke(covariant SearchIntent intent, [BuildContext? context]) {
+    searchDelegate.start(context!);
+  }
 }
 
 class NavigateSearchHitsIntent extends Intent {
