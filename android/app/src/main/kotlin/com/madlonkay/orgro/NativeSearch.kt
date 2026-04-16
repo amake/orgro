@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 private const val TAG = "OrgroNativeSearch"
 
-val jobs = ConcurrentHashMap<String,Boolean>()
+private val jobs = ConcurrentHashMap<String,Boolean>()
 
 suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Result, context: Context) = withContext(Dispatchers.Main) {
     try {
@@ -54,7 +54,7 @@ suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Res
     }
 }
 
-suspend fun findFileForId(requestId: String, id: String, dirIdentifier: String, context: Context): Map<String, String>? {
+private suspend fun findFileForId(requestId: String, id: String, dirIdentifier: String, context: Context): Map<String, String>? {
     val parent = Uri.parse(dirIdentifier)
     val found = iterateTree(requestId, parent, context) { searchFileForId(it, id, context) }
     if (found == null) return null
@@ -76,7 +76,7 @@ suspend fun findFileForId(requestId: String, id: String, dirIdentifier: String, 
  * - Expects: Tree{+document} URI
  * - Returns: Tree+document URI and file name
  */
-suspend fun iterateTree(
+private suspend fun iterateTree(
     requestId: String,
     root: Uri,
     context: Context,
@@ -133,9 +133,9 @@ suspend fun iterateTree(
     null
 }
 
-val idPattern = Regex("""^\s*:ID:\s*(?<value>\S+)\s*$""", RegexOption.IGNORE_CASE)
+private val idPattern = Regex("""^\s*:ID:\s*(?<value>\S+)\s*$""", RegexOption.IGNORE_CASE)
 
-suspend fun searchFileForId(uri: Uri, needle: String, context: Context): Boolean = withContext(Dispatchers.IO)  {
+private suspend fun searchFileForId(uri: Uri, needle: String, context: Context): Boolean = withContext(Dispatchers.IO)  {
     context.contentResolver.openInputStream(uri)?.bufferedReader()?.useLines {
         for (line in it) {
             if (!line.contains(needle)) continue
