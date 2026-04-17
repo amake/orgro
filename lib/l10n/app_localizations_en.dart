@@ -657,6 +657,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editInsertedHeadline => '[Inserted by edit]';
 
   @override
+  String get pasteImageContextMenuTitle => 'Paste image';
+
+  @override
+  String get pasteImageErrorNoFiles => 'Could not paste any images';
+
+  @override
   String get tooltipApplyChanges => 'Apply changes';
 
   @override
@@ -1446,6 +1452,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get editInsertedHeadline => '[Inserted by edit]';
 
   @override
+  String get pasteImageContextMenuTitle => 'Paste image';
+
+  @override
+  String get pasteImageErrorNoFiles => 'Could not paste any images';
+
+  @override
   String get tooltipApplyChanges => 'Apply changes';
 
   @override
@@ -2233,6 +2245,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get editInsertedHeadline => '[Inserted by edit]';
+
+  @override
+  String get pasteImageContextMenuTitle => 'Paste image';
+
+  @override
+  String get pasteImageErrorNoFiles => 'Could not paste any images';
 
   @override
   String get tooltipApplyChanges => 'Apply changes';

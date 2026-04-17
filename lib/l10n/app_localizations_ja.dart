@@ -635,6 +635,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get editInsertedHeadline => '[編集によって挿入]';
 
   @override
+  String get pasteImageContextMenuTitle => '画像を貼り付け';
+
+  @override
+  String get pasteImageErrorNoFiles => '画像の貼り付けができませんでした';
+
+  @override
   String get tooltipApplyChanges => '変更を適用する';
 
   @override

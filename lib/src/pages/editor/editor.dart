@@ -4,13 +4,17 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/common.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/pages/editor/actions.dart';
+import 'package:orgro/src/pages/editor/clipboard.dart';
 import 'package:orgro/src/pages/editor/util.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/util.dart';
 
 const _kRestoreAfterTextKey = 'restore_after_text';
 const _kEditorToolbarReservedHeight = kMinInteractiveDimension + 16;
+
+final editorTextFieldKey = GlobalKey(debugLabel: 'editor_text_field');
 
 class EditorPage extends StatefulWidget {
   const EditorPage({
@@ -147,6 +151,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                           minHeight: constraints.maxHeight,
                         ),
                         child: TextField(
+                          key: editorTextFieldKey,
                           controller: _controller.value,
                           undoController: _undoController,
                           focusNode: _focusNode,
@@ -156,6 +161,26 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                             contentPadding: EdgeInsets.symmetric(horizontal: 8),
                           ),
                           style: _textStyle,
+                          contentInsertionConfiguration:
+                              ContentInsertionConfiguration(
+                                allowedMimeTypes: [
+                                  'image/jpeg',
+                                  'image/png',
+                                  'image/gif',
+                                  'image/webp',
+                                  'image/heic',
+                                  'image/heif',
+                                  'image/avif',
+                                  'image/svg+xml',
+                                ],
+                                onContentInserted: _onContentInserted,
+                              ),
+                          contextMenuBuilder: (_, editableTextState) =>
+                              ContextMenuItemsWithImagePaste(
+                                editableTextState: editableTextState,
+                                controller: _controller.value,
+                                parentContext: context,
+                              ),
                         ),
                       ),
                     ),
@@ -188,6 +213,18 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   void _save() {
     final result = _dirty ? _after?.withTrailingLineBreak() : null;
     Navigator.pop(context, result);
+  }
+
+  Future<void> _onContentInserted(KeyboardInsertedContent content) async {
+    debugPrint(
+      'Content inserted: ${content.mimeType}, ${content.uri}, hasData: ${content.hasData}',
+    );
+    try {
+      await pasteImagesFromKeyboard(context, content, _controller.value);
+    } catch (e, s) {
+      logError(e, s);
+      if (mounted) showErrorSnackBar(context, e);
+    }
   }
 }
 

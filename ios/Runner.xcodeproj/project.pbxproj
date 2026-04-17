@@ -20,6 +20,7 @@
 		C47F4DFD2EF6E37A00115BD0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */; };
 		C47F4E1D2EF76CEF00115BD0 /* AppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */; };
 		C4AC25232ED5A3C200756304 /* OrgroCapture.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C4AC25192ED5A3C200756304 /* OrgroCapture.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C4AE9CAB2F8E11AB0020157F /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE9CAA2F8E11AB0020157F /* Clipboard.swift */; };
 		C4E0B8912B3C4E850058873A /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E0B8902B3C4E850058873A /* RunnerTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +95,7 @@
 		C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPurchase.swift; sourceTree = "<group>"; };
 		C4AC25192ED5A3C200756304 /* OrgroCapture.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OrgroCapture.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4AE9CAA2F8E11AB0020157F /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		C4C13FA82761C6B000C59B99 /* Info-Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Release.plist"; sourceTree = "<group>"; };
 		C4C13FA92761C74200C59B99 /* Info-Profile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Profile.plist"; sourceTree = "<group>"; };
 		C4E0B88E2B3C4E840058873A /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,7 +103,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C4AC25282ED5A3C200756304 /* Exceptions for "OrgroCapture" folder in "OrgroCapture" target */ = {
+		C4AC25282ED5A3C200756304 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Info-Debug.plist",
@@ -113,18 +115,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C4AC251A2ED5A3C200756304 /* OrgroCapture */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C4AC25282ED5A3C200756304 /* Exceptions for "OrgroCapture" folder in "OrgroCapture" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = OrgroCapture;
-			sourceTree = "<group>";
-		};
+		C4AC251A2ED5A3C200756304 /* OrgroCapture */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C4AC25282ED5A3C200756304 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OrgroCapture; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +222,7 @@
 				C42757302C8490AE00E74B62 /* LineReader.swift */,
 				C42757312C8490AE00E74B62 /* NativeSearch.swift */,
 				C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */,
+				C4AE9CAA2F8E11AB0020157F /* Clipboard.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -525,6 +517,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				C42757322C8490AE00E74B62 /* LineReader.swift in Sources */,
+				C4AE9CAB2F8E11AB0020157F /* Clipboard.swift in Sources */,
 				C42757332C8490AE00E74B62 /* NativeSearch.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				C47F4E1D2EF76CEF00115BD0 /* AppPurchase.swift in Sources */,

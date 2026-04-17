@@ -19,6 +19,12 @@ class MainActivity : FlutterActivity(), CoroutineScope by MainScope() {
                 handleNativeSearchMethod(call, result, applicationContext)
             }
         }
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.madlonkay.orgro/clipboard").setMethodCallHandler {
+                call, result ->
+            launch {
+                handleClipboardMethod(call, result, applicationContext)
+            }
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

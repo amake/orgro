@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/pages/editor/editor.dart';
@@ -113,6 +114,7 @@ Future<OrgTree?> showTextEditor(
   required bool requestFocus,
 }) async {
   final viewSettings = ViewSettings.of(context).data;
+  final orgSettings = OrgSettings.of(context).settings;
   final text = tree.toMarkup(serializer: OrgroPlaintextSerializer());
   final result = await Navigator.push<String?>(
     context,
@@ -120,15 +122,22 @@ Future<OrgTree?> showTextEditor(
       fullscreenDialog: true,
       builder: (builder) => RootRestorationScope(
         restorationId: 'org_editor_$layer:${dataSource.id}',
-        child: ViewSettings(
-          data: viewSettings,
-          child: EditorPage(
-            docId: dataSource.id,
-            text: text,
-            title: AppLocalizations.of(
-              context,
-            )!.pageTitleEditing(dataSource.name),
-            requestFocus: requestFocus,
+        child: InheritedOrgSettings(
+          orgSettings,
+          child: DocumentProvider(
+            dataSource: dataSource,
+            doc: tree,
+            child: ViewSettings(
+              data: viewSettings,
+              child: EditorPage(
+                docId: dataSource.id,
+                text: text,
+                title: AppLocalizations.of(
+                  context,
+                )!.pageTitleEditing(dataSource.name),
+                requestFocus: requestFocus,
+              ),
+            ),
           ),
         ),
       ),

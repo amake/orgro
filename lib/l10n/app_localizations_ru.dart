@@ -659,6 +659,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editInsertedHeadline => '[Вставлено при изменении]';
 
   @override
+  String get pasteImageContextMenuTitle => 'Paste image';
+
+  @override
+  String get pasteImageErrorNoFiles => 'Could not paste any images';
+
+  @override
   String get tooltipApplyChanges => 'Apply changes';
 
   @override

@@ -1210,6 +1210,18 @@ abstract class AppLocalizations {
   /// **'[Inserted by edit]'**
   String get editInsertedHeadline;
 
+  /// No description provided for @pasteImageContextMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste image'**
+  String get pasteImageContextMenuTitle;
+
+  /// No description provided for @pasteImageErrorNoFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not paste any images'**
+  String get pasteImageErrorNoFiles;
+
   /// No description provided for @tooltipApplyChanges.
   ///
   /// In en, this message translates to:

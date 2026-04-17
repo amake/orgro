@@ -644,6 +644,25 @@ TextEditingValue? encryptSection(TextEditingValue value) {
   }
 }
 
+TextEditingValue? insertImageLinks(
+  TextEditingValue value,
+  List<String> imagePaths, {
+  bool asAttachment = false,
+}) {
+  if (!value.selection.isValid) return null;
+
+  final replacement = imagePaths
+      .map((path) => asAttachment ? '[[attachment:$path]]' : '[[file:$path]]')
+      .join('\n');
+  return value
+      .replaced(value.selection, replacement)
+      .copyWith(
+        selection: TextSelection.collapsed(
+          offset: value.selection.baseOffset + replacement.length,
+        ),
+      );
+}
+
 // TODO(aaron): Move to org_parser?
 extension _HeadlineUtil on OrgHeadline {
   // Org-crypt treats `:crypt:` as case-sensitive

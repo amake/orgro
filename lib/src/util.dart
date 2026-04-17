@@ -203,6 +203,24 @@ extension StringExtension on String {
     }
     return buffer.toString();
   }
+
+  String toTitleCase() {
+    final buffer = StringBuffer();
+    var capitalizeNext = true;
+    for (final char in codeUnits) {
+      if (char == 32) {
+        buffer.writeCharCode(char);
+        capitalizeNext = true;
+      } else if (capitalizeNext && char >= 97 && char <= 122) {
+        buffer.writeCharCode(char - 32);
+        capitalizeNext = false;
+      } else {
+        buffer.writeCharCode(char);
+        capitalizeNext = false;
+      }
+    }
+    return buffer.toString();
+  }
 }
 
 extension BoolUtil on bool {

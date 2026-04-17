@@ -237,6 +237,9 @@
 
   "editInsertedHeadline": "[Inserted by edit]",
 
+  "pasteImageContextMenuTitle": "Paste image",
+  "pasteImageErrorNoFiles": "Could not paste any images",
+
   "tooltipApplyChanges": "Apply changes",
   "tooltipUndo": "Undo",
   "tooltipRedo": "Redo",

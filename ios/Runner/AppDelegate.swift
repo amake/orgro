@@ -21,6 +21,9 @@ import workmanager_apple
         let apChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/app_purchase", binaryMessenger: engineBridge.applicationRegistrar.messenger())
         apChannel.setMethodCallHandler(handleAppPurchaseMethod)
 
+        let cbChannel = FlutterMethodChannel(name: "com.madlonkay.orgro/clipboard", binaryMessenger: engineBridge.applicationRegistrar.messenger())
+        cbChannel.setMethodCallHandler(handleClipboardMethod)
+
         UNUserNotificationCenter.current().delegate = self
 
         FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in

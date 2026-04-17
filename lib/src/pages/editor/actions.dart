@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/common.dart';
+import 'package:orgro/src/debug.dart';
+import 'package:orgro/src/pages/editor/clipboard.dart';
+import 'package:orgro/src/pages/editor/editor.dart';
 import 'package:orgro/src/pages/editor/edits.dart';
 import 'package:orgro/src/timestamps.dart';
 
@@ -37,6 +40,7 @@ class EditorActions extends StatelessWidget {
     ChangeIndentIntent: ChangeIndentAction(),
     EncryptSectionIntent: EncryptSectionAction(),
     ScrollToDocumentBoundaryIntent: ScrollToDocumentBoundaryAction(),
+    PasteTextIntent: PasteTextAction(),
   };
 
   @override
@@ -290,5 +294,34 @@ class EncryptSectionAction extends _TextEditingAction<EncryptSectionIntent> {
   @override
   void invoke(covariant EncryptSectionIntent intent, [BuildContext? context]) {
     _applyEdit(context, encryptSection);
+  }
+}
+
+class PasteTextAction extends ContextAction<PasteTextIntent> {
+  @override
+  void invoke(PasteTextIntent intent, [BuildContext? context]) async {
+    if (context != null &&
+        await hasClipboardImageData() &&
+        context.mounted == true) {
+      final controller = _PrimaryTextEditingController.of(context);
+      try {
+        final success = await pasteImagesFromClipboard(context, controller);
+        if (success) return;
+      } catch (e, s) {
+        logError(e, s);
+        if (context.mounted) showErrorSnackBar(context, e);
+      }
+    }
+    _delegatePaste(intent);
+  }
+
+  void _delegatePaste(PasteTextIntent intent) {
+    final textFieldState = editorTextFieldKey.currentState;
+    if (textFieldState == null) return;
+    if (textFieldState is! TextSelectionGestureDetectorBuilderDelegate) return;
+    final editableTextKey =
+        (textFieldState as TextSelectionGestureDetectorBuilderDelegate)
+            .editableTextKey;
+    editableTextKey.currentState?.pasteText(intent.cause);
   }
 }

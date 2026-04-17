@@ -657,6 +657,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get editInsertedHeadline => '[Inserted by edit]';
 
   @override
+  String get pasteImageContextMenuTitle => 'Paste image';
+
+  @override
+  String get pasteImageErrorNoFiles => 'Could not paste any images';
+
+  @override
   String get tooltipApplyChanges => 'Apply changes';
 
   @override

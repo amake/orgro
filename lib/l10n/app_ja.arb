@@ -236,6 +236,9 @@
 
   "editInsertedHeadline": "[編集によって挿入]",
 
+  "pasteImageContextMenuTitle": "画像を貼り付け",
+  "pasteImageErrorNoFiles": "画像の貼り付けができませんでした",
+
   "tooltipApplyChanges": "変更を適用する",
   "tooltipUndo": "元に戻す",
   "tooltipRedo": "やり直す",
