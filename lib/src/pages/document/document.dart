@@ -613,6 +613,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       DocumentProvider.of(context).analysis.hasRelativeLinks;
 
   // Android 4.4 and earlier doesn't have APIs to get directory info
+  //
+  // TODO(aaron): We have dropped support for Android 4.4
   bool? canResolveRelativeLinks;
 
   bool get _askForDirectoryPermissions =>
