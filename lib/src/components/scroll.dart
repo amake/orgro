@@ -13,15 +13,18 @@ class ScrollingBuilder extends StatefulWidget {
 }
 
 class _ScrollingBuilderState extends State<ScrollingBuilder> {
-  late final ScrollController _controller;
+  late ScrollController _controller;
   Timer? _timer;
   bool _isScrolling = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _controller = PrimaryScrollController.of(context);
-    _controller.addListener(_onScroll);
+    // This can be called multiple times, especially in e.g. an Android
+    // predictive back gesture.
+    _controller = PrimaryScrollController.of(context)
+      ..removeListener(_onScroll)
+      ..addListener(_onScroll);
   }
 
   void _onScroll() {
