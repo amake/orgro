@@ -11,6 +11,13 @@
 | foo  | bar  |
 | bizz | bazz |
 
+"Dual" keywords:
+
+#+CAPTION[short caption]: longer caption that is longer
+#+CAPTION[short ]: caption]: longer caption that is longer
+#+RESULTS: foo
+#+RESULTS[a2a72cd647ad44515fab62e144796432793d68e1]: random
+
 No space after colon:
 
 #+TITLE:with _[[https://example.com][link]]_ and [cite:@knuth:1984]
