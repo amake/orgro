@@ -16,6 +16,7 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/native_search.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/document/document.dart';
+import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,14 +38,9 @@ extension LinkHandler on DocumentPageState {
     try {
       final url = expandAbbreviatedUrl(doc, link) ?? Uri.parse(link.location);
 
-      // Try to figure out if the URL is to an Org document
-      // TODO(aaron): Try to detect URLs pointing to the same document
-      if (await looksLikeOrgLink(url) && mounted) {
-        final cleanUrl = url.scheme.toLowerCase() == 'org-social'
-            ? Uri.parse(url.toString().substring('org-social:'.length))
-            : url;
-        await loadHttpUrl(context, cleanUrl);
-        return true;
+      {
+        final handled = await _openOrgDocLink(url);
+        if (handled) return true;
       }
 
       // Handle as a general URL
@@ -213,6 +209,43 @@ extension LinkHandler on DocumentPageState {
               : null,
         ),
       );
+
+  // Try to figure out if the URL is to an Org document
+  Future<bool> _openOrgDocLink(Uri url) async {
+    // Org Social "mentions" are URLs with `org-social` scheme
+    // https://github.com/tanrax/org-social#mentions
+    final cleanUrl = url.scheme.toLowerCase() == 'org-social'
+        ? Uri.parse(url.toString().substring('org-social:'.length))
+        : url;
+
+    final docProvider = DocumentProvider.of(context);
+    final dataSource = docProvider.dataSource;
+    if (dataSource is WebDataSource && cleanUrl.sameDocument(dataSource.uri)) {
+      // If the URL has a fragment, it is probably an Org Social link to a post.
+      if (cleanUrl.hasFragment) {
+        // ID takes precedence over headline
+        // https://github.com/tanrax/org-social#post-metadata
+        final section =
+            docProvider.doc.sectionForTarget('id:${cleanUrl.fragment}') ??
+            docProvider.doc.sectionForTarget('*${cleanUrl.fragment}');
+        if (section != null) {
+          await doNarrow(section);
+          return true;
+        }
+      }
+      // We are in the same document, so don't re-open it
+      debugPrint('Suppressing opening link to same document');
+      return true;
+    }
+
+    // Check original URL so we can recognize org-social scheme to avoid
+    // unnecessary HTTP request
+    if (!await looksLikeOrgLink(url)) return false;
+    if (!mounted) return false;
+
+    await loadHttpUrl(context, cleanUrl);
+    return true;
+  }
 }
 
 Future<void> doPickDirectory(BuildContext context) async {

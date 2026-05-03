@@ -223,6 +223,17 @@ extension StringExtension on String {
   }
 }
 
+extension UriUtil on Uri {
+  bool sameDocument(Uri other) {
+    if (host.toLowerCase() != other.host.toLowerCase()) return false;
+    // Path case equivalence depends on the server so don't normalize case but
+    // do trim trailing slashes
+    if (path.trimSuff('/') != other.path.trimSuff('/')) return false;
+    // We assume query params and fragments don't affect same-document-ness
+    return true;
+  }
+}
+
 extension BoolUtil on bool {
   int compareTo(bool other) {
     if (this == other) return 0;

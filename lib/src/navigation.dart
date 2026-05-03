@@ -13,11 +13,15 @@ import 'package:orgro/src/routes/narrow.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/serialization.dart';
 
-Future<void> loadHttpUrl(BuildContext context, Uri uri) => Navigator.pushNamed(
-  context,
-  Routes.document,
-  arguments: DocumentRouteArgs(dataSource: WebDataSource(uri)),
-);
+Future<void> loadHttpUrl(BuildContext context, Uri uri, {String? target}) =>
+    Navigator.pushNamed(
+      context,
+      Routes.document,
+      arguments: DocumentRouteArgs(
+        dataSource: WebDataSource(uri),
+        target: target,
+      ),
+    );
 
 Future<void> loadAsset(
   BuildContext context,
