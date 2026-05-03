@@ -13,7 +13,6 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/entitlements.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
-import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
@@ -292,7 +291,7 @@ Future<void> _promptAndOpenUrl(BuildContext context) async {
   );
   if (url == null || !context.mounted) return;
   try {
-    return await loadHttpUrl(context, url);
+    return await loadAndRememberUrl(context, url);
   } catch (e, s) {
     logError(e, s);
     showErrorSnackBar(context, e);
