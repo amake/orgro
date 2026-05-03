@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
@@ -33,9 +34,17 @@ extension LinkHandler on DocumentPageState {
       return true;
     }
 
-    // Handle as a general URL
     try {
       final url = expandAbbreviatedUrl(doc, link) ?? Uri.parse(link.location);
+
+      // Try to figure out if the URL is to an Org document
+      // TODO(aaron): Try to detect URLs pointing to the same document
+      if (await looksLikeOrgLink(url) && mounted) {
+        await loadHttpUrl(context, url);
+        return true;
+      }
+
+      // Handle as a general URL
       debugPrint('Launching URL: $url');
       final handled = await launchUrl(
         url,
@@ -274,4 +283,33 @@ List<LinkAbbreviation> extractLinkAbbreviations(OrgTree tree) {
     return true;
   });
   return results;
+}
+
+Future<bool> looksLikeOrgLink(Uri url) async {
+  if (url.path.toLowerCase().endsWith('.org')) return true;
+
+  final client = http.Client();
+  try {
+    final res = await client.head(url);
+    if (res.statusCode != 200) return false;
+    final contentType = res.headers['content-type']?.toLowerCase();
+    if (contentType == null) return false;
+    // Very few servers seem to serve Org files with the correct MIME type, so
+    // be lenient
+    if (contentType.startsWith('text/org')) return true;
+    if (contentType.startsWith('text/plain')) return true;
+    // Many servers serve Org files with this MIME type. If the URL path ended
+    // with .org then we would have already returned true, so check that the
+    // path doesn't look like it has a file extension for a different type of
+    // file.
+    if (contentType.startsWith('application/octet-stream') &&
+        url.pathSegments.lastOrNull?.contains('.') != true) {
+      return true;
+    }
+  } catch (e) {
+    debugPrint('Error checking URL headers: $e');
+  } finally {
+    client.close();
+  }
+  return false;
 }
