@@ -40,7 +40,10 @@ extension LinkHandler on DocumentPageState {
       // Try to figure out if the URL is to an Org document
       // TODO(aaron): Try to detect URLs pointing to the same document
       if (await looksLikeOrgLink(url) && mounted) {
-        await loadHttpUrl(context, url);
+        final cleanUrl = url.scheme.toLowerCase() == 'org-social'
+            ? Uri.parse(url.toString().substring('org-social:'.length))
+            : url;
+        await loadHttpUrl(context, cleanUrl);
         return true;
       }
 
@@ -286,6 +289,7 @@ List<LinkAbbreviation> extractLinkAbbreviations(OrgTree tree) {
 }
 
 Future<bool> looksLikeOrgLink(Uri url) async {
+  if (url.scheme.toLowerCase() == 'org-social') return true;
   if (url.path.toLowerCase().endsWith('.org')) return true;
 
   final client = http.Client();
