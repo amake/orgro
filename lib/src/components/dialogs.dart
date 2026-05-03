@@ -689,6 +689,9 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
         controller: _controller,
         autofocus: true,
         onSubmitted: _confirm,
+        keyboardType: .url,
+        textInputAction: .go,
+        autocorrect: false,
         decoration: InputDecoration(errorText: _errorText),
       ),
     );
