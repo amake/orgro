@@ -674,7 +674,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
     _controller.text = text;
   }
 
-  bool _isUrl(String text) => Uri.tryParse(text)?.hasScheme == true;
+  bool _isUrl(String text) => Uri.tryParse(text) != null;
 
   @override
   Widget build(BuildContext context) {
@@ -695,6 +695,13 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
     return _isUrl(value);
   }
 
+  Uri _normalize(String value) {
+    final uri = Uri.parse(value);
+    if (uri.hasScheme) return uri;
+    // Allow omitting the scheme for convenience; assume https
+    return Uri.parse('https://$value');
+  }
+
   Future<void> _confirm(String value) async {
     if (!_validate(value)) {
       setState(
@@ -702,7 +709,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
       );
       return;
     }
-    Navigator.pop(context, Uri.parse(value));
+    Navigator.pop(context, _normalize(value));
   }
 }
 
