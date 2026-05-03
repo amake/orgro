@@ -1,0 +1,3 @@
+- Paste images into the editor to link/attach
+- Other minor improvements
+- Bug fixes
