@@ -28,6 +28,7 @@ extension LinkHandler on DocumentPageState {
     OrgFileLink? fileLink = _tryParseFileLink(doc, link);
     if (fileLink != null) return await _openFileLink(link, fileLink);
 
+    // TODO(aaron): Should we be expanding abbreviations for images too?
     if (looksLikeImagePath(link.location)) {
       final data = Uri.tryParse(link.location)?.data;
       final widget = data != null ? DataImage(link, data) : RemoteImage(link);
