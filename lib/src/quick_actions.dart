@@ -62,10 +62,14 @@ class _QuickActionsState extends State<QuickActions> {
       case QuickAction.topPin:
         final pin = RememberedFiles.of(context).pinned.firstOrNull;
         if (pin != null) {
-          await loadAndRememberFile(
-            context,
-            readFileWithIdentifier(pin.identifier),
-          );
+          if (pin.isWebUri) {
+            await loadAndRememberUrl(context, Uri.parse(pin.identifier));
+          } else {
+            await loadAndRememberFile(
+              context,
+              readFileWithIdentifier(pin.identifier),
+            );
+          }
         }
         break;
     }

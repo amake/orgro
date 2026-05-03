@@ -227,16 +227,22 @@ class _RememberedFileManagementListTile extends StatelessWidget {
       child: RememberedFileListTile(
         recentFile,
         showAccessTime: true,
-        onTap: () async => loadAndRememberFile(
-          context,
-          progressTask(
-            context,
-            dialogTitle: AppLocalizations.of(
+        onTap: () async {
+          if (recentFile.isWebUri) {
+            loadAndRememberUrl(context, Uri.parse(recentFile.uri));
+          } else {
+            loadAndRememberFile(
               context,
-            )!.loadingProgressDialogTitle,
-            task: readFileWithIdentifier(recentFile.identifier),
-          ).then((value) => value.result),
-        ),
+              progressTask(
+                context,
+                dialogTitle: AppLocalizations.of(
+                  context,
+                )!.loadingProgressDialogTitle,
+                task: readFileWithIdentifier(recentFile.identifier),
+              ).then((value) => value.result),
+            );
+          }
+        },
       ),
     );
   }
@@ -257,7 +263,11 @@ class RememberedFileListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.insert_drive_file),
+      leading: rememberedFile.isWebUri
+          // The Language icon is an abstract globe, which in my opinion is more
+          // suggestive of a website than Web or Public
+          ? const Icon(Icons.language)
+          : const Icon(Icons.insert_drive_file),
       title: Text(rememberedFile.name),
       subtitle: Row(
         children: [

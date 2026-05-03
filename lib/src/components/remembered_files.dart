@@ -60,6 +60,10 @@ class RememberedFile {
   bool get isPinned => pinnedIdx != -1;
   bool get isNotPinned => !isPinned;
 
+  // TODO(aaron): This should really be reified as a property
+  bool get isWebUri =>
+      uri.startsWith(RegExp('^https?://', caseSensitive: false));
+
   @override
   bool operator ==(Object other) =>
       other is RememberedFile &&

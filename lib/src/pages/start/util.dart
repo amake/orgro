@@ -43,6 +43,14 @@ Future<void> loadAndRememberFile(
 }
 
 Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
+  final rememberedFiles = RememberedFiles.of(context);
+  final loadedFile = RememberedFile(
+    identifier: uri.toString(),
+    name: _nameForUri(uri),
+    uri: uri.toString(),
+    lastOpened: DateTime.now(),
+  );
+  rememberedFiles.add([loadedFile]);
   final bucket = RestorationScope.of(context);
   bucket.write<String>(
     kRestoreRouteKey,
@@ -51,6 +59,17 @@ Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
   await loadHttpUrl(context, uri);
   debugPrint('Clearing saved state from bucket $bucket');
   bucket.remove<String>(kRestoreRouteKey);
+}
+
+String _nameForUri(Uri uri) {
+  final str = uri.toString();
+  if (str.toLowerCase().startsWith('http://')) {
+    return str.substring('http://'.length);
+  }
+  if (str.toLowerCase().startsWith('https://')) {
+    return str.substring('https://'.length);
+  }
+  return str;
 }
 
 Future<void> loadAndRememberAsset(

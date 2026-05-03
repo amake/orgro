@@ -44,7 +44,10 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
     return;
   }
   final rememberedFiles = RememberedFiles.of(context);
-  final files = [...rememberedFiles.pinned, ...rememberedFiles.recents];
+  final files = [
+    ...rememberedFiles.pinned,
+    ...rememberedFiles.recents,
+  ].where((f) => !f.isWebUri).toList(growable: false);
   final result = await showDialog<(CaptureTarget, RememberedFile?)>(
     context: context,
     builder: (context) => CaptureTargetDialog(
