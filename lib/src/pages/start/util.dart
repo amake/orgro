@@ -50,6 +50,8 @@ Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
     uri: uri.toString(),
     lastOpened: DateTime.now(),
   );
+  // TODO(aaron): Don't add the file to remembered files until after it's
+  // successfully loaded
   rememberedFiles.add([loadedFile]);
   final bucket = RestorationScope.of(context);
   bucket.write<String>(
