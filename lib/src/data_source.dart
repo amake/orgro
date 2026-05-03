@@ -70,10 +70,11 @@ class WebDataSource extends DataSource {
         return response;
       } else {
         throw OrgroError(
-          'Unexpected HTTP response: $response',
-          localizedMessage: (context) => AppLocalizations.of(
-            context,
-          )!.errorUnexpectedHttpResponse(response),
+          'Unexpected HTTP response: ${response.statusCode} ${response.reasonPhrase}',
+          localizedMessage: (context) =>
+              AppLocalizations.of(context)!.errorUnexpectedHttpResponse(
+                '${response.statusCode} ${response.reasonPhrase}',
+              ),
         );
       }
     } on Exception catch (e, s) {
