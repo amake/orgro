@@ -670,11 +670,15 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
     if (!await Clipboard.hasStrings()) return;
     final clipboard = await Clipboard.getData(Clipboard.kTextPlain);
     final text = clipboard?.text;
-    if (text == null || !_isUrl(text)) return;
+    if (text == null || !_isUrl(text, strict: true)) return;
     _controller.text = text;
   }
 
-  bool _isUrl(String text) => Uri.tryParse(text) != null;
+  bool _isUrl(String text, {required bool strict}) {
+    final uri = Uri.tryParse(text);
+    if (uri == null) return false;
+    return strict ? uri.hasScheme : true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -692,7 +696,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
 
   bool _validate(String value) {
     if (value.isEmpty) return false;
-    return _isUrl(value);
+    return _isUrl(value, strict: false);
   }
 
   Uri _normalize(String value) {
