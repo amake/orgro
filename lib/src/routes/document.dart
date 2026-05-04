@@ -89,7 +89,11 @@ class _DocumentRouteTopState extends State<_DocumentRouteTop> {
             ),
           );
         } else if (snapshot.hasError) {
-          return ErrorPage(error: snapshot.error.toString());
+          final errorMessage = switch (snapshot.error) {
+            OrgroError e => e.localizedMessage(context),
+            _ => snapshot.error.toString(),
+          };
+          return ErrorPage(error: errorMessage);
         } else {
           return const ProgressPage();
         }
