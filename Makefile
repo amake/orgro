@@ -87,7 +87,8 @@ config_get = awk -F ' = ' '/^$(1) *=/ {print $$2}' config.ini
 .PHONY: deploy-web-assets
 deploy-web-assets:
 	deploy_path=s3://$$($(call config_get,deploy_bucket)) && \
-	aws s3 cp $(dryrun) --recursive --exclude '*~' --exclude .DS_Store assets/web $$deploy_path
+	aws s3 cp $(dryrun) --recursive --exclude '*~' --exclude .DS_Store \
+	--cache-control "max-age=30" assets/web $$deploy_path
 
 check_web_asset_deploy = cd ./assets/web/$(1)/ && find . -type f ! -name '*~' -print0 | xargs -0 -I % $(SHELL) -c 'diff <(curl -s https://$(2)/%) %'
 
@@ -96,6 +97,9 @@ web-assets-deploy-check:
 	$(call check_web_asset_deploy,debug,debug.orgro.org)
 	$(call check_web_asset_deploy,profile,profile.orgro.org)
 	$(call check_web_asset_deploy,release,orgro.org)
+	$(call check_web_asset_deploy,social,social-debug.orgro.org)
+	$(call check_web_asset_deploy,social,social-profile.orgro.org)
+	$(call check_web_asset_deploy,social,social.orgro.org)
 
 app_site_cdn := https://app-site-association.cdn-apple.com/a/v1
 check_app_site_cdn = diff <(curl -s $(app_site_cdn)/$(2)) ./assets/web/$(1)/.well-known/apple-app-site-association
@@ -105,6 +109,9 @@ web-assets-cdn-check:
 	$(call check_app_site_cdn,debug,debug.orgro.org)
 	$(call check_app_site_cdn,profile,profile.orgro.org)
 	$(call check_app_site_cdn,release,orgro.org)
+	$(call check_app_site_cdn,social,social-debug.orgro.org)
+	$(call check_app_site_cdn,social,social-profile.orgro.org)
+	$(call check_app_site_cdn,social,social.orgro.org)
 
 .PHONY: help
 help: ## Show this help text

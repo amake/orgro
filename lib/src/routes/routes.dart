@@ -18,7 +18,15 @@ class Routes {
   static const narrow = '/narrow';
 }
 
-const _allowedHosts = {'', 'debug.orgro.org', 'profile.orgro.org', 'orgro.org'};
+// For some reason on Android the main domain is passed as an empty string
+const _mainDomains = {'', 'orgro.org', 'debug.orgro.org', 'profile.orgro.org'};
+const _socialFeedDomains = {
+  'social.orgro.org',
+  'social-debug.orgro.org',
+  'social-profile.orgro.org',
+};
+
+const _allowedHosts = {..._mainDomains, ..._socialFeedDomains};
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   debugPrint('onGenerateRoute: ${settings.name}; ${settings.arguments}');
@@ -42,20 +50,22 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   // with a content: URL
   if (!_allowedHosts.contains(uri.host)) return null;
 
-  // org-protocol URLs on Android pass through here for some reason. We
-  // shouldn't be going to '/' because it should always be present at the root
-  // of the navigation stack.
-  if (uri.path == '/') return null;
-
-  switch (uri.path.trimSuff('/')) {
-    case Routes.document:
-      return DocumentRoute.fromSettings(settings);
-    case Routes.narrow:
-      return NarrowRoute.fromSettings(settings);
-    case Routes.manual:
-      return DocumentRoute(dataSource: AssetDataSource(LocalAssets.manual));
-    case Routes.settings:
-      return SettingsRoute();
+  if (_mainDomains.contains(uri.host)) {
+    switch (uri.path.trimSuff('/')) {
+      case Routes.document:
+        return DocumentRoute.fromSettings(settings);
+      case Routes.narrow:
+        return NarrowRoute.fromSettings(settings);
+      case Routes.manual:
+        return DocumentRoute(dataSource: AssetDataSource(LocalAssets.manual));
+      case Routes.settings:
+        return SettingsRoute();
+    }
+  } else if (_socialFeedDomains.contains(uri.host)) {
+    // TODO(aaron): Handle Org Social fragment that points to a specific post.
+    // The problem is that we don't know if we should do the lookup by section
+    // title or by ID.
+    return DocumentRoute(dataSource: WebDataSource(uri));
   }
 
   return null;

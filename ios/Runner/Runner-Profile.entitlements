@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:profile.orgro.org</string>
+		<string>applinks:social-profile.orgro.org</string>
 	</array>
 </dict>
 </plist>

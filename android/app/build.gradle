@@ -42,7 +42,8 @@ android {
         manifestPlaceholders += [
             displayName: '@string/app_name',
             appLinkHost: '@string/app_link_host',
-            orgProtocolScheme: '@string/org_protocol_scheme'
+            orgProtocolScheme: '@string/org_protocol_scheme',
+            socialFeedHost: '@string/social_feed_host'
         ]
     }
 
@@ -65,7 +66,8 @@ android {
             manifestPlaceholders += [
                 displayName: '@string/app_name_debug',
                 appLinkHost: '@string/app_link_host_debug',
-                orgProtocolScheme: '@string/org_protocol_scheme_debug'
+                orgProtocolScheme: '@string/org_protocol_scheme_debug',
+                socialFeedHost: '@string/social_feed_host_debug'
             ]
         }
         profile {
@@ -73,7 +75,8 @@ android {
             manifestPlaceholders += [
                 displayName: '@string/app_name_profile',
                 appLinkHost: '@string/app_link_host_profile',
-                orgProtocolScheme: '@string/org_protocol_scheme_profile'
+                orgProtocolScheme: '@string/org_protocol_scheme_profile',
+                socialFeedHost: '@string/social_feed_host_profile'
             ]
         }
         release {
