@@ -32,7 +32,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     'host="${uri.host}", path="${uri.path}", query="${uri.query}"',
   );
 
-  if (kOrgProtocolSchemes.contains(uri.scheme)) {
+  if (isCaptureUri(uri)) {
     // This may not ever actually happen
     debugPrint('Suppressing org-protocol URI: $uri');
     return null;

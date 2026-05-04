@@ -12,16 +12,16 @@ import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/util.dart';
 
-const kOrgProtocolSchemes = [
+const _kOrgProtocolSchemes = [
   'org-protocol-debug',
   'org-protocol-profile',
   'org-protocol',
 ];
 
-bool isCaptureUri(Uri uri) => kOrgProtocolSchemes.contains(uri.scheme);
+bool isCaptureUri(Uri uri) => _kOrgProtocolSchemes.contains(uri.scheme);
 
 bool isValidCapturePayload(Uri uri) {
-  if (!kOrgProtocolSchemes.contains(uri.scheme)) return false;
+  if (!_kOrgProtocolSchemes.contains(uri.scheme)) return false;
   if (uri.host.toLowerCase() != 'capture') return false;
   if (!uri.hasQuery) return false;
   if (!uri.queryParameters.keys.any(
