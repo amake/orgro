@@ -232,6 +232,9 @@ extension UriUtil on Uri {
     // We assume query params and fragments don't affect same-document-ness
     return true;
   }
+
+  String toDisplayString() =>
+      hasEmptyPath || path == '/' ? host : '$host${path.trimSuff('/')}';
 }
 
 extension BoolUtil on bool {

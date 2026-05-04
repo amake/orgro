@@ -10,6 +10,7 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/error.dart';
+import 'package:orgro/src/util.dart';
 
 abstract class DataSource {
   const DataSource(this.name);
@@ -41,8 +42,7 @@ abstract class DataSource {
 }
 
 class WebDataSource extends DataSource {
-  WebDataSource(this.uri)
-    : super(uri.pathSegments.lastOrNull ?? uri.toString());
+  WebDataSource(this.uri) : super(uri.toDisplayString());
 
   final Uri uri;
 

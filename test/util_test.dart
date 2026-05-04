@@ -137,4 +137,29 @@ void main() {
       expect(val, 30);
     });
   });
+    test('To display string', () {
+      expect(Uri.parse('http://example.com').toDisplayString(), 'example.com');
+      expect(Uri.parse('http://example.com/').toDisplayString(), 'example.com');
+      expect(
+        Uri.parse('http://example.com/path').toDisplayString(),
+        'example.com/path',
+      );
+      expect(
+        Uri.parse('http://example.com/path/').toDisplayString(),
+        'example.com/path',
+      );
+      expect(
+        Uri.parse('http://example.com/path?query=1').toDisplayString(),
+        'example.com/path',
+      );
+      expect(
+        Uri.parse('http://example.com/path#fragment').toDisplayString(),
+        'example.com/path',
+      );
+      expect(
+        Uri.parse('https://example.com/path').toDisplayString(),
+        'example.com/path',
+      );
+    });
+  });
 }
