@@ -13,4 +13,6 @@
     <string name="social_feed_host_debug">social-debug.orgro.org</string>
     <string name="social_feed_host_profile">social-profile.orgro.org</string>
     <string name="title_activity_capture">Capture</string>
+    <string name="title_activity_capture_debug">Capture🐞</string>
+    <string name="title_activity_capture_profile">Capture🚀</string>
 </resources>

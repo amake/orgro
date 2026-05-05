@@ -41,6 +41,7 @@ android {
         resourceConfigurations += ['en_US', 'en_GB', 'ja', 'uk', 'de', 'ru']
         manifestPlaceholders += [
             displayName: '@string/app_name',
+            captureActivityName: '@string/title_activity_capture',
             appLinkHost: '@string/app_link_host',
             orgProtocolScheme: '@string/org_protocol_scheme',
             socialFeedHost: '@string/social_feed_host'
@@ -65,6 +66,7 @@ android {
             applicationIdSuffix '.debug'
             manifestPlaceholders += [
                 displayName: '@string/app_name_debug',
+                captureActivityName: '@string/title_activity_capture_debug',
                 appLinkHost: '@string/app_link_host_debug',
                 orgProtocolScheme: '@string/org_protocol_scheme_debug',
                 socialFeedHost: '@string/social_feed_host_debug'
@@ -74,6 +76,7 @@ android {
             applicationIdSuffix '.profile'
             manifestPlaceholders += [
                 displayName: '@string/app_name_profile',
+                captureActivityName: '@string/title_activity_capture_profile',
                 appLinkHost: '@string/app_link_host_profile',
                 orgProtocolScheme: '@string/org_protocol_scheme_profile',
                 socialFeedHost: '@string/social_feed_host_profile'

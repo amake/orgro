@@ -22,7 +22,7 @@
         <activity
             android:name=".CaptureActivity"
             android:exported="true"
-            android:label="@string/title_activity_capture"
+            android:label="${captureActivityName}"
             android:theme="@android:style/Theme.NoDisplay"
             android:taskAffinity=""
             android:noHistory="true">
