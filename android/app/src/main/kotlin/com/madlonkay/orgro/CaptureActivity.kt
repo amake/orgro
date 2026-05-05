@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.core.net.toUri
 
 class CaptureActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,8 +57,8 @@ class CaptureActivity : ComponentActivity() {
 
     private fun isUri(str: String): Boolean {
         return try {
-            Uri.parse(str).scheme?.isNotBlank() == true
-        } catch (e: IllegalArgumentException) {
+            str.toUri().scheme?.isNotBlank() == true
+        } catch (_: IllegalArgumentException) {
             false
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
+import androidx.core.net.toUri
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +56,7 @@ suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Res
 }
 
 private suspend fun findFileForId(requestId: String, id: String, dirIdentifier: String, context: Context): Map<String, String>? {
-    val parent = Uri.parse(dirIdentifier)
+    val parent = dirIdentifier.toUri()
     val found = iterateTree(requestId, parent, context) { searchFileForId(it, id, context) }
     if (found == null) return null
     val (uri, name) = found
