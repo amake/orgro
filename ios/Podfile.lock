@@ -105,7 +105,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   app_settings: 0341ec6daa4f0c50f5a421bf0ad7c36084db6e90
-  file_picker_writable: 3a458aa8cdb7c1378cb3e8ec0543ead87a77d0be
+  file_picker_writable: c2e0e477a16dd9a444a84d881d3a1ce5598fd4cd
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
