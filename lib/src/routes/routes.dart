@@ -7,6 +7,31 @@ import 'package:orgro/src/routes/narrow.dart';
 import 'package:orgro/src/routes/settings.dart';
 import 'package:orgro/src/util.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
+// This does an end-run around _WidgetsAppState.didPushRouteInformation which
+// strips the host off of incoming deep links.
+class _DeepLinkInterceptor extends WidgetsBindingObserver {
+  @override
+  Future<bool> didPushRouteInformation(
+    RouteInformation routeInformation,
+  ) async {
+    debugPrint(
+      'Received route information: ${routeInformation.uri}; '
+      '${routeInformation.state}',
+    );
+    navigatorKey.currentState!.pushNamed(routeInformation.uri.toString());
+    return true;
+  }
+}
+
+/// Call this before [runApp]. Make sure the [navigatorKey] is passed to the
+/// [MaterialApp].
+void initDeepLinks() {
+  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding.instance.addObserver(_DeepLinkInterceptor());
+}
+
 const kRestoreRouteKey = 'restore_route_key';
 
 class Routes {
@@ -18,15 +43,16 @@ class Routes {
   static const narrow = '/narrow';
 }
 
-// For some reason on Android the main domain is passed as an empty string
-const _mainDomains = {'', 'orgro.org', 'debug.orgro.org', 'profile.orgro.org'};
-const _socialFeedDomains = {
+// Calling [Navigator.pushNamed] gives a [RouteSettings] with an empty host
+const _internalHost = '';
+const _mainHosts = {'orgro.org', 'debug.orgro.org', 'profile.orgro.org'};
+const _socialFeedHosts = {
   'social.orgro.org',
   'social-debug.orgro.org',
   'social-profile.orgro.org',
 };
 
-const _allowedHosts = {..._mainDomains, ..._socialFeedDomains};
+const _allowedHosts = {_internalHost, ..._mainHosts, ..._socialFeedHosts};
 
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   debugPrint('onGenerateRoute: ${settings.name}; ${settings.arguments}');
@@ -50,7 +76,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
   // with a content: URL
   if (!_allowedHosts.contains(uri.host)) return null;
 
-  if (_mainDomains.contains(uri.host)) {
+  if (uri.host == _internalHost || _mainHosts.contains(uri.host)) {
     switch (uri.path.trimSuff('/')) {
       case Routes.document:
         return DocumentRoute.fromSettings(settings);
@@ -61,7 +87,7 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       case Routes.settings:
         return SettingsRoute();
     }
-  } else if (_socialFeedDomains.contains(uri.host)) {
+  } else if (_socialFeedHosts.contains(uri.host)) {
     // TODO(aaron): Handle Org Social fragment that points to a specific post.
     // The problem is that we don't know if we should do the lookup by section
     // title or by ID.

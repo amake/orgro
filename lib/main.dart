@@ -31,6 +31,8 @@ void main() async {
     debugPrint = debugPrintNoop;
   }
 
+  initDeepLinks();
+
   runApp(buildApp());
 
   try {
@@ -89,6 +91,7 @@ class _MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       restorationScopeId: 'orgro_root',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
