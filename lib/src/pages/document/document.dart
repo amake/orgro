@@ -190,11 +190,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       await restoreDoc;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final target = bucket!.read<String>(kRestoreNarrowTargetKey);
+        final toRestoreTarget = bucket!.read<String>(kRestoreNarrowTargetKey);
         if (widget.initialTarget == null) {
-          handleInitialTarget(target);
+          debugPrint('Restoring narrow target: $toRestoreTarget');
+          handleInitialTarget(toRestoreTarget);
         }
-        if (widget.initialMode == null && target == null) {
+        if (widget.initialMode == null && toRestoreTarget == null) {
           restoreMode();
         }
       });
