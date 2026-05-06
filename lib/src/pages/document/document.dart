@@ -189,6 +189,11 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       // Wait for doc to finish restoring before opening narrow target
       await restoreDoc;
 
+      // Only restore narrow target or mode if we don't don't have an afterOpen
+      // callback, which may have narrowed or changed modes explicitly. The
+      // callback shouldn't be present in a restore scenario anyway.
+      if (widget.afterOpen != null) return;
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final toRestoreTarget = bucket!.read<String>(kRestoreNarrowTargetKey);
         if (widget.initialTarget == null) {

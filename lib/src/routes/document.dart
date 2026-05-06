@@ -32,6 +32,7 @@ class DocumentRoute extends MaterialPageRoute<void> {
     required DataSource dataSource,
     String? target,
     InitialMode? mode,
+    AfterOpenCallback? afterOpen,
   }) : super(
          builder: _builder,
          settings: RouteSettings(
@@ -40,6 +41,7 @@ class DocumentRoute extends MaterialPageRoute<void> {
              dataSource: dataSource,
              target: target,
              mode: mode,
+             afterOpen: afterOpen,
            ),
          ),
          fullscreenDialog: true,

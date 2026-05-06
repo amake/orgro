@@ -219,4 +219,24 @@ extension NarrowHandler on DocumentPageState {
         throw Exception('Unexpected section type: $after');
     }
   }
+
+  /// Handle a (likely Org Social) link with a fragment pointing to a section in
+  /// the document
+  Future<bool> narrowByFragment(Uri url) async {
+    if (!url.hasFragment) return false;
+
+    final doc = DocumentProvider.of(context).doc;
+
+    // ID takes precedence over headline
+    // https://github.com/tanrax/org-social#post-metadata
+    final section =
+        doc.sectionForTarget('id:${url.fragment}') ??
+        doc.sectionForTarget('*${url.fragment}');
+    if (section != null) {
+      await doNarrow(section);
+      return true;
+    }
+    debugPrint('No section found for fragment: ${url.fragment}');
+    return false;
+  }
 }

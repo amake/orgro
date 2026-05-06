@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/routes.dart';
@@ -45,10 +46,13 @@ Future<void> loadAndRememberFile(
 
 Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
   final rememberedFiles = RememberedFiles.of(context);
+  // Don't remember the fragment because that's used for narrowing and we only
+  // want to remember the top-level document.
+  final toRemember = uri.replace(fragment: '');
   final loadedFile = RememberedFile(
-    identifier: uri.toString(),
-    name: uri.toDisplayString(),
-    uri: uri.toString(),
+    identifier: toRemember.toString(),
+    name: toRemember.toDisplayString(),
+    uri: toRemember.toString(),
     lastOpened: DateTime.now(),
   );
   // TODO(aaron): Don't add the file to remembered files until after it's
@@ -57,9 +61,13 @@ Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
   final bucket = RestorationScope.of(context);
   bucket.write<String>(
     kRestoreRouteKey,
-    json.encode({'route': Routes.document, 'url': uri.toString()}),
+    json.encode({'route': Routes.document, 'url': toRemember.toString()}),
   );
-  await loadHttpUrl(context, uri);
+  await loadHttpUrl(
+    context,
+    uri,
+    afterOpen: uri.hasFragment ? (state) => state.narrowByFragment(uri) : null,
+  );
   debugPrint('Clearing saved state from bucket $bucket');
   bucket.remove<String>(kRestoreRouteKey);
 }

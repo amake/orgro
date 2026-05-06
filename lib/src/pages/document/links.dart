@@ -223,17 +223,9 @@ extension LinkHandler on DocumentPageState {
     final dataSource = docProvider.dataSource;
     if (dataSource is WebDataSource && cleanUrl.sameDocument(dataSource.uri)) {
       // If the URL has a fragment, it is probably an Org Social link to a post.
-      if (cleanUrl.hasFragment) {
-        // ID takes precedence over headline
-        // https://github.com/tanrax/org-social#post-metadata
-        final section =
-            docProvider.doc.sectionForTarget('id:${cleanUrl.fragment}') ??
-            docProvider.doc.sectionForTarget('*${cleanUrl.fragment}');
-        if (section != null) {
-          await doNarrow(section);
-          return true;
-        }
-      }
+      final handled = await narrowByFragment(cleanUrl);
+      if (handled) return true;
+
       // We are in the same document, so don't re-open it
       debugPrint('Suppressing opening link to same document');
       return true;
@@ -244,7 +236,13 @@ extension LinkHandler on DocumentPageState {
     if (!await looksLikeOrgLink(url)) return false;
     if (!mounted) return false;
 
-    await loadHttpUrl(context, cleanUrl);
+    await loadHttpUrl(
+      context,
+      cleanUrl,
+      afterOpen: cleanUrl.hasFragment
+          ? (state) => state.narrowByFragment(cleanUrl)
+          : null,
+    );
     return true;
   }
 }

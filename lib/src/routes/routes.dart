@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/routes/narrow.dart';
 import 'package:orgro/src/routes/settings.dart';
@@ -88,10 +89,12 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         return SettingsRoute();
     }
   } else if (_socialFeedHosts.contains(uri.host)) {
-    // TODO(aaron): Handle Org Social fragment that points to a specific post.
-    // The problem is that we don't know if we should do the lookup by section
-    // title or by ID.
-    return DocumentRoute(dataSource: WebDataSource(uri));
+    return DocumentRoute(
+      dataSource: WebDataSource(uri),
+      afterOpen: uri.hasFragment
+          ? (state) => state.narrowByFragment(uri)
+          : null,
+    );
   }
 
   return null;
