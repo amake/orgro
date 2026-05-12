@@ -872,8 +872,8 @@ extension LocalLinksPolicyPersistence on LocalLinksPolicy? {
   };
 }
 
-const _kLocalLinksPolicyDeny = 'remote_images_policy_deny';
-const _kLocalLinksPolicyAsk = 'remote_images_policy_ask';
+const _kLocalLinksPolicyDeny = 'local_links_policy_deny';
+const _kLocalLinksPolicyAsk = 'local_links_policy_ask';
 
 extension SaveChangesPolicyPersistence on SaveChangesPolicy? {
   static SaveChangesPolicy? fromString(String? value) => switch (value) {
