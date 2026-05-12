@@ -69,8 +69,8 @@ class FilterChipsInput extends StatelessWidget {
                           }
                         : null,
                   ),
-                for (final keyword in keywords)
-                  if (filter.keywords.isEmpty)
+                if (filter.keywords.isEmpty)
+                  for (final keyword in keywords)
                     _KeywordChip(
                       keyword,
                       done: todoSettings.any((e) => e.done.contains(keyword)),
@@ -78,8 +78,8 @@ class FilterChipsInput extends StatelessWidget {
                         keywords: [...filter.keywords, keyword],
                       ),
                     ),
-                for (final priority in priorities)
-                  if (filter.priorities.isEmpty)
+                if (filter.priorities.isEmpty)
+                  for (final priority in priorities)
                     _PriorityChip(
                       priority,
                       onPressed: () => selectedFilter.value = filter.copyWith(
