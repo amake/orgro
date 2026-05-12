@@ -69,6 +69,7 @@ class FilterChipsInput extends StatelessWidget {
                           }
                         : null,
                   ),
+                // Assume just one keyword at a time
                 if (filter.keywords.isEmpty)
                   for (final keyword in keywords)
                     _KeywordChip(
@@ -78,6 +79,7 @@ class FilterChipsInput extends StatelessWidget {
                         keywords: [...filter.keywords, keyword],
                       ),
                     ),
+                // Assume just one priority at a time
                 if (filter.priorities.isEmpty)
                   for (final priority in priorities)
                     _PriorityChip(
@@ -86,6 +88,7 @@ class FilterChipsInput extends StatelessWidget {
                         priorities: [...filter.priorities, priority],
                       ),
                     ),
+                // Assume multiple tags can be selected at a time
                 for (final tag in tags)
                   if (!filter.tags.contains(tag))
                     _TagChip(
