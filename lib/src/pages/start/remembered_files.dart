@@ -52,7 +52,7 @@ class RememberedFilesBody extends StatelessWidget {
                 key: ValueKey(pinnedFile),
               );
             },
-            onReorder: (oldIndex, newIndex) {
+            onReorderItem: (oldIndex, newIndex) {
               final pins = [...sortedPins];
               final moved = pins.removeAt(oldIndex);
               final insertAt = newIndex > oldIndex ? newIndex - 1 : newIndex;

@@ -181,7 +181,7 @@ class PopupPalette extends AnimatedWidget {
       child: SizeTransition(
         sizeFactor: animation,
         axis: Axis.horizontal,
-        axisAlignment: 1,
+        alignment: Alignment.centerRight,
         child: FadeTransition(opacity: animation, child: child),
       ),
     );
