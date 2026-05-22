@@ -5,9 +5,12 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -26,13 +29,10 @@
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-.packages
 .pub-cache/
 .pub/
 /build/
-
-# Web related
-lib/generated_plugin_registrant.dart
+/coverage/
 
 # Symbolication related
 app.*.symbols
@@ -47,6 +47,4 @@ app.*.map.json
 
 # Custom
 /tmp
-/ios/build
-.aider*
 config.ini
