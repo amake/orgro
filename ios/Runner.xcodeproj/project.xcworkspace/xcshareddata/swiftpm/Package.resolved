@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "universaldetector2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amake/UniversalDetector2.git",
+      "state" : {
+        "revision" : "32982d5fa66d40d59e8be38ace596a046ccd3918",
+        "version" : "2.0.2"
+      }
+    }
+  ],
+  "version" : 2
+}

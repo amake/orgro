@@ -1,127 +1,32 @@
 PODS:
-  - app_settings (6.1.2):
-    - Flutter
-  - file_picker_writable (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
-  - flutter_charset_detector_darwin (0.0.1):
-    - Flutter
-    - FlutterMacOS
-    - UniversalDetector2 (= 2.0.1)
-  - flutter_local_notifications (0.0.1):
-    - Flutter
-  - flutter_tex_js_ios (0.0.1):
-    - Flutter
-  - flutter_timezone (0.0.1):
-    - Flutter
-  - in_app_purchase_storekit (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - open_file_ios (1.0.3):
     - Flutter
   - openpgp (0.6.0):
-    - Flutter
-  - package_info_plus (0.4.5):
-    - Flutter
-  - quick_actions_ios (0.0.1):
-    - Flutter
-  - share_plus (0.0.1):
-    - Flutter
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - sqflite_darwin (0.0.4):
-    - Flutter
-    - FlutterMacOS
-  - UniversalDetector2 (2.0.1)
-  - url_launcher_ios (0.0.1):
-    - Flutter
-  - wakelock_plus (0.0.1):
     - Flutter
   - workmanager_apple (0.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - app_settings (from `.symlinks/plugins/app_settings/ios`)
-  - file_picker_writable (from `.symlinks/plugins/file_picker_writable/ios`)
   - Flutter (from `Flutter`)
-  - flutter_charset_detector_darwin (from `.symlinks/plugins/flutter_charset_detector_darwin/darwin`)
-  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
-  - flutter_tex_js_ios (from `.symlinks/plugins/flutter_tex_js_ios/ios`)
-  - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
-  - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/darwin`)
   - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
   - openpgp (from `.symlinks/plugins/openpgp/ios`)
-  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
-  - share_plus (from `.symlinks/plugins/share_plus/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
-SPEC REPOS:
-  trunk:
-    - UniversalDetector2
-
 EXTERNAL SOURCES:
-  app_settings:
-    :path: ".symlinks/plugins/app_settings/ios"
-  file_picker_writable:
-    :path: ".symlinks/plugins/file_picker_writable/ios"
   Flutter:
     :path: Flutter
-  flutter_charset_detector_darwin:
-    :path: ".symlinks/plugins/flutter_charset_detector_darwin/darwin"
-  flutter_local_notifications:
-    :path: ".symlinks/plugins/flutter_local_notifications/ios"
-  flutter_tex_js_ios:
-    :path: ".symlinks/plugins/flutter_tex_js_ios/ios"
-  flutter_timezone:
-    :path: ".symlinks/plugins/flutter_timezone/ios"
-  in_app_purchase_storekit:
-    :path: ".symlinks/plugins/in_app_purchase_storekit/darwin"
   open_file_ios:
     :path: ".symlinks/plugins/open_file_ios/ios"
   openpgp:
     :path: ".symlinks/plugins/openpgp/ios"
-  package_info_plus:
-    :path: ".symlinks/plugins/package_info_plus/ios"
-  quick_actions_ios:
-    :path: ".symlinks/plugins/quick_actions_ios/ios"
-  share_plus:
-    :path: ".symlinks/plugins/share_plus/ios"
-  shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
-  sqflite_darwin:
-    :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
-  wakelock_plus:
-    :path: ".symlinks/plugins/wakelock_plus/ios"
   workmanager_apple:
     :path: ".symlinks/plugins/workmanager_apple/ios"
 
 SPEC CHECKSUMS:
-  app_settings: 0341ec6daa4f0c50f5a421bf0ad7c36084db6e90
-  file_picker_writable: c2e0e477a16dd9a444a84d881d3a1ce5598fd4cd
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_charset_detector_darwin: 14f055ebeed6896144cc96b046749df51127a0a3
-  flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
-  flutter_tex_js_ios: 5d44702447dc77d1ee6e234375d346e2b8c55924
-  flutter_timezone: 7c838e17ffd4645d261e87037e5bebf6d38fe544
-  in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
   open_file_ios: 46184d802ee7959203f6392abcfa0dd49fdb5be0
   openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
-  package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
-  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
-  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  UniversalDetector2: 7c9ffd935cf050eeb19edf7e90f6febe3743a1af
-  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
-  wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
 PODFILE CHECKSUM: c5ea6be7508deb66b84e6302bf319338a7f21583
