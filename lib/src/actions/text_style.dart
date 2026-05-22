@@ -146,15 +146,16 @@ class _TextStyleButtonState extends State<TextStyleButton>
     animationController.forward();
   }
 
+  /// Adapted from [PopupMenuButtonState._positionBuilder]
   RelativeRect _buttonPosition(BuildContext context) {
-    // Copied from PopupMenuButtonState.showButtonMenu()
     final button = context.findRenderObject() as RenderBox;
     final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final offset = Offset(0, button.size.height);
     return RelativeRect.fromRect(
       Rect.fromPoints(
-        button.localToGlobal(Offset.zero, ancestor: overlay),
+        button.localToGlobal(offset, ancestor: overlay),
         button.localToGlobal(
-          button.size.bottomRight(Offset.zero),
+          button.size.bottomRight(Offset.zero) + offset,
           ancestor: overlay,
         ),
       ),
@@ -180,8 +181,8 @@ class PopupPalette extends AnimatedWidget {
       elevation: PopupMenuTheme.of(context).elevation ?? 8,
       child: SizeTransition(
         sizeFactor: animation,
-        axis: Axis.horizontal,
-        alignment: Alignment.centerRight,
+        axis: Axis.vertical,
+        alignment: Alignment.topRight,
         child: FadeTransition(opacity: animation, child: child),
       ),
     );
