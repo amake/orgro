@@ -174,7 +174,7 @@ packages:
     description:
       path: "."
       ref: directory-picker
-      resolved-ref: "0e475069d33edd61c07c0bfd8339349de3ff2c96"
+      resolved-ref: adee616e1f5d25a2e38659255146864317602b5e
       url: "https://github.com/amake/file_picker_writable.git"
     source: git
     version: "2.1.0+1"
@@ -211,18 +211,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_charset_detector
-      sha256: "21f6fe8172fbfe3ba9d2fe0dba3702ba07f682315e829a68d49185a0c80d5ad0"
+      sha256: "6ec4905f423206bd69fb256c496f542cba36e9c6121cbb48d9d0f2190fb6dacd"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   flutter_charset_detector_android:
     dependency: transitive
     description:
       name: flutter_charset_detector_android
-      sha256: "617345b0f78ad56c2633ea6132e57c2e374f6970792afbe9743237f683eeae8e"
+      sha256: a7d574e29f79cbd52d3e21cc60f4b3e4a8181de9273d6dfa41398d7580fac878
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "4.0.0"
   flutter_charset_detector_darwin:
     dependency: transitive
     description:
@@ -317,18 +317,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js
-      sha256: "2d6e2d54d667f4375ab5e1439826aaf1d47bb0165e9e1630031f541a67e8bdb3"
+      sha256: c9a8f10908d47e7529af93a7d656d9b8455cf35ee034725f06d696ecda253ca3
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   flutter_tex_js_android:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "4548b25fd6bbe3d73203eee06230f65f7715298a42a626a883ca837a49b78670"
+      sha256: "4a4d2ee4cd73b8a493a70329863d9608df33b67942f6729b123164770dcc261b"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.20"
+    version: "4.0.0"
   flutter_tex_js_ios:
     dependency: transitive
     description:
@@ -651,10 +651,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "5a1d0d23366828e3f1759905a5c5a1b30708198e0eee1bfbb5f431368731056b"
+      sha256: cbb5e5ddc44d21cf2a221d903d49514a6ae9eb7675c93418253eccca08cb502b
       url: "https://pub.dev"
     source: hosted
-    version: "11.1.0"
+    version: "12.0.0"
   org_parser:
     dependency: transitive
     description:

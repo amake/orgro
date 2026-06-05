@@ -28,14 +28,14 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.2.0
   flutter_cache_manager: ^3.3.0
-  flutter_charset_detector: ^5.0.0
+  flutter_charset_detector: ^6.0.0
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector/flutter_charset_detector
   flutter_slidable: ^4.0.0
   google_fonts: ^8.0.0
   http: ^1.1.0
   intl: ^0.20.2
-  org_flutter: ^11.1.0
+  org_flutter: ^12.0.0
   # org_flutter:
     # path: ../org_flutter
   path_provider: ^2.0.9
