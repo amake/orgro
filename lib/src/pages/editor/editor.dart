@@ -160,6 +160,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(horizontal: 8),
                           ),
+                          textCapitalization: .sentences,
                           style: _textStyle,
                           contentInsertionConfiguration:
                               ContentInsertionConfiguration(
