@@ -48,3 +48,4 @@ app.*.map.json
 # Custom
 /tmp
 config.ini
+untranslated.json
