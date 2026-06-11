@@ -409,13 +409,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/open_file_ios/open_file_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/openpgp/openpgp.framework",
 				"${BUILT_PRODUCTS_DIR}/workmanager_apple/workmanager_apple.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/open_file_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openpgp.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/workmanager_apple.framework",
 			);

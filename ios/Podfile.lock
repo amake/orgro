@@ -1,7 +1,5 @@
 PODS:
   - Flutter (1.0.0)
-  - open_file_ios (1.0.3):
-    - Flutter
   - openpgp (0.6.0):
     - Flutter
   - workmanager_apple (0.0.1):
@@ -9,15 +7,12 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - open_file_ios (from `.symlinks/plugins/open_file_ios/ios`)
   - openpgp (from `.symlinks/plugins/openpgp/ios`)
   - workmanager_apple (from `.symlinks/plugins/workmanager_apple/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  open_file_ios:
-    :path: ".symlinks/plugins/open_file_ios/ios"
   openpgp:
     :path: ".symlinks/plugins/openpgp/ios"
   workmanager_apple:
@@ -25,7 +20,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  open_file_ios: 46184d802ee7959203f6392abcfa0dd49fdb5be0
   openpgp: 978983a445d0bd2b62595d2fddaf939de37583fa
   workmanager_apple: 904529ae31e97fc5be632cf628507652294a0778
 
