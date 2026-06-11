@@ -137,60 +137,69 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                 ],
               ),
               body: LayoutBuilder(
-                builder: (context, constraints) => Stack(
-                  children: [
-                    SingleChildScrollView(
-                      controller: PrimaryScrollController.of(context),
-                      padding: EdgeInsets.only(
-                        bottom:
-                            _kEditorToolbarReservedHeight +
-                            MediaQuery.paddingOf(context).bottom,
-                      ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight,
-                        ),
-                        child: TextField(
-                          key: editorTextFieldKey,
-                          controller: _controller.value,
-                          undoController: _undoController,
-                          focusNode: _focusNode,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                builder: (context, constraints) {
+                  final toolbarBottomInset =
+                      _kEditorToolbarReservedHeight +
+                      MediaQuery.paddingOf(context).bottom;
+                  return Stack(
+                    children: [
+                      SingleChildScrollView(
+                        controller: PrimaryScrollController.of(context),
+                        padding: EdgeInsets.only(bottom: toolbarBottomInset),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight,
                           ),
-                          textCapitalization: .sentences,
-                          style: _textStyle,
-                          contentInsertionConfiguration:
-                              ContentInsertionConfiguration(
-                                allowedMimeTypes: [
-                                  'image/jpeg',
-                                  'image/png',
-                                  'image/gif',
-                                  'image/webp',
-                                  'image/heic',
-                                  'image/heif',
-                                  'image/avif',
-                                  'image/svg+xml',
-                                ],
-                                onContentInserted: _onContentInserted,
+                          child: TextField(
+                            key: editorTextFieldKey,
+                            controller: _controller.value,
+                            undoController: _undoController,
+                            focusNode: _focusNode,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8,
                               ),
-                          contextMenuBuilder: (_, editableTextState) =>
-                              ContextMenuItemsWithImagePaste(
-                                editableTextState: editableTextState,
-                                controller: _controller.value,
-                                parentContext: context,
-                              ),
+                            ),
+                            scrollPadding: EdgeInsets.fromLTRB(
+                              20,
+                              20,
+                              20,
+                              toolbarBottomInset + 20,
+                            ),
+                            textCapitalization: .sentences,
+                            style: _textStyle,
+                            contentInsertionConfiguration:
+                                ContentInsertionConfiguration(
+                                  allowedMimeTypes: [
+                                    'image/jpeg',
+                                    'image/png',
+                                    'image/gif',
+                                    'image/webp',
+                                    'image/heic',
+                                    'image/heif',
+                                    'image/avif',
+                                    'image/svg+xml',
+                                  ],
+                                  onContentInserted: _onContentInserted,
+                                ),
+                            contextMenuBuilder: (_, editableTextState) =>
+                                ContextMenuItemsWithImagePaste(
+                                  editableTextState: editableTextState,
+                                  controller: _controller.value,
+                                  parentContext: context,
+                                ),
+                          ),
                         ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: _EditorToolbar(undoController: _undoController),
-                    ),
-                  ],
-                ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: _EditorToolbar(undoController: _undoController),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
