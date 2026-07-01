@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
@@ -378,14 +379,33 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               child: Scaffold(
                 body: Stack(
                   children: [
-                    CustomScrollView(
-                      controller: PrimaryScrollController.of(context),
-                      restorationId:
-                          'document_scroll_view_${widget.metadata.layer}',
-                      slivers: [
-                        _buildAppBar(context, searchMode: searchMode),
-                        _buildDocument(context),
-                      ],
+                    // This AnnotatedRegion serves as a fallback for the same
+                    // AnnotatedRegion in the SliverAppBar so that we can have a
+                    // different system overlay style when the app bar is
+                    // scrolled out of view. The SliverAppBar's AnnotatedRegion
+                    // will take precedence when it is visible.
+                    //
+                    // If we want to try to dynamically adjust for the document
+                    // background, this is where we would do it, but for now we
+                    // just use a fixed style.
+                    //
+                    // This can't be more narrowly scoped because
+                    // AnnotatedRegion is a box model widget and thus can't be
+                    // used in a sliver context.
+                    AnnotatedRegion<SystemUiOverlayStyle>(
+                      value: switch (Theme.of(context).brightness) {
+                        .dark => .light,
+                        .light => .dark,
+                      },
+                      child: CustomScrollView(
+                        controller: PrimaryScrollController.of(context),
+                        restorationId:
+                            'document_scroll_view_${widget.metadata.layer}',
+                        slivers: [
+                          _buildAppBar(context, searchMode: searchMode),
+                          _buildDocument(context),
+                        ],
+                      ),
                     ),
                     if (searchMode)
                       Align(
