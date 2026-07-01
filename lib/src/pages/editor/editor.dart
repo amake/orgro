@@ -128,6 +128,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
             child: Scaffold(
               appBar: AppBar(
                 title: Text(widget.title),
+                systemOverlayStyle: .light,
                 actions: [
                   IconButton(
                     tooltip: AppLocalizations.of(context)!.tooltipApplyChanges,

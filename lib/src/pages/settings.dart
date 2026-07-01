@@ -21,6 +21,7 @@ class SettingsPage extends StatelessWidget {
           title: DeveloperAccess(
             child: Text(AppLocalizations.of(context)!.settingsScreenTitle),
           ),
+          systemOverlayStyle: .light,
         ),
         body: ListView(
           children:

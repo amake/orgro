@@ -422,6 +422,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         floating: true,
         forceElevated: true,
         snap: true,
+        systemOverlayStyle: .light,
       ),
     );
   }

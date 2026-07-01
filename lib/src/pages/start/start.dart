@@ -42,6 +42,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
             const FontPreloader(),
           ],
         ),
+        systemOverlayStyle: .light,
       ),
       body: _KeyboardShortcuts(
         child: AnimatedSwitcher(
