@@ -70,13 +70,15 @@ class MySearchDelegate {
   );
 
   Widget buildBottomSheet(BuildContext context) {
-    return BottomInputBar(
-      child: FilterChipsInput(
-        keywords: keywords,
-        tags: tags,
-        priorities: priorities,
-        todoSettings: todoSettings,
-        selectedFilter: _selectedFilter,
+    return TextFieldTapRegion(
+      child: BottomInputBar(
+        child: FilterChipsInput(
+          keywords: keywords,
+          tags: tags,
+          priorities: priorities,
+          todoSettings: todoSettings,
+          selectedFilter: _selectedFilter,
+        ),
       ),
     );
   }
@@ -168,104 +170,106 @@ class SearchField extends StatelessWidget {
     final iconTheme = IconThemeData(color: color);
     return Theme(
       data: theme.copyWith(hintColor: color),
-      child: Row(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ValueListenableBuilder(
-                  valueListenable: filterData,
-                  builder: (context, filter, _) => Row(
-                    children: [
-                      ...[
-                        SelectedFilterChips(
-                          filter: filter,
-                          todoSettings: todoSettings,
-                          onChange: (value) => filterData.value = value,
-                        ),
-                        if (filter.isNotEmpty)
-                          IconTheme.merge(
-                            data: iconTheme,
-                            child: const Icon(Icons.drag_indicator),
+      child: TextFieldTapRegion(
+        child: Row(
+          children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ValueListenableBuilder(
+                    valueListenable: filterData,
+                    builder: (context, filter, _) => Row(
+                      children: [
+                        ...[
+                          SelectedFilterChips(
+                            filter: filter,
+                            todoSettings: todoSettings,
+                            onChange: (value) => filterData.value = value,
                           ),
-                      ].separatedBy(const SizedBox(width: 8)),
-                      ConstrainedBox(
-                        constraints: filter.isNotEmpty
-                            ? BoxConstraints.tightFor(
-                                width:
-                                    constraints.maxWidth -
-                                    IconTheme.of(context).size!,
-                              )
-                            : constraints,
-                        child: ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: _controller,
-                          builder: (context, value, child) {
-                            final isError = _isError(value.text);
-                            return TextField(
-                              autofocus: true,
-                              focusNode: focusNode,
-                              style: style,
-                              controller: _controller,
-                              textInputAction: TextInputAction.search,
-                              cursorColor: theme.colorScheme.secondary,
-                              onSubmitted: onSubmitted,
-                              decoration: InputDecoration(
-                                hintText: AppLocalizations.of(
-                                  context,
-                                )!.hintTextSearch,
-                                border: InputBorder.none,
-                                prefixIcon: IconTheme.merge(
-                                  data: isError
-                                      ? IconThemeData(
-                                          color: theme.colorScheme.error,
-                                        )
-                                      : iconTheme,
-                                  child: isError
-                                      ? const Icon(Icons.error)
-                                      : const Icon(Icons.search),
+                          if (filter.isNotEmpty)
+                            IconTheme.merge(
+                              data: iconTheme,
+                              child: const Icon(Icons.drag_indicator),
+                            ),
+                        ].separatedBy(const SizedBox(width: 8)),
+                        ConstrainedBox(
+                          constraints: filter.isNotEmpty
+                              ? BoxConstraints.tightFor(
+                                  width:
+                                      constraints.maxWidth -
+                                      IconTheme.of(context).size!,
+                                )
+                              : constraints,
+                          child: ValueListenableBuilder<TextEditingValue>(
+                            valueListenable: _controller,
+                            builder: (context, value, child) {
+                              final isError = _isError(value.text);
+                              return TextField(
+                                autofocus: true,
+                                focusNode: focusNode,
+                                style: style,
+                                controller: _controller,
+                                textInputAction: TextInputAction.search,
+                                cursorColor: theme.colorScheme.secondary,
+                                onSubmitted: onSubmitted,
+                                decoration: InputDecoration(
+                                  hintText: AppLocalizations.of(
+                                    context,
+                                  )!.hintTextSearch,
+                                  border: InputBorder.none,
+                                  prefixIcon: IconTheme.merge(
+                                    data: isError
+                                        ? IconThemeData(
+                                            color: theme.colorScheme.error,
+                                          )
+                                        : iconTheme,
+                                    child: isError
+                                        ? const Icon(Icons.error)
+                                        : const Icon(Icons.search),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          ValueListenableBuilder<QueryType>(
-            valueListenable: queryType,
-            builder: (context, value, child) => TextButton(
-              onPressed: () => queryType.value = switch (value) {
-                QueryType.plain => QueryType.regex,
-                QueryType.regex => QueryType.plain,
-              },
-              style: TextButton.styleFrom(foregroundColor: color),
-              child: Text(switch (value) {
-                QueryType.plain => 'Aa',
-                QueryType.regex => '.*',
-              }),
-            ),
-          ),
-          ValueListenableBuilder<TextEditingValue>(
-            valueListenable: _controller,
-            builder: (context, value, child) =>
-                value.text.isNotEmpty ? child! : const SizedBox.shrink(),
-            child: IconTheme.merge(
-              data: iconTheme,
-              child: IconButton(
-                tooltip: AppLocalizations.of(context)!.tooltipClearSearch,
-                // Icons.clear looks too much like Icons.close so we substitute
-                // Icons.cancel, which is the same but the X is in a circle.
-                icon: const Icon(Icons.cancel),
-                onPressed: onClear,
+            ValueListenableBuilder<QueryType>(
+              valueListenable: queryType,
+              builder: (context, value, child) => TextButton(
+                onPressed: () => queryType.value = switch (value) {
+                  QueryType.plain => QueryType.regex,
+                  QueryType.regex => QueryType.plain,
+                },
+                style: TextButton.styleFrom(foregroundColor: color),
+                child: Text(switch (value) {
+                  QueryType.plain => 'Aa',
+                  QueryType.regex => '.*',
+                }),
               ),
             ),
-          ),
-        ],
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _controller,
+              builder: (context, value, child) =>
+                  value.text.isNotEmpty ? child! : const SizedBox.shrink(),
+              child: IconTheme.merge(
+                data: iconTheme,
+                child: IconButton(
+                  tooltip: AppLocalizations.of(context)!.tooltipClearSearch,
+                  // Icons.clear looks too much like Icons.close so we substitute
+                  // Icons.cancel, which is the same but the X is in a circle.
+                  icon: const Icon(Icons.cancel),
+                  onPressed: onClear,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

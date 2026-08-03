@@ -196,7 +196,11 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: _EditorToolbar(undoController: _undoController),
+                        child: TextFieldTapRegion(
+                          child: _EditorToolbar(
+                            undoController: _undoController,
+                          ),
+                        ),
                       ),
                     ],
                   );
