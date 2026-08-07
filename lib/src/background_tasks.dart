@@ -60,9 +60,6 @@ class _BackgroundTasksState extends State<BackgroundTasks> {
           frequency: const Duration(minutes: 15),
           initialDelay: const Duration(minutes: 7),
           existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
-          // If we ever want to use foreground services (passing
-          // foregroundServiceConfig here) we will need to stop removing the
-          // relevant permissions in the Android manifest
         );
       }
       // Run once at startup
