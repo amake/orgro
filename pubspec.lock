@@ -227,10 +227,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_charset_detector_darwin
-      sha256: e94ec5771d56d93d5847762759033d8744291b28c1f56e40e67bad500aeecba8
+      sha256: "10b7f368c018b88118461579c15d688525a70c97c066f4ef2970c4704d45ae85"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   flutter_charset_detector_platform_interface:
     dependency: transitive
     description:
@@ -259,10 +259,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: "9375211fd7df9c070504ac4db7047c7fae857e238291433b770cfe696b5c357a"
+      sha256: "1447ba911c60f2ba3f25dae1af151ec187162566b0f57e37771bf0b400f013ad"
       url: "https://pub.dev"
     source: hosted
-    version: "22.2.0"
+    version: "22.3.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -275,10 +275,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
-      sha256: "945a438a4779f3aca3a948718d8a4048cbe9f9c8c797492c00abd5d39112bf37"
+      sha256: "43c3761d916c9bd3d5c7ebbc44d82f4990329840c0c5d62ad5260cc1b5d399bd"
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
+    version: "12.2.0"
   flutter_local_notifications_web:
     dependency: transitive
     description:
@@ -333,18 +333,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "4a4d2ee4cd73b8a493a70329863d9608df33b67942f6729b123164770dcc261b"
+      sha256: f80905eb993fd31781fd2cd2797ed1631ceb0592ff3faa86ae91be28f1e5fa3a
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: "179a234ef827fb31b00674f2b49d2c507c38a7fc17e4810c28318de238b46e6a"
+      sha256: "9e70c55d4c151640b90b3549c1cfa25c7abc52b0bbbf23e232958b060af03378"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
