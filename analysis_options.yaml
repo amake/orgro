@@ -7,3 +7,10 @@ analyzer:
     strict-raw-types: true
   exclude:
   - flutter
+  - build/**
+  - android/**
+  - ios/**
+  - web/**
+  - windows/**
+  - macos/**
+  - linux/**

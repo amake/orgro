@@ -15,7 +15,7 @@ jobs:
       with:
         channel: stable
         cache: true
-        flutter-version: 3.44.x
+        flutter-version: 3.47.x
     - name: Install dependencies
       run: flutter pub get
     - name: Format check

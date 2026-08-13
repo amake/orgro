@@ -346,7 +346,7 @@ class _DataSourceImage extends ImageProvider<_DataSourceImage> {
           '${key.dataSource.id} / $relativePath is empty and cannot be loaded as an image.',
         );
       }
-      return decode(await ui.ImmutableBuffer.fromUint8List(bytes));
+      return await decode(await ui.ImmutableBuffer.fromUint8List(bytes));
     } catch (e, s) {
       logError(e, s);
       scheduleMicrotask(() {
