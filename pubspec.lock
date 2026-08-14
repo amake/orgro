@@ -333,10 +333,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js
-      sha256: c9a8f10908d47e7529af93a7d656d9b8455cf35ee034725f06d696ecda253ca3
+      sha256: "56a7a716d617c17797a3ff98458c0039c64db643f67577fe6466b77e03b93e3a"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "7.0.0"
   flutter_tex_js_android:
     dependency: transitive
     description:
@@ -683,10 +683,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: cbb5e5ddc44d21cf2a221d903d49514a6ae9eb7675c93418253eccca08cb502b
+      sha256: adfad134a6be8992537c58c5c28f5068cc88847e8a7e23a551e6d2644c6e4c52
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0"
+    version: "13.0.0"
   org_parser:
     dependency: transitive
     description:
