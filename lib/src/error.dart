@@ -16,16 +16,16 @@ class OrgroError implements Exception {
           ),
           OrgExecutionError(code: final code, cause: final cause) => OrgroError(
             'Execution error',
-            localizedMessage: (context) => AppLocalizations.of(
-              context,
-            )!.errorOrgExecution(cause.toString(), code),
+            localizedMessage: (context) =>
+                AppLocalizations.of(context)!
+                    .errorOrgExecution(cause.toString(), code),
           ),
           OrgTimeoutError(code: final code, timeLimit: final limit) =>
             OrgroError(
               'Timeout error',
-              localizedMessage: (context) => AppLocalizations.of(
-                context,
-              )!.errorOrgTimeout(limit.inMilliseconds, code),
+              localizedMessage: (context) =>
+                  AppLocalizations.of(context)!
+                      .errorOrgTimeout(limit.inMilliseconds, code),
             ),
           OrgArgumentError(item: final item) => OrgroError(
             'Argument error',

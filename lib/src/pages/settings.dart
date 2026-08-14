@@ -53,9 +53,8 @@ class SettingsPage extends StatelessWidget {
                     const Divider(),
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.settingsSectionDefaultText,
+                        AppLocalizations.of(context)!
+                            .settingsSectionDefaultText,
                       ),
                     ),
                     const FontFamilySettingListItem(),
@@ -64,18 +63,16 @@ class SettingsPage extends StatelessWidget {
                     const Divider(),
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.settingsSectionNotifications,
+                        AppLocalizations.of(context)!
+                            .settingsSectionNotifications,
                       ),
                     ),
                     const NotificationsListItems(),
                     const Divider(),
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.settingsSectionDataManagement,
+                        AppLocalizations.of(context)!
+                            .settingsSectionDataManagement,
                       ),
                     ),
                     const ClearCachesListItem(),

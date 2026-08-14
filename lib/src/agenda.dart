@@ -522,9 +522,8 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
         if (_permissionsGranted == false)
           ListTile(
             title: Text(
-              AppLocalizations.of(
-                context,
-              )!.settingsItemGrantNotificationPermissions,
+              AppLocalizations.of(context)!
+                  .settingsItemGrantNotificationPermissions,
             ),
             onTap: () async {
               await _prefs.setAgendaNotificationsPolicy(.ask);
@@ -541,11 +540,10 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
             title: Text(
               _pendingNotifications == null
                   ? AppLocalizations.of(context)!.settingsItemLoading
-                  : AppLocalizations.of(
-                      context,
-                    )!.settingsItemInspectNotifications(
-                      _pendingNotifications!.length,
-                    ),
+                  : AppLocalizations.of(context)!
+                        .settingsItemInspectNotifications(
+                          _pendingNotifications!.length,
+                        ),
             ),
             onTap: _hasNotifications
                 ? () => showDialog<void>(
@@ -571,9 +569,8 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.snackbarMessageNotificationsCleared,
+                      AppLocalizations.of(context)!
+                          .snackbarMessageNotificationsCleared,
                     ),
                   ),
                 );

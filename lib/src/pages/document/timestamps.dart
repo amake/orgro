@@ -61,9 +61,8 @@ extension TimestampsExtension on DocumentPageState {
     final startResult = await showTimePicker(
       context: context,
       initialTime: timestamp.timeStart.toTimeOfDay(),
-      helpText: AppLocalizations.of(
-        context,
-      )!.startTimePickerTitle.toUpperCase(),
+      helpText: AppLocalizations.of(context)!.startTimePickerTitle
+          .toUpperCase(),
     );
     if (startResult != null) {
       newTimestamp = newTimestamp.copyWith(timeStart: startResult.toOrgTime());
@@ -82,9 +81,10 @@ extension TimestampsExtension on DocumentPageState {
 
   void _updateNode(OrgNode oldNode, OrgNode newNode) {
     if (oldNode == newNode) return;
-    final newDoc = DocumentProvider.of(
-      context,
-    ).doc.editNode(oldNode)!.replace(newNode).commit<OrgTree>();
+    final newDoc = DocumentProvider.of(context).doc
+        .editNode(oldNode)!
+        .replace(newNode)
+        .commit<OrgTree>();
     updateDocument(newDoc);
   }
 }

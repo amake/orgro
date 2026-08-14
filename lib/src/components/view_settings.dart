@@ -257,9 +257,9 @@ class ViewSettingsData {
   final FilterData filterData;
   final SearchQuery searchQuery;
 
-  TextStyle get textStyle => loadFontWithVariants(
-    fontFamily,
-  ).copyWith(fontSize: TextScaler.linear(textScale).scale(18));
+  TextStyle get textStyle =>
+      loadFontWithVariants(fontFamily)
+          .copyWith(fontSize: TextScaler.linear(textScale).scale(18));
 
   ViewSettingsData copyWith({
     double? textScale,

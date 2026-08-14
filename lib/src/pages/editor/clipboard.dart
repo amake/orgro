@@ -23,12 +23,14 @@ Future<List<String>> saveClipboardImages({
   required String? relativePath,
   required String filenamePrefix,
 }) async {
-  final result = await _channel
-      .invokeListMethod<String>('saveClipboardImages', {
-        'dirIdentifier': dirIdentifier,
-        'relativePath': relativePath,
-        'filenamePrefix': filenamePrefix,
-      });
+  final result = await _channel.invokeListMethod<String>(
+    'saveClipboardImages',
+    {
+      'dirIdentifier': dirIdentifier,
+      'relativePath': relativePath,
+      'filenamePrefix': filenamePrefix,
+    },
+  );
   return result ?? [];
 }
 
@@ -96,9 +98,8 @@ class _ContextMenuItemsWithImagePasteState
           if (hasImageData) {
             items.insertMaybeAfter(
               IOSSystemContextMenuItemCustom(
-                title: AppLocalizations.of(
-                  context,
-                )!.pasteImageContextMenuTitle.toTitleCase(),
+                title: AppLocalizations.of(context)!.pasteImageContextMenuTitle
+                    .toTitleCase(),
                 onPressed: _doPaste,
               ),
               where: (item) => item is IOSSystemContextMenuItemPaste,
@@ -228,9 +229,8 @@ Future<void> _showDirectoryPermissionsSnackBar(BuildContext context) async {
       ),
       action: showAction
           ? SnackBarAction(
-              label: AppLocalizations.of(
-                context,
-              )!.snackbarActionGrantAccess.toUpperCase(),
+              label: AppLocalizations.of(context)!.snackbarActionGrantAccess
+                  .toUpperCase(),
               onPressed: () => doPickDirectory(context),
             )
           : null,

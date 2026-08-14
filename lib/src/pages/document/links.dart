@@ -196,15 +196,13 @@ extension LinkHandler on DocumentPageState {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.of(
-              context,
-            )!.snackbarMessageNeedsDirectoryPermissions,
+            AppLocalizations.of(context)!
+                .snackbarMessageNeedsDirectoryPermissions,
           ),
           action: canResolveRelativeLinks == true
               ? SnackBarAction(
-                  label: AppLocalizations.of(
-                    context,
-                  )!.snackbarActionGrantAccess.toUpperCase(),
+                  label: AppLocalizations.of(context)!.snackbarActionGrantAccess
+                      .toUpperCase(),
                   onPressed: () => doPickDirectory(context),
                 )
               : null,

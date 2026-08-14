@@ -81,15 +81,13 @@ class _NarrowRouteTop extends StatelessWidget {
                   child: DocumentPage(
                     metadata: DocumentMetadata(
                       layer: layer,
-                      title: AppLocalizations.of(
-                        context,
-                      )!.pageTitleNarrow(dataSource.name),
+                      title: AppLocalizations.of(context)!
+                          .pageTitleNarrow(dataSource.name),
                       root: false,
                       transclusion: transclusion,
                     ),
-                    title: AppLocalizations.of(
-                      context,
-                    )!.pageTitleNarrow(dataSource.name),
+                    title: AppLocalizations.of(context)!
+                        .pageTitleNarrow(dataSource.name),
                     initialQuery: viewSettings.searchQuery,
                     initialFilter: viewSettings.filterData,
                     initialTarget: args.target,

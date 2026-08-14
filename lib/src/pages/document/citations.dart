@@ -63,9 +63,8 @@ extension CitationHandler on DocumentPageState {
     if (notFound.isNotEmpty) {
       showErrorSnackBar(
         context,
-        AppLocalizations.of(
-          context,
-        )!.snackbarMessageSomeCitationsNotFound(notFound.join(', ')),
+        AppLocalizations.of(context)!
+            .snackbarMessageSomeCitationsNotFound(notFound.join(', ')),
       );
     }
 

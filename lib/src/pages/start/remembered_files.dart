@@ -235,9 +235,8 @@ class _RememberedFileManagementListTile extends StatelessWidget {
               context,
               progressTask(
                 context,
-                dialogTitle: AppLocalizations.of(
-                  context,
-                )!.loadingProgressDialogTitle,
+                dialogTitle: AppLocalizations.of(context)!
+                    .loadingProgressDialogTitle,
                 task: readFileWithIdentifier(recentFile.identifier),
               ).then((value) => value.result),
             );

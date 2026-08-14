@@ -376,9 +376,8 @@ class _EntitlementsSettingListItemsState
           ListTile(
             enabled: purchaseAvailable,
             title: Text(
-              AppLocalizations.of(
-                context,
-              )!.entitlementsPurchaseItemTitle(productDetails?.price ?? '-'),
+              AppLocalizations.of(context)!
+                  .entitlementsPurchaseItemTitle(productDetails?.price ?? '-'),
             ),
             subtitle: Text(
               AppLocalizations.of(context)!.entitlementsPurchaseItemSubtitle,
@@ -399,9 +398,8 @@ class _EntitlementsSettingListItemsState
               AppLocalizations.of(context)!.entitlementsPurchasedItem,
             ),
             subtitle: Text(
-              AppLocalizations.of(
-                context,
-              )!.entitlementsLegacyPurchaseItemSubtitle,
+              AppLocalizations.of(context)!
+                  .entitlementsLegacyPurchaseItemSubtitle,
             ),
             onLongPress: onLongPress,
           )
@@ -560,15 +558,13 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
           onPressed: purchaseAvailable
               ? () => restorePurchases().then(_close, onError: _onError)
               : null,
-          text: AppLocalizations.of(
-            context,
-          )!.entitlementsLockedDialogActionRestore,
+          text: AppLocalizations.of(context)!
+              .entitlementsLockedDialogActionRestore,
         ),
         DialogButton(
           onPressed: visitUnlockLink,
-          text: AppLocalizations.of(
-            context,
-          )!.entitlementsLockedDialogActionMoreInfo,
+          text: AppLocalizations.of(context)!
+              .entitlementsLockedDialogActionMoreInfo,
         ),
       ],
     );

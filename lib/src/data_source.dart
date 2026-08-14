@@ -71,8 +71,8 @@ class WebDataSource extends DataSource {
       } else {
         throw OrgroError(
           'Unexpected HTTP response: ${response.statusCode} ${response.reasonPhrase}',
-          localizedMessage: (context) =>
-              AppLocalizations.of(context)!.errorUnexpectedHttpResponse(
+          localizedMessage: (context) => AppLocalizations.of(context)!
+              .errorUnexpectedHttpResponse(
                 '${response.statusCode} ${response.reasonPhrase}',
               ),
         );
@@ -193,9 +193,9 @@ class NativeDataSource extends DataSource {
     if (resolved is! FileInfo) {
       throw OrgroError(
         '$relativePath resolved to a non-file: $resolved',
-        localizedMessage: (context) => AppLocalizations.of(
-          context,
-        )!.errorPathResolvedToNonFile(relativePath, resolved.uri),
+        localizedMessage: (context) =>
+            AppLocalizations.of(context)!
+                .errorPathResolvedToNonFile(relativePath, resolved.uri),
       );
     }
     return NativeDataSource(

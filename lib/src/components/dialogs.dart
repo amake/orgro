@@ -425,9 +425,8 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
         ),
         if (history.isNotEmpty)
           DialogButton(
-            text: AppLocalizations.of(
-              context,
-            )!.inputCustomFilterDialogHistoryButton,
+            text: AppLocalizations.of(context)!
+                .inputCustomFilterDialogHistoryButton,
             onPressed: () async {
               final entry = await _pickFromHistory(context, history);
               if (entry != null) _controller.text = entry;
@@ -539,9 +538,8 @@ class CitationsDialog extends StatelessWidget {
               trailing: url == null
                   ? null
                   : IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.citationsDialogOpenLink,
+                      tooltip: AppLocalizations.of(context)!
+                          .citationsDialogOpenLink,
                       icon: const Icon(Icons.open_in_new),
                       onPressed: () =>
                           launchUrl(url, mode: LaunchMode.externalApplication),

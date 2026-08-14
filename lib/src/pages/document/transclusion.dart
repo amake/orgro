@@ -32,9 +32,8 @@ extension TransclusionHandler on DocumentPageState {
     } on Exception {
       // Wasn't a file link
       return _TransclusionError(
-        message: AppLocalizations.of(
-          context,
-        )!.errorUnsupportedLinkType(link.location),
+        message: AppLocalizations.of(context)!
+            .errorUnsupportedLinkType(link.location),
       );
     }
   }
@@ -144,9 +143,8 @@ class _TransclusionState extends State<Transclusion> {
 
     if (!fileLink.isRelative) {
       return _TransclusionError(
-        message: AppLocalizations.of(
-          context,
-        )!.errorUnsupportedLinkType(fileLink.body),
+        message: AppLocalizations.of(context)!
+            .errorUnsupportedLinkType(fileLink.body),
       );
     }
 

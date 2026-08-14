@@ -88,9 +88,8 @@ class _QuickActionsState extends State<QuickActions> {
       if (pin != null)
         qa.ShortcutItem(
           type: QuickAction.topPin.name,
-          localizedTitle: AppLocalizations.of(
-            context,
-          )!.quickActionTopPin(pin.name),
+          localizedTitle: AppLocalizations.of(context)!
+              .quickActionTopPin(pin.name),
           icon: QuickAction.topPin.name.toSnakeCase(),
         ),
     ]);

@@ -94,9 +94,8 @@ class MySearchDelegate {
   }
 
   void start(BuildContext context) {
-    ModalRoute.of(
-      context,
-    )!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
+    ModalRoute.of(context)!
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
     searchMode.value = true;
     _searchFocusNode.requestFocus();
   }
@@ -214,9 +213,8 @@ class SearchField extends StatelessWidget {
                                 cursorColor: theme.colorScheme.secondary,
                                 onSubmitted: onSubmitted,
                                 decoration: InputDecoration(
-                                  hintText: AppLocalizations.of(
-                                    context,
-                                  )!.hintTextSearch,
+                                  hintText: AppLocalizations.of(context)!
+                                      .hintTextSearch,
                                   border: InputBorder.none,
                                   prefixIcon: IconTheme.merge(
                                     data: isError
@@ -336,9 +334,8 @@ class _SearchResultsNavigationState extends State<_SearchResultsNavigation> {
               child: Text(
                 _i == -1
                     ? AppLocalizations.of(context)!.searchHits(_keys.length)
-                    : AppLocalizations.of(
-                        context,
-                      )!.searchResultSelection(_i + 1, _keys.length),
+                    : AppLocalizations.of(context)!
+                          .searchResultSelection(_i + 1, _keys.length),
                 textAlign: TextAlign.center,
                 style: DefaultTextStyle.of(context).style.copyWith(
                   fontFeatures: const [FontFeature.tabularFigures()],

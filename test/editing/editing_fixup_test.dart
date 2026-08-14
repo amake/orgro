@@ -137,22 +137,19 @@ foo
 - |'''),
         );
       });
-      test(
-        'Do not remove ordered list item with empty body but present counter set',
-        () {
-          final result = afterNewLineFixup(
-            testValue('''
+      test('Do not remove ordered list item with empty body but present counter set', () {
+        final result = afterNewLineFixup(
+          testValue('''
 20. [@20]
 |'''),
-          );
-          expect(
-            result,
-            testValue('''
+        );
+        expect(
+          result,
+          testValue('''
 20. [@20]
 21. |'''),
-          );
-        },
-      );
+        );
+      });
     });
     group('Headline', () {
       test('First level', () {

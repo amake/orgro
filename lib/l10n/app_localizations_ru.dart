@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -749,9 +750,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String entitlementsFreeTrialItem(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(
-      localeName,
-    ).add_jm();
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMMd(localeName)
+        .add_jm();
     final String dateString = dateDateFormat.format(date);
 
     return 'Your free trial ends at $dateString';

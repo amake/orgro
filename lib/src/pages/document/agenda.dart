@@ -49,14 +49,13 @@ void _complainAboutDenied(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
-        AppLocalizations.of(
-          context,
-        )!.snackbarMessageNeedsNotificationsPermissions,
+        AppLocalizations.of(context)!
+            .snackbarMessageNeedsNotificationsPermissions,
       ),
       action: SnackBarAction(
-        label: AppLocalizations.of(
-          context,
-        )!.snackbarActionGrantNotificationsPermissions.toUpperCase(),
+        label: AppLocalizations.of(context)!
+            .snackbarActionGrantNotificationsPermissions
+            .toUpperCase(),
         onPressed: () async {
           if (!await requestNotificationPermissions()) {
             AppSettings.openAppSettings(type: AppSettingsType.notification);

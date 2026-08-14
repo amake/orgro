@@ -36,7 +36,6 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorSnackBar(
   } else {
     message = msgObject.toString();
   }
-  return ScaffoldMessenger.of(
-    context,
-  ).showSnackBar(SnackBar(content: Text(message)));
+  return ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message)));
 }

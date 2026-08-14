@@ -32,9 +32,8 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
     final hasRememberedFiles = RememberedFiles.of(context).hasRememberedFiles;
     return Scaffold(
       appBar: AppBar(
-        actions: _buildActions(
-          hasRememberedFiles: hasRememberedFiles,
-        ).toList(growable: false),
+        actions: _buildActions(hasRememberedFiles: hasRememberedFiles)
+            .toList(growable: false),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -116,9 +115,8 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
             context,
             progressTask(
               context,
-              dialogTitle: AppLocalizations.of(
-                context,
-              )!.preparingProgressDialogTitle,
+              dialogTitle: AppLocalizations.of(context)!
+                  .preparingProgressDialogTitle,
               task: pickFile(),
             ).then((value) => value.result),
           ),

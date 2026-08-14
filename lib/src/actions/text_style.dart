@@ -246,9 +246,8 @@ class _TextSizeAdjusterState extends State<TextSizeAdjuster> {
           ),
           Text(
             '${(_value / _kTextSizeAdjustmentFactor * 100).toStringAsFixed(0)}%',
-            style: DefaultTextStyle.of(context).style.copyWith(
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
+            style: DefaultTextStyle.of(context).style
+                .copyWith(fontFeatures: const [FontFeature.tabularFigures()]),
           ),
           IconButton(
             tooltip: AppLocalizations.of(context)!.tooltipIncreaseTextScale,

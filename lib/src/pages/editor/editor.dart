@@ -286,9 +286,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipInsertHeadline,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipInsertHeadline,
                       icon: const Icon(Icons.emergency),
                       onPressed: Actions.handler(
                         context,
@@ -296,9 +295,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipToggleUnorderedList,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipToggleUnorderedList,
                       icon: const Icon(Icons.format_list_bulleted),
                       onPressed: Actions.handler(
                         context,
@@ -306,9 +304,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipToggleOrderedList,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipToggleOrderedList,
                       icon: const Icon(Icons.format_list_numbered),
                       onPressed: Actions.handler(
                         context,
@@ -316,9 +313,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipDecreaseIndent,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipDecreaseIndent,
                       icon: const Icon(Icons.format_indent_decrease),
                       onPressed: Actions.handler(
                         context,
@@ -326,9 +322,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipIncreaseIndent,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipIncreaseIndent,
                       icon: const Icon(Icons.format_indent_increase),
                       onPressed: Actions.handler(
                         context,
@@ -360,9 +355,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipStrikethrough,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipStrikethrough,
                       icon: const Icon(Icons.format_strikethrough),
                       onPressed: Actions.handler(
                         context,
@@ -414,9 +408,8 @@ class _EditorToolbar extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      tooltip: AppLocalizations.of(
-                        context,
-                      )!.tooltipEncryptSection,
+                      tooltip: AppLocalizations.of(context)!
+                          .tooltipEncryptSection,
                       icon: const Icon(Icons.lock_outline),
                       onPressed: Actions.handler(
                         context,

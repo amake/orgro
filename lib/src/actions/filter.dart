@@ -36,9 +36,8 @@ class FilterChipsInput extends StatelessWidget {
               children: [
                 if (filter.customFilter.isEmpty)
                   _CustomChip(
-                    label: AppLocalizations.of(
-                      context,
-                    )!.customFilterChipName.toUpperCase(),
+                    label: AppLocalizations.of(context)!.customFilterChipName
+                        .toUpperCase(),
                     onPressed: () async {
                       final newQuery = await showDialog<String>(
                         context: context,

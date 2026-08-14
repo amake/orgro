@@ -280,12 +280,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       yield IconButton(
         tooltip: AppLocalizations.of(context)!.tooltipCycleVisibility,
         icon: const Icon(Icons.repeat),
-        onPressed: () => OrgController.of(
-          context,
-        ).cycleVisibility(skip: OrgVisibilityState.subtree),
-        onLongPress: () => OrgController.of(
-          context,
-        ).cycleVisibility(to: OrgVisibilityState.subtree),
+        onPressed: () =>
+            OrgController.of(context)
+                .cycleVisibility(skip: OrgVisibilityState.subtree),
+        onLongPress: () =>
+            OrgController.of(context)
+                .cycleVisibility(to: OrgVisibilityState.subtree),
       );
       if (_bigScreen) {
         yield TextStyleButton(
@@ -657,16 +657,15 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             AppLocalizations.of(context)!.snackbarMessageNeedsEncryptionKey,
           ),
           action: SnackBarAction(
-            label: AppLocalizations.of(
-              context,
-            )!.snackbarActionEnterEncryptionKey.toUpperCase(),
+            label: AppLocalizations.of(context)!
+                .snackbarActionEnterEncryptionKey
+                .toUpperCase(),
             onPressed: () async {
               final password = await showDialog<String>(
                 context: context,
                 builder: (context) => InputPasswordDialog(
-                  title: AppLocalizations.of(
-                    context,
-                  )!.inputEncryptionPasswordDialogTitle,
+                  title: AppLocalizations.of(context)!
+                      .inputEncryptionPasswordDialogTitle,
                 ),
               );
               if (password == null || !context.mounted) return;
@@ -715,9 +714,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   final ValueNotifier<bool> _dirty = ValueNotifier(false);
 
   Future<bool> updateDocument(OrgTree newDoc, {bool dirty = true}) async {
-    final (pushed, analysis) = await DocumentProvider.of(
-      context,
-    ).pushDoc(newDoc);
+    final (pushed, analysis) = await DocumentProvider.of(context)
+        .pushDoc(newDoc);
     if (pushed && dirty) {
       await _onDocChanged(newDoc, analysis);
     }
@@ -850,12 +848,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       final password = await showDialog<String>(
         context: context,
         builder: (context) => InputPasswordDialog(
-          title: AppLocalizations.of(
-            context,
-          )!.inputEncryptionPasswordDialogTitle,
-          bodyText: AppLocalizations.of(
-            context,
-          )!.inputEncryptionPasswordDialogBody,
+          title: AppLocalizations.of(context)!
+              .inputEncryptionPasswordDialogTitle,
+          bodyText: AppLocalizations.of(context)!
+              .inputEncryptionPasswordDialogBody,
         ),
       );
       if (!mounted) return;
