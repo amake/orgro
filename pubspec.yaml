@@ -6,7 +6,7 @@ homepage: https://orgro.org
 publish_to: none
 
 environment:
-  sdk: ">=3.10.0 <4.0.0"
+  sdk: ^3.13.0
   flutter: ^3.47.0
 
 dependencies:
@@ -23,8 +23,6 @@ dependencies:
       url: https://github.com/amake/file_picker_writable.git
       ref: directory-picker
   flutter:
-    sdk: flutter
-  flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.2.0
   flutter_cache_manager: ^3.3.0
@@ -66,6 +64,7 @@ dependencies:
       url: https://github.com/amake/in_app_purchase_stub.git
       ref: main
       path: in_app_purchase_stub_android
+  material_ui: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BottomInputBar extends StatelessWidget {
   const BottomInputBar({required this.child, super.key});

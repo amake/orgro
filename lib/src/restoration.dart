@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// A copy of [RestorableTextEditingController] with the addition of
 /// restoring the selection.

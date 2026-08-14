@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dynamic_fonts/dynamic_fonts.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:path_provider/path_provider.dart';

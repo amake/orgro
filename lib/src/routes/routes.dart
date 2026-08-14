@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/data_source.dart';

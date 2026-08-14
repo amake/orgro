@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/pages/settings.dart';
 import 'package:orgro/src/routes/routes.dart';
