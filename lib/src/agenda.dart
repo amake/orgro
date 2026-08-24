@@ -74,7 +74,7 @@ Future<void> initNotifications(AppLocalizations localizations) async {
   }
 }
 
-void onDidReceiveNotificationResponse(NotificationResponse details) {
+void onDidReceiveNotificationResponse(NotificationResponse details) async {
   if (details.payload == null) {
     debugPrint('No payload in notification; id: ${details.id}');
     return;
@@ -82,13 +82,13 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
   final payload = json.decode(details.payload!);
   switch (payload) {
     case {'dataSource': {'type': 'native', 'identifier': final String id}}:
-      final context = startKey.currentContext!;
+      final context = startKey.currentContext;
       try {
         // TODO(aaron): Don't open if we already have it open
-        loadAndRememberFile(context, readFileWithIdentifier(id));
-      } on Exception catch (e, s) {
+        await loadAndRememberFile(context!, readFileWithIdentifier(id));
+      } catch (e, s) {
         logError(e, s);
-        if (context.mounted) showErrorSnackBar(context, e);
+        if (context?.mounted == true) showErrorSnackBar(context!, e);
       }
     default:
       debugPrint('Unknown notification payload: ${details.payload}');
