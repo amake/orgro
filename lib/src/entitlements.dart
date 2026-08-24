@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:material_ui/material_ui.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/app_purchase.dart';
 import 'package:orgro/src/components/dialogs.dart';
@@ -152,19 +152,24 @@ class _UserEntitlementsState extends State<UserEntitlements> {
           logError(purchaseDetails.error, StackTrace.current);
           if (mounted) showErrorSnackBar(context, purchaseDetails.error!);
         } else if (purchaseDetails.status == .purchased ||
-            purchaseDetails.status == .restored &&
-                purchaseDetails.productID == _orgroUnlockProductId) {
-          // We don't have a backend to verify purchases
+            purchaseDetails.status == .restored) {
+          debugPrint(
+            'Unlock purchase detected: ${purchaseDetails.productID} @ ${DateTime.timestamp()}',
+          );
 
-          // TODO(aaron): Remove after testing
-          // ignore: avoid_print
-          print('Unlock purchase detected: ${DateTime.timestamp()}');
-          setState(() {
-            _entitlements = _entitlements.copyWith(
-              loaded: true,
-              inAppPurchase: true,
+          // We don't have a backend to verify purchases
+          if (purchaseDetails.productID == _orgroUnlockProductId) {
+            setState(() {
+              _entitlements = _entitlements.copyWith(
+                loaded: true,
+                inAppPurchase: true,
+              );
+            });
+          } else {
+            debugPrint(
+              'Unknown purchase detected: ${purchaseDetails.productID}',
             );
-          });
+          }
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
