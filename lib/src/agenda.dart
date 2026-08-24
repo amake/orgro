@@ -183,13 +183,16 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final pendingNotifications = <(tz.TZDateTime, PendingNotificationRequest)>[];
   for (final element in await plugin.pendingNotificationRequests()) {
     final payload = json.decode(element.payload!);
+    if (payload case {'dataSource': {'id': final id}}) {
+      if (id == dataSource.id) {
+        // This notification is for this file; we will reschedule it below
+        debugPrint('Canceling notification with ID ${element.id} ($id)');
+        await plugin.cancel(id: element.id);
+        continue;
+      }
+    }
+
     switch (payload) {
-      case {'dataSource': {'id': final id}}:
-        if (id == dataSource.id) {
-          // This notification is for this file; we will reschedule it below
-          debugPrint('Canceling notification with ID $id (${element.id})');
-          await plugin.cancel(id: element.id);
-        }
       case {
         'scheduledAt': final String scheduledAt,
         'timezone': final String timezone,
