@@ -13,7 +13,7 @@ class ScrollingBuilder extends StatefulWidget {
 }
 
 class _ScrollingBuilderState extends State<ScrollingBuilder> {
-  late ScrollController _controller;
+  ScrollController? _controller;
   Timer? _timer;
   bool _isScrolling = false;
 
@@ -22,9 +22,8 @@ class _ScrollingBuilderState extends State<ScrollingBuilder> {
     super.didChangeDependencies();
     // This can be called multiple times, especially in e.g. an Android
     // predictive back gesture.
-    _controller = PrimaryScrollController.of(context)
-      ..removeListener(_onScroll)
-      ..addListener(_onScroll);
+    _controller?.removeListener(_onScroll);
+    _controller = PrimaryScrollController.of(context)..addListener(_onScroll);
   }
 
   void _onScroll() {
@@ -36,9 +35,11 @@ class _ScrollingBuilderState extends State<ScrollingBuilder> {
     // sometimes it seems that the next frame won't reliably find the idle state
     // either. Thus we poll until we find the idle state.
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      final controller = _controller;
       final isScrolling =
-          _controller.hasClients &&
-          _controller.position.userScrollDirection != ScrollDirection.idle;
+          controller != null &&
+          controller.hasClients &&
+          controller.position.userScrollDirection != ScrollDirection.idle;
       if (isScrolling != _isScrolling) {
         setState(() => _isScrolling = isScrolling);
       }
@@ -51,7 +52,7 @@ class _ScrollingBuilderState extends State<ScrollingBuilder> {
 
   @override
   void dispose() {
-    _controller.removeListener(_onScroll);
+    _controller?.removeListener(_onScroll);
     _timer?.cancel();
     super.dispose();
   }
