@@ -127,7 +127,9 @@ class _UserEntitlementsState extends State<UserEntitlements> {
         environment: environment,
         error: error,
       );
-      setState(() => _entitlements = newEntitlements);
+      if (mounted) {
+        setState(() => _entitlements = newEntitlements);
+      }
       if (error == null &&
           source == .native &&
           newEntitlements.legacyPurchase) {
@@ -159,12 +161,14 @@ class _UserEntitlementsState extends State<UserEntitlements> {
 
           // We don't have a backend to verify purchases
           if (purchaseDetails.productID == _orgroUnlockProductId) {
-            setState(() {
-              _entitlements = _entitlements.copyWith(
-                loaded: true,
-                inAppPurchase: true,
-              );
-            });
+            if (mounted) {
+              setState(() {
+                _entitlements = _entitlements.copyWith(
+                  loaded: true,
+                  inAppPurchase: true,
+                );
+              });
+            }
           } else {
             debugPrint(
               'Unknown purchase detected: ${purchaseDetails.productID}',
