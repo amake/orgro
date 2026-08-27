@@ -16,20 +16,29 @@ fileprivate let logger = Logger(
 
 private var jobs = ConcurrentSet<String>()
 
+private var jobTokenForId = "forId:"
+private var jobTokenForNamePrefix = "forNamePrefix:"
+
 func handleNativeSearchMethod(call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "findFileForId":
         DispatchQueue.global(qos: .userInitiated).async {
             findFileForId(call, result)
         }
+    case "findFileWithNamePrefix":
+        DispatchQueue.global(qos: .userInitiated).async {
+            findFileWithNamePrefix(call, result)
+        }
     case "cancelFindFileForId":
-        cancelFindFileForId(call, result)
+        cancelFindFile(call, result, token: jobTokenForId)
+    case "cancelFindFileWithNamePrefix":
+        cancelFindFile(call, result, token: jobTokenForNamePrefix)
     default:
         result(FlutterError(code: "UnsupportedMethod", message: "\(call.method) is not supported", details: nil))
     }
 }
 
-private func cancelFindFileForId(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
+private func cancelFindFile(_ call: FlutterMethodCall, _ result: @escaping FlutterResult, token: String) {
     guard let args = call.arguments as? [String:Any?] else {
         result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'requestId'"))
         return
@@ -38,8 +47,8 @@ private func cancelFindFileForId(_ call: FlutterMethodCall, _ result: @escaping 
         result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
         return
     }
-    let removed = jobs.remove(requestId)
-    logger.info("Cancelling job \(requestId); cancelled: \(removed != nil)")
+    let removed = jobs.remove("\(token)\(requestId)")
+    logger.info("Cancelling job \(token)\(requestId); cancelled: \(removed != nil)")
     result(removed != nil)
 }
 
@@ -48,11 +57,15 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'id', 'dirIdentifier'"))
         return
     }
-    guard let requestId = args["requestId"] as? String else {
+    guard var requestId = args["requestId"] as? String else {
         result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
         return
     }
+    requestId = "\(jobTokenForId)\(requestId)"
     jobs.insert(requestId)
+    defer {
+        jobs.remove(requestId)
+    }
     guard let orgId = args["orgId"] as? String else {
         result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'orgId'"))
         return
@@ -67,17 +80,102 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         return
     }
 
+    let found = findFile(at: url, requestId: requestId) { fileUrl in
+        logger.debug("Searching \(fileUrl) for ID \(orgId)")
+        return fileContainsId(fileUrl: fileUrl, id: orgId)
+    }
+
+    guard let found = found else {
+        DispatchQueue.main.async {
+            result(nil)
+        }
+        return
+    }
+
+    guard let bookmark = try? found.bookmarkData() else {
+        logger.info("Failed to get bookmark for file: \(found)")
+        return
+    }
+    DispatchQueue.main.async {
+        // Result compatible with file_picker_writable
+        result([
+            "path": found.path,
+            "identifier": bookmark.base64EncodedString(),
+            "persistable": "true",
+            "uri": found.absoluteString,
+            "fileName": found.lastPathComponent,
+        ])
+    }
+}
+
+private func findFileWithNamePrefix(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
+    guard let args = call.arguments as? [String:Any?] else {
+        result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'id', 'dirIdentifier'"))
+        return
+    }
+    guard var requestId = args["requestId"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
+        return
+    }
+    requestId = "\(jobTokenForNamePrefix)\(requestId)"
+    jobs.insert(requestId)
+    defer {
+        jobs.remove(requestId)
+    }
+    guard let namePrefix = args["namePrefix"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'namePrefix'"))
+        return
+    }
+    guard let dirIdentifier = args["dirIdentifier"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'dirIdentifier'"))
+        return
+    }
+
+    guard let url = restoreUrl(from: dirIdentifier) else {
+        result(FlutterError(code: "InvalidDataError", message: "Unable to restore URL from identifier.", details: nil))
+        return
+    }
+
+    let found = findFile(at: url, requestId: requestId) { fileUrl in
+        logger.debug("Searching \(fileUrl) for file name prefix \(namePrefix)")
+        return fileUrl.lastPathComponent.hasPrefix(namePrefix)
+    }
+
+    guard let found = found else {
+        DispatchQueue.main.async {
+            result(nil)
+        }
+        return
+    }
+
+    guard let bookmark = try? found.bookmarkData() else {
+        logger.info("Failed to get bookmark for file: \(found)")
+        return
+    }
+    DispatchQueue.main.async {
+        // Result compatible with file_picker_writable
+        result([
+            "path": found.path,
+            "identifier": bookmark.base64EncodedString(),
+            "persistable": "true",
+            "uri": found.absoluteString,
+            "fileName": found.lastPathComponent,
+        ])
+    }
+}
+
+private func findFile(at url: URL, requestId: String, predicate: (_ fileUrl: URL) -> Bool) -> URL?  {
     // https://developer.apple.com/documentation/uikit/view_controllers/providing_access_to_directories
 
     guard url.startAccessingSecurityScopedResource() else {
         logger.error("Failed to access security scoped resource: \(url)")
-        return
+        return nil
     }
 
     defer { url.stopAccessingSecurityScopedResource() }
 
     var error: NSError? = nil
-    var success = false
+    var result: URL?
     NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { url in
         let keys = Set<URLResourceKey>([.nameKey, .isDirectoryKey])
 
@@ -120,29 +218,14 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
 
             var fileError: NSError? = nil
             NSFileCoordinator().coordinate(readingItemAt: file, error: &fileError) { fileUrl in
-                logger.debug("Searching \(fileUrl) for ID \(orgId)")
-                if fileContainsId(fileUrl: fileUrl, id: orgId) {
-                    guard let bookmark = try? fileUrl.bookmarkData() else {
-                        logger.info("Failed to get bookmark for file: \(fileUrl)")
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        // Result compatible with file_picker_writable
-                        result([
-                            "path": fileUrl.path,
-                            "identifier": bookmark.base64EncodedString(),
-                            "persistable": "true",
-                            "uri": fileUrl.absoluteString,
-                            "fileName": fileUrl.lastPathComponent,
-                        ])
-                    }
-                    success = true
+                if predicate(fileUrl) {
+                    result = fileUrl
                 }
             }
             if let fileError = fileError {
                 logger.error("Error accessing file: \(fileError)")
             }
-            if success {
+            if result != nil {
                 break
             }
         }
@@ -150,10 +233,7 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
     if let error = error {
         logger.error("Error accessing dir: \(error)")
     }
-    if (!success) {
-        result(nil)
-    }
-    jobs.remove(requestId)
+    return result
 }
 
 private let idPattern = try! NSRegularExpression(pattern: #"^\s*:ID:\s*(?<value>\S+)\s*$"#, options: [.caseInsensitive])

@@ -1,0 +1,14 @@
+#+title:      denote-test
+#+date:       [2026-08-28 Fri 18:40]
+#+filetags:
+#+identifier: 20260828T184017
+
+This is a test file created with ~M-x denote~ (with ~denote-directory~ set to
+=./=).
+
+* Section
+  :PROPERTIES:
+  :CUSTOM_ID: h:EA16D438-E04D-4D1F-BF19-01CF02E44E6D
+  :END:
+
+This is a section you can link to directly.

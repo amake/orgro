@@ -28,9 +28,45 @@ Future<NativeDataSource?> findFileForId({
   }
 }
 
+Future<NativeDataSource?> findFileWithNamePrefix({
+  required String requestId,
+  required String namePrefix,
+  required String dirIdentifier,
+}) async {
+  final result = await _channel.invokeMapMethod<String, String>(
+    'findFileWithNamePrefix',
+    {
+      'requestId': requestId,
+      'namePrefix': namePrefix,
+      'dirIdentifier': dirIdentifier,
+    },
+  );
+  if (result == null) {
+    return null;
+  } else {
+    // By convention we return a map compatible with FileInfo from
+    // file_picker_writable
+    final info = FileInfo.fromJson(result);
+    return NativeDataSource(
+      info.fileName ?? namePrefix,
+      info.identifier,
+      info.uri,
+      persistable: info.persistable,
+    );
+  }
+}
+
 Future<bool> cancelFindFileForId({required String requestId}) async {
   final result = await _channel.invokeMethod<bool>('cancelFindFileForId', {
     'requestId': requestId,
   });
+  return result ?? false;
+}
+
+Future<bool> cancelFindFileWithNamePrefix({required String requestId}) async {
+  final result = await _channel.invokeMethod<bool>(
+    'cancelFindFileWithNamePrefix',
+    {'requestId': requestId},
+  );
   return result ?? false;
 }

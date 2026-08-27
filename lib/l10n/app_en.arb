@@ -360,6 +360,14 @@
       }
     }
   },
+  "errorFileNamePrefixNotFound": "File with name prefix “{prefix}” not found",
+  "@errorFileNamePrefixNotFound": {
+    "placeholders": {
+      "prefix": {
+        "type": "String"
+      }
+    }
+  },
   "errorSectionNotFound": "Section not found: {section}",
   "@errorSectionNotFound": {
     "placeholders": {

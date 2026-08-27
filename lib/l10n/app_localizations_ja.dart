@@ -602,6 +602,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String errorFileNamePrefixNotFound(String prefix) {
+    return '接頭辞「$prefix」のファイルが見つかりませんでした';
+  }
+
+  @override
   String errorSectionNotFound(String section) {
     return '「$section」が見つかりませんでした';
   }

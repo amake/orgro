@@ -50,6 +50,7 @@ Bidi
 - [[file:links-radio.org][Radio]]
 - [[file:links-coderef.org][Coderef]]
 - [[file:links-transclusion.org][Transclusion]]
+- [[file:links-denote.org][Denote]]
 
 * Media
 

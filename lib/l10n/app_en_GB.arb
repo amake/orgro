@@ -226,6 +226,7 @@
   "errorDecryptionFailed": "Decryption failed",
   "errorLinkNotHandled": "Couldn’t open link “{link}”",
   "errorExternalIdNotFound": "File with ID “{id}” not found",
+  "errorFileNamePrefixNotFound": "File with name prefix “{prefix}” not found",
   "errorSectionNotFound": "Section not found: {section}",
   "errorUnsupportedSearchOption": "Unsupported search option: {option}",
   "errorSchedulingNotifications": "Failed to schedule notifications: {message}",

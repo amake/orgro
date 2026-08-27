@@ -105,13 +105,10 @@ extension LinkHandler on DocumentPageState {
         ),
       ),
       dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      onCancel: () => cancelFindFileForId(requestId: requestId),
     );
 
-    if (!succeeded) {
-      await cancelFindFileForId(requestId: requestId);
-      return false;
-    }
-
+    if (!succeeded) return false;
     if (!mounted) return false;
 
     if (foundFile == null) {
@@ -126,11 +123,63 @@ extension LinkHandler on DocumentPageState {
     }
   }
 
+  Future<bool> _openDenoteLink(OrgFileLink fileLink) async {
+    assert(fileLink.scheme == 'denote:');
+
+    final dataSource = DocumentProvider.of(context).dataSource;
+    if (dataSource is! NativeDataSource) {
+      debugPrint('Unsupported data source: ${dataSource.runtimeType}');
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.errorLinkNotHandled(fileLink.toString()),
+      );
+      return false;
+    }
+
+    if (dataSource.needsToResolveParent) {
+      showDirectoryPermissionsSnackBar(context);
+      return false;
+    }
+
+    final namePrefix = fileLink.body;
+    final requestId = Object().hashCode.toString();
+
+    final (:succeeded, result: foundFile) = await cancelableProgressTask(
+      context,
+      task: time(
+        'find file with name prefix',
+        () => findFileWithNamePrefix(
+          requestId: requestId,
+          namePrefix: namePrefix,
+          dirIdentifier: dataSource.rootDirIdentifier!,
+        ),
+      ),
+      dialogTitle: AppLocalizations.of(context)!.searchingProgressDialogTitle,
+      onCancel: () => cancelFindFileWithNamePrefix(requestId: requestId),
+    );
+
+    if (!succeeded) return false;
+    if (!mounted) return false;
+
+    if (foundFile == null) {
+      showErrorSnackBar(
+        context,
+        AppLocalizations.of(context)!.errorFileNamePrefixNotFound(namePrefix),
+      );
+      return false;
+    } else {
+      await loadDocument(context, foundFile, target: fileLink.extra);
+      return true;
+    }
+  }
+
   Future<bool> _openFileLink(OrgLink link, OrgFileLink fileLink) async {
     if (fileLink.scheme == 'id:') {
       // An internal ID link within the current document would have been handled
       // within org_flutter, so it must be external.
       return await _openExternalIdLink(fileLink);
+    } else if (fileLink.scheme == 'denote:') {
+      return await _openDenoteLink(fileLink);
     }
 
     if (!fileLink.isRelative) return false;

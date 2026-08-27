@@ -624,6 +624,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String errorFileNamePrefixNotFound(String prefix) {
+    return 'File with name prefix “$prefix” not found';
+  }
+
+  @override
   String errorSectionNotFound(String section) {
     return 'Section not found: $section';
   }
@@ -1418,6 +1423,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String errorFileNamePrefixNotFound(String prefix) {
+    return 'File with name prefix “$prefix” not found';
+  }
+
+  @override
   String errorSectionNotFound(String section) {
     return 'Section not found: $section';
   }
@@ -2209,6 +2219,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String errorExternalIdNotFound(String id) {
     return 'File with ID “$id” not found';
+  }
+
+  @override
+  String errorFileNamePrefixNotFound(String prefix) {
+    return 'File with name prefix “$prefix” not found';
   }
 
   @override

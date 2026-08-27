@@ -1162,6 +1162,12 @@ abstract class AppLocalizations {
   /// **'File with ID “{id}” not found'**
   String errorExternalIdNotFound(String id);
 
+  /// No description provided for @errorFileNamePrefixNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File with name prefix “{prefix}” not found'**
+  String errorFileNamePrefixNotFound(String prefix);
+
   /// No description provided for @errorSectionNotFound.
   ///
   /// In en, this message translates to:

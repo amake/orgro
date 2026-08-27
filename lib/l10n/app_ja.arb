@@ -225,6 +225,7 @@
   "errorDecryptionFailed": "復号が失敗しました",
   "errorLinkNotHandled": "リンク「{link}」を開けませんでした",
   "errorExternalIdNotFound": "ID「{id}」のファイルが見つかりませんでした",
+  "errorFileNamePrefixNotFound": "接頭辞「{prefix}」のファイルが見つかりませんでした",
   "errorSectionNotFound": "「{section}」が見つかりませんでした",
   "errorUnsupportedSearchOption": "未対応の検索オプション: {option}",
   "errorSchedulingNotifications": "通知の設定に失敗しました: {message}",

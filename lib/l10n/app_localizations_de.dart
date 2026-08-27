@@ -627,6 +627,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String errorFileNamePrefixNotFound(String prefix) {
+    return 'File with name prefix “$prefix” not found';
+  }
+
+  @override
   String errorSectionNotFound(String section) {
     return 'Teil nicht gefunden: $section';
   }

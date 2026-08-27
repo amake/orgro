@@ -1,0 +1,12 @@
+TODO(aaron): Make these work with ~AssetDataSource~
+
+- [[denote:20260828T184017]] (via ~M-x denote-link~)
+
+- [[denote:20260828T184017::#h:EA16D438-E04D-4D1F-BF19-01CF02E44E6D]] (via ~M-x
+  denote-org-link-to-heading~)
+
+- [[denote:nonexistent]]
+
+# Local Variables:
+# denote-directory: "./"
+# End:
