@@ -80,20 +80,34 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         return
     }
 
-    let found = findFile(at: url, requestId: requestId) { fileUrl in
-        logger.debug("Searching \(fileUrl) for ID \(orgId)")
-        return fileContainsId(fileUrl: fileUrl, id: orgId)
+    let found = findFile(at: url, requestId: requestId) { file in
+        logger.debug("Searching \(file) for ID \(orgId)")
+        return withSecurityAccess(to: file) { fileUrl in
+            var matched = false
+            var fileError: NSError? = nil
+            NSFileCoordinator().coordinate(readingItemAt: file, error: &fileError) { fileUrl in
+                if fileContainsId(fileUrl: fileUrl, id: orgId) {
+                    matched = true
+                }
+            }
+            if let fileError = fileError {
+                logger.error("Error accessing file: \(fileError)")
+            }
+            return matched
+        }
     }
 
     guard let found = found else {
-        DispatchQueue.main.async {
-            result(nil)
-        }
+        DispatchQueue.main.async { result(nil) }
         return
     }
 
-    guard let bookmark = try? found.bookmarkData() else {
+    let bookmark = withSecurityAccess(to: found) { url in
+        return try? url.bookmarkData()
+    }
+    guard let bookmark = bookmark else {
         logger.info("Failed to get bookmark for file: \(found)")
+        DispatchQueue.main.async { result(nil) }
         return
     }
     DispatchQueue.main.async {
@@ -136,30 +150,49 @@ private func findFileWithNamePrefix(_ call: FlutterMethodCall, _ result: @escapi
         return
     }
 
-    let found = findFile(at: url, requestId: requestId) { fileUrl in
-        logger.debug("Searching \(fileUrl) for file name prefix \(namePrefix)")
-        return fileUrl.lastPathComponent.hasPrefix(namePrefix)
+    let found = findFile(at: url, requestId: requestId) { file in
+        logger.debug("Searching \(file) for file name prefix \(namePrefix)")
+        return file.lastPathComponent.hasPrefix(namePrefix)
     }
 
     guard let found = found else {
-        DispatchQueue.main.async {
-            result(nil)
-        }
+        DispatchQueue.main.async { result(nil) }
         return
     }
 
-    guard let bookmark = try? found.bookmarkData() else {
-        logger.info("Failed to get bookmark for file: \(found)")
+    let coordinated = withSecurityAccess(to: found) { url in
+        var coordinated: URL? = nil
+        var fileError: NSError? = nil
+        NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { fileUrl in
+            coordinated = fileUrl
+        }
+        if let fileError = fileError {
+            logger.error("Error accessing file: \(fileError)")
+        }
+        return coordinated
+    }
+
+    guard let coordinated = coordinated else {
+        DispatchQueue.main.async { result(nil) }
+        return
+    }
+
+    let bookmark = withSecurityAccess(to: coordinated) { url in
+        return try? url.bookmarkData()
+    }
+    guard let bookmark = bookmark else {
+        logger.info("Failed to get bookmark for file: \(coordinated)")
+        DispatchQueue.main.async { result(nil) }
         return
     }
     DispatchQueue.main.async {
         // Result compatible with file_picker_writable
         result([
-            "path": found.path,
+            "path": coordinated.path,
             "identifier": bookmark.base64EncodedString(),
             "persistable": "true",
-            "uri": found.absoluteString,
-            "fileName": found.lastPathComponent,
+            "uri": coordinated.absoluteString,
+            "fileName": coordinated.lastPathComponent,
         ])
     }
 }
@@ -204,28 +237,8 @@ private func findFile(at url: URL, requestId: String, predicate: (_ fileUrl: URL
             guard name.hasSuffix(".org") || name.hasSuffix(".org.icloud") else {
                 continue
             }
-
-            let accessing = file.startAccessingSecurityScopedResource()
-            defer {
-                if accessing {
-                    file.stopAccessingSecurityScopedResource()
-                }
-            }
-            if !accessing {
-                // TODO: This seems to be the normal case. Remove log? Don't bother accessing?
-                //log("Failed to access security scoped resource: \(file)")
-            }
-
-            var fileError: NSError? = nil
-            NSFileCoordinator().coordinate(readingItemAt: file, error: &fileError) { fileUrl in
-                if predicate(fileUrl) {
-                    result = fileUrl
-                }
-            }
-            if let fileError = fileError {
-                logger.error("Error accessing file: \(fileError)")
-            }
-            if result != nil {
+            if predicate(file) {
+                result = file
                 break
             }
         }
@@ -303,4 +316,14 @@ class ConcurrentSet<T: Hashable> {
         defer { lock.unlock() }
         return data.remove(item)
     }
+}
+
+private func withSecurityAccess<T>(to url: URL, _ body: (URL) -> T) -> T {
+    let accessing = url.startAccessingSecurityScopedResource()
+    defer {
+        if accessing {
+            url.stopAccessingSecurityScopedResource()
+        }
+    }
+    return body(url)
 }
