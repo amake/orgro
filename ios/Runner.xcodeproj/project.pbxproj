@@ -20,6 +20,7 @@
 		C42757332C8490AE00E74B62 /* NativeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42757312C8490AE00E74B62 /* NativeSearch.swift */; };
 		C47F4DFD2EF6E37A00115BD0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */; };
 		C47F4E1D2EF76CEF00115BD0 /* AppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */; };
+		C48838D730425C16008BD433 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48838D630425C16008BD433 /* SceneDelegate.swift */; };
 		C4AC25232ED5A3C200756304 /* OrgroCapture.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C4AC25192ED5A3C200756304 /* OrgroCapture.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4AE9CAB2F8E11AB0020157F /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE9CAA2F8E11AB0020157F /* Clipboard.swift */; };
 		C4E0B8912B3C4E850058873A /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E0B8902B3C4E850058873A /* RunnerTests.swift */; };
@@ -96,6 +97,7 @@
 		C47453692DB136A00065AA13 /* Runner-Profile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Runner-Profile.entitlements"; sourceTree = "<group>"; };
 		C47F4DFC2EF6E37A00115BD0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPurchase.swift; sourceTree = "<group>"; };
+		C48838D630425C16008BD433 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C4AC25192ED5A3C200756304 /* OrgroCapture.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OrgroCapture.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AE9CAA2F8E11AB0020157F /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
 		C4C13FA82761C6B000C59B99 /* Info-Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Release.plist"; sourceTree = "<group>"; };
@@ -105,7 +107,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C4AC25282ED5A3C200756304 /* Exceptions for "OrgroCapture" folder in "OrgroCapture" target */ = {
+		C4AC25282ED5A3C200756304 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Info-Debug.plist",
@@ -117,18 +119,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C4AC251A2ED5A3C200756304 /* OrgroCapture */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C4AC25282ED5A3C200756304 /* Exceptions for "OrgroCapture" folder in "OrgroCapture" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = OrgroCapture;
-			sourceTree = "<group>";
-		};
+		C4AC251A2ED5A3C200756304 /* OrgroCapture */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C4AC25282ED5A3C200756304 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = OrgroCapture; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +225,7 @@
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
+				C48838D630425C16008BD433 /* SceneDelegate.swift */,
 				C42757302C8490AE00E74B62 /* LineReader.swift */,
 				C42757312C8490AE00E74B62 /* NativeSearch.swift */,
 				C47F4E1C2EF76CEF00115BD0 /* AppPurchase.swift */,
@@ -360,7 +352,7 @@
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			packageReferences = (
-				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */,
+				781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */,
 			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
@@ -503,6 +495,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				C48838D730425C16008BD433 /* SceneDelegate.swift in Sources */,
 				C42757322C8490AE00E74B62 /* LineReader.swift in Sources */,
 				C4AE9CAB2F8E11AB0020157F /* Clipboard.swift in Sources */,
 				C42757332C8490AE00E74B62 /* NativeSearch.swift in Sources */,
@@ -1085,7 +1078,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "FlutterGeneratedPluginSwiftPackage" */ = {
+		781AD8BC2B33823900A9FFBB /* XCLocalSwiftPackageReference "Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage;
 		};
