@@ -10,7 +10,7 @@ environment:
   flutter: ^3.47.2
 
 dependencies:
-  cached_network_image: ^3.0.0
+  cached_network_image: ^4.0.0
   dynamic_fonts: ^3.0.1
   # dynamic_fonts:
   #   path: ../dynamic-fonts-flutter
