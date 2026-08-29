@@ -14,3 +14,7 @@ analyzer:
   - windows/**
   - macos/**
   - linux/**
+
+linter:
+  rules:
+    - directives_ordering

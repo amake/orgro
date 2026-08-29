@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:orgro/src/util.dart';
 
 class ResponsiveSlidableAction extends StatelessWidget {
