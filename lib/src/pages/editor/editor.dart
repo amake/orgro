@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/common.dart';
+import 'package:orgro/src/actions/util.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/debug.dart';
@@ -289,7 +290,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipInsertHeadline,
                       icon: const Icon(Icons.emergency),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const InsertHeadlineIntent(),
                       ),
@@ -298,7 +299,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipToggleUnorderedList,
                       icon: const Icon(Icons.format_list_bulleted),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const ToggleListItemIntent(ordered: false),
                       ),
@@ -307,7 +308,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipToggleOrderedList,
                       icon: const Icon(Icons.format_list_numbered),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const ToggleListItemIntent(ordered: true),
                       ),
@@ -316,7 +317,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipDecreaseIndent,
                       icon: const Icon(Icons.format_indent_decrease),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const ChangeIndentIntent(increase: false),
                       ),
@@ -325,7 +326,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipIncreaseIndent,
                       icon: const Icon(Icons.format_indent_increase),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const ChangeIndentIntent(increase: true),
                       ),
@@ -333,7 +334,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipBold,
                       icon: const Icon(Icons.format_bold),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeBoldIntent(),
                       ),
@@ -341,7 +342,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipItalic,
                       icon: const Icon(Icons.format_italic),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeItalicIntent(),
                       ),
@@ -349,7 +350,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipUnderline,
                       icon: const Icon(Icons.format_underline),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeUnderlineIntent(),
                       ),
@@ -358,7 +359,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipStrikethrough,
                       icon: const Icon(Icons.format_strikethrough),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeStrikethroughIntent(),
                       ),
@@ -366,7 +367,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipCode,
                       icon: const Icon(Icons.code),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeCodeIntent(),
                       ),
@@ -374,7 +375,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipInsertLink,
                       icon: const Icon(Icons.link),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const InsertLinkIntent(),
                       ),
@@ -382,11 +383,11 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipInsertDate,
                       icon: const Icon(Icons.calendar_today),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const InsertDateIntent(active: false),
                       ),
-                      onLongPress: Actions.handler(
+                      onLongPress: ActionsUtil.handler(
                         context,
                         const InsertDateIntent(active: true),
                       ),
@@ -394,7 +395,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipSubscript,
                       icon: const Icon(Icons.subscript),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeSubscriptIntent(),
                       ),
@@ -402,7 +403,7 @@ class _EditorToolbar extends StatelessWidget {
                     IconButton(
                       tooltip: AppLocalizations.of(context)!.tooltipSuperscript,
                       icon: const Icon(Icons.superscript),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const MakeSuperscriptIntent(),
                       ),
@@ -411,7 +412,7 @@ class _EditorToolbar extends StatelessWidget {
                       tooltip: AppLocalizations.of(context)!
                           .tooltipEncryptSection,
                       icon: const Icon(Icons.lock_outline),
-                      onPressed: Actions.handler(
+                      onPressed: ActionsUtil.handler(
                         context,
                         const EncryptSectionIntent(),
                       ),

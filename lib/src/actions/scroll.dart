@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/actions/util.dart';
 
 class ScrollToDocumentBoundaryAction
     extends ContextAction<ScrollToDocumentBoundaryIntent> {
@@ -43,7 +44,7 @@ class ScrollTopButton extends StatelessWidget {
     return IconButton(
       tooltip: AppLocalizations.of(context)!.tooltipScrollTop,
       icon: const Icon(Icons.keyboard_arrow_up),
-      onPressed: Actions.handler(
+      onPressed: ActionsUtil.handler(
         context,
         const ScrollToDocumentBoundaryIntent(forward: false),
       ),
@@ -53,7 +54,7 @@ class ScrollTopButton extends StatelessWidget {
 
 PopupMenuItem<VoidCallback> scrollTopMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: Actions.handler(
+    value: ActionsUtil.handler(
       context,
       ScrollToDocumentBoundaryIntent(forward: false),
     ),
@@ -69,7 +70,7 @@ class ScrollBottomButton extends StatelessWidget {
     return IconButton(
       tooltip: AppLocalizations.of(context)!.tooltipScrollBottom,
       icon: const Icon(Icons.keyboard_arrow_down),
-      onPressed: Actions.handler(
+      onPressed: ActionsUtil.handler(
         context,
         const ScrollToDocumentBoundaryIntent(forward: true),
       ),
@@ -79,7 +80,7 @@ class ScrollBottomButton extends StatelessWidget {
 
 PopupMenuItem<VoidCallback> scrollBottomMenuItem(BuildContext context) {
   return PopupMenuItem<VoidCallback>(
-    value: Actions.handler(
+    value: ActionsUtil.handler(
       context,
       ScrollToDocumentBoundaryIntent(forward: true),
     ),
