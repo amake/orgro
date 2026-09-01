@@ -56,6 +56,34 @@ Future<NativeDataSource?> findFileWithNamePrefix({
   }
 }
 
+Future<NativeDataSource?> findFileWithExactName({
+  required String requestId,
+  required String exactName,
+  required String dirIdentifier,
+}) async {
+  final result = await _channel.invokeMapMethod<String, String>(
+    'findFileWithExactName',
+    {
+      'requestId': requestId,
+      'exactName': exactName,
+      'dirIdentifier': dirIdentifier,
+    },
+  );
+  if (result == null) {
+    return null;
+  } else {
+    // By convention we return a map compatible with FileInfo from
+    // file_picker_writable
+    final info = FileInfo.fromJson(result);
+    return NativeDataSource(
+      info.fileName ?? exactName,
+      info.identifier,
+      info.uri,
+      persistable: info.persistable,
+    );
+  }
+}
+
 Future<bool> cancelFindFileForId({required String requestId}) async {
   final result = await _channel.invokeMethod<bool>('cancelFindFileForId', {
     'requestId': requestId,
@@ -66,6 +94,14 @@ Future<bool> cancelFindFileForId({required String requestId}) async {
 Future<bool> cancelFindFileWithNamePrefix({required String requestId}) async {
   final result = await _channel.invokeMethod<bool>(
     'cancelFindFileWithNamePrefix',
+    {'requestId': requestId},
+  );
+  return result ?? false;
+}
+
+Future<bool> cancelFindFileWithExactName({required String requestId}) async {
+  final result = await _channel.invokeMethod<bool>(
+    'cancelFindFileWithExactName',
     {'requestId': requestId},
   );
   return result ?? false;

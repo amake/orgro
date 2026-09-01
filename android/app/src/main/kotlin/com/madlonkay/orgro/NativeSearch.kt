@@ -17,6 +17,7 @@ private val jobs = ConcurrentHashMap<String,Boolean>()
 
 private const val jobTokenForId = "forId:"
 private const val jobTokenForNamePrefix = "forNamePrefix:"
+private const val jobTokenForExactName = "forExactName:"
 
 suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Result, context: Context) = withContext(Dispatchers.Main) {
     try {
@@ -63,6 +64,27 @@ suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Res
                 result.success(findFileWithNamePrefix(requestId, namePrefix, dirIdentifier, context))
                 jobs.remove(requestId)
             }
+            "findFileWithExactName" -> {
+                var requestId = call.argument<String>("requestId")
+                if (requestId == null) {
+                    result.error("MissingArg", "Required argument missing", "${call.method} requires 'requestId'")
+                    return@withContext
+                }
+                requestId = jobTokenForExactName + requestId
+                val exactName = call.argument<String>("exactName")
+                if (exactName == null) {
+                    result.error("MissingArg", "Required argument missing", "${call.method} requires 'exactName'")
+                    return@withContext
+                }
+                val dirIdentifier = call.argument<String>("dirIdentifier")
+                if (dirIdentifier == null) {
+                    result.error("MissingArg", "Required argument missing", "${call.method} requires 'dirIdentifier'")
+                    return@withContext
+                }
+                jobs[requestId] = true
+                result.success(findFileWithExactName(requestId, exactName, dirIdentifier, context))
+                jobs.remove(requestId)
+            }
             "cancelFindFileForId" -> {
                 var requestId = call.argument<String>("requestId")
                 if (requestId == null) {
@@ -85,6 +107,17 @@ suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Res
                 Log.d(TAG, "Cancelling job $requestId; cancelled: ${removed ?: false}")
                 result.success(removed ?: false)
             }
+            "cancelFindFileWithExactName" -> {
+                var requestId = call.argument<String>("requestId")
+                if (requestId == null) {
+                    result.error("MissingArg", "Required argument missing", "${call.method} requires 'requestId'")
+                    return@withContext
+                }
+                requestId = jobTokenForExactName + requestId
+                val removed = jobs.remove(requestId)
+                Log.d(TAG, "Cancelling job $requestId; cancelled: ${removed ?: false}")
+                result.success(removed ?: false)
+            }
             else -> result.error("UnsupportedMethod", "${call.method} is not supported", null)
         }
     } catch (e: Exception) {
@@ -94,7 +127,9 @@ suspend fun handleNativeSearchMethod(call: MethodCall, result: MethodChannel.Res
 
 private suspend fun findFileForId(requestId: String, id: String, dirIdentifier: String, context: Context): Map<String, String>? {
     val parent = dirIdentifier.toUri()
-    val found = iterateTree(requestId, parent, context) { uri, _ -> searchFileForId(uri, id, context) }
+    val found = iterateTree(requestId, parent, context) { uri, name ->
+        name.endsWith(".org") && searchFileForId(uri, id, context)
+    }
     if (found == null) return null
     val (uri, name) = found
     // Result compatible with file_picker_writable
@@ -110,7 +145,25 @@ private suspend fun findFileForId(requestId: String, id: String, dirIdentifier: 
 
 private suspend fun findFileWithNamePrefix(requestId: String, namePrefix: String, dirIdentifier: String, context: Context): Map<String, String>? {
     val parent = dirIdentifier.toUri()
-    val found = iterateTree(requestId, parent, context) { _, name -> name.startsWith(namePrefix) }
+    val found = iterateTree(requestId, parent, context) { _, name ->
+        name.endsWith(".org") && name.startsWith(namePrefix)
+    }
+    if (found == null) return null
+    val (uri, name) = found
+    // Result compatible with file_picker_writable
+    return mapOf(
+        // Path not available in this context
+        //"path" to found.absolutePath,
+        "identifier" to uri.toString(),
+        "persistable" to "true",
+        "fileName" to name,
+        "uri" to uri.toString()
+    )
+}
+
+private suspend fun findFileWithExactName(requestId: String, exactName: String, dirIdentifier: String, context: Context): Map<String, String>? {
+    val parent = dirIdentifier.toUri()
+    val found = iterateTree(requestId, parent, context) { _, name -> name == exactName }
     if (found == null) return null
     val (uri, name) = found
     // Result compatible with file_picker_writable
@@ -179,7 +232,6 @@ private suspend fun iterateTree(
                 }
                 val name = it.getString(nameColumn)
                 Log.d(TAG,"Looking at $name")
-                if (!name.endsWith(".org")) continue
                 if (predicate(uri, name)) return@withContext Pair(uri, name)
             }
         }

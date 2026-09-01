@@ -5,6 +5,8 @@ import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/remembered_files.dart';
+import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
@@ -227,22 +229,127 @@ class _RememberedFileManagementListTile extends StatelessWidget {
       child: RememberedFileListTile(
         recentFile,
         showAccessTime: true,
-        onTap: () async {
-          if (recentFile.isWebUri) {
-            loadAndRememberUrl(context, Uri.parse(recentFile.uri));
-          } else {
-            loadAndRememberFile(
-              context,
-              progressTask(
-                context,
-                dialogTitle: AppLocalizations.of(context)!
-                    .loadingProgressDialogTitle,
-                task: readFileWithIdentifier(recentFile.identifier),
-              ).then((value) => value.result),
-            );
-          }
-        },
+        onTap: () => _open(context),
       ),
+    );
+  }
+
+  void _open(BuildContext context) async {
+    if (recentFile.isWebUri) {
+      await loadAndRememberUrl(context, Uri.parse(recentFile.uri));
+      return;
+    }
+    final (:result, :succeeded) = await progressTask(
+      context,
+      dialogTitle: AppLocalizations.of(context)!.loadingProgressDialogTitle,
+      task: _tryOurDamnedestToLoadFile(context),
+    );
+    if (!succeeded || result == null) return;
+    final (:dataSource, :recovered) = result;
+    if (recovered) {
+      await loadAndReplaceRememberedFile(
+        context,
+        recentFile.identifier,
+        dataSource,
+      );
+    } else {
+      await loadAndRememberFile(context, dataSource);
+    }
+  }
+
+  // Returns a tuple of (NativeDataSource, bool) where the bool indicates
+  // whether the file needs to be replaced (true) or loaded normally (false).
+  // Returns null if the operation was cancelled.
+  Future<({NativeDataSource dataSource, bool recovered})?>
+  _tryOurDamnedestToLoadFile(
+    BuildContext context, {
+    Iterable<String>? accessibleDirs,
+  }) async {
+    accessibleDirs ??= Preferences.of(
+      context,
+      .accessibleDirs,
+    ).data.accessibleDirs;
+    try {
+      return await readFileWithIdentifierWithRecoveryStrategy(
+        identifier: recentFile.identifier,
+        fileName: recentFile.name,
+        accessibleDirs: accessibleDirs,
+      );
+    } on NotFoundException catch (e, s) {
+      logError(e, s);
+      final dirAccessSupported = await canObtainNativeDirectoryPermissions();
+      if (!context.mounted) return null;
+      final choice = await showDialog<_NotFoundAction>(
+        context: context,
+        builder: (context) =>
+            _NotFoundDialog(dirAccessSupported: dirAccessSupported),
+      );
+      switch (choice) {
+        case .locate:
+          final replacement = await pickFile();
+          return replacement == null
+              ? null
+              : (dataSource: replacement, recovered: true);
+        case .grant:
+          final granted = await pickDirectory();
+          if (granted == null) return null;
+          if (!context.mounted) return null;
+          await Preferences.of(
+            context,
+            .accessibleDirs,
+          ).addAccessibleDir(granted.identifier);
+          if (!context.mounted) return null;
+          return await _tryOurDamnedestToLoadFile(
+            context,
+            accessibleDirs: [granted.identifier, ...accessibleDirs].unique(),
+          );
+        case .remove:
+          if (!context.mounted) return null;
+          await RememberedFiles.of(context).remove(recentFile);
+          return null;
+        case null:
+          // User dismissed the dialog without making a choice. Cancel.
+          return null;
+      }
+    }
+  }
+}
+
+enum _NotFoundAction { locate, grant, remove }
+
+class _NotFoundDialog extends StatelessWidget {
+  const _NotFoundDialog({required this.dirAccessSupported});
+
+  final bool dirAccessSupported;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.link_off),
+      title: Text(AppLocalizations.of(context)!.notFoundDialogTitle),
+      content: dirAccessSupported
+          ? Text(AppLocalizations.of(context)!.notFoundDialogBody)
+          : Text(AppLocalizations.of(context)!.notFoundDialogNoDirAccessBody),
+      actions: [
+        if (dirAccessSupported)
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context)!.notFoundDialogActionGrantAccess,
+            ),
+            onTap: () => Navigator.pop(context, _NotFoundAction.grant),
+          ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.notFoundDialogActionLocate),
+          onTap: () => Navigator.pop(context, _NotFoundAction.locate),
+        ),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.notFoundDialogActionRemove,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+          onTap: () => Navigator.pop(context, _NotFoundAction.remove),
+        ),
+      ],
     );
   }
 }

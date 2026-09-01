@@ -129,5 +129,6 @@ Future<void> _handleBackgroundFetch(String debugLabel) async {
   await setNotificationsForAllAgendaDocuments(
     prefs.agendaFileJsons,
     localizations,
+    prefs.accessibleDirs,
   );
 }

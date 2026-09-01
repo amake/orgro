@@ -120,6 +120,7 @@ class InheritedRememberedFiles extends InheritedWidget {
     this.sortOrder, {
     required this.add,
     required this.remove,
+    required this.replace,
     required this.pin,
     required this.unpin,
     required super.child,
@@ -131,6 +132,7 @@ class InheritedRememberedFiles extends InheritedWidget {
   final SortOrder sortOrder;
   final AsyncValueSetter<List<RememberedFile>> add;
   final AsyncValueSetter<RememberedFile> remove;
+  final Future<void> Function(RememberedFile, RememberedFile) replace;
   final ValueChanged<RememberedFile> pin;
   final ValueChanged<RememberedFile> unpin;
 
@@ -198,6 +200,29 @@ class _RememberedFilesState extends State<RememberedFiles> {
     _prefs.removeRecentFile(recentFile);
   }
 
+  Future<void> replaceRecentFile(
+    RememberedFile oldFile,
+    RememberedFile newFile,
+  ) async {
+    debugPrint('Replacing recent file: $oldFile with $newFile');
+    try {
+      await disposeNativeSourceIdentifier(oldFile.identifier);
+    } catch (e, s) {
+      logError(e, s);
+    }
+    final oldJson = _prefs.agendaFileJsons
+        .where((json) => json['uri'] == oldFile.uri)
+        .firstOrNull;
+    if (oldJson != null) {
+      final newJson = Map<String, dynamic>.from(oldJson)
+        ..['name'] = newFile.name
+        ..['identifier'] = newFile.identifier
+        ..['uri'] = newFile.uri;
+      await _prefs.replaceAgendaFileJson(oldJson, newJson);
+    }
+    await _prefs.replaceRecentFile(oldFile, newFile);
+  }
+
   void pinFile(RememberedFile recentFile) {
     _prefs.pinFile(recentFile);
   }
@@ -244,6 +269,7 @@ class _RememberedFilesState extends State<RememberedFiles> {
       _prefs.recentFilesSortOrder,
       add: addRecentFiles,
       remove: removeRecentFile,
+      replace: replaceRecentFile,
       pin: pinFile,
       unpin: unpinFile,
       child: widget.child,

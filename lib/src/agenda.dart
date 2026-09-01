@@ -81,11 +81,39 @@ void onDidReceiveNotificationResponse(NotificationResponse details) async {
   }
   final payload = json.decode(details.payload!);
   switch (payload) {
-    case {'dataSource': {'type': 'native', 'identifier': final String id}}:
+    case {
+      'dataSource': {
+        'type': 'native',
+        'identifier': final String id,
+        'name': final String name,
+      },
+    }:
       final context = startKey.currentContext;
       try {
+        final accessibleDirs = Preferences.of(
+          context!,
+          .accessibleDirs,
+        ).data.accessibleDirs;
         // TODO(aaron): Don't open if we already have it open
-        await loadAndRememberFile(context!, readFileWithIdentifier(id));
+        final (
+          :dataSource,
+          :recovered,
+        ) = await readFileWithIdentifierWithRecoveryStrategy(
+          identifier: id,
+          fileName: name,
+          accessibleDirs: accessibleDirs,
+        );
+        if (recovered) {
+          await Preferences.of(context, .agenda).replaceAgendaFileJson(
+            payload['dataSource'] as Map<String, dynamic>,
+            dataSource.toJson(),
+          );
+          if (context.mounted) {
+            await loadAndReplaceRememberedFile(context, id, dataSource);
+          }
+        } else {
+          await loadAndRememberFile(context, dataSource);
+        }
       } catch (e, s) {
         logError(e, s);
         if (context?.mounted == true) showErrorSnackBar(context!, e);
@@ -308,12 +336,28 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
 Future<void> setNotificationsForAllAgendaDocuments(
   List<Map<String, dynamic>> agendaFileJsons,
   AppLocalizations localizations,
+  Iterable<String> accessibleDirs,
 ) async {
   for (final elem in agendaFileJsons) {
     switch (elem) {
-      case {'type': 'native', 'identifier': final String id}:
+      case {
+        'type': 'native',
+        'identifier': final String id,
+        'name': final String name,
+      }:
         try {
-          final dataSource = await readFileWithIdentifier(id);
+          final (
+            :dataSource,
+            :recovered,
+          ) = await readFileWithIdentifierWithRecoveryStrategy(
+            identifier: id,
+            fileName: name,
+            accessibleDirs: accessibleDirs,
+          );
+          // TODO(aaron): Ideally we would update the agendaFileJsons if we used
+          // the recovery strategy, but we don't have access to the Preferences
+          // here, and since this function is called in a background thread we
+          // would need to coordinate with the main app.
           final parsed = await ParsedOrgFileInfo.from(dataSource);
           await setNotificationsForDocument((
             dataSource,

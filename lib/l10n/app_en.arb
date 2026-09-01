@@ -105,6 +105,13 @@
   "fileSourceDownloads": "Downloads",
   "fileSourceGoogleDrive": "Google Drive",
 
+  "notFoundDialogTitle" : "Not found",
+  "notFoundDialogBody" : "The file you are trying to open could not be found. It may have been moved or deleted. You can provide access to a parent directory (recommended), try to locate the file manually, or remove it from the list of recent files.",
+  "notFoundDialogNoDirAccessBody" : "The file you are trying to open could not be found. It may have been moved or deleted. You can try to locate the file manually or remove it from the list of recent files.",
+  "notFoundDialogActionGrantAccess": "Grant access to parent directory",
+  "notFoundDialogActionLocate": "Locate file",
+  "notFoundDialogActionRemove": "Remove from recent files",
+
   "menuItemReaderMode": "Reader mode",
   "menuItemWakelock": "Keep screen on",
   "menuItemFullWidth": "Full width",

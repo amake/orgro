@@ -16,6 +16,7 @@ import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
@@ -164,7 +165,31 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       final restoreData = json.decode(restoreRoute);
       final context = this.context;
       switch (restoreData) {
+        case {
+          'route': Routes.document,
+          'fileId': String fileId,
+          'name': String name,
+        }:
+          final accessibleDirs = Preferences.of(
+            context,
+            .accessibleDirs,
+          ).data.accessibleDirs;
+          final (
+            :dataSource,
+            :recovered,
+          ) = await readFileWithIdentifierWithRecoveryStrategy(
+            identifier: fileId,
+            fileName: name,
+            accessibleDirs: accessibleDirs,
+          );
+          if (recovered) {
+            await loadAndReplaceRememberedFile(context, fileId, dataSource);
+          } else {
+            await loadAndRememberFile(context, dataSource);
+          }
+          return;
         case {'route': Routes.document, 'fileId': String fileId}:
+          // Legacy case where we didn't store the name
           await loadAndRememberFile(context, readFileWithIdentifier(fileId));
           return;
         case {'route': Routes.document, 'url': String url}:

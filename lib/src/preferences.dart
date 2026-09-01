@@ -352,6 +352,16 @@ extension RecentFilesExt on InheritedPreferences {
     return await _setRecentFiles(files);
   }
 
+  Future<void> replaceRecentFile(
+    RememberedFile oldFile,
+    RememberedFile newFile,
+  ) async {
+    final files = rememberedFiles
+        .map((f) => f.uri == oldFile.uri ? newFile : f)
+        .toList(growable: false);
+    return await _setRecentFiles(files);
+  }
+
   Future<void> pinFile(RememberedFile file) async {
     final pinnedIdx = rememberedFiles.where((f) => f.isPinned).length;
     final files =
@@ -424,6 +434,16 @@ extension AgendaExt on InheritedPreferences {
   ) async {
     final jsons = agendaFileJsons
         .where((json) => !predicate(json))
+        .toList(growable: false);
+    return await _setAgendaFileJsons(jsons);
+  }
+
+  Future<void> replaceAgendaFileJson(
+    Map<String, dynamic> oldJson,
+    Map<String, dynamic> newJson,
+  ) async {
+    final jsons = agendaFileJsons
+        .map((json) => mapEquals(json, oldJson) ? newJson : json)
         .toList(growable: false);
     return await _setAgendaFileJsons(jsons);
   }

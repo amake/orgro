@@ -11,6 +11,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/preferences.dart';
 
 const _kOrgProtocolSchemes = [
   'org-protocol-debug',
@@ -70,11 +71,32 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
       );
     case (CaptureTarget.document, final captureTo!):
       if (!context.mounted) return;
-      await loadAndRememberFile(
+      final accessibleDirs = Preferences.of(
         context,
-        readFileWithIdentifier(captureTo.identifier),
-        afterOpen: (state) => captureToDocument(state, uri),
+        .accessibleDirs,
+      ).data.accessibleDirs;
+      final (
+        :dataSource,
+        :recovered,
+      ) = await readFileWithIdentifierWithRecoveryStrategy(
+        identifier: captureTo.identifier,
+        fileName: captureTo.name,
+        accessibleDirs: accessibleDirs,
       );
+      if (recovered) {
+        await loadAndReplaceRememberedFile(
+          context,
+          captureTo.identifier,
+          dataSource,
+          afterOpen: (state) => captureToDocument(state, uri),
+        );
+      } else {
+        await loadAndRememberFile(
+          context,
+          dataSource,
+          afterOpen: (state) => captureToDocument(state, uri),
+        );
+      }
   }
 }
 

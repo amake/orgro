@@ -231,6 +231,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fileSourceGoogleDrive => 'Google Drive';
 
   @override
+  String get notFoundDialogTitle => 'Not found';
+
+  @override
+  String get notFoundDialogBody =>
+      'The file you are trying to open could not be found. It may have been moved or deleted. You can provide access to a parent directory (recommended), try to locate the file manually, or remove it from the list of recent files.';
+
+  @override
+  String get notFoundDialogNoDirAccessBody =>
+      'The file you are trying to open could not be found. It may have been moved or deleted. You can try to locate the file manually or remove it from the list of recent files.';
+
+  @override
+  String get notFoundDialogActionGrantAccess =>
+      'Grant access to parent directory';
+
+  @override
+  String get notFoundDialogActionLocate => 'Locate file';
+
+  @override
+  String get notFoundDialogActionRemove => 'Remove from recent files';
+
+  @override
   String get menuItemReaderMode => 'Режим чтения';
 
   @override

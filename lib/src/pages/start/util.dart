@@ -34,12 +34,63 @@ Future<void> loadAndRememberFile(
     debugPrint('Saving file ID to bucket $bucket');
     bucket.write<String>(
       kRestoreRouteKey,
-      json.encode({'route': Routes.document, 'fileId': loadedFile.identifier}),
+      json.encode({
+        'route': Routes.document,
+        'fileId': loadedFile.identifier,
+        'name': loadedFile.name,
+      }),
     );
   } else {
     debugPrint('Couldn’t obtain persistent access to ${dataSource.name}');
   }
   await loadDocument(context, dataSource, mode: mode, afterOpen: afterOpen);
+  debugPrint('Clearing saved state from bucket $bucket');
+  bucket.remove<String>(kRestoreRouteKey);
+}
+
+Future<void> loadAndReplaceRememberedFile(
+  BuildContext context,
+  String idToReplace,
+  NativeDataSource replacement, {
+  InitialMode? mode,
+  AfterOpenCallback? afterOpen,
+}) async {
+  final rememberedFiles = RememberedFiles.of(context);
+  final bucket = RestorationScope.of(context);
+  // Replacing the remembered file can cause the context to unmount, so lock in
+  // the loadDocument future first.
+  final loadDocFuture = loadDocument(
+    context,
+    replacement,
+    mode: mode,
+    afterOpen: afterOpen,
+  );
+  if (replacement.persistable) {
+    final toReplace = rememberedFiles.list
+        .where((file) => file.identifier == idToReplace)
+        .firstOrNull;
+    if (toReplace != null) {
+      final loadedFile = toReplace.copyWith(
+        identifier: replacement.identifier,
+        name: replacement.name,
+        uri: replacement.uri,
+        lastOpened: DateTime.now(),
+      );
+      await rememberedFiles.replace(toReplace, loadedFile);
+      debugPrint('Saving file ID to bucket $bucket');
+      bucket.write<String>(
+        kRestoreRouteKey,
+        json.encode({
+          'route': Routes.document,
+          'fileId': loadedFile.identifier,
+          'name': loadedFile.name,
+        }),
+      );
+    }
+  } else {
+    debugPrint('Couldn’t obtain persistent access to ${replacement.name}');
+  }
+  await loadDocFuture;
   debugPrint('Clearing saved state from bucket $bucket');
   bucket.remove<String>(kRestoreRouteKey);
 }

@@ -6,6 +6,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 import 'package:quick_actions/quick_actions.dart' as qa;
 
@@ -65,10 +66,27 @@ class _QuickActionsState extends State<QuickActions> {
           if (pin.isWebUri) {
             await loadAndRememberUrl(context, Uri.parse(pin.identifier));
           } else {
-            await loadAndRememberFile(
+            final accessibleDirs = Preferences.of(
               context,
-              readFileWithIdentifier(pin.identifier),
+              .accessibleDirs,
+            ).data.accessibleDirs;
+            final (
+              :dataSource,
+              :recovered,
+            ) = await readFileWithIdentifierWithRecoveryStrategy(
+              identifier: pin.identifier,
+              fileName: pin.name,
+              accessibleDirs: accessibleDirs,
             );
+            if (recovered) {
+              await loadAndReplaceRememberedFile(
+                context,
+                pin.identifier,
+                dataSource,
+              );
+            } else {
+              await loadAndRememberFile(context, dataSource);
+            }
           }
         }
         break;

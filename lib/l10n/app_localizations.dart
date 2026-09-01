@@ -502,6 +502,42 @@ abstract class AppLocalizations {
   /// **'Google Drive'**
   String get fileSourceGoogleDrive;
 
+  /// No description provided for @notFoundDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found'**
+  String get notFoundDialogTitle;
+
+  /// No description provided for @notFoundDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The file you are trying to open could not be found. It may have been moved or deleted. You can provide access to a parent directory (recommended), try to locate the file manually, or remove it from the list of recent files.'**
+  String get notFoundDialogBody;
+
+  /// No description provided for @notFoundDialogNoDirAccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The file you are trying to open could not be found. It may have been moved or deleted. You can try to locate the file manually or remove it from the list of recent files.'**
+  String get notFoundDialogNoDirAccessBody;
+
+  /// No description provided for @notFoundDialogActionGrantAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant access to parent directory'**
+  String get notFoundDialogActionGrantAccess;
+
+  /// No description provided for @notFoundDialogActionLocate.
+  ///
+  /// In en, this message translates to:
+  /// **'Locate file'**
+  String get notFoundDialogActionLocate;
+
+  /// No description provided for @notFoundDialogActionRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from recent files'**
+  String get notFoundDialogActionRemove;
+
   /// No description provided for @menuItemReaderMode.
   ///
   /// In en, this message translates to:

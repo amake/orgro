@@ -18,6 +18,7 @@ private var jobs = ConcurrentSet<String>()
 
 private var jobTokenForId = "forId:"
 private var jobTokenForNamePrefix = "forNamePrefix:"
+private var jobTokenForExactName = "forExactName:"
 
 func handleNativeSearchMethod(call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
@@ -29,10 +30,16 @@ func handleNativeSearchMethod(call: FlutterMethodCall, result: @escaping Flutter
         DispatchQueue.global(qos: .userInitiated).async {
             findFileWithNamePrefix(call, result)
         }
+    case "findFileWithExactName":
+        DispatchQueue.global(qos: .userInitiated).async {
+            findFileWithExactName(call, result)
+        }
     case "cancelFindFileForId":
         cancelFindFile(call, result, token: jobTokenForId)
     case "cancelFindFileWithNamePrefix":
         cancelFindFile(call, result, token: jobTokenForNamePrefix)
+    case "cancelFindFileWithExactName":
+        cancelFindFile(call, result, token: jobTokenForExactName)
     default:
         result(FlutterError(code: "UnsupportedMethod", message: "\(call.method) is not supported", details: nil))
     }
@@ -80,7 +87,10 @@ private func findFileForId(_ call: FlutterMethodCall, _ result: @escaping Flutte
         return
     }
 
-    let found = findFile(at: url, requestId: requestId) { file in
+    let found = findFile(at: url, requestId: requestId) { file, name in
+        guard name.hasSuffix(".org") || name.hasSuffix(".org.icloud") else {
+            return false
+        }
         logger.debug("Searching \(file) for ID \(orgId)")
         return withSecurityAccess(to: file) { fileUrl in
             var matched = false
@@ -150,9 +160,12 @@ private func findFileWithNamePrefix(_ call: FlutterMethodCall, _ result: @escapi
         return
     }
 
-    let found = findFile(at: url, requestId: requestId) { file in
+    let found = findFile(at: url, requestId: requestId) { file, name  in
+        guard name.hasSuffix(".org") || name.hasSuffix(".org.icloud") else {
+            return false
+        }
         logger.debug("Searching \(file) for file name prefix \(namePrefix)")
-        return file.lastPathComponent.hasPrefix(namePrefix)
+        return name.hasPrefix(namePrefix)
     }
 
     guard let found = found else {
@@ -197,7 +210,82 @@ private func findFileWithNamePrefix(_ call: FlutterMethodCall, _ result: @escapi
     }
 }
 
-private func findFile(at url: URL, requestId: String, predicate: (_ fileUrl: URL) -> Bool) -> URL?  {
+private func findFileWithExactName(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
+    guard let args = call.arguments as? [String:Any?] else {
+        result(FlutterError(code: "MissingArgs", message: "Required arguments missing", details: "\(call.method) requires 'id', 'dirIdentifier'"))
+        return
+    }
+    guard var requestId = args["requestId"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'requestId'"))
+        return
+    }
+    requestId = "\(jobTokenForExactName)\(requestId)"
+    jobs.insert(requestId)
+    defer {
+        jobs.remove(requestId)
+    }
+    guard let exactName = args["exactName"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'exactName'"))
+        return
+    }
+    guard let dirIdentifier = args["dirIdentifier"] as? String else {
+        result(FlutterError(code: "MissingArg", message: "Required argument missing", details: "\(call.method) requires 'dirIdentifier'"))
+        return
+    }
+
+    guard let url = restoreUrl(from: dirIdentifier) else {
+        result(FlutterError(code: "InvalidDataError", message: "Unable to restore URL from identifier.", details: nil))
+        return
+    }
+
+    let found = findFile(at: url, requestId: requestId) { file, name  in
+        logger.debug("Searching \(file) for file named \(exactName)")
+        return name == exactName
+    }
+
+    guard let found = found else {
+        DispatchQueue.main.async { result(nil) }
+        return
+    }
+
+    let coordinated = withSecurityAccess(to: found) { url in
+        var coordinated: URL? = nil
+        var fileError: NSError? = nil
+        NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { fileUrl in
+            coordinated = fileUrl
+        }
+        if let fileError = fileError {
+            logger.error("Error accessing file: \(fileError)")
+        }
+        return coordinated
+    }
+
+    guard let coordinated = coordinated else {
+        DispatchQueue.main.async { result(nil) }
+        return
+    }
+
+    let bookmark = withSecurityAccess(to: coordinated) { url in
+        return try? url.bookmarkData()
+    }
+    guard let bookmark = bookmark else {
+        logger.info("Failed to get bookmark for file: \(coordinated)")
+        DispatchQueue.main.async { result(nil) }
+        return
+    }
+    DispatchQueue.main.async {
+        // Result compatible with file_picker_writable
+        result([
+            "path": coordinated.path,
+            "identifier": bookmark.base64EncodedString(),
+            "persistable": "true",
+            "uri": coordinated.absoluteString,
+            "fileName": coordinated.lastPathComponent,
+        ])
+    }
+}
+
+private func findFile(at url: URL, requestId: String, predicate: (_ fileUrl: URL, _ name: String) -> Bool) -> URL?  {
     // https://developer.apple.com/documentation/uikit/view_controllers/providing_access_to_directories
 
     guard url.startAccessingSecurityScopedResource() else {
@@ -234,10 +322,7 @@ private func findFile(at url: URL, requestId: String, predicate: (_ fileUrl: URL
             guard !isDirectory else {
                 continue
             }
-            guard name.hasSuffix(".org") || name.hasSuffix(".org.icloud") else {
-                continue
-            }
-            if predicate(file) {
+            if predicate(file, name) {
                 result = file
                 break
             }

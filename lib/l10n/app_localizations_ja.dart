@@ -227,6 +227,26 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fileSourceGoogleDrive => 'Google ドライブ';
 
   @override
+  String get notFoundDialogTitle => 'ファイルが見つかりません';
+
+  @override
+  String get notFoundDialogBody =>
+      'お探しのファイルは見つかりませんでした。移動または削除された可能性があります。上位ディレクトリへのアクセスを与える（推奨）か、手動でファイルを探すか、最近使用したファイルのリストから削除してください。';
+
+  @override
+  String get notFoundDialogNoDirAccessBody =>
+      'お探しのファイルは見つかりませんでした。移動または削除された可能性があります。手動でファイルを探すか、最近使用したファイルのリストから削除してください。';
+
+  @override
+  String get notFoundDialogActionGrantAccess => '上位ディレクトリへのアクセスを与える';
+
+  @override
+  String get notFoundDialogActionLocate => '手動でファイルを探す';
+
+  @override
+  String get notFoundDialogActionRemove => '最近使用したファイルのリストから削除';
+
+  @override
   String get menuItemReaderMode => 'リーダーモード';
 
   @override

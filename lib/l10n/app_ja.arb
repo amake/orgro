@@ -83,6 +83,13 @@
   "fileSourceDownloads": "ダウンロード",
   "fileSourceGoogleDrive": "Google ドライブ",
 
+  "notFoundDialogTitle" : "ファイルが見つかりません",
+  "notFoundDialogBody" : "お探しのファイルは見つかりませんでした。移動または削除された可能性があります。上位ディレクトリへのアクセスを与える（推奨）か、手動でファイルを探すか、最近使用したファイルのリストから削除してください。",
+  "notFoundDialogNoDirAccessBody" : "お探しのファイルは見つかりませんでした。移動または削除された可能性があります。手動でファイルを探すか、最近使用したファイルのリストから削除してください。",
+  "notFoundDialogActionGrantAccess": "上位ディレクトリへのアクセスを与える",
+  "notFoundDialogActionLocate": "手動でファイルを探す",
+  "notFoundDialogActionRemove": "最近使用したファイルのリストから削除",
+
   "menuItemReaderMode": "リーダーモード",
   "menuItemWakelock": "画面を常にオンにする",
   "menuItemFullWidth": "画面幅いっぱいで表示",

@@ -282,6 +282,17 @@ class LoadedNativeDataSource extends NativeDataSource {
     persistable: externalFileInfo.persistable,
   );
 
+  static Future<LoadedNativeDataSource> from(NativeDataSource other) async =>
+      other is LoadedNativeDataSource
+      ? other
+      : LoadedNativeDataSource(
+          other.name,
+          other.identifier,
+          other.uri,
+          await other.content,
+          persistable: other.persistable,
+        );
+
   LoadedNativeDataSource(
     super.name,
     super.identifier,
