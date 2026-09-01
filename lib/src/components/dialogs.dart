@@ -300,19 +300,20 @@ Future<({bool succeeded, T? result})> cancelableProgressTask<T>(
     builder: (context) =>
         ProgressIndicatorDialog(title: dialogTitle, dismissable: true),
   );
-  final dialogFuture = Navigator.push(context, route);
+  final navigator = Navigator.of(context);
+  final dialogFuture = navigator.push(route);
 
   task
       .then((result) {
-        if (!canceled && context.mounted) {
-          Navigator.removeRoute(context, route, (result, null));
+        if (!canceled) {
+          navigator.removeRoute(route, (result, null));
         }
       })
       .onError((error, stackTrace) {
         if (context.mounted) showErrorSnackBar(context, error);
         logError(error, stackTrace);
-        if (!canceled && context.mounted) {
-          Navigator.removeRoute(context, route, (null, error));
+        if (!canceled) {
+          navigator.removeRoute(route, (null, error));
         }
       });
 
@@ -345,7 +346,8 @@ Future<({bool succeeded, T? result})> progressTask<T>(
     builder: (context) =>
         ProgressIndicatorDialog(title: dialogTitle, dismissable: false),
   );
-  Navigator.push(context, route);
+  final navigator = Navigator.of(context);
+  navigator.push(route);
   try {
     final result = await task;
     return (succeeded: true, result: result);
@@ -354,7 +356,7 @@ Future<({bool succeeded, T? result})> progressTask<T>(
     logError(error, stackTrace);
     return (succeeded: false, result: null);
   } finally {
-    if (context.mounted) Navigator.removeRoute(context, route);
+    navigator.removeRoute(route);
   }
 }
 
