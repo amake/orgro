@@ -24,15 +24,7 @@ class SavePermissionDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.save),
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
-      // SizedBox with any finite height needed because AlertDialog uses
-      // IntrinsicWidth and this needs something to work with, apparently;
-      // see https://stackoverflow.com/a/60896702/448068
-      //
-      // TODO(aaron): Should this be inside OrgText instead?
-      content: SizedBox(
-        width: double.maxFinite,
-        child: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
-      ),
+      content: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
       actions: [
         ListTile(
           title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveOnce),
