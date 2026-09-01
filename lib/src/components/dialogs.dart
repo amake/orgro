@@ -27,15 +27,24 @@ class SavePermissionDialog extends StatelessWidget {
       content: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
       actions: [
         ListTile(
-          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveOnce),
+          title: Text(
+            AppLocalizations.of(context)!.bannerBodyActionSaveOnce
+                .toUpperCase(),
+          ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, false)),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveAlways),
+          title: Text(
+            AppLocalizations.of(context)!.bannerBodyActionSaveAlways
+                .toUpperCase(),
+          ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, true)),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.bannerBodyActionSaveNever),
+          title: Text(
+            AppLocalizations.of(context)!.bannerBodyActionSaveNever
+                .toUpperCase(),
+          ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.deny, true)),
         ),
       ],
@@ -63,7 +72,7 @@ class SaveChangesDialog extends StatelessWidget {
       content: message == null ? null : Text(message!),
       actions: [
         ListTile(
-          title: Text(SaveAction.saveAs.toDisplayString(context)),
+          title: Text(SaveAction.saveAs.toDisplayString(context).toUpperCase()),
           onTap: () async {
             final fileName = await showDialog<String>(
               context: context,
@@ -95,7 +104,9 @@ class SaveChangesDialog extends StatelessWidget {
         Builder(
           builder: (context) {
             return ListTile(
-              title: Text(SaveAction.share.toDisplayString(context)),
+              title: Text(
+                SaveAction.share.toDisplayString(context).toUpperCase(),
+              ),
               onTap: () async {
                 final navigator = Navigator.of(context);
                 final route = ModalRoute.of(context)!;
@@ -129,7 +140,10 @@ class SaveChangesDialog extends StatelessWidget {
           },
         ),
         ListTile(
-          title: Text(SaveAction.discard.toDisplayString(context)),
+          title: Text(
+            SaveAction.discard.toDisplayString(context).toUpperCase(),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
           onTap: () => Navigator.pop(context, true),
         ),
       ],
@@ -157,11 +171,16 @@ class DiscardChangesDialog extends StatelessWidget {
       title: Text(AppLocalizations.of(context)!.discardChangesDialogTitle),
       actions: [
         ListTile(
-          title: Text(AppLocalizations.of(context)!.discardActionDiscard),
+          title: Text(
+            AppLocalizations.of(context)!.discardActionDiscard.toUpperCase(),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
           onTap: () => Navigator.pop(context, true),
         ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.discardActionCancel),
+          title: Text(
+            AppLocalizations.of(context)!.discardActionCancel.toUpperCase(),
+          ),
           onTap: () => Navigator.pop(context, false),
         ),
       ],
@@ -185,13 +204,16 @@ class ConfirmResetDialog extends StatelessWidget {
       actions: [
         ListTile(
           title: Text(
-            AppLocalizations.of(context)!.confirmResetPreferencesActionReset,
+            AppLocalizations.of(context)!.confirmResetPreferencesActionReset
+                .toUpperCase(),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
           onTap: () => Navigator.pop(context, true),
         ),
         ListTile(
           title: Text(
-            AppLocalizations.of(context)!.confirmResetPreferencesActionCancel,
+            AppLocalizations.of(context)!.confirmResetPreferencesActionCancel
+                .toUpperCase(),
           ),
           onTap: () => Navigator.pop(context, false),
         ),

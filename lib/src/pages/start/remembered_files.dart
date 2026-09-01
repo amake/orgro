@@ -334,17 +334,22 @@ class _NotFoundDialog extends StatelessWidget {
         if (dirAccessSupported)
           ListTile(
             title: Text(
-              AppLocalizations.of(context)!.notFoundDialogActionGrantAccess,
+              AppLocalizations.of(context)!.notFoundDialogActionGrantAccess
+                  .toUpperCase(),
             ),
             onTap: () => Navigator.pop(context, _NotFoundAction.grant),
           ),
         ListTile(
-          title: Text(AppLocalizations.of(context)!.notFoundDialogActionLocate),
+          title: Text(
+            AppLocalizations.of(context)!.notFoundDialogActionLocate
+                .toUpperCase(),
+          ),
           onTap: () => Navigator.pop(context, _NotFoundAction.locate),
         ),
         ListTile(
           title: Text(
-            AppLocalizations.of(context)!.notFoundDialogActionRemove,
+            AppLocalizations.of(context)!.notFoundDialogActionRemove
+                .toUpperCase(),
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
           onTap: () => Navigator.pop(context, _NotFoundAction.remove),
