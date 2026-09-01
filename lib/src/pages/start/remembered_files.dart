@@ -349,6 +349,7 @@ class _NotFoundDialog extends StatelessWidget {
                 title: Text(
                   AppLocalizations.of(context)!.notFoundDialogActionGrantAccess
                       .toUpperCase(),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 onTap: () => Navigator.pop(context, _NotFoundAction.grant),
               ),
@@ -356,6 +357,7 @@ class _NotFoundDialog extends StatelessWidget {
               title: Text(
                 AppLocalizations.of(context)!.notFoundDialogActionLocate
                     .toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               onTap: () => Navigator.pop(context, _NotFoundAction.locate),
             ),
@@ -363,7 +365,10 @@ class _NotFoundDialog extends StatelessWidget {
               title: Text(
                 AppLocalizations.of(context)!.notFoundDialogActionRemove
                     .toUpperCase(),
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               onTap: () => Navigator.pop(context, _NotFoundAction.remove),
             ),

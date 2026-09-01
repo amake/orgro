@@ -30,6 +30,7 @@ class SavePermissionDialog extends StatelessWidget {
           title: Text(
             AppLocalizations.of(context)!.bannerBodyActionSaveOnce
                 .toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, false)),
         ),
@@ -37,6 +38,7 @@ class SavePermissionDialog extends StatelessWidget {
           title: Text(
             AppLocalizations.of(context)!.bannerBodyActionSaveAlways
                 .toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.allow, true)),
         ),
@@ -44,6 +46,7 @@ class SavePermissionDialog extends StatelessWidget {
           title: Text(
             AppLocalizations.of(context)!.bannerBodyActionSaveNever
                 .toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           onTap: () => Navigator.pop(context, (SaveChangesPolicy.deny, true)),
         ),
@@ -72,7 +75,10 @@ class SaveChangesDialog extends StatelessWidget {
       content: message == null ? null : Text(message!),
       actions: [
         ListTile(
-          title: Text(SaveAction.saveAs.toDisplayString(context).toUpperCase()),
+          title: Text(
+            SaveAction.saveAs.toDisplayString(context).toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           onTap: () async {
             final fileName = await showDialog<String>(
               context: context,
@@ -106,6 +112,7 @@ class SaveChangesDialog extends StatelessWidget {
             return ListTile(
               title: Text(
                 SaveAction.share.toDisplayString(context).toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               onTap: () async {
                 final navigator = Navigator.of(context);
@@ -142,7 +149,10 @@ class SaveChangesDialog extends StatelessWidget {
         ListTile(
           title: Text(
             SaveAction.discard.toDisplayString(context).toUpperCase(),
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           onTap: () => Navigator.pop(context, true),
         ),
@@ -173,13 +183,17 @@ class DiscardChangesDialog extends StatelessWidget {
         ListTile(
           title: Text(
             AppLocalizations.of(context)!.discardActionDiscard.toUpperCase(),
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           onTap: () => Navigator.pop(context, true),
         ),
         ListTile(
           title: Text(
             AppLocalizations.of(context)!.discardActionCancel.toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           onTap: () => Navigator.pop(context, false),
         ),
@@ -206,7 +220,10 @@ class ConfirmResetDialog extends StatelessWidget {
           title: Text(
             AppLocalizations.of(context)!.confirmResetPreferencesActionReset
                 .toUpperCase(),
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           onTap: () => Navigator.pop(context, true),
         ),
@@ -214,6 +231,7 @@ class ConfirmResetDialog extends StatelessWidget {
           title: Text(
             AppLocalizations.of(context)!.confirmResetPreferencesActionCancel
                 .toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
           onTap: () => Navigator.pop(context, false),
         ),
