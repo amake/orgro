@@ -327,34 +327,49 @@ class _NotFoundDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(Icons.link_off),
       title: Text(AppLocalizations.of(context)!.notFoundDialogTitle),
-      content: dirAccessSupported
-          ? Text(AppLocalizations.of(context)!.notFoundDialogBody)
-          : Text(AppLocalizations.of(context)!.notFoundDialogNoDirAccessBody),
-      actions: [
-        if (dirAccessSupported)
-          ListTile(
-            title: Text(
-              AppLocalizations.of(context)!.notFoundDialogActionGrantAccess
-                  .toUpperCase(),
+      contentPadding: const EdgeInsets.all(8),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              // This padding adapted from [AlertDialog.contentPadding] defaults.
+              // Needs to be updated when moving to Material 3.
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+              child: dirAccessSupported
+                  ? Text(AppLocalizations.of(context)!.notFoundDialogBody)
+                  : Text(
+                      AppLocalizations.of(context)!
+                          .notFoundDialogNoDirAccessBody,
+                    ),
             ),
-            onTap: () => Navigator.pop(context, _NotFoundAction.grant),
-          ),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.notFoundDialogActionLocate
-                .toUpperCase(),
-          ),
-          onTap: () => Navigator.pop(context, _NotFoundAction.locate),
+            if (dirAccessSupported)
+              ListTile(
+                title: Text(
+                  AppLocalizations.of(context)!.notFoundDialogActionGrantAccess
+                      .toUpperCase(),
+                ),
+                onTap: () => Navigator.pop(context, _NotFoundAction.grant),
+              ),
+            ListTile(
+              title: Text(
+                AppLocalizations.of(context)!.notFoundDialogActionLocate
+                    .toUpperCase(),
+              ),
+              onTap: () => Navigator.pop(context, _NotFoundAction.locate),
+            ),
+            ListTile(
+              title: Text(
+                AppLocalizations.of(context)!.notFoundDialogActionRemove
+                    .toUpperCase(),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              onTap: () => Navigator.pop(context, _NotFoundAction.remove),
+            ),
+          ],
         ),
-        ListTile(
-          title: Text(
-            AppLocalizations.of(context)!.notFoundDialogActionRemove
-                .toUpperCase(),
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-          onTap: () => Navigator.pop(context, _NotFoundAction.remove),
-        ),
-      ],
+      ),
     );
   }
 }
