@@ -195,9 +195,9 @@ class _RememberedFilesState extends State<RememberedFiles> {
     } on Exception catch (e, s) {
       logError(e, s);
     }
-    _prefs.removeAgendaFileJsons((json) => json['uri'] == recentFile.uri);
+    await _prefs.removeAgendaFileJsons((json) => json['uri'] == recentFile.uri);
     await clearNotificationsForFiles((json) => json['uri'] == recentFile.uri);
-    _prefs.removeRecentFile(recentFile);
+    await _prefs.removeRecentFile(recentFile);
   }
 
   Future<void> replaceRecentFile(
@@ -223,12 +223,12 @@ class _RememberedFilesState extends State<RememberedFiles> {
     await _prefs.replaceRecentFile(oldFile, newFile);
   }
 
-  void pinFile(RememberedFile recentFile) {
-    _prefs.pinFile(recentFile);
+  Future<void> pinFile(RememberedFile recentFile) async {
+    await _prefs.pinFile(recentFile);
   }
 
-  void unpinFile(RememberedFile recentFile) {
-    _prefs.unpinFile(recentFile);
+  Future<void> unpinFile(RememberedFile recentFile) async {
+    await _prefs.unpinFile(recentFile);
   }
 
   @override
