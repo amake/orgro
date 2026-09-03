@@ -1,0 +1,66 @@
+#+STARTUP: logdone showall
+
+#+TODO: TODO(t) | DONE(d)
+#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+#+TODO: | CANCELED(c) MEGACANCELED(m)
+
+* TODO foo
+  SCHEDULED: <2026-09-04 Fri>
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to DONE
+  - It should log =CLOSED:=
+
+* DONE foo
+  CLOSED: [2026-09-04 Fri 07:41] SCHEDULED: <2026-09-04 Fri>
+
+  - This should show with the complete color (default green)
+  - This should cycle next to REPORT
+  - It should remove =CLOSED:=
+
+* REPORT bar
+  SCHEDULED: <2026-09-04 Fri>
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to BUG
+  - It should not log =CLOSED:=
+
+* BUG bar
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to KNOWNCAUSE
+  - It should not log =CLOSED:=
+
+* KNOWNCAUSE bar
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to FIXED
+  - It should log =CLOSED:=
+
+* FIXED bar
+  CLOSED: [2026-09-04 Fri 07:41]
+
+  - This should show with the complete color (default green)
+  - This should cycle next to CANCELED
+  - It should not update or remove =CLOSED:=
+
+* CANCELED baz
+  CLOSED: [2026-09-04 Fri 07:41]
+
+  - This should show with the complete color (default green)
+  - This should cycle next to MEGACANCELED
+  - It should not update or remove =CLOSED:=
+
+* MEGACANCELED bazinga
+  CLOSED: [2026-09-04 Fri 07:41]
+
+  - This should show with the complete color (default green)
+  - This should cycle next to have no keyword
+  - It should remove =CLOSED:=
+
+* TODO bazonga
+  CLOSED: [2026-09-04 Fri 07:41] SCHEDULED: <2026-09-04 Fri>
+
+  - This should show with the incomplete color (default red)
+  - This should cycle next to DONE
+  - It should *update* =CLOSED:=

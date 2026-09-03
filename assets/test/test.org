@@ -104,6 +104,7 @@ Error cases
 - [[file:todo-complex.org][Complex]]
 - [[file:todo-all-keywords.org][All keywords]]
 - [[file:todo-disabled.org][Disabled]]
+- [[file:todo-logdone.org][Log done]]
 
 * Attachments
 

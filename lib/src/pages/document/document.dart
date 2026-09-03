@@ -216,9 +216,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           label: AppLocalizations.of(context)!.sectionActionCycleTodo,
           icon: Icons.repeat,
           onPressed: () {
-            final todoSettings = OrgSettings.of(context).settings.todoSettings;
+            final orgSettings = OrgSettings.of(context).settings;
             try {
-              final replacement = section.cycleTodo(todoStates: todoSettings);
+              final replacement = section.cycleTodo(
+                todoStates: orgSettings.todoSettings,
+                logDone: orgSettings.logDone,
+              );
               var newDoc =
                   _doc.editNode(section)!.replace(replacement).commit()
                       as OrgTree;
