@@ -1,0 +1,3 @@
+- TODO完了時の日時記録に対応（`#+STARTUP: logdone`）
+- denote: リンクに対応
+- バグ修正

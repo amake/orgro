@@ -1,0 +1,3 @@
+- Support completion logging (`#+STARTUP: logdone`)
+- Support `denote:` links
+- Bug fixes
