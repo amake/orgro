@@ -93,7 +93,15 @@ class _MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       restorationScopeId: 'orgro_root',
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // Work around https://github.com/flutter/flutter/issues/191072 by
+      // avoiding using AppLocalizations.localizationDelegates and specifying
+      // the delegates manually
+      //
+      // TODO(aaron): Remove pending upstream fix
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: !kScreenshotMode,
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
