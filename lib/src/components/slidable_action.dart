@@ -4,6 +4,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/src/util.dart';
 
+const _kFloatingIconLabelPadding = 24.0;
+const _kFloatingIconLabelSpacing = 4.0;
+
 class ResponsiveSlidableAction extends StatelessWidget {
   const ResponsiveSlidableAction({
     required this.onPressed,
@@ -22,10 +25,17 @@ class ResponsiveSlidableAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor =
-        this.backgroundColor ?? Theme.of(context).colorScheme.secondary;
+    final theme = Theme.of(context);
+    final backgroundColor = this.backgroundColor ?? theme.colorScheme.secondary;
     final foregroundColor =
-        this.foregroundColor ?? Theme.of(context).colorScheme.onSecondary;
+        this.foregroundColor ?? theme.colorScheme.onSecondary;
+    final iconSize = IconTheme.of(context).size!;
+    final textHeight = theme.textTheme.labelLarge!.fontSize!;
+    final shortThreshold =
+        iconSize +
+        2 * _kFloatingIconLabelPadding +
+        _kFloatingIconLabelSpacing +
+        textHeight;
     return Expanded(
       child: SizedBox.expand(
         child: OutlinedButton(
@@ -45,17 +55,14 @@ class ResponsiveSlidableAction extends StatelessWidget {
             side: BorderSide.none,
           ),
           child: LayoutBuilder(
-            builder: (context, constraints) {
-              final short =
-                  constraints.maxHeight < IconTheme.of(context).size! * 2;
-              return short
-                  ? _SmallIconLabel(icon: icon, label: label)
-                  : _FloatingIconLabel(
-                      icon: icon,
-                      label: label,
-                      width: constraints.maxWidth,
-                    );
-            },
+            builder: (context, constraints) =>
+                constraints.maxHeight < shortThreshold
+                ? _SmallIconLabel(icon: icon, label: label)
+                : _FloatingIconLabel(
+                    icon: icon,
+                    label: label,
+                    width: constraints.maxWidth,
+                  ),
           ),
         ),
       ),
@@ -173,10 +180,12 @@ class _FloatingIconLabelState extends State<_FloatingIconLabel> {
           child: SizedBox(
             width: widget.width,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
+              padding: const EdgeInsets.symmetric(
+                vertical: _kFloatingIconLabelPadding,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                spacing: 4,
+                spacing: _kFloatingIconLabelSpacing,
                 children: [Icon(widget.icon), Text(widget.label)],
               ),
             ),
