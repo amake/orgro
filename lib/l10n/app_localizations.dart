@@ -829,7 +829,7 @@ abstract class AppLocalizations {
   /// No description provided for @bannerBodySaveDocument.
   ///
   /// In en, this message translates to:
-  /// **'Would you like to save your changes?'**
+  /// **'Would you like to save changes as you make them?'**
   String get bannerBodySaveDocument;
 
   /// No description provided for @bannerBodyActionSaveAlways.

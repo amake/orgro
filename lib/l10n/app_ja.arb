@@ -154,7 +154,7 @@
   "bannerBodyActionGrantNever": "許可しない",
   "bannerBodyActionGrantNow": "許可",
 
-  "bannerBodySaveDocument": "変更を保存しますか？",
+  "bannerBodySaveDocument": "変更を随時保存しますか？",
   "bannerBodyActionSaveAlways": "常に保存",
   "bannerBodyActionSaveNever": "保存しない",
   "bannerBodyActionSaveOnce": "今回だけ",

@@ -426,7 +426,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionGrantNow => 'Надати дозвіл';
 
   @override
-  String get bannerBodySaveDocument => 'Would you like to save your changes?';
+  String get bannerBodySaveDocument =>
+      'Would you like to save changes as you make them?';
 
   @override
   String get bannerBodyActionSaveAlways => 'Always';

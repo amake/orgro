@@ -209,7 +209,7 @@
   "bannerBodyActionGrantNever": "Never",
   "bannerBodyActionGrantNow": "Grant access",
 
-  "bannerBodySaveDocument": "Would you like to save your changes?",
+  "bannerBodySaveDocument": "Would you like to save changes as you make them?",
   "bannerBodyActionSaveAlways": "Always",
   "bannerBodyActionSaveNever": "Never",
   "bannerBodyActionSaveOnce": "Just this time",

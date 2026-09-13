@@ -411,7 +411,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionGrantNow => '許可';
 
   @override
-  String get bannerBodySaveDocument => '変更を保存しますか？';
+  String get bannerBodySaveDocument => '変更を随時保存しますか？';
 
   @override
   String get bannerBodyActionSaveAlways => '常に保存';
