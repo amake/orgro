@@ -65,16 +65,15 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
           ? _buildFloatingActionButton(context)
           : null,
       bottomNavigationBar: hasAgenda
-          ? NavigationBar(
-              selectedIndex: _pageIdx,
-              onDestinationSelected: (int idx) =>
-                  setState(() => _pageIdx = idx),
-              destinations: [
-                NavigationDestination(
+          ? BottomNavigationBar(
+              currentIndex: _pageIdx,
+              onTap: (int idx) => setState(() => _pageIdx = idx),
+              items: [
+                BottomNavigationBarItem(
                   icon: const Icon(Icons.folder_open),
                   label: AppLocalizations.of(context)!.filesTabTitle,
                 ),
-                NavigationDestination(
+                BottomNavigationBarItem(
                   icon: const Icon(Icons.calendar_month),
                   label: AppLocalizations.of(context)!.agendaTabTitle,
                 ),
