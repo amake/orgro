@@ -247,9 +247,11 @@ class _BannerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextButton(
       style: TextButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: theme.colorScheme.secondary,
+        textStyle: TextStyle(fontWeight: .w600),
       ),
       onPressed: onPressed,
       child: Text(text.toUpperCase()),
