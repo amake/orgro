@@ -227,6 +227,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fileSourceGoogleDrive => 'Google ドライブ';
 
   @override
+  String get filesTabTitle => 'ファイル';
+
+  @override
+  String get agendaTabTitle => 'アジェンダ';
+
+  @override
+  String get unknownAgendaTitle => '不明なタイトル';
+
+  @override
+  String get emptyAgendaMessage => 'アジェンダ項目が見つかりませんでした。';
+
+  @override
   String get notFoundDialogTitle => 'ファイルが見つかりません';
 
   @override
@@ -653,6 +665,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get errorInvalidUrl => '不正なURL';
+
+  @override
+  String get errorUnknown => '不明なエラー';
 
   @override
   String get tooltipErrorDetails => 'エラー詳細を見る';

@@ -237,12 +237,13 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   }
 
   final toSchedule = <(tz.TZDateTime, OrgSection)>[];
+  final now = DateTime.now();
   doc.visitSections((section) {
     if (section.isPending()) {
       for (final dateTime in section.scheduledAt.unique().take(
         kMaxNotifications,
       )) {
-        if (dateTime.isAfter(DateTime.now())) {
+        if (dateTime.isAfter(now)) {
           var tzDateTime = tz.TZDateTime.from(dateTime, tz.local);
           if (tzDateTime.hour == 0 && tzDateTime.minute == 0) {
             // Scheduled time is midnight. Move to 9am.
@@ -373,6 +374,115 @@ Future<void> setNotificationsForAllAgendaDocuments(
   }
 }
 
+typedef AgendaItemSource = ({OrgSection section, NativeDataSource dataSource});
+
+Future<List<AgendaItemSource>> getAllAgendaSections(
+  List<Map<String, dynamic>> agendaFileJsons,
+  Iterable<String> accessibleDirs,
+) async {
+  final sections = <AgendaItemSource>[];
+
+  for (final elem in agendaFileJsons) {
+    switch (elem) {
+      case {
+        'type': 'native',
+        'identifier': final String id,
+        'name': final String name,
+      }:
+        try {
+          final (
+            :dataSource,
+            :recovered,
+          ) = await readFileWithIdentifierWithRecoveryStrategy(
+            identifier: id,
+            fileName: name,
+            accessibleDirs: accessibleDirs,
+          );
+          // TODO(aaron): Ideally we would update the agendaFileJsons if we used
+          // the recovery strategy
+          final parsed = await ParsedOrgFileInfo.from(dataSource);
+          sections.addAll(
+            parsed.doc.pendingSections().map(
+              (s) => (section: s, dataSource: dataSource),
+            ),
+          );
+        } catch (e, s) {
+          logError(e, s);
+        }
+      default:
+        throw UnimplementedError('Unknown agenda file JSON: $elem');
+    }
+  }
+
+  return sections;
+}
+
+typedef AgendaItem = ({
+  OrgSection section,
+  NativeDataSource dataSource,
+  tz.TZDateTime scheduledAt,
+});
+
+Iterable<AgendaItem> agendaItemsFromSources(
+  List<AgendaItemSource> sources,
+) sync* {
+  final iters = sources
+      .map((s) => (source: s, iter: s.section.scheduledAt.iterator))
+      .where((e) => e.iter.moveNext())
+      .toList();
+
+  debugPrint(
+    'Found ${iters.length} agenda items from ${sources.length} sources',
+  );
+
+  var n = 0;
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  DateTime? emitted;
+
+  while (true) {
+    debugPrint('Emitting agenda item #$n; previous: $emitted');
+
+    final toRemove = <({AgendaItemSource source, Iterator<DateTime> iter})>[];
+    outer:
+    for (final i in iters) {
+      while (i.iter.current.isBefore(emitted ?? today)) {
+        if (!i.iter.moveNext()) {
+          toRemove.add(i);
+          continue outer;
+        }
+      }
+    }
+    iters.removeWhere((e) => toRemove.contains(e));
+    if (iters.isEmpty) break;
+
+    final emitAt = iters
+        .map((e) => e.iter.current)
+        .reduce((a, b) => a.isBefore(b) ? a : b);
+
+    final allEmitted = <({AgendaItemSource source, Iterator<DateTime> iter})>[];
+    for (final i in iters) {
+      if (i.iter.current.isAtSameMomentAs(emitAt)) {
+        yield (
+          section: i.source.section,
+          dataSource: i.source.dataSource,
+          scheduledAt: tz.TZDateTime.from(i.iter.current, tz.local),
+        );
+        allEmitted.add(i);
+      }
+    }
+
+    for (final i in allEmitted) {
+      if (!i.iter.moveNext()) {
+        iters.remove(i);
+      }
+    }
+
+    emitted = emitAt;
+    n++;
+  }
+}
+
 Future<void> clearNotificationsForFiles(
   bool Function(Map<String, dynamic>) predicate,
 ) async {
@@ -442,7 +552,12 @@ extension OrgSectionUtil on OrgSection {
   List<OrgTimestamp> get activeTimestamps {
     final timestamps = <OrgTimestamp>[];
     bool visitor(OrgTimestamp timestamp) {
-      if (timestamp.isActive) timestamps.add(timestamp);
+      if (timestamp.isActive &&
+          !timestamps.whereType<OrgDateRangeTimestamp>().any(
+            (t) => t.start == timestamp || t.end == timestamp,
+          )) {
+        timestamps.add(timestamp);
+      }
       return true;
     }
 
@@ -457,6 +572,20 @@ extension OrgSectionUtil on OrgSection {
     'customId': customIds.firstOrNull,
     'rawTitle': headline.rawTitle,
   };
+}
+
+extension OrgTreeUtil on OrgTree {
+  Iterable<OrgSection> pendingSections() sync* {
+    final toSchedule = <OrgSection>[];
+    visitSections((section) {
+      if (section.isPending()) {
+        toSchedule.add(section);
+      }
+      return true;
+    });
+
+    yield* toSchedule;
+  }
 }
 
 // - `+`: Add the specified offset to the original datetime

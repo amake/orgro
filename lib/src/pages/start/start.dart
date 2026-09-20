@@ -14,6 +14,7 @@ import 'package:orgro/src/entitlements.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/fonts.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/pages/start/agenda.dart';
 import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
@@ -28,9 +29,17 @@ class StartPage extends StatefulWidget {
 }
 
 class StartPageState extends State<StartPage> with PlatformOpenHandler {
+  var _pageIdx = 0;
+
+  bool get _hasRememberedFiles =>
+      RememberedFiles.of(context).hasRememberedFiles;
+  bool get _hasAgenda =>
+      Preferences.of(context, .agenda).data.agendaFileJsons.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
-    final hasRememberedFiles = RememberedFiles.of(context).hasRememberedFiles;
+    final hasRememberedFiles = _hasRememberedFiles;
+    final hasAgenda = _hasAgenda;
     return Scaffold(
       appBar: AppBar(
         actions: _buildActions(hasRememberedFiles: hasRememberedFiles)
@@ -48,12 +57,29 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: hasRememberedFiles
-              ? const RememberedFilesBody()
+              ? [const RememberedFilesBody(), const AgendaBody()][_pageIdx]
               : const _EmptyBody(),
         ),
       ),
       floatingActionButton: hasRememberedFiles
           ? _buildFloatingActionButton(context)
+          : null,
+      bottomNavigationBar: hasAgenda
+          ? NavigationBar(
+              selectedIndex: _pageIdx,
+              onDestinationSelected: (int idx) =>
+                  setState(() => _pageIdx = idx),
+              destinations: [
+                NavigationDestination(
+                  icon: const Icon(Icons.folder_open),
+                  label: AppLocalizations.of(context)!.filesTabTitle,
+                ),
+                NavigationDestination(
+                  icon: const Icon(Icons.calendar_month),
+                  label: AppLocalizations.of(context)!.agendaTabTitle,
+                ),
+              ],
+            )
           : null,
     );
   }
@@ -153,6 +179,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
         );
       }
     }
+    if (!_hasAgenda) _pageIdx = 0;
   }
 
   bool _restoreRoute() {

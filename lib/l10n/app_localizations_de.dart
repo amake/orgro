@@ -230,6 +230,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fileSourceGoogleDrive => 'Google Drive';
 
   @override
+  String get filesTabTitle => 'Files';
+
+  @override
+  String get agendaTabTitle => 'Agenda';
+
+  @override
+  String get unknownAgendaTitle => 'Unknown';
+
+  @override
+  String get emptyAgendaMessage => 'No pending agenda items found';
+
+  @override
   String get notFoundDialogTitle => 'Not found';
 
   @override
@@ -680,6 +692,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get errorInvalidUrl => 'Invalid URL';
+
+  @override
+  String get errorUnknown => 'Unknown error';
 
   @override
   String get tooltipErrorDetails => 'View error details';

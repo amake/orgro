@@ -227,6 +227,37 @@ void main() {
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, isEmpty);
     });
+    test('Time range', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-21 Mon 17:00-22:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isFalse);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.activeTimestamps, [isA<OrgTimeRangeTimestamp>()]);
+      expect(section.scheduledAt, [DateTime(2026, 9, 21, 17, 0)]);
+    });
+    test('Datetime range', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri 08:00>--<2026-09-26 Sat 14:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isFalse);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      expect(section.scheduledAt, [
+        DateTime(2026, 9, 25, 8, 0),
+        DateTime(2026, 9, 26, 14, 0),
+      ]);
+    });
     group('Modifiers', () {
       test('Simple with repeater', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w>');

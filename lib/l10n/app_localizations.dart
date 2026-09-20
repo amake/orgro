@@ -502,6 +502,30 @@ abstract class AppLocalizations {
   /// **'Google Drive'**
   String get fileSourceGoogleDrive;
 
+  /// No description provided for @filesTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get filesTabTitle;
+
+  /// No description provided for @agendaTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Agenda'**
+  String get agendaTabTitle;
+
+  /// No description provided for @unknownAgendaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownAgendaTitle;
+
+  /// No description provided for @emptyAgendaMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending agenda items found'**
+  String get emptyAgendaMessage;
+
   /// No description provided for @notFoundDialogTitle.
   ///
   /// In en, this message translates to:
@@ -1239,6 +1263,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid URL'**
   String get errorInvalidUrl;
+
+  /// No description provided for @errorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error'**
+  String get errorUnknown;
 
   /// No description provided for @tooltipErrorDetails.
   ///

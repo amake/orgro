@@ -83,6 +83,12 @@
   "fileSourceDownloads": "Downloads",
   "fileSourceGoogleDrive": "Google Drive",
 
+  "filesTabTitle": "Files",
+  "agendaTabTitle": "Agenda",
+
+  "unknownAgendaTitle": "Unknown",
+  "emptyAgendaMessage": "No pending agenda items found",
+
   "notFoundDialogTitle" : "Not found",
   "notFoundDialogBody" : "The file you are trying to open could not be found. It may have been moved or deleted. You can provide access to a parent directory (recommended), try to locate the file manually, or remove it from the list of recent files.",
   "notFoundDialogNoDirAccessBody" : "The file you are trying to open could not be found. It may have been moved or deleted. You can try to locate the file manually or remove it from the list of recent files.",
@@ -240,6 +246,7 @@
   "errorUnsupportedLinkType": "Unsupported link type: {link}",
   "errorUnsupportedDataSource": "Unsupported data source: {source}",
   "errorInvalidUrl": "Invalid URL",
+  "errorUnknown": "Unknown error",
 
   "tooltipErrorDetails": "View error details",
 
