@@ -841,6 +841,7 @@ class _PendingNotificationsDialog extends StatelessWidget {
               ),
             };
             return ListTile(
+              contentPadding: EdgeInsets.zero,
               title: Text(notification.title!),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
