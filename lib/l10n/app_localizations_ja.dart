@@ -128,7 +128,26 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemClearNotifications => 'すべての通知を削除';
 
   @override
-  String get settingsItemClearAgenda => 'アジェンダファイルの登録をすべて解除する';
+  String get settingsItemClearAgenda => 'アジェンダを消去';
+
+  @override
+  String get confirmClearAgendaDialogTitle => 'アジェンダを消去しますか?';
+
+  @override
+  String confirmClearAgendaDialogMessage(num n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n個のファイル',
+    );
+    return '次の$_temp0がアジェンダから登録解除されます。この操作は元に戻せません。';
+  }
+
+  @override
+  String get confirmClearAgendaActionClear => '消去';
+
+  @override
+  String get confirmClearAgendaActionCancel => 'キャンセル';
 
   @override
   String get settingsActionClearCache => 'キャッシュを削除';

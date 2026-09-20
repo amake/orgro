@@ -56,7 +56,12 @@
   "settingsItemEnableAgendaNotifications": "Agenda notifications",
   "settingsDialogNotificationsTitle": "Pending notifications",
   "settingsItemClearNotifications": "Clear all notifications",
-  "settingsItemClearAgenda": "Forget agenda files",
+  "settingsItemClearAgenda": "Clear agenda",
+
+  "confirmClearAgendaDialogTitle": "Clear agenda?",
+  "confirmClearAgendaDialogMessage": "The following {n, plural, =1{agenda file} other{{n} agenda files}} will no longer be tracked. This action can’t be undone.",
+  "confirmClearAgendaActionClear": "Clear",
+  "confirmClearAgendaActionCancel": "Cancel",
 
   "settingsActionClearCache": "Clear cache",
   "settingsActionResetPreferences": "Restore defaults",

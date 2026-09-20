@@ -41,7 +41,12 @@
   "settingsItemEnableAgendaNotifications": "アジェンダ通知",
   "settingsDialogNotificationsTitle": "設定済みの通知",
   "settingsItemClearNotifications": "すべての通知を削除",
-  "settingsItemClearAgenda": "アジェンダファイルの登録をすべて解除する",
+  "settingsItemClearAgenda": "アジェンダを消去",
+
+  "confirmClearAgendaDialogTitle": "アジェンダを消去しますか?",
+  "confirmClearAgendaDialogMessage": "次の{n, plural, other{{n}個のファイル}}がアジェンダから登録解除されます。この操作は元に戻せません。",
+  "confirmClearAgendaActionClear": "消去",
+  "confirmClearAgendaActionCancel": "キャンセル",
 
   "settingsActionClearCache": "キャッシュを削除",
   "settingsActionResetPreferences": "設定を初期化",

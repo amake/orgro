@@ -774,10 +774,15 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
               }
             },
           ),
-        if (agendaEnabled)
+        if (agendaEnabled && _prefs().agendaFileJsons.isNotEmpty)
           ListTile(
             title: Text(AppLocalizations.of(context)!.settingsItemClearAgenda),
             onTap: () async {
+              final result = await showDialog<bool>(
+                context: context,
+                builder: (context) => _ClearAgendaFilesDialog(),
+              );
+              if (result != true) return;
               await _prefs().clearAgendaFileJsons();
               await clearAllNotifications();
               await _load();
@@ -864,6 +869,65 @@ class _PendingNotificationsDialog extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class _ClearAgendaFilesDialog extends StatelessWidget {
+  const _ClearAgendaFilesDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final agendaFileJsons = Preferences.of(
+      context,
+      .agenda,
+    ).data.agendaFileJsons;
+    return AlertDialog(
+      icon: const Icon(Icons.warning),
+      title: Text(AppLocalizations.of(context)!.confirmClearAgendaDialogTitle),
+      content: SizedBox(
+        width: .maxFinite,
+        child: Column(
+          spacing: 16,
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
+          children: [
+            Text(
+              AppLocalizations.of(context)!
+                  .confirmClearAgendaDialogMessage(agendaFileJsons.length),
+            ),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final elem in agendaFileJsons) Text('• ${elem['name']}'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.confirmClearAgendaActionClear
+                .toUpperCase(),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          onTap: () => Navigator.of(context).pop(true),
+        ),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.confirmClearAgendaActionCancel
+                .toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+          onTap: () => Navigator.of(context).pop(false),
+        ),
+      ],
     );
   }
 }

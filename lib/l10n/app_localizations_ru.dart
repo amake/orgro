@@ -130,7 +130,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsItemClearNotifications => 'Clear all notifications';
 
   @override
-  String get settingsItemClearAgenda => 'Forget agenda files';
+  String get settingsItemClearAgenda => 'Clear agenda';
+
+  @override
+  String get confirmClearAgendaDialogTitle => 'Clear agenda?';
+
+  @override
+  String confirmClearAgendaDialogMessage(num n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n agenda files',
+      one: 'agenda file',
+    );
+    return 'The following $_temp0 will no longer be tracked. This action can’t be undone.';
+  }
+
+  @override
+  String get confirmClearAgendaActionClear => 'Clear';
+
+  @override
+  String get confirmClearAgendaActionCancel => 'Cancel';
 
   @override
   String get settingsActionClearCache => 'Очистить кэш';

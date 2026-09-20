@@ -313,8 +313,32 @@ abstract class AppLocalizations {
   /// No description provided for @settingsItemClearAgenda.
   ///
   /// In en, this message translates to:
-  /// **'Forget agenda files'**
+  /// **'Clear agenda'**
   String get settingsItemClearAgenda;
+
+  /// No description provided for @confirmClearAgendaDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear agenda?'**
+  String get confirmClearAgendaDialogTitle;
+
+  /// No description provided for @confirmClearAgendaDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The following {n, plural, =1{agenda file} other{{n} agenda files}} will no longer be tracked. This action can’t be undone.'**
+  String confirmClearAgendaDialogMessage(num n);
+
+  /// No description provided for @confirmClearAgendaActionClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get confirmClearAgendaActionClear;
+
+  /// No description provided for @confirmClearAgendaActionCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get confirmClearAgendaActionCancel;
 
   /// No description provided for @settingsActionClearCache.
   ///
