@@ -63,7 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
-  String get settingsSectionNotifications => 'Notifications';
+  String get settingsSectionAgenda => 'Agenda';
 
   @override
   String get settingsSectionDataManagement => 'Data management';
@@ -101,7 +101,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemEnableAgenda => 'Enable agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -121,10 +121,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
   String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
+  String get settingsItemClearAgenda => 'Forget agenda files';
 
   @override
   String get settingsActionClearCache => 'Clear cache';
@@ -137,6 +143,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'Agenda cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
@@ -464,11 +473,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
-  String get bannerBodyAgendaNotifications =>
-      'Get notifications for agenda items in this file?';
+  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Notify me';
+  String get bannerBodyActionAgendaAdd => 'Add';
 
   @override
   String get bannerBodyActionAgendaNotNow => 'Not now';
@@ -899,7 +907,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
-  String get settingsSectionNotifications => 'Notifications';
+  String get settingsSectionAgenda => 'Agenda';
 
   @override
   String get settingsSectionDataManagement => 'Data management';
@@ -937,7 +945,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemEnableAgenda => 'Enable agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -957,10 +965,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
   String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
+  String get settingsItemClearAgenda => 'Forget agenda files';
 
   @override
   String get settingsActionClearCache => 'Clear cache';
@@ -973,6 +987,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'Agenda cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
@@ -1300,11 +1317,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
-  String get bannerBodyAgendaNotifications =>
-      'Get notifications for agenda items in this file?';
+  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Notify me';
+  String get bannerBodyActionAgendaAdd => 'Add';
 
   @override
   String get bannerBodyActionAgendaNotNow => 'Not now';
@@ -1735,7 +1751,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
-  String get settingsSectionNotifications => 'Notifications';
+  String get settingsSectionAgenda => 'Agenda';
 
   @override
   String get settingsSectionDataManagement => 'Data management';
@@ -1773,7 +1789,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemEnableAgenda => 'Enable agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -1793,10 +1809,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
   String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
+  String get settingsItemClearAgenda => 'Forget agenda files';
 
   @override
   String get settingsActionClearCache => 'Clear cache';
@@ -1809,6 +1831,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'Agenda cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache cleared';
@@ -2136,11 +2161,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
-  String get bannerBodyAgendaNotifications =>
-      'Get notifications for agenda items in this file?';
+  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Notify me';
+  String get bannerBodyActionAgendaAdd => 'Add';
 
   @override
   String get bannerBodyActionAgendaNotNow => 'Not now';

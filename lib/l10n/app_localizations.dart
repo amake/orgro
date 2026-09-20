@@ -208,11 +208,11 @@ abstract class AppLocalizations {
   /// **'Default text'**
   String get settingsSectionDefaultText;
 
-  /// No description provided for @settingsSectionNotifications.
+  /// No description provided for @settingsSectionAgenda.
   ///
   /// In en, this message translates to:
-  /// **'Notifications'**
-  String get settingsSectionNotifications;
+  /// **'Agenda'**
+  String get settingsSectionAgenda;
 
   /// No description provided for @settingsSectionDataManagement.
   ///
@@ -280,17 +280,23 @@ abstract class AppLocalizations {
   /// **'This is what document text will look like in the selected font and scale.\n\nTap to edit.'**
   String get settingsItemDefaultTextPreviewString;
 
-  /// No description provided for @settingsItemGrantNotificationPermissions.
+  /// No description provided for @settingsItemEnableAgenda.
   ///
   /// In en, this message translates to:
-  /// **'Enable notifications'**
-  String get settingsItemGrantNotificationPermissions;
+  /// **'Enable agenda'**
+  String get settingsItemEnableAgenda;
 
   /// No description provided for @settingsItemInspectNotifications.
   ///
   /// In en, this message translates to:
   /// **'{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}'**
   String settingsItemInspectNotifications(num n);
+
+  /// No description provided for @settingsItemEnableAgendaNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Agenda notifications'**
+  String get settingsItemEnableAgendaNotifications;
 
   /// No description provided for @settingsDialogNotificationsTitle.
   ///
@@ -303,6 +309,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear all notifications'**
   String get settingsItemClearNotifications;
+
+  /// No description provided for @settingsItemClearAgenda.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget agenda files'**
+  String get settingsItemClearAgenda;
 
   /// No description provided for @settingsActionClearCache.
   ///
@@ -327,6 +339,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notifications cleared'**
   String get snackbarMessageNotificationsCleared;
+
+  /// No description provided for @snackbarMessageAgendaCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Agenda cleared'**
+  String get snackbarMessageAgendaCleared;
 
   /// No description provided for @snackbarMessageCacheCleared.
   ///
@@ -898,17 +916,17 @@ abstract class AppLocalizations {
   /// **'Never'**
   String get bannerBodyActionDecryptNever;
 
-  /// No description provided for @bannerBodyAgendaNotifications.
+  /// No description provided for @bannerBodyAddToAgenda.
   ///
   /// In en, this message translates to:
-  /// **'Get notifications for agenda items in this file?'**
-  String get bannerBodyAgendaNotifications;
+  /// **'Add this file to your agenda?'**
+  String get bannerBodyAddToAgenda;
 
-  /// No description provided for @bannerBodyActionAgendaEnable.
+  /// No description provided for @bannerBodyActionAgendaAdd.
   ///
   /// In en, this message translates to:
-  /// **'Notify me'**
-  String get bannerBodyActionAgendaEnable;
+  /// **'Add'**
+  String get bannerBodyActionAgendaAdd;
 
   /// No description provided for @bannerBodyActionAgendaNotNow.
   ///

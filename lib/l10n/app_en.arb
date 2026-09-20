@@ -27,7 +27,7 @@
   "settingsScreenTitle": "Settings",
   "settingsSectionAppearance": "Appearance",
   "settingsSectionDefaultText": "Default text",
-  "settingsSectionNotifications": "Notifications",
+  "settingsSectionAgenda": "Agenda",
   "settingsSectionDataManagement": "Data management",
   "settingsSectionDonate": "Donate",
   "settingsSectionPurchase": "Purchase",
@@ -43,7 +43,7 @@
   "settingsItemFontFamily": "Font",
   "settingsItemDefaultTextPreviewString": "This is what document text will look like in the selected font and scale.\n\nTap to edit.",
 
-  "settingsItemGrantNotificationPermissions": "Enable notifications",
+  "settingsItemEnableAgenda": "Enable agenda",
   "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
   "@settingsItemInspectNotifications": {
     "placeholders": {
@@ -53,14 +53,17 @@
       }
     }
   },
+  "settingsItemEnableAgendaNotifications": "Agenda notifications",
   "settingsDialogNotificationsTitle": "Pending notifications",
   "settingsItemClearNotifications": "Clear all notifications",
+  "settingsItemClearAgenda": "Forget agenda files",
 
   "settingsActionClearCache": "Clear cache",
   "settingsActionResetPreferences": "Restore defaults",
   "settingsActionResetPermissions": "Reset permissions",
 
   "snackbarMessageNotificationsCleared": "Notifications cleared",
+  "snackbarMessageAgendaCleared": "Agenda cleared",
   "snackbarMessageCacheCleared": "Cache cleared",
   "snackbarMessagePreferencesReset": "Preferences reset",
   "snackbarMessagePermissionsReset": "Permissions reset",
@@ -225,8 +228,8 @@
   "bannerBodyActionDecryptNotNow": "Not now",
   "bannerBodyActionDecryptNever": "Never",
 
-  "bannerBodyAgendaNotifications": "Get notifications for agenda items in this file?",
-  "bannerBodyActionAgendaEnable": "Notify me",
+  "bannerBodyAddToAgenda": "Add this file to your agenda?",
+  "bannerBodyActionAgendaAdd": "Add",
   "bannerBodyActionAgendaNotNow": "Not now",
   "bannerBodyActionAgendaNever": "Never",
 

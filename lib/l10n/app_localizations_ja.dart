@@ -63,7 +63,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSectionDefaultText => 'デフォルトの書式';
 
   @override
-  String get settingsSectionNotifications => '通知';
+  String get settingsSectionAgenda => 'アジェンダ';
 
   @override
   String get settingsSectionDataManagement => 'データ管理';
@@ -100,7 +100,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。';
 
   @override
-  String get settingsItemGrantNotificationPermissions => '通知を有効にする';
+  String get settingsItemEnableAgenda => 'アジェンダを有効にする';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -119,10 +119,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'アジェンダ通知';
+
+  @override
   String get settingsDialogNotificationsTitle => '設定済みの通知';
 
   @override
   String get settingsItemClearNotifications => 'すべての通知を削除';
+
+  @override
+  String get settingsItemClearAgenda => 'アジェンダファイルの登録をすべて解除する';
 
   @override
   String get settingsActionClearCache => 'キャッシュを削除';
@@ -135,6 +141,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get snackbarMessageNotificationsCleared => '通知を削除しました';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'アジェンダをクリアしました';
 
   @override
   String get snackbarMessageCacheCleared => 'キャッシュを削除しました';
@@ -447,16 +456,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get bannerBodyActionDecryptNever => '復号しない';
 
   @override
-  String get bannerBodyAgendaNotifications => 'このファイルのアジェンダ項目の通知を受け取りますか？';
+  String get bannerBodyAddToAgenda => 'このファイルをアジェンダに追加しますか？';
 
   @override
-  String get bannerBodyActionAgendaEnable => '受け取る';
+  String get bannerBodyActionAgendaAdd => '追加する';
 
   @override
-  String get bannerBodyActionAgendaNotNow => '今は受け取らない';
+  String get bannerBodyActionAgendaNotNow => '今は追加しない';
 
   @override
-  String get bannerBodyActionAgendaNever => '受け取らない';
+  String get bannerBodyActionAgendaNever => '追加しない';
 
   @override
   String get transclusionPermissionsMessage => 'ディレクトリのアクセス権が必要';

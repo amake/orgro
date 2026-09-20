@@ -63,7 +63,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsSectionDefaultText => 'Vorgegebener Text';
 
   @override
-  String get settingsSectionNotifications => 'Benachrichtigungen';
+  String get settingsSectionAgenda => 'Agenda';
 
   @override
   String get settingsSectionDataManagement => 'Datenverwaltung';
@@ -101,7 +101,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemEnableAgenda => 'Enable agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -121,10 +121,16 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
   String get settingsDialogNotificationsTitle => 'Offene Benachrichtigungen';
 
   @override
   String get settingsItemClearNotifications => 'Lösche alle Benachrichtigungen';
+
+  @override
+  String get settingsItemClearAgenda => 'Forget agenda files';
 
   @override
   String get settingsActionClearCache => 'Cache löschen';
@@ -138,6 +144,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get snackbarMessageNotificationsCleared =>
       'Benachrichtigungen gelöscht';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'Agenda cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Cache gelöscht';
@@ -465,11 +474,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get bannerBodyActionDecryptNever => 'Nie';
 
   @override
-  String get bannerBodyAgendaNotifications =>
-      'Willst du Benachrichtigungen für Agenda Einträge in dieser Datei bekommen?';
+  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Ja';
+  String get bannerBodyActionAgendaAdd => 'Add';
 
   @override
   String get bannerBodyActionAgendaNotNow => 'Nicht jetzt';

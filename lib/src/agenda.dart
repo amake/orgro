@@ -660,8 +660,8 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   bool? _permissionsGranted;
   late final Timer _reloadTimer;
 
-  InheritedPreferences get _prefs =>
-      Preferences.of(context, PrefsAspect.agenda);
+  InheritedPreferences _prefs([PrefsAspect aspect = .agenda]) =>
+      Preferences.of(context, aspect);
 
   @override
   void initState() {
@@ -679,9 +679,7 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
   Future<void> _load() async {
     final pending = await FlutterLocalNotificationsPlugin()
         .pendingNotificationRequests();
-    final permissionsGranted =
-        _prefs.agendaNotificationsPolicy != .deny &&
-        await checkNotificationPermissions();
+    final permissionsGranted = await checkNotificationPermissions();
     setState(() {
       _pendingNotifications = pending;
       _permissionsGranted = permissionsGranted;
@@ -693,25 +691,52 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
 
   @override
   Widget build(BuildContext context) {
+    final agendaEnabled = _prefs().agendaEnabledPolicy != .deny;
+    final developerMode = _prefs(.customization).developerMode;
     return Column(
       children: [
-        if (_permissionsGranted == false)
+        if (!agendaEnabled || _permissionsGranted == false)
           ListTile(
-            title: Text(
-              AppLocalizations.of(context)!
-                  .settingsItemGrantNotificationPermissions,
-            ),
+            title: Text(AppLocalizations.of(context)!.settingsItemEnableAgenda),
             onTap: () async {
-              await _prefs.setAgendaNotificationsPolicy(.ask);
+              await _prefs().setAgendaEnabledPolicy(.ask);
+              await _prefs().setAgendaOSNotificationsEnabled(true);
               final granted = await requestNotificationPermissions();
               if (granted) {
                 await _load();
               } else {
-                AppSettings.openAppSettings(type: AppSettingsType.notification);
+                AppSettings.openAppSettings(type: .notification);
               }
             },
           ),
-        if (_permissionsGranted == true)
+        if (agendaEnabled)
+          CheckboxListTile(
+            title: Text(
+              AppLocalizations.of(context)!
+                  .settingsItemEnableAgendaNotifications,
+            ),
+            value: _prefs().agendaOSNotificationsEnabled,
+            onChanged: (value) async {
+              switch (value) {
+                case true:
+                  final localizations = AppLocalizations.of(context)!;
+                  final accessibleDirs = _prefs(.accessibleDirs)
+                      .data
+                      .accessibleDirs;
+                  await _prefs().setAgendaOSNotificationsEnabled(true);
+                  await setNotificationsForAllAgendaDocuments(
+                    _prefs().agendaFileJsons,
+                    localizations,
+                    accessibleDirs,
+                  );
+                case false:
+                  await _prefs().setAgendaOSNotificationsEnabled(false);
+                  await clearAllNotifications();
+                case null:
+              }
+            },
+          ),
+        if (_permissionsGranted == true && developerMode)
           ListTile(
             title: Text(
               _pendingNotifications == null
@@ -729,16 +754,12 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
                   )
                 : null,
           ),
-        if (_permissionsGranted == true && _hasNotifications)
+        if (_hasNotifications && developerMode)
           ListTile(
             title: Text(
               AppLocalizations.of(context)!.settingsItemClearNotifications,
             ),
             onTap: () async {
-              await Preferences.of(
-                context,
-                PrefsAspect.agenda,
-              ).clearAgendaFileJsons();
               await clearAllNotifications();
               await _load();
               if (context.mounted) {
@@ -747,6 +768,25 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
                     content: Text(
                       AppLocalizations.of(context)!
                           .snackbarMessageNotificationsCleared,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        if (agendaEnabled)
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.settingsItemClearAgenda),
+            onTap: () async {
+              await _prefs().clearAgendaFileJsons();
+              await clearAllNotifications();
+              await _load();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!
+                          .snackbarMessageAgendaCleared,
                     ),
                   ),
                 );

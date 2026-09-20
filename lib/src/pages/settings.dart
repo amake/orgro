@@ -63,8 +63,7 @@ class SettingsPage extends StatelessWidget {
                     const Divider(),
                     ListHeader(
                       title: Text(
-                        AppLocalizations.of(context)!
-                            .settingsSectionNotifications,
+                        AppLocalizations.of(context)!.settingsSectionAgenda,
                       ),
                     ),
                     const NotificationsListItems(),

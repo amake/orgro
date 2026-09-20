@@ -196,8 +196,8 @@ class DecryptContentBanner extends StatelessWidget {
   }
 }
 
-class AgendaNotificationsBanner extends StatelessWidget {
-  const AgendaNotificationsBanner({
+class AddToAgendaBanner extends StatelessWidget {
+  const AddToAgendaBanner({
     required this.visible,
     required this.onAccept,
     required this.onDeny,
@@ -205,8 +205,7 @@ class AgendaNotificationsBanner extends StatelessWidget {
   });
 
   final VoidCallback onAccept;
-  final void Function(AgendaNotificationsPolicy, {required bool persist})
-  onDeny;
+  final void Function(AgendaEnabledPolicy, {required bool persist}) onDeny;
   final bool visible;
 
   @override
@@ -214,24 +213,20 @@ class AgendaNotificationsBanner extends StatelessWidget {
     return _NicelyTimedBanner(
       visible: visible,
       child: MaterialBanner(
-        content: Text(
-          AppLocalizations.of(context)!.bannerBodyAgendaNotifications,
-        ),
+        content: Text(AppLocalizations.of(context)!.bannerBodyAddToAgenda),
         leading: const Icon(Icons.calendar_month),
         actions: [
           _BannerButton(
-            text: AppLocalizations.of(context)!.bannerBodyActionAgendaEnable,
+            text: AppLocalizations.of(context)!.bannerBodyActionAgendaAdd,
             onPressed: onAccept,
           ),
           _BannerButton(
             text: AppLocalizations.of(context)!.bannerBodyActionAgendaNever,
-            onPressed: () =>
-                onDeny(AgendaNotificationsPolicy.deny, persist: true),
+            onPressed: () => onDeny(.deny, persist: true),
           ),
           _BannerButton(
             text: AppLocalizations.of(context)!.bannerBodyActionAgendaNotNow,
-            onPressed: () =>
-                onDeny(AgendaNotificationsPolicy.deny, persist: false),
+            onPressed: () => onDeny(.deny, persist: false),
           ),
         ],
       ),

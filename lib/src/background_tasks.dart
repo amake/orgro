@@ -126,9 +126,11 @@ Future<void> _handleBackgroundFetch(String debugLabel) async {
 
   debugPrint('Going to set notifications for all agenda docs; locale: $locale');
 
-  await setNotificationsForAllAgendaDocuments(
-    prefs.agendaFileJsons,
-    localizations,
-    prefs.accessibleDirs,
-  );
+  if (prefs.agendaOSNotificationsEnabled) {
+    await setNotificationsForAllAgendaDocuments(
+      prefs.agendaFileJsons,
+      localizations,
+      prefs.accessibleDirs,
+    );
+  }
 }

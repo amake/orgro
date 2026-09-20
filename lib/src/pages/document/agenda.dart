@@ -25,7 +25,16 @@ extension AgendaHandler on DocumentPageState {
     _ => false,
   };
 
+  Future<void> addToAgenda() async {
+    await setAgendaFile();
+    await enableNotifications();
+  }
+
   Future<void> enableNotifications() async {
+    if (!Preferences.of(context, .agenda).agendaOSNotificationsEnabled) {
+      debugPrint('Notifications are disabled in preferences');
+      return;
+    }
     if (!await checkNotificationPermissions()) {
       final granted = await requestNotificationPermissions();
       if (!granted) {
@@ -34,10 +43,9 @@ extension AgendaHandler on DocumentPageState {
         return;
       }
     }
-    setAgendaFile();
   }
 
-  void setAgendaFile() => Preferences.of(
+  Future<void> setAgendaFile() => Preferences.of(
     context,
     PrefsAspect.agenda,
   ).addAgendaFileJson(_dataSource.toJson());
@@ -67,6 +75,11 @@ void _complainAboutDenied(BuildContext context) {
 }
 
 final _setNotifications = debounce1((BuildContext context) async {
+  if (!Preferences.of(context, .agenda).agendaOSNotificationsEnabled) {
+    debugPrint('Notifications are disabled in preferences');
+    return;
+  }
+
   if (!await checkNotificationPermissions()) {
     debugPrint('No permission for notifications');
     if (context.mounted) _complainAboutDenied(context);

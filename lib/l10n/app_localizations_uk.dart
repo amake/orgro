@@ -63,7 +63,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsSectionDefaultText => 'Default text';
 
   @override
-  String get settingsSectionNotifications => 'Notifications';
+  String get settingsSectionAgenda => 'Agenda';
 
   @override
   String get settingsSectionDataManagement => 'Data management';
@@ -101,7 +101,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemEnableAgenda => 'Enable agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -121,10 +121,16 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
   String get settingsItemClearNotifications => 'Clear all notifications';
+
+  @override
+  String get settingsItemClearAgenda => 'Forget agenda files';
 
   @override
   String get settingsActionClearCache => 'Clear cache';
@@ -137,6 +143,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+
+  @override
+  String get snackbarMessageAgendaCleared => 'Agenda cleared';
 
   @override
   String get snackbarMessageCacheCleared => 'Кеш очищено';
@@ -464,11 +473,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bannerBodyActionDecryptNever => 'Never';
 
   @override
-  String get bannerBodyAgendaNotifications =>
-      'Get notifications for agenda items in this file?';
+  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
 
   @override
-  String get bannerBodyActionAgendaEnable => 'Notify me';
+  String get bannerBodyActionAgendaAdd => 'Add';
 
   @override
   String get bannerBodyActionAgendaNotNow => 'Not now';

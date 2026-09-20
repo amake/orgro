@@ -145,14 +145,14 @@ class InheritedViewSettings extends InheritedWidget {
     }
   }
 
-  AgendaNotificationsPolicy get agendaNotificationsPolicy =>
+  AgendaEnabledPolicy get agendaNotificationsPolicy =>
       data.agendaNotificationsPolicy;
   void setAgendaNotificationsPolicy(
-    AgendaNotificationsPolicy value, {
+    AgendaEnabledPolicy value, {
     bool persist = false,
   }) {
     if (persist) {
-      _prefs.setAgendaNotificationsPolicy(value);
+      _prefs.setAgendaEnabledPolicy(value);
     } else {
       _update((data) => data.copyWith(agendaNotificationsPolicy: value));
     }
@@ -201,7 +201,7 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
-      agendaNotificationsPolicy: prefs.agendaNotificationsPolicy,
+      agendaNotificationsPolicy: prefs.agendaEnabledPolicy,
       fullWidth: prefs.fullWidth,
       wakelock: prefs.wakelock,
       searchQuery: SearchQuery.defaults(),
@@ -250,7 +250,7 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
-  final AgendaNotificationsPolicy agendaNotificationsPolicy;
+  final AgendaEnabledPolicy agendaNotificationsPolicy;
   final bool fullWidth;
   final bool wakelock;
   // Not persisted
@@ -269,7 +269,7 @@ class ViewSettingsData {
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
-    AgendaNotificationsPolicy? agendaNotificationsPolicy,
+    AgendaEnabledPolicy? agendaNotificationsPolicy,
     bool? fullWidth,
     bool? wakelock,
     SearchQuery? searchQuery,

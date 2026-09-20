@@ -20,7 +20,7 @@
   "settingsScreenTitle": "設定",
   "settingsSectionAppearance": "外観",
   "settingsSectionDefaultText": "デフォルトの書式",
-  "settingsSectionNotifications": "通知",
+  "settingsSectionAgenda": "アジェンダ",
   "settingsSectionDataManagement": "データ管理",
   "settingsSectionDonate": "支援",
   "settingsSectionPurchase": "購入",
@@ -36,16 +36,19 @@
   "settingsItemFontFamily": "書体",
   "settingsItemDefaultTextPreviewString": "【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。",
 
-  "settingsItemGrantNotificationPermissions": "通知を有効にする",
+  "settingsItemEnableAgenda": "アジェンダを有効にする",
   "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",
+  "settingsItemEnableAgendaNotifications": "アジェンダ通知",
   "settingsDialogNotificationsTitle": "設定済みの通知",
   "settingsItemClearNotifications": "すべての通知を削除",
+  "settingsItemClearAgenda": "アジェンダファイルの登録をすべて解除する",
 
   "settingsActionClearCache": "キャッシュを削除",
   "settingsActionResetPreferences": "設定を初期化",
   "settingsActionResetPermissions": "権限をリセット",
 
   "snackbarMessageNotificationsCleared": "通知を削除しました",
+  "snackbarMessageAgendaCleared": "アジェンダをクリアしました",
   "snackbarMessageCacheCleared": "キャッシュを削除しました",
   "snackbarMessagePreferencesReset": "設定を初期化しました",
   "snackbarMessagePermissionsReset": "権限をリセットしました",
@@ -170,10 +173,10 @@
   "bannerBodyActionDecryptNotNow": "今は復号しない",
   "bannerBodyActionDecryptNever": "復号しない",
 
-  "bannerBodyAgendaNotifications": "このファイルのアジェンダ項目の通知を受け取りますか？",
-  "bannerBodyActionAgendaEnable": "受け取る",
-  "bannerBodyActionAgendaNotNow": "今は受け取らない",
-  "bannerBodyActionAgendaNever": "受け取らない",
+  "bannerBodyAddToAgenda": "このファイルをアジェンダに追加しますか？",
+  "bannerBodyActionAgendaAdd": "追加する",
+  "bannerBodyActionAgendaNotNow": "今は追加しない",
+  "bannerBodyActionAgendaNever": "追加しない",
 
   "transclusionPermissionsMessage": "ディレクトリのアクセス権が必要",
 

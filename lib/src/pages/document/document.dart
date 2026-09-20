@@ -485,9 +485,9 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           onAccept: decryptContent,
           onDeny: viewSettings.setDecryptPolicy,
         ),
-        AgendaNotificationsBanner(
-          visible: _askAboutAgendaNotifications,
-          onAccept: enableNotifications,
+        AddToAgendaBanner(
+          visible: _askAboutAddingToAgenda,
+          onAccept: addToAgenda,
           onDeny: viewSettings.setAgendaNotificationsPolicy,
         ),
         _maybeConstrainWidth(
@@ -923,9 +923,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   bool? get _hasAgendaEntries =>
       DocumentProvider.of(context).analysis.hasAgendaEntries;
 
-  bool get _askAboutAgendaNotifications =>
-      _viewSettings.agendaNotificationsPolicy ==
-          AgendaNotificationsPolicy.ask &&
+  bool get _askAboutAddingToAgenda =>
+      _viewSettings.agendaNotificationsPolicy == AgendaEnabledPolicy.ask &&
       canBeAgendaFile &&
       !isAgendaFile &&
       _hasAgendaEntries == true &&

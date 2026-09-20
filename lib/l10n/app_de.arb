@@ -20,7 +20,6 @@
   "settingsScreenTitle": "Einstellungen",
   "settingsSectionAppearance": "Aussehen",
   "settingsSectionDefaultText": "Vorgegebener Text",
-  "settingsSectionNotifications": "Benachrichtigungen",
   "settingsSectionDataManagement": "Datenverwaltung",
 
   "agendaNotificationsChannelName": "Agenda Benachrichtigungen",
@@ -128,8 +127,6 @@
   "bannerBodyActionDecryptNotNow": "Nicht jetzt",
   "bannerBodyActionDecryptNever": "Nie",
 
-  "bannerBodyAgendaNotifications": "Willst du Benachrichtigungen für Agenda Einträge in dieser Datei bekommen?",
-  "bannerBodyActionAgendaEnable": "Ja",
   "bannerBodyActionAgendaNotNow": "Nicht jetzt",
   "bannerBodyActionAgendaNever": "Nie",
 
