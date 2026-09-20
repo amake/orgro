@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
+import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/assets.dart';
 import 'package:orgro/src/components/about.dart';
 import 'package:orgro/src/components/dialogs.dart';
@@ -67,7 +68,13 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       bottomNavigationBar: hasAgenda
           ? BottomNavigationBar(
               currentIndex: _pageIdx,
-              onTap: (int idx) => setState(() => _pageIdx = idx),
+              onTap: (int idx) {
+                if (idx == _pageIdx) {
+                  scrollToTop(context);
+                } else {
+                  setState(() => _pageIdx = idx);
+                }
+              },
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.folder_open),

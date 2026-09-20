@@ -12,7 +12,7 @@ class ScrollToDocumentBoundaryAction
       if (intent.forward) {
         scrollToBottom(context);
       } else {
-        _scrollToTop(context);
+        scrollToTop(context);
       }
     }
   }
@@ -25,7 +25,7 @@ void _scrollTo(ScrollController controller, double position) =>
       curve: Curves.ease,
     );
 
-void _scrollToTop(BuildContext context) {
+void scrollToTop(BuildContext context) {
   final controller = PrimaryScrollController.of(context);
   _scrollTo(controller, controller.position.minScrollExtent);
 }
