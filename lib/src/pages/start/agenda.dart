@@ -128,16 +128,18 @@ class _AgendaBodyState extends State<AgendaBody>
                 final (:section, :dataSource, :scheduledAt) = iter.elementAt(
                   index,
                 );
-                final result = ListTile(
-                  leading: Text(timeFormat.format(scheduledAt)),
-                  title: Text(
-                    section.headline.title?.toPlainText() ??
-                        section.headline.rawTitle ??
-                        AppLocalizations.of(context)!.unknownAgendaTitle,
+                final result = _constrain(
+                  ListTile(
+                    leading: Text(timeFormat.format(scheduledAt)),
+                    title: Text(
+                      section.headline.title?.toPlainText() ??
+                          section.headline.rawTitle ??
+                          AppLocalizations.of(context)!.unknownAgendaTitle,
+                    ),
+                    titleAlignment: .center,
+                    subtitle: Text(dataSource.name),
+                    onTap: () => loadDocument(context, dataSource),
                   ),
-                  titleAlignment: .center,
-                  subtitle: Text(dataSource.name),
-                  onTap: () => loadDocument(context, dataSource),
                 );
 
                 final needsHeader =
@@ -155,10 +157,15 @@ class _AgendaBodyState extends State<AgendaBody>
                       padding: const EdgeInsets.all(8.0),
                       color: theme.dividerColor,
                       width: .infinity,
-                      child: Text(
-                        dateFormat.format(scheduledAt).toUpperCase(),
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: .w500,
+                      child: _constrain(
+                        SizedBox(
+                          width: .infinity,
+                          child: Text(
+                            dateFormat.format(scheduledAt).toUpperCase(),
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: .w500,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -175,6 +182,14 @@ class _AgendaBodyState extends State<AgendaBody>
     );
   }
 }
+
+Widget _constrain(Widget child, {Key? key}) => Center(
+  key: key,
+  child: ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 600),
+    child: child,
+  ),
+);
 
 class _RefreshableChildView extends StatelessWidget {
   const _RefreshableChildView({required this.child});
