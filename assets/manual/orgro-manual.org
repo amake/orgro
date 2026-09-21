@@ -335,24 +335,27 @@ Close the narrowed view by touching the Back button in the top app bar.
 
 * Agenda
 
-Orgro will offer to remind you of upcoming Org Agenda items (any section with an
-active timestamp like <2025-10-16 Thu>) by sending you a local notification.
-Look for a banner at the top of a document containing such sections.
+When you open a file containing Org Agenda items (any section with an active
+timestamp like <2025-10-16 Thu>), Orgro will allow you to “add the file to your
+agenda”. Look for the banner at the top of such a document.
 
-If you allow notifications, that file will be remembered as an “agenda file” and
-Orgro will update pending notifications across all agenda files at the following
-times:
+Orgro will aggregate all the agenda items scheduled for today or later, across
+all agenda files, and display them in an Agenda view. This view is available
+from the start screen; look for it in the bottom navigation bar.
 
+If you grant the required permissions, Orgro can send notifications to remind
+you of your agenda items. Orgro will update pending notifications at the
+following times:
+
+- When loading or refreshing the Agenda view
 - At app launch
 - Periodically while open
 - When opening or editing an agenda file
 - Periodically in the background, subject to OS background task limitations
 
-In the Settings screen you can see a list of pending notifications. You can also
-clear all notifications; when doing so all agenda files are forgotten.
-
-If you denied notification permissions, look for “Enable notifications” in the
-Settings screen.
+You can turn notifications on and off, or clear your agenda in the Settings
+screen. If you denied notification permissions, look for the “Enable
+notifications” item.
 
 * Attachments                                                        :ATTACH:
   :PROPERTIES:
