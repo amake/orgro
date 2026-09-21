@@ -15,7 +15,11 @@ class AgendaBody extends StatefulWidget {
   State<AgendaBody> createState() => _AgendaBodyState();
 }
 
-class _AgendaBodyState extends State<AgendaBody> {
+class _AgendaBodyState extends State<AgendaBody>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  final wantKeepAlive = true;
+
   Future<List<AgendaItemSource>>? _agendaData;
   Future<void>? _notificationsUpdate;
 
@@ -54,6 +58,7 @@ class _AgendaBodyState extends State<AgendaBody> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
         setState(() => _refresh());

@@ -12,11 +12,21 @@ import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
-class RememberedFilesBody extends StatelessWidget {
+class RememberedFilesBody extends StatefulWidget {
   const RememberedFilesBody({super.key});
 
   @override
+  State<RememberedFilesBody> createState() => _RememberedFilesBodyState();
+}
+
+class _RememberedFilesBodyState extends State<RememberedFilesBody>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  final bool wantKeepAlive = true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final remembered = RememberedFiles.of(context);
     final sortedPins = remembered.pinned;
     final sortedRecents = remembered.recents

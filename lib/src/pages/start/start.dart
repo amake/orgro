@@ -58,7 +58,10 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: hasRememberedFiles
-              ? [const RememberedFilesBody(), const AgendaBody()][_pageIdx]
+              ? _FilesAndAgendaBody(
+                  pageIdx: _pageIdx,
+                  onPageChanged: (idx) => setState(() => _pageIdx = idx),
+                )
               : const _EmptyBody(),
         ),
       ),
@@ -303,6 +306,73 @@ class _EmptyBody extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _FilesAndAgendaBody extends StatefulWidget {
+  const _FilesAndAgendaBody({
+    required this.pageIdx,
+    required this.onPageChanged,
+  });
+
+  final int pageIdx;
+  final ValueChanged<int>? onPageChanged;
+
+  @override
+  State<_FilesAndAgendaBody> createState() => _FilesAndAgendaBodyState();
+}
+
+class _FilesAndAgendaBodyState extends State<_FilesAndAgendaBody> {
+  final _pageController = PageController();
+  final _inactiveScrollController = ScrollController();
+
+  @override
+  void didUpdateWidget(covariant _FilesAndAgendaBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pageIdx != oldWidget.pageIdx) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _pageController.jumpToPage(widget.pageIdx);
+        }
+      });
+    }
+  }
+
+  ScrollController _scrollControllerFor(int idx) => widget.pageIdx == idx
+      ? PrimaryScrollController.of(context)
+      : _inactiveScrollController;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _inactiveScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // We use a PageView just for the keep-alive behavior
+    return PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      onPageChanged: widget.onPageChanged,
+      children: const [RememberedFilesBody(), AgendaBody()].indexed
+          .map((e) {
+            final (idx, child) = e;
+            // The children have keep-alive enabled, which means that without
+            // this trick they will both remain attached to the scaffold's
+            // scroll controller (PrimaryScrollController.of(context)) even when
+            // not visible. That causes [scrollToTop] to die, and makes the iOS
+            // scroll-to-top gesture scroll both children. We swap out a dummy
+            // scroll controller for the non-visible child so that it doesn't
+            // get scrolled.
+            return PrimaryScrollController(
+              controller: _scrollControllerFor(idx),
+              child: child,
+            );
+          })
+          .toList(growable: false),
     );
   }
 }
