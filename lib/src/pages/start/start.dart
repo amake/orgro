@@ -22,6 +22,8 @@ import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/routes/routes.dart';
 import 'package:orgro/src/util.dart';
 
+const _kRestoreStartTabIdxKey = 'start_tab_idx';
+
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
 
@@ -31,6 +33,12 @@ class StartPage extends StatefulWidget {
 
 class StartPageState extends State<StartPage> with PlatformOpenHandler {
   var _pageIdx = 0;
+
+  void _setPageIdx(int idx) {
+    _pageIdx = idx;
+    final bucket = RestorationScope.of(context);
+    bucket.write(_kRestoreStartTabIdxKey, idx);
+  }
 
   bool get _hasRememberedFiles =>
       RememberedFiles.of(context).hasRememberedFiles;
@@ -60,7 +68,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
           child: hasRememberedFiles
               ? _FilesAndAgendaBody(
                   pageIdx: _pageIdx,
-                  onPageChanged: (idx) => setState(() => _pageIdx = idx),
+                  onPageChanged: (idx) => setState(() => _setPageIdx(idx)),
                 )
               : const _EmptyBody(),
         ),
@@ -72,7 +80,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       bottomNavigationBar: hasAgenda
           ? _FilesAndAgendaBottomNavigationBar(
               pageIdx: _pageIdx,
-              onPageChanged: (idx) => setState(() => _pageIdx = idx),
+              onPageChanged: (idx) => setState(() => _setPageIdx(idx)),
             )
           : null,
     );
@@ -154,18 +162,19 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    var restored = false;
+    var restoredRoute = false;
     if (!_inited) {
       _inited = true;
+      _restorePageIdx();
       // RestorationMixin.restoreRoute is ultimately called during
       // didChangeDependencies, so we do the same here.
       //
       // We don't use RestorationMixin here because we don't want StartPage to
       // have its own bucket; we want it and QuickActions to use the root bucket
       // so that routes remembered by either can be restored here.
-      restored = _restoreRoute();
+      restoredRoute = _restoreRoute();
     }
-    if (!restored && kFreemium) {
+    if (!restoredRoute && kFreemium) {
       final entitlements = UserEntitlements.of(context)!.entitlements;
       if (entitlements.locked) {
         WidgetsBinding.instance.addPostFrameCallback(
@@ -225,6 +234,14 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       }
     });
     return true;
+  }
+
+  void _restorePageIdx() {
+    final bucket = RestorationScope.of(context);
+    final restoredIdx = bucket.read<int>(_kRestoreStartTabIdxKey);
+    if (restoredIdx != null) {
+      _pageIdx = restoredIdx;
+    }
   }
 }
 
@@ -309,8 +326,14 @@ class _FilesAndAgendaBody extends StatefulWidget {
 }
 
 class _FilesAndAgendaBodyState extends State<_FilesAndAgendaBody> {
-  final _pageController = PageController();
+  late final PageController _pageController;
   final _inactiveScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: widget.pageIdx);
+  }
 
   @override
   void didUpdateWidget(covariant _FilesAndAgendaBody oldWidget) {

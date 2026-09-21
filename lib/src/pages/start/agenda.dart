@@ -122,6 +122,7 @@ class _AgendaBodyState extends State<AgendaBody>
           final dateFormat = DateFormat.yMMMMEEEEd(locale);
           final theme = Theme.of(context);
           return ListView.builder(
+            restorationId: 'agenda_list',
             itemBuilder: (context, index) {
               try {
                 final (:section, :dataSource, :scheduledAt) = iter.elementAt(

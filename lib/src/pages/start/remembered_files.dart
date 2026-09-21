@@ -44,6 +44,7 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
     // We let ListView fill the viewport and constrain its children so that the
     // list can be scrolled even by the edges of the view.
     return ListView(
+      restorationId: 'remembered_files_list',
       children: [
         if (sortedPins.isNotEmpty) ...[
           _constrain(
