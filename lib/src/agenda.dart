@@ -334,92 +334,64 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   }
 });
 
+Future<ParsedOrgFileInfo?> parseAgendaFileJson(
+  Map<String, dynamic> agendaFileJson,
+  Iterable<String> accessibleDirs,
+) async {
+  switch (agendaFileJson) {
+    case {
+      'type': 'native',
+      'identifier': final String id,
+      'name': final String name,
+    }:
+      try {
+        final (
+          :dataSource,
+          :recovered,
+        ) = await readFileWithIdentifierWithRecoveryStrategy(
+          identifier: id,
+          fileName: name,
+          accessibleDirs: accessibleDirs,
+        );
+        // TODO(aaron): Ideally we would update the agendaFileJsons if we used
+        // the recovery strategy, but we don't have access to the Preferences
+        // here, and since this function is called in a background thread we
+        // would need to coordinate with the main app.
+        return await ParsedOrgFileInfo.from(dataSource);
+      } catch (e, s) {
+        logError(e, s);
+        return null;
+      }
+    default:
+      throw UnimplementedError('Unknown agenda file JSON: $agendaFileJson');
+  }
+}
+
 Future<void> setNotificationsForAllAgendaDocuments(
   List<Map<String, dynamic>> agendaFileJsons,
   AppLocalizations localizations,
   Iterable<String> accessibleDirs,
 ) async {
   for (final elem in agendaFileJsons) {
-    switch (elem) {
-      case {
-        'type': 'native',
-        'identifier': final String id,
-        'name': final String name,
-      }:
-        try {
-          final (
-            :dataSource,
-            :recovered,
-          ) = await readFileWithIdentifierWithRecoveryStrategy(
-            identifier: id,
-            fileName: name,
-            accessibleDirs: accessibleDirs,
-          );
-          // TODO(aaron): Ideally we would update the agendaFileJsons if we used
-          // the recovery strategy, but we don't have access to the Preferences
-          // here, and since this function is called in a background thread we
-          // would need to coordinate with the main app.
-          final parsed = await ParsedOrgFileInfo.from(dataSource);
-          await setNotificationsForDocument((
-            dataSource,
-            parsed.doc,
-            localizations,
-          ));
-        } catch (e, s) {
-          logError(e, s);
-        }
-      default:
-        throw UnimplementedError('Unknown agenda file JSON: $elem');
+    switch (await parseAgendaFileJson(elem, accessibleDirs)) {
+      case ParsedOrgFileInfo(:final dataSource, :final doc):
+        await setNotificationsForDocument((dataSource, doc, localizations));
+      case null:
     }
   }
 }
 
-typedef AgendaItemSource = ({OrgSection section, NativeDataSource dataSource});
+typedef AgendaItemSource = ({OrgSection section, DataSource dataSource});
 
-Future<List<AgendaItemSource>> getAllAgendaSections(
-  List<Map<String, dynamic>> agendaFileJsons,
-  Iterable<String> accessibleDirs,
-) async {
-  final sections = <AgendaItemSource>[];
-
-  for (final elem in agendaFileJsons) {
-    switch (elem) {
-      case {
-        'type': 'native',
-        'identifier': final String id,
-        'name': final String name,
-      }:
-        try {
-          final (
-            :dataSource,
-            :recovered,
-          ) = await readFileWithIdentifierWithRecoveryStrategy(
-            identifier: id,
-            fileName: name,
-            accessibleDirs: accessibleDirs,
-          );
-          // TODO(aaron): Ideally we would update the agendaFileJsons if we used
-          // the recovery strategy
-          final parsed = await ParsedOrgFileInfo.from(dataSource);
-          sections.addAll(
-            parsed.doc.pendingSections().map(
-              (s) => (section: s, dataSource: dataSource),
-            ),
-          );
-        } catch (e, s) {
-          logError(e, s);
-        }
-      default:
-        throw UnimplementedError('Unknown agenda file JSON: $elem');
-    }
-  }
-
-  return sections;
-}
+List<AgendaItemSource> getAgendaSections(ParsedOrgFileInfo parsedFile) =>
+    parsedFile.doc
+        .pendingSections()
+        .map((s) => (section: s, dataSource: parsedFile.dataSource))
+        .toList();
 
 typedef AgendaItem = ({
   OrgSection section,
-  NativeDataSource dataSource,
+  DataSource dataSource,
   tz.TZDateTime scheduledAt,
 });
 

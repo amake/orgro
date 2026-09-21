@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
-import 'package:orgro/src/pages/start/util.dart';
+import 'package:orgro/src/data_source.dart';
+import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/util.dart';
 
@@ -16,26 +17,45 @@ class AgendaBody extends StatefulWidget {
 
 class _AgendaBodyState extends State<AgendaBody> {
   Future<List<AgendaItemSource>>? _agendaData;
+  Future<void>? _notificationsUpdate;
 
-  void _refreshAgendaData() {
-    _agendaData = getAllAgendaSections(
-      Preferences.of(context, .agenda).agendaFileJsons,
-      Preferences.of(context, .accessibleDirs).accessibleDirs,
+  void _refresh() {
+    final agendaFileJsons = Preferences.of(context, .agenda).agendaFileJsons;
+    final accessibleDirs = Preferences.of(
+      context,
+      .accessibleDirs,
+    ).accessibleDirs;
+    final localizations = AppLocalizations.of(context)!;
+    final parsedFiles = Future.wait(
+      agendaFileJsons.map((e) => parseAgendaFileJson(e, accessibleDirs)),
+    ).then((files) => files.whereType<ParsedOrgFileInfo>());
+    _agendaData = parsedFiles.then(
+      (files) => files.expand(getAgendaSections).toList(growable: false),
     );
+    _notificationsUpdate = parsedFiles.then((files) async {
+      for (final file in files) {
+        await setNotificationsForDocument((
+          file.dataSource,
+          file.doc,
+          localizations,
+        ));
+      }
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _refreshAgendaData();
+    _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() => _refreshAgendaData());
+        setState(() => _refresh());
         await _agendaData;
+        await _notificationsUpdate;
       },
       child: FutureBuilder(
         future: _agendaData,
@@ -105,7 +125,7 @@ class _AgendaBodyState extends State<AgendaBody> {
                   ),
                   titleAlignment: .center,
                   subtitle: Text(dataSource.name),
-                  onTap: () => loadAndRememberFile(context, dataSource),
+                  onTap: () => loadDocument(context, dataSource),
                 );
 
                 final needsHeader =
