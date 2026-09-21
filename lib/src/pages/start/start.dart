@@ -69,25 +69,9 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
           ? _buildFloatingActionButton(context)
           : null,
       bottomNavigationBar: hasAgenda
-          ? BottomNavigationBar(
-              currentIndex: _pageIdx,
-              onTap: (int idx) {
-                if (idx == _pageIdx) {
-                  scrollToTop(context);
-                } else {
-                  setState(() => _pageIdx = idx);
-                }
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.folder_open),
-                  label: AppLocalizations.of(context)!.filesTabTitle,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.calendar_month),
-                  label: AppLocalizations.of(context)!.agendaTabTitle,
-                ),
-              ],
+          ? _FilesAndAgendaBottomNavigationBar(
+              pageIdx: _pageIdx,
+              onPageChanged: (idx) => setState(() => _pageIdx = idx),
             )
           : null,
     );
@@ -373,6 +357,48 @@ class _FilesAndAgendaBodyState extends State<_FilesAndAgendaBody> {
             );
           })
           .toList(growable: false),
+    );
+  }
+}
+
+class _FilesAndAgendaBottomNavigationBar extends StatelessWidget {
+  const _FilesAndAgendaBottomNavigationBar({
+    required this.pageIdx,
+    required this.onPageChanged,
+  });
+
+  final int pageIdx;
+  final ValueChanged<int> onPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BottomNavigationBar(
+      useLegacyColorScheme: false,
+      currentIndex: pageIdx,
+      backgroundColor: switch (theme.brightness) {
+        .light => theme.colorScheme.primary,
+        .dark => theme.colorScheme.surface,
+      },
+      selectedItemColor: theme.colorScheme.onPrimary,
+      unselectedItemColor: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
+      onTap: (int idx) {
+        if (idx == pageIdx) {
+          scrollToTop(context);
+        } else {
+          onPageChanged(idx);
+        }
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.folder_open),
+          label: AppLocalizations.of(context)!.filesTabTitle,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.calendar_month),
+          label: AppLocalizations.of(context)!.agendaTabTitle,
+        ),
+      ],
     );
   }
 }
