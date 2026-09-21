@@ -1,6 +1,6 @@
 name: orgro
 description: An Org Mode file viewer
-version: 2.5.0+259
+version: 2.5.1+260
 homepage: https://orgro.org
 
 publish_to: none
@@ -65,6 +65,7 @@ dependencies:
       ref: main
       path: in_app_purchase_stub_android
   material_ui: ^1.0.0
+
 
 dev_dependencies:
   flutter_lints: ^6.0.0
