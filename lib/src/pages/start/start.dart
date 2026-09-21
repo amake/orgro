@@ -68,6 +68,7 @@ class StartPageState extends State<StartPage> with PlatformOpenHandler {
       floatingActionButton: hasRememberedFiles
           ? _buildFloatingActionButton(context)
           : null,
+      extendBody: true,
       bottomNavigationBar: hasAgenda
           ? _FilesAndAgendaBottomNavigationBar(
               pageIdx: _pageIdx,
@@ -373,32 +374,51 @@ class _FilesAndAgendaBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BottomNavigationBar(
-      useLegacyColorScheme: false,
-      currentIndex: pageIdx,
-      backgroundColor: switch (theme.brightness) {
-        .light => theme.colorScheme.primary,
-        .dark => theme.colorScheme.surface,
-      },
-      selectedItemColor: theme.colorScheme.onPrimary,
-      unselectedItemColor: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-      onTap: (int idx) {
-        if (idx == pageIdx) {
-          scrollToTop(context);
-        } else {
-          onPageChanged(idx);
-        }
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.folder_open),
-          label: AppLocalizations.of(context)!.filesTabTitle,
+    const borderRadius = BorderRadius.all(Radius.circular(16));
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        child: Material(
+          borderRadius: borderRadius,
+          color: switch (theme.brightness) {
+            .light => theme.colorScheme.primary,
+            .dark => theme.colorScheme.surface,
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: theme.highlightColor,
+              borderRadius: borderRadius,
+            ),
+            child: BottomNavigationBar(
+              elevation: 0,
+              useLegacyColorScheme: false,
+              currentIndex: pageIdx,
+              backgroundColor: Colors.transparent,
+              selectedItemColor: theme.colorScheme.onPrimary,
+              unselectedItemColor: theme.colorScheme.onPrimary.withValues(
+                alpha: 0.8,
+              ),
+              onTap: (int idx) {
+                if (idx == pageIdx) {
+                  scrollToTop(context);
+                } else {
+                  onPageChanged(idx);
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.folder_open),
+                  label: AppLocalizations.of(context)!.filesTabTitle,
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.calendar_month),
+                  label: AppLocalizations.of(context)!.agendaTabTitle,
+                ),
+              ],
+            ),
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.calendar_month),
-          label: AppLocalizations.of(context)!.agendaTabTitle,
-        ),
-      ],
+      ),
     );
   }
 }
