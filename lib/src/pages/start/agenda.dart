@@ -85,8 +85,10 @@ class _AgendaBodyState extends State<AgendaBody> {
             agendaItemsFromSources(snapshot.data!).iterator,
           );
 
+          // The time format is always in 24-hour format, regardless of locale.
           final timeFormat = DateFormat.Hm();
-          final dateFormat = DateFormat.yMMMMEEEEd();
+          final locale = AppLocalizations.of(context)!.localeName;
+          final dateFormat = DateFormat.yMMMMEEEEd(locale);
           final theme = Theme.of(context);
           return ListView.builder(
             itemBuilder: (context, index) {
