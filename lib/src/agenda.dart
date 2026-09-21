@@ -383,11 +383,13 @@ Future<void> setNotificationsForAllAgendaDocuments(
 
 typedef AgendaItemSource = ({OrgSection section, DataSource dataSource});
 
-List<AgendaItemSource> getAgendaSections(ParsedOrgFileInfo parsedFile) =>
-    parsedFile.doc
-        .pendingSections()
-        .map((s) => (section: s, dataSource: parsedFile.dataSource))
-        .toList();
+List<AgendaItemSource> getAgendaSections(
+  ParsedOrgFileInfo parsedFile, {
+  DateTime? now,
+}) => parsedFile.doc
+    .pendingSections(now: now)
+    .map((s) => (section: s, dataSource: parsedFile.dataSource))
+    .toList();
 
 typedef AgendaItem = ({
   OrgSection section,
@@ -396,8 +398,9 @@ typedef AgendaItem = ({
 });
 
 Iterable<AgendaItem> agendaItemsFromSources(
-  List<AgendaItemSource> sources,
-) sync* {
+  List<AgendaItemSource> sources, {
+  DateTime? now,
+}) sync* {
   final iters = sources
       .map((s) => (source: s, iter: s.section.scheduledAt.iterator))
       .where((e) => e.iter.moveNext())
@@ -408,9 +411,8 @@ Iterable<AgendaItem> agendaItemsFromSources(
   );
 
   var n = 0;
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
   DateTime? emitted;
+  now ??= DateTime.now();
 
   while (true) {
     debugPrint('Emitting agenda item #$n; previous: $emitted');
@@ -418,7 +420,7 @@ Iterable<AgendaItem> agendaItemsFromSources(
     final toRemove = <({AgendaItemSource source, Iterator<DateTime> iter})>[];
     outer:
     for (final i in iters) {
-      while (i.iter.current.isBefore(emitted ?? today)) {
+      while (i.iter.current.isBefore(emitted ?? now)) {
         if (!i.iter.moveNext()) {
           toRemove.add(i);
           continue outer;
@@ -547,10 +549,10 @@ extension OrgSectionUtil on OrgSection {
 }
 
 extension OrgTreeUtil on OrgTree {
-  Iterable<OrgSection> pendingSections() sync* {
+  Iterable<OrgSection> pendingSections({DateTime? now}) sync* {
     final toSchedule = <OrgSection>[];
     visitSections((section) {
-      if (section.isPending()) {
+      if (section.isPending(now: now)) {
         toSchedule.add(section);
       }
       return true;

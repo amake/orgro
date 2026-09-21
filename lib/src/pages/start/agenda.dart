@@ -20,6 +20,7 @@ class _AgendaBodyState extends State<AgendaBody> {
   Future<void>? _notificationsUpdate;
 
   void _refresh() {
+    final now = DateTime.now().startOfDay();
     final agendaFileJsons = Preferences.of(context, .agenda).agendaFileJsons;
     final accessibleDirs = Preferences.of(
       context,
@@ -30,7 +31,9 @@ class _AgendaBodyState extends State<AgendaBody> {
       agendaFileJsons.map((e) => parseAgendaFileJson(e, accessibleDirs)),
     ).then((files) => files.whereType<ParsedOrgFileInfo>());
     _agendaData = parsedFiles.then(
-      (files) => files.expand(getAgendaSections).toList(growable: false),
+      (files) => files
+          .expand((f) => getAgendaSections(f, now: now))
+          .toList(growable: false),
     );
     _notificationsUpdate = parsedFiles.then((files) async {
       for (final file in files) {
@@ -102,7 +105,10 @@ class _AgendaBodyState extends State<AgendaBody> {
           // memory if the user scrolls very far through an agenda with many
           // items, but testing on iOS shows negligible impact.
           final iter = CachingIterable(
-            agendaItemsFromSources(snapshot.data!).iterator,
+            agendaItemsFromSources(
+              snapshot.data!,
+              now: DateTime.now().startOfDay(),
+            ).iterator,
           );
 
           // The time format is always in 24-hour format, regardless of locale.
