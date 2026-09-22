@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/components/lifecycle.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
 import 'package:orgro/src/preferences.dart';
@@ -23,8 +24,9 @@ class _AgendaBodyState extends State<AgendaBody>
   Future<List<AgendaItemSource>>? _agendaData;
   Future<void>? _notificationsUpdate;
 
+  var today = DateTime.now().startOfDay();
+
   void _refresh() {
-    final now = DateTime.now().startOfDay();
     final agendaFileJsons = Preferences.of(context, .agenda).agendaFileJsons;
     final accessibleDirs = Preferences.of(
       context,
@@ -36,7 +38,7 @@ class _AgendaBodyState extends State<AgendaBody>
     ).then((files) => files.whereType<ParsedOrgFileInfo>());
     _agendaData = parsedFiles.then(
       (files) => files
-          .expand((f) => getAgendaSections(f, now: now))
+          .expand((f) => getAgendaSections(f, now: today))
           .toList(growable: false),
     );
     _notificationsUpdate = parsedFiles.then((files) async {
@@ -59,58 +61,72 @@ class _AgendaBodyState extends State<AgendaBody>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
-      onRefresh: () async {
-        setState(() => _refresh());
-        await _agendaData;
-        await _notificationsUpdate;
+    return AppLifecycle(
+      onStateChange: (state) {
+        if (state == .resumed) {
+          final newToday = DateTime.now().startOfDay();
+          if (!newToday.isSameDayAs(today)) {
+            setState(() {
+              today = newToday;
+              _refresh();
+            });
+          }
+        }
       },
-      child: FutureBuilder(
-        future: _agendaData,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return _ErrorView(error: snapshot.error);
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.data!.isEmpty) {
-            return const _EmptyView();
-          }
+      child: RefreshIndicator(
+        onRefresh: () async {
+          setState(() => _refresh());
+          await _agendaData;
+          await _notificationsUpdate;
+        },
+        child: FutureBuilder(
+          future: _agendaData,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return _ErrorView(error: snapshot.error);
+            }
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data!.isEmpty) {
+              return const _EmptyView();
+            }
 
-          // The iterable is infinite in principle. Without any caching we have
-          // to recompute from the zeroth item on every access.
-          //
-          // In principle if the cache is not bounded then this can blow up
-          // memory if the user scrolls very far through an agenda with many
-          // items, but testing on iOS shows negligible impact.
-          final iter = CachingIterable(
-            agendaItemsFromSources(
-              snapshot.data!,
-              now: DateTime.now().startOfDay(),
-            ).iterator,
-          );
+            // The iterable is infinite in principle. Without any caching we
+            // have to recompute from the zeroth item on every access.
+            //
+            // In principle if the cache is not bounded then this can blow up
+            // memory if the user scrolls very far through an agenda with many
+            // items, but testing on iOS shows negligible impact.
+            final iter = CachingIterable(
+              agendaItemsFromSources(snapshot.data!, now: today).iterator,
+            );
 
-          // The time format is always in 24-hour format, regardless of locale.
-          final timeFormat = DateFormat.Hm();
-          final locale = AppLocalizations.of(context)!.localeName;
-          final dateFormat = DateFormat.yMMMMEEEEd(locale);
-          final theme = Theme.of(context);
-          return ListView.builder(
-            restorationId: 'agenda_list',
-            itemBuilder: (context, index) {
-              try {
-                final (:section, :dataSource, :scheduledAt) = iter.elementAt(
-                  index,
-                );
+            // The time format is always in 24-hour format, regardless of
+            // locale.
+            final timeFormat = DateFormat.Hm();
+            final locale = AppLocalizations.of(context)!.localeName;
+            final dateFormat = DateFormat.yMMMMEEEEd(locale);
+            final theme = Theme.of(context);
+            return ListView.builder(
+              restorationId: 'agenda_list',
+              itemBuilder: (context, index) {
+                final AgendaItem item;
+                try {
+                  item = iter.elementAt(index);
+                } on RangeError {
+                  return null;
+                }
+                final (:section, :dataSource, :scheduledAt) = item;
+
+                final title =
+                    section.headline.title?.toPlainText() ??
+                    section.headline.rawTitle ??
+                    AppLocalizations.of(context)!.unknownAgendaTitle;
                 final result = _constrain(
                   ListTile(
                     leading: Text(timeFormat.format(scheduledAt)),
-                    title: Text(
-                      section.headline.title?.toPlainText() ??
-                          section.headline.rawTitle ??
-                          AppLocalizations.of(context)!.unknownAgendaTitle,
-                    ),
+                    title: Text(title),
                     titleAlignment: .center,
                     subtitle: Text(dataSource.name),
                     onTap: () => loadDocument(context, dataSource),
@@ -147,12 +163,10 @@ class _AgendaBodyState extends State<AgendaBody>
                     result,
                   ],
                 );
-              } on RangeError {
-                return null;
-              }
-            },
-          );
-        },
+              },
+            );
+          },
+        ),
       ),
     );
   }
