@@ -69,38 +69,13 @@ class _AgendaBodyState extends State<AgendaBody>
         future: _agendaData,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return _RefreshableChildView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: .center,
-                  spacing: 16,
-                  children: [
-                    const Icon(Icons.error),
-                    Text(
-                      snapshot.error?.toString() ??
-                          AppLocalizations.of(context)!.errorUnknown,
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _ErrorView(error: snapshot.error);
           }
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.data!.isEmpty) {
-            return _RefreshableChildView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: .center,
-                  spacing: 16,
-                  children: [
-                    const Icon(Icons.calendar_month),
-                    Text(AppLocalizations.of(context)!.emptyAgendaMessage),
-                  ],
-                ),
-              ),
-            );
+            return const _EmptyView();
           }
 
           // The iterable is infinite in principle. Without any caching we have
@@ -190,6 +165,50 @@ Widget _constrain(Widget child, {Key? key}) => Center(
     child: child,
   ),
 );
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.error});
+
+  final Object? error;
+
+  @override
+  Widget build(BuildContext context) {
+    return _RefreshableChildView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          spacing: 16,
+          children: [
+            const Icon(Icons.error),
+            Text(
+              error?.toString() ?? AppLocalizations.of(context)!.errorUnknown,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyView extends StatelessWidget {
+  const _EmptyView();
+
+  @override
+  Widget build(BuildContext context) {
+    return _RefreshableChildView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          spacing: 16,
+          children: [
+            const Icon(Icons.calendar_month),
+            Text(AppLocalizations.of(context)!.emptyAgendaMessage),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _RefreshableChildView extends StatelessWidget {
   const _RefreshableChildView({required this.child});
