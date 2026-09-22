@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/components/lifecycle.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/preferences.dart';
@@ -167,7 +168,6 @@ class _RememberedFilesState extends State<RememberedFiles> {
   InheritedPreferences get _prefs =>
       Preferences.of(context, PrefsAspect.recentFiles);
   List<RememberedFile> get _rememberedFiles => _prefs.rememberedFiles;
-  _LifecycleEventHandler? _lifecycleEventHandler;
 
   Future<void> _reloadFuture = Future.value();
 
@@ -232,65 +232,38 @@ class _RememberedFilesState extends State<RememberedFiles> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _lifecycleEventHandler ??= _LifecycleEventHandler(onResume: _onResume);
-    WidgetsBinding.instance.addObserver(_lifecycleEventHandler!);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(_lifecycleEventHandler!);
-    super.dispose();
-  }
-
-  Future<void> _onResume() async {
-    if (Platform.isAndroid) {
-      // Only reload on resume on Android:
-      //
-      // - On Android there could be new Recent File entries due to other
-      //   activities, but on iOS there is only a single "activity" so no
-      //   pressing need to reload
-      //
-      // - On iOS a resume event occurs when returning from file/directory
-      //   pickers, when we are likely to want to store something in shared
-      //   prefs. Shared prefs are committed asynchronously on iOS (`commit` is
-      //   a noop) so reloading at this point will clear what we just stored.
-      debugPrint('Reloading recent files');
-      await (_reloadFuture = _prefs.reload());
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return InheritedRememberedFiles(
-      _rememberedFiles,
-      _prefs.recentFilesSortKey,
-      _prefs.recentFilesSortOrder,
-      add: addRecentFiles,
-      remove: removeRecentFile,
-      replace: replaceRecentFile,
-      pin: pinFile,
-      unpin: unpinFile,
-      child: widget.child,
+    return AppLifecycle(
+      onStateChange: (state) async {
+        if (state == .resumed) {
+          debugPrint('App resumed');
+          if (Platform.isAndroid) {
+            // Only reload on resume on Android:
+            //
+            // - On Android there could be new Recent File entries due to other
+            //   activities, but on iOS there is only a single "activity" so no
+            //   pressing need to reload
+            //
+            // - On iOS a resume event occurs when returning from file/directory
+            //   pickers, when we are likely to want to store something in shared
+            //   prefs. Shared prefs are committed asynchronously on iOS (`commit` is
+            //   a noop) so reloading at this point will clear what we just stored.
+            debugPrint('Reloading recent files');
+            await (_reloadFuture = _prefs.reload());
+          }
+        }
+      },
+      child: InheritedRememberedFiles(
+        _rememberedFiles,
+        _prefs.recentFilesSortKey,
+        _prefs.recentFilesSortOrder,
+        add: addRecentFiles,
+        remove: removeRecentFile,
+        replace: replaceRecentFile,
+        pin: pinFile,
+        unpin: unpinFile,
+        child: widget.child,
+      ),
     );
-  }
-}
-
-class _LifecycleEventHandler extends WidgetsBindingObserver {
-  _LifecycleEventHandler({this.onResume});
-
-  final VoidCallback? onResume;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        debugPrint('App resumed');
-        onResume?.call();
-        break;
-      default:
-      // Nothing
-    }
   }
 }
