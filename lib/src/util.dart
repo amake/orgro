@@ -288,3 +288,18 @@ extension DateTimeUtil on DateTime {
       millisecond == 0 &&
       microsecond == 0;
 }
+
+Future<void> awaitFrame(bool Function() callback) {
+  final result = Completer<void>();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (callback()) {
+      result.complete();
+    } else {
+      await awaitFrame(callback);
+      result.complete();
+    }
+  });
+
+  return result.future;
+}

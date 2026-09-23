@@ -139,12 +139,16 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     canObtainNativeDirectoryPermissions().then(
       (value) => setState(() => canResolveRelativeLinks = value),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       handleInitialTarget(widget.initialTarget);
       ensureOpenOnNarrow();
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
           case InitialMode.view:
+            await awaitFrame(
+              () => !mounted || DocumentProvider.of(context).analysis.loaded,
+            );
+            if (!mounted) return;
             widget.afterOpen?.call(this);
             break;
           case InitialMode.edit:
