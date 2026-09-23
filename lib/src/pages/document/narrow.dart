@@ -111,7 +111,7 @@ extension NarrowHandler on DocumentPageState {
       await handleInitialTarget(searchOption);
       return;
     }
-    final restorationTarget = _targetForSection(section);
+    final restorationTarget = section.targetForSection;
     if (restorationTarget != null) {
       bucket!.write(kRestoreNarrowTargetKey, restorationTarget);
     }
@@ -134,22 +134,6 @@ extension NarrowHandler on DocumentPageState {
       logError(e, s);
       if (mounted) showErrorSnackBar(context, e);
     }
-  }
-
-  String? _targetForSection(OrgTree section) {
-    final id = section.ids.firstOrNull;
-    if (id != null) {
-      return 'id:$id';
-    }
-    final customId = section.customIds.firstOrNull;
-    if (customId != null) {
-      return '#$customId';
-    }
-    final title = section is OrgSection ? section.headline.rawTitle : null;
-    if (title != null) {
-      return '*$title';
-    }
-    return null;
   }
 
   OrgNode? _applyNarrowResult({
