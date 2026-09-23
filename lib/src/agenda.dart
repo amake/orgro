@@ -16,6 +16,7 @@ import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/util.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -103,16 +104,27 @@ void onDidReceiveNotificationResponse(NotificationResponse details) async {
           fileName: name,
           accessibleDirs: accessibleDirs,
         );
+        final target = _targetFromPayloadJson(payload['section']);
+        final AfterOpenCallback? afterOpen = target == null
+            ? null
+            : (state) async {
+                OrgLocator.of(state.context)?.jumpToSection(target);
+              };
         if (recovered) {
           await Preferences.of(context, .agenda).replaceAgendaFileJson(
             payload['dataSource'] as Map<String, dynamic>,
             dataSource.toJson(),
           );
           if (context.mounted) {
-            await loadAndReplaceRememberedFile(context, id, dataSource);
+            await loadAndReplaceRememberedFile(
+              context,
+              id,
+              dataSource,
+              afterOpen: afterOpen,
+            );
           }
         } else {
-          await loadAndRememberFile(context, dataSource);
+          await loadAndRememberFile(context, dataSource, afterOpen: afterOpen);
         }
       } catch (e, s) {
         logError(e, s);
@@ -555,6 +567,13 @@ extension OrgSectionUtil on OrgSection {
     'rawTitle': headline.rawTitle,
   };
 }
+
+String? _targetFromPayloadJson(dynamic payload) => switch (payload) {
+  {'id': final String id} => 'id:$id',
+  {'customId': final String customId} => '#$customId',
+  {'rawTitle': final String rawTitle} => '*$rawTitle',
+  _ => null,
+};
 
 extension OrgTreeUtil on OrgTree {
   Iterable<OrgSection> pendingSections({DateTime? now}) sync* {

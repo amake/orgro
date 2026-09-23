@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/components/layout.dart';
@@ -133,7 +136,15 @@ class _AgendaBodyState extends State<AgendaBody>
                     title: Text(title),
                     titleAlignment: .center,
                     subtitle: Text(dataSource.name),
-                    onTap: () => loadDocument(context, dataSource),
+                    onTap: () => loadDocument(
+                      context,
+                      dataSource,
+                      afterOpen: (state) async {
+                        final target = section.targetForSection;
+                        if (target == null) return;
+                        OrgLocator.of(state.context)!.jumpToSection(target);
+                      },
+                    ),
                   ),
                 );
 
