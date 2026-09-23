@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/components/layout.dart';
 import 'package:orgro/src/components/lifecycle.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
@@ -123,8 +124,8 @@ class _AgendaBodyState extends State<AgendaBody>
                     section.headline.title?.toPlainText() ??
                     section.headline.rawTitle ??
                     AppLocalizations.of(context)!.unknownAgendaTitle;
-                final result = _constrain(
-                  ListTile(
+                final result = ConstrainForWideScreen(
+                  child: ListTile(
                     leading: Text(timeFormat.format(scheduledAt)),
                     title: Text(title),
                     titleAlignment: .center,
@@ -148,8 +149,8 @@ class _AgendaBodyState extends State<AgendaBody>
                       padding: const EdgeInsets.all(8.0),
                       color: theme.dividerColor,
                       width: .infinity,
-                      child: _constrain(
-                        SizedBox(
+                      child: ConstrainForWideScreen(
+                        child: SizedBox(
                           width: .infinity,
                           child: Text(
                             dateFormat.format(scheduledAt).toUpperCase(),
@@ -171,14 +172,6 @@ class _AgendaBodyState extends State<AgendaBody>
     );
   }
 }
-
-Widget _constrain(Widget child, {Key? key}) => Center(
-  key: key,
-  child: ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 600),
-    child: child,
-  ),
-);
 
 class _ErrorView extends StatelessWidget {
   const _ErrorView({required this.error});

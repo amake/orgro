@@ -12,6 +12,7 @@ import 'package:orgro/src/components/banners.dart';
 import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/fab.dart';
+import 'package:orgro/src/components/layout.dart';
 import 'package:orgro/src/components/scroll.dart';
 import 'package:orgro/src/components/slidable_action.dart';
 import 'package:orgro/src/components/view_settings.dart';
@@ -117,13 +118,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   InheritedViewSettings get _viewSettings => ViewSettings.of(context);
 
   double get _screenWidth => MediaQuery.sizeOf(context).width;
-
-  // Not sure why this size
-  bool get _biggishScreen => _screenWidth > 500;
-
-  // E.g. iPad mini in portrait (768px), iPhone XS in landscape (812px), Pixel 2
-  // in landscape (731px)
-  bool get _bigScreen => _screenWidth > 600;
+  bool get _biggishScreen => _screenWidth > kBiggishScreenMaxWidth;
+  bool get _bigScreen => _screenWidth > kWideScreenMaxWidth;
 
   @override
   void initState() {

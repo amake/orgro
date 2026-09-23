@@ -5,6 +5,7 @@ import 'package:orgro/src/actions/appearance.dart';
 import 'package:orgro/src/agenda.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/developer.dart';
+import 'package:orgro/src/components/layout.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/view_settings.dart';
 import 'package:orgro/src/entitlements.dart';
@@ -81,7 +82,7 @@ class SettingsPage extends StatelessWidget {
                   .map(
                     (child) => switch (child) {
                       Divider() => child,
-                      _ => _constrain(child),
+                      _ => ConstrainForWideScreen(child: child),
                     },
                   )
                   .toList(growable: false),
@@ -89,13 +90,6 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _constrain(Widget child) => Center(
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 600),
-      child: child,
-    ),
-  );
 }
 
 class _TextPreview extends StatefulWidget {

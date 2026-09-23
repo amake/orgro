@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/components/dialogs.dart';
+import 'package:orgro/src/components/layout.dart';
 import 'package:orgro/src/components/list.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/data_source.dart';
@@ -47,8 +48,8 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
       restorationId: 'remembered_files_list',
       children: [
         if (sortedPins.isNotEmpty) ...[
-          _constrain(
-            ListHeader(
+          ConstrainForWideScreen(
+            child: ListHeader(
               title: Text(
                 AppLocalizations.of(context)!.sectionHeaderPinnedFiles,
               ),
@@ -60,9 +61,9 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
             shrinkWrap: true,
             itemBuilder: (context, index) {
               final pinnedFile = sortedPins[index];
-              return _constrain(
-                _RememberedFileManagementListTile(pinnedFile),
+              return ConstrainForWideScreen(
                 key: ValueKey(pinnedFile),
+                child: _RememberedFileManagementListTile(pinnedFile),
               );
             },
             onReorderItem: (oldIndex, newIndex) {
@@ -78,8 +79,8 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
           ),
         ],
         if (sortedRecents.isNotEmpty) ...[
-          _constrain(
-            ListHeader(
+          ConstrainForWideScreen(
+            child: ListHeader(
               title: Text(
                 AppLocalizations.of(context)!.sectionHeaderRecentFiles,
               ),
@@ -92,9 +93,9 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
             itemCount: sortedRecents.length,
             itemBuilder: (context, index) {
               final recentFile = sortedRecents[index];
-              return _constrain(
-                _RememberedFileManagementListTile(recentFile),
+              return ConstrainForWideScreen(
                 key: ValueKey(recentFile),
+                child: _RememberedFileManagementListTile(recentFile),
               );
             },
           ),
@@ -102,14 +103,6 @@ class _RememberedFilesBodyState extends State<RememberedFilesBody>
       ],
     );
   }
-
-  Widget _constrain(Widget child, {Key? key}) => Center(
-    key: key,
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 600),
-      child: child,
-    ),
-  );
 }
 
 class _RecentFilesListSortControl extends StatelessWidget {
