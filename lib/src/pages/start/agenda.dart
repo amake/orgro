@@ -118,7 +118,7 @@ class _AgendaBodyState extends State<AgendaBody>
                 } on RangeError {
                   return null;
                 }
-                final (:section, :dataSource, :scheduledAt) = item;
+                final (:section, :dataSource, scheduledAt: agendaSpan) = item;
 
                 final title =
                     section.headline.title?.toPlainText() ??
@@ -126,7 +126,10 @@ class _AgendaBodyState extends State<AgendaBody>
                     AppLocalizations.of(context)!.unknownAgendaTitle;
                 final result = ConstrainForWideScreen(
                   child: ListTile(
-                    leading: Text(timeFormat.format(scheduledAt)),
+                    leading: _AgendaTime(
+                      agendaSpan: agendaSpan,
+                      timeFormat: timeFormat,
+                    ),
                     title: Text(title),
                     titleAlignment: .center,
                     subtitle: Text(dataSource.name),
@@ -139,7 +142,8 @@ class _AgendaBodyState extends State<AgendaBody>
                     !iter
                         .elementAt(index - 1)
                         .scheduledAt
-                        .isSameDayAs(scheduledAt);
+                        .$1
+                        .isSameDayAs(agendaSpan.$1);
                 if (!needsHeader) return result;
 
                 return Column(
@@ -153,9 +157,12 @@ class _AgendaBodyState extends State<AgendaBody>
                         child: SizedBox(
                           width: .infinity,
                           child: Text(
-                            dateFormat.format(scheduledAt).toUpperCase(),
+                            dateFormat.format(agendaSpan.$1).toUpperCase(),
                             style: theme.textTheme.titleSmall?.copyWith(
                               fontWeight: .w500,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
                             ),
                           ),
                         ),
@@ -169,6 +176,57 @@ class _AgendaBodyState extends State<AgendaBody>
           },
         ),
       ),
+    );
+  }
+}
+
+class _AgendaTime extends StatelessWidget {
+  const _AgendaTime({required this.agendaSpan, required this.timeFormat});
+
+  final ChunkedAgendaSpan agendaSpan;
+  final DateFormat timeFormat;
+
+  TextStyle get _timeStyle =>
+      const TextStyle(fontFeatures: [FontFeature.tabularFigures()]);
+
+  @override
+  Widget build(BuildContext context) {
+    final (start, end, chunkIdx) = agendaSpan;
+
+    if (start.isAtSameMomentAs(end)) {
+      return Text(timeFormat.format(start), style: _timeStyle);
+    }
+
+    if (start.isStartOfDay() && end.isStartOfDay()) {
+      return const Icon(Icons.calendar_today);
+    }
+
+    if (chunkIdx == 0 && end.isStartOfDay()) {
+      return Column(
+        mainAxisAlignment: .center,
+        children: [
+          Text(timeFormat.format(start), style: _timeStyle),
+          const Text('|'),
+        ],
+      );
+    }
+
+    if (chunkIdx > 0 && start.isStartOfDay()) {
+      return Column(
+        mainAxisAlignment: .center,
+        children: [
+          const Text('|'),
+          Text(timeFormat.format(end), style: _timeStyle),
+        ],
+      );
+    }
+
+    return Column(
+      mainAxisAlignment: .center,
+      children: [
+        Text(timeFormat.format(start), style: _timeStyle),
+        Text(timeFormat.format(end), style: _timeStyle),
+      ],
     );
   }
 }

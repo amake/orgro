@@ -278,5 +278,13 @@ extension DateTimeUtil on DateTime {
   bool isSameDayAs(DateTime other) =>
       year == other.year && month == other.month && day == other.day;
 
-  DateTime startOfDay() => DateTime(year, month, day);
+  DateTime startOfDay() =>
+      copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
+
+  bool isStartOfDay() =>
+      hour == 0 &&
+      minute == 0 &&
+      second == 0 &&
+      millisecond == 0 &&
+      microsecond == 0;
 }

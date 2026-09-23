@@ -240,7 +240,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final now = DateTime.now();
   doc.visitSections((section) {
     if (section.isPending()) {
-      for (final dateTime in section.scheduledAt.unique().take(
+      for (final (dateTime, _, _) in section.scheduledAt.unique().take(
         kMaxNotifications,
       )) {
         if (dateTime.isAfter(now)) {
@@ -394,7 +394,7 @@ List<AgendaItemSource> getAgendaSections(
 typedef AgendaItem = ({
   OrgSection section,
   DataSource dataSource,
-  tz.TZDateTime scheduledAt,
+  (tz.TZDateTime start, tz.TZDateTime end, int chunkIdx) scheduledAt,
 });
 
 Iterable<AgendaItem> agendaItemsFromSources(
@@ -417,10 +417,11 @@ Iterable<AgendaItem> agendaItemsFromSources(
   while (true) {
     debugPrint('Emitting agenda item #$n; previous: $emitted');
 
-    final toRemove = <({AgendaItemSource source, Iterator<DateTime> iter})>[];
+    final toRemove =
+        <({AgendaItemSource source, Iterator<ChunkedAgendaSpan> iter})>[];
     outer:
     for (final i in iters) {
-      while (i.iter.current.isBefore(emitted ?? now)) {
+      while (i.iter.current.$1.isBefore(emitted ?? now)) {
         if (!i.iter.moveNext()) {
           toRemove.add(i);
           continue outer;
@@ -432,15 +433,20 @@ Iterable<AgendaItem> agendaItemsFromSources(
 
     final emitAt = iters
         .map((e) => e.iter.current)
-        .reduce((a, b) => a.isBefore(b) ? a : b);
+        .reduce((a, b) => a.$1.isBefore(b.$1) ? a : b);
 
-    final allEmitted = <({AgendaItemSource source, Iterator<DateTime> iter})>[];
+    final allEmitted =
+        <({AgendaItemSource source, Iterator<ChunkedAgendaSpan> iter})>[];
     for (final i in iters) {
-      if (i.iter.current.isAtSameMomentAs(emitAt)) {
+      if (i.iter.current.$1.isAtSameMomentAs(emitAt.$1)) {
         yield (
           section: i.source.section,
           dataSource: i.source.dataSource,
-          scheduledAt: tz.TZDateTime.from(i.iter.current, tz.local),
+          scheduledAt: (
+            tz.TZDateTime.from(i.iter.current.$1, tz.local),
+            tz.TZDateTime.from(i.iter.current.$2, tz.local),
+            i.iter.current.$3,
+          ),
         );
         allEmitted.add(i);
       }
@@ -452,7 +458,7 @@ Iterable<AgendaItem> agendaItemsFromSources(
       }
     }
 
-    emitted = emitAt;
+    emitted = emitAt.$1;
     n++;
   }
 }
@@ -484,11 +490,13 @@ extension OrgSectionUtil on OrgSection {
   bool get isClosed =>
       planning.any((entry) => entry.keyword.content == 'CLOSED:');
 
-  Iterable<DateTime> get scheduledAt sync* {
+  Iterable<ChunkedAgendaSpan> get scheduledAt sync* {
     final timestamps = activeTimestamps.toList(growable: false)..sort();
     final iters = timestamps
-        .expand((dt) => expandTimestamp(dt))
-        .map((e) => e.iterator)
+        .map(
+          (e) =>
+              expandTimestamp(e).expand((e) => chunkMultidaySpan(e)).iterator,
+        )
         .toList(growable: false);
     while (true) {
       var done = true;
@@ -507,7 +515,7 @@ extension OrgSectionUtil on OrgSection {
     now ??= DateTime.now();
     return scheduledAt
         .take(kMaxNotifications)
-        .any((dateTime) => dateTime.isAfter(now!));
+        .any((span) => span.$2.isAfter(now!));
   }
 
   List<OrgPlanningEntry> get planning {
@@ -577,26 +585,36 @@ extension OrgTreeUtil on OrgTree {
 // - Min-max style: can ignore max for now
 //   https://orgmode.org/manual/Tracking-your-habits.html
 
-List<Iterable<DateTime>> expandTimestamp(OrgTimestamp timestamp) =>
-    switch (timestamp) {
-      OrgSimpleTimestamp() => [
-        expandDate(timestamp.dateTime, timestamp.modifiers),
-      ],
-      OrgTimeRangeTimestamp() => [
-        expandDate(timestamp.startDateTime, timestamp.modifiers),
-      ],
-      OrgDateRangeTimestamp() => [
-        ...expandTimestamp(timestamp.start),
-        ...expandTimestamp(timestamp.end),
-      ],
-    };
+typedef AgendaSpan = (DateTime start, DateTime end);
+// chunkIdx is -1 if the span is not chunked, otherwise it is the index of the
+// chunk in the multi-day span.
+typedef ChunkedAgendaSpan = (DateTime start, DateTime end, int chunkIdx);
 
-Iterable<DateTime> expandDate(
-  DateTime dateTime,
+Iterable<AgendaSpan> expandTimestamp(
+  OrgTimestamp timestamp, [
+  OrgTimestamp? end,
+]) => switch (timestamp) {
+  OrgSimpleTimestamp() => expandDate(
+    timestamp.startDateTime,
+    (end ?? timestamp).endDateTime,
+    timestamp.modifiers,
+  ),
+
+  OrgTimeRangeTimestamp() => expandDate(
+    timestamp.startDateTime,
+    (end ?? timestamp).endDateTime,
+    timestamp.modifiers,
+  ),
+  OrgDateRangeTimestamp() => expandTimestamp(timestamp.start, timestamp.end),
+};
+
+Iterable<AgendaSpan> expandDate(
+  DateTime start,
+  DateTime end,
   List<OrgTimestampModifier> modifiers,
 ) sync* {
   if (modifiers.isEmpty) {
-    yield dateTime;
+    yield (start, end);
     return;
   }
   final repeater = modifiers.where((m) => m.isRepeater).firstOrNull;
@@ -609,7 +627,7 @@ Iterable<DateTime> expandDate(
     return dt.addModifier(delayValue!, delay.unit);
   }
 
-  yield applyDelay(dateTime);
+  yield (applyDelay(start), applyDelay(end));
   if (repeater == null) return;
 
   final repeaterValue = int.parse(repeater.value);
@@ -617,9 +635,28 @@ Iterable<DateTime> expandDate(
       dt.addModifier(repeaterValue, repeater.unit);
 
   while (true) {
-    dateTime = applyRepeater(dateTime);
-    yield delay?.prefix == '-' ? applyDelay(dateTime) : dateTime;
+    start = applyRepeater(start);
+    end = applyRepeater(end);
+    yield delay?.prefix == '-'
+        ? (applyDelay(start), applyDelay(end))
+        : (start, end);
   }
+}
+
+// A multi-day span is accurately modeled by a (start, end) pair, but for
+// day-based notifications and agenda view we want to present it as a series of
+// single-day spans.
+Iterable<ChunkedAgendaSpan> chunkMultidaySpan(AgendaSpan span) sync* {
+  final (start, end) = span;
+  var chunkIdx = 0;
+  var currentStart = start;
+  var currentEnd = currentStart.add(const Duration(days: 1)).startOfDay();
+  while (currentEnd.isBefore(end)) {
+    yield (currentStart, currentEnd, chunkIdx++);
+    currentStart = currentStart.add(const Duration(days: 1)).startOfDay();
+    currentEnd = currentEnd.add(const Duration(days: 1)).startOfDay();
+  }
+  yield (currentStart, end, chunkIdx == 0 ? -1 : chunkIdx);
 }
 
 class NotificationsListItems extends StatefulWidget {

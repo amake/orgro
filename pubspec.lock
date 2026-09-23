@@ -691,10 +691,10 @@ packages:
     dependency: transitive
     description:
       name: org_parser
-      sha256: "0a780ff905b28c35f0e5d356fb60ace8e11ccf3e679d1ea9723c3a9f36eee27b"
+      sha256: "12115566ecbf75caeb4e8e02729b8c281895d472cb9032c611a29bb72a81aaf4"
       url: "https://pub.dev"
     source: hosted
-    version: "11.6.0"
+    version: "11.6.1"
   package_config:
     dependency: transitive
     description:

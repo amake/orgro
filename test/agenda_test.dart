@@ -4,7 +4,7 @@ import 'package:orgro/src/agenda.dart';
 
 void main() {
   group('Section pending', () {
-    final now = DateTime(2025, 10, 1, 10, 0);
+    final now = DateTime(2025, 10, 1, 10);
     test('Pending', () {
       final doc = OrgDocument.parse('''
 * TODO Do the thing
@@ -17,7 +17,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.scheduledAt, [DateTime(2025, 10, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+      ]);
     });
     test('Exact time', () {
       final doc = OrgDocument.parse('''
@@ -31,7 +33,25 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.scheduledAt, [DateTime(2025, 10, 5, 10, 1)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 5, 10, 1), DateTime(2025, 10, 5, 10, 1), -1),
+      ]);
+    });
+    test('Right now', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+  SCHEDULED: <2025-10-05 Sun 10:00>
+  foo
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isTrue);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), -1),
+      ]);
     });
     test('Past', () {
       final doc = OrgDocument.parse('''
@@ -45,7 +65,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 9, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+      ]);
     });
     test('Naked timestamp', () {
       final doc = OrgDocument.parse('''
@@ -58,7 +80,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 9, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+      ]);
     });
     test('Multiple timestamps', () {
       final doc = OrgDocument.parse('''
@@ -73,8 +97,8 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        DateTime(2025, 9, 5),
-        DateTime(2025, 10, 10),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
       ]);
     });
     test('Duplicate timestamps', () {
@@ -89,7 +113,10 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 9, 5), DateTime(2025, 9, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+      ]);
     });
     test('Time range', () {
       final doc = OrgDocument.parse('''
@@ -102,7 +129,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.scheduledAt, [DateTime(2025, 10, 1, 10, 30)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 1, 10, 30), DateTime(2025, 10, 1, 12, 30), -1),
+      ]);
     });
     test('Time range (already started)', () {
       final doc = OrgDocument.parse('''
@@ -114,8 +143,10 @@ void main() {
       expect(section.isTodo, isTrue);
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
-      expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 10, 1, 9, 30)]);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 1, 9, 30), DateTime(2025, 10, 1, 12, 30), -1),
+      ]);
     });
     test('Timestamp in header', () {
       final doc = OrgDocument.parse('''
@@ -128,7 +159,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.scheduledAt, [DateTime(2025, 10, 10)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
+      ]);
     });
     test('Planning entry in header', () {
       final doc = OrgDocument.parse('''
@@ -141,7 +174,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.scheduledAt, [DateTime(2025, 10, 10)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
+      ]);
     });
     test('Inacive timestamp', () {
       final doc = OrgDocument.parse('''
@@ -183,7 +218,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isTrue);
       expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 10, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+      ]);
     });
     test('Completed via DONE', () {
       final doc = OrgDocument.parse('''
@@ -197,7 +234,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
-      expect(section.scheduledAt, [DateTime(2025, 10, 5)]);
+      expect(section.scheduledAt, [
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+      ]);
     });
     test('Not TODO', () {
       final doc = OrgDocument.parse('''
@@ -239,9 +278,11 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgTimeRangeTimestamp>()]);
-      expect(section.scheduledAt, [DateTime(2026, 9, 21, 17, 0)]);
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 21, 17, 0), DateTime(2026, 9, 21, 22, 0), -1),
+      ]);
     });
-    test('Datetime range', () {
+    test('Datetime range with specific times (next day, >1 day)', () {
       final doc = OrgDocument.parse('''
 * TODO Do the thing
 <2026-09-25 Fri 08:00>--<2026-09-26 Sat 14:00>
@@ -254,8 +295,61 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        DateTime(2026, 9, 25, 8, 0),
-        DateTime(2026, 9, 26, 14, 0),
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 14, 0), 1),
+      ]);
+    });
+    test('Datetime range with specific times (next day, <1 day)', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri 08:00>--<2026-09-26 Sat 07:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isFalse);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 7, 0), 1),
+      ]);
+    });
+    test('Datetime range with specific times (multiple days away)', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri 08:00>--<2026-09-27 Sun 14:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isFalse);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 27, 14, 0), 2),
+      ]);
+    });
+    test('Datetime range no specific times', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri>--<2026-09-27 Sat>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+      expect(section.isDone, isFalse);
+      expect(section.isTodo, isTrue);
+      expect(section.isScheduled, isFalse);
+      expect(section.isClosed, isFalse);
+      expect(section.isPending(now: now), isTrue);
+      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 25, 0, 0), DateTime(2026, 9, 26, 0, 0), 0),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 28, 0, 0), 2),
       ]);
     });
     group('Modifiers', () {
@@ -268,13 +362,15 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          DateTime(2025, 10, 5),
-          DateTime(2025, 10, 12),
-          DateTime(2025, 10, 19),
-          DateTime(2025, 10, 26),
-          DateTime(2025, 11, 2),
+          (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), -1),
+          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), -1),
+          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), -1),
+          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), -1),
         ]);
-        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 5)]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), -1),
+        ]);
       });
       test('Simple with delay', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun -1d>');
@@ -284,7 +380,9 @@ void main() {
         expect(section.isScheduled, isFalse);
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
-        expect(section.scheduledAt, [DateTime(2025, 10, 6)]);
+        expect(section.scheduledAt, [
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
+        ]);
       });
       test('Simple with repeater and delay', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w -1d>');
@@ -295,13 +393,15 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          DateTime(2025, 10, 6),
-          DateTime(2025, 10, 13),
-          DateTime(2025, 10, 20),
-          DateTime(2025, 10, 27),
-          DateTime(2025, 11, 3),
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
+          (DateTime(2025, 10, 13), DateTime(2025, 10, 14), -1),
+          (DateTime(2025, 10, 20), DateTime(2025, 10, 21), -1),
+          (DateTime(2025, 10, 27), DateTime(2025, 10, 28), -1),
+          (DateTime(2025, 11, 3), DateTime(2025, 11, 4), -1),
         ]);
-        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 6)]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          (DateTime(2027, 9, 6), DateTime(2027, 9, 7), -1),
+        ]);
       });
       test('Simple with repeater and one-time delay', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w --1d>');
@@ -312,13 +412,15 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          DateTime(2025, 10, 6),
-          DateTime(2025, 10, 12),
-          DateTime(2025, 10, 19),
-          DateTime(2025, 10, 26),
-          DateTime(2025, 11, 2),
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
+          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), -1),
+          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), -1),
+          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), -1),
+          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), -1),
         ]);
-        expect(section.scheduledAt.skip(100).take(1), [DateTime(2027, 9, 5)]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), -1),
+        ]);
       });
       test('Time range', () {
         final doc = OrgDocument.parse(
@@ -331,14 +433,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          DateTime(2025, 10, 5, 10, 0),
-          DateTime(2025, 10, 6, 10, 0),
-          DateTime(2025, 10, 7, 10, 0),
-          DateTime(2025, 10, 8, 10, 0),
-          DateTime(2025, 10, 9, 10, 0),
+          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 11, 0), -1),
+          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 11, 0), -1),
+          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 11, 0), -1),
+          (DateTime(2025, 10, 8, 10, 0), DateTime(2025, 10, 8, 11, 0), -1),
+          (DateTime(2025, 10, 9, 10, 0), DateTime(2025, 10, 9, 11, 0), -1),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          DateTime(2026, 1, 13, 10, 0),
+          (DateTime(2026, 1, 13, 10, 0), DateTime(2026, 1, 13, 11, 0), -1),
         ]);
       });
       test('Multiple', () {
@@ -352,14 +454,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          DateTime(2025, 10, 5, 10, 0),
-          DateTime(2026, 10, 5, 10, 0),
-          DateTime(2025, 10, 6, 10, 0),
-          DateTime(2026, 10, 6, 10, 0),
-          DateTime(2025, 10, 7, 10, 0),
+          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), -1),
+          (DateTime(2026, 10, 5, 10, 0), DateTime(2026, 10, 5, 10, 0), -1),
+          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 10, 0), -1),
+          (DateTime(2026, 10, 6, 10, 0), DateTime(2026, 10, 6, 10, 0), -1),
+          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 10, 0), -1),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          DateTime(2025, 11, 24, 10, 0),
+          (DateTime(2025, 11, 24, 10, 0), DateTime(2025, 11, 24, 10, 0), -1),
         ]);
       });
     });
