@@ -506,19 +506,21 @@ extension OrgSectionUtil on OrgSection {
   Iterable<ChunkedAgendaSpan> get scheduledAt sync* {
     final timestamps = activeTimestamps.toList(growable: false)..sort();
     final iters = timestamps
-        .map(
-          (e) =>
-              expandTimestamp(e).expand((e) => chunkMultidaySpan(e)).iterator,
-        )
-        .toList(growable: false);
-    while (true) {
-      var done = true;
-      for (final iter in iters) {
-        if (!iter.moveNext()) continue;
-        done = false;
-        yield iter.current;
+        .map((e) => expandTimestamp(e).expand(chunkMultidaySpan).iterator)
+        .where((iter) => iter.moveNext())
+        .toList();
+
+    while (iters.isNotEmpty) {
+      final iter = iters.reduce(
+        (a, b) => a.current.comparisonPoint.isBefore(b.current.comparisonPoint)
+            ? a
+            : b,
+      );
+
+      yield iter.current;
+      if (!iter.moveNext()) {
+        iters.remove(iter);
       }
-      if (done) break;
     }
   }
 

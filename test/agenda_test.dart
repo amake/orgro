@@ -1,8 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/data_source.dart';
+import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() {
+  setUpAll(() {
+    tz_data.initializeTimeZones();
+    tz.setLocalLocation(tz.UTC);
+  });
+
   group('Section pending', () {
     final now = DateTime(2025, 10, 1, 10);
     test('Pending', () {
@@ -352,6 +360,78 @@ void main() {
         (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 28, 0, 0), 2, true),
       ]);
     });
+    test('Orders overlapping spans by comparison point', () {
+      final now = DateTime(2026, 9, 1);
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri 08:00>--<2026-09-27 Sun 14:00>
+<2026-09-26 Sat 10:00>
+<2026-09-27 Sun 09:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
+        (DateTime(2026, 9, 26, 10, 0), DateTime(2026, 9, 26, 10, 0), 0, true),
+        (DateTime(2026, 9, 27, 9, 0), DateTime(2026, 9, 27, 9, 0), 0, true),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 27, 14, 0), 2, true),
+      ]);
+
+      final agendaItems = agendaItemsFromSources([
+        (section: section, dataSource: AssetDataSource('test.org')),
+      ], now: now);
+      expect(agendaItems.map((item) => item.scheduledAt.$1), [
+        tz.TZDateTime.from(DateTime(2026, 9, 25, 8, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 26, 0, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 26, 10, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 27, 9, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 27, 0, 0), tz.local),
+      ]);
+    });
+    test('Emits every source at the same comparison point', () {
+      final firstDoc = OrgDocument.parse('''
+* TODO First
+<2026-09-25 Fri 08:00>
+''');
+      final secondDoc = OrgDocument.parse('''
+* TODO Second
+<2026-09-25 Fri 08:00>
+''');
+      final firstSection = firstDoc.children.firstOrNull as OrgSection;
+      final secondSection = secondDoc.children.firstOrNull as OrgSection;
+
+      final agendaItems = agendaItemsFromSources([
+        (section: firstSection, dataSource: AssetDataSource('first.org')),
+        (section: secondSection, dataSource: AssetDataSource('second.org')),
+      ], now: DateTime(2026, 9, 1, 0, 0));
+
+      expect(agendaItems.map((item) => item.section), [
+        firstSection,
+        secondSection,
+      ]);
+      expect(agendaItems.map((item) => item.scheduledAt.$1), [
+        tz.TZDateTime.from(DateTime(2026, 9, 25, 8, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 25, 8, 0), tz.local),
+      ]);
+    });
+    test('Includes entries at the current comparison point', () {
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri 08:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+
+      final agendaItems = agendaItemsFromSources([
+        (section: section, dataSource: AssetDataSource('test.org')),
+      ], now: DateTime(2026, 9, 25, 8, 0));
+
+      expect(agendaItems, hasLength(1));
+      expect(
+        agendaItems.single.scheduledAt.$1,
+        tz.TZDateTime.from(DateTime(2026, 9, 25, 8, 0), tz.local),
+      );
+    });
     group('Modifiers', () {
       test('Simple with repeater', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w>');
@@ -455,18 +535,13 @@ void main() {
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
           (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), 0, true),
-          (DateTime(2026, 10, 5, 10, 0), DateTime(2026, 10, 5, 10, 0), 0, true),
           (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 10, 0), 0, true),
-          (DateTime(2026, 10, 6, 10, 0), DateTime(2026, 10, 6, 10, 0), 0, true),
           (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 10, 0), 0, true),
+          (DateTime(2025, 10, 8, 10, 0), DateTime(2025, 10, 8, 10, 0), 0, true),
+          (DateTime(2025, 10, 9, 10, 0), DateTime(2025, 10, 9, 10, 0), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (
-            DateTime(2025, 11, 24, 10, 0),
-            DateTime(2025, 11, 24, 10, 0),
-            0,
-            true,
-          ),
+          (DateTime(2026, 1, 13, 10, 0), DateTime(2026, 1, 13, 10, 0), 0, true),
         ]);
       });
     });
