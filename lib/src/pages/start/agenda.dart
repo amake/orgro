@@ -10,7 +10,9 @@ import 'package:orgro/src/components/layout.dart';
 import 'package:orgro/src/components/lifecycle.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/navigation.dart';
+import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/util.dart';
 
 class AgendaBody extends StatefulWidget {
@@ -136,15 +138,7 @@ class _AgendaBodyState extends State<AgendaBody>
                     title: Text(title),
                     titleAlignment: .center,
                     subtitle: Text(dataSource.name),
-                    onTap: () => loadDocument(
-                      context,
-                      dataSource,
-                      afterOpen: (state) async {
-                        final target = section.targetForSection;
-                        if (target == null) return;
-                        OrgLocator.of(state.context)!.jumpToSection(target);
-                      },
-                    ),
+                    onTap: () => _openAgendaItem(section, dataSource),
                   ),
                 );
 
@@ -188,6 +182,20 @@ class _AgendaBodyState extends State<AgendaBody>
         ),
       ),
     );
+  }
+
+  void _openAgendaItem(OrgTree section, DataSource dataSource) {
+    final target = section.targetForSection;
+    final AfterOpenCallback? afterOpen = target == null
+        ? null
+        : (state) => OrgLocator.of(state.context)!.jumpToSection(target);
+
+    switch (dataSource) {
+      case NativeDataSource():
+        loadAndRememberFile(context, dataSource, afterOpen: afterOpen);
+      default:
+        loadDocument(context, dataSource, afterOpen: afterOpen);
+    }
   }
 }
 
