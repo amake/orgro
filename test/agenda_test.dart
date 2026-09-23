@@ -18,7 +18,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
       ]);
     });
     test('Exact time', () {
@@ -34,7 +34,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 5, 10, 1), DateTime(2025, 10, 5, 10, 1), -1),
+        (DateTime(2025, 10, 5, 10, 1), DateTime(2025, 10, 5, 10, 1), 0, true),
       ]);
     });
     test('Right now', () {
@@ -50,7 +50,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), -1),
+        (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), 0, true),
       ]);
     });
     test('Past', () {
@@ -66,7 +66,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, [
-        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), 0, true),
       ]);
     });
     test('Naked timestamp', () {
@@ -81,7 +81,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, [
-        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), 0, true),
       ]);
     });
     test('Multiple timestamps', () {
@@ -97,8 +97,8 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
-        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), 0, true),
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), 0, true),
       ]);
     });
     test('Duplicate timestamps', () {
@@ -114,8 +114,8 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, [
-        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
-        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), -1),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), 0, true),
+        (DateTime(2025, 9, 5), DateTime(2025, 9, 6), 0, true),
       ]);
     });
     test('Time range', () {
@@ -130,7 +130,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 1, 10, 30), DateTime(2025, 10, 1, 12, 30), -1),
+        (DateTime(2025, 10, 1, 10, 30), DateTime(2025, 10, 1, 12, 30), 0, true),
       ]);
     });
     test('Time range (already started)', () {
@@ -145,7 +145,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 1, 9, 30), DateTime(2025, 10, 1, 12, 30), -1),
+        (DateTime(2025, 10, 1, 9, 30), DateTime(2025, 10, 1, 12, 30), 0, true),
       ]);
     });
     test('Timestamp in header', () {
@@ -160,7 +160,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), 0, true),
       ]);
     });
     test('Planning entry in header', () {
@@ -175,7 +175,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), -1),
+        (DateTime(2025, 10, 10), DateTime(2025, 10, 11), 0, true),
       ]);
     });
     test('Inacive timestamp', () {
@@ -219,7 +219,7 @@ void main() {
       expect(section.isClosed, isTrue);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
       ]);
     });
     test('Completed via DONE', () {
@@ -235,7 +235,7 @@ void main() {
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, [
-        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
+        (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
       ]);
     });
     test('Not TODO', () {
@@ -279,7 +279,7 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgTimeRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        (DateTime(2026, 9, 21, 17, 0), DateTime(2026, 9, 21, 22, 0), -1),
+        (DateTime(2026, 9, 21, 17, 0), DateTime(2026, 9, 21, 22, 0), 0, true),
       ]);
     });
     test('Datetime range with specific times (next day, >1 day)', () {
@@ -295,8 +295,8 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
-        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 14, 0), 1),
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 14, 0), 1, true),
       ]);
     });
     test('Datetime range with specific times (next day, <1 day)', () {
@@ -312,8 +312,8 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
-        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 7, 0), 1),
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 7, 0), 1, true),
       ]);
     });
     test('Datetime range with specific times (multiple days away)', () {
@@ -329,9 +329,9 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0),
-        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1),
-        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 27, 14, 0), 2),
+        (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 27, 14, 0), 2, true),
       ]);
     });
     test('Datetime range no specific times', () {
@@ -347,9 +347,9 @@ void main() {
       expect(section.isPending(now: now), isTrue);
       expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
       expect(section.scheduledAt, [
-        (DateTime(2026, 9, 25, 0, 0), DateTime(2026, 9, 26, 0, 0), 0),
-        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1),
-        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 28, 0, 0), 2),
+        (DateTime(2026, 9, 25, 0, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 28, 0, 0), 2, true),
       ]);
     });
     group('Modifiers', () {
@@ -362,14 +362,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          (DateTime(2025, 10, 5), DateTime(2025, 10, 6), -1),
-          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), -1),
-          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), -1),
-          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), -1),
-          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), -1),
+          (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
+          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), 0, true),
+          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), 0, true),
+          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), 0, true),
+          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), -1),
+          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), 0, true),
         ]);
       });
       test('Simple with delay', () {
@@ -381,7 +381,7 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt, [
-          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), 0, true),
         ]);
       });
       test('Simple with repeater and delay', () {
@@ -393,14 +393,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
-          (DateTime(2025, 10, 13), DateTime(2025, 10, 14), -1),
-          (DateTime(2025, 10, 20), DateTime(2025, 10, 21), -1),
-          (DateTime(2025, 10, 27), DateTime(2025, 10, 28), -1),
-          (DateTime(2025, 11, 3), DateTime(2025, 11, 4), -1),
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), 0, true),
+          (DateTime(2025, 10, 13), DateTime(2025, 10, 14), 0, true),
+          (DateTime(2025, 10, 20), DateTime(2025, 10, 21), 0, true),
+          (DateTime(2025, 10, 27), DateTime(2025, 10, 28), 0, true),
+          (DateTime(2025, 11, 3), DateTime(2025, 11, 4), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (DateTime(2027, 9, 6), DateTime(2027, 9, 7), -1),
+          (DateTime(2027, 9, 6), DateTime(2027, 9, 7), 0, true),
         ]);
       });
       test('Simple with repeater and one-time delay', () {
@@ -412,14 +412,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), -1),
-          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), -1),
-          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), -1),
-          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), -1),
-          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), -1),
+          (DateTime(2025, 10, 6), DateTime(2025, 10, 7), 0, true),
+          (DateTime(2025, 10, 12), DateTime(2025, 10, 13), 0, true),
+          (DateTime(2025, 10, 19), DateTime(2025, 10, 20), 0, true),
+          (DateTime(2025, 10, 26), DateTime(2025, 10, 27), 0, true),
+          (DateTime(2025, 11, 2), DateTime(2025, 11, 3), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), -1),
+          (DateTime(2027, 9, 5), DateTime(2027, 9, 6), 0, true),
         ]);
       });
       test('Time range', () {
@@ -433,14 +433,14 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 11, 0), -1),
-          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 11, 0), -1),
-          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 11, 0), -1),
-          (DateTime(2025, 10, 8, 10, 0), DateTime(2025, 10, 8, 11, 0), -1),
-          (DateTime(2025, 10, 9, 10, 0), DateTime(2025, 10, 9, 11, 0), -1),
+          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 11, 0), 0, true),
+          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 11, 0), 0, true),
+          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 11, 0), 0, true),
+          (DateTime(2025, 10, 8, 10, 0), DateTime(2025, 10, 8, 11, 0), 0, true),
+          (DateTime(2025, 10, 9, 10, 0), DateTime(2025, 10, 9, 11, 0), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (DateTime(2026, 1, 13, 10, 0), DateTime(2026, 1, 13, 11, 0), -1),
+          (DateTime(2026, 1, 13, 10, 0), DateTime(2026, 1, 13, 11, 0), 0, true),
         ]);
       });
       test('Multiple', () {
@@ -454,14 +454,19 @@ void main() {
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
-          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), -1),
-          (DateTime(2026, 10, 5, 10, 0), DateTime(2026, 10, 5, 10, 0), -1),
-          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 10, 0), -1),
-          (DateTime(2026, 10, 6, 10, 0), DateTime(2026, 10, 6, 10, 0), -1),
-          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 10, 0), -1),
+          (DateTime(2025, 10, 5, 10, 0), DateTime(2025, 10, 5, 10, 0), 0, true),
+          (DateTime(2026, 10, 5, 10, 0), DateTime(2026, 10, 5, 10, 0), 0, true),
+          (DateTime(2025, 10, 6, 10, 0), DateTime(2025, 10, 6, 10, 0), 0, true),
+          (DateTime(2026, 10, 6, 10, 0), DateTime(2026, 10, 6, 10, 0), 0, true),
+          (DateTime(2025, 10, 7, 10, 0), DateTime(2025, 10, 7, 10, 0), 0, true),
         ]);
         expect(section.scheduledAt.skip(100).take(1), [
-          (DateTime(2025, 11, 24, 10, 0), DateTime(2025, 11, 24, 10, 0), -1),
+          (
+            DateTime(2025, 11, 24, 10, 0),
+            DateTime(2025, 11, 24, 10, 0),
+            0,
+            true,
+          ),
         ]);
       });
     });

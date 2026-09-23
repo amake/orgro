@@ -210,7 +210,7 @@ class _AgendaTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (start, end, chunkIdx) = agendaSpan;
+    final (start, end, chunkIdx, last) = agendaSpan;
 
     if (start.isAtSameMomentAs(end)) {
       return Text(timeFormat.format(start), style: _timeStyle);
@@ -220,7 +220,7 @@ class _AgendaTime extends StatelessWidget {
       return const Icon(Icons.calendar_today);
     }
 
-    if (chunkIdx == 0 && end.isStartOfDay()) {
+    if (chunkIdx == 0 && !last && end.isStartOfDay()) {
       return Column(
         mainAxisAlignment: .center,
         children: [
@@ -230,7 +230,7 @@ class _AgendaTime extends StatelessWidget {
       );
     }
 
-    if (chunkIdx > 0 && start.isStartOfDay()) {
+    if (chunkIdx > 0 && last && start.isStartOfDay()) {
       return Column(
         mainAxisAlignment: .center,
         children: [
