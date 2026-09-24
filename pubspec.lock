@@ -37,26 +37,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-      sha256: "489c7e1f81368ab1c182a2468b1ed8cc7cd6a111902fac8445c33df9aa930a48"
+      sha256: "3d8cca7b14130f094aa38e3a58cb132bd38eb12664d7d094e7995fdcc8640863"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-      sha256: "4e5dd92739318b8c20cf4dc3c3a21c4e1b22efcc1b6a3562c4b8f47cb9652e59"
+      sha256: a6de45d11286a05e8a6df3e8d158f51c2833b86b83521d21d3375bb3fb20fc5f
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "5.0.2"
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-      sha256: "33300a8c6c658cf68e30550c326a505b3dfd16b6b3958655684db8f6bfd5d309"
+      sha256: "49b1034a1a6c74d61387f44ae81da8e66b66d0d7debc6190072fb1af228f0227"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   characters:
     dependency: transitive
     description:
@@ -603,10 +603,10 @@ packages:
     dependency: transitive
     description:
       name: octo_image
-      sha256: "34faa6639a78c7e3cbe79be6f9f96535867e879748ade7d17c9b1ae7536293bd"
+      sha256: "66e8f59a538a9f9f53141bc22ec0a12f8e85f2ca3bfcacab6dd30315b2fc256d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   open_file:
     dependency: "direct main"
     description:
