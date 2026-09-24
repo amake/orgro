@@ -502,6 +502,37 @@ void main() {
           (DateTime(2027, 9, 5), DateTime(2027, 9, 6), 0, true),
         ]);
       });
+      test('With repeater from many repeats ago', () {
+        final doc = OrgDocument.parse('* TODO foo <2020-10-05 Sun +1d>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt.take(5), [
+          (DateTime(2020, 10, 5), DateTime(2020, 10, 6), 0, true),
+          (DateTime(2020, 10, 6), DateTime(2020, 10, 7), 0, true),
+          (DateTime(2020, 10, 7), DateTime(2020, 10, 8), 0, true),
+          (DateTime(2020, 10, 8), DateTime(2020, 10, 9), 0, true),
+          (DateTime(2020, 10, 9), DateTime(2020, 10, 10), 0, true),
+        ]);
+        expect(section.scheduledAt.skip(100).take(1), [
+          (DateTime(2021, 1, 13), DateTime(2021, 1, 14), 0, true),
+        ]);
+      });
+      test('With delay that makes it pending', () {
+        final doc = OrgDocument.parse('* TODO foo <2025-09-30 Sun -1w>');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        expect(section.scheduledAt, [
+          (DateTime(2025, 10, 7), DateTime(2025, 10, 8), 0, true),
+        ]);
+      });
       test('Time range', () {
         final doc = OrgDocument.parse(
           '* TODO foo <2025-10-05 Sun 10:00-11:00 +1d>',

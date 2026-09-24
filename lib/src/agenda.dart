@@ -475,9 +475,12 @@ extension OrgSectionUtil on OrgSection {
     if (isDone || isClosed) return false;
 
     now ??= DateTime.now();
-    return scheduledAt
-        .take(kMaxNotifications)
-        .any((span) => span.$2.isAfter(now!));
+    return activeTimestamps.any(
+      (t) =>
+          t.endDateTime.isAfter(now!) ||
+          t.repeats ||
+          (t.hasDelay && t.delayedEndTime.isAfter(now)),
+    );
   }
 
   List<OrgPlanningEntry> get planning {
@@ -515,6 +518,16 @@ extension OrgSectionUtil on OrgSection {
     'id': ids.firstOrNull,
     'customId': customIds.firstOrNull,
     'rawTitle': headline.rawTitle,
+  };
+}
+
+extension _OrgTimestampUtil on OrgTimestamp {
+  DateTime get delayedEndTime => switch (this) {
+    final OrgSimpleTimestamp t =>
+      t.modifiers.firstWhere((m) => m.isDelay).apply(t.endDateTime),
+    final OrgTimeRangeTimestamp t =>
+      t.modifiers.firstWhere((m) => m.isDelay).apply(t.endDateTime),
+    final OrgDateRangeTimestamp t => t.end.delayedEndTime,
   };
 }
 
