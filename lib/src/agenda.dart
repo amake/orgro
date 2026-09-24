@@ -413,66 +413,27 @@ Iterable<AgendaItem> agendaItemsFromSources(
   List<AgendaItemSource> sources, {
   DateTime? now,
 }) sync* {
-  final iters = sources
-      .map((s) => (source: s, iter: s.section.scheduledAt.iterator))
-      .where((e) => e.iter.moveNext())
-      .toList();
-
-  debugPrint(
-    'Found ${iters.length} agenda items from ${sources.length} sources',
-  );
-
-  var n = 0;
-  DateTime? emitted;
   now ??= DateTime.now();
 
-  while (true) {
-    debugPrint('Emitting agenda item #$n; previous: $emitted');
+  final items = sources.map(
+    (source) => source.section.scheduledAt
+        .where((span) => !span.comparisonPoint.isBefore(now!))
+        .map((span) => (source: source, span: span)),
+  );
 
-    final toRemove =
-        <({AgendaItemSource source, Iterator<ChunkedAgendaSpan> iter})>[];
-    outer:
-    for (final i in iters) {
-      while (i.iter.current.comparisonPoint.isBefore(emitted ?? now)) {
-        if (!i.iter.moveNext()) {
-          toRemove.add(i);
-          continue outer;
-        }
-      }
-    }
-    iters.removeWhere((e) => toRemove.contains(e));
-    if (iters.isEmpty) break;
-
-    final emitAt = iters
-        .map((e) => e.iter.current.comparisonPoint)
-        .reduce((a, b) => a.isBefore(b) ? a : b);
-
-    final allEmitted =
-        <({AgendaItemSource source, Iterator<ChunkedAgendaSpan> iter})>[];
-    for (final i in iters) {
-      if (i.iter.current.comparisonPoint.isAtSameMomentAs(emitAt)) {
-        yield (
-          section: i.source.section,
-          dataSource: i.source.dataSource,
-          scheduledAt: (
-            tz.TZDateTime.from(i.iter.current.$1, tz.local),
-            tz.TZDateTime.from(i.iter.current.$2, tz.local),
-            i.iter.current.$3,
-            i.iter.current.$4,
-          ),
-        );
-        allEmitted.add(i);
-      }
-    }
-
-    for (final i in allEmitted) {
-      if (!i.iter.moveNext()) {
-        iters.remove(i);
-      }
-    }
-
-    emitted = emitAt;
-    n++;
+  for (final (:source, :span) in items.mergeSorted(
+    (a, b) => a.span.comparisonPoint.compareTo(b.span.comparisonPoint),
+  )) {
+    yield (
+      section: source.section,
+      dataSource: source.dataSource,
+      scheduledAt: (
+        tz.TZDateTime.from(span.$1, tz.local),
+        tz.TZDateTime.from(span.$2, tz.local),
+        span.$3,
+        span.$4,
+      ),
+    );
   }
 }
 
@@ -505,23 +466,9 @@ extension OrgSectionUtil on OrgSection {
 
   Iterable<ChunkedAgendaSpan> get scheduledAt sync* {
     final timestamps = activeTimestamps.toList(growable: false)..sort();
-    final iters = timestamps
-        .map((e) => expandTimestamp(e).expand(chunkMultidaySpan).iterator)
-        .where((iter) => iter.moveNext())
-        .toList();
-
-    while (iters.isNotEmpty) {
-      final iter = iters.reduce(
-        (a, b) => a.current.comparisonPoint.isBefore(b.current.comparisonPoint)
-            ? a
-            : b,
-      );
-
-      yield iter.current;
-      if (!iter.moveNext()) {
-        iters.remove(iter);
-      }
-    }
+    yield* timestamps
+        .map((e) => expandTimestamp(e).expand(chunkMultidaySpan))
+        .mergeSorted((a, b) => a.comparisonPoint.compareTo(b.comparisonPoint));
   }
 
   bool isPending({DateTime? now}) {

@@ -26,6 +26,25 @@ extension IterUtils<T> on Iterable<T> {
   }
 }
 
+extension IterIterUtils<T> on Iterable<Iterable<T>> {
+  Iterable<T> mergeSorted(Comparator<T> compare) sync* {
+    final iters = map((source) => source.iterator)
+        .where((iter) => iter.moveNext())
+        .toList();
+
+    while (iters.isNotEmpty) {
+      final iter = iters.reduce(
+        (a, b) => compare(a.current, b.current) <= 0 ? a : b,
+      );
+      yield iter.current;
+
+      if (!iter.moveNext()) {
+        iters.remove(iter);
+      }
+    }
+  }
+}
+
 extension ListUtils<T> on List<T> {
   bool equals(List<T> other, {bool Function(T?, T?)? valueEquals}) {
     valueEquals ??= (a, b) => a == b;
