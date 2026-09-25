@@ -470,7 +470,7 @@ extension OrgSectionUtil on OrgSection {
     final timestamps = activeTimestamps.toList(growable: false)
       ..sort((a, b) => a.$1.compareTo(b.$1));
     yield* timestamps
-        .map((e) => expandTimestamp(e.$1, e.$2).expand(chunkMultidaySpan))
+        .map2((t, kw) => expandTimestamp(t, kw).expand(chunkMultidaySpan))
         .mergeSorted((a, b) => a.comparisonPoint.compareTo(b.comparisonPoint));
   }
 
@@ -478,8 +478,7 @@ extension OrgSectionUtil on OrgSection {
     if (isDone || isClosed) return false;
 
     now ??= DateTime.now();
-    return activeTimestamps.any((e) {
-      final (t, kw) = e;
+    return activeTimestamps.any2((t, kw) {
       if (t.endDateTime.isAfter(now!)) return true;
       if (t.repeats) return true;
       if (t.hasDelay && t.delayedEndTime(kw).isAfter(now)) return true;
@@ -504,8 +503,7 @@ extension OrgSectionUtil on OrgSection {
     final timestamps = <PlannedTimestamp>[];
     bool timestampVisitor(OrgTimestamp node) {
       if (node.isActive &&
-          !timestamps.any((e) {
-            final (t, _) = e;
+          !timestamps.any2((t, _) {
             return t == node ||
                 t is OrgDateRangeTimestamp &&
                     (t.start == node || t.end == node);

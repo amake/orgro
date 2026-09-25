@@ -65,6 +65,13 @@ extension Iter2Utils<T, U> on Iterable<(T, U)> {
       yield visit(a, b);
     }
   }
+
+  bool any2(bool Function(T, U) test) {
+    for (final (a, b) in this) {
+      if (test(a, b)) return true;
+    }
+    return false;
+  }
 }
 
 extension MapUtils<T, U> on Map<T, U> {

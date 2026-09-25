@@ -366,8 +366,7 @@ class _FilesAndAgendaBodyState extends State<_FilesAndAgendaBody> {
       physics: const NeverScrollableScrollPhysics(),
       onPageChanged: widget.onPageChanged,
       children: const [RememberedFilesBody(), AgendaBody()].indexed
-          .map((e) {
-            final (idx, child) = e;
+          .map2((idx, child) {
             // The children have keep-alive enabled, which means that without
             // this trick they will both remain attached to the scaffold's
             // scroll controller (PrimaryScrollController.of(context)) even when
