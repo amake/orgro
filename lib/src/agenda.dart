@@ -456,6 +456,8 @@ Future<void> clearNotificationsForFiles(
 Future<void> clearAllNotifications() async =>
     await FlutterLocalNotificationsPlugin().cancelAll();
 
+typedef PlannedTimestamp = (OrgTimestamp, OrgPlanningKeyword?);
+
 extension OrgSectionUtil on OrgSection {
   bool get isTodo => headline.keyword?.done == false;
   bool get isDone => headline.keyword?.done == true;
@@ -465,9 +467,10 @@ extension OrgSectionUtil on OrgSection {
       planning.any((entry) => entry.keyword.content == 'CLOSED:');
 
   Iterable<ChunkedAgendaSpan> get scheduledAt sync* {
-    final timestamps = activeTimestamps.toList(growable: false)..sort();
+    final timestamps = activeTimestamps.toList(growable: false)
+      ..sort((a, b) => a.$1.compareTo(b.$1));
     yield* timestamps
-        .map((e) => expandTimestamp(e).expand(chunkMultidaySpan))
+        .map((e) => expandTimestamp(e.$1, e.$2).expand(chunkMultidaySpan))
         .mergeSorted((a, b) => a.comparisonPoint.compareTo(b.comparisonPoint));
   }
 
@@ -475,12 +478,13 @@ extension OrgSectionUtil on OrgSection {
     if (isDone || isClosed) return false;
 
     now ??= DateTime.now();
-    return activeTimestamps.any(
-      (t) =>
-          t.endDateTime.isAfter(now!) ||
-          t.repeats ||
-          (t.hasDelay && t.delayedEndTime.isAfter(now)),
-    );
+    return activeTimestamps.any((e) {
+      final (t, kw) = e;
+      if (t.endDateTime.isAfter(now!)) return true;
+      if (t.repeats) return true;
+      if (t.hasDelay && t.delayedEndTime(kw).isAfter(now)) return true;
+      return false;
+    });
   }
 
   List<OrgPlanningEntry> get planning {
@@ -496,21 +500,40 @@ extension OrgSectionUtil on OrgSection {
     return entries;
   }
 
-  List<OrgTimestamp> get activeTimestamps {
-    final timestamps = <OrgTimestamp>[];
-    bool visitor(OrgTimestamp timestamp) {
-      if (timestamp.isActive &&
-          !timestamps.whereType<OrgDateRangeTimestamp>().any(
-            (t) => t.start == timestamp || t.end == timestamp,
-          )) {
-        timestamps.add(timestamp);
+  List<PlannedTimestamp> get activeTimestamps {
+    final timestamps = <PlannedTimestamp>[];
+    bool timestampVisitor(OrgTimestamp node) {
+      if (node.isActive &&
+          !timestamps.any((e) {
+            final (t, _) = e;
+            return t == node ||
+                t is OrgDateRangeTimestamp &&
+                    (t.start == node || t.end == node);
+          })) {
+        timestamps.add((node, null));
+      }
+      return true;
+    }
+
+    bool allVisitor(OrgNode node) {
+      switch (node) {
+        // TODO(aaron): Technically we should only honor planning entries that
+        // are on the line immediately following the headline
+        case OrgPlanningEntry(keyword: final k, value: final OrgTimestamp v)
+            when v.isActive:
+          timestamps.add((v, k));
+        case OrgTimestamp():
+          timestampVisitor(node);
       }
       return true;
     }
 
     // Don't just call this.visit because we don't want to visit subsections
-    headline.visit(visitor);
-    content?.visit(visitor);
+
+    // Planning entries are not honored when in the headline, but the timestamps
+    // are
+    headline.visit(timestampVisitor);
+    content?.visit(allVisitor);
     return timestamps;
   }
 
@@ -522,12 +545,16 @@ extension OrgSectionUtil on OrgSection {
 }
 
 extension _OrgTimestampUtil on OrgTimestamp {
-  DateTime get delayedEndTime => switch (this) {
+  DateTime delayedEndTime(OrgPlanningKeyword? keyword) => switch (this) {
     final OrgSimpleTimestamp t =>
-      t.modifiers.firstWhere((m) => m.isDelay).apply(t.endDateTime),
+      t.modifiers
+          .firstWhere((m) => m.isDelay)
+          .apply(t.endDateTime, keyword: keyword),
     final OrgTimeRangeTimestamp t =>
-      t.modifiers.firstWhere((m) => m.isDelay).apply(t.endDateTime),
-    final OrgDateRangeTimestamp t => t.end.delayedEndTime,
+      t.modifiers
+          .firstWhere((m) => m.isDelay)
+          .apply(t.endDateTime, keyword: keyword),
+    final OrgDateRangeTimestamp t => t.end.delayedEndTime(keyword),
   };
 }
 
@@ -557,7 +584,7 @@ extension OrgTreeUtil on OrgTree {
 // - `++`: Add the specified offset enough times to get past *now*
 //   https://orgmode.org/manual/Repeated-tasks.html
 // - `-`: Subtract the specified offset from the original datetime if this is a
-//   DEADLINE. Add if this is a SCHEDULED.
+//   DEADLINE. Add if this is a SCHEDULED. If neither, it is a noop.
 //   https://orgmode.org/manual/Deadlines-and-Scheduling.html
 // - `--`: When a SCHEDULED and has a repeater, add the specified offset to the
 //   original datetime only for the first occurrence.
@@ -583,27 +610,35 @@ extension _ChunkUtil on ChunkedAgendaSpan {
 }
 
 Iterable<AgendaSpan> expandTimestamp(
-  OrgTimestamp timestamp, [
+  OrgTimestamp timestamp,
+  OrgPlanningKeyword? keyword, [
   OrgTimestamp? end,
 ]) => switch (timestamp) {
   OrgSimpleTimestamp() => expandDate(
     timestamp.startDateTime,
     (end ?? timestamp).endDateTime,
     timestamp.modifiers,
+    keyword,
   ),
 
   OrgTimeRangeTimestamp() => expandDate(
     timestamp.startDateTime,
     (end ?? timestamp).endDateTime,
     timestamp.modifiers,
+    keyword,
   ),
-  OrgDateRangeTimestamp() => expandTimestamp(timestamp.start, timestamp.end),
+  OrgDateRangeTimestamp() => expandTimestamp(
+    timestamp.start,
+    keyword,
+    timestamp.end,
+  ),
 };
 
 Iterable<AgendaSpan> expandDate(
   DateTime start,
   DateTime end,
   List<OrgTimestampModifier> modifiers,
+  OrgPlanningKeyword? keyword,
 ) sync* {
   if (modifiers.isEmpty) {
     yield (start, end);
@@ -615,7 +650,13 @@ Iterable<AgendaSpan> expandDate(
   int? delayValue;
   DateTime applyDelay(DateTime dt) {
     if (delay == null) return dt;
-    delayValue ??= int.parse(delay.value);
+    delayValue ??=
+        int.parse(delay.value) *
+        switch ((delay.prefix, keyword?.content)) {
+          ('-', 'DEADLINE:') => -1,
+          ('-', 'SCHEDULED:') || ('--', 'SCHEDULED:') => 1,
+          _ => 0,
+        };
     return dt.addModifier(delayValue!, delay.unit);
   }
 

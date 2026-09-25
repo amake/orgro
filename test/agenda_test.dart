@@ -25,6 +25,9 @@ void main() {
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgSimpleTimestamp>());
+      expect(keyword!.content, 'SCHEDULED:');
       expect(section.scheduledAt, [
         (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
       ]);
@@ -197,10 +200,10 @@ void main() {
       expect(section.isTodo, isTrue);
       expect(section.isScheduled, isTrue);
       expect(section.isClosed, isFalse);
+      expect(section.activeTimestamps, isEmpty);
       expect(section.isPending(now: now), isFalse);
       expect(section.scheduledAt, isEmpty);
     });
-
     test('Not scheduled', () {
       final doc = OrgDocument.parse('''
 * TODO Do the thing
@@ -285,7 +288,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.activeTimestamps, [isA<OrgTimeRangeTimestamp>()]);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgTimeRangeTimestamp>());
+      expect(keyword, isNull);
       expect(section.scheduledAt, [
         (DateTime(2026, 9, 21, 17, 0), DateTime(2026, 9, 21, 22, 0), 0, true),
       ]);
@@ -301,7 +306,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgDateRangeTimestamp>());
+      expect(keyword, isNull);
       expect(section.scheduledAt, [
         (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
         (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 14, 0), 1, true),
@@ -318,7 +325,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgDateRangeTimestamp>());
+      expect(keyword, isNull);
       expect(section.scheduledAt, [
         (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
         (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 26, 7, 0), 1, true),
@@ -335,7 +344,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgDateRangeTimestamp>());
+      expect(keyword, isNull);
       expect(section.scheduledAt, [
         (DateTime(2026, 9, 25, 8, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
         (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
@@ -353,7 +364,9 @@ void main() {
       expect(section.isScheduled, isFalse);
       expect(section.isClosed, isFalse);
       expect(section.isPending(now: now), isTrue);
-      expect(section.activeTimestamps, [isA<OrgDateRangeTimestamp>()]);
+      final (timestamp, keyword) = section.activeTimestamps.single;
+      expect(timestamp, isA<OrgDateRangeTimestamp>());
+      expect(keyword, isNull);
       expect(section.scheduledAt, [
         (DateTime(2026, 9, 25, 0, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
         (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
@@ -460,16 +473,52 @@ void main() {
         expect(section.isScheduled, isFalse);
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
+        final (timestamp, keyword) = section.activeTimestamps.single;
+        expect(timestamp, isA<OrgSimpleTimestamp>());
+        expect(keyword, isNull);
+        expect(section.scheduledAt, [
+          (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
+        ]);
+      });
+      test('Scheduled with delay', () {
+        final doc = OrgDocument.parse('''* TODO foo
+SCHEDULED: <2025-10-05 Sun -1d>''');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isTrue);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        final (timestamp, keyword) = section.activeTimestamps.single;
+        expect(timestamp, isA<OrgSimpleTimestamp>());
+        expect(keyword!.content, 'SCHEDULED:');
         expect(section.scheduledAt, [
           (DateTime(2025, 10, 6), DateTime(2025, 10, 7), 0, true),
         ]);
       });
-      test('Simple with repeater and delay', () {
-        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w -1d>');
+      test('Deadline with delay', () {
+        final doc = OrgDocument.parse('''* TODO foo
+DEADLINE: <2025-10-05 Sun -1d>''');
         final section = doc.children.firstOrNull as OrgSection;
         expect(section.isDone, isFalse);
         expect(section.isTodo, isTrue);
         expect(section.isScheduled, isFalse);
+        expect(section.isClosed, isFalse);
+        expect(section.isPending(now: now), isTrue);
+        final (timestamp, keyword) = section.activeTimestamps.single;
+        expect(timestamp, isA<OrgSimpleTimestamp>());
+        expect(keyword!.content, 'DEADLINE:');
+        expect(section.scheduledAt, [
+          (DateTime(2025, 10, 4), DateTime(2025, 10, 5), 0, true),
+        ]);
+      });
+      test('Simple with repeater and delay', () {
+        final doc = OrgDocument.parse('''* TODO foo
+SCHEDULED: <2025-10-05 Sun +1w -1d>''');
+        final section = doc.children.firstOrNull as OrgSection;
+        expect(section.isDone, isFalse);
+        expect(section.isTodo, isTrue);
+        expect(section.isScheduled, isTrue);
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt.take(5), [
@@ -484,13 +533,17 @@ void main() {
         ]);
       });
       test('Simple with repeater and one-time delay', () {
-        final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w --1d>');
+        final doc = OrgDocument.parse('''* TODO foo
+SCHEDULED: <2025-10-05 Sun +1w --1d>''');
         final section = doc.children.firstOrNull as OrgSection;
         expect(section.isDone, isFalse);
         expect(section.isTodo, isTrue);
-        expect(section.isScheduled, isFalse);
+        expect(section.isScheduled, isTrue);
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
+        final (timestamp, keyword) = section.activeTimestamps.single;
+        expect(timestamp, isA<OrgSimpleTimestamp>());
+        expect(keyword!.content, 'SCHEDULED:');
         expect(section.scheduledAt.take(5), [
           (DateTime(2025, 10, 6), DateTime(2025, 10, 7), 0, true),
           (DateTime(2025, 10, 12), DateTime(2025, 10, 13), 0, true),
@@ -522,11 +575,12 @@ void main() {
         ]);
       });
       test('With delay that makes it pending', () {
-        final doc = OrgDocument.parse('* TODO foo <2025-09-30 Sun -1w>');
+        final doc = OrgDocument.parse('''* TODO foo
+SCHEDULED: <2025-09-30 Sun --1w>''');
         final section = doc.children.firstOrNull as OrgSection;
         expect(section.isDone, isFalse);
         expect(section.isTodo, isTrue);
-        expect(section.isScheduled, isFalse);
+        expect(section.isScheduled, isTrue);
         expect(section.isClosed, isFalse);
         expect(section.isPending(now: now), isTrue);
         expect(section.scheduledAt, [
