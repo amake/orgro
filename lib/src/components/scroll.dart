@@ -3,6 +3,118 @@ import 'dart:async';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+class SnapDirectionScrollController extends ScrollController {
+  SnapDirectionScrollController({
+    super.initialScrollOffset,
+    super.keepScrollOffset,
+    super.debugLabel,
+    super.onAttach,
+    super.onDetach,
+  });
+
+  @override
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) => _SnapDirectionScrollPosition(
+    physics: physics,
+    context: context,
+    initialPixels: initialScrollOffset,
+    keepScrollOffset: keepScrollOffset,
+    oldPosition: oldPosition,
+    debugLabel: debugLabel,
+  );
+}
+
+// This filters ordinary end-of-drag thumb adjustments but remains small enough
+// that a deliberate reversal feels immediate.
+const _kDirectionChangeThreshold = 24;
+
+class _SnapDirectionScrollPosition extends ScrollPositionWithSingleContext {
+  _SnapDirectionScrollPosition({
+    required super.physics,
+    required super.context,
+    super.initialPixels,
+    super.keepScrollOffset,
+    super.oldPosition,
+    super.debugLabel,
+  });
+
+  ScrollDirection? _pendingDirection;
+  double _pendingDistance = 0;
+  bool _applyingUserOffset = false;
+  bool _allowDirectionUpdate = false;
+
+  @override
+  void applyUserOffset(double delta) {
+    final direction = delta > 0
+        ? ScrollDirection.forward
+        : ScrollDirection.reverse;
+
+    if (direction == userScrollDirection || userScrollDirection == .idle) {
+      _pendingDirection = null;
+      _pendingDistance = 0;
+      _allowDirectionUpdate = true;
+    } else {
+      if (_pendingDirection != direction) {
+        _pendingDirection = direction;
+        _pendingDistance = 0;
+      }
+      _pendingDistance += delta.abs();
+      _allowDirectionUpdate = _pendingDistance >= _kDirectionChangeThreshold;
+      if (_allowDirectionUpdate) {
+        _pendingDirection = null;
+        _pendingDistance = 0;
+      }
+    }
+    _applyingUserOffset = true;
+    try {
+      super.applyUserOffset(delta);
+    } finally {
+      _applyingUserOffset = false;
+      _allowDirectionUpdate = false;
+    }
+  }
+
+  @override
+  void updateUserScrollDirection(ScrollDirection value) {
+    if (value == .idle) {
+      _pendingDirection = null;
+      _pendingDistance = 0;
+      super.updateUserScrollDirection(value);
+    } else if (!_applyingUserOffset || _allowDirectionUpdate) {
+      super.updateUserScrollDirection(value);
+    }
+  }
+}
+
+class SnapDirectionScrollScope extends StatefulWidget {
+  const SnapDirectionScrollScope({super.key, required this.builder});
+
+  final WidgetBuilder builder;
+
+  @override
+  State<SnapDirectionScrollScope> createState() =>
+      _SnapDirectionScrollScopeState();
+}
+
+class _SnapDirectionScrollScopeState extends State<SnapDirectionScrollScope> {
+  final _scrollController = SnapDirectionScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => PrimaryScrollController(
+    controller: _scrollController,
+    child: Builder(builder: widget.builder),
+  );
+}
+
 class ScrollingBuilder extends StatefulWidget {
   const ScrollingBuilder({required this.builder, super.key});
 

@@ -208,32 +208,29 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     });
   }
 
-  List<Widget> _onSectionSlide(OrgSection section) {
+  List<Widget> _onSectionSlide(BuildContext context, OrgSection section) {
     return [
-      PrimaryScrollController(
-        controller: PrimaryScrollController.of(context),
-        child: ResponsiveSlidableAction(
-          label: AppLocalizations.of(context)!.sectionActionCycleTodo,
-          icon: Icons.repeat,
-          onPressed: () {
-            final orgSettings = OrgSettings.of(context).settings;
-            try {
-              final replacement = section.cycleTodo(
-                todoStates: orgSettings.todoSettings,
-                logDone: orgSettings.logDone,
-              );
-              var newDoc =
-                  _doc.editNode(section)!.replace(replacement).commit()
-                      as OrgTree;
-              newDoc = recalculateHeadlineStats(newDoc, replacement.headline);
-              updateDocument(newDoc);
-            } catch (e, s) {
-              logError(e, s);
-              // TODO(aaron): Make this more friendly?
-              showErrorSnackBar(context, e);
-            }
-          },
-        ),
+      ResponsiveSlidableAction(
+        label: AppLocalizations.of(context)!.sectionActionCycleTodo,
+        icon: Icons.repeat,
+        onPressed: () {
+          final orgSettings = OrgSettings.of(context).settings;
+          try {
+            final replacement = section.cycleTodo(
+              todoStates: orgSettings.todoSettings,
+              logDone: orgSettings.logDone,
+            );
+            var newDoc =
+                _doc.editNode(section)!.replace(replacement).commit()
+                    as OrgTree;
+            newDoc = recalculateHeadlineStats(newDoc, replacement.headline);
+            updateDocument(newDoc);
+          } catch (e, s) {
+            logError(e, s);
+            // TODO(aaron): Make this more friendly?
+            showErrorSnackBar(context, e);
+          }
+        },
       ),
     ];
   }
@@ -275,7 +272,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     }
   }
 
-  Iterable<Widget> _actions(bool searchMode) sync* {
+  Iterable<Widget> _actions(BuildContext context, bool searchMode) sync* {
     final viewSettings = _viewSettings;
     final scopeKey = _dataSource.id;
     final scopedViewSettings = viewSettings.forScope(scopeKey);
@@ -314,7 +311,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       } else {
         yield PopupMenuButton<VoidCallback>(
           onSelected: (callback) => callback(),
-          itemBuilder: (context) => [
+          // Menu items are built in the navigator overlay, outside the
+          // document's PrimaryScrollController scope. Bind their actions to the
+          // document context captured by _actions instead.
+          itemBuilder: (_) => [
             if (!_transclusion) undoMenuItem(context, onChanged: _undo),
             if (!_transclusion) redoMenuItem(context, onChanged: _redo),
             const PopupMenuDivider(),
@@ -365,20 +365,20 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       valueListenable: searchDelegate.searchMode,
       builder: (context, searchMode, _) => ValueListenableBuilder<bool>(
         valueListenable: _dirty,
-        builder: (context, dirty, _) {
-          return PopScope(
-            canPop:
-                searchMode ||
-                !dirty ||
-                _doc is! OrgDocument ||
-                !_root ||
-                _transclusion,
-            onPopInvokedWithResult: _onPopInvoked,
-            child: KeyboardShortcuts(
-              onEdit: _transclusion ? null : doEdit,
-              onUndo: _transclusion ? null : _undo,
-              onRedo: _transclusion ? null : _redo,
-              searchDelegate: searchDelegate,
+        builder: (context, dirty, _) => SnapDirectionScrollScope(
+          builder: (context) => KeyboardShortcuts(
+            onEdit: _transclusion ? null : doEdit,
+            onUndo: _transclusion ? null : _undo,
+            onRedo: _transclusion ? null : _redo,
+            searchDelegate: searchDelegate,
+            builder: (context) => PopScope(
+              canPop:
+                  searchMode ||
+                  !dirty ||
+                  _doc is! OrgDocument ||
+                  !_root ||
+                  _transclusion,
+              onPopInvokedWithResult: _onPopInvoked,
               child: Scaffold(
                 body: Stack(
                   children: [
@@ -401,11 +401,26 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                         .light => .dark,
                       },
                       child: CustomScrollView(
+                        // We explicitly pass the primary scroll controller
+                        // instead of marking as `primary: true` because a
+                        // primary view explicitly prevents its children from
+                        // accessing the primary scroll controller.
                         controller: PrimaryScrollController.of(context),
                         restorationId:
                             'document_scroll_view_${widget.metadata.layer}',
                         slivers: [
-                          _buildAppBar(context, searchMode: searchMode),
+                          SliverAppBar(
+                            title: _title(searchMode),
+                            actions: _actions(
+                              context,
+                              searchMode,
+                            ).toList(growable: false),
+                            pinned: searchMode,
+                            floating: true,
+                            forceElevated: true,
+                            snap: true,
+                            systemOverlayStyle: .light,
+                          ),
                           _buildDocument(context),
                         ],
                       ),
@@ -419,33 +434,14 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 ),
                 // Builder is here to ensure that the Scaffold makes it into the
                 // body's context
-                floatingActionButton: Builder(
-                  builder: (context) => _buildFloatingActionButton(
-                    context,
-                    searchMode: searchMode,
-                  ),
+                floatingActionButton: _buildFloatingActionButton(
+                  context,
+                  searchMode: searchMode,
                 ),
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context, {required bool searchMode}) {
-    return PrimaryScrollController(
-      // Context of app bar(?) lacks access to the primary scroll controller, so
-      // we supply it explicitly from parent context
-      controller: PrimaryScrollController.of(context),
-      child: SliverAppBar(
-        title: _title(searchMode),
-        actions: _actions(searchMode).toList(growable: false),
-        pinned: searchMode,
-        floating: true,
-        forceElevated: true,
-        snap: true,
-        systemOverlayStyle: .light,
+          ),
+        ),
       ),
     );
   }
@@ -494,22 +490,17 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           context,
           child: PrimaryScrollController(
             controller: PrimaryScrollController.of(context),
-            // TODO(aaron): Hack to allow access to the primary scroll
-            // controller for scrolling to top/bottom of document WITHOUT
-            // allowing child scroll views to inherit it as primary.
-            //
-            // This goes hand-in-hand with providing the primary scroll
-            // controller to the CustomScrollView (instead of marking it as
-            // primary: true).
-            //
-            // We must be doing something wrong here.
+            // Nested scroll views must not attach to the document controller,
+            // but document widgets can still resolve it for scroll listeners.
             automaticallyInheritForPlatforms: const {},
             child: SelectionArea(
               child: OrgRootWidget(
                 style: viewSettings.forScope(_dataSource.id).textStyle,
                 onLinkTap: openLink,
                 onSectionLongPress: doNarrow,
-                onSectionSlide: _transclusion ? null : _onSectionSlide,
+                onSectionSlide: _transclusion
+                    ? null
+                    : (section) => _onSectionSlide(context, section),
                 onLocalSectionLinkTap: doNarrow,
                 onListItemTap: _transclusion ? null : _onListItemTap,
                 onCitationTap: openCitation,

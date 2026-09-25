@@ -7,7 +7,7 @@ import 'package:orgro/src/util.dart';
 
 class KeyboardShortcuts extends StatelessWidget {
   KeyboardShortcuts({
-    required this.child,
+    required this.builder,
     required this.onEdit,
     required this.onUndo,
     required this.onRedo,
@@ -15,7 +15,7 @@ class KeyboardShortcuts extends StatelessWidget {
     super.key,
   });
 
-  final Widget child;
+  final WidgetBuilder builder;
   final VoidCallback? onEdit;
   final VoidCallback? onUndo;
   final VoidCallback? onRedo;
@@ -80,7 +80,7 @@ class KeyboardShortcuts extends StatelessWidget {
       shortcuts: _shortcuts,
       child: Actions(
         actions: _actions,
-        child: FocusScope(autofocus: true, child: child),
+        child: FocusScope(autofocus: true, child: Builder(builder: builder)),
       ),
     );
   }
