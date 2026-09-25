@@ -108,7 +108,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
   @override
   String get restorationId => 'document_page_${widget.metadata.layer}';
 
-  late MySearchDelegate searchDelegate;
+  late final MySearchDelegate searchDelegate;
 
   bool get _root => widget.metadata.root;
   bool get _transclusion => widget.metadata.transclusion;
