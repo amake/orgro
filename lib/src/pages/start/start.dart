@@ -396,7 +396,9 @@ class _FilesAndAgendaBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const borderRadius = BorderRadius.all(Radius.circular(16));
+    const borderRadius = BorderRadius.all(
+      Radius.circular(kBottomNavigationBarHeight / 2),
+    );
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
