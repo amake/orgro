@@ -602,9 +602,14 @@ typedef ChunkedAgendaSpan = (
   bool last,
 );
 
-extension _ChunkUtil on ChunkedAgendaSpan {
+extension ChunkUtil on ChunkedAgendaSpan {
+  bool get isInstant => $1.isAtSameMomentAs($2);
+  bool get isAllDay => $1.isStartOfDay() && $2.isStartOfDay();
+  bool get isStartOfMultidaySpan => $3 == 0 && !$4;
+  bool get isEndOfMultidaySpan => $3 > 0 && $4;
+
   // Sort the last chunk of a multi-day span by the end of the chunk
-  DateTime get comparisonPoint => $3 > 0 && $4 ? $2 : $1;
+  DateTime get comparisonPoint => isEndOfMultidaySpan ? $2 : $1;
 }
 
 Iterable<AgendaSpan> expandTimestamp(

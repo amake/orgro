@@ -231,18 +231,18 @@ class _AgendaTime extends StatelessWidget {
   Widget build(BuildContext context) {
     final (start, end, chunkIdx, last) = agendaSpan;
 
-    if (start.isAtSameMomentAs(end)) {
+    if (agendaSpan.isInstant) {
       return Text(timeFormat.format(start), style: _timeStyle);
     }
 
-    if (start.isStartOfDay() && end.isStartOfDay()) {
+    if (agendaSpan.isAllDay) {
       return SizedBox(
         width: iconWidth,
         child: const Icon(Icons.calendar_today),
       );
     }
 
-    if (chunkIdx == 0 && !last && end.isStartOfDay()) {
+    if (agendaSpan.isStartOfMultidaySpan) {
       return Column(
         mainAxisAlignment: .center,
         children: [
@@ -252,7 +252,7 @@ class _AgendaTime extends StatelessWidget {
       );
     }
 
-    if (chunkIdx > 0 && last && start.isStartOfDay()) {
+    if (agendaSpan.isEndOfMultidaySpan) {
       return Column(
         mainAxisAlignment: .center,
         children: [
