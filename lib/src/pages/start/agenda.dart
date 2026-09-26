@@ -111,6 +111,14 @@ class _AgendaBodyState extends State<AgendaBody>
             // The time format is always in 24-hour format, regardless of
             // locale.
             final timeFormat = DateFormat.Hm();
+            final timeWidth = renderedBounds(
+              context,
+              const BoxConstraints(),
+              Text.rich(
+                TextSpan(text: timeFormat.format(DateTime(0))),
+                style: _AgendaTime._timeStyle,
+              ),
+            ).toRect().width;
             final locale = AppLocalizations.of(context)!.localeName;
             final dateFormat = DateFormat.yMMMMEEEEd(locale);
             final theme = Theme.of(context);
@@ -134,6 +142,7 @@ class _AgendaBodyState extends State<AgendaBody>
                     leading: _AgendaTime(
                       agendaSpan: agendaSpan,
                       timeFormat: timeFormat,
+                      iconWidth: timeWidth,
                     ),
                     title: Text(title),
                     titleAlignment: .center,
@@ -200,12 +209,17 @@ class _AgendaBodyState extends State<AgendaBody>
 }
 
 class _AgendaTime extends StatelessWidget {
-  const _AgendaTime({required this.agendaSpan, required this.timeFormat});
+  const _AgendaTime({
+    required this.agendaSpan,
+    required this.timeFormat,
+    required this.iconWidth,
+  });
 
   final ChunkedAgendaSpan agendaSpan;
   final DateFormat timeFormat;
+  final double iconWidth;
 
-  TextStyle get _timeStyle =>
+  static TextStyle get _timeStyle =>
       const TextStyle(fontFeatures: [FontFeature.tabularFigures()]);
 
   @override
@@ -217,7 +231,10 @@ class _AgendaTime extends StatelessWidget {
     }
 
     if (start.isStartOfDay() && end.isStartOfDay()) {
-      return const Icon(Icons.calendar_today);
+      return SizedBox(
+        width: iconWidth,
+        child: const Icon(Icons.calendar_today),
+      );
     }
 
     if (chunkIdx == 0 && !last && end.isStartOfDay()) {
