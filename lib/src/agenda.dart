@@ -609,7 +609,8 @@ extension ChunkUtil on ChunkedAgendaSpan {
   bool get isEndOfMultidaySpan => $3 > 0 && $4;
 
   // Sort the last chunk of a multi-day span by the end of the chunk
-  DateTime get comparisonPoint => isEndOfMultidaySpan ? $2 : $1;
+  DateTime get comparisonPoint =>
+      isEndOfMultidaySpan && !$2.isStartOfDay() ? $2 : $1;
 }
 
 Iterable<AgendaSpan> expandTimestamp(

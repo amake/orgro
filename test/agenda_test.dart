@@ -445,6 +445,35 @@ void main() {
         tz.TZDateTime.from(DateTime(2026, 9, 25, 8, 0), tz.local),
       );
     });
+    test('All-day entries always sorted ahead of partial-day ones', () {
+      final now = DateTime(2026, 9, 1);
+      final doc = OrgDocument.parse('''
+* TODO Do the thing
+<2026-09-25 Fri>--<2026-09-27 Sun>
+<2026-09-26 Sat 10:00>
+<2026-09-27 Sun 09:00>
+''');
+      final section = doc.children.firstOrNull as OrgSection;
+
+      expect(section.scheduledAt, [
+        (DateTime(2026, 9, 25, 0, 0), DateTime(2026, 9, 26, 0, 0), 0, false),
+        (DateTime(2026, 9, 26, 0, 0), DateTime(2026, 9, 27, 0, 0), 1, false),
+        (DateTime(2026, 9, 26, 10, 0), DateTime(2026, 9, 26, 10, 0), 0, true),
+        (DateTime(2026, 9, 27, 0, 0), DateTime(2026, 9, 28, 0, 0), 2, true),
+        (DateTime(2026, 9, 27, 9, 0), DateTime(2026, 9, 27, 9, 0), 0, true),
+      ]);
+
+      final agendaItems = agendaItemsFromSources([
+        (section: section, dataSource: AssetDataSource('test.org')),
+      ], now: now);
+      expect(agendaItems.map((item) => item.scheduledAt.$1), [
+        tz.TZDateTime.from(DateTime(2026, 9, 25, 0, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 26, 0, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 26, 10, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 27, 0, 0), tz.local),
+        tz.TZDateTime.from(DateTime(2026, 9, 27, 9, 0), tz.local),
+      ]);
+    });
     group('Modifiers', () {
       test('Simple with repeater', () {
         final doc = OrgDocument.parse('* TODO foo <2025-10-05 Sun +1w>');
