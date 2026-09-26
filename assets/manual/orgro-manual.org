@@ -604,7 +604,8 @@ following settings from the local variables list:
 - ~org-hidden-keywords~ :: Document metadata keywords (~#+TITLE:~, ~#+AUTHOR:~,
   etc.) to hide.
 
-- ~org-log-done~ :: Automatically TODO completion time in a ~CLOSED:~ timestamp.
+- ~org-log-done~ :: Automatically log TODO completion time in a ~CLOSED:~
+  timestamp.
 
 To avoid having the local variables list show up in your exported docs, put it
 under a section with the =COMMENT= keyword or =noexport= tag.
