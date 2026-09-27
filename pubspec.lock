@@ -691,10 +691,10 @@ packages:
     dependency: transitive
     description:
       name: org_parser
-      sha256: "34d68fd0d04f776986099f94191ee9cd9e6f650cca73fc6d8ea8f5d94b8916bd"
+      sha256: "561fd1f1cbb930fb5d0811bdd107278171910be1f199478f3660df2cc4b010d3"
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0"
+    version: "12.0.1"
   package_config:
     dependency: transitive
     description:
@@ -803,10 +803,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "91bd59303e9f769f108f8df05e371341b15d59e995e6806aefab827b58336675"
+      sha256: "2f1564aadb14215e478563b5406cb80729d022158c01dc50c96013c2f7eb4790"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.2"
+    version: "7.1.0"
   platform:
     dependency: transitive
     description:
