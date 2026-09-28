@@ -153,11 +153,6 @@ class _RecentFilesListSortControl extends StatelessWidget {
   }
 }
 
-// Do not make format object a constant because it will break dynamic UI
-// language switching
-String _formatLastOpenedDate(DateTime date, String locale) =>
-    DateFormat.yMd(locale).add_jm().format(date);
-
 String? _appName(BuildContext context, String uriString) {
   final uri = Uri.tryParse(uriString);
   if (uri == null) return null;
@@ -397,6 +392,8 @@ class RememberedFileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!.localeName;
+    final dateTimeFormat = DateFormat.yMd(locale).add_jm();
     return ListTile(
       leading: rememberedFile.isWebUri
           // The Language icon is an abstract globe, which in my opinion is more
@@ -414,10 +411,7 @@ class RememberedFileListTile extends StatelessWidget {
             ),
             const SizedBox(width: 2),
             Text(
-              _formatLastOpenedDate(
-                rememberedFile.lastOpened,
-                AppLocalizations.of(context)!.localeName,
-              ),
+              dateTimeFormat.format(rememberedFile.lastOpened),
               style: const TextStyle(
                 fontFeatures: [FontFeature.tabularFigures()],
               ),

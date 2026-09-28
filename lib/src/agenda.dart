@@ -860,6 +860,8 @@ class _PendingNotificationsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconSize = 16.0;
     final iconColor = Theme.of(context).hintColor;
+    final locale = AppLocalizations.of(context)!.localeName;
+    final dateTimeFormat = DateFormat.yMd(locale).add_jm();
     return AlertDialog(
       title: Text(
         AppLocalizations.of(context)!.settingsDialogNotificationsTitle,
@@ -877,12 +879,11 @@ class _PendingNotificationsDialog extends StatelessWidget {
                 'scheduledAt': final String scheduledAt,
                 'timezone': final String timezone,
               } =>
-                _formatNotificationDateTime(
+                dateTimeFormat.format(
                   tz.TZDateTime.from(
                     DateTime.parse(scheduledAt),
                     tz.getLocation(timezone),
                   ).toLocal(),
-                  AppLocalizations.of(context)!.localeName,
                 ),
               _ => throw UnimplementedError(
                 'Unknown notification payload: $payload',
@@ -980,8 +981,3 @@ class _ClearAgendaFilesDialog extends StatelessWidget {
     );
   }
 }
-
-// Do not make format object a constant because it will break dynamic UI
-// language switching
-String _formatNotificationDateTime(DateTime date, String locale) =>
-    DateFormat.yMd(locale).add_jm().format(date);
