@@ -238,7 +238,7 @@ class _AgendaTime extends StatelessWidget {
     if (agendaSpan.isAllDay) {
       return SizedBox(
         width: iconWidth,
-        child: const Icon(Icons.calendar_today),
+        child: const Icon(Icons.calendar_today, applyTextScaling: true),
       );
     }
 

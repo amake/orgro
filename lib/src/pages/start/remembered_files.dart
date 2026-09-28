@@ -138,6 +138,7 @@ class _RecentFilesListSortControl extends StatelessWidget {
             },
             size: iconSize,
             color: iconColor,
+            applyTextScaling: true,
           ),
           Icon(
             switch (sortOrder) {
@@ -146,6 +147,7 @@ class _RecentFilesListSortControl extends StatelessWidget {
             },
             size: iconSize,
             color: iconColor,
+            applyTextScaling: true,
           ),
         ],
       ),
@@ -324,7 +326,7 @@ class _NotFoundDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.link_off),
+      icon: const Icon(Icons.link_off, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.notFoundDialogTitle),
       contentPadding: const EdgeInsets.all(8),
       content: SizedBox(
@@ -395,11 +397,12 @@ class RememberedFileListTile extends StatelessWidget {
     final locale = AppLocalizations.of(context)!.localeName;
     final dateTimeFormat = DateFormat.yMd(locale).add_jm();
     return ListTile(
+      titleAlignment: .center,
       leading: rememberedFile.isWebUri
           // The Language icon is an abstract globe, which in my opinion is more
           // suggestive of a website than Web or Public
-          ? const Icon(Icons.language)
-          : const Icon(Icons.insert_drive_file),
+          ? const Icon(Icons.language, applyTextScaling: true)
+          : const Icon(Icons.insert_drive_file, applyTextScaling: true),
       title: Text(rememberedFile.name),
       subtitle: Row(
         children: [

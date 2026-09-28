@@ -933,7 +933,7 @@ class _ClearAgendaFilesDialog extends StatelessWidget {
       .agenda,
     ).data.agendaFileJsons;
     return AlertDialog(
-      icon: const Icon(Icons.warning),
+      icon: const Icon(Icons.warning, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.confirmClearAgendaDialogTitle),
       content: SizedBox(
         width: .maxFinite,

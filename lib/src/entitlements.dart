@@ -364,7 +364,7 @@ class _EntitlementsSettingListItemsState
       children: [
         if (entitlements.inTrial)
           ListTile(
-            leading: const Icon(Icons.timer_outlined),
+            leading: const Icon(Icons.timer_outlined, applyTextScaling: true),
             title: Text(
               AppLocalizations.of(context)!.entitlementsFreeTrialItem(
                     entitlements.trialEnd ?? DateTime.now(),
@@ -376,7 +376,7 @@ class _EntitlementsSettingListItemsState
         if (!entitlements.purchased) ...[
           if (!entitlements.inTrial)
             ListTile(
-              leading: const Icon(Icons.lock_outline),
+              leading: const Icon(Icons.lock_outline, applyTextScaling: true),
               title: Text(
                 AppLocalizations.of(context)!.entitlementsTrialExpiredItem,
               ),
@@ -402,7 +402,10 @@ class _EntitlementsSettingListItemsState
           ),
         ] else if (entitlements.legacyPurchase == true)
           ListTile(
-            leading: const Icon(Icons.workspace_premium),
+            leading: const Icon(
+              Icons.workspace_premium,
+              applyTextScaling: true,
+            ),
             title: Text(
               AppLocalizations.of(context)!.entitlementsPurchasedItem,
             ),
@@ -414,7 +417,10 @@ class _EntitlementsSettingListItemsState
           )
         else if (entitlements.inAppPurchase == true)
           ListTile(
-            leading: const Icon(Icons.check_circle_outline),
+            leading: const Icon(
+              Icons.check_circle_outline,
+              applyTextScaling: true,
+            ),
             title: Text(
               AppLocalizations.of(context)!.entitlementsPurchasedItem,
             ),
@@ -496,7 +502,7 @@ class DonateSettingListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.favorite),
+      leading: const Icon(Icons.favorite, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.donateItemTitle),
       subtitle: Text(AppLocalizations.of(context)!.donateItemSubtitle),
       onTap: visitDonateLink,
@@ -548,7 +554,7 @@ class _LockedDialogState extends State<LockedDialog> with PurchaseHelper {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.lock_outline),
+      icon: const Icon(Icons.lock_outline, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.entitlementsLockedDialogTitle),
       content: Text(
         AppLocalizations.of(context)!.entitlementsLockedDialogMessage,

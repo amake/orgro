@@ -223,8 +223,14 @@ class SearchField extends StatelessWidget {
                                           )
                                         : iconTheme,
                                     child: isError
-                                        ? const Icon(Icons.error)
-                                        : const Icon(Icons.search),
+                                        ? const Icon(
+                                            Icons.error,
+                                            applyTextScaling: true,
+                                          )
+                                        : const Icon(
+                                            Icons.search,
+                                            applyTextScaling: true,
+                                          ),
                                   ),
                                 ),
                               );

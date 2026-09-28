@@ -246,7 +246,7 @@ class _ImageError extends StatelessWidget {
           onPressed: () => showDialog<void>(
             context: context,
             builder: (context) => AlertDialog(
-              icon: const Icon(Icons.error),
+              icon: const Icon(Icons.error, applyTextScaling: true),
               content: Text(error),
             ),
           ),

@@ -22,7 +22,7 @@ class SavePermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.save),
+      icon: const Icon(Icons.save, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
       content: Text(AppLocalizations.of(context)!.bannerBodySaveDocument),
       actions: [
@@ -70,7 +70,7 @@ class SaveChangesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.save),
+      icon: const Icon(Icons.save, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.saveChangesDialogTitle),
       content: message == null ? null : Text(message!),
       actions: [
@@ -177,7 +177,7 @@ class DiscardChangesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.warning),
+      icon: const Icon(Icons.warning, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.discardChangesDialogTitle),
       actions: [
         ListTile(
@@ -208,7 +208,7 @@ class ConfirmResetDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.warning),
+      icon: const Icon(Icons.warning, applyTextScaling: true),
       title: Text(
         AppLocalizations.of(context)!.confirmResetPreferencesDialogTitle,
       ),
@@ -262,7 +262,7 @@ class InputPasswordDialog extends StatelessWidget {
       );
     }
     return AlertDialog(
-      icon: const Icon(Icons.lock),
+      icon: const Icon(Icons.lock, applyTextScaling: true),
       title: Text(title),
       content: content,
     );
@@ -307,7 +307,7 @@ class _InputFileNameDialogState extends State<InputFileNameDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.create),
+      icon: const Icon(Icons.create, applyTextScaling: true),
       title: Text(widget.title),
       content: TextField(
         autofocus: true,
@@ -440,7 +440,7 @@ class _InputFilterQueryDialogState extends State<InputFilterQueryDialog> {
   Widget build(BuildContext context) {
     final history = Preferences.of(context).customFilterQueries;
     return AlertDialog(
-      icon: const Icon(Icons.filter_alt),
+      icon: const Icon(Icons.filter_alt, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.inputCustomFilterDialogTitle),
       content: TextField(
         controller: _controller,
@@ -553,19 +553,17 @@ class CitationsDialog extends StatelessWidget {
                 'booklet' ||
                 'inbook' ||
                 'incollection' ||
-                'manual' => const Icon(Icons.book),
+                'manual' => const Icon(Icons.book, applyTextScaling: true),
                 'conference' ||
                 'inproceedings' ||
-                'proceedings' => const Icon(Icons.mic),
-                'article' ||
-                'mastersthesis' ||
-                'phdthesis' ||
-                'techreport' => const Icon(Icons.article),
+                'proceedings' => const Icon(Icons.mic, applyTextScaling: true),
+                'article' || 'mastersthesis' || 'phdthesis' || 'techreport' =>
+                  const Icon(Icons.article, applyTextScaling: true),
                 // 'misc' is often used for websites; the Language icon is
                 // an abstract globe, which in my opinion is more suggestive
                 // of a website than Web or Public
-                'misc' => const Icon(Icons.language),
-                _ => const Icon(Icons.question_mark),
+                'misc' => const Icon(Icons.language, applyTextScaling: true),
+                _ => const Icon(Icons.question_mark, applyTextScaling: true),
               },
               title: Text(entry.getPrettyValue('title') ?? entry.key),
               subtitle: details.isEmpty ? null : Text(details),
@@ -574,7 +572,10 @@ class CitationsDialog extends StatelessWidget {
                   : IconButton(
                       tooltip: AppLocalizations.of(context)!
                           .citationsDialogOpenLink,
-                      icon: const Icon(Icons.open_in_new),
+                      icon: const Icon(
+                        Icons.open_in_new,
+                        applyTextScaling: true,
+                      ),
                       onPressed: () =>
                           launchUrl(url, mode: LaunchMode.externalApplication),
                     ),
@@ -715,7 +716,7 @@ class _InputUrlDialogState extends State<InputUrlDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const Icon(Icons.insert_link),
+      icon: const Icon(Icons.insert_link, applyTextScaling: true),
       title: Text(AppLocalizations.of(context)!.inputUrlDialogTitle),
       content: TextField(
         controller: _controller,
@@ -793,7 +794,7 @@ class CaptureTargetDialog extends StatelessWidget {
             switch (idx) {
               case 0:
                 return ListTile(
-                  leading: const Icon(Icons.copy),
+                  leading: const Icon(Icons.copy, applyTextScaling: true),
                   title: Text(
                     AppLocalizations.of(context)!.captureToClipboardItem,
                   ),
@@ -802,7 +803,7 @@ class CaptureTargetDialog extends StatelessWidget {
                 );
               case 1:
                 return ListTile(
-                  leading: const Icon(Icons.add),
+                  leading: const Icon(Icons.add, applyTextScaling: true),
                   title: Text(
                     AppLocalizations.of(context)!.captureToNewDocumentItem,
                   ),
