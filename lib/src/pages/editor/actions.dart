@@ -66,6 +66,10 @@ class _PrimaryTextEditingController extends InheritedWidget {
       .dependOnInheritedWidgetOfExactType<_PrimaryTextEditingController>()!
       .controller;
 
+  static TextEditingController read(BuildContext context) => context
+      .getInheritedWidgetOfExactType<_PrimaryTextEditingController>()!
+      .controller;
+
   @override
   bool updateShouldNotify(covariant _PrimaryTextEditingController oldWidget) =>
       controller != oldWidget.controller;
@@ -79,7 +83,7 @@ abstract class _TextEditingAction<T extends Intent> extends ContextAction<T> {
   @override
   bool isEnabled(T intent, [BuildContext? context]) {
     if (!super.isEnabled(intent, context)) return false;
-    final controller = _PrimaryTextEditingController.of(context!);
+    final controller = _PrimaryTextEditingController.read(context!);
     return controller.value.selection.isValid;
   }
 
@@ -87,7 +91,7 @@ abstract class _TextEditingAction<T extends Intent> extends ContextAction<T> {
     BuildContext? context,
     FutureOr<TextEditingValue?> Function(TextEditingValue) edit,
   ) async {
-    final controller = _PrimaryTextEditingController.of(context!);
+    final controller = _PrimaryTextEditingController.read(context!);
     final value = await edit(controller.value);
     if (value == null) return;
     controller.value = value;

@@ -156,6 +156,10 @@ class RememberedFiles extends StatefulWidget {
   static InheritedRememberedFiles of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<InheritedRememberedFiles>()!;
 
+  /// Obtains remembered-files operations without subscribing to updates.
+  static InheritedRememberedFiles read(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<InheritedRememberedFiles>()!;
+
   const RememberedFiles({required this.child, super.key});
 
   final Widget child;

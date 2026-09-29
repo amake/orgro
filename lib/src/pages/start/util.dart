@@ -22,7 +22,7 @@ Future<void> loadAndRememberFile(
   if (dataSource == null) return;
   if (!context.mounted) return;
 
-  final rememberedFiles = RememberedFiles.of(context);
+  final rememberedFiles = RememberedFiles.read(context);
   final bucket = RestorationScope.of(context);
   if (dataSource.persistable) {
     final loadedFile = RememberedFile(
@@ -62,7 +62,7 @@ Future<void> loadAndReplaceRememberedFile(
   InitialMode? mode,
   AfterOpenCallback? afterOpen,
 }) async {
-  final rememberedFiles = RememberedFiles.of(context);
+  final rememberedFiles = RememberedFiles.read(context);
   final bucket = RestorationScope.of(context);
   // Replacing the remembered file can cause the context to unmount, so lock in
   // the loadDocument future first.
@@ -103,7 +103,7 @@ Future<void> loadAndReplaceRememberedFile(
 }
 
 Future<void> loadAndRememberUrl(BuildContext context, Uri uri) async {
-  final rememberedFiles = RememberedFiles.of(context);
+  final rememberedFiles = RememberedFiles.read(context);
   // Don't remember the fragment because that's used for narrowing and we only
   // want to remember the top-level document.
   final toRemember = uri.replace(fragment: '');
