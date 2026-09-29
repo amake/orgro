@@ -37,6 +37,7 @@ class _ViewSettingsState extends State<ViewSettings> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final prefs = _prefs;
+    final agendaPrefs = Preferences.of(context, .agenda);
     _update(
       (data) => data.copyWith(
         textScale: prefs.textScale,
@@ -46,6 +47,7 @@ class _ViewSettingsState extends State<ViewSettings> {
         localLinksPolicy: prefs.localLinksPolicy,
         saveChangesPolicy: prefs.saveChangesPolicy,
         decryptPolicy: prefs.decryptPolicy,
+        agendaEnabledPolicy: agendaPrefs.agendaEnabledPolicy,
         fullWidth: prefs.fullWidth,
         wakelock: prefs.wakelock,
       ),
@@ -200,7 +202,7 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
-      agendaEnabledPolicy: prefs.agendaEnabledPolicy,
+      agendaEnabledPolicy: Preferences.of(context, .agenda).agendaEnabledPolicy,
       fullWidth: prefs.fullWidth,
       wakelock: prefs.wakelock,
       searchQuery: SearchQuery.defaults(),
