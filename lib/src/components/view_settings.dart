@@ -145,16 +145,15 @@ class InheritedViewSettings extends InheritedWidget {
     }
   }
 
-  AgendaEnabledPolicy get agendaNotificationsPolicy =>
-      data.agendaNotificationsPolicy;
-  void setAgendaNotificationsPolicy(
+  AgendaEnabledPolicy get agendaEnabledPolicy => data.agendaEnabledPolicy;
+  void setAgendaEnabledPolicy(
     AgendaEnabledPolicy value, {
     bool persist = false,
   }) {
     if (persist) {
       _prefs.setAgendaEnabledPolicy(value);
     } else {
-      _update((data) => data.copyWith(agendaNotificationsPolicy: value));
+      _update((data) => data.copyWith(agendaEnabledPolicy: value));
     }
   }
 
@@ -201,7 +200,7 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
-      agendaNotificationsPolicy: prefs.agendaEnabledPolicy,
+      agendaEnabledPolicy: prefs.agendaEnabledPolicy,
       fullWidth: prefs.fullWidth,
       wakelock: prefs.wakelock,
       searchQuery: SearchQuery.defaults(),
@@ -235,7 +234,7 @@ class ViewSettingsData {
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
     required this.decryptPolicy,
-    required this.agendaNotificationsPolicy,
+    required this.agendaEnabledPolicy,
     required this.fullWidth,
     required this.wakelock,
     required this.filterData,
@@ -250,7 +249,7 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
-  final AgendaEnabledPolicy agendaNotificationsPolicy;
+  final AgendaEnabledPolicy agendaEnabledPolicy;
   final bool fullWidth;
   final bool wakelock;
   // Not persisted
@@ -269,7 +268,7 @@ class ViewSettingsData {
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
-    AgendaEnabledPolicy? agendaNotificationsPolicy,
+    AgendaEnabledPolicy? agendaEnabledPolicy,
     bool? fullWidth,
     bool? wakelock,
     SearchQuery? searchQuery,
@@ -282,8 +281,7 @@ class ViewSettingsData {
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
     saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
     decryptPolicy: decryptPolicy ?? this.decryptPolicy,
-    agendaNotificationsPolicy:
-        agendaNotificationsPolicy ?? this.agendaNotificationsPolicy,
+    agendaEnabledPolicy: agendaEnabledPolicy ?? this.agendaEnabledPolicy,
     fullWidth: fullWidth ?? this.fullWidth,
     wakelock: wakelock ?? this.wakelock,
     searchQuery: searchQuery ?? this.searchQuery,
@@ -300,7 +298,7 @@ class ViewSettingsData {
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
       decryptPolicy == other.decryptPolicy &&
-      agendaNotificationsPolicy == other.agendaNotificationsPolicy &&
+      agendaEnabledPolicy == other.agendaEnabledPolicy &&
       fullWidth == other.fullWidth &&
       wakelock == other.wakelock &&
       searchQuery == other.searchQuery &&
@@ -315,7 +313,7 @@ class ViewSettingsData {
     localLinksPolicy,
     saveChangesPolicy,
     decryptPolicy,
-    agendaNotificationsPolicy,
+    agendaEnabledPolicy,
     fullWidth,
     wakelock,
     searchQuery,
