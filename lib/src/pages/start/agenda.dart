@@ -153,6 +153,7 @@ class _AgendaBodyState extends State<AgendaBody>
                     titleAlignment: .center,
                     subtitle: Text(dataSource.name),
                     onTap: () => _openAgendaItem(section, dataSource),
+                    onLongPress: () => _narrowToAgendaItem(section, dataSource),
                   ),
                 );
 
@@ -209,6 +210,19 @@ class _AgendaBodyState extends State<AgendaBody>
         loadAndRememberFile(context, dataSource, afterOpen: afterOpen);
       default:
         loadDocument(context, dataSource, afterOpen: afterOpen);
+    }
+  }
+
+  void _narrowToAgendaItem(OrgTree section, DataSource dataSource) {
+    switch (dataSource) {
+      case NativeDataSource():
+        loadAndRememberFile(
+          context,
+          dataSource,
+          target: section.targetForSection,
+        );
+      default:
+        loadDocument(context, dataSource, target: section.targetForSection);
     }
   }
 }

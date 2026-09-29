@@ -15,6 +15,7 @@ Future<void> loadAndRememberFile(
   BuildContext context,
   FutureOr<NativeDataSource?> fileInfoFuture, {
   InitialMode? mode,
+  String? target,
   AfterOpenCallback? afterOpen,
 }) async {
   final dataSource = await fileInfoFuture;
@@ -43,7 +44,13 @@ Future<void> loadAndRememberFile(
   } else {
     debugPrint('Couldn’t obtain persistent access to ${dataSource.name}');
   }
-  await loadDocument(context, dataSource, mode: mode, afterOpen: afterOpen);
+  await loadDocument(
+    context,
+    dataSource,
+    mode: mode,
+    target: target,
+    afterOpen: afterOpen,
+  );
   debugPrint('Clearing saved state from bucket $bucket');
   bucket.remove<String>(kRestoreRouteKey);
 }
