@@ -36,8 +36,9 @@
   "settingsItemFontFamily": "書体",
   "settingsItemDefaultTextPreviewString": "【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。",
 
-  "settingsItemEnableAgenda": "アジェンダを有効にする",
+  "settingsItemEnableAgendaPrompts": "アジェンダへの追加を提案",
   "settingsItemInspectNotifications": "{n, plural, =0{通知なし} other{{n} 件の通知}}",
+  "settingsItemGrantNotificationPermissions": "通知を有効にする",
   "settingsItemEnableAgendaNotifications": "アジェンダ通知",
   "settingsDialogNotificationsTitle": "設定済みの通知",
   "settingsItemClearNotifications": "すべての通知を削除",

@@ -739,51 +739,65 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
 
   @override
   Widget build(BuildContext context) {
-    final agendaEnabled = _prefs().agendaEnabledPolicy != .deny;
+    final agendaPromptEnabled = _prefs().agendaPromptPolicy != .deny;
     final developerMode = _prefs(.customization).developerMode;
     return Column(
       children: [
-        if (!agendaEnabled || _permissionsGranted == false)
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.settingsItemEnableAgenda),
-            onTap: () async {
-              await _prefs().setAgendaEnabledPolicy(.ask);
-              await _prefs().setAgendaOSNotificationsEnabled(true);
-              final granted = await requestNotificationPermissions();
-              if (granted) {
-                await _load();
-              } else {
-                AppSettings.openAppSettings(type: .notification);
-              }
-            },
+        CheckboxListTile(
+          title: Text(
+            AppLocalizations.of(context)!.settingsItemEnableAgendaPrompts,
           ),
-        if (agendaEnabled)
-          CheckboxListTile(
+          value: agendaPromptEnabled,
+          onChanged: (value) async {
+            if (value == null) return;
+            await _prefs().setAgendaPromptPolicy(switch (value) {
+              true => .ask,
+              false => .deny,
+            });
+            await _load();
+          },
+        ),
+        if (_permissionsGranted == false)
+          ListTile(
             title: Text(
               AppLocalizations.of(context)!
-                  .settingsItemEnableAgendaNotifications,
+                  .settingsItemGrantNotificationPermissions,
             ),
-            value: _prefs().agendaOSNotificationsEnabled,
-            onChanged: (value) async {
-              switch (value) {
-                case true:
-                  final localizations = AppLocalizations.of(context)!;
-                  final accessibleDirs = _prefs(.accessibleDirs)
-                      .data
-                      .accessibleDirs;
-                  await _prefs().setAgendaOSNotificationsEnabled(true);
-                  await setNotificationsForAllAgendaDocuments(
-                    _prefs().agendaFileJsons,
-                    localizations,
-                    accessibleDirs,
-                  );
-                case false:
-                  await _prefs().setAgendaOSNotificationsEnabled(false);
-                  await clearAllNotifications();
-                case null:
+            onTap: () async {
+              await _prefs().setAgendaOSNotificationsEnabled(true);
+              final granted = await requestNotificationPermissions();
+              if (!granted) {
+                AppSettings.openAppSettings(type: .notification);
               }
+              await _load();
             },
           ),
+        CheckboxListTile(
+          title: Text(
+            AppLocalizations.of(context)!.settingsItemEnableAgendaNotifications,
+          ),
+          enabled: _permissionsGranted == true,
+          value: _prefs().agendaOSNotificationsEnabled,
+          onChanged: (value) async {
+            switch (value) {
+              case true:
+                final localizations = AppLocalizations.of(context)!;
+                final accessibleDirs = _prefs(.accessibleDirs)
+                    .data
+                    .accessibleDirs;
+                await _prefs().setAgendaOSNotificationsEnabled(true);
+                await setNotificationsForAllAgendaDocuments(
+                  _prefs().agendaFileJsons,
+                  localizations,
+                  accessibleDirs,
+                );
+              case false:
+                await _prefs().setAgendaOSNotificationsEnabled(false);
+                await clearAllNotifications();
+              case null:
+            }
+          },
+        ),
         if (_permissionsGranted == true && developerMode)
           ListTile(
             title: Text(
@@ -822,7 +836,7 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
               }
             },
           ),
-        if (agendaEnabled && _prefs().agendaFileJsons.isNotEmpty)
+        if (_prefs().agendaFileJsons.isNotEmpty)
           ListTile(
             title: Text(AppLocalizations.of(context)!.settingsItemClearAgenda),
             onTap: () async {

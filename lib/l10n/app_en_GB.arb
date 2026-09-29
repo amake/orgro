@@ -36,8 +36,9 @@
   "settingsItemFontFamily": "Font",
   "settingsItemDefaultTextPreviewString": "This is what document text will look like in the selected font and scale.\n\nTap to edit.",
 
-  "settingsItemEnableAgenda": "Enable agenda",
+  "settingsItemEnableAgendaPrompts": "Ask to add documents to agenda",
   "settingsItemInspectNotifications": "{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}",
+  "settingsItemGrantNotificationPermissions": "Enable notifications",
   "settingsItemEnableAgendaNotifications": "Agenda notifications",
   "settingsDialogNotificationsTitle": "Pending notifications",
   "settingsItemClearNotifications": "Clear all notifications",

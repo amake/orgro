@@ -484,7 +484,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
         AddToAgendaBanner(
           visible: _askAboutAddingToAgenda,
           onAccept: addToAgenda,
-          onDeny: viewSettings.setAgendaEnabledPolicy,
+          onDeny: viewSettings.setAgendaPromptPolicy,
         ),
         _maybeConstrainWidth(
           context,
@@ -915,7 +915,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       DocumentProvider.of(context).analysis.hasAgendaEntries;
 
   bool get _askAboutAddingToAgenda =>
-      _viewSettings.agendaEnabledPolicy == AgendaEnabledPolicy.ask &&
+      _viewSettings.agendaPromptPolicy == AgendaPromptPolicy.ask &&
       canBeAgendaFile &&
       !isAgendaFile &&
       _hasAgendaEntries == true &&

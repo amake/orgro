@@ -205,7 +205,7 @@ class AddToAgendaBanner extends StatelessWidget {
   });
 
   final VoidCallback onAccept;
-  final void Function(AgendaEnabledPolicy, {required bool persist}) onDeny;
+  final void Function(AgendaPromptPolicy, {required bool persist}) onDeny;
   final bool visible;
 
   @override

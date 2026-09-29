@@ -47,7 +47,7 @@ class _ViewSettingsState extends State<ViewSettings> {
         localLinksPolicy: prefs.localLinksPolicy,
         saveChangesPolicy: prefs.saveChangesPolicy,
         decryptPolicy: prefs.decryptPolicy,
-        agendaEnabledPolicy: agendaPrefs.agendaEnabledPolicy,
+        agendaPromptPolicy: agendaPrefs.agendaPromptPolicy,
         fullWidth: prefs.fullWidth,
         wakelock: prefs.wakelock,
       ),
@@ -147,15 +147,12 @@ class InheritedViewSettings extends InheritedWidget {
     }
   }
 
-  AgendaEnabledPolicy get agendaEnabledPolicy => data.agendaEnabledPolicy;
-  void setAgendaEnabledPolicy(
-    AgendaEnabledPolicy value, {
-    bool persist = false,
-  }) {
+  AgendaPromptPolicy get agendaPromptPolicy => data.agendaPromptPolicy;
+  void setAgendaPromptPolicy(AgendaPromptPolicy value, {bool persist = false}) {
     if (persist) {
-      _prefs.setAgendaEnabledPolicy(value);
+      _prefs.setAgendaPromptPolicy(value);
     } else {
-      _update((data) => data.copyWith(agendaEnabledPolicy: value));
+      _update((data) => data.copyWith(agendaPromptPolicy: value));
     }
   }
 
@@ -202,7 +199,7 @@ class ViewSettingsData {
       localLinksPolicy: prefs.localLinksPolicy,
       saveChangesPolicy: prefs.saveChangesPolicy,
       decryptPolicy: prefs.decryptPolicy,
-      agendaEnabledPolicy: Preferences.of(context, .agenda).agendaEnabledPolicy,
+      agendaPromptPolicy: Preferences.of(context, .agenda).agendaPromptPolicy,
       fullWidth: prefs.fullWidth,
       wakelock: prefs.wakelock,
       searchQuery: SearchQuery.defaults(),
@@ -236,7 +233,7 @@ class ViewSettingsData {
     required this.localLinksPolicy,
     required this.saveChangesPolicy,
     required this.decryptPolicy,
-    required this.agendaEnabledPolicy,
+    required this.agendaPromptPolicy,
     required this.fullWidth,
     required this.wakelock,
     required this.filterData,
@@ -251,7 +248,7 @@ class ViewSettingsData {
   final LocalLinksPolicy localLinksPolicy;
   final SaveChangesPolicy saveChangesPolicy;
   final DecryptPolicy decryptPolicy;
-  final AgendaEnabledPolicy agendaEnabledPolicy;
+  final AgendaPromptPolicy agendaPromptPolicy;
   final bool fullWidth;
   final bool wakelock;
   // Not persisted
@@ -270,7 +267,7 @@ class ViewSettingsData {
     LocalLinksPolicy? localLinksPolicy,
     SaveChangesPolicy? saveChangesPolicy,
     DecryptPolicy? decryptPolicy,
-    AgendaEnabledPolicy? agendaEnabledPolicy,
+    AgendaPromptPolicy? agendaPromptPolicy,
     bool? fullWidth,
     bool? wakelock,
     SearchQuery? searchQuery,
@@ -283,7 +280,7 @@ class ViewSettingsData {
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
     saveChangesPolicy: saveChangesPolicy ?? this.saveChangesPolicy,
     decryptPolicy: decryptPolicy ?? this.decryptPolicy,
-    agendaEnabledPolicy: agendaEnabledPolicy ?? this.agendaEnabledPolicy,
+    agendaPromptPolicy: agendaPromptPolicy ?? this.agendaPromptPolicy,
     fullWidth: fullWidth ?? this.fullWidth,
     wakelock: wakelock ?? this.wakelock,
     searchQuery: searchQuery ?? this.searchQuery,
@@ -300,7 +297,7 @@ class ViewSettingsData {
       localLinksPolicy == other.localLinksPolicy &&
       saveChangesPolicy == other.saveChangesPolicy &&
       decryptPolicy == other.decryptPolicy &&
-      agendaEnabledPolicy == other.agendaEnabledPolicy &&
+      agendaPromptPolicy == other.agendaPromptPolicy &&
       fullWidth == other.fullWidth &&
       wakelock == other.wakelock &&
       searchQuery == other.searchQuery &&
@@ -315,7 +312,7 @@ class ViewSettingsData {
     localLinksPolicy,
     saveChangesPolicy,
     decryptPolicy,
-    agendaEnabledPolicy,
+    agendaPromptPolicy,
     fullWidth,
     wakelock,
     searchQuery,

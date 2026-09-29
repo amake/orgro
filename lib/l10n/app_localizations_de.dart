@@ -101,7 +101,8 @@ class AppLocalizationsDe extends AppLocalizations {
       'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
 
   @override
-  String get settingsItemEnableAgenda => 'Enable agenda';
+  String get settingsItemEnableAgendaPrompts =>
+      'Ask to add documents to agenda';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -119,6 +120,9 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
 
   @override
   String get settingsItemEnableAgendaNotifications => 'Agenda notifications';

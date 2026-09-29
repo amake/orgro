@@ -25,7 +25,7 @@ enum DecryptPolicy { deny, ask }
 
 enum SortOrder { ascending, descending }
 
-enum AgendaEnabledPolicy { deny, ask }
+enum AgendaPromptPolicy { deny, ask }
 
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
@@ -47,7 +47,7 @@ const kDefaultTextPreviewString = '';
 const kDefaultDeveloperMode = false;
 const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
 const kDefaultRecentFilesSortOrder = SortOrder.descending;
-const kDefaultAgendaEnabledPolicy = AgendaEnabledPolicy.ask;
+const kDefaultAgendaPromptPolicy = AgendaPromptPolicy.ask;
 const kDefaultAgendaOSNotificationsEnabled = true;
 
 const kMaxRecentFiles = 10;
@@ -71,7 +71,7 @@ const kRecentFilesSortKey = 'recent_files_sort_key';
 const kRecentFilesSortOrder = 'recent_files_sort_order';
 const kAgendaFileJsonsKey = 'agenda_file_jsons';
 // This mismatch is due to historical reasons
-const kAgendaEnabledPolicyKey = 'agenda_notifications_policy';
+const kAgendaPromptPolicyKey = 'agenda_notifications_policy';
 const kAgendaOSNotificationsEnabledKey = 'agenda_os_notifications_enabled';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
@@ -455,10 +455,10 @@ extension AgendaExt on InheritedPreferences {
     return await _setAgendaFileJsons([]);
   }
 
-  AgendaEnabledPolicy get agendaEnabledPolicy => data.agendaEnabledPolicy;
-  Future<void> setAgendaEnabledPolicy(AgendaEnabledPolicy value) async {
-    _update((data) => data.copyWith(agendaEnabledPolicy: value));
-    return await _setOrRemove(kAgendaEnabledPolicyKey, value.persistableString);
+  AgendaPromptPolicy get agendaPromptPolicy => data.agendaPromptPolicy;
+  Future<void> setAgendaPromptPolicy(AgendaPromptPolicy value) async {
+    _update((data) => data.copyWith(agendaPromptPolicy: value));
+    return await _setOrRemove(kAgendaPromptPolicyKey, value.persistableString);
   }
 
   bool get agendaOSNotificationsEnabled => data.agendaOSNotificationsEnabled;
@@ -473,7 +473,7 @@ extension AgendaExt on InheritedPreferences {
   ) =>
       dependencies.contains(PrefsAspect.agenda) &&
       (!listEquals(data.agendaFileJsons, oldWidget.data.agendaFileJsons) ||
-          data.agendaEnabledPolicy != oldWidget.data.agendaEnabledPolicy ||
+          data.agendaPromptPolicy != oldWidget.data.agendaPromptPolicy ||
           data.agendaOSNotificationsEnabled !=
               oldWidget.data.agendaOSNotificationsEnabled);
 }
@@ -645,7 +645,7 @@ class PreferencesData {
       recentFilesSortKey = kDefaultRecentFilesSortKey,
       recentFilesSortOrder = kDefaultRecentFilesSortOrder,
       agendaFileJsons = const [],
-      agendaEnabledPolicy = kDefaultAgendaEnabledPolicy,
+      agendaPromptPolicy = kDefaultAgendaPromptPolicy,
       agendaOSNotificationsEnabled = kDefaultAgendaOSNotificationsEnabled,
       themeMode = _kDefaultThemeMode,
       remoteImagesPolicy = kDefaultRemoteImagesPolicy,
@@ -689,8 +689,8 @@ class PreferencesData {
           ?.map<dynamic>(json.decode)
           .cast<Map<String, dynamic>>()
           .toList(growable: false),
-      agendaEnabledPolicy: AgendaEnabledPolicyPersistence.fromString(
-        await prefs.getString(kAgendaEnabledPolicyKey),
+      agendaPromptPolicy: AgendaPromptPolicyPersistence.fromString(
+        await prefs.getString(kAgendaPromptPolicyKey),
       ),
       agendaOSNotificationsEnabled: await prefs.getBool(
         kAgendaOSNotificationsEnabledKey,
@@ -727,7 +727,7 @@ class PreferencesData {
     required this.recentFilesSortKey,
     required this.recentFilesSortOrder,
     required this.agendaFileJsons,
-    required this.agendaEnabledPolicy,
+    required this.agendaPromptPolicy,
     required this.agendaOSNotificationsEnabled,
     required this.themeMode,
     required this.remoteImagesPolicy,
@@ -750,7 +750,7 @@ class PreferencesData {
   final RecentFilesSortKey recentFilesSortKey;
   final SortOrder recentFilesSortOrder;
   final List<Map<String, dynamic>> agendaFileJsons;
-  final AgendaEnabledPolicy agendaEnabledPolicy;
+  final AgendaPromptPolicy agendaPromptPolicy;
   final bool agendaOSNotificationsEnabled;
   final ThemeMode themeMode;
   final RemoteImagesPolicy remoteImagesPolicy;
@@ -773,7 +773,7 @@ class PreferencesData {
     RecentFilesSortKey? recentFilesSortKey,
     SortOrder? recentFilesSortOrder,
     List<Map<String, dynamic>>? agendaFileJsons,
-    AgendaEnabledPolicy? agendaEnabledPolicy,
+    AgendaPromptPolicy? agendaPromptPolicy,
     bool? agendaOSNotificationsEnabled,
     ThemeMode? themeMode,
     RemoteImagesPolicy? remoteImagesPolicy,
@@ -795,7 +795,7 @@ class PreferencesData {
     recentFilesSortKey: recentFilesSortKey ?? this.recentFilesSortKey,
     recentFilesSortOrder: recentFilesSortOrder ?? this.recentFilesSortOrder,
     agendaFileJsons: agendaFileJsons ?? this.agendaFileJsons,
-    agendaEnabledPolicy: agendaEnabledPolicy ?? this.agendaEnabledPolicy,
+    agendaPromptPolicy: agendaPromptPolicy ?? this.agendaPromptPolicy,
     agendaOSNotificationsEnabled:
         agendaOSNotificationsEnabled ?? this.agendaOSNotificationsEnabled,
     themeMode: themeMode ?? this.themeMode,
@@ -825,7 +825,7 @@ class PreferencesData {
         other.agendaFileJsons,
         valueEquals: (a, b) => mapEquals(a, b),
       ) &&
-      agendaEnabledPolicy == other.agendaEnabledPolicy &&
+      agendaPromptPolicy == other.agendaPromptPolicy &&
       agendaOSNotificationsEnabled == other.agendaOSNotificationsEnabled &&
       themeMode == other.themeMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
@@ -853,7 +853,7 @@ class PreferencesData {
     recentFilesSortKey,
     recentFilesSortOrder,
     Object.hashAll(agendaFileJsons),
-    agendaEnabledPolicy,
+    agendaPromptPolicy,
     agendaOSNotificationsEnabled,
     themeMode,
     remoteImagesPolicy,
@@ -985,19 +985,19 @@ const _kSortOrderAscending = 'ascending';
 const _kSortOrderDescending = 'descending';
 
 // This mismatch is due to historical reasons
-const _kAgendaEnabledPolicyDeny = 'agenda_notifications_policy_deny';
-const _kAgendaEnabledPolicyAsk = 'agenda_notifications_policy_ask';
+const _kAgendaPromptPolicyDeny = 'agenda_notifications_policy_deny';
+const _kAgendaPromptPolicyAsk = 'agenda_notifications_policy_ask';
 
-extension AgendaEnabledPolicyPersistence on AgendaEnabledPolicy? {
-  static AgendaEnabledPolicy? fromString(String? value) => switch (value) {
-    _kAgendaEnabledPolicyDeny => AgendaEnabledPolicy.deny,
-    _kAgendaEnabledPolicyAsk => AgendaEnabledPolicy.ask,
+extension AgendaPromptPolicyPersistence on AgendaPromptPolicy? {
+  static AgendaPromptPolicy? fromString(String? value) => switch (value) {
+    _kAgendaPromptPolicyDeny => AgendaPromptPolicy.deny,
+    _kAgendaPromptPolicyAsk => AgendaPromptPolicy.ask,
     _ => null,
   };
 
   String? get persistableString => switch (this) {
-    AgendaEnabledPolicy.deny => _kAgendaEnabledPolicyDeny,
-    AgendaEnabledPolicy.ask => _kAgendaEnabledPolicyAsk,
+    AgendaPromptPolicy.deny => _kAgendaPromptPolicyDeny,
+    AgendaPromptPolicy.ask => _kAgendaPromptPolicyAsk,
     null => null,
   };
 }
@@ -1044,7 +1044,7 @@ class ResetPermissionsListItem extends StatelessWidget {
         await prefs.setLocalLinksPolicy(kDefaultLocalLinksPolicy);
         await prefs.setSaveChangesPolicy(kDefaultSaveChangesPolicy);
         await prefs.setDecryptPolicy(kDefaultDecryptPolicy);
-        await prefs.setAgendaEnabledPolicy(kDefaultAgendaEnabledPolicy);
+        await prefs.setAgendaPromptPolicy(kDefaultAgendaPromptPolicy);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

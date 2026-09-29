@@ -100,7 +100,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '【プレビュー】This is what document text will look like in the selected font and scale.\n\nタップして編集できます。';
 
   @override
-  String get settingsItemEnableAgenda => 'アジェンダを有効にする';
+  String get settingsItemEnableAgendaPrompts => 'アジェンダへの追加を提案';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -117,6 +117,9 @@ class AppLocalizationsJa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get settingsItemGrantNotificationPermissions => '通知を有効にする';
 
   @override
   String get settingsItemEnableAgendaNotifications => 'アジェンダ通知';

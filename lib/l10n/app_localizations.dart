@@ -280,17 +280,23 @@ abstract class AppLocalizations {
   /// **'This is what document text will look like in the selected font and scale.\n\nTap to edit.'**
   String get settingsItemDefaultTextPreviewString;
 
-  /// No description provided for @settingsItemEnableAgenda.
+  /// No description provided for @settingsItemEnableAgendaPrompts.
   ///
   /// In en, this message translates to:
-  /// **'Enable agenda'**
-  String get settingsItemEnableAgenda;
+  /// **'Ask to add documents to agenda'**
+  String get settingsItemEnableAgendaPrompts;
 
   /// No description provided for @settingsItemInspectNotifications.
   ///
   /// In en, this message translates to:
   /// **'{n, plural, =0{No notifications} =1{1 pending notification} other{{n} pending notifications}}'**
   String settingsItemInspectNotifications(num n);
+
+  /// No description provided for @settingsItemGrantNotificationPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications'**
+  String get settingsItemGrantNotificationPermissions;
 
   /// No description provided for @settingsItemEnableAgendaNotifications.
   ///
