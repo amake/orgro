@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dynamic_fonts/dynamic_fonts.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts_lite.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -237,7 +237,7 @@ void _initCustomFonts() {
 
 Iterable<String> get availableFontFamilies sync* {
   yield* _kCustomFonts;
-  for (final family in GoogleFonts.asMap().keys) {
+  for (final family in GoogleFontsLite.fontsMap.keys) {
     if (_kGoogleFontFamilies.contains(family)) {
       yield family;
     }
@@ -333,7 +333,7 @@ TextStyle _loadGoogleFont(String fontFamily) {
   // GoogleFonts.getFont(fontFamily, fontStyle: FontStyle.italic);
   // GoogleFonts.getFont(fontFamily,
   //     fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
-  return GoogleFonts.getFont(fontFamily);
+  return GoogleFontsLite.getFont(fontFamily);
 }
 
 TextStyle _loadDynamicFont(String fontFamily) {
