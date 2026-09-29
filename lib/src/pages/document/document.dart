@@ -167,7 +167,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
     searchDelegate.tags = analysis.tags ?? [];
     searchDelegate.priorities = analysis.priorities ?? [];
     searchDelegate.todoSettings = OrgSettings.of(context).settings.todoSettings;
-    if (analysis.loaded && isAgendaFile) {
+    if (_root && analysis.loaded && isAgendaFile) {
       // The same file's persistent identifier may change; re-add to overwrite
       // stale entry.
       setAgendaFile();
@@ -915,6 +915,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       DocumentProvider.of(context).analysis.hasAgendaEntries;
 
   bool get _askAboutAddingToAgenda =>
+      _root &&
       _viewSettings.agendaPromptPolicy == AgendaPromptPolicy.ask &&
       canBeAgendaFile &&
       !isAgendaFile &&
