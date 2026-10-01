@@ -809,11 +809,16 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
                         ),
             ),
             onTap: _hasNotifications
-                ? () => showDialog<void>(
-                    context: context,
-                    builder: (context) =>
-                        _PendingNotificationsDialog(_pendingNotifications!),
-                  )
+                ? () {
+                    final notifications =
+                        _pendingNotifications!.map((e) => e.toInfo()).toList()
+                          ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) =>
+                          _PendingNotificationsDialog(notifications),
+                    );
+                  }
                 : null,
           ),
         if (_hasNotifications && developerMode)
@@ -868,7 +873,7 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
 class _PendingNotificationsDialog extends StatelessWidget {
   const _PendingNotificationsDialog(this.notifications);
 
-  final List<PendingNotificationRequest> notifications;
+  final List<_PendingNotificationInfo> notifications;
 
   @override
   Widget build(BuildContext context) {
@@ -887,25 +892,9 @@ class _PendingNotificationsDialog extends StatelessWidget {
           itemCount: notifications.length,
           itemBuilder: (context, index) {
             final notification = notifications[index];
-            final payload = json.decode(notification.payload!);
-            final dateTime = switch (payload) {
-              {
-                'scheduledAt': final String scheduledAt,
-                'timezone': final String timezone,
-              } =>
-                dateTimeFormat.format(
-                  tz.TZDateTime.from(
-                    DateTime.parse(scheduledAt),
-                    tz.getLocation(timezone),
-                  ).toLocal(),
-                ),
-              _ => throw UnimplementedError(
-                'Unknown notification payload: $payload',
-              ),
-            };
             return ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(notification.title!),
+              title: Text(notification.title),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -917,14 +906,14 @@ class _PendingNotificationsDialog extends StatelessWidget {
                         size: iconSize,
                         color: iconColor,
                       ),
-                      Text(notification.body!),
+                      Text(notification.body),
                     ],
                   ),
                   Row(
                     spacing: 4,
                     children: [
                       Icon(Icons.access_time, size: iconSize, color: iconColor),
-                      Text(dateTime),
+                      Text(dateTimeFormat.format(notification.dateTime)),
                     ],
                   ),
                 ],
@@ -934,6 +923,30 @@ class _PendingNotificationsDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+typedef _PendingNotificationInfo = ({
+  tz.TZDateTime dateTime,
+  String title,
+  String body,
+});
+
+extension _PendingNotificationRequestUtil on PendingNotificationRequest {
+  _PendingNotificationInfo toInfo() {
+    final decoded = json.decode(payload!);
+    final dateTime = switch (decoded) {
+      {
+        'scheduledAt': final String scheduledAt,
+        'timezone': final String timezone,
+      } =>
+        tz.TZDateTime.from(
+          DateTime.parse(scheduledAt),
+          tz.getLocation(timezone),
+        ),
+      _ => throw UnimplementedError('Unknown notification payload: $decoded'),
+    };
+    return (dateTime: dateTime, title: title!, body: body!);
   }
 }
 
