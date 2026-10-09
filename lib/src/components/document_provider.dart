@@ -217,7 +217,7 @@ class DocumentAnalysis {
       } else if (node is OrgSection) {
         // TODO(aaron): Is this right? Is it efficient?
         // TODO(aaron): Should we detect only *pending* entries?
-        hasAgendaEntries |= node.scheduledAt.isNotEmpty;
+        hasAgendaEntries |= node.occursAt.isNotEmpty;
       }
       return !hasRemoteImages ||
           (!hasRelativeLinks && canResolveRelativeLinks) ||

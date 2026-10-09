@@ -252,7 +252,7 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final now = DateTime.now();
   doc.visitSections((section) {
     if (section.isPending()) {
-      for (final (dateTime, _, _, _) in section.scheduledAt.unique().take(
+      for (final (dateTime, _, _, _) in section.occursAt.unique().take(
         kMaxNotifications,
       )) {
         if (dateTime.isAfter(now)) {
@@ -399,7 +399,7 @@ List<AgendaItemSource> getAgendaSections(
   ParsedOrgFileInfo parsedFile, {
   DateTime? now,
 }) => parsedFile.doc
-    .pendingSections(now: now)
+    .agendaSections(now: now)
     .map((s) => (section: s, dataSource: parsedFile.dataSource))
     .toList();
 
@@ -416,7 +416,7 @@ Iterable<AgendaItem> agendaItemsFromSources(
   now ??= DateTime.now();
 
   final items = sources.map(
-    (source) => source.section.scheduledAt
+    (source) => source.section.occursAt
         .where((span) => !span.comparisonPoint.isBefore(now!))
         .map((span) => (source: source, span: span)),
   );
@@ -461,12 +461,12 @@ typedef PlannedTimestamp = (OrgTimestamp, OrgPlanningKeyword?);
 extension OrgSectionUtil on OrgSection {
   bool get isTodo => headline.keyword?.done == false;
   bool get isDone => headline.keyword?.done == true;
-  bool get isScheduled =>
+  bool get hasScheduled =>
       planning.any((entry) => entry.keyword.content == 'SCHEDULED:');
-  bool get isClosed =>
+  bool get hasClosed =>
       planning.any((entry) => entry.keyword.content == 'CLOSED:');
 
-  Iterable<ChunkedAgendaSpan> get scheduledAt sync* {
+  Iterable<ChunkedAgendaSpan> get occursAt sync* {
     final timestamps = activeTimestamps.toList(growable: false)
       ..sort((a, b) => a.$1.compareTo(b.$1));
     yield* timestamps
@@ -475,7 +475,7 @@ extension OrgSectionUtil on OrgSection {
   }
 
   bool isPending({DateTime? now}) {
-    if (isDone || isClosed) return false;
+    if (isDone || hasClosed) return false;
 
     now ??= DateTime.now();
     return activeTimestamps.any2((t, kw) {
@@ -564,7 +564,7 @@ String? _targetFromPayloadJson(dynamic payload) => switch (payload) {
 };
 
 extension OrgTreeUtil on OrgTree {
-  Iterable<OrgSection> pendingSections({DateTime? now}) sync* {
+  Iterable<OrgSection> agendaSections({DateTime? now}) sync* {
     final toSchedule = <OrgSection>[];
     visitSections((section) {
       if (section.isPending(now: now)) {
