@@ -252,11 +252,14 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   final now = DateTime.now();
   doc.visitSections((section) {
     if (section.isPending()) {
-      for (final (dateTime, _, _, _) in section.occursAt.unique().take(
-        kMaxNotifications,
-      )) {
-        if (dateTime.isAfter(now)) {
-          var tzDateTime = tz.TZDateTime.from(dateTime, tz.local);
+      for (final e
+          in section
+              .occursAt(now: now)
+              .where((e) => !e.overdue)
+              .unique()
+              .take(kMaxNotifications)) {
+        if (e.start.isAfter(now)) {
+          var tzDateTime = tz.TZDateTime.from(e.start, tz.local);
           if (tzDateTime.hour == 0 && tzDateTime.minute == 0) {
             // Scheduled time is midnight. Move to 9am.
             tzDateTime = tzDateTime.add(const Duration(hours: 9));
@@ -406,7 +409,15 @@ List<AgendaItemSource> getAgendaSections(
 typedef AgendaItem = ({
   OrgSection section,
   DataSource dataSource,
-  (tz.TZDateTime start, tz.TZDateTime end, int chunkIdx, bool last) scheduledAt,
+  ({
+    tz.TZDateTime start,
+    tz.TZDateTime end,
+    int chunkIdx,
+    bool last,
+    String? keyword,
+    bool overdue,
+  })
+  scheduledAt,
 });
 
 Iterable<AgendaItem> agendaItemsFromSources(
@@ -416,8 +427,9 @@ Iterable<AgendaItem> agendaItemsFromSources(
   now ??= DateTime.now();
 
   final items = sources.map(
-    (source) => source.section.occursAt
-        .where((span) => !span.comparisonPoint.isBefore(now!))
+    (source) => source.section
+        .occursAt(now: now)
+        .where((span) => span.overdue || !span.comparisonPoint.isBefore(now!))
         .map((span) => (source: source, span: span)),
   );
 
@@ -428,10 +440,12 @@ Iterable<AgendaItem> agendaItemsFromSources(
       section: source.section,
       dataSource: source.dataSource,
       scheduledAt: (
-        tz.TZDateTime.from(span.$1, tz.local),
-        tz.TZDateTime.from(span.$2, tz.local),
-        span.$3,
-        span.$4,
+        start: tz.TZDateTime.from(span.start, tz.local),
+        end: tz.TZDateTime.from(span.end, tz.local),
+        chunkIdx: span.chunkIdx,
+        last: span.last,
+        keyword: span.keyword,
+        overdue: span.overdue,
       ),
     );
   }
@@ -465,13 +479,36 @@ extension OrgSectionUtil on OrgSection {
       planning.any((entry) => entry.keyword.content == 'SCHEDULED:');
   bool get hasClosed =>
       planning.any((entry) => entry.keyword.content == 'CLOSED:');
+  bool get hasDeadline =>
+      planning.any((entry) => entry.keyword.content == 'DEADLINE:');
 
-  Iterable<ChunkedAgendaSpan> get occursAt sync* {
+  Iterable<ChunkedAgendaSpan> occursAt({DateTime? now}) sync* {
+    now ??= DateTime.now();
     final timestamps = activeTimestamps.toList(growable: false)
       ..sort((a, b) => a.$1.compareTo(b.$1));
     yield* timestamps
-        .map2((t, kw) => expandTimestamp(t, kw).expand(chunkMultidaySpan))
+        .map2(
+          (t, kw) => _expandTimestampWithPlanning(
+            t,
+            kw,
+            now: now,
+          ).expand(chunkMultidaySpan),
+        )
         .mergeSorted((a, b) => a.comparisonPoint.compareTo(b.comparisonPoint));
+  }
+
+  Iterable<AgendaSpan> _expandTimestampWithPlanning(
+    OrgTimestamp timestamp,
+    OrgPlanningKeyword? keyword, {
+    DateTime? now,
+  }) sync* {
+    now ??= DateTime.now();
+    if (!isDone && timestamp.isOverdue(keyword, now: now)) {
+      final startOfDay = now.startOfDay();
+      yield (startOfDay, startOfDay.nextDay(), keyword?.content, true);
+      return;
+    }
+    yield* expandTimestamp(timestamp, keyword);
   }
 
   bool isPending({DateTime? now}) {
@@ -479,9 +516,9 @@ extension OrgSectionUtil on OrgSection {
 
     now ??= DateTime.now();
     return activeTimestamps.any2((t, kw) {
-      if (t.endDateTime.isAfter(now!)) return true;
+      if (t.endsAfter(now!, kw)) return true;
+      if (t.isOverdue(kw, now: now)) return true;
       if (t.repeats) return true;
-      if (t.hasDelay && t.delayedEndTime(kw).isAfter(now)) return true;
       return false;
     });
   }
@@ -543,7 +580,25 @@ extension OrgSectionUtil on OrgSection {
 }
 
 extension _OrgTimestampUtil on OrgTimestamp {
-  DateTime delayedEndTime(OrgPlanningKeyword? keyword) => switch (this) {
+  bool isOverdue(OrgPlanningKeyword? kw, {DateTime? now}) {
+    // TODO(aaron): Not sure how to handle a repeating SCHEDULED/DEADLINE. For now
+    // we let them get picked up by [isPending].
+    if (repeats) return false;
+
+    if (kw?.content != 'SCHEDULED:' && kw?.content != 'DEADLINE:') return false;
+
+    final startOfDay = (now ??= DateTime.now()).startOfDay();
+    return endsBeforeOrOn(startOfDay, kw);
+  }
+
+  bool endsBeforeOrOn(DateTime dt, OrgPlanningKeyword? keyword) => hasDelay
+      ? !_delayedEndTime(keyword).isAfter(dt)
+      : !endDateTime.isAfter(dt);
+
+  bool endsAfter(DateTime dt, OrgPlanningKeyword? keyword) =>
+      hasDelay ? _delayedEndTime(keyword).isAfter(dt) : endDateTime.isAfter(dt);
+
+  DateTime _delayedEndTime(OrgPlanningKeyword? keyword) => switch (this) {
     final OrgSimpleTimestamp t =>
       t.modifiers
           .firstWhere((m) => m.isDelay)
@@ -552,7 +607,7 @@ extension _OrgTimestampUtil on OrgTimestamp {
       t.modifiers
           .firstWhere((m) => m.isDelay)
           .apply(t.endDateTime, keyword: keyword),
-    final OrgDateRangeTimestamp t => t.end.delayedEndTime(keyword),
+    final OrgDateRangeTimestamp t => t.end._delayedEndTime(keyword),
   };
 }
 
@@ -592,25 +647,32 @@ extension OrgTreeUtil on OrgTree {
 // - Min-max style: can ignore max for now
 //   https://orgmode.org/manual/Tracking-your-habits.html
 
-typedef AgendaSpan = (DateTime start, DateTime end);
-typedef ChunkedAgendaSpan = (
+typedef AgendaSpan = (
+  DateTime start,
+  DateTime end,
+  String? keyword,
+  bool overdue,
+);
+typedef ChunkedAgendaSpan = ({
   DateTime start,
   DateTime end,
   int chunkIdx,
   // True if this is the last chunk of a span, false otherwise. Single-day spans
   // have chunkIdx == 0 and last == true.
   bool last,
-);
+  String? keyword,
+  bool overdue,
+});
 
 extension ChunkUtil on ChunkedAgendaSpan {
-  bool get isInstant => $1.isAtSameMomentAs($2);
-  bool get isAllDay => $1.isStartOfDay() && $2.isStartOfDay();
-  bool get isStartOfMultidaySpan => $3 == 0 && !$4;
-  bool get isEndOfMultidaySpan => $3 > 0 && $4;
+  bool get isInstant => start.isAtSameMomentAs(end);
+  bool get isAllDay => start.isStartOfDay() && end.isStartOfDay();
+  bool get isStartOfMultidaySpan => chunkIdx == 0 && !last;
+  bool get isEndOfMultidaySpan => chunkIdx > 0 && last;
 
   // Sort the last chunk of a multi-day span by the end of the chunk
   DateTime get comparisonPoint =>
-      isEndOfMultidaySpan && !$2.isStartOfDay() ? $2 : $1;
+      isEndOfMultidaySpan && !end.isStartOfDay() ? end : start;
 }
 
 Iterable<AgendaSpan> expandTimestamp(
@@ -624,7 +686,6 @@ Iterable<AgendaSpan> expandTimestamp(
     timestamp.modifiers,
     keyword,
   ),
-
   OrgTimeRangeTimestamp() => expandDate(
     timestamp.startDateTime,
     (end ?? timestamp).endDateTime,
@@ -645,7 +706,7 @@ Iterable<AgendaSpan> expandDate(
   OrgPlanningKeyword? keyword,
 ) sync* {
   if (modifiers.isEmpty) {
-    yield (start, end);
+    yield (start, end, keyword?.content, false);
     return;
   }
   final repeater = modifiers.where((m) => m.isRepeater).firstOrNull;
@@ -664,7 +725,7 @@ Iterable<AgendaSpan> expandDate(
     return dt.addModifier(delayValue!, delay.unit);
   }
 
-  yield (applyDelay(start), applyDelay(end));
+  yield (applyDelay(start), applyDelay(end), keyword?.content, false);
   if (repeater == null) return;
 
   final repeaterValue = int.parse(repeater.value);
@@ -675,8 +736,8 @@ Iterable<AgendaSpan> expandDate(
     start = applyRepeater(start);
     end = applyRepeater(end);
     yield delay?.prefix == '-'
-        ? (applyDelay(start), applyDelay(end))
-        : (start, end);
+        ? (applyDelay(start), applyDelay(end), keyword?.content, false)
+        : (start, end, keyword?.content, false);
   }
 }
 
@@ -684,16 +745,30 @@ Iterable<AgendaSpan> expandDate(
 // day-based notifications and agenda view we want to present it as a series of
 // single-day spans.
 Iterable<ChunkedAgendaSpan> chunkMultidaySpan(AgendaSpan span) sync* {
-  final (start, end) = span;
+  final (start, end, keyword, overdue) = span;
   var chunkIdx = 0;
   var currentStart = start;
   var currentEnd = currentStart.add(const Duration(days: 1)).startOfDay();
   while (currentEnd.isBefore(end)) {
-    yield (currentStart, currentEnd, chunkIdx++, false);
+    yield (
+      start: currentStart,
+      end: currentEnd,
+      chunkIdx: chunkIdx++,
+      last: false,
+      keyword: keyword,
+      overdue: overdue,
+    );
     currentStart = currentStart.add(const Duration(days: 1)).startOfDay();
     currentEnd = currentEnd.add(const Duration(days: 1)).startOfDay();
   }
-  yield (currentStart, end, chunkIdx, true);
+  yield (
+    start: currentStart,
+    end: end,
+    chunkIdx: chunkIdx,
+    last: true,
+    keyword: keyword,
+    overdue: overdue,
+  );
 }
 
 class NotificationsListItems extends StatefulWidget {

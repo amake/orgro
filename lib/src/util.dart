@@ -307,6 +307,8 @@ extension DateTimeUtil on DateTime {
   DateTime startOfDay() =>
       copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
 
+  DateTime nextDay() => copyWith(day: day + 1);
+
   bool isStartOfDay() =>
       hour == 0 &&
       minute == 0 &&

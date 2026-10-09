@@ -162,8 +162,8 @@ class _AgendaBodyState extends State<AgendaBody>
                     !iter
                         .elementAt(index - 1)
                         .scheduledAt
-                        .$1
-                        .isSameDayAs(agendaSpan.$1);
+                        .start
+                        .isSameDayAs(agendaSpan.start);
                 if (!needsHeader) return result;
 
                 return Column(
@@ -177,7 +177,7 @@ class _AgendaBodyState extends State<AgendaBody>
                         child: SizedBox(
                           width: .infinity,
                           child: Text(
-                            dateFormat.format(agendaSpan.$1).toUpperCase(),
+                            dateFormat.format(agendaSpan.start).toUpperCase(),
                             style: theme.textTheme.titleSmall?.copyWith(
                               fontWeight: .w500,
                               fontFeatures: const [
@@ -243,16 +243,27 @@ class _AgendaTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (start, end, chunkIdx, last) = agendaSpan;
+    final (:start, :end, :chunkIdx, :last, :keyword, :overdue) = agendaSpan;
+
+    var style = _timeStyle;
+    if (overdue) {
+      style = style.copyWith(color: Theme.of(context).colorScheme.error);
+    }
 
     if (agendaSpan.isInstant) {
-      return Text(timeFormat.format(start), style: _timeStyle);
+      return Text(timeFormat.format(start), style: style);
     }
 
     if (agendaSpan.isAllDay) {
       return SizedBox(
         width: iconWidth,
-        child: const Icon(Icons.calendar_today, applyTextScaling: true),
+        child: Icon(
+          overdue || keyword == 'DEADLINE:'
+              ? Icons.assignment_late_outlined
+              : Icons.calendar_today,
+          applyTextScaling: true,
+          color: style.color,
+        ),
       );
     }
 
@@ -260,7 +271,7 @@ class _AgendaTime extends StatelessWidget {
       return Column(
         mainAxisAlignment: .center,
         children: [
-          Text(timeFormat.format(start), style: _timeStyle),
+          Text(timeFormat.format(start), style: style),
           const Text('|'),
         ],
       );
@@ -271,7 +282,7 @@ class _AgendaTime extends StatelessWidget {
         mainAxisAlignment: .center,
         children: [
           const Text('|'),
-          Text(timeFormat.format(end), style: _timeStyle),
+          Text(timeFormat.format(end), style: style),
         ],
       );
     }
@@ -279,8 +290,8 @@ class _AgendaTime extends StatelessWidget {
     return Column(
       mainAxisAlignment: .center,
       children: [
-        Text(timeFormat.format(start), style: _timeStyle),
-        Text(timeFormat.format(end), style: _timeStyle),
+        Text(timeFormat.format(start), style: style),
+        Text(timeFormat.format(end), style: style),
       ],
     );
   }
