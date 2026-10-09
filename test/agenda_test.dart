@@ -217,7 +217,7 @@ void main() {
       expect(section.isPending(now: now), isFalse);
       expect(section.occursAt, isEmpty);
     });
-    test('Completed via CLOSED', () {
+    test('Not completed via CLOSED', () {
       final doc = OrgDocument.parse('''
 * TODO Do the thing
   SCHEDULED: <2025-10-05 Sun> CLOSED: [2025-10-06 Tue]
@@ -228,7 +228,7 @@ void main() {
       expect(section.isTodo, isTrue);
       expect(section.hasScheduled, isTrue);
       expect(section.hasClosed, isTrue);
-      expect(section.isPending(now: now), isFalse);
+      expect(section.isPending(now: now), isTrue);
       expect(section.occursAt, [
         (DateTime(2025, 10, 5), DateTime(2025, 10, 6), 0, true),
       ]);

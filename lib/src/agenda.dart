@@ -475,7 +475,7 @@ extension OrgSectionUtil on OrgSection {
   }
 
   bool isPending({DateTime? now}) {
-    if (isDone || hasClosed) return false;
+    if (isDone) return false;
 
     now ??= DateTime.now();
     return activeTimestamps.any2((t, kw) {
