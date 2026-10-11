@@ -11,7 +11,6 @@ import 'package:orgro/src/pages/editor/util.dart';
 import 'package:orgro/src/restoration.dart';
 import 'package:orgro/src/util.dart';
 
-const _kRestoreAfterTextKey = 'restore_after_text';
 const _kEditorToolbarReservedHeight = kMinInteractiveDimension + 16;
 
 final editorTextFieldKey = GlobalKey(debugLabel: 'editor_text_field');
@@ -38,8 +37,9 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   @override
   String get restorationId => 'editor_page';
 
-  String? _after;
-  bool get _dirty => _after != null && _after != widget.text;
+  bool get _dirty => _controller.value.text != widget.text;
+  bool _maybeDirty = false;
+  late String _previousText;
 
   late FullyRestorableTextEditingController _controller;
   late UndoHistoryController _undoController;
@@ -49,23 +49,29 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   @override
   void initState() {
     super.initState();
+    _previousText = widget.text;
     _controller = FullyRestorableTextEditingController(text: widget.text)
-      ..addListener(() {
-        if (_controller.value.text != _after) {
-          if (lineBreakInserted(_after, _controller.value.value)) {
-            // TODO(aaron): It would be nice to handle this via normal intent
-            // dispatch, but the context here doesn't include the Actions below
-            AfterNewLineAction.directlyApply(_controller.value);
-          }
-          setState(() {
-            _after = _controller.value.text;
-            bucket?.write(_kRestoreAfterTextKey, _after);
-          });
-        }
-      });
+      ..addListener(_onTextChanged);
     _undoController = UndoHistoryController();
     if (widget.requestFocus) {
       _focusNode.requestFocus();
+    }
+  }
+
+  void _onTextChanged() {
+    final value = _controller.value.value;
+
+    final previousText = _previousText;
+    _previousText = value.text;
+
+    if (!_maybeDirty) {
+      setState(() => _maybeDirty = true);
+    }
+
+    if (lineBreakInserted(previousText, value)) {
+      // TODO(aaron): It would be nice to handle this via normal intent
+      // dispatch, but the context here doesn't include the Actions below
+      AfterNewLineAction.directlyApply(_controller.value);
     }
   }
 
@@ -78,9 +84,6 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(_controller, 'controller');
-
-    if (!initialRestore) return;
-    _after = bucket?.read<String>(_kRestoreAfterTextKey);
   }
 
   @override
@@ -116,7 +119,7 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: !_dirty,
+      canPop: !_maybeDirty,
       onPopInvokedWithResult: _onPopInvoked,
       child: Shortcuts(
         shortcuts: _shortcuts,
@@ -217,6 +220,10 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
     if (didPop) return;
 
     final navigator = Navigator.of(context);
+    if (!_dirty) {
+      navigator.pop();
+      return;
+    }
 
     final result = await showDialog<bool>(
       context: context,
@@ -226,7 +233,8 @@ class _EditorPageState extends State<EditorPage> with RestorationMixin {
   }
 
   void _save() {
-    final result = _dirty ? _after?.withTrailingLineBreak() : null;
+    final text = _controller.value.text;
+    final result = text != widget.text ? text.withTrailingLineBreak() : null;
     Navigator.pop(context, result);
   }
 
