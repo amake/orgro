@@ -258,7 +258,7 @@ class _AgendaTime extends StatelessWidget {
       return SizedBox(
         width: iconWidth,
         child: Icon(
-          overdue || keyword == 'DEADLINE:'
+          keyword == 'DEADLINE:'
               ? Icons.assignment_late_outlined
               : Icons.calendar_today,
           applyTextScaling: true,
