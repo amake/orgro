@@ -1,0 +1,21 @@
+Orgro is an Org Mode file editor and viewer that brings essential Org features to mobile:
+
+- TODO and checkbox toggling, with progress cookies
+
+- Quick actions to start a new Org doc or go straight to your most important one
+
+- Notifications for Org Agenda items
+
+- Narrow, search, and filter your document just like in Emacs
+
+- Org Crypt section symmetric decryption/encryption
+
+- Org Cite bibliography support
+
+- Syntax highlighting, beautiful tables, LaTeX rendering
+
+- Expand or collapse sections, blocks, and drawers
+
+- Reflowed text for easy viewing on mobile
+
+Try for free for 7 days. Afterwards you can purchase a one-time, permanent unlock of all features.
