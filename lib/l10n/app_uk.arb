@@ -64,7 +64,7 @@
   "confirmResetPreferencesActionReset": "Відновити",
   "confirmResetPreferencesActionCancel": "Скасувати",
 
-  "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
+  "aboutLinkSupport": "Підтримка · Зворотний звʼязок",
   "aboutLinkChangelog": "Список змін",
 
   "buttonOpenFile": "Відкрити файл",
@@ -76,8 +76,8 @@
   "tooltipCreateFile": "Створити файл",
   "tooltipOpenFile": "Відкрити файл",
 
-  "buttonSupport": "Підтримка · Зворотній звʼязок",
-  "buttonVersion": "в{version}",
+  "buttonSupport": "Підтримка · Зворотний звʼязок",
+  "buttonVersion": "v{version}",
 
   "sectionHeaderPinnedFiles": "Закріплені файли",
   "sectionHeaderRecentFiles": "Останні файли",
@@ -108,7 +108,7 @@
   "menuItemReaderMode": "Режим читання",
   "menuItemWakelock": "Не вимикати екран",
   "menuItemFullWidth": "На всю ширину",
-  "menuItemScrollTop": "Прокрутити вверх",
+  "menuItemScrollTop": "Прокрутити вгору",
   "menuItemScrollBottom": "Прокрутити вниз",
 
   "menuItemUndo": "Відмінити",
@@ -116,7 +116,7 @@
 
   "tooltipFullWidth": "Перемкнути режим на всю ширину",
   "tooltipReaderMode": "Перемкнути режим читання",
-  "tooltipScrollTop": "Прокрутити вверх",
+  "tooltipScrollTop": "Прокрутити вгору",
   "tooltipScrollBottom": "Прокрутити вниз",
 
   "tooltipTextStyle": "Стиль тексту",
@@ -136,7 +136,7 @@
   "searchResultSelection": "{current} / {total}",
   "customFilterChipName": "Власний",
 
-  "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro не має дозволу на обробку відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",
 
   "snackbarMessageNeedsEncryptionKey": "Не вдалося зберегти. Немає пароля шифрування.",
@@ -235,7 +235,7 @@
   "snackbarMessageCitationsNotFound": "Цитування не знайдено",
   "snackbarMessageSomeCitationsNotFound": "Цитування не знайдено: {citations}",
 
-  "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
+  "errorCannotResolveRelativePath": "Неможливо визначити шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
   "errorUnknownType": "Невідомий тип: {type}",
   "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}",

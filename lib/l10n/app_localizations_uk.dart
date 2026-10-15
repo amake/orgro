@@ -199,7 +199,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get confirmResetPreferencesActionCancel => 'Скасувати';
 
   @override
-  String get aboutLinkSupport => 'Підтримка · Зворотній звʼязок';
+  String get aboutLinkSupport => 'Підтримка · Зворотний звʼязок';
 
   @override
   String get aboutLinkChangelog => 'Список змін';
@@ -226,11 +226,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tooltipOpenFile => 'Відкрити файл';
 
   @override
-  String get buttonSupport => 'Підтримка · Зворотній звʼязок';
+  String get buttonSupport => 'Підтримка · Зворотний звʼязок';
 
   @override
   String buttonVersion(String version) {
-    return 'в$version';
+    return 'v$version';
   }
 
   @override
@@ -309,7 +309,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemFullWidth => 'На всю ширину';
 
   @override
-  String get menuItemScrollTop => 'Прокрутити вверх';
+  String get menuItemScrollTop => 'Прокрутити вгору';
 
   @override
   String get menuItemScrollBottom => 'Прокрутити вниз';
@@ -327,7 +327,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tooltipReaderMode => 'Перемкнути режим читання';
 
   @override
-  String get tooltipScrollTop => 'Прокрутити вверх';
+  String get tooltipScrollTop => 'Прокрутити вгору';
 
   @override
   String get tooltipScrollBottom => 'Прокрутити вниз';
@@ -397,7 +397,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get snackbarMessageNeedsDirectoryPermissions =>
-      'Orgro немає прав для розвʼязання відносних посилань';
+      'Orgro не має дозволу на обробку відносних посилань';
 
   @override
   String get snackbarActionGrantAccess => 'Надати дозвіл';
@@ -643,7 +643,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get errorCannotResolveRelativePath =>
-      'Не можливо розвʼязати шлях відносно цього документа';
+      'Неможливо визначити шлях відносно цього документа';
 
   @override
   String errorPathResolvedToNonFile(String path, String resolved) {
