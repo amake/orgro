@@ -16,7 +16,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemAppearance => 'Вигляд';
 
   @override
-  String get menuItemSettings => 'Settings';
+  String get menuItemSettings => 'Налаштування';
 
   @override
   String get menuItemClearCache => 'Очистити кеш';
@@ -28,20 +28,20 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemOrgManual => 'Посібник Org';
 
   @override
-  String get menuItemTestFile => 'Test File';
+  String get menuItemTestFile => 'Тестовий файл';
 
   @override
   String get menuItemAbout => 'Про застосунок';
 
   @override
-  String get menuItemOpenUrl => 'Open URL';
+  String get menuItemOpenUrl => 'Відкрити URL';
 
   @override
-  String get quickActionNewDocument => 'New Document';
+  String get quickActionNewDocument => 'Новий документ';
 
   @override
   String quickActionTopPin(String name) {
-    return 'Open $name';
+    return 'Відкрити $name';
   }
 
   @override
@@ -54,55 +54,55 @@ class AppLocalizationsUk extends AppLocalizations {
   String get appearanceModeDark => 'Темний';
 
   @override
-  String get settingsScreenTitle => 'Settings';
+  String get settingsScreenTitle => 'Налаштування';
 
   @override
-  String get settingsSectionAppearance => 'Appearance';
+  String get settingsSectionAppearance => 'Вигляд';
 
   @override
-  String get settingsSectionDefaultText => 'Default text';
+  String get settingsSectionDefaultText => 'Текст за замовчуванням';
 
   @override
-  String get settingsSectionAgenda => 'Agenda';
+  String get settingsSectionAgenda => 'Розклад';
 
   @override
-  String get settingsSectionDataManagement => 'Data management';
+  String get settingsSectionDataManagement => 'Керування даними';
 
   @override
-  String get settingsSectionDonate => 'Donate';
+  String get settingsSectionDonate => 'Пожертви';
 
   @override
-  String get settingsSectionPurchase => 'Purchase';
+  String get settingsSectionPurchase => 'Придбання';
 
   @override
-  String get agendaNotificationsChannelName => 'Agenda Notifications';
+  String get agendaNotificationsChannelName => 'Сповіщення розкладу';
 
   @override
   String get agendaNotificationsChannelDescription =>
-      'Notifications for Org Agenda items';
+      'Сповіщення про пункти розкладу Org';
 
   @override
-  String get agendaNotificationsActionView => 'View';
+  String get agendaNotificationsActionView => 'Переглянути';
 
   @override
-  String get settingsItemLoading => 'Loading...';
+  String get settingsItemLoading => 'Завантаження...';
 
   @override
-  String get settingsItemTheme => 'Theme';
+  String get settingsItemTheme => 'Тема';
 
   @override
-  String get settingsItemTextScale => 'Scale';
+  String get settingsItemTextScale => 'Масштаб';
 
   @override
-  String get settingsItemFontFamily => 'Font';
+  String get settingsItemFontFamily => 'Шрифт';
 
   @override
   String get settingsItemDefaultTextPreviewString =>
-      'This is what document text will look like in the selected font and scale.\n\nTap to edit.';
+      'Так виглядатиме текст документа з вибраним шрифтом і масштабом.\n\nТоркніться, щоб редагувати.';
 
   @override
   String get settingsItemEnableAgendaPrompts =>
-      'Ask to add documents to agenda';
+      'Пропонувати додавати документи до розкладу';
 
   @override
   String settingsItemInspectNotifications(num n) {
@@ -114,84 +114,89 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nString pending notifications',
-      one: '1 pending notification',
-      zero: 'No notifications',
+      other: '$nString запланованого сповіщення',
+      many: '$nString запланованих сповіщень',
+      few: '$nString заплановані сповіщення',
+      one: '$nString заплановане сповіщення',
+      zero: 'Немає сповіщень',
     );
     return '$_temp0';
   }
 
   @override
-  String get settingsItemGrantNotificationPermissions => 'Enable notifications';
+  String get settingsItemGrantNotificationPermissions => 'Увімкнути сповіщення';
 
   @override
-  String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+  String get settingsItemEnableAgendaNotifications => 'Сповіщення розкладу';
 
   @override
-  String get settingsDialogNotificationsTitle => 'Pending notifications';
+  String get settingsDialogNotificationsTitle => 'Заплановані сповіщення';
 
   @override
-  String get settingsItemClearNotifications => 'Clear all notifications';
+  String get settingsItemClearNotifications => 'Очистити всі сповіщення';
 
   @override
-  String get settingsItemClearAgenda => 'Clear agenda';
+  String get settingsItemClearAgenda => 'Очистити розклад';
 
   @override
-  String get confirmClearAgendaDialogTitle => 'Clear agenda?';
+  String get confirmClearAgendaDialogTitle => 'Очистити розклад?';
 
   @override
   String confirmClearAgendaDialogMessage(num n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n agenda files',
-      one: 'agenda file',
+      other: 'Наведені нижче $n файлу розкладу більше не відстежуватимуться.',
+      many: 'Наведені нижче $n файлів розкладу більше не відстежуватимуться.',
+      few: 'Наведені нижче $n файли розкладу більше не відстежуватимуться.',
+      one: 'Наведений нижче $n файл розкладу більше не відстежуватиметься.',
     );
-    return 'The following $_temp0 will no longer be tracked. This action can’t be undone.';
+    return '$_temp0 Цю дію не можна скасувати.';
   }
 
   @override
-  String get confirmClearAgendaActionClear => 'Clear';
+  String get confirmClearAgendaActionClear => 'Очистити';
 
   @override
-  String get confirmClearAgendaActionCancel => 'Cancel';
+  String get confirmClearAgendaActionCancel => 'Скасувати';
 
   @override
-  String get settingsActionClearCache => 'Clear cache';
+  String get settingsActionClearCache => 'Очистити кеш';
 
   @override
-  String get settingsActionResetPreferences => 'Restore defaults';
+  String get settingsActionResetPreferences => 'Відновити типові налаштування';
 
   @override
-  String get settingsActionResetPermissions => 'Reset permissions';
+  String get settingsActionResetPermissions => 'Скинути дозволи';
 
   @override
-  String get snackbarMessageNotificationsCleared => 'Notifications cleared';
+  String get snackbarMessageNotificationsCleared => 'Сповіщення очищено';
 
   @override
-  String get snackbarMessageAgendaCleared => 'Agenda cleared';
+  String get snackbarMessageAgendaCleared => 'Розклад очищено';
 
   @override
   String get snackbarMessageCacheCleared => 'Кеш очищено';
 
   @override
-  String get snackbarMessagePreferencesReset => 'Preferences reset';
+  String get snackbarMessagePreferencesReset => 'Налаштування скинуто';
 
   @override
-  String get snackbarMessagePermissionsReset => 'Permissions reset';
+  String get snackbarMessagePermissionsReset => 'Дозволи скинуто';
 
   @override
-  String get confirmResetPreferencesDialogTitle => 'Restore defaults?';
+  String get confirmResetPreferencesDialogTitle =>
+      'Відновити типові налаштування?';
 
   @override
   String get confirmResetPreferencesDialogMessage =>
-      'This will reset all preferences to their default values. This action can’t be undone.';
+      'Усі налаштування буде скинуто до типових значень. Цю дію не можна скасувати.';
 
   @override
-  String get confirmResetPreferencesActionReset => 'Restore';
+  String get confirmResetPreferencesActionReset => 'Відновити';
 
   @override
-  String get confirmResetPreferencesActionCancel => 'Cancel';
+  String get confirmResetPreferencesActionCancel => 'Скасувати';
 
   @override
   String get aboutLinkSupport => 'Підтримка · Зворотній звʼязок';
@@ -203,7 +208,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get buttonOpenFile => 'Відкрити файл';
 
   @override
-  String get buttonCreateFile => 'Create File';
+  String get buttonCreateFile => 'Створити файл';
 
   @override
   String get buttonOpenOrgroManual => 'Відкрити Посібник Orgro';
@@ -212,13 +217,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get buttonOpenOrgManual => 'Відкрити Посібник Org';
 
   @override
-  String get buttonOpenUrl => 'Open URL';
+  String get buttonOpenUrl => 'Відкрити URL';
 
   @override
-  String get tooltipCreateFile => 'Create file';
+  String get tooltipCreateFile => 'Створити файл';
 
   @override
-  String get tooltipOpenFile => 'Open file';
+  String get tooltipOpenFile => 'Відкрити файл';
 
   @override
   String get buttonSupport => 'Підтримка · Зворотній звʼязок';
@@ -229,79 +234,79 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get sectionHeaderPinnedFiles => 'Pinned files';
+  String get sectionHeaderPinnedFiles => 'Закріплені файли';
 
   @override
   String get sectionHeaderRecentFiles => 'Останні файли';
 
   @override
-  String get recentFilesSortDialogTitle => 'Sort by';
+  String get recentFilesSortDialogTitle => 'Сортувати за';
 
   @override
-  String get sortKeyLastOpened => 'Last opened';
+  String get sortKeyLastOpened => 'Останнім відкриттям';
 
   @override
-  String get sortKeyName => 'Name';
+  String get sortKeyName => 'Назвою';
 
   @override
-  String get sortKeyLocation => 'Location';
+  String get sortKeyLocation => 'Розташуванням';
 
   @override
-  String get sortOrderAscending => 'Ascending';
+  String get sortOrderAscending => 'За зростанням';
 
   @override
-  String get sortOrderDescending => 'Descending';
+  String get sortOrderDescending => 'За спаданням';
 
   @override
-  String get fileSourceDocuments => 'Documents';
+  String get fileSourceDocuments => 'Документи';
 
   @override
-  String get fileSourceDownloads => 'Downloads';
+  String get fileSourceDownloads => 'Завантаження';
 
   @override
-  String get fileSourceGoogleDrive => 'Google Drive';
+  String get fileSourceGoogleDrive => 'Google Диск';
 
   @override
-  String get filesTabTitle => 'Files';
+  String get filesTabTitle => 'Файли';
 
   @override
-  String get agendaTabTitle => 'Agenda';
+  String get agendaTabTitle => 'Розклад';
 
   @override
-  String get unknownAgendaTitle => 'Unknown';
+  String get unknownAgendaTitle => 'Невідомо';
 
   @override
-  String get emptyAgendaMessage => 'No pending agenda items found';
+  String get emptyAgendaMessage => 'Запланованих пунктів розкладу не знайдено';
 
   @override
-  String get notFoundDialogTitle => 'Not found';
+  String get notFoundDialogTitle => 'Не знайдено';
 
   @override
   String get notFoundDialogBody =>
-      'The file you are trying to open could not be found. It may have been moved or deleted. You can provide access to a parent directory (recommended), try to locate the file manually, or remove it from the list of recent files.';
+      'Не вдалося знайти файл, який ви намагаєтеся відкрити. Можливо, його переміщено або видалено. Ви можете надати доступ до батьківської теки (рекомендовано), спробувати знайти файл вручну або вилучити його зі списку останніх файлів.';
 
   @override
   String get notFoundDialogNoDirAccessBody =>
-      'The file you are trying to open could not be found. It may have been moved or deleted. You can try to locate the file manually or remove it from the list of recent files.';
+      'Не вдалося знайти файл, який ви намагаєтеся відкрити. Можливо, його переміщено або видалено. Ви можете спробувати знайти файл вручну або вилучити його зі списку останніх файлів.';
 
   @override
   String get notFoundDialogActionGrantAccess =>
-      'Grant access to parent directory';
+      'Надати доступ до батьківської теки';
 
   @override
-  String get notFoundDialogActionLocate => 'Locate file';
+  String get notFoundDialogActionLocate => 'Знайти файл';
 
   @override
-  String get notFoundDialogActionRemove => 'Remove from recent files';
+  String get notFoundDialogActionRemove => 'Вилучити з останніх файлів';
 
   @override
   String get menuItemReaderMode => 'Режим читання';
 
   @override
-  String get menuItemWakelock => 'Keep screen on';
+  String get menuItemWakelock => 'Не вимикати екран';
 
   @override
-  String get menuItemFullWidth => 'Full width';
+  String get menuItemFullWidth => 'На всю ширину';
 
   @override
   String get menuItemScrollTop => 'Прокрутити вверх';
@@ -310,52 +315,52 @@ class AppLocalizationsUk extends AppLocalizations {
   String get menuItemScrollBottom => 'Прокрутити вниз';
 
   @override
-  String get menuItemUndo => 'Undo';
+  String get menuItemUndo => 'Відмінити';
 
   @override
-  String get menuItemRedo => 'Redo';
+  String get menuItemRedo => 'Повторити';
 
   @override
-  String get tooltipFullWidth => 'Toggle full width';
+  String get tooltipFullWidth => 'Перемкнути режим на всю ширину';
 
   @override
-  String get tooltipReaderMode => 'Toggle reader mode';
+  String get tooltipReaderMode => 'Перемкнути режим читання';
 
   @override
-  String get tooltipScrollTop => 'Scroll to top';
+  String get tooltipScrollTop => 'Прокрутити вверх';
 
   @override
-  String get tooltipScrollBottom => 'Scroll to bottom';
+  String get tooltipScrollBottom => 'Прокрутити вниз';
 
   @override
-  String get tooltipTextStyle => 'Text style';
+  String get tooltipTextStyle => 'Стиль тексту';
 
   @override
-  String get tooltipDecreaseTextScale => 'Decrease text scale';
+  String get tooltipDecreaseTextScale => 'Зменшити масштаб тексту';
 
   @override
-  String get tooltipIncreaseTextScale => 'Increase text scale';
+  String get tooltipIncreaseTextScale => 'Збільшити масштаб тексту';
 
   @override
-  String get tooltipCycleVisibility => 'Cycle visibility';
+  String get tooltipCycleVisibility => 'Перемкнути видимість';
 
   @override
-  String get tooltipEditDocument => 'Edit document';
+  String get tooltipEditDocument => 'Редагувати документ';
 
   @override
-  String get tooltipSearchDocument => 'Search document';
+  String get tooltipSearchDocument => 'Шукати в документі';
 
   @override
-  String get tooltipPreviousSearchHit => 'Previous search result';
+  String get tooltipPreviousSearchHit => 'Попередній результат пошуку';
 
   @override
-  String get tooltipNextSearchHit => 'Next search result';
+  String get tooltipNextSearchHit => 'Наступний результат пошуку';
 
   @override
   String get hintTextSearch => 'Шукати...';
 
   @override
-  String get tooltipClearSearch => 'Clear search';
+  String get tooltipClearSearch => 'Очистити пошук';
 
   @override
   String searchHits(num n) {
@@ -367,9 +372,10 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nString hits',
-      one: '1 hit',
-      zero: '0 hits',
+      other: '$nString збігу',
+      many: '$nString збігів',
+      few: '$nString збіги',
+      one: '$nString збіг',
     );
     return '$_temp0';
   }
@@ -387,7 +393,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get customFilterChipName => 'Custom';
+  String get customFilterChipName => 'Власний';
 
   @override
   String get snackbarMessageNeedsDirectoryPermissions =>
@@ -398,17 +404,17 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get snackbarMessageNeedsEncryptionKey =>
-      'Could not save. Missing encryption password.';
+      'Не вдалося зберегти. Немає пароля шифрування.';
 
   @override
-  String get snackbarActionEnterEncryptionKey => 'Enter password';
+  String get snackbarActionEnterEncryptionKey => 'Ввести пароль';
 
   @override
   String get snackbarMessageNeedsNotificationsPermissions =>
-      'Orgro doesn’t have permission to send notifications';
+      'Orgro не має дозволу надсилати сповіщення';
 
   @override
-  String get snackbarActionGrantNotificationsPermissions => 'Allow';
+  String get snackbarActionGrantNotificationsPermissions => 'Дозволити';
 
   @override
   String get dialogTitleError => 'Помилка';
@@ -417,10 +423,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get dialogActionConfirm => 'OK';
 
   @override
-  String get dialogActionCancel => 'Cancel';
+  String get dialogActionCancel => 'Скасувати';
 
   @override
-  String get dialogActionHelp => 'Help';
+  String get dialogActionHelp => 'Довідка';
 
   @override
   String get pageTitleError => 'Помилка';
@@ -435,14 +441,14 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String pageTitleEditing(String name) {
-    return '$name › editing';
+    return '$name › редагування';
   }
 
   @override
-  String get sectionActionNarrow => 'Narrow';
+  String get sectionActionNarrow => 'Гілка';
 
   @override
-  String get sectionActionCycleTodo => 'Cycle TODO';
+  String get sectionActionCycleTodo => 'Змінити стан TODO';
 
   @override
   String get bannerBodyRemoteImages =>
@@ -472,165 +478,167 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get bannerBodySaveDocument =>
-      'Would you like to save changes as you make them?';
+      'Бажаєте зберігати зміни одразу під час редагування?';
 
   @override
-  String get bannerBodyActionSaveAlways => 'Always';
+  String get bannerBodyActionSaveAlways => 'Завжди';
 
   @override
-  String get bannerBodyActionSaveNever => 'Never';
+  String get bannerBodyActionSaveNever => 'Ніколи';
 
   @override
-  String get bannerBodyActionSaveOnce => 'Just this time';
+  String get bannerBodyActionSaveOnce => 'Лише цього разу';
 
   @override
   String get bannerBodyDecryptContent =>
-      'This document contains encrypted content. Decrypt it now?';
+      'Цей документ містить зашифрований вміст. Розшифрувати його зараз?';
 
   @override
-  String get bannerBodyActionDecryptNow => 'Decrypt';
+  String get bannerBodyActionDecryptNow => 'Розшифрувати';
 
   @override
-  String get bannerBodyActionDecryptNotNow => 'Not now';
+  String get bannerBodyActionDecryptNotNow => 'Не зараз';
 
   @override
-  String get bannerBodyActionDecryptNever => 'Never';
+  String get bannerBodyActionDecryptNever => 'Ніколи';
 
   @override
-  String get bannerBodyAddToAgenda => 'Add this file to your agenda?';
+  String get bannerBodyAddToAgenda => 'Додати цей файл до розкладу?';
 
   @override
-  String get bannerBodyActionAgendaAdd => 'Add';
+  String get bannerBodyActionAgendaAdd => 'Додати';
 
   @override
-  String get bannerBodyActionAgendaNotNow => 'Not now';
+  String get bannerBodyActionAgendaNotNow => 'Не зараз';
 
   @override
-  String get bannerBodyActionAgendaNever => 'Never';
+  String get bannerBodyActionAgendaNever => 'Ніколи';
 
   @override
   String get transclusionPermissionsMessage =>
-      'Transclusion requires directory access permissions.';
+      'Для трансклюзії потрібен дозвіл на доступ до теки.';
 
   @override
-  String get saveChangesDialogTitle => 'Save changes?';
+  String get saveChangesDialogTitle => 'Зберегти зміни?';
 
   @override
   String get saveChangesDialogMessage =>
-      'Orgro can’t write your changes back to the original file.';
+      'Orgro не може записати зміни в початковий файл.';
 
   @override
   String get saveChangesDialogForbiddenMessage =>
-      'You chose to forbid Orgro from saving back to the original file.';
+      'Ви заборонили Orgro зберігати зміни в початковий файл.';
 
   @override
-  String get saveActionShare => 'Share';
+  String get saveActionShare => 'Поділитися';
 
   @override
-  String get saveActionDiscard => 'Discard';
+  String get saveActionDiscard => 'Відкинути';
 
   @override
-  String get saveActionSaveAs => 'Save as';
+  String get saveActionSaveAs => 'Зберегти як';
 
   @override
-  String get discardChangesDialogTitle => 'Discard changes?';
+  String get discardChangesDialogTitle => 'Відкинути зміни?';
 
   @override
-  String get discardActionDiscard => 'Discard';
+  String get discardActionDiscard => 'Відкинути';
 
   @override
-  String get discardActionCancel => 'Cancel';
+  String get discardActionCancel => 'Скасувати';
 
   @override
-  String get savedMessage => 'Saved';
+  String get savedMessage => 'Збережено';
 
   @override
   String get inputDecryptionPasswordDialogTitle =>
-      'Enter password for decrypting';
+      'Введіть пароль для розшифрування';
 
   @override
   String get inputEncryptionPasswordDialogTitle =>
-      'Enter password for encrypting';
+      'Введіть пароль для шифрування';
 
   @override
   String get inputEncryptionPasswordDialogBody =>
-      'This password will be used to encrypt Org Crypt sections for which no password has been specified.';
+      'Цей пароль буде використано для шифрування розділів Org Crypt, для яких пароль не вказано.';
 
   @override
-  String get inputCustomFilterDialogTitle => 'Custom filter query';
+  String get inputCustomFilterDialogTitle => 'Власний запит фільтра';
 
   @override
-  String get inputCustomFilterDialogHistoryButton => 'History';
+  String get inputCustomFilterDialogHistoryButton => 'Історія';
 
   @override
-  String get loadingProgressDialogTitle => 'Loading…';
+  String get loadingProgressDialogTitle => 'Завантаження…';
 
   @override
-  String get preparingProgressDialogTitle => 'Preparing…';
+  String get preparingProgressDialogTitle => 'Підготовка…';
 
   @override
-  String get decryptingProgressDialogTitle => 'Decrypting…';
+  String get decryptingProgressDialogTitle => 'Розшифрування…';
 
   @override
-  String get encryptingProgressDialogTitle => 'Encrypting…';
+  String get encryptingProgressDialogTitle => 'Шифрування…';
 
   @override
-  String get serializingProgressDialogTitle => 'Serializing…';
+  String get serializingProgressDialogTitle => 'Серіалізація…';
 
   @override
-  String get savingProgressDialogTitle => 'Saving…';
+  String get savingProgressDialogTitle => 'Збереження…';
 
   @override
-  String get searchingProgressDialogTitle => 'Searching…';
+  String get searchingProgressDialogTitle => 'Пошук…';
 
   @override
-  String get citationsDialogTitle => 'Citations';
+  String get citationsDialogTitle => 'Цитування';
 
   @override
-  String get citationsDialogOpenLink => 'Open link';
+  String get citationsDialogOpenLink => 'Відкрити посилання';
 
   @override
-  String get createFileDialogTitle => 'Create new file';
+  String get createFileDialogTitle => 'Створити новий файл';
 
   @override
   String get createFileDefaultName => 'untitled.org';
 
   @override
-  String get saveAsDialogTitle => 'Save as';
+  String get saveAsDialogTitle => 'Зберегти як';
 
   @override
-  String get inputUrlDialogTitle => 'Enter URL';
+  String get inputUrlDialogTitle => 'Введіть URL';
 
   @override
-  String get startTimePickerTitle => 'Select start time';
+  String get startTimePickerTitle => 'Виберіть час початку';
 
   @override
-  String get endTimePickerTitle => 'Select end time';
+  String get endTimePickerTitle => 'Виберіть час завершення';
 
   @override
-  String get captureToDialogTitle => 'Capture to';
+  String get captureToDialogTitle => 'Зберегти до';
 
   @override
-  String get captureToClipboardItem => 'Clipboard';
+  String get captureToClipboardItem => 'Буфер обміну';
 
   @override
-  String get captureToNewDocumentItem => 'New file';
+  String get captureToNewDocumentItem => 'Новий файл';
 
   @override
-  String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
+  String get snackbarMessageInvalidCaptureUri => 'Недійсний URL для збереження';
 
   @override
-  String get snackbarMessageBibliographiesNotFound => 'No bibliographies found';
+  String get snackbarMessageBibliographiesNotFound =>
+      'Бібліографій не знайдено';
 
   @override
-  String get snackbarMessageCitationKeysNotFound => 'Citation keys not found';
+  String get snackbarMessageCitationKeysNotFound =>
+      'Ключі цитувань не знайдено';
 
   @override
-  String get snackbarMessageCitationsNotFound => 'Citations not found';
+  String get snackbarMessageCitationsNotFound => 'Цитування не знайдено';
 
   @override
   String snackbarMessageSomeCitationsNotFound(String citations) {
-    return 'Citations not found: $citations';
+    return 'Цитування не знайдено: $citations';
   }
 
   @override
@@ -654,12 +662,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String errorOrgParser(Object result) {
-    return 'Parser error: $result';
+    return 'Помилка синтаксичного аналізу: $result';
   }
 
   @override
   String errorOrgExecution(Object message, String code) {
-    return 'Execution error in the below code: $message\n\n$code';
+    return 'Помилка виконання коду нижче: $message\n\n$code';
   }
 
   @override
@@ -668,157 +676,157 @@ class AppLocalizationsUk extends AppLocalizations {
         intl.NumberFormat.decimalPattern(localeName);
     final String timeoutString = timeoutNumberFormat.format(timeout);
 
-    return 'Evaluation of the below code timed out after ${timeoutString}ms.\n\n$code';
+    return 'Час виконання коду нижче вичерпано через $timeoutString мс.\n\n$code';
   }
 
   @override
   String errorOrgArgument(Object item) {
-    return 'Invalid argument: $item';
+    return 'Недійсний аргумент: $item';
   }
 
   @override
-  String get errorDecryptionFailed => 'Decryption failed';
+  String get errorDecryptionFailed => 'Не вдалося розшифрувати';
 
   @override
   String errorLinkNotHandled(Object link) {
-    return 'Couldn’t open link “$link”';
+    return 'Не вдалося відкрити посилання «$link»';
   }
 
   @override
   String errorExternalIdNotFound(String id) {
-    return 'File with ID “$id” not found';
+    return 'Файл з ID «$id» не знайдено';
   }
 
   @override
   String errorFileNamePrefixNotFound(String prefix) {
-    return 'File with name prefix “$prefix” not found';
+    return 'Файл із префіксом назви «$prefix» не знайдено';
   }
 
   @override
   String errorSectionNotFound(String section) {
-    return 'Section not found: $section';
+    return 'Розділ не знайдено: $section';
   }
 
   @override
   String errorUnsupportedSearchOption(String option) {
-    return 'Unsupported search option: $option';
+    return 'Непідтримуваний параметр пошуку: $option';
   }
 
   @override
   String errorSchedulingNotifications(Object message) {
-    return 'Failed to schedule notifications: $message';
+    return 'Не вдалося запланувати сповіщення: $message';
   }
 
   @override
   String errorUnsupportedLinkType(Object link) {
-    return 'Unsupported link type: $link';
+    return 'Непідтримуваний тип посилання: $link';
   }
 
   @override
   String errorUnsupportedDataSource(Object source) {
-    return 'Unsupported data source: $source';
+    return 'Непідтримуване джерело даних: $source';
   }
 
   @override
-  String get errorInvalidUrl => 'Invalid URL';
+  String get errorInvalidUrl => 'Недійсний URL';
 
   @override
-  String get errorUnknown => 'Unknown error';
+  String get errorUnknown => 'Невідома помилка';
 
   @override
-  String get tooltipErrorDetails => 'View error details';
+  String get tooltipErrorDetails => 'Переглянути подробиці помилки';
 
   @override
-  String get editInsertedHeadline => '[Inserted by edit]';
+  String get editInsertedHeadline => '[Вставлено під час редагування]';
 
   @override
-  String get pasteImageContextMenuTitle => 'Paste image';
+  String get pasteImageContextMenuTitle => 'Вставити зображення';
 
   @override
-  String get pasteImageErrorNoFiles => 'Could not paste any images';
+  String get pasteImageErrorNoFiles => 'Не вдалося вставити жодного зображення';
 
   @override
-  String get tooltipApplyChanges => 'Apply changes';
+  String get tooltipApplyChanges => 'Застосувати зміни';
 
   @override
-  String get tooltipUndo => 'Undo';
+  String get tooltipUndo => 'Відмінити';
 
   @override
-  String get tooltipRedo => 'Redo';
+  String get tooltipRedo => 'Повторити';
 
   @override
-  String get tooltipInsertHeadline => 'Insert headline';
+  String get tooltipInsertHeadline => 'Вставити заголовок';
 
   @override
-  String get tooltipToggleUnorderedList => 'Toggle unordered list';
+  String get tooltipToggleUnorderedList => 'Перемкнути маркований список';
 
   @override
-  String get tooltipToggleOrderedList => 'Toggle ordered list';
+  String get tooltipToggleOrderedList => 'Перемкнути нумерований список';
 
   @override
-  String get tooltipDecreaseIndent => 'Decrease indent';
+  String get tooltipDecreaseIndent => 'Зменшити відступ';
 
   @override
-  String get tooltipIncreaseIndent => 'Increase indent';
+  String get tooltipIncreaseIndent => 'Збільшити відступ';
 
   @override
-  String get tooltipBold => 'Bold';
+  String get tooltipBold => 'Жирний';
 
   @override
-  String get tooltipItalic => 'Italic';
+  String get tooltipItalic => 'Курсив';
 
   @override
-  String get tooltipUnderline => 'Underline';
+  String get tooltipUnderline => 'Підкреслений';
 
   @override
-  String get tooltipStrikethrough => 'Strikethrough';
+  String get tooltipStrikethrough => 'Закреслений';
 
   @override
-  String get tooltipCode => 'Code style';
+  String get tooltipCode => 'Стиль коду';
 
   @override
-  String get tooltipInsertLink => 'Insert link';
+  String get tooltipInsertLink => 'Вставити посилання';
 
   @override
-  String get tooltipInsertDate => 'Insert date';
+  String get tooltipInsertDate => 'Вставити дату';
 
   @override
-  String get tooltipSubscript => 'Subscript';
+  String get tooltipSubscript => 'Нижній індекс';
 
   @override
-  String get tooltipSuperscript => 'Superscript';
+  String get tooltipSuperscript => 'Верхній індекс';
 
   @override
-  String get tooltipEncryptSection => 'Encrypt section';
+  String get tooltipEncryptSection => 'Зашифрувати розділ';
 
   @override
   String tooltipKeywordChip(String keyword) {
-    return '“$keyword” keyword';
+    return 'Ключове слово «$keyword»';
   }
 
   @override
   String tooltipTagChip(String tag) {
-    return '“$tag” tag';
+    return 'Тег «$tag»';
   }
 
   @override
   String tooltipPriorityChip(String priority) {
-    return '“$priority” priority';
+    return 'Пріоритет «$priority»';
   }
 
   @override
   String tooltipCustomFilterQueryChip(String query) {
-    return 'Custom filter: $query';
+    return 'Власний фільтр: $query';
   }
 
   @override
-  String get donateItemTitle => 'Donate to support Orgro';
+  String get donateItemTitle => 'Підтримати Orgro пожертвою';
 
   @override
-  String get donateItemSubtitle => 'Your support is appreciated!';
+  String get donateItemSubtitle => 'Ваша підтримка дуже цінна!';
 
   @override
-  String get entitlementsLoadingItem => 'Loading info...';
+  String get entitlementsLoadingItem => 'Завантаження інформації...';
 
   @override
   String entitlementsFreeTrialItem(DateTime date) {
@@ -826,49 +834,51 @@ class AppLocalizationsUk extends AppLocalizations {
         .add_jm();
     final String dateString = dateDateFormat.format(date);
 
-    return 'Your free trial ends at $dateString';
+    return 'Безкоштовний пробний період закінчується $dateString';
   }
 
   @override
-  String get entitlementsTrialExpiredItem => 'Your free trial has ended';
+  String get entitlementsTrialExpiredItem =>
+      'Безкоштовний пробний період закінчився';
 
   @override
   String entitlementsPurchaseItemTitle(String price) {
-    return 'Purchase Orgro for $price (one-time payment)';
+    return 'Придбати Orgro за $price (одноразовий платіж)';
   }
 
   @override
   String get entitlementsPurchaseItemSubtitle =>
-      'Unlock all features and support development';
+      'Відкрийте доступ до всіх функцій і підтримайте розробку';
 
   @override
-  String get entitlementsRestorePurchasesItem => 'Restore purchases';
+  String get entitlementsRestorePurchasesItem => 'Відновити покупки';
 
   @override
-  String get entitlementsPurchasedItem => 'Purchased';
+  String get entitlementsPurchasedItem => 'Придбано';
 
   @override
-  String get entitlementsPurchasedItemSubtitle => 'Thank you for your support';
+  String get entitlementsPurchasedItemSubtitle => 'Дякуємо за вашу підтримку';
 
   @override
   String get entitlementsLegacyPurchaseItemSubtitle =>
-      'Thank you for being a long-time supporter!';
+      'Дякуємо, що давно підтримуєте Orgro!';
 
   @override
-  String get entitlementsLockedDialogTitle => 'Your free trial has ended';
+  String get entitlementsLockedDialogTitle =>
+      'Безкоштовний пробний період закінчився';
 
   @override
   String get entitlementsLockedDialogMessage =>
-      'To continue using Orgro, please purchase a license or restore your previous purchases.\n\nPurchasing a license is a one-time payment that unlocks all features.';
+      'Щоб і далі користуватися Orgro, придбайте ліцензію або відновіть попередні покупки.\n\nЛіцензія купується одноразовим платежем і відкриває доступ до всіх функцій.';
 
   @override
   String entitlementsLockedDialogActionPurchase(String price) {
-    return 'Purchase ($price)';
+    return 'Придбати ($price)';
   }
 
   @override
-  String get entitlementsLockedDialogActionRestore => 'Restore';
+  String get entitlementsLockedDialogActionRestore => 'Відновити';
 
   @override
-  String get entitlementsLockedDialogActionMoreInfo => 'Learn more';
+  String get entitlementsLockedDialogActionMoreInfo => 'Докладніше';
 }
