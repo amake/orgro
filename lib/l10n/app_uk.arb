@@ -2,43 +2,161 @@
   "appTitle": "Orgro",
 
   "menuItemAppearance": "Вигляд",
+  "menuItemSettings": "Налаштування",
   "menuItemClearCache": "Очистити кеш",
   "menuItemOrgroManual": "Посібник Orgro",
   "menuItemOrgManual": "Посібник Org",
+  "menuItemTestFile": "Тестовий файл",
   "menuItemAbout": "Про застосунок",
+  "menuItemOpenUrl": "Відкрити URL",
+
+  "quickActionNewDocument": "Новий документ",
+  "quickActionTopPin": "Відкрити {name}",
 
   "appearanceModeAutomatic": "Автоматичний",
   "appearanceModeLight": "Світлий",
   "appearanceModeDark": "Темний",
 
-  "snackbarMessageCacheCleared": "Кеш очищено",
+  "settingsScreenTitle": "Налаштування",
+  "settingsSectionAppearance": "Вигляд",
+  "settingsSectionDefaultText": "Текст за замовчуванням",
+  "settingsSectionAgenda": "Розклад",
+  "settingsSectionDataManagement": "Керування даними",
+  "settingsSectionDonate": "Пожертви",
+  "settingsSectionPurchase": "Придбання",
 
-  "aboutLinkSupport": "Підтримка · Зворотній звʼязок",
+  "agendaNotificationsChannelName": "Сповіщення розкладу",
+  "agendaNotificationsChannelDescription": "Сповіщення про пункти розкладу Org",
+  "agendaNotificationsActionView": "Переглянути",
+
+  "settingsItemLoading": "Завантаження...",
+
+  "settingsItemTheme": "Тема",
+  "settingsItemTextScale": "Масштаб",
+  "settingsItemFontFamily": "Шрифт",
+  "settingsItemDefaultTextPreviewString": "Так виглядатиме текст документа з вибраним шрифтом і масштабом.\n\nТоркніться, щоб редагувати.",
+
+  "settingsItemEnableAgendaPrompts": "Пропонувати додавати документи до розкладу",
+  "settingsItemInspectNotifications": "{n, plural, =0{Немає сповіщень} one{{n} заплановане сповіщення} few{{n} заплановані сповіщення} many{{n} запланованих сповіщень} other{{n} запланованого сповіщення}}",
+  "settingsItemGrantNotificationPermissions": "Увімкнути сповіщення",
+  "settingsItemEnableAgendaNotifications": "Сповіщення розкладу",
+  "settingsDialogNotificationsTitle": "Заплановані сповіщення",
+  "settingsItemClearNotifications": "Очистити всі сповіщення",
+  "settingsItemClearAgenda": "Очистити розклад",
+
+  "confirmClearAgendaDialogTitle": "Очистити розклад?",
+  "confirmClearAgendaDialogMessage": "{n, plural, one{Наведений нижче {n} файл розкладу більше не відстежуватиметься.} few{Наведені нижче {n} файли розкладу більше не відстежуватимуться.} many{Наведені нижче {n} файлів розкладу більше не відстежуватимуться.} other{Наведені нижче {n} файлу розкладу більше не відстежуватимуться.}} Цю дію не можна скасувати.",
+  "confirmClearAgendaActionClear": "Очистити",
+  "confirmClearAgendaActionCancel": "Скасувати",
+
+  "settingsActionClearCache": "Очистити кеш",
+  "settingsActionResetPreferences": "Відновити типові налаштування",
+  "settingsActionResetPermissions": "Скинути дозволи",
+
+  "snackbarMessageNotificationsCleared": "Сповіщення очищено",
+  "snackbarMessageAgendaCleared": "Розклад очищено",
+  "snackbarMessageCacheCleared": "Кеш очищено",
+  "snackbarMessagePreferencesReset": "Налаштування скинуто",
+  "snackbarMessagePermissionsReset": "Дозволи скинуто",
+
+  "confirmResetPreferencesDialogTitle": "Відновити типові налаштування?",
+  "confirmResetPreferencesDialogMessage": "Усі налаштування буде скинуто до типових значень. Цю дію не можна скасувати.",
+  "confirmResetPreferencesActionReset": "Відновити",
+  "confirmResetPreferencesActionCancel": "Скасувати",
+
+  "aboutLinkSupport": "Підтримка · Зворотний звʼязок",
   "aboutLinkChangelog": "Список змін",
 
   "buttonOpenFile": "Відкрити файл",
+  "buttonCreateFile": "Створити файл",
   "buttonOpenOrgroManual": "Відкрити Посібник Orgro",
   "buttonOpenOrgManual": "Відкрити Посібник Org",
+  "buttonOpenUrl": "Відкрити URL",
 
-  "buttonSupport": "Підтримка · Зворотній звʼязок",
-  "buttonVersion": "в{version}",
+  "tooltipCreateFile": "Створити файл",
+  "tooltipOpenFile": "Відкрити файл",
 
+  "buttonSupport": "Підтримка · Зворотний звʼязок",
+  "buttonVersion": "v{version}",
+
+  "sectionHeaderPinnedFiles": "Закріплені файли",
   "sectionHeaderRecentFiles": "Останні файли",
+  "recentFilesSortDialogTitle": "Сортувати за",
+  "sortKeyLastOpened": "Останнім відкриттям",
+  "sortKeyName": "Назвою",
+  "sortKeyLocation": "Розташуванням",
+  "sortOrderAscending": "За зростанням",
+  "sortOrderDescending": "За спаданням",
+
+  "fileSourceDocuments": "Документи",
+  "fileSourceDownloads": "Завантаження",
+  "fileSourceGoogleDrive": "Google Диск",
+
+  "filesTabTitle": "Файли",
+  "agendaTabTitle": "Розклад",
+
+  "unknownAgendaTitle": "Невідомо",
+  "emptyAgendaMessage": "Запланованих пунктів розкладу не знайдено",
+
+  "notFoundDialogTitle": "Не знайдено",
+  "notFoundDialogBody": "Не вдалося знайти файл, який ви намагаєтеся відкрити. Можливо, його переміщено або видалено. Ви можете надати доступ до батьківської теки (рекомендовано), спробувати знайти файл вручну або вилучити його зі списку останніх файлів.",
+  "notFoundDialogNoDirAccessBody": "Не вдалося знайти файл, який ви намагаєтеся відкрити. Можливо, його переміщено або видалено. Ви можете спробувати знайти файл вручну або вилучити його зі списку останніх файлів.",
+  "notFoundDialogActionGrantAccess": "Надати доступ до батьківської теки",
+  "notFoundDialogActionLocate": "Знайти файл",
+  "notFoundDialogActionRemove": "Вилучити з останніх файлів",
 
   "menuItemReaderMode": "Режим читання",
-  "menuItemScrollTop": "Прокрутити вверх",
+  "menuItemWakelock": "Не вимикати екран",
+  "menuItemFullWidth": "На всю ширину",
+  "menuItemScrollTop": "Прокрутити вгору",
   "menuItemScrollBottom": "Прокрутити вниз",
 
-  "hintTextSearch": "Шукати...",
+  "menuItemUndo": "Відмінити",
+  "menuItemRedo": "Повторити",
 
-  "snackbarMessageNeedsDirectoryPermissions": "Orgro немає прав для розвʼязання відносних посилань",
+  "tooltipFullWidth": "Перемкнути режим на всю ширину",
+  "tooltipReaderMode": "Перемкнути режим читання",
+  "tooltipScrollTop": "Прокрутити вгору",
+  "tooltipScrollBottom": "Прокрутити вниз",
+
+  "tooltipTextStyle": "Стиль тексту",
+  "tooltipDecreaseTextScale": "Зменшити масштаб тексту",
+  "tooltipIncreaseTextScale": "Збільшити масштаб тексту",
+
+  "tooltipCycleVisibility": "Перемкнути видимість",
+
+  "tooltipEditDocument": "Редагувати документ",
+  "tooltipSearchDocument": "Шукати в документі",
+  "tooltipPreviousSearchHit": "Попередній результат пошуку",
+  "tooltipNextSearchHit": "Наступний результат пошуку",
+
+  "hintTextSearch": "Шукати...",
+  "tooltipClearSearch": "Очистити пошук",
+  "searchHits": "{n, plural, one{{n} збіг} few{{n} збіги} many{{n} збігів} other{{n} збігу}}",
+  "searchResultSelection": "{current} / {total}",
+  "customFilterChipName": "Власний",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro не має дозволу на обробку відносних посилань",
   "snackbarActionGrantAccess": "Надати дозвіл",
 
+  "snackbarMessageNeedsEncryptionKey": "Не вдалося зберегти. Немає пароля шифрування.",
+  "snackbarActionEnterEncryptionKey": "Ввести пароль",
+
+  "snackbarMessageNeedsNotificationsPermissions": "Orgro не має дозволу надсилати сповіщення",
+  "snackbarActionGrantNotificationsPermissions": "Дозволити",
+
   "dialogTitleError": "Помилка",
+  "dialogActionConfirm": "OK",
+  "dialogActionCancel": "Скасувати",
+  "dialogActionHelp": "Довідка",
 
   "pageTitleError": "Помилка",
   "pageTitleLoading": "Завантаження...",
   "pageTitleNarrow": "{name} › гілка",
+  "pageTitleEditing": "{name} › редагування",
+
+  "sectionActionNarrow": "Гілка",
+  "sectionActionCycleTodo": "Змінити стан TODO",
 
   "bannerBodyRemoteImages": "Цей документ містить віддалені зображення. Бажаєте завантажувати їх?",
   "bannerBodyActionShowAlways": "Завжди",
@@ -50,8 +168,140 @@
   "bannerBodyActionGrantNever": "Ніколи",
   "bannerBodyActionGrantNow": "Надати дозвіл",
 
-  "errorCannotResolveRelativePath": "Не можливо розвʼязати шлях відносно цього документа",
+  "bannerBodySaveDocument": "Бажаєте зберігати зміни одразу під час редагування?",
+  "bannerBodyActionSaveAlways": "Завжди",
+  "bannerBodyActionSaveNever": "Ніколи",
+  "bannerBodyActionSaveOnce": "Лише цього разу",
+
+  "bannerBodyDecryptContent": "Цей документ містить зашифрований вміст. Розшифрувати його зараз?",
+  "bannerBodyActionDecryptNow": "Розшифрувати",
+  "bannerBodyActionDecryptNotNow": "Не зараз",
+  "bannerBodyActionDecryptNever": "Ніколи",
+
+  "bannerBodyAddToAgenda": "Додати цей файл до розкладу?",
+  "bannerBodyActionAgendaAdd": "Додати",
+  "bannerBodyActionAgendaNotNow": "Не зараз",
+  "bannerBodyActionAgendaNever": "Ніколи",
+
+  "transclusionPermissionsMessage": "Для трансклюзії потрібен дозвіл на доступ до теки.",
+
+  "saveChangesDialogTitle": "Зберегти зміни?",
+  "saveChangesDialogMessage": "Orgro не може записати зміни в початковий файл.",
+  "saveChangesDialogForbiddenMessage": "Ви заборонили Orgro зберігати зміни в початковий файл.",
+  "saveActionShare": "Поділитися",
+  "saveActionDiscard": "Відкинути",
+  "saveActionSaveAs": "Зберегти як",
+
+  "discardChangesDialogTitle": "Відкинути зміни?",
+  "discardActionDiscard": "Відкинути",
+  "discardActionCancel": "Скасувати",
+
+  "savedMessage": "Збережено",
+
+  "inputDecryptionPasswordDialogTitle": "Введіть пароль для розшифрування",
+  "inputEncryptionPasswordDialogTitle": "Введіть пароль для шифрування",
+  "inputEncryptionPasswordDialogBody": "Цей пароль буде використано для шифрування розділів Org Crypt, для яких пароль не вказано.",
+
+  "inputCustomFilterDialogTitle": "Власний запит фільтра",
+  "inputCustomFilterDialogHistoryButton": "Історія",
+
+  "loadingProgressDialogTitle": "Завантаження…",
+  "preparingProgressDialogTitle": "Підготовка…",
+  "decryptingProgressDialogTitle": "Розшифрування…",
+  "encryptingProgressDialogTitle": "Шифрування…",
+  "serializingProgressDialogTitle": "Серіалізація…",
+  "savingProgressDialogTitle": "Збереження…",
+  "searchingProgressDialogTitle": "Пошук…",
+  "citationsDialogTitle": "Цитування",
+  "citationsDialogOpenLink": "Відкрити посилання",
+
+  "createFileDialogTitle": "Створити новий файл",
+  "createFileDefaultName": "untitled.org",
+
+  "saveAsDialogTitle": "Зберегти як",
+
+  "inputUrlDialogTitle": "Введіть URL",
+
+  "startTimePickerTitle": "Виберіть час початку",
+  "endTimePickerTitle": "Виберіть час завершення",
+
+  "captureToDialogTitle": "Зберегти до",
+  "captureToClipboardItem": "Буфер обміну",
+  "captureToNewDocumentItem": "Новий файл",
+  "snackbarMessageInvalidCaptureUri": "Недійсний URL для збереження",
+
+  "snackbarMessageBibliographiesNotFound": "Бібліографій не знайдено",
+  "snackbarMessageCitationKeysNotFound": "Ключі цитувань не знайдено",
+  "snackbarMessageCitationsNotFound": "Цитування не знайдено",
+  "snackbarMessageSomeCitationsNotFound": "Цитування не знайдено: {citations}",
+
+  "errorCannotResolveRelativePath": "Неможливо визначити шлях відносно цього документа",
   "errorPathResolvedToNonFile": "{path} визначено як не файл: {resolved}",
   "errorUnknownType": "Невідомий тип: {type}",
-  "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}"
+  "errorUnexpectedHttpResponse": "Неочікувана відповідь HTTP: {response}",
+  "errorOrgParser": "Помилка синтаксичного аналізу: {result}",
+  "errorOrgExecution": "Помилка виконання коду нижче: {message}\n\n{code}",
+  "errorOrgTimeout": "Час виконання коду нижче вичерпано через {timeout} мс.\n\n{code}",
+  "errorOrgArgument": "Недійсний аргумент: {item}",
+  "errorDecryptionFailed": "Не вдалося розшифрувати",
+  "errorLinkNotHandled": "Не вдалося відкрити посилання «{link}»",
+  "errorExternalIdNotFound": "Файл з ID «{id}» не знайдено",
+  "errorFileNamePrefixNotFound": "Файл із префіксом назви «{prefix}» не знайдено",
+  "errorSectionNotFound": "Розділ не знайдено: {section}",
+  "errorUnsupportedSearchOption": "Непідтримуваний параметр пошуку: {option}",
+  "errorSchedulingNotifications": "Не вдалося запланувати сповіщення: {message}",
+  "errorUnsupportedLinkType": "Непідтримуваний тип посилання: {link}",
+  "errorUnsupportedDataSource": "Непідтримуване джерело даних: {source}",
+  "errorInvalidUrl": "Недійсний URL",
+  "errorUnknown": "Невідома помилка",
+
+  "tooltipErrorDetails": "Переглянути подробиці помилки",
+
+  "editInsertedHeadline": "[Вставлено під час редагування]",
+
+  "pasteImageContextMenuTitle": "Вставити зображення",
+  "pasteImageErrorNoFiles": "Не вдалося вставити жодного зображення",
+
+  "tooltipApplyChanges": "Застосувати зміни",
+  "tooltipUndo": "Відмінити",
+  "tooltipRedo": "Повторити",
+  "tooltipInsertHeadline": "Вставити заголовок",
+  "tooltipToggleUnorderedList": "Перемкнути маркований список",
+  "tooltipToggleOrderedList": "Перемкнути нумерований список",
+  "tooltipDecreaseIndent": "Зменшити відступ",
+  "tooltipIncreaseIndent": "Збільшити відступ",
+  "tooltipBold": "Жирний",
+  "tooltipItalic": "Курсив",
+  "tooltipUnderline": "Підкреслений",
+  "tooltipStrikethrough": "Закреслений",
+  "tooltipCode": "Стиль коду",
+  "tooltipInsertLink": "Вставити посилання",
+  "tooltipInsertDate": "Вставити дату",
+  "tooltipSubscript": "Нижній індекс",
+  "tooltipSuperscript": "Верхній індекс",
+  "tooltipEncryptSection": "Зашифрувати розділ",
+
+  "tooltipKeywordChip": "Ключове слово «{keyword}»",
+  "tooltipTagChip": "Тег «{tag}»",
+  "tooltipPriorityChip": "Пріоритет «{priority}»",
+  "tooltipCustomFilterQueryChip": "Власний фільтр: {query}",
+
+  "donateItemTitle": "Підтримати Orgro пожертвою",
+  "donateItemSubtitle": "Ваша підтримка дуже цінна!",
+
+  "entitlementsLoadingItem": "Завантаження інформації...",
+  "entitlementsFreeTrialItem": "Безкоштовний пробний період закінчується {date}",
+  "entitlementsTrialExpiredItem": "Безкоштовний пробний період закінчився",
+  "entitlementsPurchaseItemTitle": "Придбати Orgro за {price} (одноразовий платіж)",
+  "entitlementsPurchaseItemSubtitle": "Відкрийте доступ до всіх функцій і підтримайте розробку",
+  "entitlementsRestorePurchasesItem": "Відновити покупки",
+  "entitlementsPurchasedItem": "Придбано",
+  "entitlementsPurchasedItemSubtitle": "Дякуємо за вашу підтримку",
+  "entitlementsLegacyPurchaseItemSubtitle": "Дякуємо, що давно підтримуєте Orgro!",
+
+  "entitlementsLockedDialogTitle": "Безкоштовний пробний період закінчився",
+  "entitlementsLockedDialogMessage": "Щоб і далі користуватися Orgro, придбайте ліцензію або відновіть попередні покупки.\n\nЛіцензія купується одноразовим платежем і відкриває доступ до всіх функцій.",
+  "entitlementsLockedDialogActionPurchase": "Придбати ({price})",
+  "entitlementsLockedDialogActionRestore": "Відновити",
+  "entitlementsLockedDialogActionMoreInfo": "Докладніше"
 }
