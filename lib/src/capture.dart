@@ -115,8 +115,8 @@ enum _CaptureTarget {
   static _CaptureTarget forDialogIdx(int idx) =>
       idx >= rememberedDocument.index ? rememberedDocument : values[idx];
 
-  static int rememberedDocIdxFromDialogIdx(int docIdx) =>
-      docIdx - rememberedDocument.index;
+  static int rememberedDocIdxFromDialogIdx(int dialogIdx) =>
+      dialogIdx - rememberedDocument.index;
 }
 
 class _CaptureTargetDialog extends StatelessWidget {
