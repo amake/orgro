@@ -33,8 +33,6 @@ bool isValidCapturePayload(Uri uri) {
   return true;
 }
 
-enum _CaptureTarget { clipboard, scratch, document }
-
 Future<void> captureUri(BuildContext context, Uri uri) async {
   if (!isValidCapturePayload(uri)) {
     debugPrint('Invalid capture URI: $uri');
@@ -56,17 +54,17 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
   switch (result) {
     case null:
       break;
-    case (_CaptureTarget.clipboard, _):
+    case (.clipboard, _):
       final (newDoc, _) = captureUriToSection(OrgDocument(null, []), uri);
       await Clipboard.setData(ClipboardData(text: newDoc.toMarkup()));
-    case (_CaptureTarget.scratch, _):
+    case (.scratch, _):
       if (!context.mounted) return;
       await loadAndRememberAsset(
         context,
         LocalAssets.scratch,
         afterOpen: (state) => captureToDocument(state, uri),
       );
-    case (_CaptureTarget.document, final captureTo!):
+    case (.rememberedDocument, final captureTo!):
       if (!context.mounted) return;
       final accessibleDirs = Preferences.of(
         context,
@@ -97,6 +95,22 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
   }
 }
 
+enum _CaptureTarget {
+  clipboard,
+  scratch,
+  // This must come last because it represents a variable number of items in the
+  // dialog
+  rememberedDocument;
+
+  static _CaptureTarget forDialogIdx(int idx) =>
+      idx >= _CaptureTarget.rememberedDocument.index
+      ? _CaptureTarget.rememberedDocument
+      : _CaptureTarget.values[idx];
+
+  static int rememberedDocIdxFromDialogIdx(int docIdx) =>
+      docIdx - _CaptureTarget.rememberedDocument.index;
+}
+
 class _CaptureTargetDialog extends StatelessWidget {
   const _CaptureTargetDialog({required this.files});
 
@@ -111,8 +125,8 @@ class _CaptureTargetDialog extends StatelessWidget {
         child: ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, idx) {
-            switch (idx) {
-              case 0:
+            switch (_CaptureTarget.forDialogIdx(idx)) {
+              case .clipboard:
                 return ListTile(
                   leading: const Icon(Icons.copy, applyTextScaling: true),
                   title: Text(
@@ -121,7 +135,7 @@ class _CaptureTargetDialog extends StatelessWidget {
                   onTap: () =>
                       Navigator.pop(context, (_CaptureTarget.clipboard, null)),
                 );
-              case 1:
+              case .scratch:
                 return ListTile(
                   leading: const Icon(Icons.add, applyTextScaling: true),
                   title: Text(
@@ -130,16 +144,19 @@ class _CaptureTargetDialog extends StatelessWidget {
                   onTap: () =>
                       Navigator.pop(context, (_CaptureTarget.scratch, null)),
                 );
-              default:
-                final file = files[idx - 2];
+              case .rememberedDocument:
+                final file =
+                    files[_CaptureTarget.rememberedDocIdxFromDialogIdx(idx)];
                 return RememberedFileListTile(
                   file,
-                  onTap: () =>
-                      Navigator.pop(context, (_CaptureTarget.document, file)),
+                  onTap: () => Navigator.pop(context, (
+                    _CaptureTarget.rememberedDocument,
+                    file,
+                  )),
                 );
             }
           },
-          itemCount: files.length + 2,
+          itemCount: (_CaptureTarget.values.length - 1) + files.length,
         ),
       ),
     );
