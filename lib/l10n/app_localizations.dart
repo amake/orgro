@@ -1174,6 +1174,12 @@ abstract class AppLocalizations {
   /// **'New file'**
   String get captureToNewDocumentItem;
 
+  /// No description provided for @captureToExistingFileToBeChosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file…'**
+  String get captureToExistingFileToBeChosen;
+
   /// No description provided for @snackbarMessageInvalidCaptureUri.
   ///
   /// In en, this message translates to:

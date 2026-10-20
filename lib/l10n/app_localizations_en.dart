@@ -617,6 +617,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get captureToNewDocumentItem => 'New file';
 
   @override
+  String get captureToExistingFileToBeChosen => 'Choose file…';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
 
   @override
@@ -1485,6 +1488,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get captureToNewDocumentItem => 'New file';
 
   @override
+  String get captureToExistingFileToBeChosen => 'Choose file…';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';
 
   @override
@@ -2351,6 +2357,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get captureToNewDocumentItem => 'New file';
+
+  @override
+  String get captureToExistingFileToBeChosen => 'Choose file…';
 
   @override
   String get snackbarMessageInvalidCaptureUri => 'Invalid capture URL';

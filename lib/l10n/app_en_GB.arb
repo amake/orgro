@@ -230,6 +230,7 @@
   "captureToDialogTitle": "Capture to",
   "captureToClipboardItem": "Clipboard",
   "captureToNewDocumentItem": "New file",
+  "captureToExistingFileToBeChosen": "Choose file…",
   "snackbarMessageInvalidCaptureUri": "Invalid capture URL",
 
   "snackbarMessageBibliographiesNotFound": "No bibliographies found",

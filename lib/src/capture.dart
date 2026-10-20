@@ -4,8 +4,10 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/assets.dart';
+import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/remembered_files.dart';
+import 'package:orgro/src/data_source.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
@@ -47,7 +49,7 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
     ...rememberedFiles.pinned,
     ...rememberedFiles.recents,
   ].where((f) => !f.isWebUri).toList(growable: false);
-  final result = await showDialog<(_CaptureTarget, RememberedFile?)>(
+  final result = await showDialog<(_CaptureTarget, dynamic)>(
     context: context,
     builder: (context) => _CaptureTargetDialog(files: files),
   );
@@ -64,7 +66,14 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
         LocalAssets.scratch,
         afterOpen: (state) => captureToDocument(state, uri),
       );
-    case (.rememberedDocument, final captureTo!):
+    case (.openDocument, final NativeDataSource dataSource):
+      if (!context.mounted) return;
+      await loadAndRememberFile(
+        context,
+        dataSource,
+        afterOpen: (state) => captureToDocument(state, uri),
+      );
+    case (.rememberedDocument, final RememberedFile captureTo):
       if (!context.mounted) return;
       final accessibleDirs = Preferences.of(
         context,
@@ -98,6 +107,7 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
 enum _CaptureTarget {
   clipboard,
   scratch,
+  openDocument,
   // This must come last because it represents a variable number of items in the
   // dialog
   rememberedDocument;
@@ -143,6 +153,31 @@ class _CaptureTargetDialog extends StatelessWidget {
                   ),
                   onTap: () =>
                       Navigator.pop(context, (_CaptureTarget.scratch, null)),
+                );
+              case .openDocument:
+                return ListTile(
+                  leading: const Icon(
+                    Icons.folder_open,
+                    applyTextScaling: true,
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context)!
+                        .captureToExistingFileToBeChosen,
+                  ),
+                  onTap: () async {
+                    final (:result, :succeeded) = await progressTask(
+                      context,
+                      dialogTitle: AppLocalizations.of(context)!
+                          .preparingProgressDialogTitle,
+                      task: pickFile(),
+                    );
+                    if (result != null) {
+                      Navigator.pop(context, (
+                        _CaptureTarget.openDocument,
+                        result,
+                      ));
+                    }
+                  },
                 );
               case .rememberedDocument:
                 final file =

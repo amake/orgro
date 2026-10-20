@@ -623,6 +623,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get captureToNewDocumentItem => 'Новий файл';
 
   @override
+  String get captureToExistingFileToBeChosen => 'Choose file…';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => 'Недійсний URL для збереження';
 
   @override

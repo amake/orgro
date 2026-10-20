@@ -593,6 +593,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get captureToNewDocumentItem => '新規ファイル';
 
   @override
+  String get captureToExistingFileToBeChosen => 'ファイルを選択…';
+
+  @override
   String get snackbarMessageInvalidCaptureUri => '不正なキャプチャURL';
 
   @override
