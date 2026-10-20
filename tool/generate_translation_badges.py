@@ -133,7 +133,10 @@ def main() -> None:
             )
 
         remaining = len(missing_keys)
-        percentage = round(100 * (total - remaining) / total)
+        percentage = (
+            100 if remaining == 0
+            else min(99, (100 * (total - remaining)) // total)
+        )
 
         output_path = OUTPUT_DIR / f"{language}.svg"
         output_path.write_text(
