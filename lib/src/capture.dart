@@ -4,12 +4,12 @@ import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/assets.dart';
-import 'package:orgro/src/components/dialogs.dart';
 import 'package:orgro/src/components/document_provider.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/pages.dart';
+import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
 
@@ -33,7 +33,7 @@ bool isValidCapturePayload(Uri uri) {
   return true;
 }
 
-enum CaptureTarget { clipboard, scratch, document }
+enum _CaptureTarget { clipboard, scratch, document }
 
 Future<void> captureUri(BuildContext context, Uri uri) async {
   if (!isValidCapturePayload(uri)) {
@@ -49,27 +49,24 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
     ...rememberedFiles.pinned,
     ...rememberedFiles.recents,
   ].where((f) => !f.isWebUri).toList(growable: false);
-  final result = await showDialog<(CaptureTarget, RememberedFile?)>(
+  final result = await showDialog<(_CaptureTarget, RememberedFile?)>(
     context: context,
-    builder: (context) => CaptureTargetDialog(
-      title: AppLocalizations.of(context)!.captureToDialogTitle,
-      files: files,
-    ),
+    builder: (context) => _CaptureTargetDialog(files: files),
   );
   switch (result) {
     case null:
       break;
-    case (CaptureTarget.clipboard, _):
+    case (_CaptureTarget.clipboard, _):
       final (newDoc, _) = captureUriToSection(OrgDocument(null, []), uri);
       await Clipboard.setData(ClipboardData(text: newDoc.toMarkup()));
-    case (CaptureTarget.scratch, _):
+    case (_CaptureTarget.scratch, _):
       if (!context.mounted) return;
       await loadAndRememberAsset(
         context,
         LocalAssets.scratch,
         afterOpen: (state) => captureToDocument(state, uri),
       );
-    case (CaptureTarget.document, final captureTo!):
+    case (_CaptureTarget.document, final captureTo!):
       if (!context.mounted) return;
       final accessibleDirs = Preferences.of(
         context,
@@ -97,6 +94,55 @@ Future<void> captureUri(BuildContext context, Uri uri) async {
           afterOpen: (state) => captureToDocument(state, uri),
         );
       }
+  }
+}
+
+class _CaptureTargetDialog extends StatelessWidget {
+  const _CaptureTargetDialog({required this.files});
+
+  final List<RememberedFile> files;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.captureToDialogTitle),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (context, idx) {
+            switch (idx) {
+              case 0:
+                return ListTile(
+                  leading: const Icon(Icons.copy, applyTextScaling: true),
+                  title: Text(
+                    AppLocalizations.of(context)!.captureToClipboardItem,
+                  ),
+                  onTap: () =>
+                      Navigator.pop(context, (_CaptureTarget.clipboard, null)),
+                );
+              case 1:
+                return ListTile(
+                  leading: const Icon(Icons.add, applyTextScaling: true),
+                  title: Text(
+                    AppLocalizations.of(context)!.captureToNewDocumentItem,
+                  ),
+                  onTap: () =>
+                      Navigator.pop(context, (_CaptureTarget.scratch, null)),
+                );
+              default:
+                final file = files[idx - 2];
+                return RememberedFileListTile(
+                  file,
+                  onTap: () =>
+                      Navigator.pop(context, (_CaptureTarget.document, file)),
+                );
+            }
+          },
+          itemCount: files.length + 2,
+        ),
+      ),
+    );
   }
 }
 

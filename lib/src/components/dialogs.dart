@@ -4,12 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/l10n/app_localizations.dart';
-import 'package:orgro/src/capture.dart';
 import 'package:orgro/src/components/remembered_files.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';
 import 'package:orgro/src/pages/document/citations.dart';
-import 'package:orgro/src/pages/start/remembered_files.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/serialization.dart';
 import 'package:petit_bibtex/bibtex.dart';
@@ -770,60 +768,6 @@ extension SortOrderDisplayString on SortOrder {
     SortOrder.ascending => AppLocalizations.of(context)!.sortOrderAscending,
     SortOrder.descending => AppLocalizations.of(context)!.sortOrderDescending,
   };
-}
-
-class CaptureTargetDialog extends StatelessWidget {
-  const CaptureTargetDialog({
-    required this.title,
-    required this.files,
-    super.key,
-  });
-
-  final String title;
-  final List<RememberedFile> files;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: SizedBox(
-        width: double.maxFinite,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, idx) {
-            switch (idx) {
-              case 0:
-                return ListTile(
-                  leading: const Icon(Icons.copy, applyTextScaling: true),
-                  title: Text(
-                    AppLocalizations.of(context)!.captureToClipboardItem,
-                  ),
-                  onTap: () =>
-                      Navigator.pop(context, (CaptureTarget.clipboard, null)),
-                );
-              case 1:
-                return ListTile(
-                  leading: const Icon(Icons.add, applyTextScaling: true),
-                  title: Text(
-                    AppLocalizations.of(context)!.captureToNewDocumentItem,
-                  ),
-                  onTap: () =>
-                      Navigator.pop(context, (CaptureTarget.scratch, null)),
-                );
-              default:
-                final file = files[idx - 2];
-                return RememberedFileListTile(
-                  file,
-                  onTap: () =>
-                      Navigator.pop(context, (CaptureTarget.document, file)),
-                );
-            }
-          },
-          itemCount: files.length + 2,
-        ),
-      ),
-    );
-  }
 }
 
 class DialogButton extends StatelessWidget {
