@@ -24,15 +24,16 @@ def get_translation_keys(arb: dict) -> set[str]:
 
 def discover_languages() -> set[str]:
     # Discover languages from app_<language>.arb files.
-    # English is the source language, not a translation target.
+    # English is the source language, not a translation target, but we
+    # include because we want a full complement of badges for all supported
+    # languages.
     languages = set()
 
     for path in ARB_DIR.glob("app_*.arb"):
         match = re.fullmatch(r"app_(.+)\.arb", path.name)
         if match:
             language = match.group(1)
-            if language != "en":
-                languages.add(language)
+            languages.add(language)
 
     return languages
 
