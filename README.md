@@ -1,6 +1,6 @@
 [<img src="https://orgro.org/assets/appstore.png" alt="Download on the App Store" height="60">](https://apps.apple.com/us/app/orgro/id1512580074?uo=4) [<img src="https://orgro.org/assets/playstore.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=com.madlonkay.orgro) [<img src="https://orgro.org/assets/fdroid.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/packages/com.madlonkay.orgro/)
 
-![de l10n completion](https://amake.github.io/orgro/badges/de.svg) ![en l10n completion](https://amake.github.io/orgro/badges/en.svg) ![ja l10n completion](https://amake.github.io/orgro/badges/ja.svg) ![ru l10n completion](https://amake.github.io/orgro/badges/ru.svg) ![uk l10n completion](https://amake.github.io/orgro/badges/uk.svg)
+[![de completion](https://amake.github.io/orgro/badges/de.svg)](./lib/l10n/app_de.arb) [![en completion](https://amake.github.io/orgro/badges/en.svg)](./lib/l10n/app_en.arb) [![ja completion](https://amake.github.io/orgro/badges/ja.svg)](./lib/l10n/app_ja.arb) [![ru completion](https://amake.github.io/orgro/badges/ru.svg)](./lib/l10n/app_ru.arb) [![uk l10n completion](https://amake.github.io/orgro/badges/uk.svg)](./lib/l10n/app_uk.arb)
 
 # Orgro
 
