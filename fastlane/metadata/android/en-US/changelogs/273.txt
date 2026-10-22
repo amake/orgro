@@ -1,0 +1,4 @@
+- Customize when you receive agenda notifications
+- Choose a file to capture to with file picker
+- Updated Ukrainian localization
+- Bug fixes
