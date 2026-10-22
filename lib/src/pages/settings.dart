@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/src/actions/actions.dart';
 import 'package:orgro/src/actions/appearance.dart';
-import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/agenda/settings.dart';
 import 'package:orgro/src/cache.dart';
 import 'package:orgro/src/components/developer.dart';
 import 'package:orgro/src/components/layout.dart';

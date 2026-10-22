@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_flutter/org_flutter.dart';
-import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/agenda/agenda.dart';
 import 'package:orgro/src/data_source.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;

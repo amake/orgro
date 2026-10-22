@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/agenda/agenda.dart';
 import 'package:orgro/src/components/lifecycle.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/file_picker.dart';

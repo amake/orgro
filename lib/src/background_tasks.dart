@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/main.dart';
-import 'package:orgro/src/agenda.dart';
+import 'package:orgro/src/agenda/agenda.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
