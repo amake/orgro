@@ -795,7 +795,7 @@ Iterable<ChunkedAgendaSpan> chunkMultidaySpan(AgendaSpan span) sync* {
   final (start, end, keyword, overdue) = span;
   var chunkIdx = 0;
   var currentStart = start;
-  var currentEnd = currentStart.add(const Duration(days: 1)).startOfDay();
+  var currentEnd = currentStart.nextDay().startOfDay();
   while (currentEnd.isBefore(end)) {
     yield (
       start: currentStart,
@@ -805,8 +805,8 @@ Iterable<ChunkedAgendaSpan> chunkMultidaySpan(AgendaSpan span) sync* {
       keyword: keyword,
       overdue: overdue,
     );
-    currentStart = currentStart.add(const Duration(days: 1)).startOfDay();
-    currentEnd = currentEnd.add(const Duration(days: 1)).startOfDay();
+    currentStart = currentStart.nextDay().startOfDay();
+    currentEnd = currentEnd.nextDay().startOfDay();
   }
   yield (
     start: currentStart,
