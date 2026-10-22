@@ -33,17 +33,14 @@ class _AgendaBodyState extends State<AgendaBody>
   var today = DateTime.now().startOfDay();
 
   void _refresh() {
-    final (agendaFileJsons, notificationsEnabled) = (() {
-      final prefs = Preferences.of(context, .agenda);
-      return (prefs.agendaFileJsons, prefs.agendaOSNotificationsEnabled);
-    })();
+    final prefs = Preferences.of(context, .agenda);
     final accessibleDirs = Preferences.of(
       context,
       .accessibleDirs,
     ).accessibleDirs;
     final localizations = AppLocalizations.of(context)!;
     final parsedFiles = Future.wait(
-      agendaFileJsons.map((e) => parseAgendaFileJson(e, accessibleDirs)),
+      prefs.agendaFileJsons.map((e) => parseAgendaFileJson(e, accessibleDirs)),
     ).then((files) => files.whereType<ParsedOrgFileInfo>());
     _agendaData = parsedFiles.then(
       (files) => files
@@ -51,13 +48,15 @@ class _AgendaBodyState extends State<AgendaBody>
           .toList(growable: false),
     );
     _notificationsUpdate = parsedFiles.then((files) async {
-      if (!notificationsEnabled) return;
+      if (!prefs.agendaOSNotificationsEnabled) return;
 
       for (final file in files) {
         await setNotificationsForDocument((
           file.dataSource,
           file.doc,
           localizations,
+          prefs.eventNotificationTime,
+          prefs.allDayEventNotificationTime,
         ));
       }
     });

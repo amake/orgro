@@ -131,6 +131,8 @@ Future<void> _handleBackgroundFetch(String debugLabel) async {
       prefs.agendaFileJsons,
       localizations,
       prefs.accessibleDirs,
+      prefs.eventNotificationTime,
+      prefs.allDayEventNotificationTime,
     );
   }
 }

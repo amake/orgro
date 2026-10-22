@@ -204,10 +204,19 @@ Future<void> cleanNotficationsLockfile() async {
   lockfile.deleteSync();
 }
 
+const kAllDayEventNotificationHour = 9;
+
 final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
-  (DataSource, OrgTree, AppLocalizations) args,
+  (
+    DataSource,
+    OrgTree,
+    AppLocalizations,
+    EventNotificationTime,
+    AllDayEventNotificationTime,
+  )
+  args,
 ) async {
-  final (dataSource, doc, localizations) = args;
+  final (dataSource, doc, localizations, notifyTime, allDayNotifyTime) = args;
   if (!(await checkNotificationPermissions())) {
     debugPrint(
       'Skipping setting notifications because permissions not granted.',
@@ -256,12 +265,11 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
               .where((e) => !e.overdue)
               .unique()
               .take(kMaxNotifications)) {
-        if (e.start.isAfter(now)) {
-          var tzDateTime = tz.TZDateTime.from(e.start, tz.local);
-          if (tzDateTime.hour == 0 && tzDateTime.minute == 0) {
-            // Scheduled time is midnight. Move to 9am.
-            tzDateTime = tzDateTime.add(const Duration(hours: 9));
-          }
+        final notificationDateTime = e.isAllDay
+            ? allDayNotifyTime.applyTo(e.start)
+            : notifyTime.applyTo(e.start);
+        if (notificationDateTime.isAfter(now)) {
+          final tzDateTime = tz.TZDateTime.from(notificationDateTime, tz.local);
           toSchedule.add((tzDateTime, section));
         }
       }
@@ -347,6 +355,39 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
   }
 });
 
+extension _EventNotificationTimeUtil on EventNotificationTime {
+  DateTime applyTo(DateTime dateTime) => switch (this) {
+    .atEventTime => dateTime,
+    .fiveMinutesBefore => dateTime.copyWith(minute: dateTime.minute - 5),
+    .tenMinutesBefore => dateTime.copyWith(minute: dateTime.minute - 10),
+    .fifteenMinutesBefore => dateTime.copyWith(minute: dateTime.minute - 15),
+    .thirtyMinutesBefore => dateTime.copyWith(minute: dateTime.minute - 30),
+    .oneHourBefore => dateTime.copyWith(hour: dateTime.hour - 1),
+    .twoHoursBefore => dateTime.copyWith(hour: dateTime.hour - 2),
+    .oneDayBefore => dateTime.copyWith(day: dateTime.day - 1),
+    .twoDaysBefore => dateTime.copyWith(day: dateTime.day - 2),
+    .oneWeekBefore => dateTime.copyWith(day: dateTime.day - 7),
+  };
+}
+
+extension _AllDayEventNotificationTimeUtil on AllDayEventNotificationTime {
+  DateTime applyTo(DateTime dateTime) => switch (this) {
+    .onDayOfEvent => dateTime.copyWith(hour: kAllDayEventNotificationHour),
+    .oneDayBefore => dateTime.copyWith(
+      day: dateTime.day - 1,
+      hour: kAllDayEventNotificationHour,
+    ),
+    .twoDaysBefore => dateTime.copyWith(
+      day: dateTime.day - 2,
+      hour: kAllDayEventNotificationHour,
+    ),
+    .oneWeekBefore => dateTime.copyWith(
+      day: dateTime.day - 7,
+      hour: kAllDayEventNotificationHour,
+    ),
+  };
+}
+
 Future<ParsedOrgFileInfo?> parseAgendaFileJson(
   Map<String, dynamic> agendaFileJson,
   Iterable<String> accessibleDirs,
@@ -384,11 +425,19 @@ Future<void> setNotificationsForAllAgendaDocuments(
   List<Map<String, dynamic>> agendaFileJsons,
   AppLocalizations localizations,
   Iterable<String> accessibleDirs,
+  EventNotificationTime notifyTime,
+  AllDayEventNotificationTime allDayNotifyTime,
 ) async {
   for (final elem in agendaFileJsons) {
     switch (await parseAgendaFileJson(elem, accessibleDirs)) {
       case ParsedOrgFileInfo(:final dataSource, :final doc):
-        await setNotificationsForDocument((dataSource, doc, localizations));
+        await setNotificationsForDocument((
+          dataSource,
+          doc,
+          localizations,
+          notifyTime,
+          allDayNotifyTime,
+        ));
       case null:
     }
   }

@@ -125,6 +125,74 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsItemEnableAgendaNotifications => 'アジェンダ通知';
 
   @override
+  String get settingsItemEventNotificationTime => '通知時刻';
+
+  @override
+  String get eventNotificationTimeAtEventTime => '予定の時刻';
+
+  @override
+  String get eventNotificationTimeFiveMinutesBefore => '5分前';
+
+  @override
+  String get eventNotificationTimeTenMinutesBefore => '10分前';
+
+  @override
+  String get eventNotificationTimeFifteenMinutesBefore => '15分前';
+
+  @override
+  String get eventNotificationTimeThirtyMinutesBefore => '30分前';
+
+  @override
+  String get eventNotificationTimeOneHourBefore => '1時間前';
+
+  @override
+  String get eventNotificationTimeTwoHoursBefore => '2時間前';
+
+  @override
+  String get eventNotificationTimeOneDayBefore => '1日前';
+
+  @override
+  String get eventNotificationTimeTwoDaysBefore => '2日前';
+
+  @override
+  String get eventNotificationTimeOneWeekBefore => '1週間前';
+
+  @override
+  String get settingsItemAllDayEventNotificationTime => '終日予定の通知時刻';
+
+  @override
+  String allDayEventNotificationTimeAtEventTime(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '予定の当日 ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneDayBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1日前 ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeTwoDaysBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '2日前 ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneWeekBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1週間前 ($timeString)';
+  }
+
+  @override
   String get settingsDialogNotificationsTitle => '設定済みの通知';
 
   @override

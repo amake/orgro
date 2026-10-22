@@ -6,8 +6,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:orgro/l10n/app_localizations.dart';
-import 'package:orgro/src/agenda/agenda.dart~';
+import 'package:orgro/src/agenda/agenda.dart';
 import 'package:orgro/src/preferences.dart';
+import 'package:orgro/src/util.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationsListItems extends StatefulWidget {
@@ -95,20 +96,69 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
           onChanged: (value) async {
             switch (value) {
               case true:
-                final localizations = AppLocalizations.of(context)!;
-                final accessibleDirs = _prefs(.accessibleDirs)
-                    .data
-                    .accessibleDirs;
                 await _prefs().setAgendaOSNotificationsEnabled(true);
-                await setNotificationsForAllAgendaDocuments(
-                  _prefs().agendaFileJsons,
-                  localizations,
-                  accessibleDirs,
-                );
+                await _scheduleAllNotifications();
               case false:
                 await _prefs().setAgendaOSNotificationsEnabled(false);
                 await clearAllNotifications();
               case null:
+            }
+          },
+        ),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.settingsItemEventNotificationTime,
+          ),
+          subtitle: Text(
+            _prefs().eventNotificationTime.toDisplayString(context),
+          ),
+          onTap: () async {
+            final current = _prefs().eventNotificationTime;
+            final newTime = await showDialog<EventNotificationTime>(
+              context: context,
+              builder: (context) => SimpleDialog(
+                children: [
+                  for (final value in EventNotificationTime.values)
+                    CheckboxListTile(
+                      value: current == value,
+                      title: Text(value.toDisplayString(context)),
+                      onChanged: (_) => Navigator.pop(context, value),
+                    ),
+                ],
+              ),
+            );
+            if (newTime != null) {
+              await _prefs().setEventNotificationTime(newTime);
+              await _scheduleAllNotifications(notificationTime: newTime);
+            }
+          },
+        ),
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!
+                .settingsItemAllDayEventNotificationTime,
+          ),
+          subtitle: Text(
+            _prefs().allDayEventNotificationTime.toDisplayString(context),
+          ),
+          onTap: () async {
+            final current = _prefs().allDayEventNotificationTime;
+            final newTime = await showDialog<AllDayEventNotificationTime>(
+              context: context,
+              builder: (context) => SimpleDialog(
+                children: [
+                  for (final value in AllDayEventNotificationTime.values)
+                    CheckboxListTile(
+                      value: current == value,
+                      title: Text(value.toDisplayString(context)),
+                      onChanged: (_) => Navigator.pop(context, value),
+                    ),
+                ],
+              ),
+            );
+            if (newTime != null) {
+              await _prefs().setAllDayEventNotificationTime(newTime);
+              await _scheduleAllNotifications(allDayNotificationTime: newTime);
             }
           },
         ),
@@ -181,6 +231,58 @@ class _NotificationsListItemsState extends State<NotificationsListItems> {
           ),
       ],
     );
+  }
+
+  Future<void> _scheduleAllNotifications({
+    EventNotificationTime? notificationTime,
+    AllDayEventNotificationTime? allDayNotificationTime,
+  }) async {
+    if (!_prefs().agendaOSNotificationsEnabled) return;
+
+    final localizations = AppLocalizations.of(context)!;
+    final accessibleDirs = _prefs(.accessibleDirs).data.accessibleDirs;
+    await setNotificationsForAllAgendaDocuments(
+      _prefs().agendaFileJsons,
+      localizations,
+      accessibleDirs,
+      notificationTime ?? _prefs().eventNotificationTime,
+      allDayNotificationTime ?? _prefs().allDayEventNotificationTime,
+    );
+  }
+}
+
+extension _EventNotificationTimeDisplayString on EventNotificationTime {
+  String toDisplayString(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return switch (this) {
+      .atEventTime => loc.eventNotificationTimeAtEventTime,
+      .fiveMinutesBefore => loc.eventNotificationTimeFiveMinutesBefore,
+      .tenMinutesBefore => loc.eventNotificationTimeTenMinutesBefore,
+      .fifteenMinutesBefore => loc.eventNotificationTimeFifteenMinutesBefore,
+      .thirtyMinutesBefore => loc.eventNotificationTimeThirtyMinutesBefore,
+      .oneHourBefore => loc.eventNotificationTimeOneHourBefore,
+      .twoHoursBefore => loc.eventNotificationTimeTwoHoursBefore,
+      .oneDayBefore => loc.eventNotificationTimeOneDayBefore,
+      .twoDaysBefore => loc.eventNotificationTimeTwoDaysBefore,
+      .oneWeekBefore => loc.eventNotificationTimeOneWeekBefore,
+    };
+  }
+}
+
+final _kExemplarNotificationDateTime = DateTime.now().startOfDay().copyWith(
+  hour: kAllDayEventNotificationHour,
+);
+
+extension _AllDayEventNotificationTimeDisplayString
+    on AllDayEventNotificationTime {
+  String toDisplayString(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    return switch (this) {
+      .onDayOfEvent => loc.allDayEventNotificationTimeAtEventTime,
+      .oneDayBefore => loc.allDayEventNotificationTimeOneDayBefore,
+      .twoDaysBefore => loc.allDayEventNotificationTimeTwoDaysBefore,
+      .oneWeekBefore => loc.allDayEventNotificationTimeOneWeekBefore,
+    }(_kExemplarNotificationDateTime);
   }
 }
 

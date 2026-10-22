@@ -128,6 +128,75 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
 
   @override
+  String get settingsItemEventNotificationTime => 'Event notification time';
+
+  @override
+  String get eventNotificationTimeAtEventTime => 'At event time';
+
+  @override
+  String get eventNotificationTimeFiveMinutesBefore => '5 minutes before';
+
+  @override
+  String get eventNotificationTimeTenMinutesBefore => '10 minutes before';
+
+  @override
+  String get eventNotificationTimeFifteenMinutesBefore => '15 minutes before';
+
+  @override
+  String get eventNotificationTimeThirtyMinutesBefore => '30 minutes before';
+
+  @override
+  String get eventNotificationTimeOneHourBefore => '1 hour before';
+
+  @override
+  String get eventNotificationTimeTwoHoursBefore => '2 hours before';
+
+  @override
+  String get eventNotificationTimeOneDayBefore => '1 day before';
+
+  @override
+  String get eventNotificationTimeTwoDaysBefore => '2 days before';
+
+  @override
+  String get eventNotificationTimeOneWeekBefore => '1 week before';
+
+  @override
+  String get settingsItemAllDayEventNotificationTime =>
+      'All-day event notification time';
+
+  @override
+  String allDayEventNotificationTimeAtEventTime(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'On event day ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneDayBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 day before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeTwoDaysBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '2 days before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneWeekBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 week before ($timeString)';
+  }
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
@@ -999,6 +1068,75 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
 
   @override
+  String get settingsItemEventNotificationTime => 'Event notification time';
+
+  @override
+  String get eventNotificationTimeAtEventTime => 'At event time';
+
+  @override
+  String get eventNotificationTimeFiveMinutesBefore => '5 minutes before';
+
+  @override
+  String get eventNotificationTimeTenMinutesBefore => '10 minutes before';
+
+  @override
+  String get eventNotificationTimeFifteenMinutesBefore => '15 minutes before';
+
+  @override
+  String get eventNotificationTimeThirtyMinutesBefore => '30 minutes before';
+
+  @override
+  String get eventNotificationTimeOneHourBefore => '1 hour before';
+
+  @override
+  String get eventNotificationTimeTwoHoursBefore => '2 hours before';
+
+  @override
+  String get eventNotificationTimeOneDayBefore => '1 day before';
+
+  @override
+  String get eventNotificationTimeTwoDaysBefore => '2 days before';
+
+  @override
+  String get eventNotificationTimeOneWeekBefore => '1 week before';
+
+  @override
+  String get settingsItemAllDayEventNotificationTime =>
+      'All-day event notification time';
+
+  @override
+  String allDayEventNotificationTimeAtEventTime(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'On event day ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneDayBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 day before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeTwoDaysBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '2 days before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneWeekBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 week before ($timeString)';
+  }
+
+  @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';
 
   @override
@@ -1868,6 +2006,75 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get settingsItemEnableAgendaNotifications => 'Agenda notifications';
+
+  @override
+  String get settingsItemEventNotificationTime => 'Event notification time';
+
+  @override
+  String get eventNotificationTimeAtEventTime => 'At event time';
+
+  @override
+  String get eventNotificationTimeFiveMinutesBefore => '5 minutes before';
+
+  @override
+  String get eventNotificationTimeTenMinutesBefore => '10 minutes before';
+
+  @override
+  String get eventNotificationTimeFifteenMinutesBefore => '15 minutes before';
+
+  @override
+  String get eventNotificationTimeThirtyMinutesBefore => '30 minutes before';
+
+  @override
+  String get eventNotificationTimeOneHourBefore => '1 hour before';
+
+  @override
+  String get eventNotificationTimeTwoHoursBefore => '2 hours before';
+
+  @override
+  String get eventNotificationTimeOneDayBefore => '1 day before';
+
+  @override
+  String get eventNotificationTimeTwoDaysBefore => '2 days before';
+
+  @override
+  String get eventNotificationTimeOneWeekBefore => '1 week before';
+
+  @override
+  String get settingsItemAllDayEventNotificationTime =>
+      'All-day event notification time';
+
+  @override
+  String allDayEventNotificationTimeAtEventTime(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'On event day ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneDayBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 day before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeTwoDaysBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '2 days before ($timeString)';
+  }
+
+  @override
+  String allDayEventNotificationTimeOneWeekBefore(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return '1 week before ($timeString)';
+  }
 
   @override
   String get settingsDialogNotificationsTitle => 'Pending notifications';

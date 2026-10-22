@@ -27,6 +27,26 @@ enum SortOrder { ascending, descending }
 
 enum AgendaPromptPolicy { deny, ask }
 
+enum EventNotificationTime {
+  atEventTime,
+  fiveMinutesBefore,
+  tenMinutesBefore,
+  fifteenMinutesBefore,
+  thirtyMinutesBefore,
+  oneHourBefore,
+  twoHoursBefore,
+  oneDayBefore,
+  twoDaysBefore,
+  oneWeekBefore,
+}
+
+enum AllDayEventNotificationTime {
+  onDayOfEvent,
+  oneDayBefore,
+  twoDaysBefore,
+  oneWeekBefore,
+}
+
 const kDefaultFontFamily = 'Fira Code';
 const kDefaultTextScale = 1.0;
 const kDefaultQueryString = '';
@@ -49,6 +69,9 @@ const kDefaultRecentFilesSortKey = RecentFilesSortKey.lastOpened;
 const kDefaultRecentFilesSortOrder = SortOrder.descending;
 const kDefaultAgendaPromptPolicy = AgendaPromptPolicy.ask;
 const kDefaultAgendaOSNotificationsEnabled = true;
+const kDefaultEventNotificationTime = EventNotificationTime.atEventTime;
+const kDefaultAllDayEventNotificationTime =
+    AllDayEventNotificationTime.onDayOfEvent;
 
 const kMaxRecentFiles = 10;
 
@@ -73,6 +96,8 @@ const kAgendaFileJsonsKey = 'agenda_file_jsons';
 // This mismatch is due to historical reasons
 const kAgendaPromptPolicyKey = 'agenda_notifications_policy';
 const kAgendaOSNotificationsEnabledKey = 'agenda_os_notifications_enabled';
+const kEventNotificationTimeKey = 'event_notification_time';
+const kAllDayEventNotificationTimeKey = 'all_day_event_notification_time';
 
 const _kMigrationCompletedKey = 'migration_completed_key';
 
@@ -467,6 +492,21 @@ extension AgendaExt on InheritedPreferences {
     return await _setOrRemove(kAgendaOSNotificationsEnabledKey, value);
   }
 
+  EventNotificationTime get eventNotificationTime => data.eventNotificationTime;
+  Future<void> setEventNotificationTime(EventNotificationTime value) async {
+    _update((data) => data.copyWith(eventNotificationTime: value));
+    return await _setOrRemove(kEventNotificationTimeKey, value.name);
+  }
+
+  AllDayEventNotificationTime get allDayEventNotificationTime =>
+      data.allDayEventNotificationTime;
+  Future<void> setAllDayEventNotificationTime(
+    AllDayEventNotificationTime value,
+  ) async {
+    _update((data) => data.copyWith(allDayEventNotificationTime: value));
+    return await _setOrRemove(kAllDayEventNotificationTimeKey, value.name);
+  }
+
   bool _updateShouldNotifyDependentAgenda(
     InheritedPreferences oldWidget,
     Set<PrefsAspect> dependencies,
@@ -475,7 +515,10 @@ extension AgendaExt on InheritedPreferences {
       (!listEquals(data.agendaFileJsons, oldWidget.data.agendaFileJsons) ||
           data.agendaPromptPolicy != oldWidget.data.agendaPromptPolicy ||
           data.agendaOSNotificationsEnabled !=
-              oldWidget.data.agendaOSNotificationsEnabled);
+              oldWidget.data.agendaOSNotificationsEnabled ||
+          data.eventNotificationTime != oldWidget.data.eventNotificationTime ||
+          data.allDayEventNotificationTime !=
+              oldWidget.data.allDayEventNotificationTime);
 }
 
 extension ViewSettingsExt on InheritedPreferences {
@@ -647,6 +690,8 @@ class PreferencesData {
       agendaFileJsons = const [],
       agendaPromptPolicy = kDefaultAgendaPromptPolicy,
       agendaOSNotificationsEnabled = kDefaultAgendaOSNotificationsEnabled,
+      eventNotificationTime = kDefaultEventNotificationTime,
+      allDayEventNotificationTime = kDefaultAllDayEventNotificationTime,
       themeMode = _kDefaultThemeMode,
       remoteImagesPolicy = kDefaultRemoteImagesPolicy,
       localLinksPolicy = kDefaultLocalLinksPolicy,
@@ -695,6 +740,13 @@ class PreferencesData {
       agendaOSNotificationsEnabled: await prefs.getBool(
         kAgendaOSNotificationsEnabledKey,
       ),
+      eventNotificationTime: EventNotificationTimePersistence.fromString(
+        await prefs.getString(kEventNotificationTimeKey),
+      ),
+      allDayEventNotificationTime:
+          AllDayEventNotificationTimePersistence.fromString(
+            await prefs.getString(kAllDayEventNotificationTimeKey),
+          ),
       themeMode: ThemeModePersistence.fromString(
         await prefs.getString(kThemeModeKey),
       ),
@@ -729,6 +781,8 @@ class PreferencesData {
     required this.agendaFileJsons,
     required this.agendaPromptPolicy,
     required this.agendaOSNotificationsEnabled,
+    required this.eventNotificationTime,
+    required this.allDayEventNotificationTime,
     required this.themeMode,
     required this.remoteImagesPolicy,
     required this.localLinksPolicy,
@@ -752,6 +806,8 @@ class PreferencesData {
   final List<Map<String, dynamic>> agendaFileJsons;
   final AgendaPromptPolicy agendaPromptPolicy;
   final bool agendaOSNotificationsEnabled;
+  final EventNotificationTime eventNotificationTime;
+  final AllDayEventNotificationTime allDayEventNotificationTime;
   final ThemeMode themeMode;
   final RemoteImagesPolicy remoteImagesPolicy;
   final LocalLinksPolicy localLinksPolicy;
@@ -775,6 +831,8 @@ class PreferencesData {
     List<Map<String, dynamic>>? agendaFileJsons,
     AgendaPromptPolicy? agendaPromptPolicy,
     bool? agendaOSNotificationsEnabled,
+    EventNotificationTime? eventNotificationTime,
+    AllDayEventNotificationTime? allDayEventNotificationTime,
     ThemeMode? themeMode,
     RemoteImagesPolicy? remoteImagesPolicy,
     LocalLinksPolicy? localLinksPolicy,
@@ -798,6 +856,9 @@ class PreferencesData {
     agendaPromptPolicy: agendaPromptPolicy ?? this.agendaPromptPolicy,
     agendaOSNotificationsEnabled:
         agendaOSNotificationsEnabled ?? this.agendaOSNotificationsEnabled,
+    eventNotificationTime: eventNotificationTime ?? this.eventNotificationTime,
+    allDayEventNotificationTime:
+        allDayEventNotificationTime ?? this.allDayEventNotificationTime,
     themeMode: themeMode ?? this.themeMode,
     remoteImagesPolicy: remoteImagesPolicy ?? this.remoteImagesPolicy,
     localLinksPolicy: localLinksPolicy ?? this.localLinksPolicy,
@@ -827,6 +888,8 @@ class PreferencesData {
       ) &&
       agendaPromptPolicy == other.agendaPromptPolicy &&
       agendaOSNotificationsEnabled == other.agendaOSNotificationsEnabled &&
+      eventNotificationTime == other.eventNotificationTime &&
+      allDayEventNotificationTime == other.allDayEventNotificationTime &&
       themeMode == other.themeMode &&
       remoteImagesPolicy == other.remoteImagesPolicy &&
       localLinksPolicy == other.localLinksPolicy &&
@@ -855,6 +918,8 @@ class PreferencesData {
     Object.hashAll(agendaFileJsons),
     agendaPromptPolicy,
     agendaOSNotificationsEnabled,
+    eventNotificationTime,
+    allDayEventNotificationTime,
     themeMode,
     remoteImagesPolicy,
     localLinksPolicy,
@@ -1000,6 +1065,21 @@ extension AgendaPromptPolicyPersistence on AgendaPromptPolicy? {
     AgendaPromptPolicy.ask => _kAgendaPromptPolicyAsk,
     null => null,
   };
+}
+
+extension EventNotificationTimePersistence on EventNotificationTime? {
+  static EventNotificationTime? fromString(String? value) => value == null
+      ? null
+      : EventNotificationTime.values.where((e) => e.name == value).firstOrNull;
+}
+
+extension AllDayEventNotificationTimePersistence
+    on AllDayEventNotificationTime? {
+  static AllDayEventNotificationTime? fromString(String? value) => value == null
+      ? null
+      : AllDayEventNotificationTime.values
+            .where((e) => e.name == value)
+            .firstOrNull;
 }
 
 class ResetPreferencesListItem extends StatelessWidget {

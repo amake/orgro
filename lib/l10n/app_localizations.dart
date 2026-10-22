@@ -304,6 +304,102 @@ abstract class AppLocalizations {
   /// **'Agenda notifications'**
   String get settingsItemEnableAgendaNotifications;
 
+  /// No description provided for @settingsItemEventNotificationTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Event notification time'**
+  String get settingsItemEventNotificationTime;
+
+  /// No description provided for @eventNotificationTimeAtEventTime.
+  ///
+  /// In en, this message translates to:
+  /// **'At event time'**
+  String get eventNotificationTimeAtEventTime;
+
+  /// No description provided for @eventNotificationTimeFiveMinutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'5 minutes before'**
+  String get eventNotificationTimeFiveMinutesBefore;
+
+  /// No description provided for @eventNotificationTimeTenMinutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'10 minutes before'**
+  String get eventNotificationTimeTenMinutesBefore;
+
+  /// No description provided for @eventNotificationTimeFifteenMinutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'15 minutes before'**
+  String get eventNotificationTimeFifteenMinutesBefore;
+
+  /// No description provided for @eventNotificationTimeThirtyMinutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'30 minutes before'**
+  String get eventNotificationTimeThirtyMinutesBefore;
+
+  /// No description provided for @eventNotificationTimeOneHourBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour before'**
+  String get eventNotificationTimeOneHourBefore;
+
+  /// No description provided for @eventNotificationTimeTwoHoursBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'2 hours before'**
+  String get eventNotificationTimeTwoHoursBefore;
+
+  /// No description provided for @eventNotificationTimeOneDayBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day before'**
+  String get eventNotificationTimeOneDayBefore;
+
+  /// No description provided for @eventNotificationTimeTwoDaysBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'2 days before'**
+  String get eventNotificationTimeTwoDaysBefore;
+
+  /// No description provided for @eventNotificationTimeOneWeekBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 week before'**
+  String get eventNotificationTimeOneWeekBefore;
+
+  /// No description provided for @settingsItemAllDayEventNotificationTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All-day event notification time'**
+  String get settingsItemAllDayEventNotificationTime;
+
+  /// No description provided for @allDayEventNotificationTimeAtEventTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On event day ({time})'**
+  String allDayEventNotificationTimeAtEventTime(DateTime time);
+
+  /// No description provided for @allDayEventNotificationTimeOneDayBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day before ({time})'**
+  String allDayEventNotificationTimeOneDayBefore(DateTime time);
+
+  /// No description provided for @allDayEventNotificationTimeTwoDaysBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'2 days before ({time})'**
+  String allDayEventNotificationTimeTwoDaysBefore(DateTime time);
+
+  /// No description provided for @allDayEventNotificationTimeOneWeekBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 week before ({time})'**
+  String allDayEventNotificationTimeOneWeekBefore(DateTime time);
+
   /// No description provided for @settingsDialogNotificationsTitle.
   ///
   /// In en, this message translates to:

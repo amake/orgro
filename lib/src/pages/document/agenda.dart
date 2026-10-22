@@ -75,7 +75,8 @@ void _complainAboutDenied(BuildContext context) {
 }
 
 final _setNotifications = debounce1((BuildContext context) async {
-  if (!Preferences.of(context, .agenda).agendaOSNotificationsEnabled) {
+  final prefs = Preferences.of(context, .agenda);
+  if (!prefs.agendaOSNotificationsEnabled) {
     debugPrint('Notifications are disabled in preferences');
     return;
   }
@@ -93,7 +94,13 @@ final _setNotifications = debounce1((BuildContext context) async {
   final localizations = AppLocalizations.of(context)!;
 
   try {
-    await setNotificationsForDocument((dataSource, doc, localizations));
+    await setNotificationsForDocument((
+      dataSource,
+      doc,
+      localizations,
+      prefs.eventNotificationTime,
+      prefs.allDayEventNotificationTime,
+    ));
   } catch (e, s) {
     logError(e, s);
     if (context.mounted) {
