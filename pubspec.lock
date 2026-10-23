@@ -227,10 +227,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_charset_detector_android
-      sha256: "9b788572ee54e005139a623d7f3403875faaca732e8cc43db6d1af1a11211b61"
+      sha256: ad17e5c7374739a9714c66e321b380c242a5c73bfb35ce1ab34d43da070e2c64
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   flutter_charset_detector_darwin:
     dependency: transitive
     description:
@@ -341,18 +341,18 @@ packages:
     dependency: transitive
     description:
       name: flutter_tex_js_android
-      sha256: "7357d171f44068e51271ddf5c3bf8f0bd502df259b8755dba2dfa6fb7481e614"
+      sha256: fec96b079d0c09e02149ef43adfbceeea1b77c215be08034a8d3e51a5d1712ca
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "4.0.4"
   flutter_tex_js_ios:
     dependency: transitive
     description:
       name: flutter_tex_js_ios
-      sha256: "0ae1a241b20d385bade82732a54513500763908cb50602e7b9ab5059e2840612"
+      sha256: "462d8f40e3b0f81394bd72763ed19da87db92e849b5dbf31b3d9b2872b1a510e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   flutter_tex_js_platform_interface:
     dependency: transitive
     description:
@@ -587,10 +587,10 @@ packages:
     dependency: transitive
     description:
       name: more
-      sha256: e252628d2183cc09539b686abfbd9d8302675959b89a2a8146f5f4baca6ac5ba
+      sha256: ebd845356882f599f2fbfc2dea77b05b4ff0948dd5681544f3d0b755c246562b
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.0"
+    version: "4.8.0"
   objective_c:
     dependency: transitive
     description:
@@ -1216,10 +1216,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
+      sha256: e119e82ac4795c7925103b7cf3768191f33941b99e7ccffbd6c645201d9f606b
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   win32:
     dependency: transitive
     description:
