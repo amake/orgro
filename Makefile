@@ -64,7 +64,7 @@ build:
 
 .PHONY: release
 release: ## Prepare Android bundle and iOS archive for release
-release: dirty-check keystore-check format-check l10n-check web-assets-deploy-check test build
+release: dirty-check keystore-check format-check l10n-check web-assets-deploy-check test clean build
 	open -a Transporter build/ios/ipa/Orgro.ipa
 
 .PHONY: release-wait
