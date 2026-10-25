@@ -3,15 +3,12 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:orgro/l10n/app_localizations.dart';
 import 'package:orgro/main.dart';
 import 'package:orgro/src/agenda/agenda.dart';
 import 'package:orgro/src/debug.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 
 class BackgroundTasks extends StatefulWidget {
@@ -83,14 +80,12 @@ class _BackgroundTasksState extends State<BackgroundTasks> {
 void backgroundTaskDispatcher() {
   DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
-  tz.initializeTimeZones();
 
   Workmanager().executeTask((task, inputData) async {
-    final currentTimeZone = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
-    debugPrint('Background task triggered: $task; timezone: $currentTimeZone');
+    debugPrint('Background task triggered: $task');
 
     try {
+      await syncTimezone();
       switch (task) {
         case kAgendaUpdateTask:
           // Custom task to update agenda notifications

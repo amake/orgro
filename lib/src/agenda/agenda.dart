@@ -30,11 +30,19 @@ const kAgendaNotificationsChannel = 'com.madlonkay.orgro.agenda';
 const kAgendaNotificationsActionView = 'com.madlonkay.orgro.agenda.view';
 const kAgendaNotificationsAndroidIcon = 'ic_notification';
 
-Future<void> initNotifications(AppLocalizations localizations) async {
-  tz.initializeTimeZones();
+Future<TimezoneInfo> syncTimezone() async {
+  if (!tz.timeZoneDatabase.isInitialized) {
+    tz.initializeTimeZones();
+  }
+
   final currentTimeZone = await FlutterTimezone.getLocalTimezone();
   debugPrint('Current time zone: $currentTimeZone');
   tz.setLocalLocation(tz.getLocation(currentTimeZone.identifier));
+  return currentTimeZone;
+}
+
+Future<void> initNotifications(AppLocalizations localizations) async {
+  await syncTimezone();
 
   final plugin = FlutterLocalNotificationsPlugin();
   const initializationSettingsAndroid = AndroidInitializationSettings(
