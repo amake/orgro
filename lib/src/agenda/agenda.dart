@@ -475,6 +475,13 @@ typedef AgendaItem = ({
   scheduledAt,
 });
 
+bool shouldRefreshAgenda({
+  required DateTime today,
+  required DateTime now,
+  required String timezone,
+  required String currentTimezone,
+}) => !today.isSameDayAs(now) || timezone != currentTimezone;
+
 Iterable<AgendaItem> agendaItemsFromSources(
   List<AgendaItemSource> sources, {
   DateTime? now,

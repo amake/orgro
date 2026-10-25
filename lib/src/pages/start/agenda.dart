@@ -14,6 +14,7 @@ import 'package:orgro/src/pages/start/util.dart';
 import 'package:orgro/src/preferences.dart';
 import 'package:orgro/src/routes/document.dart';
 import 'package:orgro/src/util.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class AgendaBody extends StatefulWidget {
   const AgendaBody({super.key});
@@ -31,6 +32,7 @@ class _AgendaBodyState extends State<AgendaBody>
   Future<void>? _notificationsUpdate;
 
   var today = DateTime.now().startOfDay();
+  var timezone = tz.local.name;
 
   void _refresh() {
     final prefs = Preferences.of(context, .agenda);
@@ -74,13 +76,7 @@ class _AgendaBodyState extends State<AgendaBody>
     return AppLifecycle(
       onStateChange: (state) {
         if (state == .resumed) {
-          final newToday = DateTime.now().startOfDay();
-          if (!newToday.isSameDayAs(today)) {
-            setState(() {
-              today = newToday;
-              _refresh();
-            });
-          }
+          _refreshForCurrentDateAndTimezone();
         }
       },
       child: RefreshIndicator(
@@ -196,6 +192,31 @@ class _AgendaBodyState extends State<AgendaBody>
         ),
       ),
     );
+  }
+
+  Future<void> _refreshForCurrentDateAndTimezone() async {
+    final currentTimezone = await syncTimezone()
+        .then((tzInfo) => tzInfo.identifier)
+        .onError((e, s) {
+          debugPrint('Failed to sync timezone: $e\n$s');
+          return timezone;
+        });
+    final newToday = DateTime.now().startOfDay();
+    if (!shouldRefreshAgenda(
+      today: today,
+      now: newToday,
+      timezone: timezone,
+      currentTimezone: currentTimezone,
+    )) {
+      return;
+    }
+
+    if (!mounted) return;
+    setState(() {
+      today = newToday;
+      timezone = currentTimezone;
+      _refresh();
+    });
   }
 
   void _openAgendaItem(OrgTree section, DataSource dataSource) {
