@@ -28,6 +28,9 @@ clean:
 test: ## Run tests
 	$(flutter) analyze
 	$(flutter) test
+	TZ=America/Sao_Paulo $(flutter) test test/agenda_tz_test.dart
+	TZ=Pacific/Apia $(flutter) test test/agenda_tz_test.dart
+	TZ=America/New_York $(flutter) test test/agenda_tz_test.dart
 
 .PHONY: test-watch
 test-watch:

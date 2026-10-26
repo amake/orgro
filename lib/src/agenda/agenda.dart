@@ -252,10 +252,11 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
         'scheduledAt': final String scheduledAt,
         'timezone': final String timezone,
       }:
-        final dateTime = DateTime.tryParse(scheduledAt)!;
-        final location = tz.getLocation(timezone);
         pendingNotifications.add((
-          tz.TZDateTime.from(dateTime, location),
+          parseScheduledNotificationDateTime(
+            scheduledAt: scheduledAt,
+            timezone: timezone,
+          ),
           element,
         ));
       default:
@@ -362,6 +363,12 @@ final setNotificationsForDocument = sequentiallyWithLockfile(_getLockfile(), (
     }
   }
 });
+
+@visibleForTesting
+tz.TZDateTime parseScheduledNotificationDateTime({
+  required String scheduledAt,
+  required String timezone,
+}) => tz.TZDateTime.from(DateTime.parse(scheduledAt), tz.getLocation(timezone));
 
 extension _EventNotificationTimeUtil on EventNotificationTime {
   DateTime applyTo(DateTime dateTime) => switch (this) {
@@ -567,7 +574,12 @@ extension OrgSectionUtil on OrgSection {
     now ??= DateTime.now();
     if (!isDone && timestamp.isOverdue(keyword, now: now)) {
       final startOfDay = now.startOfDay();
-      yield (startOfDay, startOfDay.nextDay(), keyword?.content, true);
+      yield (
+        startOfDay,
+        startOfDay.nextDay().startOfDay(),
+        keyword?.content,
+        true,
+      );
       return;
     }
     yield* expandTimestamp(timestamp, keyword);
