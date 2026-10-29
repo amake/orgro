@@ -82,8 +82,7 @@ class _AgendaBodyState extends State<AgendaBody>
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() => _refresh());
-          await _agendaData;
-          await _notificationsUpdate;
+          await Future.wait([?_agendaData, ?_notificationsUpdate]);
         },
         child: FutureBuilder(
           future: _agendaData,
