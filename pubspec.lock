@@ -312,10 +312,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: ea369262929d3cc6ebf9d8a00c196127966f117fe433a5e5cb47fb08008ca203
+      sha256: dc9d7841ebda668fa1b4a6cbc827694a145e8deb798e6b2b714a3117964a36c3
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "5.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -450,10 +450,10 @@ packages:
     dependency: transitive
     description:
       name: in_app_purchase_storekit
-      sha256: de4f86b7bed848cd60a32c93affad868ba06a5276c007e23878855558094ff43
+      sha256: fb2744b928bb0fcbfc95d1833469b3f638a44670aac3e278695930d3727011b6
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.15"
+    version: "0.4.16"
   in_app_purchase_stub_android:
     dependency: "direct main"
     description:
@@ -683,10 +683,10 @@ packages:
     dependency: "direct main"
     description:
       name: org_flutter
-      sha256: "3f6dd5586bf7f29c1a646ec4857510add0f435b29c784e937c08fca229417d4d"
+      sha256: "91ebdbb60ef1e978c3a2daf1310f3585127fbad902ed603b100593fd5e319200"
       url: "https://pub.dev"
     source: hosted
-    version: "13.4.2"
+    version: "13.4.3"
   org_parser:
     dependency: transitive
     description:
