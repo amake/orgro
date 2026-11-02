@@ -307,7 +307,12 @@ class _TranscludedContentState extends State<_TranscludedContent> {
             light: theme.light.copyWith(rootPadding: EdgeInsets.zero),
             child: OrgController(
               root: doc,
-              settings: _settings(params),
+              settings: _adaptSettings(
+                viewSettings.readerMode
+                    ? OrgSettings.hideMarkup
+                    : const OrgSettings(),
+                params,
+              ),
               interpretEmbeddedSettings: true,
               searchQuery: viewSettings.searchQuery.asPattern(),
               sparseQuery: viewSettings.filterData.asSparseQuery(),
@@ -336,7 +341,7 @@ class _TranscludedContentState extends State<_TranscludedContent> {
     );
   }
 
-  OrgSettings _settings(Plist params) {
+  OrgSettings _adaptSettings(OrgSettings baseSettings, Plist params) {
     final excluded =
         params.get(':exclude-elements')?.split(RegExp(r'\s+')) ?? [];
     if (params.has(':only-contents')) {
@@ -345,7 +350,7 @@ class _TranscludedContentState extends State<_TranscludedContent> {
     if (!excluded.contains('property-drawer')) {
       excluded.add('property-drawer');
     }
-    return OrgSettings(
+    return baseSettings.copyWith(
       hiddenElements: excluded,
       startupFolded: OrgVisibilityState.subtree,
     );
