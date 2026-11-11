@@ -5,3 +5,6 @@ format: true
 preferred-supported-locales:
   - en
 untranslated-messages-file: untranslated.json
+# TODO(aaron): Temporarily add due to
+# https://github.com/flutter/flutter/issues/191072#issuecomment-6808050678
+header: "// ignore_for_file: deprecated_member_use"
