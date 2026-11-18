@@ -1,0 +1,335 @@
+{
+  "appTitle": "Orgro",
+
+  "menuItemAppearance": "Apariencia",
+  "menuItemSettings": "Ajustes",
+  "menuItemClearCache": "Borrar caché",
+  "menuItemOrgroManual": "Manual de Orgro",
+  "menuItemOrgManual": "Manual de Org",
+  "menuItemTestFile": "Archivo de prueba",
+  "menuItemAbout": "Acerca de",
+  "menuItemOpenUrl": "Abrir URL",
+
+  "quickActionNewDocument": "Nuevo documento",
+  "quickActionTopPin": "Abrir {name}",
+
+  "appearanceModeAutomatic": "Automático",
+  "appearanceModeLight": "Claro",
+  "appearanceModeDark": "Oscuro",
+
+  "settingsScreenTitle": "Ajustes",
+  "settingsSectionAppearance": "Apariencia",
+  "settingsSectionDefaultText": "Texto predeterminado",
+  "settingsSectionAgenda": "Agenda",
+  "settingsSectionDataManagement": "Gestión de datos",
+  "settingsSectionDonate": "Donaciones",
+  "settingsSectionPurchase": "Compra",
+
+  "agendaNotificationsChannelName": "Notificaciones de la agenda",
+  "agendaNotificationsChannelDescription": "Notificaciones de elementos de Org Agenda",
+  "agendaNotificationsActionView": "Ver",
+
+  "settingsItemLoading": "Cargando...",
+
+  "settingsItemTheme": "Tema",
+  "settingsItemTextScale": "Tamaño",
+  "settingsItemFontFamily": "Fuente",
+  "settingsItemDefaultTextPreviewString": "Así se verá el texto de los documentos con la fuente y el tamaño seleccionados.\n\nToca para editar.",
+
+  "settingsItemEnableAgendaPrompts": "Ofrecer añadir documentos a la agenda",
+  "settingsItemInspectNotifications": "{n, plural, =0{Sin notificaciones} =1{1 notificación pendiente} other{{n} notificaciones pendientes}}",
+  "settingsItemGrantNotificationPermissions": "Activar notificaciones",
+  "settingsItemEnableAgendaNotifications": "Notificaciones de la agenda",
+
+  "settingsItemEventNotificationTime": "Cuándo notificar los eventos",
+  "eventNotificationTimeAtEventTime": "A la hora del evento",
+  "eventNotificationTimeFiveMinutesBefore": "5 minutos antes",
+  "eventNotificationTimeTenMinutesBefore": "10 minutos antes",
+  "eventNotificationTimeFifteenMinutesBefore": "15 minutos antes",
+  "eventNotificationTimeThirtyMinutesBefore": "30 minutos antes",
+  "eventNotificationTimeOneHourBefore": "1 hora antes",
+  "eventNotificationTimeTwoHoursBefore": "2 horas antes",
+  "eventNotificationTimeOneDayBefore": "1 día antes",
+  "eventNotificationTimeTwoDaysBefore": "2 días antes",
+  "eventNotificationTimeOneWeekBefore": "1 semana antes",
+
+  "settingsItemAllDayEventNotificationTime": "Cuándo notificar los eventos de todo el día",
+  "allDayEventNotificationTimeAtEventTime": "El día del evento ({time})",
+  "allDayEventNotificationTimeOneDayBefore": "1 día antes ({time})",
+  "allDayEventNotificationTimeTwoDaysBefore": "2 días antes ({time})",
+  "allDayEventNotificationTimeOneWeekBefore": "1 semana antes ({time})",
+
+  "settingsDialogNotificationsTitle": "Notificaciones pendientes",
+  "settingsItemClearNotifications": "Borrar todas las notificaciones",
+  "settingsItemClearAgenda": "Vaciar la agenda",
+
+  "confirmClearAgendaDialogTitle": "¿Vaciar la agenda?",
+  "confirmClearAgendaDialogMessage": "La agenda dejará de incluir {n, plural, =1{el siguiente archivo} other{los siguientes {n} archivos}}. Esta acción no se puede deshacer.",
+  "confirmClearAgendaActionClear": "Vaciar",
+  "confirmClearAgendaActionCancel": "Cancelar",
+
+  "settingsActionClearCache": "Borrar caché",
+  "settingsActionResetPreferences": "Restablecer valores predeterminados",
+  "settingsActionResetPermissions": "Restablecer permisos",
+
+  "snackbarMessageNotificationsCleared": "Notificaciones borradas",
+  "snackbarMessageAgendaCleared": "Agenda vaciada",
+  "snackbarMessageCacheCleared": "Caché borrada",
+  "snackbarMessagePreferencesReset": "Preferencias restablecidas",
+  "snackbarMessagePermissionsReset": "Permisos restablecidos",
+
+  "confirmResetPreferencesDialogTitle": "¿Restablecer valores predeterminados?",
+  "confirmResetPreferencesDialogMessage": "Todas las preferencias volverán a sus valores predeterminados. Esta acción no se puede deshacer.",
+  "confirmResetPreferencesActionReset": "Restablecer",
+  "confirmResetPreferencesActionCancel": "Cancelar",
+
+  "aboutLinkSupport": "Soporte · Comentarios",
+  "aboutLinkChangelog": "Registro de cambios",
+
+  "buttonOpenFile": "Abrir archivo",
+  "buttonCreateFile": "Crear archivo",
+  "buttonOpenOrgroManual": "Abrir el manual de Orgro",
+  "buttonOpenOrgManual": "Abrir el manual de Org",
+  "buttonOpenUrl": "Abrir URL",
+
+  "tooltipCreateFile": "Crear archivo",
+  "tooltipOpenFile": "Abrir archivo",
+
+  "buttonSupport": "Soporte · Comentarios",
+  "buttonVersion": "v{version}",
+
+  "sectionHeaderPinnedFiles": "Archivos fijados",
+  "sectionHeaderRecentFiles": "Archivos recientes",
+  "recentFilesSortDialogTitle": "Ordenar por",
+  "sortKeyLastOpened": "Última apertura",
+  "sortKeyName": "Nombre",
+  "sortKeyLocation": "Ubicación",
+  "sortOrderAscending": "Ascendente",
+  "sortOrderDescending": "Descendente",
+
+  "fileSourceDocuments": "Documentos",
+  "fileSourceDownloads": "Descargas",
+  "fileSourceGoogleDrive": "Google Drive",
+
+  "filesTabTitle": "Archivos",
+  "agendaTabTitle": "Agenda",
+
+  "unknownAgendaTitle": "Sin título",
+  "emptyAgendaMessage": "No hay elementos pendientes en la agenda",
+
+  "notFoundDialogTitle" : "Archivo no encontrado",
+  "notFoundDialogBody" : "No se ha encontrado el archivo que intentas abrir. Puede que se haya movido o eliminado. Puedes conceder acceso a un directorio superior (recomendado), intentar localizar el archivo manualmente o quitarlo de la lista de archivos recientes.",
+  "notFoundDialogNoDirAccessBody" : "No se ha encontrado el archivo que intentas abrir. Puede que se haya movido o eliminado. Puedes intentar localizar el archivo manualmente o quitarlo de la lista de archivos recientes.",
+  "notFoundDialogActionGrantAccess": "Conceder acceso al directorio superior",
+  "notFoundDialogActionLocate": "Localizar archivo",
+  "notFoundDialogActionRemove": "Quitar de archivos recientes",
+
+  "menuItemReaderMode": "Modo lectura",
+  "menuItemWakelock": "Mantener la pantalla encendida",
+  "menuItemFullWidth": "Ancho completo",
+  "menuItemScrollTop": "Desplazarse al principio",
+  "menuItemScrollBottom": "Desplazarse al final",
+
+  "menuItemUndo": "Deshacer",
+  "menuItemRedo": "Rehacer",
+
+  "tooltipFullWidth": "Alternar ancho completo",
+  "tooltipReaderMode": "Alternar modo lectura",
+  "tooltipScrollTop": "Desplazarse al principio",
+  "tooltipScrollBottom": "Desplazarse al final",
+
+  "tooltipTextStyle": "Estilo de texto",
+  "tooltipDecreaseTextScale": "Reducir el tamaño del texto",
+  "tooltipIncreaseTextScale": "Aumentar el tamaño del texto",
+
+  "tooltipCycleVisibility": "Cambiar visibilidad",
+
+  "tooltipEditDocument": "Editar documento",
+  "tooltipSearchDocument": "Buscar en el documento",
+  "tooltipPreviousSearchHit": "Resultado de búsqueda anterior",
+  "tooltipNextSearchHit": "Siguiente resultado de búsqueda",
+
+  "hintTextSearch": "Buscar...",
+  "tooltipClearSearch": "Borrar búsqueda",
+  "searchHits": "{n, plural, =0{0 coincidencias} =1{1 coincidencia} other{{n} coincidencias}}",
+  "searchResultSelection": "{current} / {total}",
+  "customFilterChipName": "Personalizado",
+
+  "snackbarMessageNeedsDirectoryPermissions": "Orgro no tiene permiso para resolver enlaces relativos",
+  "snackbarActionGrantAccess": "Conceder acceso",
+
+  "snackbarMessageNeedsEncryptionKey": "No se ha podido guardar. Falta la contraseña de cifrado.",
+  "snackbarActionEnterEncryptionKey": "Introducir contraseña",
+
+  "snackbarMessageNeedsNotificationsPermissions": "Orgro no tiene permiso para enviar notificaciones",
+  "snackbarActionGrantNotificationsPermissions": "Permitir",
+
+  "dialogTitleError": "Error",
+  "dialogActionConfirm": "Aceptar",
+  "dialogActionCancel": "Cancelar",
+  "dialogActionHelp": "Ayuda",
+
+  "pageTitleError": "Error",
+  "pageTitleLoading": "Cargando...",
+  "pageTitleNarrow": "{name} › acotado",
+  "pageTitleEditing": "{name} › edición",
+
+  "sectionActionNarrow": "Acotar",
+  "sectionActionCycleTodo": "Cambiar estado TODO",
+
+  "bannerBodyRemoteImages": "Este documento contiene imágenes remotas. ¿Quieres cargarlas?",
+  "bannerBodyActionShowAlways": "Siempre",
+  "bannerBodyActionShowNever": "Nunca",
+  "bannerBodyActionShowOnce": "Solo una vez",
+
+  "bannerBodyRelativeLinks": "Este documento contiene enlaces relativos. ¿Quieres conceder acceso?",
+  "bannerBodyActionGrantNotNow": "Ahora no",
+  "bannerBodyActionGrantNever": "Nunca",
+  "bannerBodyActionGrantNow": "Conceder acceso",
+
+  "bannerBodySaveDocument": "¿Quieres guardar los cambios a medida que los hagas?",
+  "bannerBodyActionSaveAlways": "Siempre",
+  "bannerBodyActionSaveNever": "Nunca",
+  "bannerBodyActionSaveOnce": "Solo esta vez",
+
+  "bannerBodyDecryptContent": "Este documento tiene contenido cifrado. ¿Quieres descifrarlo ahora?",
+  "bannerBodyActionDecryptNow": "Descifrar",
+  "bannerBodyActionDecryptNotNow": "Ahora no",
+  "bannerBodyActionDecryptNever": "Nunca",
+
+  "bannerBodyAddToAgenda": "¿Quieres añadir este archivo a tu agenda?",
+  "bannerBodyActionAgendaAdd": "Añadir",
+  "bannerBodyActionAgendaNotNow": "Ahora no",
+  "bannerBodyActionAgendaNever": "Nunca",
+
+  "transclusionPermissionsMessage": "La transclusión requiere permisos de acceso a directorios.",
+
+  "saveChangesDialogTitle": "¿Guardar los cambios?",
+  "saveChangesDialogMessage": "Orgro no puede guardar los cambios en el archivo original.",
+  "saveChangesDialogForbiddenMessage": "Has decidido no permitir que Orgro guarde los cambios en el archivo original.",
+  "saveActionShare": "Compartir",
+  "saveActionDiscard": "Descartar",
+  "saveActionSaveAs": "Guardar como",
+
+  "discardChangesDialogTitle": "¿Descartar los cambios?",
+  "discardActionDiscard": "Descartar",
+  "discardActionCancel": "Cancelar",
+
+  "savedMessage": "Guardado",
+
+  "inputDecryptionPasswordDialogTitle": "Introduce la contraseña para descifrar",
+  "inputEncryptionPasswordDialogTitle": "Introduce la contraseña para cifrar",
+  "inputEncryptionPasswordDialogBody": "Esta contraseña se usará para cifrar las secciones de Org Crypt que no tengan una contraseña propia.",
+
+  "inputCustomFilterDialogTitle": "Consulta de filtro personalizado",
+  "inputCustomFilterDialogHistoryButton": "Historial",
+
+  "loadingProgressDialogTitle": "Cargando…",
+  "preparingProgressDialogTitle": "Preparando…",
+  "decryptingProgressDialogTitle": "Descifrando…",
+  "encryptingProgressDialogTitle": "Cifrando…",
+  "serializingProgressDialogTitle": "Serializando…",
+  "savingProgressDialogTitle": "Guardando…",
+  "searchingProgressDialogTitle": "Buscando…",
+  "citationsDialogTitle": "Citas",
+  "citationsDialogOpenLink": "Abrir enlace",
+
+  "createFileDialogTitle": "Crear archivo nuevo",
+  "createFileDefaultName": "sin_titulo.org",
+
+  "saveAsDialogTitle": "Guardar como",
+
+  "inputUrlDialogTitle": "Introduce una URL",
+
+  "startTimePickerTitle": "Selecciona la hora de inicio",
+  "endTimePickerTitle": "Selecciona la hora de fin",
+
+  "captureToDialogTitle": "Capturar en",
+  "captureToClipboardItem": "Portapapeles",
+  "captureToNewDocumentItem": "Archivo nuevo",
+  "captureToExistingFileToBeChosen": "Elegir archivo…",
+  "snackbarMessageInvalidCaptureUri": "URL de captura no válida",
+
+  "snackbarMessageBibliographiesNotFound": "No se ha encontrado ninguna bibliografía",
+  "snackbarMessageCitationKeysNotFound": "No se han encontrado las claves de cita",
+  "snackbarMessageCitationsNotFound": "No se han encontrado las citas",
+  "snackbarMessageSomeCitationsNotFound": "Citas no encontradas: {citations}",
+
+  "errorCannotResolveRelativePath": "No se puede resolver la ruta relativa a este documento",
+  "errorPathResolvedToNonFile": "{path} no apunta a un archivo: {resolved}",
+  "errorUnknownType": "Tipo desconocido: {type}",
+  "errorUnexpectedHttpResponse": "Respuesta HTTP inesperada: {response}",
+  "errorOrgParser": "Error del analizador: {result}",
+  "errorOrgExecution": "Error de ejecución en el siguiente código: {message}\n\n{code}",
+  "errorOrgTimeout": "La evaluación del siguiente código ha superado el tiempo límite de {timeout} ms.\n\n{code}",
+  "errorOrgArgument": "Argumento no válido: {item}",
+  "errorDecryptionFailed": "Error al descifrar",
+  "errorLinkNotHandled": "No se ha podido abrir el enlace «{link}»",
+  "errorExternalIdNotFound": "No se ha encontrado el archivo con ID «{id}»",
+  "errorFileNamePrefixNotFound": "No se ha encontrado ningún archivo cuyo nombre empiece por «{prefix}»",
+  "errorSectionNotFound": "Sección no encontrada: {section}",
+  "errorUnsupportedSearchOption": "Opción de búsqueda no admitida: {option}",
+  "errorSchedulingNotifications": "No se han podido programar las notificaciones: {message}",
+  "errorUnsupportedLinkType": "Tipo de enlace no admitido: {link}",
+  "errorUnsupportedDataSource": "Origen de datos no admitido: {source}",
+  "errorInvalidUrl": "URL no válida",
+  "errorUnknown": "Error desconocido",
+
+  "tooltipErrorDetails": "Ver detalles del error",
+
+  "editInsertedHeadline": "[Insertado al editar]",
+
+  "pasteImageContextMenuTitle": "Pegar imagen",
+  "pasteImageErrorNoFiles": "No se ha podido pegar ninguna imagen",
+
+  "tooltipApplyChanges": "Aplicar cambios",
+  "tooltipUndo": "Deshacer",
+  "tooltipRedo": "Rehacer",
+  "tooltipInsertHeadline": "Insertar encabezado",
+  "tooltipToggleUnorderedList": "Alternar lista con viñetas",
+  "tooltipToggleOrderedList": "Alternar lista numerada",
+  "tooltipDecreaseIndent": "Reducir sangría",
+  "tooltipIncreaseIndent": "Aumentar sangría",
+  "tooltipBold": "Negrita",
+  "tooltipItalic": "Cursiva",
+  "tooltipUnderline": "Subrayado",
+  "tooltipStrikethrough": "Tachado",
+  "tooltipCode": "Estilo de código",
+  "tooltipInsertLink": "Insertar enlace",
+  "tooltipInsertDate": "Insertar fecha",
+  "tooltipSubscript": "Subíndice",
+  "tooltipSuperscript": "Superíndice",
+  "tooltipEncryptSection": "Cifrar sección",
+
+  "tooltipKeywordChip": "Palabra clave «{keyword}»",
+  "tooltipTagChip": "Etiqueta «{tag}»",
+  "tooltipPriorityChip": "Prioridad «{priority}»",
+  "tooltipCustomFilterQueryChip": "Filtro personalizado: {query}",
+
+  "donateItemTitle": "Haz una donación para apoyar Orgro",
+  "donateItemSubtitle": "¡Se agradece tu apoyo!",
+
+  "entitlementsLoadingItem": "Cargando información...",
+  "entitlementsFreeTrialItem": "Tu prueba gratuita termina el {date}",
+  "@entitlementsFreeTrialItem": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMd+jm"
+      }
+    }
+  },
+  "entitlementsTrialExpiredItem": "Tu prueba gratuita ha terminado",
+  "entitlementsPurchaseItemTitle": "Compra Orgro por {price} (pago único)",
+  "entitlementsPurchaseItemSubtitle": "Desbloquea todas las funciones y apoya el desarrollo",
+  "entitlementsRestorePurchasesItem": "Restaurar compras",
+  "entitlementsPurchasedItem": "Comprado",
+  "entitlementsPurchasedItemSubtitle": "Gracias por tu apoyo",
+  "entitlementsLegacyPurchaseItemSubtitle": "¡Gracias por tu apoyo durante tanto tiempo!",
+
+  "entitlementsLockedDialogTitle": "Tu prueba gratuita ha terminado",
+  "entitlementsLockedDialogMessage": "Para seguir usando Orgro, compra una licencia o restaura tus compras anteriores.\n\nLa licencia se paga una sola vez y desbloquea todas las funciones.",
+  "entitlementsLockedDialogActionPurchase": "Comprar ({price})",
+  "entitlementsLockedDialogActionRestore": "Restaurar",
+  "entitlementsLockedDialogActionMoreInfo": "Más información"
+}

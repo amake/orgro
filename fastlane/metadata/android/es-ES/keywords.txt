@@ -1,0 +1,1 @@
+org,mode,org-mode,emacs,marcado,visor,editor,notas,todo,tareas,apuntes,organizar,latex
