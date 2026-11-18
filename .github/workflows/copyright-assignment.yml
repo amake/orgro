@@ -1,0 +1,25 @@
+name: Copyright assignment
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, reopened, edited ]
+
+jobs:
+  copyright-assignment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check copyright assignment
+      env:
+        PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        PR_BODY: ${{ github.event.pull_request.body }}
+      run: |
+        if [[ "$PR_AUTHOR" == "amake" ]]; then
+          echo "Copyright assignment is not required for @amake."
+          exit 0
+        fi
+
+        if ! grep -Eiq '^[[:space:]]*-[[:space:]]+\[[xX]\].*<!--[[:space:]]*copyright-assignment[[:space:]]*-->' <<< "$PR_BODY"; then
+          echo "The PR description must check the copyright assignment checkbox from the template."
+          exit 1
+        fi
