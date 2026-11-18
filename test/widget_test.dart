@@ -6,11 +6,17 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts_lite.dart';
 import 'package:orgro/main.dart';
 
 void main() {
+  GoogleFontsLite.config.allowRuntimeFetching = false;
+
   testWidgets('Instantiate app test', (tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(buildApp(isTest: true));
+    // Flush the asynchronous system-font notification before teardown.
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+    await tester.pump();
   });
 }
