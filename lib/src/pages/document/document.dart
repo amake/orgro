@@ -149,7 +149,12 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
               () => !mounted || DocumentProvider.of(context).analysis.loaded,
             );
             if (!mounted) return;
-            widget.afterOpen?.call(this);
+            final afterOpen = widget.afterOpen;
+            if (afterOpen != null) {
+              final route = await awaitRouteTransition(context);
+              if (!mounted || route?.isCurrent != true) return;
+              afterOpen(this);
+            }
             break;
           case InitialMode.edit:
             doEdit(requestFocus: true);

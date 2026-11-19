@@ -332,3 +332,29 @@ Future<void> awaitFrameWhere(bool Function() predicate) {
 
   return result.future;
 }
+
+Future<ModalRoute<dynamic>?> awaitRouteTransition(BuildContext context) async {
+  final route = ModalRoute.of(context);
+  final animation = route?.animation;
+  if (animation == null || animation.status == .completed) return route;
+
+  final completer = Completer<void>();
+  void listener(AnimationStatus status) {
+    // A newly pushed route can still be in the dismissed state on its first
+    // frame, especially on Android. Wait for its entrance transition instead
+    // of mistaking that initial state for a completed transition.
+    final hasLeftRoute = status == .dismissed && route?.isCurrent != true;
+    if ((status == .completed || hasLeftRoute) && !completer.isCompleted) {
+      animation.removeStatusListener(listener);
+      completer.complete();
+    }
+  }
+
+  animation.addStatusListener(listener);
+  // Cover a transition that completed between the initial check and listener
+  // registration.
+  listener(animation.status);
+  await completer.future;
+
+  return route;
+}
