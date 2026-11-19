@@ -145,7 +145,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
       if (widget.initialTarget == null) {
         switch (widget.initialMode ?? _kDefaultInitialMode) {
           case InitialMode.view:
-            await awaitFrame(
+            await awaitFrameWhere(
               () => !mounted || DocumentProvider.of(context).analysis.loaded,
             );
             if (!mounted) return;

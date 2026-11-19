@@ -317,17 +317,18 @@ extension DateTimeUtil on DateTime {
       microsecond == 0;
 }
 
-Future<void> awaitFrame(bool Function() callback) {
+Future<void> awaitFrameWhere(bool Function() predicate) {
   final result = Completer<void>();
 
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
-    if (callback()) {
+  void checkAfterFrame(Duration _) {
+    if (predicate()) {
       result.complete();
     } else {
-      await awaitFrame(callback);
-      result.complete();
+      WidgetsBinding.instance.addPostFrameCallback(checkAfterFrame);
     }
-  });
+  }
+
+  WidgetsBinding.instance.addPostFrameCallback(checkAfterFrame);
 
   return result.future;
 }
