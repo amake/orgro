@@ -19,6 +19,11 @@ all: release
 run: ## Run app with full environment
 	$(flutter) run $(dart_defines) $(args)
 
+.PHONY: profile
+profile: ## Run app in profile mode
+profile: args := --profile
+profile: run
+
 .PHONY: clean
 clean: ## Clean project
 clean:
