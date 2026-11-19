@@ -222,7 +222,8 @@ class _AgendaBodyState extends State<AgendaBody>
     final target = section.targetForSection;
     final AfterOpenCallback? afterOpen = target == null
         ? null
-        : (state) => OrgLocator.of(state.context)!.jumpToSection(target);
+        : (state) async =>
+              await OrgLocator.of(state.context)!.jumpToSection(target);
 
     switch (dataSource) {
       case NativeDataSource():

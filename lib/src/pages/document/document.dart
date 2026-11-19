@@ -153,7 +153,7 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
             if (afterOpen != null) {
               final route = await awaitRouteTransition(context);
               if (!mounted || route?.isCurrent != true) return;
-              afterOpen(this);
+              await afterOpen(this);
             }
             break;
           case InitialMode.edit:

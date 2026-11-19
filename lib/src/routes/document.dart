@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 import 'package:org_flutter/org_flutter.dart';
 import 'package:orgro/src/components/document_provider.dart';
@@ -8,7 +10,7 @@ import 'package:orgro/src/error.dart';
 import 'package:orgro/src/pages/pages.dart';
 import 'package:orgro/src/routes/routes.dart';
 
-typedef AfterOpenCallback = void Function(DocumentPageState);
+typedef AfterOpenCallback = FutureOr<void> Function(DocumentPageState);
 
 class DocumentRouteArgs {
   const DocumentRouteArgs({

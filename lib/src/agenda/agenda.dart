@@ -113,9 +113,8 @@ void onDidReceiveNotificationResponse(NotificationResponse details) async {
         final target = _targetFromPayloadJson(payload['section']);
         final AfterOpenCallback? afterOpen = target == null
             ? null
-            : (state) async {
-                OrgLocator.of(state.context)?.jumpToSection(target);
-              };
+            : (state) async =>
+                  await OrgLocator.of(state.context)?.jumpToSection(target);
         if (recovered) {
           await Preferences.of(context, .agenda).replaceAgendaFileJson(
             payload['dataSource'] as Map<String, dynamic>,
