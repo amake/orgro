@@ -30,10 +30,11 @@ dependencies:
   # flutter_charset_detector:
   #   path: ../flutter_charset_detector/flutter_charset_detector
   flutter_slidable: ^5.0.0
+  flutter_tex_js: ^7.0.0
   google_fonts: ^9.0.0
   http: ^1.1.0
   intl: ^0.20.2
-  org_flutter: ^13.4.2
+  org_flutter: ^14.0.0
   # org_flutter:
     # path: ../org_flutter
   path_provider: ^2.0.9

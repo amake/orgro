@@ -26,6 +26,7 @@ import 'package:orgro/src/pages/document/citations.dart';
 import 'package:orgro/src/pages/document/encryption.dart';
 import 'package:orgro/src/pages/document/images.dart';
 import 'package:orgro/src/pages/document/keyboard.dart';
+import 'package:orgro/src/pages/document/latex.dart';
 import 'package:orgro/src/pages/document/links.dart';
 import 'package:orgro/src/pages/document/narrow.dart';
 import 'package:orgro/src/pages/document/restoration.dart';
@@ -516,6 +517,8 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
                 onTimestampTap: _transclusion ? null : onTimestampTap,
                 loadImage: loadImage,
                 loadTransclusion: _transclusion ? null : loadTransclusion,
+                loadLatexBlock: loadLatexBlock,
+                loadLatexInline: loadLatexInline,
                 child: switch (doc) {
                   OrgDocument() => OrgDocumentWidget(doc, shrinkWrap: true),
                   OrgSection() => OrgSectionWidget(

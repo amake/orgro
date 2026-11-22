@@ -293,6 +293,8 @@ class _TranscludedContentState extends State<_TranscludedContent> {
           onSectionLongPress: (section) => doNarrow(context, section),
           onCitationTap: events.onCitationTap,
           loadImage: events.loadImage,
+          loadLatexBlock: events.loadLatexBlock,
+          loadLatexInline: events.loadLatexInline,
           // Don't allow editing
           //
           // TODO(aaron): It would be nice to allow excluding just specific events
