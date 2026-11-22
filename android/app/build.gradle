@@ -30,6 +30,9 @@ android {
         applicationId "com.madlonkay.orgro"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
+        // flutter_local_notifications requires 37 ahead of the current
+        // flutter.compileSdkVersion:
+        compileSdkVersion Math.max(flutter.compileSdkVersion, 37)
         versionCode flutter.versionCode
         versionName flutter.versionName
         // No need to list base locale (en)
