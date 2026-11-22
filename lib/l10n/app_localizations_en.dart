@@ -393,6 +393,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tooltipReaderMode => 'Toggle reader mode';
 
   @override
+  String get tooltipWakelock => 'Keep screen on';
+
+  @override
   String get tooltipScrollTop => 'Scroll to top';
 
   @override
@@ -1333,6 +1336,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get tooltipReaderMode => 'Toggle reader mode';
 
   @override
+  String get tooltipWakelock => 'Keep screen on';
+
+  @override
   String get tooltipScrollTop => 'Scroll to top';
 
   @override
@@ -2271,6 +2277,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tooltipReaderMode => 'Toggle reader mode';
+
+  @override
+  String get tooltipWakelock => 'Keep screen on';
 
   @override
   String get tooltipScrollTop => 'Scroll to top';

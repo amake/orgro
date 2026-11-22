@@ -12,3 +12,24 @@ PopupMenuItem<VoidCallback> wakelockMenuItem(
     child: Text(AppLocalizations.of(context)!.menuItemWakelock),
   );
 }
+
+class WakelockButton extends StatelessWidget {
+  const WakelockButton({
+    required this.enabled,
+    required this.onChanged,
+    super.key,
+  });
+
+  final bool enabled;
+  final void Function(bool) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: AppLocalizations.of(context)!.tooltipWakelock,
+      icon: const Icon(Icons.light_mode),
+      color: enabled ? Theme.of(context).colorScheme.secondary : null,
+      onPressed: () => onChanged(!enabled),
+    );
+  }
+}

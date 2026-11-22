@@ -387,6 +387,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipReaderMode => 'リーダーモードの切替';
 
   @override
+  String get tooltipWakelock => '画面を常にオンにする';
+
+  @override
   String get tooltipScrollTop => '上へスクロール';
 
   @override

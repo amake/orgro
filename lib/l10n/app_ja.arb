@@ -135,6 +135,7 @@
 
   "tooltipFullWidth": "画面幅いっぱい表示の切替",
   "tooltipReaderMode": "リーダーモードの切替",
+  "tooltipWakelock": "画面を常にオンにする",
   "tooltipScrollTop": "上へスクロール",
   "tooltipScrollBottom": "下へスクロール",
 

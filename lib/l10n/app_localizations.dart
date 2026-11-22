@@ -761,6 +761,12 @@ abstract class AppLocalizations {
   /// **'Toggle reader mode'**
   String get tooltipReaderMode;
 
+  /// No description provided for @tooltipWakelock.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep screen on'**
+  String get tooltipWakelock;
+
   /// No description provided for @tooltipScrollTop.
   ///
   /// In en, this message translates to:

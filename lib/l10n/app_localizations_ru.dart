@@ -395,6 +395,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tooltipReaderMode => 'Toggle reader mode';
 
   @override
+  String get tooltipWakelock => 'Keep screen on';
+
+  @override
   String get tooltipScrollTop => 'Scroll to top';
 
   @override

@@ -305,6 +305,10 @@ class DocumentPageState extends State<DocumentPage> with RestorationMixin {
           enabled: scopedViewSettings.readerMode,
           onChanged: (value) => viewSettings.readerMode = value,
         );
+        yield WakelockButton(
+          enabled: scopedViewSettings.wakelock,
+          onChanged: (value) => viewSettings.wakelock = value,
+        );
         if (_allowFullScreen(context)) {
           yield FullWidthButton(
             enabled: scopedViewSettings.fullWidth,

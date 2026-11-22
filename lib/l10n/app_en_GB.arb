@@ -135,6 +135,7 @@
 
   "tooltipFullWidth": "Toggle full width",
   "tooltipReaderMode": "Toggle reader mode",
+  "tooltipWakelock": "Keep screen on",
   "tooltipScrollTop": "Scroll to top",
   "tooltipScrollBottom": "Scroll to bottom",
 

@@ -47,6 +47,7 @@
     "menuItemWakelock",
     "tooltipFullWidth",
     "tooltipReaderMode",
+    "tooltipWakelock",
     "tooltipScrollTop",
     "tooltipScrollBottom",
     "tooltipTextStyle",
@@ -176,6 +177,7 @@
     "menuItemWakelock",
     "tooltipFullWidth",
     "tooltipReaderMode",
+    "tooltipWakelock",
     "tooltipScrollTop",
     "tooltipScrollBottom",
     "tooltipTextStyle",
@@ -272,6 +274,7 @@
     "allDayEventNotificationTimeOneDayBefore",
     "allDayEventNotificationTimeTwoDaysBefore",
     "allDayEventNotificationTimeOneWeekBefore",
+    "tooltipWakelock",
     "captureToExistingFileToBeChosen"
   ]
 }

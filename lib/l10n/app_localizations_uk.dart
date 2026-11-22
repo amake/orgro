@@ -398,6 +398,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tooltipReaderMode => 'Перемкнути режим читання';
 
   @override
+  String get tooltipWakelock => 'Keep screen on';
+
+  @override
   String get tooltipScrollTop => 'Прокрутити вгору';
 
   @override
