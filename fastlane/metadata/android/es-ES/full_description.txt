@@ -1,0 +1,23 @@
+Orgro es un editor y visor de archivos de Org Mode que trae al móvil las funciones esenciales de Org:
+
+- Cambio de estado TODO y de casillas de verificación, con contadores de progreso
+
+- Acciones rápidas para crear un documento Org nuevo o ir directamente al más importante
+
+- Notificaciones de elementos de Org Agenda
+
+- Acota, busca y filtra tu documento igual que en Emacs
+
+- Cifrado y descifrado simétrico de secciones con Org Crypt
+
+- Compatibilidad con bibliografías de Org Cite
+
+- Resaltado de sintaxis, tablas elegantes y renderizado de LaTeX
+
+- Expande o contrae secciones, bloques y cajones
+
+- Texto adaptado a la pantalla para leerlo cómodamente en el móvil
+
+Nota: el permiso INTERNET es necesario para mostrar imágenes remotas y cargar dinámicamente fuentes de servicios en línea (Google Fonts, AWS S3).
+
+Los permisos relacionados con notificaciones y ejecución son necesarios para las notificaciones de Org Agenda y la actualización de la agenda en segundo plano.
